@@ -59,38 +59,20 @@ int main() {
             throw std::runtime_error("can not read file: test.txt");
         }
 
-        std::cout << "Prepare output file: test.txt.sign..." << std::endl;
-        std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.sign");
-        }
+        std::cout << "Read virgil sign..." << std::endl;
+        VirgilSign virgilSign = virgil::stream::read_sign("test.txt.sign");
 
         std::cout << "Read virgil public key..." << std::endl;
         VirgilCertificate virgilPublicKey = virgil::stream::read_certificate("virgil_public.key");
 
-        std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
-        VirgilByteArray privateKeyPassword = virgil::str2bytes("password");
-
-        std::cout << "Initialize signer..." << std::endl;
+        std::cout << "Initialize verifier..." << std::endl;
         VirgilStreamSigner signer;
 
-        std::cout << "Sign data..." << std::endl;
+        std::cout << "Verify data..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
-        VirgilSign sign = signer.sign(dataSource, virgilPublicKey.id().certificateId(),
-                privateKey, privateKeyPassword);
+        bool verified = signer.verify(dataSource, virgilSign, virgilPublicKey.publicKey());
 
-        std::cout << "Save sign..." << std::endl;
-        VirgilByteArray signData = sign.toAsn1();
-        std::copy(signData.begin(), signData.end(), std::ostreambuf_iterator<char>(outFile));
-
-        std::cout << "Sign is successfully stored in the output file." << std::endl;
+        std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }

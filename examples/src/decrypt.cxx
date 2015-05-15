@@ -43,27 +43,35 @@
 
 #include <virgil/VirgilByteArray.h>
 using virgil::VirgilByteArray;
-#include <virgil/service/VirgilStreamSigner.h>
-using virgil::service::VirgilStreamSigner;
+#include <virgil/VirgilException.h>
+using virgil::VirgilException;
+#include <virgil/service/data/VirgilCertificate.h>
+using virgil::service::data::VirgilCertificate;
+#include <virgil/service/VirgilStreamCipher.h>
+using virgil::service::VirgilStreamCipher;
 #include <virgil/stream/VirgilStreamDataSource.h>
 using virgil::stream::VirgilStreamDataSource;
-#include <virgil/service/data/VirgilSign.h>
-using virgil::service::data::VirgilSign;
+#include <virgil/stream/VirgilStreamDataSink.h>
+using virgil::stream::VirgilStreamDataSink;
+
 #include <virgil/stream/utils.h>
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
-        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
+        std::cout << "Prepare input file: test.txt.enc..." << std::endl;
+        std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);
         if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt");
+            throw std::runtime_error("can not read file: test.txt.enc");
         }
 
-        std::cout << "Prepare output file: test.txt.sign..." << std::endl;
-        std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
+        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
         if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.sign");
+            throw std::runtime_error("can not write file: decrypted_test.txt");
         }
+
+        std::cout << "Initialize cipher..." << std::endl;
+        VirgilStreamCipher cipher;
 
         std::cout << "Read virgil public key..." << std::endl;
         VirgilCertificate virgilPublicKey = virgil::stream::read_certificate("virgil_public.key");
@@ -78,19 +86,12 @@ int main() {
                 std::back_inserter(privateKey));
         VirgilByteArray privateKeyPassword = virgil::str2bytes("password");
 
-        std::cout << "Initialize signer..." << std::endl;
-        VirgilStreamSigner signer;
-
-        std::cout << "Sign data..." << std::endl;
+        std::cout << "Decrypt..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
-        VirgilSign sign = signer.sign(dataSource, virgilPublicKey.id().certificateId(),
+        VirgilStreamDataSink dataSink(outFile);
+        cipher.decryptWithKey(dataSource, dataSink, virgilPublicKey.id().certificateId(),
                 privateKey, privateKeyPassword);
-
-        std::cout << "Save sign..." << std::endl;
-        VirgilByteArray signData = sign.toAsn1();
-        std::copy(signData.begin(), signData.end(), std::ostreambuf_iterator<char>(outFile));
-
-        std::cout << "Sign is successfully stored in the output file." << std::endl;
+        std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
