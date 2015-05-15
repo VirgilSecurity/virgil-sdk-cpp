@@ -129,8 +129,8 @@ int main() {
             throw std::invalid_argument("can not write file: test.txt.sign");
         }
 
-        std::cout << "Read extended public key..." << std::endl;
-        VirgilCertificate certificate = virgil::stream::read_certificate("public.key");
+        std::cout << "Read virgil public key..." << std::endl;
+        VirgilCertificate virgilPublicKey = virgil::stream::read_certificate("virgil_public.key");
 
         std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
@@ -147,7 +147,7 @@ int main() {
 
         std::cout << "Sign data..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
-        VirgilSign sign = signer.sign(dataSource, certificate.id().certificateId(),
+        VirgilSign sign = signer.sign(dataSource, virgilPublicKey.id().certificateId(),
                 privateKey, privateKeyPassword);
 
         std::cout << "Save sign..." << std::endl;
