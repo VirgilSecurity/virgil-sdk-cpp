@@ -83,8 +83,8 @@ fi
 if [ ! -d origin_lib ]; then
     mkdir origin_build
     pushd origin_build &>/dev/null
-    cmake -DCMAKE_BUILD_TYPE=Release -DCPP_BUILD_CLI=NO -DLIB_FILE_IO=ON -DENABLE_TESTING=NO \
-            -DCMAKE_INSTALL_PREFIX=../origin_lib ../origin
+    cmake -DCMAKE_BUILD_TYPE=Release -DCPP_BUILD_CLI=NO -DLIB_FILE_IO=ON -DINSTALL_EXT_HEADERS=YES \
+            -DENABLE_TESTING=NO -DCMAKE_INSTALL_PREFIX=../origin_lib ../origin
     make -j 4 && make install
     popd &> /dev/null
 fi
