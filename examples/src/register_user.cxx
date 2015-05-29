@@ -54,7 +54,8 @@ using virgil::crypto::VirgilBase64;
 #include <curl/curl.h>
 #include <json/json.h>
 
-#define VIRGIL_PKI_URL_BASE "https://pki.virgilsecurity.com/"
+#define VIRGIL_PKI_URL_BASE "https://pki.virgilsecurity.com/v1/"
+#define VIRGIL_PKI_APP_KEY "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 #define USER_ID_TYPE "email"
 #define USER_ID "test.virgilsecurity@mailinator.com"
 
@@ -85,6 +86,7 @@ static std::string pki_post(const std::string& url, const std::string& json) {
         /* set content type */
         headers = curl_slist_append(headers, "Accept: application/json");
         headers = curl_slist_append(headers, "Content-Type: application/json");
+        headers = curl_slist_append(headers, "X-VIRGIL-APP-TOKEN: " VIRGIL_PKI_APP_KEY);
         /* Set the URL */
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         /* Now specify the POST data */
@@ -130,7 +132,7 @@ pki_create_user(const VirgilByteArray& publicKey, const std::map<std::string, st
     }
     payload["user_data"] = userData;
     // Perform request
-    std::string response = pki_post(MAKE_URL(VIRGIL_PKI_URL_BASE, "objects/public-key"),
+    std::string response = pki_post(MAKE_URL(VIRGIL_PKI_URL_BASE, "public-key"),
             Json::FastWriter().write(payload));
     // Parse response
     Json::Reader reader(Json::Features::strictMode());
