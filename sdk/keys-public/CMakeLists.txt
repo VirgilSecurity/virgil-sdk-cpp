@@ -54,12 +54,19 @@ include_directories (${JSON_INCLUDE_DIRS})
 include ("ext/rest_ext.cmake")
 include_directories (${REST_INCLUDE_DIRS})
 
+find_library (CURL_LIB curl)
+if (CURL_LIB)
+    message (STATUS "Found CURL: ${CURL_LIB}")
+else ()
+    message (FATAL_ERROR "cURL dependency library is not found in the system.")
+endif ()
+
 # Grab source directory tree
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
 
 # Configure library build
 add_library (pki STATIC ${SRC_LIST})
-target_link_libraries (pki rest)
+target_link_libraries (pki rest ${CURL_LIB})
 add_dependencies (pki json)
 
 # Add unit tests
