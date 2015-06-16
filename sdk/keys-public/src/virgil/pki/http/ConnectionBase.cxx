@@ -45,12 +45,44 @@ using virgil::pki::http::Response;
 #include <virgil/string/JsonKey.h>
 using virgil::string::JsonKey;
 
+#include <stdexcept>
+
 #include <json.hpp>
 using json = nlohmann::json;
 
+#include <restless.hpp>
+using HttpRequest = asoni::Handle;
+
 Response ConnectionBase::send(const Request& request) {
-    (void)request;
-    return Response();
+    // Make Request
+    HttpRequest httpRequest;
+    httpRequest.header(request.header()).content(request.contentType(), request.body());
+    switch (request.method()) {
+        case Request::Method::GET:
+            httpRequest.get(request.uri());
+            break;
+        case Request::Method::POST:
+            httpRequest.post(request.uri());
+            break;
+        case Request::Method::PUT:
+            httpRequest.put(request.uri());
+            break;
+        case Request::Method::DELETE:
+            httpRequest.del(request.uri());
+            break;
+        default:
+            throw std::logic_error("Unknown HTTP method.");
+    }
+    // Execute
+    auto httpResponse = httpRequest.exec();
+    // Make response
+    Response response;
+    try {
+        response.statusCodeRaw(httpResponse.code);
+    } catch (const std::logic_error&) {
+        throw std::runtime_error(httpResponse.body);
+    }
+    return response.header(httpResponse.headers).body(httpResponse.body);
 }
 
 void ConnectionBase::checkResponseError(const Response& response, PkiError::Action action) {

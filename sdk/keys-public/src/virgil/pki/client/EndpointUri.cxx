@@ -65,10 +65,6 @@ std::string EndpointUri::userDataResendConfirm(const std::string& userDataId) {
     return "/user-data/" + userDataId + "/actions/resend-confirmation";
 }
 
-std::string EndpointUri::userDataSearch(bool expandPublicKey) {
-    if (expandPublicKey) {
-        return "/user-data/actions/search/?expand=public_key";
-    } else {
-        return "/user-data/actions/search";
-    }
+std::string EndpointUri::userDataSearch() {
+    return "/user-data/actions/search";
 }

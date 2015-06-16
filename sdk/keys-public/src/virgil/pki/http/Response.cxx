@@ -37,6 +37,9 @@
 #include <virgil/pki/http/Response.h>
 using virgil::pki::http::Response;
 
+#include <stdexcept>
+#include <set>
+
 Response& Response::body (const std::string& body) {
     body_ = body;
     return *this;
@@ -55,13 +58,13 @@ std::string Response::contentType () const {
     return contentType_;
 }
 
-Response& Response::headers (const Response::Headers& headers) {
-    headers_ = headers;
+Response& Response::header (const Response::Headers& header) {
+    header_ = header;
     return *this;
 }
 
-Response::Headers Response::headers () const {
-    return headers_;
+Response::Headers Response::header () const {
+    return header_;
 }
 
 Response& Response::statusCode(Response::StatusCode statusCode) {
@@ -71,6 +74,20 @@ Response& Response::statusCode(Response::StatusCode statusCode) {
 
 Response::StatusCode Response::statusCode() const {
     return statusCode_;
+}
+
+Response& Response::statusCodeRaw(int code) {
+    std::set<int> availableCodes {200, 400, 401, 404, 405, 500};
+    if (availableCodes.find(code) != availableCodes.end()) {
+        statusCode_ = static_cast<Response::StatusCode>(code);
+    } else {
+        throw std::logic_error("Given status code is not supported.");
+    }
+    return *this;
+}
+
+int Response::statusCodeRaw() const {
+    return static_cast<int>(statusCode_);
 }
 
 bool Response::fail() const {

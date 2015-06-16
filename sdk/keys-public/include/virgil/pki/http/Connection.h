@@ -69,6 +69,8 @@ namespace virgil { namespace pki { namespace http {
         /**
          * @brief Send synchronous request.
          * @param request - request to be send.
+         * @throw std::logic_error - if given parameters are inconsistent.
+         * @throw std::runtime_error - if error was occured when send request.
          */
         virtual Response send(const Request& request) = 0;
         /**

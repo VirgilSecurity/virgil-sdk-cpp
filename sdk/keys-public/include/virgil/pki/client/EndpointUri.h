@@ -91,9 +91,8 @@ namespace virgil { namespace pki { namespace client {
         static std::string userDataResendConfirm(const std::string& userDataId);
         /**
          * @brief Return endpoint that extract all user data associated with given user identifier.
-         * @param expandPublicKey - if true, response will include public key associated with found user data.
          */
-        static std::string userDataSearch(bool expandPublicKey = false);
+        static std::string userDataSearch();
         //@}
     private:
         EndpointUri();

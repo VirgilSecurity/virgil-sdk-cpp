@@ -96,13 +96,13 @@ namespace virgil { namespace pki { namespace http {
          */
         std::string endpoint() const;
         /**
-         * @brief Set request headers.
+         * @brief Set request header.
          */
-        Request& headers(const Headers& headers);
+        Request& header(const Headers& header);
         /**
-         * @brief Get request headers.
+         * @brief Get request header.
          */
-        Headers headers() const;
+        Headers header() const;
         /**
          * @brief Set request parameters.
          */
@@ -111,6 +111,10 @@ namespace virgil { namespace pki { namespace http {
          * @brief Get request parameters.
          */
         Parameters parameters() const;
+        /**
+         * @brief Return request URI.
+         */
+        std::string uri() const;
         /**
          * @brief Set request HTTP method.
          */
@@ -141,7 +145,7 @@ namespace virgil { namespace pki { namespace http {
         std::string body_;
         std::string contentType_;
         std::string endPoint_;
-        Headers headers_;
+        Headers header_;
         Parameters parameters_;
         Method method_;
     };

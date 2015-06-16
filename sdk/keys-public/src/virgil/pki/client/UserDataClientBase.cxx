@@ -127,7 +127,11 @@ std::vector<UserData> UserDataClientBase::search(const std::string& userId, bool
         {JsonKey::id, userId}
     };
 
-    Request request = Request().endpoint(EndpointUri::userDataSearch(expandPublicKey)).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::userDataSearch()).post().body(payload.dump());
+    if (expandPublicKey) {
+        // TODO: Move to the class EndpointUri.
+        request.parameters({{"expand", "public_key"}});
+    }
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_SEARCH);
 

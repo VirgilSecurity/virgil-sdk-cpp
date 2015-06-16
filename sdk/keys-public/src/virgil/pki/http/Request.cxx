@@ -37,11 +37,17 @@
 #include <virgil/pki/http/Request.h>
 using virgil::pki::http::Request;
 
-Request& Request::baseAddress (const std::string& baseAddress) {
-    baseAddress_ = baseAddress;
-    if (!baseAddress_.empty() && baseAddress_.back() == '/') {
-        baseAddress_.pop_back();
+#include <sstream>
+
+static std::string normalize_base_address(const std::string& baseAddress) {
+    if (!baseAddress.empty() && baseAddress.back() == '/') {
+        return baseAddress.substr(0, baseAddress.size() - 1);
     }
+    return baseAddress;
+}
+
+Request& Request::baseAddress (const std::string& baseAddress) {
+    baseAddress_ = normalize_base_address(baseAddress);
     return *this;
 }
 
@@ -76,13 +82,13 @@ std::string Request::endpoint () const {
     return endPoint_;
 }
 
-Request& Request::headers (const Request::Headers& headers) {
-    headers_ = headers;
+Request& Request::header (const Request::Headers& header) {
+    header_ = header;
     return *this;
 }
 
-Request::Headers Request::headers () const {
-    return headers_;
+Request::Headers Request::header () const {
+    return header_;
 }
 
 Request& Request::parameters (const Request::Parameters& parameters) {
@@ -92,6 +98,16 @@ Request& Request::parameters (const Request::Parameters& parameters) {
 
 Request::Parameters Request::parameters () const {
     return parameters_;
+}
+
+
+std::string Request::uri() const {
+    std::ostringstream uri;
+    uri << baseAddress() << endpoint() << "/?";
+    for (auto param : parameters()) {
+        uri << "&" << param.first << "=" << param.second;
+    }
+    return uri.str();
 }
 
 Request& Request::method (const Request::Method& method) {

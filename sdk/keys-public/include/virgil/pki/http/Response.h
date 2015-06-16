@@ -85,13 +85,13 @@ namespace virgil { namespace pki { namespace http {
          */
         std::string contentType() const;
         /**
-         * @brief Set response headers.
+         * @brief Set response header.
          */
-        Response& headers(const Headers& headers);
+        Response& header(const Headers& header);
         /**
-         * @brief Get response headers.
+         * @brief Get response header.
          */
-        Headers headers() const;
+        Headers header() const;
         /**
          * @brief Set response status code.
          */
@@ -100,6 +100,15 @@ namespace virgil { namespace pki { namespace http {
          * @brief Return response status code.
          */
         StatusCode statusCode() const;
+        /**
+         * @brief Set response status code from integer value.
+         * @throw std::logic_error - if given code is not found in @link Response::StatusCode @endlink enum.
+         */
+        Response& statusCodeRaw(int code);
+        /**
+         * @brief Return response status code integer value.
+         */
+        int statusCodeRaw() const;
         //@}
         /**
          * @brief Return true if response contains error status code.
@@ -108,7 +117,7 @@ namespace virgil { namespace pki { namespace http {
     private:
         std::string body_;
         std::string contentType_;
-        Headers headers_;
+        Headers header_;
         StatusCode statusCode_;
     };
 }}}
