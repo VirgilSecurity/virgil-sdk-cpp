@@ -45,16 +45,18 @@
 using virgil::VirgilByteArray;
 #include <virgil/VirgilException.h>
 using virgil::VirgilException;
-#include <virgil/service/data/VirgilCertificate.h>
-using virgil::service::data::VirgilCertificate;
-#include <virgil/service/VirgilStreamCipher.h>
-using virgil::service::VirgilStreamCipher;
+#include <virgil/crypto/VirgilStreamCipher.h>
+using virgil::crypto::VirgilStreamCipher;
 #include <virgil/stream/VirgilStreamDataSource.h>
 using virgil::stream::VirgilStreamDataSource;
 #include <virgil/stream/VirgilStreamDataSink.h>
 using virgil::stream::VirgilStreamDataSink;
 
-#include <virgil/stream/utils.h>
+#include <virgil/pki/model/PublicKey.h>
+using virgil::pki::model::PublicKey;
+
+#include <virgil/pki/io/marshaller.h>
+using virgil::pki::io::marshaller;
 
 int main() {
     try {
@@ -74,7 +76,15 @@ int main() {
         VirgilStreamCipher cipher;
 
         std::cout << "Read virgil public key..." << std::endl;
-        VirgilCertificate virgilPublicKey = virgil::stream::read_certificate("virgil_public.key");
+        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!publicKeyFile.good()) {
+            throw std::runtime_error("can not read virgil public key: virgil_public.key");
+        }
+        std::string publicKeyData;
+        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(publicKeyData));
+
+        PublicKey publicKey = marshaller<PublicKey>::fromJson(publicKeyData);
 
         std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
@@ -84,13 +94,11 @@ int main() {
         VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        VirgilByteArray privateKeyPassword = virgil::str2bytes("password");
 
         std::cout << "Decrypt..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
         VirgilStreamDataSink dataSink(outFile);
-        cipher.decryptWithKey(dataSource, dataSink, virgilPublicKey.id().certificateId(),
-                privateKey, privateKeyPassword);
+        cipher.decryptWithKey(dataSource, dataSink, virgil::str2bytes(publicKey.publicKeyId()), privateKey);
         std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

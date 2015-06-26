@@ -43,13 +43,13 @@
 
 #include <virgil/VirgilByteArray.h>
 using virgil::VirgilByteArray;
-#include <virgil/service/data/VirgilKeyPair.h>
-using virgil::service::data::VirgilKeyPair;
+#include <virgil/crypto/VirgilKeyPair.h>
+using virgil::crypto::VirgilKeyPair;
 
 int main(int argc, char **argv) {
     try {
-        std::cout << "Generate keys with with password: 'password'" << std::endl;
-        VirgilKeyPair newKeyPair(virgil::str2bytes("password"));
+        std::cout << "Generate keys" << std::endl;
+        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
 
         std::cout << "Store public key: new_public.key ..." << std::endl;
         std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);

@@ -44,108 +44,32 @@
 
 #include <virgil/VirgilByteArray.h>
 using virgil::VirgilByteArray;
-#include <virgil/service/data/VirgilCertificate.h>
-using virgil::service::data::VirgilCertificate;
-#include <virgil/crypto/VirgilBase64.h>
-using virgil::crypto::VirgilBase64;
 
-#include <curl/curl.h>
-#include <json/json.h>
+#include <virgil/pki/model/Account.h>
+using virgil::pki::model::Account;
+#include <virgil/pki/model/PublicKey.h>
+using virgil::pki::model::PublicKey;
+#include <virgil/pki/io/marshaller.h>
+using virgil::pki::io::marshaller;
+#include <virgil/pki/http/ConnectionBase.h>
+using virgil::pki::http::ConnectionBase;
+#include <virgil/pki/client/PublicKeyClientBase.h>
+using virgil::pki::client::PublicKeyClientBase;
 
-#define VIRGIL_PKI_URL_BASE "https://pki.virgilsecurity.com/v1/"
-#define VIRGIL_PKI_APP_KEY "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-#define USER_ID_TYPE "email"
-#define USER_ID "test.virgilsecurity@mailinator.com"
-
-#define MAKE_URL(base, path) (base path)
-
-static int pki_callback(char *data, size_t size, size_t nmemb, std::string *buffer_in) {
-    // Is there anything in the buffer?
-    if (buffer_in != NULL) {
-        // Append the data to the buffer
-        buffer_in->append(data, size * nmemb);
-        return size * nmemb;
-    }
-    return 0;
-}
-
-static std::string pki_post(const std::string& url, const std::string& json) {
-    CURL *curl = NULL;
-    CURLcode result = CURLE_OK;
-    struct curl_slist *headers = NULL;
-    std::string response;
-
-    /* In windows, this will init the winsock stuff */
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    /* get a curl handle */
-    curl = curl_easy_init();
-    if (curl) {
-        /* set content type */
-        headers = curl_slist_append(headers, "Accept: application/json");
-        headers = curl_slist_append(headers, "Content-Type: application/json");
-        headers = curl_slist_append(headers, "X-VIRGIL-APP-TOKEN: " VIRGIL_PKI_APP_KEY);
-        /* Set the URL */
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        /* Now specify the POST data */
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
-        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, json.c_str());
-
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, pki_callback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)(&response));
-
-        /* Perform the request, result will get the return code */
-        result = curl_easy_perform(curl);
-
-        /* free headers */
-        curl_slist_free_all(headers);
-
-        /* cleanup curl handle */
-        curl_easy_cleanup(curl);
-    }
-    curl_global_cleanup();
-
-    /* Check for errors */
-    if (result == CURLE_OK) {
-        return response;
-    } else {
-        throw std::runtime_error(std::string("cURL failed with error: ") + curl_easy_strerror(result));
-    }
-}
-
-VirgilCertificate pki_get_public_key(const std::string& userIdType, const std::string& userId) {
-    // Create request
-    Json::Value payload;
-    payload[userIdType] = userId;
-    // Perform request
-    std::string response = pki_post(MAKE_URL(VIRGIL_PKI_URL_BASE, "account/actions/search"),
-            Json::FastWriter().write(payload));
-    // Parse response
-    Json::Reader reader(Json::Features::strictMode());
-    Json::Value responseObject;
-    if (!reader.parse(response, responseObject)) {
-        throw std::runtime_error(reader.getFormattedErrorMessages());
-    }
-    const Json::Value& virgilPublicKeyObject = responseObject[0]["public_keys"][0];
-    const Json::Value& idObject = virgilPublicKeyObject["id"]["public_key_id"];
-    const Json::Value& publicKeyObject = virgilPublicKeyObject["public_key"];
-
-    if (idObject.isString() && publicKeyObject.isString()) {
-        VirgilCertificate virgilPublicKey(VirgilBase64::decode(publicKeyObject.asString()));
-        virgilPublicKey.id().setCertificateId(virgil::str2bytes(idObject.asString()));
-        return virgilPublicKey;
-    } else {
-        throw std::runtime_error(std::string("virgil public key for recipient '") + userId +
-                "' of type '" + userIdType + "' not found");
-    }
-}
+static const std::string VIRGIL_PKI_URL_BASE = "https://pki-stg.virgilsecurity.com/v1/";
+static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+static const std::string USER_ID = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {
         std::cout << "Get user ("<< USER_ID << ") information from the Virgil PKI service..." << std::endl;
-        VirgilCertificate virgilPublicKey = pki_get_public_key(USER_ID_TYPE, USER_ID);
+        PublicKeyClientBase publicKeyClient(
+                std::make_shared<ConnectionBase>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        std::vector<Account> accounts = publicKeyClient.search(USER_ID);
+        if (accounts.empty() || accounts.front().publicKeys().empty()) {
+            throw std::runtime_error(std::string("User with id: ") + USER_ID + " not found.");
+        }
+        PublicKey publicKey = accounts.front().publicKeys().front();
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
@@ -154,8 +78,8 @@ int main() {
         }
 
         std::cout << "Store virgil public key to the output file..." << std::endl;
-        VirgilByteArray virgilPublicKeyData = virgilPublicKey.toAsn1();
-        std::copy(virgilPublicKeyData.begin(), virgilPublicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
+        std::string publicKeyData = marshaller<PublicKey>::toJson(publicKey);
+        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }

@@ -38,20 +38,48 @@ cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
 project (virgil-cpp)
 
-# Configure path to custom modules
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+# Enable C++11
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Update module search path
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake" ${CMAKE_MODULE_PATH})
+
+# Find dependencies
 find_package (cURL REQUIRED)
 include_directories (${CURL_INCLUDE_DIRS})
 
-find_package (Virgil)
-include_directories (${VIRGIL_INCLUDE_DIRS})
+include (virgil)
+virgil_add_dependency ("crypto"
+    VIRGIL_CRYPTO_DEPENDENCIES
+    VIRGIL_CRYPTO_INCLUDE_DIRS
+    VIRGIL_CRYPTO_LIBRARIES
+)
+include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
 
-aux_source_directory ("examples/src" SRC_LIST)
+virgil_add_dependency ("keys-public"
+    VIRGIL_KEYS_PUBLIC_DEPENDENCIES
+    VIRGIL_KEYS_PUBLIC_INCLUDE_DIRS
+    VIRGIL_KEYS_PUBLIC_LIBRARIES
+)
+include_directories (${VIRGIL_KEYS_PUBLIC_INCLUDE_DIRS})
+
+file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
+foreach (DATA_FILE ${DATA_FILES})
+    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
+    configure_file (
+        ${CMAKE_CURRENT_SOURCE_DIR}/data/${DATA_FILE_NAME}
+        ${CMAKE_CURRENT_BINARY_DIR}/${DATA_FILE_NAME}
+        COPYONLY
+    )
+endforeach (DATA_FILE)
+
+aux_source_directory ("src" SRC_LIST)
 foreach (SRC ${SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME} ${VIRGIL_LIBRARIES} ${CURL_LIBRARIES})
+    target_link_libraries (${TARGET_NAME} ${VIRGIL_CRYPTO_LIBRARIES} ${VIRGIL_KEYS_PUBLIC_LIBRARIES} ${CURL_LIBRARIES})
+    add_dependencies (${TARGET_NAME} ${VIRGIL_CRYPTO_DEPENDENCIES} ${VIRGIL_KEYS_PUBLIC_DEPENDENCIES})
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)
-install (DIRECTORY "examples/data/" DESTINATION ".")
+install (DIRECTORY "data/" DESTINATION ".")
