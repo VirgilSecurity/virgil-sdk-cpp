@@ -103,7 +103,7 @@ Request::Parameters Request::parameters () const {
 
 std::string Request::uri() const {
     std::ostringstream uri;
-    uri << baseAddress() << endpoint() << "/?";
+    uri << baseAddress() << endpoint() << "?";
     for (auto param : parameters()) {
         uri << "&" << param.first << "=" << param.second;
     }
