@@ -77,7 +77,8 @@ PublicKey PublicKeyClientBase::add(const std::vector<unsigned char>& publicKey,
         );
     }
 
-    Request request = Request().endpoint(EndpointUri::publicKeyAdd()).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::publicKeyAdd()).post()
+            .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_ADD);
 
@@ -115,10 +116,11 @@ PublicKey PublicKeyClientBase::get(const std::string& publicKeyId) const {
 
 std::vector<Account> PublicKeyClientBase::search(const std::string& userId) const {
     json payload = {
-        {JsonKey::id, userId}
+        {"email", userId}
     };
 
-    Request request = Request().endpoint(EndpointUri::publicKeySearch()).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::publicKeySearch()).post()
+            .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_SEARCH);
 

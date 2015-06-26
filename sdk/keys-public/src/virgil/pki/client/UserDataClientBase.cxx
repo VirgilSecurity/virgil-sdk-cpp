@@ -71,7 +71,7 @@ UserData UserDataClientBase::add(const std::string& publicKeyId, const std::stri
         {JsonKey::value, value}
     };
 
-    Request request = Request().endpoint(EndpointUri::userDataAdd()).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::userDataAdd()).post().contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_ADD);
 
@@ -109,7 +109,8 @@ void UserDataClientBase::confirm(const std::string& userDataId, const std::strin
         {JsonKey::code, code}
     };
 
-    Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post()
+            .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM);
 }
@@ -117,7 +118,8 @@ void UserDataClientBase::confirm(const std::string& userDataId, const std::strin
 void UserDataClientBase::resendConfirmation(const std::string& userDataId) const {
     json payload = {};
 
-    Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()
+            .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM_RESEND);
 }
@@ -127,7 +129,8 @@ std::vector<UserData> UserDataClientBase::search(const std::string& userId, bool
         {JsonKey::id, userId}
     };
 
-    Request request = Request().endpoint(EndpointUri::userDataSearch()).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::userDataSearch()).post()
+            .contentType("application/json").body(payload.dump());
     if (expandPublicKey) {
         // TODO: Move to the class EndpointUri.
         request.parameters({{"expand", "public_key"}});
