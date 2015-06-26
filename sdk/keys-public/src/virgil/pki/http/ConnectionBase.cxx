@@ -55,20 +55,22 @@ using HttpRequest = asoni::Handle;
 
 Response ConnectionBase::send(const Request& request) {
     // Make Request
+    std::string uri = request.baseAddress().empty() ?
+            this->baseAddress() + request.uri() : request.uri();
     HttpRequest httpRequest;
     httpRequest.header(request.header()).content(request.contentType(), request.body());
     switch (request.method()) {
         case Request::Method::GET:
-            httpRequest.get(request.uri());
+            httpRequest.get(uri);
             break;
         case Request::Method::POST:
-            httpRequest.post(request.uri());
+            httpRequest.post(uri);
             break;
         case Request::Method::PUT:
-            httpRequest.put(request.uri());
+            httpRequest.put(uri);
             break;
         case Request::Method::DELETE:
-            httpRequest.del(request.uri());
+            httpRequest.del(uri);
             break;
         default:
             throw std::logic_error("Unknown HTTP method.");
