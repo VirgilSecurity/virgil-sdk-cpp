@@ -39,10 +39,15 @@ using virgil::pki::http::Connection;
 
 const std::string Connection::baseAddressDefault = "https://pki.virgilsecurity.com/v1";
 
-Connection::Connection(const std::string& baseAddress) : baseAddress_(baseAddress) {
+Connection::Connection(const std::string& appToken, const std::string& baseAddress)
+        : appToken_(appToken), baseAddress_(baseAddress) {
     if (!baseAddress_.empty() && baseAddress_.back() == '/') {
         baseAddress_.pop_back();
     }
+}
+
+std::string Connection::appToken() const {
+    return appToken_;
 }
 
 std::string Connection::baseAddress() const {

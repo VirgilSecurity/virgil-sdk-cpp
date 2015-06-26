@@ -79,6 +79,7 @@ static const std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
 static const std::string expectedClassName = "user_id";
 static const std::string expectedType = "email";
 static const std::string expectedValue = "test@virgilsecurity.com";
+static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 TEST_CASE("Add User Data - success", "[pki-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
@@ -93,7 +94,7 @@ TEST_CASE("Add User Data - success", "[pki-user-data]") {
         {JsonKey::value, expectedValue}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -122,7 +123,7 @@ TEST_CASE("Get User Data - success", "[pki-user-data]") {
         {JsonKey::value, expectedValue}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -142,7 +143,7 @@ TEST_CASE("Confirm User Data - success", "[pki-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -155,7 +156,7 @@ TEST_CASE("Resend User Data Confirmation - success", "[pki-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -179,7 +180,7 @@ TEST_CASE("Search User Data - success", "[pki-user-data]") {
         }
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -222,7 +223,7 @@ TEST_CASE("Search User Data and Expand Key - success", "[pki-user-data]") {
         }
     }).dump(4));
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 

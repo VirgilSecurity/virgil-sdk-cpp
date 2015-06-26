@@ -70,6 +70,8 @@ using virgil::pki::model::UserData;
 
 #include "fakeit_utils.hpp"
 
+static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+
 TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
     auto expectedAccountId = "3a768eea-cbda-4926-a82d-831cb89092aa";
     auto expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
@@ -87,7 +89,7 @@ TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
 
     UserData userData = UserData().className("user_id").type("email").value("test@test.com");
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -110,7 +112,7 @@ TEST_CASE("Add Public Key (new account) - failed", "[pki-public-key]") {
         }}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(errorResponse);
 
@@ -149,7 +151,7 @@ TEST_CASE("Get Public Key - success", "[pki-public-key]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(successResponseJson.dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
@@ -192,7 +194,7 @@ TEST_CASE ("Search Public Key - success", "[pki-public-key]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(successResponseJson.dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>();
+    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 

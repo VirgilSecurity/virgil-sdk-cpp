@@ -54,11 +54,17 @@ using json = nlohmann::json;
 using HttpRequest = asoni::Handle;
 
 Response ConnectionBase::send(const Request& request) {
-    // Make Request
+    // Construct URI
     std::string uri = request.baseAddress().empty() ?
             this->baseAddress() + request.uri() : request.uri();
+    // Add custom field to the header
+    auto header = request.header();
+    if (header.find("X-VIRGIL-APP-TOKEN") == header.end()) {
+        header["X-VIRGIL-APP-TOKEN"] = appToken();
+    }
+    // Make Request
     HttpRequest httpRequest;
-    httpRequest.header(request.header()).content(request.contentType(), request.body());
+    httpRequest.header(header).content(request.contentType(), request.body());
     switch (request.method()) {
         case Request::Method::GET:
             httpRequest.get(uri);
