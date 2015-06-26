@@ -50,7 +50,7 @@ namespace virgil { namespace pki { namespace http {
          * @name Types aliases
          */
         //@{
-        using Headers = std::map<std::string, std::string>;
+        using Header = std::map<std::string, std::string>;
         using Parameters = std::map<std::string, std::string>;
         //@}
         /**
@@ -98,11 +98,11 @@ namespace virgil { namespace pki { namespace http {
         /**
          * @brief Set request header.
          */
-        Request& header(const Headers& header);
+        Request& header(const Header& header);
         /**
          * @brief Get request header.
          */
-        Headers header() const;
+        Header header() const;
         /**
          * @brief Set request parameters.
          */
@@ -145,7 +145,7 @@ namespace virgil { namespace pki { namespace http {
         std::string body_;
         std::string contentType_;
         std::string endPoint_;
-        Headers header_;
+        Header header_;
         Parameters parameters_;
         Method method_;
     };

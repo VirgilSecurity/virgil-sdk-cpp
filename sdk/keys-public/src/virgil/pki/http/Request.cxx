@@ -82,12 +82,12 @@ std::string Request::endpoint () const {
     return endPoint_;
 }
 
-Request& Request::header (const Request::Headers& header) {
+Request& Request::header (const Request::Header& header) {
     header_ = header;
     return *this;
 }
 
-Request::Headers Request::header () const {
+Request::Header Request::header () const {
     return header_;
 }
 
