@@ -105,7 +105,7 @@ VirgilByteArray data = virgil::str2bytes("some data");
 VirgilByteArray sign = signer.sign(data, privateKey);
 ```
 
-### <a name="example-6"></a> Example 7: Verify data
+### <a name="example-7"></a> Example 7: Verify data
 
 To verify that data was signed by a particular party, you must have the following information:
 
