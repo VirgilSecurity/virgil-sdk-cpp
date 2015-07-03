@@ -76,4 +76,4 @@ add_subdirectory (tests)
 # Install
 install (TARGETS pki DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
-install (DIRECTORY "include/" DESTINATION include)
+install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)

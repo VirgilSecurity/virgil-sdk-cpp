@@ -49,26 +49,26 @@ using json = nlohmann::json;
 #include "fakeit.hpp"
 using namespace fakeit;
 
-#include <virgil/pki/http/Connection.h>
-using virgil::pki::http::Connection;
-#include <virgil/pki/http/ConnectionBase.h>
-using virgil::pki::http::ConnectionBase;
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
-#include <virgil/pki/client/PkiClientBase.h>
-using virgil::pki::client::PkiClientBase;
+#include <virgil/sdk/keys/client/PkiClientBase.h>
+using virgil::sdk::keys::client::PkiClientBase;
 
-#include <virgil/pki/error/PkiError.h>
-using virgil::pki::error::PkiError;
+#include <virgil/sdk/keys/error/PkiError.h>
+using virgil::sdk::keys::error::PkiError;
 
-#include <virgil/string/Base64.h>
-using virgil::string::Base64;
-#include <virgil/string/JsonKey.h>
-using virgil::string::JsonKey;
+#include <virgil/sdk/keys/util/Base64.h>
+using virgil::sdk::keys::util::Base64;
+#include <virgil/sdk/keys/util/JsonKey.h>
+using virgil::sdk::keys::util::JsonKey;
 
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
-#include <virgil/pki/model/UserData.h>
-using virgil::pki::model::UserData;
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+#include <virgil/sdk/keys/model/UserData.h>
+using virgil::sdk::keys::model::UserData;
 
 #include "fakeit_utils.hpp"
 
