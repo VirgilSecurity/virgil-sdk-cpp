@@ -42,29 +42,32 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
-#include <virgil/stream/VirgilStreamDataSink.h>
-using virgil::stream::VirgilStreamDataSink;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
 #include <virgil/crypto/VirgilStreamCipher.h>
 using virgil::crypto::VirgilStreamCipher;
-#include <virgil/crypto/base/VirgilBase64.h>
-using virgil::crypto::base::VirgilBase64;
 
-#include <virgil/pki/model/Account.h>
-using virgil::pki::model::Account;
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
-#include <virgil/pki/http/ConnectionBase.h>
-using virgil::pki::http::ConnectionBase;
-#include <virgil/pki/client/PublicKeyClientBase.h>
-using virgil::pki::client::PublicKeyClientBase;
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
+using virgil::crypto::stream::VirgilStreamDataSink;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://pki-stg.virgilsecurity.com/v1/";
+#include <virgil/crypto/foundation/VirgilBase64.h>
+using virgil::crypto::foundation::VirgilBase64;
+
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
+
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string USER_ID = "test.virgilsecurity@mailinator.com";
+static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 #define MAKE_URL(base, path) (base path)
 
@@ -85,16 +88,15 @@ int main() {
         std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
-        std::cout << "Get recipient ("<< USER_ID << ") information from the Virgil PKI service..." << std::endl;
-        PublicKeyClientBase publicKeyClient(
-                std::make_shared<ConnectionBase>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        std::vector<Account> accounts = publicKeyClient.search(USER_ID);
-        if (accounts.empty() || accounts.front().publicKeys().empty()) {
-            throw std::runtime_error(std::string("Recipient with id: ") + USER_ID + " not found.");
+        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        std::vector<PublicKey> publicKeys = keysClient.publicKey().search(USER_EMAIL, UserDataType::emailId);
+        if (publicKeys.empty()) {
+            throw std::runtime_error(std::string("Recipient with id: ") + USER_EMAIL + " not found.");
         }
         std::cout << "Add recipient..." << std::endl;
-        PublicKey publicKey = accounts.front().publicKeys().front();
-        cipher.addKeyRecipient(virgil::str2bytes(publicKey.publicKeyId()), publicKey.key());
+        PublicKey publicKey = publicKeys.front();
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 
         std::cout << "Encrypt and store results..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);

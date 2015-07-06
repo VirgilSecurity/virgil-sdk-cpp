@@ -41,22 +41,23 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
-#include <virgil/VirgilException.h>
-using virgil::VirgilException;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
+#include <virgil/crypto/VirgilCryptoException.h>
+using virgil::crypto::VirgilCryptoException;
 #include <virgil/crypto/VirgilStreamCipher.h>
 using virgil::crypto::VirgilStreamCipher;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
-#include <virgil/stream/VirgilStreamDataSink.h>
-using virgil::stream::VirgilStreamDataSink;
 
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
+using virgil::crypto::stream::VirgilStreamDataSink;
 
-#include <virgil/pki/io/marshaller.h>
-using virgil::pki::io::marshaller;
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+
+#include <virgil/sdk/keys/io/marshaller.h>
+using virgil::sdk::keys::io::marshaller;
 
 int main() {
     try {
@@ -98,7 +99,7 @@ int main() {
         std::cout << "Decrypt..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
         VirgilStreamDataSink dataSink(outFile);
-        cipher.decryptWithKey(dataSource, dataSink, virgil::str2bytes(publicKey.publicKeyId()), privateKey);
+        cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
         std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

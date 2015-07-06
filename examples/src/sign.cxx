@@ -41,12 +41,12 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
 #include <virgil/crypto/VirgilStreamSigner.h>
 using virgil::crypto::VirgilStreamSigner;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
 
 int main() {
     try {

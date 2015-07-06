@@ -42,27 +42,28 @@
 #include <stdexcept>
 #include <map>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
-#include <virgil/VirgilException.h>
-using virgil::VirgilException;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
+#include <virgil/crypto/VirgilCryptoException.h>
+using virgil::crypto::VirgilCryptoException;
 
-#include <virgil/pki/model/Account.h>
-using virgil::pki::model::Account;
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
-#include <virgil/pki/io/marshaller.h>
-using virgil::pki::io::marshaller;
-#include <virgil/pki/http/ConnectionBase.h>
-using virgil::pki::http::ConnectionBase;
-#include <virgil/pki/client/PublicKeyClientBase.h>
-using virgil::pki::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/model/Account.h>
+using virgil::sdk::keys::model::Account;
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://pki-stg.virgilsecurity.com/v1/";
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
+
+#include <virgil/sdk/keys/io/marshaller.h>
+using virgil::sdk::keys::io::marshaller;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string USER_ID = "test.virgilsecurity@mailinator.com";
-static const std::string USER_ID_CLASS = "user_id";
-static const std::string USER_ID_TYPE = "email";
+static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {
@@ -83,11 +84,10 @@ int main() {
         std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(publicKey));
 
-        std::cout << "Create user (" << USER_ID << ") account on the Virgil PKI service..." << std::endl;
-        PublicKeyClientBase publicKeyClient(
-                std::make_shared<ConnectionBase>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        UserData userData = UserData().className(USER_ID_CLASS).type(USER_ID_TYPE).value(USER_ID);
-        PublicKey virgilPublicKey = publicKeyClient.add(publicKey, {userData});
+        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        UserData userData = UserData::email(USER_EMAIL);
+        PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData});
 
         std::cout << "Store virgil public key to the output file..." << std::endl;
         std::string publicKeyData = marshaller<PublicKey>::toJson(virgilPublicKey);

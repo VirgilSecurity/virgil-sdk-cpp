@@ -41,25 +41,27 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
 #include <virgil/crypto/VirgilStreamSigner.h>
 using virgil::crypto::VirgilStreamSigner;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
 
-#include <virgil/pki/model/Account.h>
-using virgil::pki::model::Account;
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
-#include <virgil/pki/http/ConnectionBase.h>
-using virgil::pki::http::ConnectionBase;
-#include <virgil/pki/client/PublicKeyClientBase.h>
-using virgil::pki::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://pki-stg.virgilsecurity.com/v1/";
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string SIGNER_ID = "test.virgilsecurity@mailinator.com";
+static const std::string SIGNER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {
@@ -78,14 +80,13 @@ int main() {
         std::copy(std::istreambuf_iterator<char>(signFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(sign));
 
-        std::cout << "Get signer ("<< SIGNER_ID << ") public key from the Virgil PKI service..." << std::endl;
-        PublicKeyClientBase publicKeyClient(
-                std::make_shared<ConnectionBase>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        std::vector<Account> accounts = publicKeyClient.search(SIGNER_ID);
-        if (accounts.empty() || accounts.front().publicKeys().empty()) {
-            throw std::runtime_error(std::string("User with id: ") + SIGNER_ID + " not found.");
+        std::cout << "Get signer ("<< SIGNER_EMAIL << ") public key from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        std::vector<PublicKey> publicKeys = keysClient.publicKey().search(SIGNER_EMAIL, UserDataType::emailId);
+        if (publicKeys.empty()) {
+            throw std::runtime_error(std::string("User with id: ") + SIGNER_EMAIL + " not found.");
         }
-        PublicKey publicKey = accounts.front().publicKeys().front();
+        PublicKey publicKey = publicKeys.front();
 
         std::cout << "Initialize verifier..." << std::endl;
         VirgilStreamSigner signer;

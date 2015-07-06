@@ -42,34 +42,35 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
 
-#include <virgil/pki/model/Account.h>
-using virgil::pki::model::Account;
-#include <virgil/pki/model/PublicKey.h>
-using virgil::pki::model::PublicKey;
-#include <virgil/pki/io/marshaller.h>
-using virgil::pki::io::marshaller;
-#include <virgil/pki/http/ConnectionBase.h>
-using virgil::pki::http::ConnectionBase;
-#include <virgil/pki/client/PublicKeyClientBase.h>
-using virgil::pki::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://pki-stg.virgilsecurity.com/v1/";
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
+
+#include <virgil/sdk/keys/io/marshaller.h>
+using virgil::sdk::keys::io::marshaller;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string USER_ID = "test.virgilsecurity@mailinator.com";
+static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {
-        std::cout << "Get user ("<< USER_ID << ") information from the Virgil PKI service..." << std::endl;
-        PublicKeyClientBase publicKeyClient(
-                std::make_shared<ConnectionBase>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        std::vector<Account> accounts = publicKeyClient.search(USER_ID);
-        if (accounts.empty() || accounts.front().publicKeys().empty()) {
-            throw std::runtime_error(std::string("User with id: ") + USER_ID + " not found.");
+        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        std::vector<PublicKey> publicKeys = keysClient.publicKey().search(USER_EMAIL, UserDataType::emailId);
+        if (publicKeys.empty()) {
+            throw std::runtime_error(std::string("User with id: ") + USER_EMAIL + " not found.");
         }
-        PublicKey publicKey = accounts.front().publicKeys().front();
+        PublicKey publicKey = publicKeys.front();
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);

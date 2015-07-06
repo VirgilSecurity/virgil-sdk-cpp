@@ -59,9 +59,9 @@ Once you've created public key you may push it to the Public Keys Service. This 
 This example shows how to upload public key and register new account on Public Keys Service.
 
 ``` {.cpp}
-PkiClientBase pkiClient(std::make_shared<ConnectionBase>("{Token}"));
-UserData userData = UserData().className("user_id").type("email").value("mail@server.com");
-PublicKey virgilPublicKey = pkiClient.publicKey().add(publicKey, {userData});
+KeysClient keysClient(std::make_shared<Connection>("{Token}"));
+UserData userData = UserData::email("mail@server.com");
+PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData});
 ```
 
 ### <a name="example-3"></a> Example 3: Get user's public key
@@ -69,8 +69,9 @@ PublicKey virgilPublicKey = pkiClient.publicKey().add(publicKey, {userData});
 Get public key from Public Keys Service.
 
 ``` {.cpp}
-PkiClientBase pkiClient(std::make_shared<ConnectionBase>("{Token}"));
-auto virgilAccount = pkiClient.publicKey().search(publicKey, {userData});
+KeysClient keysClient(std::make_shared<Connection>("{Token}"));
+std::vector<PublicKey> publicKeys = keysClient.publicKey().search("mail@server.com", UserDataType::emailId);
+PublicKey publicKey = publicKeys.front();
 ```
 
 ### <a name="example-4"></a> Example 4: Encrypt data
@@ -81,8 +82,8 @@ In code example below data encrypted with public key previously loaded from Publ
 
 ``` {.cpp}
 VirgilCipher cipher;
-cipher.addKeyRecipient(virgil::str2bytes(publicKey.publicKeyId()), publicKey.key());
-VirgilByteArray encryptedData = cipher.encrypt(virgil::str2bytes("Data to be encrypted."), true);
+cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
+VirgilByteArray encryptedData = cipher.encrypt(virgil::crypto::str2bytes("Data to be encrypted."), true);
 ```
 
 ### <a name="example-5"></a> Example 5: Decrypt data
@@ -101,7 +102,7 @@ The following example applies a digital signature to public key identifier.
 
 ``` {.cpp}
 VirgilSigner signer;
-VirgilByteArray data = virgil::str2bytes("some data");
+VirgilByteArray data = virgil::crypto::str2bytes("some data");
 VirgilByteArray sign = signer.sign(data, privateKey);
 ```
 

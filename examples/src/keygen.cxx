@@ -41,8 +41,8 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
 #include <virgil/crypto/VirgilKeyPair.h>
 using virgil::crypto::VirgilKeyPair;
 
