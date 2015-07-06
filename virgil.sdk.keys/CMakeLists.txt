@@ -91,11 +91,30 @@ target_link_libraries (keys rest ${CURL_LIB})
 add_dependencies (keys json)
 set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
 
-# Add unit tests
-enable_testing ()
-add_subdirectory (tests)
-
 # Install
 install (TARGETS keys DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
+
+# Add unit tests
+enable_testing ()
+add_subdirectory (tests)
+
+# Add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+
+find_program(dot DOT_PROGRAM)
+if (DOT_PROGRAM)
+    set (DOT_FOUND "YES")
+else ()
+    set (DOT_FOUND "NO")
+endif (DOT_PROGRAM)
+
+if(DOXYGEN_FOUND)
+    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+    add_custom_target (doc
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
+endif (DOXYGEN_FOUND)
