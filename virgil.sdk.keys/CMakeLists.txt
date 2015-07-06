@@ -38,12 +38,21 @@ cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
 project (keys CXX)
 
-# Configurable variables
-set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SDK library name.")
-
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Configurable variables
+set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SDK library name.")
+
+# Set library version
+set (VIRGIL_SDK_KEYS_VERSION_MAJOR 1)
+set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 0)
+set (VIRGIL_SDK_KEYS_VERSION
+    ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
+)
+message (STATUS "Virgil Keys SDK version: " ${VIRGIL_SDK_KEYS_VERSION})
 
 # Add self includes
 include_directories ("include")
@@ -66,6 +75,15 @@ endif ()
 
 # Grab source directory tree
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
+foreach (SRC_FILE ${SRC_LIST})
+    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src/" "" SRC_REL_PATH ${SRC_FILE})
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}"
+        "${CMAKE_CURRENT_BINARY_DIR}/src/${SRC_REL_PATH}"
+        @ONLY
+    )
+endforeach ()
+file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
 add_library (keys STATIC ${SRC_LIST})
