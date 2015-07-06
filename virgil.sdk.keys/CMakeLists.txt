@@ -38,6 +38,9 @@ cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
 project (keys CXX)
 
+# Configurable variables
+set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SDK library name.")
+
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -68,6 +71,7 @@ file (GLOB_RECURSE SRC_LIST "src/*.cxx")
 add_library (keys STATIC ${SRC_LIST})
 target_link_libraries (keys rest ${CURL_LIB})
 add_dependencies (keys json)
+set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
 
 # Add unit tests
 enable_testing ()
