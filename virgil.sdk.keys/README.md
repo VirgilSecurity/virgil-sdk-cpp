@@ -1,3 +1,6 @@
+## Virgil Keys SDK
+This project simplify interaction with [Keys Service](https://virgilsecurity.com/documents/cpp/keys-service).
+
 ## Build
 
 ### Build prerequisite:
@@ -14,3 +17,8 @@
 1. [libcurl](http://curl.haxx.se/libcurl/).
 
 ### Build steps:
+
+1. `mkdir build`
+1. `cd build`
+1. `cmake ../virgil.sdk.keys`
+1. `make`

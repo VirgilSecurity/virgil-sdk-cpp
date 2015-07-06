@@ -1,4 +1,6 @@
-## Introduction
+## Examples
+This directory contains project with examples that shows how to use Virgil Security libraries
+    can be used to solve specific tasks.
 
 ### General statements
 
@@ -27,3 +29,8 @@
 1. [libcurl](http://curl.haxx.se/libcurl/).
 
 ### Build steps:
+
+1. `mkdir build`
+1. `cd build`
+1. `cmake ../examples`
+1. `make`
