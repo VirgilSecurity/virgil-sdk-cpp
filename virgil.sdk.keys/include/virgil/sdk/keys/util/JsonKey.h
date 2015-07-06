@@ -45,20 +45,20 @@ namespace virgil { namespace sdk { namespace keys { namespace util {
      */
     class JsonKey {
     public:
-        static const std::string publicKey;
-        static const std::string publicKeys;
-        static const std::string userData;
-        static const std::string className;
-        static const std::string type;
-        static const std::string value;
-        static const std::string isConfirmed;
-        static const std::string error;
-        static const std::string code;
-        static const std::string id;
-        static const std::string accountId;
-        static const std::string publicKeyId;
-        static const std::string userDataId;
-        static const std::string expanded;
+        static const std::string publicKey; /*!< Json key for public key object. */
+        static const std::string publicKeys; /*!< Json key for public key objects. */
+        static const std::string userData; /*!< Json key for user data object. */
+        static const std::string className; /*!< Json key for user data class name. */
+        static const std::string type; /*!< Json key for user data type. */
+        static const std::string value; /*!< Json key for user data value. */
+        static const std::string isConfirmed; /*!< Json key for user data status: is confirmed. */
+        static const std::string error; /*!< Json key for error object. */
+        static const std::string code; /*!< Json key for error code. */
+        static const std::string id; /*!< Json key for id object. */
+        static const std::string accountId; /*!< Json key for account GUID. */
+        static const std::string publicKeyId; /*!< Json key for public key GUID. */
+        static const std::string userDataId; /*!< Json key for user data GUID. */
+        static const std::string expanded; /*!< Json key for expanded object. */
     private:
         JsonKey();
     };

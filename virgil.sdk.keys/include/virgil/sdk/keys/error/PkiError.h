@@ -73,7 +73,7 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
          * @brief Initialize exception.
          * @param action - defines which action trigger an error.
          * @param statusCode - HTTP response status code.
-         * @param errorCdode - specific Virgil Public Key service error code.
+         * @param errorCode - specific Virgil Public Key service error code.
          */
         PkiError(PkiError::Action action, Response::StatusCode statusCode,
                 unsigned int errorCode = undefinedErrorCode);

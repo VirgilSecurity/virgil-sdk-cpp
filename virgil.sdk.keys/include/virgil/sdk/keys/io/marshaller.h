@@ -41,13 +41,21 @@
 
 namespace virgil { namespace sdk { namespace keys { namespace io {
     /**
-     * @brief
+     * @brief This class responsible for the data object marshalling.
+     *
+     * Supported classes: model::Account, model::PublicKey, model::UserData.
      */
     template <typename T>
     class marshaller {
     public:
+        /**
+         * @brief Marshal given object to the Json representation.
+         */
         template<int INDENT = -1>
         static std::string toJson(const T& obj, bool deep = false);
+        /**
+         * @brief Unmarshal Json representation to the associated object.
+         */
         static T fromJson(const std::string& jsonString);
     private:
         /**

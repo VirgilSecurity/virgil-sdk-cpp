@@ -63,7 +63,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param publicKey - public key to add.
          * @param userData - user data associated with public key.
          * @param accountId - target account GUID.
-         * @note If parameter @link accountId @endlink is omitted, new account will be created.
+         * @note If parameter @param accountId is omitted, new account will be created.
          */
         virtual PublicKey add(const std::vector<unsigned char>& publicKey,
                 const std::vector<UserData>& userData, const std::string& accountId = "") const = 0;
@@ -75,7 +75,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Search associated with given user public keys.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
-         * @param userId - user unique identifier type.
+         * @param userIdType - user unique identifier type.
          * @return Found public keys associated with given user.
          * @see UserDataType.
          */

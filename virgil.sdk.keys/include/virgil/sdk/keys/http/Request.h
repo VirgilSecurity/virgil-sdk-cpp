@@ -124,19 +124,19 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          */
         Method method() const;
         /**
-         * @brief Short form of method @link method(Method::GET) @endlink
+         * @brief Short form of method Request::method(Method::GET)
          */
         Request& get();
         /**
-         * @brief Short form of method @link method(Method::POST) @endlink
+         * @brief Short form of method Request::method(Method::POST)
          */
         Request& post();
         /**
-         * @brief Short form of method @link method(Method::PUT) @endlink
+         * @brief Short form of method Request::method(Method::PUT)
          */
         Request& put();
         /**
-         * @brief Short form of method @link method(Method::DELETE) @endlink
+         * @brief Short form of method Request::method(Method::DELETE)
          */
         Request& del();
         //@}
