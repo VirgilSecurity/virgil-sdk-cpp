@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_ERROR_PKI_ERROR_H
-#define VIRGIL_SDK_KEYS_ERROR_PKI_ERROR_H
+#ifndef VIRGIL_SDK_KEYS_KEYS_ERROR_H
+#define VIRGIL_SDK_KEYS_KEYS_ERROR_H
 
 #include <stdexcept>
 #include <string>
@@ -48,9 +48,9 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
      * @brief Virgil Public Key service exception.
      *
      * This class defines the type of objects thrown as exceptions
-     *     to report errors that occurs during PKI communication.
+     *     to report errors that occurs during Virgil Keys Service communication.
      */
-    class PkiError final : public std::runtime_error {
+    class KeysError final : public std::runtime_error {
     public:
         /**
          * @brief Define constant for undefined error code.
@@ -75,15 +75,15 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
          * @param statusCode - HTTP response status code.
          * @param errorCode - specific Virgil Public Key service error code.
          */
-        PkiError(PkiError::Action action, Response::StatusCode statusCode,
+        KeysError(KeysError::Action action, Response::StatusCode statusCode,
                 unsigned int errorCode = undefinedErrorCode);
     private:
         /**
          * @brief Create formatted error message.
          */
-        std::string formatMessage(PkiError::Action action, Response::StatusCode statusCode,
+        std::string formatMessage(KeysError::Action action, Response::StatusCode statusCode,
                 unsigned int errorCode) noexcept;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_ERROR_PKI_ERROR_H */
+#endif /* VIRGIL_SDK_KEYS_KEYS_ERROR_H */

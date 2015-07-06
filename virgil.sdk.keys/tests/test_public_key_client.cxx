@@ -57,8 +57,8 @@ using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/client/KeysClient.h>
 using virgil::sdk::keys::client::KeysClient;
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 #include <virgil/sdk/keys/util/Base64.h>
 using virgil::sdk::keys::util::Base64;
@@ -123,7 +123,7 @@ TEST_CASE("Add Public Key (new account) - failed", "[virgil-sdk-keys-public-key]
     When(Method(connection, send)).Return(errorResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_THROWS_AS(keysClient->publicKey().add(expectedPublicKey, {UserData()}), PkiError);
+    REQUIRE_THROWS_AS(keysClient->publicKey().add(expectedPublicKey, {UserData()}), KeysError);
 
     Verify(Method(connection, send));
 }

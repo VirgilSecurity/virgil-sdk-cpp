@@ -34,46 +34,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 #include <sstream>
 
-PkiError::PkiError(PkiError::Action action, Response::StatusCode statusCode,
+KeysError::KeysError(KeysError::Action action, Response::StatusCode statusCode,
         unsigned int errorCode)
         : runtime_error(formatMessage(action, statusCode, errorCode)) {
 }
 
 
-std::string PkiError::formatMessage(PkiError::Action action, Response::StatusCode statusCode,
+std::string KeysError::formatMessage(KeysError::Action action, Response::StatusCode statusCode,
         unsigned int errorCode) noexcept {
 
     std::ostringstream message;
 
     message << "Failed to ";
     switch (action) {
-    case PkiError::Action::PUBLIC_KEY_ADD:
+    case KeysError::Action::PUBLIC_KEY_ADD:
         message << "add public key.";
         break;
-    case PkiError::Action::PUBLIC_KEY_GET:
+    case KeysError::Action::PUBLIC_KEY_GET:
         message << "get public key.";
         break;
-    case PkiError::Action::PUBLIC_KEY_SEARCH:
+    case KeysError::Action::PUBLIC_KEY_SEARCH:
         message << "search public key.";
         break;
-    case PkiError::Action::USER_DATA_ADD:
+    case KeysError::Action::USER_DATA_ADD:
         message << "add user data.";
         break;
-    case PkiError::Action::USER_DATA_GET:
+    case KeysError::Action::USER_DATA_GET:
         message << "get user data.";
         break;
-    case PkiError::Action::USER_DATA_SEARCH:
+    case KeysError::Action::USER_DATA_SEARCH:
         message << "search user data.";
         break;
-    case PkiError::Action::USER_DATA_CONFIRM:
+    case KeysError::Action::USER_DATA_CONFIRM:
         message << "confirm user data.";
         break;
-    case PkiError::Action::USER_DATA_CONFIRM_RESEND:
+    case KeysError::Action::USER_DATA_CONFIRM_RESEND:
         message << "resend user data confirmation.";
         break;
     default:

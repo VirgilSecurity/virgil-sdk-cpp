@@ -44,8 +44,8 @@ using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
 using virgil::sdk::keys::http::Response;
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 namespace virgil { namespace sdk { namespace keys { namespace http {
     /**
@@ -77,9 +77,9 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          * @brief Check response for errors.
          * @param response - HTTP response to check.
          * @param action - PKI action that created the response.
-         * @throw PkiError, if HTTP response contains error description.
+         * @throw KeysError, if HTTP response contains error description.
          */
-        virtual void checkResponseError(const Response& response, PkiError::Action action) = 0;
+        virtual void checkResponseError(const Response& response, KeysError::Action action) = 0;
     private:
         std::string baseAddress_;
     };

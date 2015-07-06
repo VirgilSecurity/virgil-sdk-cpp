@@ -61,7 +61,7 @@ class Connection final : public ConnectionBase {
          */
         //@{
         Response send(const Request& request) override;
-        void checkResponseError(const Response& response, PkiError::Action action) override;
+        void checkResponseError(const Response& response, KeysError::Action action) override;
         //@}
     private:
         std::string appToken_;

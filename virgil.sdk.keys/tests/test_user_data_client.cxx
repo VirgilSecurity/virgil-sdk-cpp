@@ -55,8 +55,8 @@ using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/client/KeysClient.h>
 using virgil::sdk::keys::client::KeysClient;
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 #include <virgil/sdk/keys/util/Base64.h>
 using virgil::sdk::keys::util::Base64;

@@ -102,11 +102,11 @@ Response Connection::send(const Request& request) {
     return response.header(httpResponse.headers).body(httpResponse.body);
 }
 
-void Connection::checkResponseError(const Response& response, PkiError::Action action) {
+void Connection::checkResponseError(const Response& response, KeysError::Action action) {
     if (response.fail()) {
         json error = json::parse(response.body());
         json errorCode = error[JsonKey::error][JsonKey::code];
-        throw PkiError(action, response.statusCode(),
-                errorCode.is_number() ? errorCode.get<unsigned int>() : PkiError::undefinedErrorCode);
+        throw KeysError(action, response.statusCode(),
+                errorCode.is_number() ? errorCode.get<unsigned int>() : KeysError::undefinedErrorCode);
     }
 }

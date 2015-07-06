@@ -55,8 +55,8 @@ using virgil::sdk::keys::util::Base64;
 #include <virgil/sdk/keys/util/JsonKey.h>
 using virgil::sdk::keys::util::JsonKey;
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -83,7 +83,7 @@ PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
     Request request = Request().endpoint(EndpointUri::publicKeyAdd()).post()
             .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_ADD);
+    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_ADD);
 
     json responseBody = json::parse(response.body());
 
@@ -98,7 +98,7 @@ PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
 PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
     Request request = Request().endpoint(EndpointUri::publicKeyGet(publicKeyId)).get();
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_GET);
+    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GET);
 
     json responseBody = json::parse(response.body());
 
@@ -125,7 +125,7 @@ std::vector<PublicKey> PublicKeyClient::search(const std::string& userId, const 
     Request request = Request().endpoint(EndpointUri::publicKeySearch()).post()
             .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_SEARCH);
+    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_SEARCH);
 
     json responseBody = json::parse(response.body());
 

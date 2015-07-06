@@ -55,8 +55,8 @@ using virgil::sdk::keys::util::Base64;
 #include <virgil/sdk/keys/util/JsonKey.h>
 using virgil::sdk::keys::util::JsonKey;
 
-#include <virgil/sdk/keys/error/PkiError.h>
-using virgil::sdk::keys::error::PkiError;
+#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::error::KeysError;
 
 #include <json.hpp>
 using json = nlohmann::json;
@@ -73,7 +73,7 @@ UserData UserDataClient::add(const std::string& publicKeyId, const std::string& 
 
     Request request = Request().endpoint(EndpointUri::userDataAdd()).post().contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::USER_DATA_ADD);
+    connection()->checkResponseError(response, KeysError::Action::USER_DATA_ADD);
 
     json responseBody = json::parse(response.body());
 
@@ -90,7 +90,7 @@ UserData UserDataClient::add(const std::string& publicKeyId, const std::string& 
 UserData UserDataClient::get(const std::string& userDataId) const {
     Request request = Request().endpoint(EndpointUri::userDataGet(userDataId)).get();
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::USER_DATA_GET);
+    connection()->checkResponseError(response, KeysError::Action::USER_DATA_GET);
 
     json responseBody = json::parse(response.body());
 
@@ -112,7 +112,7 @@ void UserDataClient::confirm(const std::string& userDataId, const std::string& c
     Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post()
             .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM);
+    connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
 }
 
 void UserDataClient::resendConfirmation(const std::string& userDataId) const {
@@ -121,7 +121,7 @@ void UserDataClient::resendConfirmation(const std::string& userDataId) const {
     Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()
             .contentType("application/json").body(payload.dump());
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM_RESEND);
+    connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM_RESEND);
 }
 
 std::vector<UserData> UserDataClient::search(const std::string& userId, bool expandPublicKey) const {
@@ -136,7 +136,7 @@ std::vector<UserData> UserDataClient::search(const std::string& userId, bool exp
         request.parameters({{"expand", "public_key"}});
     }
     Response response = connection()->send(request);
-    connection()->checkResponseError(response, PkiError::Action::USER_DATA_SEARCH);
+    connection()->checkResponseError(response, KeysError::Action::USER_DATA_SEARCH);
 
     json responseBody = json::parse(response.body());
 
