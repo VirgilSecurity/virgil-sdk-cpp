@@ -43,8 +43,6 @@
 #include <virgil/sdk/keys/client/EndpointClient.h>
 using virgil::sdk::keys::client::EndpointClient;
 
-#include <virgil/sdk/keys/model/Account.h>
-using virgil::sdk::keys::model::Account;
 #include <virgil/sdk/keys/model/PublicKey.h>
 using virgil::sdk::keys::model::PublicKey;
 #include <virgil/sdk/keys/model/UserData.h>
@@ -77,9 +75,11 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Search associated with given user public keys.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
+         * @param userId - user unique identifier type.
          * @return Found public keys associated with given user.
+         * @see UserDataType.
          */
-        virtual std::vector<Account> search(const std::string& userId) const = 0;
+        virtual std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const = 0;
     };
 }}}}
 

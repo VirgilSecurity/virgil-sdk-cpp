@@ -34,32 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H
-#define VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H
+#ifndef VIRGIL_SDK_KEYS_MODEL_USER_DATA_CLASS_H
+#define VIRGIL_SDK_KEYS_MODEL_USER_DATA_CLASS_H
 
-#include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
+#include <string>
 
-namespace virgil { namespace sdk { namespace keys { namespace client {
+namespace virgil { namespace sdk { namespace keys { namespace model {
     /**
-     * @brief Base implenetation of class PublicKeyClient.
+     * @brief Contains string representation of "Virgil User Data" class name.
      */
-    class PublicKeyClientBase final : public PublicKeyClient {
+    class UserDataClass {
     public:
         /**
-         * @brief Inherit base class constructor.
+         * @property userId
+         * @brief Class name for UserData object that contains user's identifier.
          */
-        using PublicKeyClient::PublicKeyClient;
+        static const std::string userId;
         /**
-         * @name Base class implementation
+         * @property userInfo
+         * @brief Class name for UserData object that contains user's information.
          */
-        //@{
-        PublicKey add(const std::vector<unsigned char>& publicKey,
-                const std::vector<UserData>& userData, const std::string& accountId = "") const override;
-        PublicKey get(const std::string& publicKeyId) const override;
-        std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const override;
-        //@}
+        static const std::string userInfo;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H */
+#endif /* VIRGIL_SDK_KEYS_MODEL_USER_DATA_CLASS_H */

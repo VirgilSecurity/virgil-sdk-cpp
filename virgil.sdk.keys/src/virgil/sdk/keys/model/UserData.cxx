@@ -36,9 +36,37 @@
 
 #include <virgil/sdk/keys/model/UserData.h>
 using virgil::sdk::keys::model::UserData;
+#include <virgil/sdk/keys/model/UserDataClass.h>
+using virgil::sdk::keys::model::UserDataClass;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
 
 #include <virgil/sdk/keys/model/PublicKey.h>
 using virgil::sdk::keys::model::PublicKey;
+
+UserData UserData::email(const std::string& value) {
+    return UserData().className(UserDataClass::userId).type(UserDataType::emailId).value(value);
+}
+
+UserData UserData::phone(const std::string& value) {
+    return UserData().className(UserDataClass::userId).type(UserDataType::phoneId).value(value);
+}
+
+UserData UserData::application(const std::string& value) {
+    return UserData().className(UserDataClass::userId).type(UserDataType::applicationId).value(value);
+}
+
+UserData UserData::domain(const std::string& value) {
+    return UserData().className(UserDataClass::userId).type(UserDataType::domainId).value(value);
+}
+
+UserData UserData::firstName(const std::string& value) {
+    return UserData().className(UserDataClass::userInfo).type(UserDataType::firstNameInfo).value(value);
+}
+
+UserData UserData::lastName(const std::string& value) {
+    return UserData().className(UserDataClass::userInfo).type(UserDataType::lastNameInfo).value(value);
+}
 
 UserData& UserData::accountId(const std::string& accountId) {
     accountId_ = accountId;

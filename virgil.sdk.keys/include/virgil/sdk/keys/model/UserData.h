@@ -54,6 +54,37 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
     class UserData {
     public:
         /**
+         * @name Common object creation
+         * @brief Return UserData object with preset fields:
+         *     @link className @endlink and @link type @endlink
+         */
+        //@{
+        /**
+         * @return UserData object that represents email.
+         */
+        static UserData email(const std::string& value);
+        /**
+         * @return UserData object that represents phone.
+         */
+        static UserData phone(const std::string& value);
+        /**
+         * @return UserData object that represents application.
+         */
+        static UserData application(const std::string& value);
+        /**
+         * @return UserData object that represents domain.
+         */
+        static UserData domain(const std::string& value);
+        /**
+         * @return UserData object that represents user's first name.
+         */
+        static UserData firstName(const std::string& value);
+        /**
+         * @return UserData object that represents user's last name.
+         */
+        static UserData lastName(const std::string& value);
+        //@}
+        /**
          * @brief Set parent account GUID.
          */
         UserData& accountId (const std::string& accountId);

@@ -40,6 +40,9 @@ using virgil::sdk::keys::client::PublicKeyClientBase;
 #include <virgil/sdk/keys/client/EndpointUri.h>
 using virgil::sdk::keys::client::EndpointUri;
 
+#include <virgil/sdk/keys/model/Account.h>
+using virgil::sdk::keys::model::Account;
+
 #include <virgil/sdk/keys/http/Connection.h>
 using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/http/Request.h>
@@ -114,9 +117,9 @@ PublicKey PublicKeyClientBase::get(const std::string& publicKeyId) const {
     return pkiPublicKey;
 }
 
-std::vector<Account> PublicKeyClientBase::search(const std::string& userId) const {
+std::vector<PublicKey> PublicKeyClientBase::search(const std::string& userId, const std::string& userIdType) const {
     json payload = {
-        {"email", userId}
+        {userIdType, userId}
     };
 
     Request request = Request().endpoint(EndpointUri::publicKeySearch()).post()
@@ -139,5 +142,8 @@ std::vector<Account> PublicKeyClientBase::search(const std::string& userId) cons
         }
         accounts.push_back(account);
     }
-    return accounts;
+    if (accounts.empty()) {
+        throw std::runtime_error("PublicKeyClientBase: public key not found.");
+    }
+    return accounts.front().publicKeys();
 }

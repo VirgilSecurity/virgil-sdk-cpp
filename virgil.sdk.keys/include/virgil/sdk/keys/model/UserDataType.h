@@ -34,32 +34,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H
-#define VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H
+#ifndef VIRGIL_SDK_KEYS_MODEL_USER_DATA_TYPE_H
+#define VIRGIL_SDK_KEYS_MODEL_USER_DATA_TYPE_H
 
-#include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
+#include <string>
 
-namespace virgil { namespace sdk { namespace keys { namespace client {
+namespace virgil { namespace sdk { namespace keys { namespace model {
     /**
-     * @brief Base implenetation of class PublicKeyClient.
+     * @brief Contains string representation of "Virgil User Data" class type.
      */
-    class PublicKeyClientBase final : public PublicKeyClient {
+    class UserDataType {
     public:
         /**
-         * @brief Inherit base class constructor.
-         */
-        using PublicKeyClient::PublicKeyClient;
-        /**
-         * @name Base class implementation
+         * @name User identifier types.
          */
         //@{
-        PublicKey add(const std::vector<unsigned char>& publicKey,
-                const std::vector<UserData>& userData, const std::string& accountId = "") const override;
-        PublicKey get(const std::string& publicKeyId) const override;
-        std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const override;
+        /**
+         * @property emailId
+         * @brief Represents user identifer type - email.
+         */
+        static const std::string emailId;
+        /**
+         * @property phoneId
+         * @brief Represents user identifer type - phone.
+         */
+        static const std::string phoneId;
+        /**
+         * @property applicationId
+         * @brief Represents user identifer type - application.
+         */
+        static const std::string applicationId;
+        /**
+         * @property domainId
+         * @brief Represents user identifer type - domain.
+         */
+        static const std::string domainId;
+        //@}
+        /**
+         * @name User info types.
+         */
+        //@{
+        /**
+         * @property firstNameInfo
+         * @brief Represents user info type - first name.
+         */
+        static const std::string firstNameInfo;
+        /**
+         * @property lastNameInfo
+         * @brief Represents user info type - last name.
+         */
+        static const std::string lastNameInfo;
         //@}
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_PUBLIC_KEY_CLIENT_BASE_H */
+#endif /* VIRGIL_SDK_KEYS_MODEL_USER_DATA_TYPE_H */

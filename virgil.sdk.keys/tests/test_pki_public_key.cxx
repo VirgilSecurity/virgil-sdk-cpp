@@ -67,6 +67,10 @@ using virgil::sdk::keys::util::JsonKey;
 
 #include <virgil/sdk/keys/model/UserData.h>
 using virgil::sdk::keys::model::UserData;
+#include <virgil/sdk/keys/model/UserDataClass.h>
+using virgil::sdk::keys::model::UserDataClass;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
 
 #include "fakeit_utils.hpp"
 
@@ -87,7 +91,7 @@ TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
         {JsonKey::userData, json::array()}
     }).dump());
 
-    UserData userData = UserData().className("user_id").type("email").value("test@test.com");
+    UserData userData = UserData::email("test@test.com");
 
     auto connectionObj = std::make_shared<ConnectionBase>(appToken);
     Mock<Connection> connection(*connectionObj);
@@ -127,8 +131,8 @@ TEST_CASE("Get Public Key - success", "[pki-public-key]") {
     auto expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
     std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
     std::vector<UserData> expectedUserData {
-        UserData().className("user_id").type("phone").value("+1 123 777 7777").isConfirmed(false),
-        UserData().className("user_id").type("email").value("test@virgilsecurity.com").isConfirmed(true)
+        UserData::phone("+1 123 777 7777").isConfirmed(false),
+        UserData::email("test@virgilsecurity.com").isConfirmed(true)
     };
 
     json successResponseJson = {
@@ -199,16 +203,13 @@ TEST_CASE ("Search Public Key - success", "[pki-public-key]") {
     When(Method(connection, send)).Return(successResponse);
 
     auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
-    std::vector<Account> accounts = pkiClient->publicKey().search("test@virgilsecurity.com");
+    std::vector<PublicKey> publicKeys =
+            pkiClient->publicKey().search("test@virgilsecurity.com", UserDataType::emailId);
 
     Verify(Method(connection, send));
-    REQUIRE (accounts.size() == 1);
 
-    Account account = accounts.front();
-    REQUIRE(account.accountId() == expectedAccountId);
-    REQUIRE(account.publicKeys().size() == 1);
-
-    PublicKey publicKey = account.publicKeys().at(0);
+    REQUIRE(publicKeys.size() == 1);
+    PublicKey publicKey = publicKeys.front();
     REQUIRE(publicKey.accountId() == expectedAccountId);
     REQUIRE(publicKey.publicKeyId() == expectedPublicKeyId);
     REQUIRE(publicKey.key() == expectedPublicKey);
