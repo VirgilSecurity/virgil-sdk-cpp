@@ -86,7 +86,7 @@ function (virgil_add_dependency module target includes libraries)
         ExternalProject_Add (${VIRGIL}_project
             GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil.git"
             GIT_TAG "develop"
-            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil_crypto"
+            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.crypto"
             CMAKE_ARGS ${CMAKE_ARGS}
         )
 
@@ -118,15 +118,15 @@ function (virgil_add_dependency module target includes libraries)
         endif ()
 
         ExternalProject_Add (${VIRGIL}_project
-            URL "${CMAKE_CURRENT_SOURCE_DIR}/../sdk/keys-public"
-            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil_crypto"
+            URL "${CMAKE_CURRENT_SOURCE_DIR}/../virgil.sdk.keys"
+            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.sdk.keys"
             CMAKE_ARGS ${CMAKE_ARGS}
         )
 
         # Payload targets and output variables
         ExternalProject_Get_Property (${VIRGIL}_project INSTALL_DIR)
 
-        set (VIRGIL_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}pki${CMAKE_STATIC_LIBRARY_SUFFIX})
+        set (VIRGIL_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}virgil_sdk_keys${CMAKE_STATIC_LIBRARY_SUFFIX})
         set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
         set (VIRGIL_INCLUDE_DIR "${INSTALL_DIR}/include")
         set (VIRGIL_LIBRARIES "${INSTALL_DIR}/lib/${VIRGIL_LIBRARY_NAME};${INSTALL_DIR}/lib/${REST_LIBRARY_NAME}")
