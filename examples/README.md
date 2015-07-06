@@ -1,6 +1,6 @@
 ## Examples
 This directory contains project with examples that shows how to use Virgil Security libraries
-    can be used to solve specific tasks.
+    that can be used to solve specific tasks.
 
 ### General statements
 
