@@ -37,19 +37,67 @@
 #include <virgil/sdk/keys/http/Connection.h>
 using virgil::sdk::keys::http::Connection;
 
-const std::string Connection::baseAddressDefault = "https://pki.virgilsecurity.com/v1";
+#include <virgil/sdk/keys/http/Request.h>
+using virgil::sdk::keys::http::Request;
+#include <virgil/sdk/keys/http/Response.h>
+using virgil::sdk::keys::http::Response;
 
-Connection::Connection(const std::string& appToken, const std::string& baseAddress)
-        : appToken_(appToken), baseAddress_(baseAddress) {
-    if (!baseAddress_.empty() && baseAddress_.back() == '/') {
-        baseAddress_.pop_back();
+#include <virgil/sdk/keys/util/JsonKey.h>
+using virgil::sdk::keys::util::JsonKey;
+
+#include <stdexcept>
+
+#include <json.hpp>
+using json = nlohmann::json;
+
+#include <restless.hpp>
+using HttpRequest = asoni::Handle;
+
+Response Connection::send(const Request& request) {
+    // Construct URI
+    std::string uri = request.baseAddress().empty() ?
+            this->baseAddress() + request.uri() : request.uri();
+    // Add custom field to the header
+    auto header = request.header();
+    if (header.find("X-VIRGIL-APP-TOKEN") == header.end()) {
+        header["X-VIRGIL-APP-TOKEN"] = appToken();
     }
+    // Make Request
+    HttpRequest httpRequest;
+    httpRequest.header(header).content(request.contentType(), request.body());
+    switch (request.method()) {
+        case Request::Method::GET:
+            httpRequest.get(uri);
+            break;
+        case Request::Method::POST:
+            httpRequest.post(uri);
+            break;
+        case Request::Method::PUT:
+            httpRequest.put(uri);
+            break;
+        case Request::Method::DELETE:
+            httpRequest.del(uri);
+            break;
+        default:
+            throw std::logic_error("Unknown HTTP method.");
+    }
+    // Execute
+    auto httpResponse = httpRequest.exec();
+    // Make response
+    Response response;
+    try {
+        response.statusCodeRaw(httpResponse.code);
+    } catch (const std::logic_error&) {
+        throw std::runtime_error(httpResponse.body);
+    }
+    return response.header(httpResponse.headers).body(httpResponse.body);
 }
 
-std::string Connection::appToken() const {
-    return appToken_;
-}
-
-std::string Connection::baseAddress() const {
-    return baseAddress_;
+void Connection::checkResponseError(const Response& response, PkiError::Action action) {
+    if (response.fail()) {
+        json error = json::parse(response.body());
+        json errorCode = error[JsonKey::error][JsonKey::code];
+        throw PkiError(action, response.statusCode(),
+                errorCode.is_number() ? errorCode.get<unsigned int>() : PkiError::undefinedErrorCode);
+    }
 }

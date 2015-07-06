@@ -1078,13 +1078,13 @@ namespace Detail {
 #endif
 
     template<bool C>
-    struct StringMakerBase {
+    struct StringMakerDefault {
         template<typename T>
         static std::string convert( T const& ) { return "{?}"; }
     };
 
     template<>
-    struct StringMakerBase<true> {
+    struct StringMakerDefault<true> {
         template<typename T>
         static std::string convert( T const& _value ) {
             std::ostringstream oss;
@@ -1107,7 +1107,7 @@ std::string toString( T const& value );
 
 template<typename T>
 struct StringMaker :
-    Detail::StringMakerBase<Detail::IsStreamInsertable<T>::value> {};
+    Detail::StringMakerDefault<Detail::IsStreamInsertable<T>::value> {};
 
 template<typename T>
 struct StringMaker<T*> {
@@ -5752,9 +5752,9 @@ namespace Catch {
 
 namespace Catch {
 
-    class StreamBufBase : public std::streambuf {
+    class StreamBufDefault : public std::streambuf {
     public:
-        virtual ~StreamBufBase() CATCH_NOEXCEPT;
+        virtual ~StreamBufDefault() CATCH_NOEXCEPT;
     };
 }
 
@@ -5764,7 +5764,7 @@ namespace Catch {
 namespace Catch {
 
     template<typename WriterF, size_t bufferSize=256>
-    class StreamBufImpl : public StreamBufBase {
+    class StreamBufImpl : public StreamBufDefault {
         char data[bufferSize];
         WriterF m_writer;
 
@@ -7206,18 +7206,18 @@ namespace Catch {
 #define TWOBLUECUBES_CATCH_REPORTER_XML_HPP_INCLUDED
 
 // #included from: catch_reporter_bases.hpp
-#define TWOBLUECUBES_CATCH_REPORTER_BASES_HPP_INCLUDED
+#define TWOBLUECUBES_CATCH_REPORTER_DEFAULTS_HPP_INCLUDED
 
 namespace Catch {
 
-    struct StreamingReporterBase : SharedImpl<IStreamingReporter> {
+    struct StreamingReporterDefault : SharedImpl<IStreamingReporter> {
 
-        StreamingReporterBase( ReporterConfig const& _config )
+        StreamingReporterDefault( ReporterConfig const& _config )
         :   m_config( _config.fullConfig() ),
             stream( _config.stream() )
         {}
 
-        virtual ~StreamingReporterBase();
+        virtual ~StreamingReporterDefault();
 
         virtual void noMatchingTestCases( std::string const& ) {}
 
@@ -7261,7 +7261,7 @@ namespace Catch {
         std::vector<SectionInfo> m_sectionStack;
     };
 
-    struct CumulativeReporterBase : SharedImpl<IStreamingReporter> {
+    struct CumulativeReporterDefault : SharedImpl<IStreamingReporter> {
         template<typename T, typename ChildNodeT>
         struct Node : SharedImpl<> {
             explicit Node( T const& _value ) : value( _value ) {}
@@ -7306,11 +7306,11 @@ namespace Catch {
         typedef Node<TestGroupStats, TestCaseNode> TestGroupNode;
         typedef Node<TestRunStats, TestGroupNode> TestRunNode;
 
-        CumulativeReporterBase( ReporterConfig const& _config )
+        CumulativeReporterDefault( ReporterConfig const& _config )
         :   m_config( _config.fullConfig() ),
             stream( _config.stream() )
         {}
-        ~CumulativeReporterBase();
+        ~CumulativeReporterDefault();
 
         virtual void testRunStarting( TestRunInfo const& ) {}
         virtual void testGroupStarting( GroupInfo const& ) {}
@@ -7820,10 +7820,10 @@ namespace Catch {
 
 namespace Catch {
 
-    class JunitReporter : public CumulativeReporterBase {
+    class JunitReporter : public CumulativeReporterDefault {
     public:
         JunitReporter( ReporterConfig const& _config )
-        :   CumulativeReporterBase( _config ),
+        :   CumulativeReporterDefault( _config ),
             xml( _config.stream() )
         {}
 
@@ -7842,7 +7842,7 @@ namespace Catch {
         }
 
         virtual void testRunStarting( TestRunInfo const& runInfo ) {
-            CumulativeReporterBase::testRunStarting( runInfo );
+            CumulativeReporterDefault::testRunStarting( runInfo );
             xml.startElement( "testsuites" );
         }
 
@@ -7851,24 +7851,24 @@ namespace Catch {
             stdOutForSuite.str("");
             stdErrForSuite.str("");
             unexpectedExceptions = 0;
-            CumulativeReporterBase::testGroupStarting( groupInfo );
+            CumulativeReporterDefault::testGroupStarting( groupInfo );
         }
 
         virtual bool assertionEnded( AssertionStats const& assertionStats ) {
             if( assertionStats.assertionResult.getResultType() == ResultWas::ThrewException )
                 unexpectedExceptions++;
-            return CumulativeReporterBase::assertionEnded( assertionStats );
+            return CumulativeReporterDefault::assertionEnded( assertionStats );
         }
 
         virtual void testCaseEnded( TestCaseStats const& testCaseStats ) {
             stdOutForSuite << testCaseStats.stdOut;
             stdErrForSuite << testCaseStats.stdErr;
-            CumulativeReporterBase::testCaseEnded( testCaseStats );
+            CumulativeReporterDefault::testCaseEnded( testCaseStats );
         }
 
         virtual void testGroupEnded( TestGroupStats const& testGroupStats ) {
             double suiteTime = suiteTimer.getElapsedSeconds();
-            CumulativeReporterBase::testGroupEnded( testGroupStats );
+            CumulativeReporterDefault::testGroupEnded( testGroupStats );
             writeGroup( *m_testGroups.back(), suiteTime );
         }
 
@@ -8032,9 +8032,9 @@ namespace Catch {
 
 namespace Catch {
 
-    struct ConsoleReporter : StreamingReporterBase {
+    struct ConsoleReporter : StreamingReporterDefault {
         ConsoleReporter( ReporterConfig const& _config )
-        :   StreamingReporterBase( _config ),
+        :   StreamingReporterDefault( _config ),
             m_headerPrinted( false )
         {}
 
@@ -8077,7 +8077,7 @@ namespace Catch {
 
         virtual void sectionStarting( SectionInfo const& _sectionInfo ) {
             m_headerPrinted = false;
-            StreamingReporterBase::sectionStarting( _sectionInfo );
+            StreamingReporterDefault::sectionStarting( _sectionInfo );
         }
         virtual void sectionEnded( SectionStats const& _sectionStats ) {
             if( _sectionStats.missingAssertions ) {
@@ -8098,11 +8098,11 @@ namespace Catch {
                 if( m_config->showDurations() == ShowDurations::Always )
                     stream << _sectionStats.sectionInfo.name << " completed in " << _sectionStats.durationInSeconds << "s" << std::endl;
             }
-            StreamingReporterBase::sectionEnded( _sectionStats );
+            StreamingReporterDefault::sectionEnded( _sectionStats );
         }
 
         virtual void testCaseEnded( TestCaseStats const& _testCaseStats ) {
-            StreamingReporterBase::testCaseEnded( _testCaseStats );
+            StreamingReporterDefault::testCaseEnded( _testCaseStats );
             m_headerPrinted = false;
         }
         virtual void testGroupEnded( TestGroupStats const& _testGroupStats ) {
@@ -8112,13 +8112,13 @@ namespace Catch {
                 printTotals( _testGroupStats.totals );
                 stream << "\n" << std::endl;
             }
-            StreamingReporterBase::testGroupEnded( _testGroupStats );
+            StreamingReporterDefault::testGroupEnded( _testGroupStats );
         }
         virtual void testRunEnded( TestRunStats const& _testRunStats ) {
             printTotalsDivider( _testRunStats.totals );
             printTotals( _testRunStats.totals );
             stream << std::endl;
-            StreamingReporterBase::testRunEnded( _testRunStats );
+            StreamingReporterDefault::testRunEnded( _testRunStats );
         }
 
     private:
@@ -8475,10 +8475,10 @@ namespace Catch {
 
 namespace Catch {
 
-    struct CompactReporter : StreamingReporterBase {
+    struct CompactReporter : StreamingReporterDefault {
 
         CompactReporter( ReporterConfig const& _config )
-        : StreamingReporterBase( _config )
+        : StreamingReporterDefault( _config )
         {}
 
         virtual ~CompactReporter();
@@ -8522,7 +8522,7 @@ namespace Catch {
         virtual void testRunEnded( TestRunStats const& _testRunStats ) {
             printTotals( _testRunStats.totals );
             stream << "\n" << std::endl;
-            StreamingReporterBase::testRunEnded( _testRunStats );
+            StreamingReporterDefault::testRunEnded( _testRunStats );
         }
 
     private:
@@ -8754,7 +8754,7 @@ namespace Catch {
 namespace Catch {
     NonCopyable::~NonCopyable() {}
     IShared::~IShared() {}
-    StreamBufBase::~StreamBufBase() CATCH_NOEXCEPT {}
+    StreamBufDefault::~StreamBufDefault() CATCH_NOEXCEPT {}
     IContext::~IContext() {}
     IResultCapture::~IResultCapture() {}
     ITestCase::~ITestCase() {}
@@ -8772,10 +8772,10 @@ namespace Catch {
     TestCaseStats::~TestCaseStats() {}
     TestGroupStats::~TestGroupStats() {}
     TestRunStats::~TestRunStats() {}
-    CumulativeReporterBase::SectionNode::~SectionNode() {}
-    CumulativeReporterBase::~CumulativeReporterBase() {}
+    CumulativeReporterDefault::SectionNode::~SectionNode() {}
+    CumulativeReporterDefault::~CumulativeReporterDefault() {}
 
-    StreamingReporterBase::~StreamingReporterBase() {}
+    StreamingReporterDefault::~StreamingReporterDefault() {}
     ConsoleReporter::~ConsoleReporter() {}
     CompactReporter::~CompactReporter() {}
     IRunner::~IRunner() {}

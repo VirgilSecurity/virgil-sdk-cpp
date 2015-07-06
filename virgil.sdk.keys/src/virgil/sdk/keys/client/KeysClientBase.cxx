@@ -34,20 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/PkiClient.h>
-using virgil::sdk::keys::client::PkiClient;
+#include <virgil/sdk/keys/client/KeysClientBase.h>
+using virgil::sdk::keys::client::KeysClientBase;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
 #include <stdexcept>
 
-PkiClient::PkiClient(const std::shared_ptr<Connection>& connection) : connection_(connection) {
+KeysClientBase::KeysClientBase(const std::shared_ptr<ConnectionBase>& connection) : connection_(connection) {
     if (!connection_) {
         throw std::logic_error("Connection is not defined.");
     }
 }
 
-std::shared_ptr<Connection> PkiClient::connection() const {
+std::shared_ptr<ConnectionBase> KeysClientBase::connection() const {
     return connection_;
 }

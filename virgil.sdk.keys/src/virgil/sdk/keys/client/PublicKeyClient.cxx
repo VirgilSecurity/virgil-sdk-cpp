@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/PublicKeyClientBase.h>
-using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/PublicKeyClient.h>
+using virgil::sdk::keys::client::PublicKeyClient;
 
 #include <virgil/sdk/keys/client/EndpointUri.h>
 using virgil::sdk::keys::client::EndpointUri;
@@ -43,8 +43,8 @@ using virgil::sdk::keys::client::EndpointUri;
 #include <virgil/sdk/keys/model/Account.h>
 using virgil::sdk::keys::model::Account;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 #include <virgil/sdk/keys/http/Request.h>
 using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
@@ -61,7 +61,7 @@ using virgil::sdk::keys::error::PkiError;
 #include <json.hpp>
 using json = nlohmann::json;
 
-PublicKey PublicKeyClientBase::add(const std::vector<unsigned char>& publicKey,
+PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
         const std::vector<UserData>& userData, const std::string& accountId) const {
 
     json payload = json::object();
@@ -95,7 +95,7 @@ PublicKey PublicKeyClientBase::add(const std::vector<unsigned char>& publicKey,
     return pkiPublicKey;
 }
 
-PublicKey PublicKeyClientBase::get(const std::string& publicKeyId) const {
+PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
     Request request = Request().endpoint(EndpointUri::publicKeyGet(publicKeyId)).get();
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::PUBLIC_KEY_GET);
@@ -117,7 +117,7 @@ PublicKey PublicKeyClientBase::get(const std::string& publicKeyId) const {
     return pkiPublicKey;
 }
 
-std::vector<PublicKey> PublicKeyClientBase::search(const std::string& userId, const std::string& userIdType) const {
+std::vector<PublicKey> PublicKeyClient::search(const std::string& userId, const std::string& userIdType) const {
     json payload = {
         {userIdType, userId}
     };
@@ -143,7 +143,7 @@ std::vector<PublicKey> PublicKeyClientBase::search(const std::string& userId, co
         accounts.push_back(account);
     }
     if (accounts.empty()) {
-        throw std::runtime_error("PublicKeyClientBase: public key not found.");
+        throw std::runtime_error("PublicKeyClient: public key not found.");
     }
     return accounts.front().publicKeys();
 }

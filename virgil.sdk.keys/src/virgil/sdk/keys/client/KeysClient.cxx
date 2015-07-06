@@ -34,39 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/PkiClientBase.h>
-using virgil::sdk::keys::client::PkiClientBase;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
 
-#include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
 using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/PublicKeyClient.h>
+using virgil::sdk::keys::client::PublicKeyClient;
 
-#include <virgil/sdk/keys/client/UserDataClient.h>
-using virgil::sdk::keys::client::UserDataClient;
 #include <virgil/sdk/keys/client/UserDataClientBase.h>
 using virgil::sdk::keys::client::UserDataClientBase;
+#include <virgil/sdk/keys/client/UserDataClient.h>
+using virgil::sdk::keys::client::UserDataClient;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
-    class PkiClientBaseImpl {
+    class KeysClientImpl {
     public:
-        explicit PkiClientBaseImpl(const std::shared_ptr<http::Connection>& connection) :
+        explicit KeysClientImpl(const std::shared_ptr<http::ConnectionBase>& connection) :
                 publicKeyClient(connection), userDataClient(connection) {
         }
     public:
-        PublicKeyClientBase publicKeyClient;
-        UserDataClientBase userDataClient;
+        PublicKeyClient publicKeyClient;
+        UserDataClient userDataClient;
     };
 }}}}
 
-PkiClientBase::PkiClientBase(const std::shared_ptr<http::Connection>& connection)
-        : PkiClient(connection), impl_(std::make_shared<PkiClientBaseImpl>(connection)) {
+KeysClient::KeysClient(const std::shared_ptr<http::ConnectionBase>& connection)
+        : KeysClientBase(connection), impl_(std::make_shared<KeysClientImpl>(connection)) {
 }
 
-PublicKeyClient& PkiClientBase::publicKey() {
+PublicKeyClientBase& KeysClient::publicKey() {
     return impl_->publicKeyClient;
 }
 
-UserDataClient& PkiClientBase::userData() {
+UserDataClientBase& KeysClient::userData() {
     return impl_->userDataClient;
 }

@@ -34,44 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
-#define VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
+#ifndef VIRGIL_SDK_KEYS_KEYS_CLIENT_H
+#define VIRGIL_SDK_KEYS_KEYS_CLIENT_H
 
 #include <memory>
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
-
-#include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
-#include <virgil/sdk/keys/client/UserDataClient.h>
-using virgil::sdk::keys::client::UserDataClient;
+#include <virgil/sdk/keys/client/KeysClientBase.h>
+using virgil::sdk::keys::client::KeysClientBase;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @brief Entrypoint for interacting with Virgil Public Keys Service (PKI).
+     * @name Forward declaration
      */
-    class PkiClient {
+    //@{
+    class KeysClientImpl;
+    //@}
+    /**
+     * @brief Default implementation of KeysClientBase.
+     */
+    class KeysClient final : public KeysClientBase {
     public:
         /**
-         * @brief Initialize PKI client with appropriate connection.
+         * @brief Initialize all clients with appropriate connection.
          */
-        explicit PkiClient(const std::shared_ptr<http::Connection>& connection);
+        explicit KeysClient(const std::shared_ptr<http::ConnectionBase>& connection);
         /**
-         * @brief Return "Public Key" entrypoint.
+         * @name Default class implementation
          */
-        virtual PublicKeyClient& publicKey() = 0;
-        /**
-         * @brief Return "User Data" entrypoint.
-         */
-        virtual UserDataClient& userData() = 0;
-        /**
-         * @brief Return PKI service connection.
-         */
-        std::shared_ptr<http::Connection> connection() const;
+        //@{
+        PublicKeyClientBase& publicKey() override;
+        UserDataClientBase& userData() override;
+        //@}
     private:
-        std::shared_ptr<http::Connection> connection_;
+        std::shared_ptr<KeysClientImpl> impl_;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H */
+#endif /* VIRGIL_SDK_KEYS_KEYS_CLIENT_H */

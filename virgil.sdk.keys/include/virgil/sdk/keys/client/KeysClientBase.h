@@ -34,20 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/EndpointClient.h>
-using virgil::sdk::keys::client::EndpointClient;
+#ifndef VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
+#define VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include <memory>
 
-#include <stdexcept>
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
-EndpointClient::EndpointClient(const std::shared_ptr<Connection>& connection) : connection_(connection) {
-    if (!connection_) {
-        throw std::logic_error("Connection is not defined.");
-    }
-}
+#include <virgil/sdk/keys/client/PublicKeyClientBase.h>
+using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/UserDataClientBase.h>
+using virgil::sdk::keys::client::UserDataClientBase;
 
-std::shared_ptr<Connection> EndpointClient::connection() const {
-    return connection_;
-}
+namespace virgil { namespace sdk { namespace keys { namespace client {
+    /**
+     * @brief Entrypoint for interacting with Virgil Public Keys Service (PKI).
+     */
+    class KeysClientBase {
+    public:
+        /**
+         * @brief Initialize PKI client with appropriate connection.
+         */
+        explicit KeysClientBase(const std::shared_ptr<http::ConnectionBase>& connection);
+        /**
+         * @brief Return "Public Key" entrypoint.
+         */
+        virtual PublicKeyClientBase& publicKey() = 0;
+        /**
+         * @brief Return "User Data" entrypoint.
+         */
+        virtual UserDataClientBase& userData() = 0;
+        /**
+         * @brief Return PKI service connection.
+         */
+        std::shared_ptr<http::ConnectionBase> connection() const;
+    private:
+        std::shared_ptr<http::ConnectionBase> connection_;
+    };
+}}}}
+
+#endif /* VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H */

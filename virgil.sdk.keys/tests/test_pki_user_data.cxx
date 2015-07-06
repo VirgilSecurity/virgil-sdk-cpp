@@ -51,11 +51,9 @@ using namespace fakeit;
 
 #include <virgil/sdk/keys/http/Connection.h>
 using virgil::sdk::keys::http::Connection;
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
 
-#include <virgil/sdk/keys/client/PkiClientBase.h>
-using virgil::sdk::keys::client::PkiClientBase;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
 
 #include <virgil/sdk/keys/error/PkiError.h>
 using virgil::sdk::keys::error::PkiError;
@@ -94,11 +92,11 @@ TEST_CASE("Add User Data - success", "[pki-user-data]") {
         {JsonKey::value, expectedValue}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     UserData userData = pkiClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue);
 
     Verify(Method(connection, send));
@@ -123,11 +121,11 @@ TEST_CASE("Get User Data - success", "[pki-user-data]") {
         {JsonKey::value, expectedValue}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     UserData userData = pkiClient->userData().get(expectedUserDataId);
 
     Verify(Method(connection, send));
@@ -143,11 +141,11 @@ TEST_CASE("Confirm User Data - success", "[pki-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     REQUIRE_NOTHROW(pkiClient->userData().confirm(expectedUserDataId, "F9U0W9"));
     Verify(Method(connection, send));
 }
@@ -156,11 +154,11 @@ TEST_CASE("Resend User Data Confirmation - success", "[pki-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     REQUIRE_NOTHROW(pkiClient->userData().resendConfirmation(expectedUserDataId));
     Verify(Method(connection, send));
 }
@@ -180,11 +178,11 @@ TEST_CASE("Search User Data - success", "[pki-user-data]") {
         }
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     std::vector<UserData> allUserData = pkiClient->userData().search(expectedValue);
 
     Verify(Method(connection, send));
@@ -223,11 +221,11 @@ TEST_CASE("Search User Data and Expand Key - success", "[pki-user-data]") {
         }
     }).dump(4));
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     std::vector<UserData> allUserData = pkiClient->userData().search(expectedValue, true);
 
     Verify(Method(connection, send));

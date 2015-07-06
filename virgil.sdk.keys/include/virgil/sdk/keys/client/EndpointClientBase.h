@@ -34,40 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_BASE_H
-#define VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_BASE_H
+#ifndef VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H
+#define VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H
 
 #include <memory>
 
-#include <virgil/sdk/keys/client/PkiClient.h>
-using virgil::sdk::keys::client::PkiClient;
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @name Forward declaration
+     * @brief Interface for specific endpoints of the Virgil Public Keys Service.
      */
-    //@{
-    class PkiClientBaseImpl;
-    //@}
-    /**
-     * @brief Base implementation of PkiClient.
-     */
-    class PkiClientBase final : public PkiClient {
+    class EndpointClientBase {
     public:
         /**
-         * @brief Initialize all clients with appropriate connection.
+         * @brief Initialize API client with appropriate connection.
          */
-        explicit PkiClientBase(const std::shared_ptr<http::Connection>& connection);
+        explicit EndpointClientBase(const std::shared_ptr<http::ConnectionBase>& connection);
         /**
-         * @name Base class implementation
+         * @brief Return API service connection.
          */
-        //@{
-        PublicKeyClient& publicKey() override;
-        UserDataClient& userData() override;
-        //@}
+        std::shared_ptr<http::ConnectionBase> connection() const;
     private:
-        std::shared_ptr<PkiClientBaseImpl> impl_;
+        std::shared_ptr<http::ConnectionBase> connection_;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_BASE_H */
+#endif /* VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H */

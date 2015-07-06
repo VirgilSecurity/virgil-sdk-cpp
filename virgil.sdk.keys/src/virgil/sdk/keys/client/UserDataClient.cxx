@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/UserDataClientBase.h>
-using virgil::sdk::keys::client::UserDataClientBase;
+#include <virgil/sdk/keys/client/UserDataClient.h>
+using virgil::sdk::keys::client::UserDataClient;
 
 #include <virgil/sdk/keys/client/EndpointUri.h>
 using virgil::sdk::keys::client::EndpointUri;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 #include <virgil/sdk/keys/http/Request.h>
 using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
@@ -61,7 +61,7 @@ using virgil::sdk::keys::error::PkiError;
 #include <json.hpp>
 using json = nlohmann::json;
 
-UserData UserDataClientBase::add(const std::string& publicKeyId, const std::string& className,
+UserData UserDataClient::add(const std::string& publicKeyId, const std::string& className,
         const std::string& type, const std::string& value) const {
 
     json payload = {
@@ -87,7 +87,7 @@ UserData UserDataClientBase::add(const std::string& publicKeyId, const std::stri
     return userData;
 }
 
-UserData UserDataClientBase::get(const std::string& userDataId) const {
+UserData UserDataClient::get(const std::string& userDataId) const {
     Request request = Request().endpoint(EndpointUri::userDataGet(userDataId)).get();
     Response response = connection()->send(request);
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_GET);
@@ -104,7 +104,7 @@ UserData UserDataClientBase::get(const std::string& userDataId) const {
     return userData;
 }
 
-void UserDataClientBase::confirm(const std::string& userDataId, const std::string& code) const {
+void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
     json payload = {
         {JsonKey::code, code}
     };
@@ -115,7 +115,7 @@ void UserDataClientBase::confirm(const std::string& userDataId, const std::strin
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM);
 }
 
-void UserDataClientBase::resendConfirmation(const std::string& userDataId) const {
+void UserDataClient::resendConfirmation(const std::string& userDataId) const {
     json payload = {};
 
     Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()
@@ -124,7 +124,7 @@ void UserDataClientBase::resendConfirmation(const std::string& userDataId) const
     connection()->checkResponseError(response, PkiError::Action::USER_DATA_CONFIRM_RESEND);
 }
 
-std::vector<UserData> UserDataClientBase::search(const std::string& userId, bool expandPublicKey) const {
+std::vector<UserData> UserDataClient::search(const std::string& userId, bool expandPublicKey) const {
     json payload = {
         {JsonKey::id, userId}
     };

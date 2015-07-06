@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_STRING_BASE64_H
-#define VIRGIL_STRING_BASE64_H
+#ifndef VIRGIL_STRING_DEFAULT64_H
+#define VIRGIL_STRING_DEFAULT64_H
 
 #include <string>
 #include <vector>
@@ -57,5 +57,5 @@ namespace virgil { namespace sdk { namespace keys { namespace util {
     };
 }}}}
 
-#endif /* VIRGIL_STRING_BASE64_H */
+#endif /* VIRGIL_STRING_DEFAULT64_H */
 

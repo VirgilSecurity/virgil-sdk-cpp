@@ -34,64 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H
-#define VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H
+#ifndef VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H
+#define VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H
 
-#include <string>
-#include <vector>
-
-#include <virgil/sdk/keys/client/EndpointClient.h>
-using virgil::sdk::keys::client::EndpointClient;
-
-#include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
+#include <virgil/sdk/keys/client/UserDataClientBase.h>
+using virgil::sdk::keys::client::UserDataClientBase;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @brief Endpoint "/user-data" to the Virgil Public Keys Service (API).
+     * @brief Default implenetation of class UserDataClientBase.
      */
-    class UserDataClient : public EndpointClient {
+    class UserDataClient final : public UserDataClientBase {
     public:
         /**
          * @brief Inherit base class constructor.
          */
-        using EndpointClient::EndpointClient;
+        using UserDataClientBase::UserDataClientBase;
         /**
-         * @brief Add user data to the public key.
-         * @param publicKeyId - associated public key GUID.
-         * @param className - user data class: "user_id" or "user_info".
-         * @param type - user data type: "email", "phone", "first_name", etc.
-         * @param value - user data value.
-         * @return Added user data.
+         * @name Default class implementation.
          */
-        virtual UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value) const = 0;
-        /**
-         * @brief Get user data by its identifier.
-         * @param userDataId - user data GUID.
-         * @return Retrived user data.
-         */
-        virtual UserData get(const std::string& userDataId) const = 0;
-        /**
-         * @brief Confirm user data.
-         * @param userDataId - user data GUID.
-         * @param code - confirmation code.
-         */
-        virtual void confirm(const std::string& userDataId, const std::string& code) const = 0;
-        /**
-         * @brief Resend user data confirmation code.
-         * @param userDataId - user data GUID.
-         */
-        virtual void resendConfirmation(const std::string& userDataId) const = 0;
-        /**
-         * @brief Search user data.
-         * @param userId - user identifier: email, phone, fax, etc.
-         * @param expandPublicKey - if true, user data will include associated public key.
-         * @return Found user data.
-         */
-        virtual std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const = 0;
-
+        //@{
+        UserData add(const std::string& publicKeyId, const std::string& className,
+                const std::string& type, const std::string& value) const override;
+        UserData get(const std::string& userDataId) const override;
+        void confirm(const std::string& userDataId, const std::string& code) const override;
+        void resendConfirmation(const std::string& userDataId) const override;
+        virtual std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const override;
+        //@}
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H */
+#endif /* VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H */

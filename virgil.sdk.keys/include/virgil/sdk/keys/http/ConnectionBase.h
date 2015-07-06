@@ -37,28 +37,58 @@
 #ifndef VIRGIL_SDK_KEYS_HTTP_CONNECTION_BASE_H
 #define VIRGIL_SDK_KEYS_HTTP_CONNECTION_BASE_H
 
-#include <virgil/sdk/keys/http/Connection.h>
+#include <string>
+
+#include <virgil/sdk/keys/http/Request.h>
+using virgil::sdk::keys::http::Request;
+#include <virgil/sdk/keys/http/Response.h>
+using virgil::sdk::keys::http::Response;
+
+#include <virgil/sdk/keys/error/PkiError.h>
+using virgil::sdk::keys::error::PkiError;
 
 namespace virgil { namespace sdk { namespace keys { namespace http {
-
-/**
- * @brief This abstract class unifies access to the HTTP layer.
- */
-class ConnectionBase final : public Connection {
-public:
     /**
-     * @brief Inherit base constructor.
+     * @brief This abstract class unifies access to the HTTP layer.
      */
-    using Connection::Connection;
-    /**
-     * @name Base class implementation.
-     */
-    //@{
-    Response send(const Request& request) override;
-    void checkResponseError(const Response& response, PkiError::Action action) override;
-    //@}
-};
-
+    class ConnectionBase {
+    public:
+        /**
+         * @brief Default API base address URI, i.e. https://pki.virgilsecurity.com/v1
+         */
+        static const std::string baseAddressDefault;
+        /**
+         * @brief Configure connection with base address URI.
+         * @param appToken - application specific key that is used for all service communications.
+         * @param baseAddress - service base address including API version, i.e. https://pki.virgilsecurity.com/v1
+         */
+        explicit ConnectionBase(const std::string& appToken, const std::string &baseAddress = baseAddressDefault);
+        /**
+         * @brief Return application specific key.
+         */
+        std::string appToken() const;
+        /**
+         * @brief Return API base address.
+         */
+        std::string baseAddress() const;
+        /**
+         * @brief Send synchronous request.
+         * @param request - request to be send.
+         * @throw std::logic_error - if given parameters are inconsistent.
+         * @throw std::runtime_error - if error was occured when send request.
+         */
+        virtual Response send(const Request& request) = 0;
+        /**
+         * @brief Check response for errors.
+         * @param response - HTTP response to check.
+         * @param action - PKI action that created the response.
+         * @throw PkiError, if HTTP response contains error description.
+         */
+        virtual void checkResponseError(const Response& response, PkiError::Action action) = 0;
+    private:
+        std::string appToken_;
+        std::string baseAddress_;
+    };
 }}}}
 
 #endif /* VIRGIL_SDK_KEYS_HTTP_CONNECTION_BASE_H */

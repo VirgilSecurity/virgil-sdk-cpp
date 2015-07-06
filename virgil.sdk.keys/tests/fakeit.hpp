@@ -2193,7 +2193,7 @@ namespace Detail {
     };
 #endif
     template<bool C>
-    struct StringMakerBase {
+    struct StringMakerDefault {
 #if defined(CATCH_CPP11_OR_GREATER)
         template<typename T>
         static std::string convert( T const& v )
@@ -2207,7 +2207,7 @@ namespace Detail {
     };
 
     template<>
-    struct StringMakerBase<true> {
+    struct StringMakerDefault<true> {
         template<typename T>
         static std::string convert( T const& _value ) {
             std::ostringstream oss;
@@ -2227,7 +2227,7 @@ namespace Detail {
 
 template<typename T>
 struct StringMaker :
-    Detail::StringMakerBase<Detail::IsStreamInsertable<T>::value> {};
+    Detail::StringMakerDefault<Detail::IsStreamInsertable<T>::value> {};
 
 template<typename T>
 struct StringMaker<T*> {
@@ -7097,9 +7097,9 @@ namespace Catch {
 
 namespace Catch {
 
-    class StreamBufBase : public std::streambuf {
+    class StreamBufDefault : public std::streambuf {
     public:
-        virtual ~StreamBufBase() CATCH_NOEXCEPT;
+        virtual ~StreamBufDefault() CATCH_NOEXCEPT;
     };
 }
 
@@ -7110,7 +7110,7 @@ namespace Catch {
 namespace Catch {
 
     template<typename WriterF, size_t bufferSize=256>
-    class StreamBufImpl : public StreamBufBase {
+    class StreamBufImpl : public StreamBufDefault {
         char data[bufferSize];
         WriterF m_writer;
 
@@ -8599,20 +8599,20 @@ namespace Catch {
 #define TWOBLUECUBES_CATCH_REPORTER_XML_HPP_INCLUDED
 
 
-#define TWOBLUECUBES_CATCH_REPORTER_BASES_HPP_INCLUDED
+#define TWOBLUECUBES_CATCH_REPORTER_DEFAULTS_HPP_INCLUDED
 
 #include <cstring>
 
 namespace Catch {
 
-    struct StreamingReporterBase : SharedImpl<IStreamingReporter> {
+    struct StreamingReporterDefault : SharedImpl<IStreamingReporter> {
 
-        StreamingReporterBase( ReporterConfig const& _config )
+        StreamingReporterDefault( ReporterConfig const& _config )
         :   m_config( _config.fullConfig() ),
             stream( _config.stream() )
         {}
 
-        virtual ~StreamingReporterBase();
+        virtual ~StreamingReporterDefault();
 
         virtual void noMatchingTestCases( std::string const& ) {}
 
@@ -8660,7 +8660,7 @@ namespace Catch {
         std::vector<SectionInfo> m_sectionStack;
     };
 
-    struct CumulativeReporterBase : SharedImpl<IStreamingReporter> {
+    struct CumulativeReporterDefault : SharedImpl<IStreamingReporter> {
         template<typename T, typename ChildNodeT>
         struct Node : SharedImpl<> {
             explicit Node( T const& _value ) : value( _value ) {}
@@ -8705,11 +8705,11 @@ namespace Catch {
         typedef Node<TestGroupStats, TestCaseNode> TestGroupNode;
         typedef Node<TestRunStats, TestGroupNode> TestRunNode;
 
-        CumulativeReporterBase( ReporterConfig const& _config )
+        CumulativeReporterDefault( ReporterConfig const& _config )
         :   m_config( _config.fullConfig() ),
             stream( _config.stream() )
         {}
-        ~CumulativeReporterBase();
+        ~CumulativeReporterDefault();
 
         virtual void testRunStarting( TestRunInfo const& ) {}
         virtual void testGroupStarting( GroupInfo const& ) {}
@@ -9087,10 +9087,10 @@ namespace Catch {
 
 }
 namespace Catch {
-    class XmlReporter : public StreamingReporterBase {
+    class XmlReporter : public StreamingReporterDefault {
     public:
         XmlReporter( ReporterConfig const& _config )
-        :   StreamingReporterBase( _config ),
+        :   StreamingReporterDefault( _config ),
             m_sectionDepth( 0 )
         {}
 
@@ -9108,11 +9108,11 @@ namespace Catch {
         }
 
         virtual void noMatchingTestCases( std::string const& s ) {
-            StreamingReporterBase::noMatchingTestCases( s );
+            StreamingReporterDefault::noMatchingTestCases( s );
         }
 
         virtual void testRunStarting( TestRunInfo const& testInfo ) {
-            StreamingReporterBase::testRunStarting( testInfo );
+            StreamingReporterDefault::testRunStarting( testInfo );
             m_xml.setStream( stream );
             m_xml.startElement( "Catch" );
             if( !m_config->name().empty() )
@@ -9120,13 +9120,13 @@ namespace Catch {
         }
 
         virtual void testGroupStarting( GroupInfo const& groupInfo ) {
-            StreamingReporterBase::testGroupStarting( groupInfo );
+            StreamingReporterDefault::testGroupStarting( groupInfo );
             m_xml.startElement( "Group" )
                 .writeAttribute( "name", groupInfo.name );
         }
 
         virtual void testCaseStarting( TestCaseInfo const& testInfo ) {
-            StreamingReporterBase::testCaseStarting(testInfo);
+            StreamingReporterDefault::testCaseStarting(testInfo);
             m_xml.startElement( "TestCase" ).writeAttribute( "name", trim( testInfo.name ) );
 
             if ( m_config->showDurations() == ShowDurations::Always )
@@ -9134,7 +9134,7 @@ namespace Catch {
         }
 
         virtual void sectionStarting( SectionInfo const& sectionInfo ) {
-            StreamingReporterBase::sectionStarting( sectionInfo );
+            StreamingReporterDefault::sectionStarting( sectionInfo );
             if( m_sectionDepth++ > 0 ) {
                 m_xml.startElement( "Section" )
                     .writeAttribute( "name", trim( sectionInfo.name ) )
@@ -9216,7 +9216,7 @@ namespace Catch {
         }
 
         virtual void sectionEnded( SectionStats const& sectionStats ) {
-            StreamingReporterBase::sectionEnded( sectionStats );
+            StreamingReporterDefault::sectionEnded( sectionStats );
             if( --m_sectionDepth > 0 ) {
                 XmlWriter::ScopedElement e = m_xml.scopedElement( "OverallResults" );
                 e.writeAttribute( "successes", sectionStats.assertions.passed );
@@ -9231,7 +9231,7 @@ namespace Catch {
         }
 
         virtual void testCaseEnded( TestCaseStats const& testCaseStats ) {
-            StreamingReporterBase::testCaseEnded( testCaseStats );
+            StreamingReporterDefault::testCaseEnded( testCaseStats );
             XmlWriter::ScopedElement e = m_xml.scopedElement( "OverallResult" );
             e.writeAttribute( "success", testCaseStats.totals.assertions.allOk() );
 
@@ -9242,7 +9242,7 @@ namespace Catch {
         }
 
         virtual void testGroupEnded( TestGroupStats const& testGroupStats ) {
-            StreamingReporterBase::testGroupEnded( testGroupStats );
+            StreamingReporterDefault::testGroupEnded( testGroupStats );
 
             m_xml.scopedElement( "OverallResults" )
                 .writeAttribute( "successes", testGroupStats.totals.assertions.passed )
@@ -9252,7 +9252,7 @@ namespace Catch {
         }
 
         virtual void testRunEnded( TestRunStats const& testRunStats ) {
-            StreamingReporterBase::testRunEnded( testRunStats );
+            StreamingReporterDefault::testRunEnded( testRunStats );
             m_xml.scopedElement( "OverallResults" )
                 .writeAttribute( "successes", testRunStats.totals.assertions.passed )
                 .writeAttribute( "failures", testRunStats.totals.assertions.failed )
@@ -9277,10 +9277,10 @@ namespace Catch {
 
 namespace Catch {
 
-    class JunitReporter : public CumulativeReporterBase {
+    class JunitReporter : public CumulativeReporterDefault {
     public:
         JunitReporter( ReporterConfig const& _config )
-        :   CumulativeReporterBase( _config ),
+        :   CumulativeReporterDefault( _config ),
             xml( _config.stream() )
         {}
 
@@ -9299,7 +9299,7 @@ namespace Catch {
         }
 
         virtual void testRunStarting( TestRunInfo const& runInfo ) {
-            CumulativeReporterBase::testRunStarting( runInfo );
+            CumulativeReporterDefault::testRunStarting( runInfo );
             xml.startElement( "testsuites" );
         }
 
@@ -9308,24 +9308,24 @@ namespace Catch {
             stdOutForSuite.str("");
             stdErrForSuite.str("");
             unexpectedExceptions = 0;
-            CumulativeReporterBase::testGroupStarting( groupInfo );
+            CumulativeReporterDefault::testGroupStarting( groupInfo );
         }
 
         virtual bool assertionEnded( AssertionStats const& assertionStats ) {
             if( assertionStats.assertionResult.getResultType() == ResultWas::ThrewException )
                 unexpectedExceptions++;
-            return CumulativeReporterBase::assertionEnded( assertionStats );
+            return CumulativeReporterDefault::assertionEnded( assertionStats );
         }
 
         virtual void testCaseEnded( TestCaseStats const& testCaseStats ) {
             stdOutForSuite << testCaseStats.stdOut;
             stdErrForSuite << testCaseStats.stdErr;
-            CumulativeReporterBase::testCaseEnded( testCaseStats );
+            CumulativeReporterDefault::testCaseEnded( testCaseStats );
         }
 
         virtual void testGroupEnded( TestGroupStats const& testGroupStats ) {
             double suiteTime = suiteTimer.getElapsedSeconds();
-            CumulativeReporterBase::testGroupEnded( testGroupStats );
+            CumulativeReporterDefault::testGroupEnded( testGroupStats );
             writeGroup( *m_testGroups.back(), suiteTime );
         }
 
@@ -9488,9 +9488,9 @@ namespace Catch {
 
 namespace Catch {
 
-    struct ConsoleReporter : StreamingReporterBase {
+    struct ConsoleReporter : StreamingReporterDefault {
         ConsoleReporter( ReporterConfig const& _config )
-        :   StreamingReporterBase( _config ),
+        :   StreamingReporterDefault( _config ),
             m_headerPrinted( false )
         {}
 
@@ -9533,7 +9533,7 @@ namespace Catch {
 
         virtual void sectionStarting( SectionInfo const& _sectionInfo ) {
             m_headerPrinted = false;
-            StreamingReporterBase::sectionStarting( _sectionInfo );
+            StreamingReporterDefault::sectionStarting( _sectionInfo );
         }
         virtual void sectionEnded( SectionStats const& _sectionStats ) {
             if( _sectionStats.missingAssertions ) {
@@ -9554,11 +9554,11 @@ namespace Catch {
                 if( m_config->showDurations() == ShowDurations::Always )
                     stream << _sectionStats.sectionInfo.name << " completed in " << _sectionStats.durationInSeconds << "s" << std::endl;
             }
-            StreamingReporterBase::sectionEnded( _sectionStats );
+            StreamingReporterDefault::sectionEnded( _sectionStats );
         }
 
         virtual void testCaseEnded( TestCaseStats const& _testCaseStats ) {
-            StreamingReporterBase::testCaseEnded( _testCaseStats );
+            StreamingReporterDefault::testCaseEnded( _testCaseStats );
             m_headerPrinted = false;
         }
         virtual void testGroupEnded( TestGroupStats const& _testGroupStats ) {
@@ -9568,13 +9568,13 @@ namespace Catch {
                 printTotals( _testGroupStats.totals );
                 stream << "\n" << std::endl;
             }
-            StreamingReporterBase::testGroupEnded( _testGroupStats );
+            StreamingReporterDefault::testGroupEnded( _testGroupStats );
         }
         virtual void testRunEnded( TestRunStats const& _testRunStats ) {
             printTotalsDivider( _testRunStats.totals );
             printTotals( _testRunStats.totals );
             stream << std::endl;
-            StreamingReporterBase::testRunEnded( _testRunStats );
+            StreamingReporterDefault::testRunEnded( _testRunStats );
         }
 
     private:
@@ -9930,10 +9930,10 @@ namespace Catch {
 
 namespace Catch {
 
-    struct CompactReporter : StreamingReporterBase {
+    struct CompactReporter : StreamingReporterDefault {
 
         CompactReporter( ReporterConfig const& _config )
-        : StreamingReporterBase( _config )
+        : StreamingReporterDefault( _config )
         {}
 
         virtual ~CompactReporter();
@@ -9977,7 +9977,7 @@ namespace Catch {
         virtual void testRunEnded( TestRunStats const& _testRunStats ) {
             printTotals( _testRunStats.totals );
             stream << "\n" << std::endl;
-            StreamingReporterBase::testRunEnded( _testRunStats );
+            StreamingReporterDefault::testRunEnded( _testRunStats );
         }
 
     private:
@@ -10216,7 +10216,7 @@ namespace Catch {
 namespace Catch {
     NonCopyable::~NonCopyable() {}
     IShared::~IShared() {}
-    StreamBufBase::~StreamBufBase() CATCH_NOEXCEPT {}
+    StreamBufDefault::~StreamBufDefault() CATCH_NOEXCEPT {}
     IContext::~IContext() {}
     IResultCapture::~IResultCapture() {}
     ITestCase::~ITestCase() {}
@@ -10234,10 +10234,10 @@ namespace Catch {
     TestCaseStats::~TestCaseStats() {}
     TestGroupStats::~TestGroupStats() {}
     TestRunStats::~TestRunStats() {}
-    CumulativeReporterBase::SectionNode::~SectionNode() {}
-    CumulativeReporterBase::~CumulativeReporterBase() {}
+    CumulativeReporterDefault::SectionNode::~SectionNode() {}
+    CumulativeReporterDefault::~CumulativeReporterDefault() {}
 
-    StreamingReporterBase::~StreamingReporterBase() {}
+    StreamingReporterDefault::~StreamingReporterDefault() {}
     ConsoleReporter::~ConsoleReporter() {}
     CompactReporter::~CompactReporter() {}
     IRunner::~IRunner() {}
@@ -14732,13 +14732,13 @@ namespace fakeit {
         }
     };
 
-    struct RTTIBaseClassDescriptor {
-        RTTIBaseClassDescriptor() :
-                pTypeDescriptor(nullptr), numContainedBases(0), attributes(0) {
+    struct RTTIDefaultClassDescriptor {
+        RTTIDefaultClassDescriptor() :
+                pTypeDescriptor(nullptr), numContainedDefaults(0), attributes(0) {
         }
 
         const std::type_info *pTypeDescriptor;
-        DWORD numContainedBases;
+        DWORD numContainedDefaults;
         struct PMD where;
         DWORD attributes;
     };
@@ -14748,42 +14748,42 @@ namespace fakeit {
         RTTIClassHierarchyDescriptor() :
                 signature(0),
                 attributes(0),
-                numBaseClasses(0),
-                pBaseClassArray(nullptr) {
-            pBaseClassArray = new RTTIBaseClassDescriptor *[1 + sizeof...(baseclasses)];
-            addBaseClass < C, baseclasses...>();
+                numDefaultClasses(0),
+                pDefaultClassArray(nullptr) {
+            pDefaultClassArray = new RTTIDefaultClassDescriptor *[1 + sizeof...(baseclasses)];
+            addDefaultClass < C, baseclasses...>();
         }
 
         ~RTTIClassHierarchyDescriptor() {
             for (int i = 0; i < 1 + sizeof...(baseclasses); i++) {
-                RTTIBaseClassDescriptor *desc = pBaseClassArray[i];
+                RTTIDefaultClassDescriptor *desc = pDefaultClassArray[i];
                 delete desc;
             }
-            delete[] pBaseClassArray;
+            delete[] pDefaultClassArray;
         }
 
         DWORD signature;
         DWORD attributes;
-        DWORD numBaseClasses;
-        RTTIBaseClassDescriptor **pBaseClassArray;
+        DWORD numDefaultClasses;
+        RTTIDefaultClassDescriptor **pDefaultClassArray;
 
-        template<typename BaseType>
-        void addBaseClass() {
-            static_assert(std::is_base_of<BaseType, C>::value, "C must be a derived class of BaseType");
-            RTTIBaseClassDescriptor *desc = new RTTIBaseClassDescriptor();
-            desc->pTypeDescriptor = &typeid(BaseType);
-            pBaseClassArray[numBaseClasses] = desc;
-            for (unsigned int i = 0; i < numBaseClasses; i++) {
-                pBaseClassArray[i]->numContainedBases++;
+        template<typename DefaultType>
+        void addDefaultClass() {
+            static_assert(std::is_base_of<DefaultType, C>::value, "C must be a derived class of DefaultType");
+            RTTIDefaultClassDescriptor *desc = new RTTIDefaultClassDescriptor();
+            desc->pTypeDescriptor = &typeid(DefaultType);
+            pDefaultClassArray[numDefaultClasses] = desc;
+            for (unsigned int i = 0; i < numDefaultClasses; i++) {
+                pDefaultClassArray[i]->numContainedDefaults++;
             }
-            numBaseClasses++;
+            numDefaultClasses++;
         }
 
         template<typename head, typename B1, typename... tail>
-        void addBaseClass() {
+        void addDefaultClass() {
             static_assert(std::is_base_of<B1, head>::value, "invalid inheritance list");
-            addBaseClass<head>();
-            addBaseClass<B1, tail...>();
+            addDefaultClass<head>();
+            addDefaultClass<B1, tail...>();
         }
 
     };
@@ -14807,14 +14807,14 @@ namespace fakeit {
         struct RTTIClassHierarchyDescriptor<C, baseclasses...> *pClassDescriptor;
     };
 
-    struct VirtualTableBase {
+    struct VirtualTableDefault {
 
-        static VirtualTableBase &getVTable(void *instance) {
-            fakeit::VirtualTableBase *vt = (fakeit::VirtualTableBase *) (instance);
+        static VirtualTableDefault &getVTable(void *instance) {
+            fakeit::VirtualTableDefault *vt = (fakeit::VirtualTableDefault *) (instance);
             return *vt;
         }
 
-        VirtualTableBase(void **firstMethod) : _firstMethod(firstMethod) { }
+        VirtualTableDefault(void **firstMethod) : _firstMethod(firstMethod) { }
 
         void *getCookie(int index) {
             return _firstMethod[-2 - index];
@@ -14837,7 +14837,7 @@ namespace fakeit {
     };
 
     template<class C, class... baseclasses>
-    struct VirtualTable : public VirtualTableBase {
+    struct VirtualTable : public VirtualTableDefault {
 
         class Handle {
 
@@ -14941,7 +14941,7 @@ namespace fakeit {
             return array;
         }
 
-        VirtualTable(void **firstMethod) : VirtualTableBase(firstMethod) {
+        VirtualTable(void **firstMethod) : VirtualTableDefault(firstMethod) {
         }
     };
 }
@@ -14977,14 +14977,14 @@ namespace fakeit {
 
 namespace fakeit {
 
-    struct VirtualTableBase {
+    struct VirtualTableDefault {
 
-        static VirtualTableBase &getVTable(void *instance) {
-            fakeit::VirtualTableBase *vt = (fakeit::VirtualTableBase *) (instance);
+        static VirtualTableDefault &getVTable(void *instance) {
+            fakeit::VirtualTableDefault *vt = (fakeit::VirtualTableDefault *) (instance);
             return *vt;
         }
 
-        VirtualTableBase(void **firstMethod) : _firstMethod(firstMethod) { }
+        VirtualTableDefault(void **firstMethod) : _firstMethod(firstMethod) { }
 
         void *getCookie(int index) {
             return _firstMethod[-3 - index];
@@ -15007,7 +15007,7 @@ namespace fakeit {
     };
 
     template<class C, class ... baseclasses>
-    struct VirtualTable : public VirtualTableBase {
+    struct VirtualTable : public VirtualTableDefault {
 
 #ifndef __clang__
         static_assert(is_simple_inheritance_layout<C>::value, "Can't mock a type with multiple inheritance");
@@ -15110,7 +15110,7 @@ namespace fakeit {
             return array;
         }
 
-        VirtualTable(void **firstMethod) : VirtualTableBase(firstMethod) {
+        VirtualTable(void **firstMethod) : VirtualTableDefault(firstMethod) {
         }
 
     };
@@ -15233,7 +15233,7 @@ namespace fakeit {
         virtual Destructible *getInvocatoinHandlerPtrById(unsigned int index) = 0;
 
         static InvocationHandlerCollection *getInvocationHandlerCollection(void *instance) {
-            VirtualTableBase &vt = VirtualTableBase::getVTable(instance);
+            VirtualTableDefault &vt = VirtualTableDefault::getVTable(instance);
             InvocationHandlerCollection *invocationHandlerCollection = (InvocationHandlerCollection *) vt.getCookie(
                     InvocationHandlerCollection::VT_COOKIE_INDEX);
             return invocationHandlerCollection;
@@ -15449,10 +15449,10 @@ namespace fakeit {
             return dynamic_cast<DATA_TYPE>(ptr.get());
         }
 
-        template<typename BaseClass>
+        template<typename DefaultClass>
         void checkMultipleInheritance() {
             C *ptr = (C *) (unsigned int) 1;
-            BaseClass *basePtr = ptr;
+            DefaultClass *basePtr = ptr;
             int delta = (unsigned long) basePtr - (unsigned long) ptr;
             if (delta > 0) {
 
@@ -17301,16 +17301,16 @@ namespace fakeit {
         FakeitContext &_fakeit;
 
         template<typename R, typename ... arglist>
-        class MethodMockingContextBase : public MethodMockingContext<R, arglist...>::Context {
+        class MethodMockingContextDefault : public MethodMockingContext<R, arglist...>::Context {
         protected:
             MockImpl<C, baseclasses...> &_mock;
 
             virtual RecordedMethodBody<R, arglist...> &getRecordedMethodBody() = 0;
 
         public:
-            MethodMockingContextBase(MockImpl<C, baseclasses...> &mock) : _mock(mock) { }
+            MethodMockingContextDefault(MockImpl<C, baseclasses...> &mock) : _mock(mock) { }
 
-            virtual ~MethodMockingContextBase() = default;
+            virtual ~MethodMockingContextDefault() = default;
 
             void addMethodInvocationHandler(typename ActualInvocation<arglist...>::Matcher *matcher,
                                             MethodInvocationHandler<R, arglist...> *invocationHandler) {
@@ -17340,7 +17340,7 @@ namespace fakeit {
         };
 
         template<typename R, typename ... arglist>
-        class MethodMockingContextImpl : public MethodMockingContextBase<R, arglist...> {
+        class MethodMockingContextImpl : public MethodMockingContextDefault<R, arglist...> {
         protected:
 
             R (C::*_vMethod)(arglist...);
@@ -17355,12 +17355,12 @@ namespace fakeit {
             virtual ~MethodMockingContextImpl() = default;
 
             MethodMockingContextImpl(MockImpl<C, baseclasses...> &mock, R (C::*vMethod)(arglist...))
-                    : MethodMockingContextBase<R, arglist...>(mock), _vMethod(vMethod) {
+                    : MethodMockingContextDefault<R, arglist...>(mock), _vMethod(vMethod) {
             }
 
             virtual std::function<R(arglist &...)> getOriginalMethod() override {
-                void *mPtr = MethodMockingContextBase<R, arglist...>::_mock.getOriginalMethod(_vMethod);
-                C * instance = &(MethodMockingContextBase<R, arglist...>::_mock.get());
+                void *mPtr = MethodMockingContextDefault<R, arglist...>::_mock.getOriginalMethod(_vMethod);
+                C * instance = &(MethodMockingContextDefault<R, arglist...>::_mock.get());
                 return [=](arglist &... args) -> R {
                     auto m = union_cast<VTableMethodType>(mPtr);
                     return m(instance, args...);
@@ -17374,8 +17374,8 @@ namespace fakeit {
         protected:
 
             virtual RecordedMethodBody<R, arglist...> &getRecordedMethodBody() override {
-                return MethodMockingContextBase<R, arglist...>::_mock.template stubMethodIfNotStubbed<id>(
-                        MethodMockingContextBase<R, arglist...>::_mock._proxy,
+                return MethodMockingContextDefault<R, arglist...>::_mock.template stubMethodIfNotStubbed<id>(
+                        MethodMockingContextDefault<R, arglist...>::_mock._proxy,
                         MethodMockingContextImpl<R, arglist...>::_vMethod);
             }
 
@@ -17386,24 +17386,24 @@ namespace fakeit {
             }
         };
 
-        class DtorMockingContextImpl : public MethodMockingContextBase<void> {
+        class DtorMockingContextImpl : public MethodMockingContextDefault<void> {
 
         protected:
 
             virtual RecordedMethodBody<void> &getRecordedMethodBody() override {
-                return MethodMockingContextBase<void>::_mock.stubDtorIfNotStubbed(
-                        MethodMockingContextBase<void>::_mock._proxy);
+                return MethodMockingContextDefault<void>::_mock.stubDtorIfNotStubbed(
+                        MethodMockingContextDefault<void>::_mock._proxy);
             }
 
         public:
             virtual ~DtorMockingContextImpl() = default;
 
             DtorMockingContextImpl(MockImpl<C, baseclasses...> &mock)
-                    : MethodMockingContextBase<void>(mock) {
+                    : MethodMockingContextDefault<void>(mock) {
             }
 
             virtual std::function<void()> getOriginalMethod() override {
-                C &instance = MethodMockingContextBase<void>::_mock.get();
+                C &instance = MethodMockingContextDefault<void>::_mock.get();
                 return [=, &instance]() -> void {
                 };
             }

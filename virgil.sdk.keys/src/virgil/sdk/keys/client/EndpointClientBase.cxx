@@ -34,31 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_ENDPOINT_CLIENT_API_CLIENT_H
-#define VIRGIL_ENDPOINT_CLIENT_API_CLIENT_H
+#include <virgil/sdk/keys/client/EndpointClientBase.h>
+using virgil::sdk::keys::client::EndpointClientBase;
 
-#include <memory>
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include <stdexcept>
 
-namespace virgil { namespace sdk { namespace keys { namespace client {
-    /**
-     * @brief Interface for specific endpoints of the Virgil Public Keys Service.
-     */
-    class EndpointClient {
-    public:
-        /**
-         * @brief Initialize API client with appropriate connection.
-         */
-        explicit EndpointClient(const std::shared_ptr<http::Connection>& connection);
-        /**
-         * @brief Return API service connection.
-         */
-        std::shared_ptr<http::Connection> connection() const;
-    private:
-        std::shared_ptr<http::Connection> connection_;
-    };
-}}}}
+EndpointClientBase::EndpointClientBase(const std::shared_ptr<ConnectionBase>& connection) : connection_(connection) {
+    if (!connection_) {
+        throw std::logic_error("ConnectionBase is not defined.");
+    }
+}
 
-#endif /* VIRGIL_ENDPOINT_CLIENT_API_CLIENT_H */
+std::shared_ptr<ConnectionBase> EndpointClientBase::connection() const {
+    return connection_;
+}

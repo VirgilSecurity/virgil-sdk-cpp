@@ -49,13 +49,13 @@ using json = nlohmann::json;
 #include "fakeit.hpp"
 using namespace fakeit;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/http/ConnectionBase.h>
 using virgil::sdk::keys::http::ConnectionBase;
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
 
-#include <virgil/sdk/keys/client/PkiClientBase.h>
-using virgil::sdk::keys::client::PkiClientBase;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
 
 #include <virgil/sdk/keys/error/PkiError.h>
 using virgil::sdk::keys::error::PkiError;
@@ -65,6 +65,8 @@ using virgil::sdk::keys::util::Base64;
 #include <virgil/sdk/keys/util/JsonKey.h>
 using virgil::sdk::keys::util::JsonKey;
 
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
 #include <virgil/sdk/keys/model/UserData.h>
 using virgil::sdk::keys::model::UserData;
 #include <virgil/sdk/keys/model/UserDataClass.h>
@@ -93,11 +95,11 @@ TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
 
     UserData userData = UserData::email("test@test.com");
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     PublicKey publicKey = pkiClient->publicKey().add(expectedPublicKey, {userData});
 
     Verify(Method(connection, send));
@@ -116,11 +118,11 @@ TEST_CASE("Add Public Key (new account) - failed", "[pki-public-key]") {
         }}
     }).dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(errorResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     REQUIRE_THROWS_AS(pkiClient->publicKey().add(expectedPublicKey, {UserData()}), PkiError);
 
     Verify(Method(connection, send));
@@ -155,11 +157,11 @@ TEST_CASE("Get Public Key - success", "[pki-public-key]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(successResponseJson.dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     PublicKey publicKey = pkiClient->publicKey().get(expectedPublicKeyId);
 
     Verify(Method(connection, send));
@@ -198,11 +200,11 @@ TEST_CASE ("Search Public Key - success", "[pki-public-key]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(successResponseJson.dump());
 
-    auto connectionObj = std::make_shared<ConnectionBase>(appToken);
-    Mock<Connection> connection(*connectionObj);
+    auto connectionObj = std::make_shared<Connection>(appToken);
+    Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<PkiClientBase>(make_moc_shared(connection));
+    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     std::vector<PublicKey> publicKeys =
             pkiClient->publicKey().search("test@virgilsecurity.com", UserDataType::emailId);
 
