@@ -35,7 +35,7 @@
  */
 
 /**
- * @file test_pki_public_key.cxx
+ * @file test_user_data_client.cxx
  * @brief Covers "/public-key" endpoint.
  */
 #include <string>
@@ -79,7 +79,7 @@ static const std::string expectedType = "email";
 static const std::string expectedValue = "test@virgilsecurity.com";
 static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-TEST_CASE("Add User Data - success", "[pki-user-data]") {
+TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json({
         {JsonKey::id, {
@@ -96,8 +96,8 @@ TEST_CASE("Add User Data - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = pkiClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    UserData userData = keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue);
 
     Verify(Method(connection, send));
     REQUIRE(userData.accountId() == expectedAccountId);
@@ -108,7 +108,7 @@ TEST_CASE("Add User Data - success", "[pki-user-data]") {
     REQUIRE(userData.value() == expectedValue);
 }
 
-TEST_CASE("Get User Data - success", "[pki-user-data]") {
+TEST_CASE("Get User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json({
         {JsonKey::id, {
@@ -125,8 +125,8 @@ TEST_CASE("Get User Data - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = pkiClient->userData().get(expectedUserDataId);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    UserData userData = keysClient->userData().get(expectedUserDataId);
 
     Verify(Method(connection, send));
     REQUIRE(userData.accountId() == expectedAccountId);
@@ -137,7 +137,7 @@ TEST_CASE("Get User Data - success", "[pki-user-data]") {
     REQUIRE(userData.value() == expectedValue);
 }
 
-TEST_CASE("Confirm User Data - success", "[pki-user-data]") {
+TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
@@ -145,12 +145,12 @@ TEST_CASE("Confirm User Data - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(pkiClient->userData().confirm(expectedUserDataId, "F9U0W9"));
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9"));
     Verify(Method(connection, send));
 }
 
-TEST_CASE("Resend User Data Confirmation - success", "[pki-user-data]") {
+TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::object().dump());
 
@@ -158,12 +158,12 @@ TEST_CASE("Resend User Data Confirmation - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(pkiClient->userData().resendConfirmation(expectedUserDataId));
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId));
     Verify(Method(connection, send));
 }
 
-TEST_CASE("Search User Data - success", "[pki-user-data]") {
+TEST_CASE("Search User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::array({
         {
@@ -182,8 +182,8 @@ TEST_CASE("Search User Data - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    std::vector<UserData> allUserData = pkiClient->userData().search(expectedValue);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    std::vector<UserData> allUserData = keysClient->userData().search(expectedValue);
 
     Verify(Method(connection, send));
     REQUIRE(allUserData.size() == 1);
@@ -197,7 +197,7 @@ TEST_CASE("Search User Data - success", "[pki-user-data]") {
     REQUIRE(userData.value() == expectedValue);
 }
 
-TEST_CASE("Search User Data and Expand Key - success", "[pki-user-data]") {
+TEST_CASE("Search User Data and Expand Key - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(json::array({
         {
@@ -225,8 +225,8 @@ TEST_CASE("Search User Data and Expand Key - success", "[pki-user-data]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    std::vector<UserData> allUserData = pkiClient->userData().search(expectedValue, true);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    std::vector<UserData> allUserData = keysClient->userData().search(expectedValue, true);
 
     Verify(Method(connection, send));
     REQUIRE(allUserData.size() == 1);

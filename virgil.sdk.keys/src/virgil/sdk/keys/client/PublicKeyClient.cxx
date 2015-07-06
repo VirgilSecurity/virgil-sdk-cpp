@@ -87,12 +87,12 @@ PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
 
     json responseBody = json::parse(response.body());
 
-    PublicKey pkiPublicKey;
-    pkiPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    pkiPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    pkiPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
+    PublicKey virgilPublicKey;
+    virgilPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
+    virgilPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
+    virgilPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
 
-    return pkiPublicKey;
+    return virgilPublicKey;
 }
 
 PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
@@ -102,19 +102,19 @@ PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
 
     json responseBody = json::parse(response.body());
 
-    PublicKey pkiPublicKey;
-    pkiPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    pkiPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    pkiPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
+    PublicKey virgilPublicKey;
+    virgilPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
+    virgilPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
+    virgilPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
     for (auto userDataJson : responseBody[JsonKey::userData]) {
         UserData userData;
         userData.className(userDataJson[JsonKey::className]);
         userData.type(userDataJson[JsonKey::type]);
         userData.value(userDataJson[JsonKey::value]);
         userData.isConfirmed(userDataJson[JsonKey::isConfirmed]);
-        pkiPublicKey.userData().push_back(userData);
+        virgilPublicKey.userData().push_back(userData);
     }
-    return pkiPublicKey;
+    return virgilPublicKey;
 }
 
 std::vector<PublicKey> PublicKeyClient::search(const std::string& userId, const std::string& userIdType) const {

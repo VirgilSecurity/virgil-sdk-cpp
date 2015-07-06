@@ -36,7 +36,7 @@
 
 cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
-project (pki CXX)
+project (keys CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
@@ -65,15 +65,15 @@ endif ()
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
 
 # Configure library build
-add_library (pki STATIC ${SRC_LIST})
-target_link_libraries (pki rest ${CURL_LIB})
-add_dependencies (pki json)
+add_library (keys STATIC ${SRC_LIST})
+target_link_libraries (keys rest ${CURL_LIB})
+add_dependencies (keys json)
 
 # Add unit tests
 enable_testing ()
 add_subdirectory (tests)
 
 # Install
-install (TARGETS pki DESTINATION lib)
+install (TARGETS keys DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)

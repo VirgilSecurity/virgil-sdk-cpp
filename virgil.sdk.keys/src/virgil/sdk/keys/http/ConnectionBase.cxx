@@ -37,7 +37,7 @@
 #include <virgil/sdk/keys/http/ConnectionBase.h>
 using virgil::sdk::keys::http::ConnectionBase;
 
-const std::string ConnectionBase::baseAddressDefault = "https://pki.virgilsecurity.com/v1";
+const std::string ConnectionBase::baseAddressDefault = "https://keys.virgilsecurity.com/v1";
 
 ConnectionBase::ConnectionBase(const std::string& baseAddress) : baseAddress_(baseAddress) {
     if (!baseAddress_.empty() && baseAddress_.back() == '/') {

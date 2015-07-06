@@ -49,7 +49,7 @@ class Connection final : public ConnectionBase {
         /**
          * @brief Configure connection with base address URI.
          * @param appToken - application specific key that is used for all service communications.
-         * @param baseAddress - service base address including API version, i.e. https://pki.virgilsecurity.com/v1
+         * @param baseAddress - service base address including API version, i.e. https://keys.virgilsecurity.com/v1
          */
         explicit Connection(const std::string& appToken, const std::string& baseAddress = baseAddressDefault);
         /**

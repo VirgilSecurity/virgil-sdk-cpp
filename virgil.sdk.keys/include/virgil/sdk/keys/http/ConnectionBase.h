@@ -54,12 +54,12 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
     class ConnectionBase {
     public:
         /**
-         * @brief Default API base address URI, i.e. https://pki.virgilsecurity.com/v1
+         * @brief Default API base address URI, i.e. https://keys.virgilsecurity.com/v1
          */
         static const std::string baseAddressDefault;
         /**
          * @brief Configure connection with base address URI.
-         * @param baseAddress - service base address including API version, i.e. https://pki.virgilsecurity.com/v1
+         * @param baseAddress - service base address including API version, i.e. https://keys.virgilsecurity.com/v1
          */
         explicit ConnectionBase(const std::string &baseAddress = baseAddressDefault);
         /**

@@ -35,7 +35,7 @@
  */
 
 /**
- * @file test_pki_public_key.cxx
+ * @file test_public_key_client.cxx
  * @brief Covers "/public-key" endpoint.
  */
 #include <string>
@@ -78,7 +78,7 @@ using virgil::sdk::keys::model::UserDataType;
 
 static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
+TEST_CASE("Add Public Key (new account) - success", "[virgil-sdk-keys-public-key]") {
     auto expectedAccountId = "3a768eea-cbda-4926-a82d-831cb89092aa";
     auto expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
     std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
@@ -99,8 +99,8 @@ TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = pkiClient->publicKey().add(expectedPublicKey, {userData});
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    PublicKey publicKey = keysClient->publicKey().add(expectedPublicKey, {userData});
 
     Verify(Method(connection, send));
     REQUIRE(publicKey.accountId() == expectedAccountId);
@@ -108,7 +108,7 @@ TEST_CASE("Add Public Key (new account) - success", "[pki-public-key]") {
     REQUIRE(publicKey.key() == expectedPublicKey);
 }
 
-TEST_CASE("Add Public Key (new account) - failed", "[pki-public-key]") {
+TEST_CASE("Add Public Key (new account) - failed", "[virgil-sdk-keys-public-key]") {
     std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
 
     Response errorResponse = Response().statusCode(Response::StatusCode::REQUEST_ERROR).contentType("application/json");
@@ -122,13 +122,13 @@ TEST_CASE("Add Public Key (new account) - failed", "[pki-public-key]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(errorResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_THROWS_AS(pkiClient->publicKey().add(expectedPublicKey, {UserData()}), PkiError);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    REQUIRE_THROWS_AS(keysClient->publicKey().add(expectedPublicKey, {UserData()}), PkiError);
 
     Verify(Method(connection, send));
 }
 
-TEST_CASE("Get Public Key - success", "[pki-public-key]") {
+TEST_CASE("Get Public Key - success", "[virgil-sdk-keys-public-key]") {
     auto expectedAccountId = "3a768eea-cbda-4926-a82d-831cb89092aa";
     auto expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
     std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
@@ -161,8 +161,8 @@ TEST_CASE("Get Public Key - success", "[pki-public-key]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = pkiClient->publicKey().get(expectedPublicKeyId);
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    PublicKey publicKey = keysClient->publicKey().get(expectedPublicKeyId);
 
     Verify(Method(connection, send));
     REQUIRE(publicKey.accountId() == expectedAccountId);
@@ -176,7 +176,7 @@ TEST_CASE("Get Public Key - success", "[pki-public-key]") {
     }
 }
 
-TEST_CASE ("Search Public Key - success", "[pki-public-key]") {
+TEST_CASE ("Search Public Key - success", "[virgil-sdk-keys-public-key]") {
     auto expectedAccountId = "3a768eea-cbda-4926-a82d-831cb89092aa";
     auto expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
     std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
@@ -204,9 +204,9 @@ TEST_CASE ("Search Public Key - success", "[pki-public-key]") {
     Mock<ConnectionBase> connection(*connectionObj);
     When(Method(connection, send)).Return(successResponse);
 
-    auto pkiClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     std::vector<PublicKey> publicKeys =
-            pkiClient->publicKey().search("test@virgilsecurity.com", UserDataType::emailId);
+            keysClient->publicKey().search("test@virgilsecurity.com", UserDataType::emailId);
 
     Verify(Method(connection, send));
 

@@ -37,7 +37,7 @@
 cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
 # Define variables
-set (UUT_LIB_NAME pki)
+set (UUT_LIB_NAME keys)
 set (TEST_RUNNER test_runner)
 
 # Grab source directory
