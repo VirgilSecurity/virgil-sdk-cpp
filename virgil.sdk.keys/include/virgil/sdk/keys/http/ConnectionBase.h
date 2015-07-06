@@ -59,14 +59,9 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
         static const std::string baseAddressDefault;
         /**
          * @brief Configure connection with base address URI.
-         * @param appToken - application specific key that is used for all service communications.
          * @param baseAddress - service base address including API version, i.e. https://pki.virgilsecurity.com/v1
          */
-        explicit ConnectionBase(const std::string& appToken, const std::string &baseAddress = baseAddressDefault);
-        /**
-         * @brief Return application specific key.
-         */
-        std::string appToken() const;
+        explicit ConnectionBase(const std::string &baseAddress = baseAddressDefault);
         /**
          * @brief Return API base address.
          */
@@ -86,7 +81,6 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          */
         virtual void checkResponseError(const Response& response, PkiError::Action action) = 0;
     private:
-        std::string appToken_;
         std::string baseAddress_;
     };
 }}}}

@@ -45,19 +45,27 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
  * @brief This abstract class unifies access to the HTTP layer.
  */
 class Connection final : public ConnectionBase {
-public:
-    /**
-     * @brief Inherit base constructor.
-     */
-    using ConnectionBase::ConnectionBase;
-    /**
-     * @name Default class implementation.
-     */
-    //@{
-    Response send(const Request& request) override;
-    void checkResponseError(const Response& response, PkiError::Action action) override;
-    //@}
-};
+    public:
+        /**
+         * @brief Configure connection with base address URI.
+         * @param appToken - application specific key that is used for all service communications.
+         * @param baseAddress - service base address including API version, i.e. https://pki.virgilsecurity.com/v1
+         */
+        explicit Connection(const std::string& appToken, const std::string& baseAddress = baseAddressDefault);
+        /**
+         * @brief Return application specific key.
+         */
+        std::string appToken() const;
+        /**
+         * @name Default class implementation.
+         */
+        //@{
+        Response send(const Request& request) override;
+        void checkResponseError(const Response& response, PkiError::Action action) override;
+        //@}
+    private:
+        std::string appToken_;
+    };
 
 }}}}
 

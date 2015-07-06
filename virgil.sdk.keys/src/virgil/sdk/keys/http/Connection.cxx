@@ -53,6 +53,15 @@ using json = nlohmann::json;
 #include <restless.hpp>
 using HttpRequest = asoni::Handle;
 
+Connection::Connection(const std::string& appToken, const std::string& baseAddress)
+        : ConnectionBase(baseAddress), appToken_(appToken) {
+
+}
+
+std::string Connection::appToken() const {
+    return appToken_;
+}
+
 Response Connection::send(const Request& request) {
     // Construct URI
     std::string uri = request.baseAddress().empty() ?
