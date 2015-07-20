@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -36,22 +36,19 @@
 
 cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 
-project (virgil-cpp)
+# Define variables
+set (UUT_LIB_NAME keys)
+set (TEST_RUNNER test_runner)
 
-# Configure path to custom modules
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+# Grab source directory
+aux_source_directory (${CMAKE_CURRENT_SOURCE_DIR} UUT_SRC_LIST)
 
-find_package (cURL REQUIRED)
-include_directories (${CURL_INCLUDE_DIRS})
+# Configure test target
+add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})
+target_link_libraries (${TEST_RUNNER} ${UUT_LIB_NAME})
 
-find_package (Virgil)
-include_directories (${VIRGIL_INCLUDE_DIRS})
-
-aux_source_directory ("examples/src" SRC_LIST)
-foreach (SRC ${SRC_LIST})
-    get_filename_component (TARGET_NAME ${SRC} NAME_WE)
-    add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME} ${VIRGIL_LIBRARIES} ${CURL_LIBRARIES})
-    install (TARGETS ${TARGET_NAME} DESTINATION ".")
-endforeach (SRC)
-install (DIRECTORY "examples/data/" DESTINATION ".")
+# Run tests
+add_test (
+    NAME ${TEST_RUNNER}
+    COMMAND ./${TEST_RUNNER}
+)

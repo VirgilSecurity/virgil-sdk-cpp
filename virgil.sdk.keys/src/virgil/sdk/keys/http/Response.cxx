@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,62 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
+#include <virgil/sdk/keys/http/Response.h>
+using virgil::sdk::keys::http::Response;
+
 #include <stdexcept>
+#include <set>
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+Response& Response::body (const std::string& body) {
+    body_ = body;
+    return *this;
+}
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
+std::string Response::body () const {
+    return body_;
+}
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
-        }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
+Response& Response::contentType (const std::string& contentType) {
+    contentType_ = contentType;
+    return *this;
+}
 
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+std::string Response::contentType () const {
+    return contentType_;
+}
+
+Response& Response::header (const Response::Headers& header) {
+    header_ = header;
+    return *this;
+}
+
+Response::Headers Response::header () const {
+    return header_;
+}
+
+Response& Response::statusCode(Response::StatusCode statusCode) {
+    statusCode_ = statusCode;
+    return *this;
+}
+
+Response::StatusCode Response::statusCode() const {
+    return statusCode_;
+}
+
+Response& Response::statusCodeRaw(int code) {
+    std::set<int> availableCodes {200, 400, 401, 404, 405, 500};
+    if (availableCodes.find(code) != availableCodes.end()) {
+        statusCode_ = static_cast<Response::StatusCode>(code);
+    } else {
+        throw std::logic_error("Given status code is not supported.");
     }
-    return 0;
+    return *this;
+}
+
+int Response::statusCodeRaw() const {
+    return static_cast<int>(statusCode_);
+}
+
+bool Response::fail() const {
+    return statusCode_ != StatusCode::OK;
 }

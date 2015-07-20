@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
+#ifndef VIRGIL_STRING_JSON_KEY_H
+#define VIRGIL_STRING_JSON_KEY_H
+
 #include <string>
-#include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+namespace virgil { namespace sdk { namespace keys { namespace util {
+    /**
+     * @brief This class holds string constants of Json keys.
+     */
+    class JsonKey {
+    public:
+        static const std::string publicKey; /*!< Json key for public key object. */
+        static const std::string publicKeys; /*!< Json key for public key objects. */
+        static const std::string userData; /*!< Json key for user data object. */
+        static const std::string className; /*!< Json key for user data class name. */
+        static const std::string type; /*!< Json key for user data type. */
+        static const std::string value; /*!< Json key for user data value. */
+        static const std::string isConfirmed; /*!< Json key for user data status: is confirmed. */
+        static const std::string error; /*!< Json key for error object. */
+        static const std::string code; /*!< Json key for error code. */
+        static const std::string id; /*!< Json key for id object. */
+        static const std::string accountId; /*!< Json key for account GUID. */
+        static const std::string publicKeyId; /*!< Json key for public key GUID. */
+        static const std::string userDataId; /*!< Json key for user data GUID. */
+        static const std::string expanded; /*!< Json key for expanded object. */
+    private:
+        JsonKey();
+    };
+}}}}
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
-
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
-        }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
-
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_STRING_JSON_KEY_H */

@@ -41,15 +41,12 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
-#include <virgil/service/VirgilStreamSigner.h>
-using virgil::service::VirgilStreamSigner;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
-#include <virgil/service/data/VirgilSign.h>
-using virgil::service::data::VirgilSign;
-#include <virgil/stream/utils.h>
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
+#include <virgil/crypto/VirgilStreamSigner.h>
+using virgil::crypto::VirgilStreamSigner;
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
 
 int main() {
     try {
@@ -65,9 +62,6 @@ int main() {
             throw std::runtime_error("can not write file: test.txt.sign");
         }
 
-        std::cout << "Read virgil public key..." << std::endl;
-        VirgilCertificate virgilPublicKey = virgil::stream::read_certificate("virgil_public.key");
-
         std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
         if (!keyFile.good()) {
@@ -76,19 +70,16 @@ int main() {
         VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        VirgilByteArray privateKeyPassword = virgil::str2bytes("password");
 
         std::cout << "Initialize signer..." << std::endl;
         VirgilStreamSigner signer;
 
         std::cout << "Sign data..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
-        VirgilSign sign = signer.sign(dataSource, virgilPublicKey.id().certificateId(),
-                privateKey, privateKeyPassword);
+        VirgilByteArray sign = signer.sign(dataSource, privateKey);
 
         std::cout << "Save sign..." << std::endl;
-        VirgilByteArray signData = sign.toAsn1();
-        std::copy(signData.begin(), signData.end(), std::ostreambuf_iterator<char>(outFile));
+        std::copy(sign.begin(), sign.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Sign is successfully stored in the output file." << std::endl;
     } catch (std::exception& exception) {

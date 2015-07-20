@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#include <virgil/sdk/keys/client/EndpointUri.h>
+using virgil::sdk::keys::client::EndpointUri;
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+std::string EndpointUri::publicKeyAdd() {
+    return "/public-key";
+}
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
+std::string EndpointUri::publicKeyGet(const std::string& publicKeyId) {
+    return "/public-key/" + publicKeyId;
+}
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
-        }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
+std::string EndpointUri::publicKeySearch() {
+    return "/account/actions/search";
+}
 
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
+std::string EndpointUri::userDataAdd() {
+    return "/user-data";
+}
+
+std::string EndpointUri::userDataGet(const std::string& userDataId) {
+    return "/user-data/" + userDataId;
+}
+
+std::string EndpointUri::userDataConfirm(const std::string& userDataId) {
+    return "/user-data/" + userDataId + "/actions/confirm";
+}
+
+std::string EndpointUri::userDataResendConfirm(const std::string& userDataId) {
+    return "/user-data/" + userDataId + "/actions/resend-confirmation";
+}
+
+std::string EndpointUri::userDataSearch() {
+    return "/user-data/actions/search";
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#ifndef VIRGIL_SDK_KEYS_PUBLIC_KEY_CLIENT_H
+#define VIRGIL_SDK_KEYS_PUBLIC_KEY_CLIENT_H
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+#include <virgil/sdk/keys/client/PublicKeyClientBase.h>
+using virgil::sdk::keys::client::PublicKeyClientBase;
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
+namespace virgil { namespace sdk { namespace keys { namespace client {
+    /**
+     * @brief Default implenetation of class PublicKeyClientBase.
+     */
+    class PublicKeyClient final : public PublicKeyClientBase {
+    public:
+        /**
+         * @brief Inherit base class constructor.
+         */
+        using PublicKeyClientBase::PublicKeyClientBase;
+        /**
+         * @name Default class implementation
+         */
+        //@{
+        PublicKey add(const std::vector<unsigned char>& publicKey,
+                const std::vector<UserData>& userData, const std::string& accountId = "") const override;
+        PublicKey get(const std::string& publicKeyId) const override;
+        std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const override;
+        //@}
+    };
+}}}}
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
-        }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
-
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_SDK_KEYS_PUBLIC_KEY_CLIENT_H */

@@ -42,111 +42,34 @@
 #include <string>
 #include <stdexcept>
 
-#include <virgil/VirgilByteArray.h>
-using virgil::VirgilByteArray;
-#include <virgil/service/data/VirgilCertificate.h>
-using virgil::service::data::VirgilCertificate;
-#include <virgil/service/VirgilStreamCipher.h>
-using virgil::service::VirgilStreamCipher;
-#include <virgil/stream/VirgilStreamDataSource.h>
-using virgil::stream::VirgilStreamDataSource;
-#include <virgil/stream/VirgilStreamDataSink.h>
-using virgil::stream::VirgilStreamDataSink;
-#include <virgil/crypto/VirgilBase64.h>
-using virgil::crypto::VirgilBase64;
+#include <virgil/crypto/VirgilByteArray.h>
+using virgil::crypto::VirgilByteArray;
+#include <virgil/crypto/VirgilStreamCipher.h>
+using virgil::crypto::VirgilStreamCipher;
 
-#include <curl/curl.h>
-#include <json/json.h>
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+using virgil::crypto::stream::VirgilStreamDataSource;
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
+using virgil::crypto::stream::VirgilStreamDataSink;
 
-#define VIRGIL_PKI_URL_BASE "https://pki.virgilsecurity.com/v1/"
-#define VIRGIL_PKI_APP_KEY "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-#define USER_ID_TYPE "email"
-#define USER_ID "test.virgilsecurity@mailinator.com"
+#include <virgil/crypto/foundation/VirgilBase64.h>
+using virgil::crypto::foundation::VirgilBase64;
+
+#include <virgil/sdk/keys/model/PublicKey.h>
+using virgil::sdk::keys::model::PublicKey;
+#include <virgil/sdk/keys/model/UserDataType.h>
+using virgil::sdk::keys::model::UserDataType;
+
+#include <virgil/sdk/keys/http/Connection.h>
+using virgil::sdk::keys::http::Connection;
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
+static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 #define MAKE_URL(base, path) (base path)
-
-static int pki_callback(char *data, size_t size, size_t nmemb, std::string *buffer_in) {
-    // Is there anything in the buffer?
-    if (buffer_in != NULL) {
-        // Append the data to the buffer
-        buffer_in->append(data, size * nmemb);
-        return size * nmemb;
-    }
-    return 0;
-}
-
-static std::string pki_post(const std::string& url, const std::string& json) {
-    CURL *curl = NULL;
-    CURLcode result = CURLE_OK;
-    struct curl_slist *headers = NULL;
-    std::string response;
-
-    /* In windows, this will init the winsock stuff */
-    curl_global_init(CURL_GLOBAL_ALL);
-
-    /* get a curl handle */
-    curl = curl_easy_init();
-    if (curl) {
-        /* set content type */
-        headers = curl_slist_append(headers, "Accept: application/json");
-        headers = curl_slist_append(headers, "Content-Type: application/json");
-        headers = curl_slist_append(headers, "X-VIRGIL-APP-TOKEN: " VIRGIL_PKI_APP_KEY);
-        /* Set the URL */
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        /* Now specify the POST data */
-        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
-        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, json.c_str());
-
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, pki_callback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)(&response));
-
-        /* Perform the request, result will get the return code */
-        result = curl_easy_perform(curl);
-
-        /* free headers */
-        curl_slist_free_all(headers);
-
-        /* cleanup curl handle */
-        curl_easy_cleanup(curl);
-    }
-    curl_global_cleanup();
-
-    /* Check for errors */
-    if (result == CURLE_OK) {
-        return response;
-    } else {
-        throw std::runtime_error(std::string("cURL failed with error: ") + curl_easy_strerror(result));
-    }
-}
-
-VirgilCertificate pki_get_public_key(const std::string& userIdType, const std::string& userId) {
-    // Create request
-    Json::Value payload;
-    payload[userIdType] = userId;
-    // Perform request
-    std::string response = pki_post(MAKE_URL(VIRGIL_PKI_URL_BASE, "account/actions/search"),
-            Json::FastWriter().write(payload));
-    // Parse response
-    Json::Reader reader(Json::Features::strictMode());
-    Json::Value responseObject;
-    if (!reader.parse(response, responseObject)) {
-        throw std::runtime_error(reader.getFormattedErrorMessages());
-    }
-    const Json::Value& virgilPublicKeyObject = responseObject[0]["public_keys"][0];
-    const Json::Value& idObject = virgilPublicKeyObject["id"]["public_key_id"];
-    const Json::Value& publicKeyObject = virgilPublicKeyObject["public_key"];
-
-    if (idObject.isString() && publicKeyObject.isString()) {
-        VirgilCertificate virgilPublicKey(VirgilBase64::decode(publicKeyObject.asString()));
-        virgilPublicKey.id().setCertificateId(virgil::str2bytes(idObject.asString()));
-        return virgilPublicKey;
-    } else {
-        throw std::runtime_error(std::string("virgil public key for recipient '") + userId +
-                "' of type '" + userIdType + "' not found");
-    }
-}
 
 int main() {
     try {
@@ -165,10 +88,15 @@ int main() {
         std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
-        std::cout << "Get recipient ("<< USER_ID << ") information from the Virgil PKI service..." << std::endl;
-        VirgilCertificate virgilPublicKey = pki_get_public_key(USER_ID_TYPE, USER_ID);
+        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
+        std::vector<PublicKey> publicKeys = keysClient.publicKey().search(USER_EMAIL, UserDataType::emailId);
+        if (publicKeys.empty()) {
+            throw std::runtime_error(std::string("Recipient with id: ") + USER_EMAIL + " not found.");
+        }
         std::cout << "Add recipient..." << std::endl;
-        cipher.addKeyRecipient(virgilPublicKey.id().certificateId(), virgilPublicKey.publicKey());
+        PublicKey publicKey = publicKeys.front();
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 
         std::cout << "Encrypt and store results..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClient;
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+#include <virgil/sdk/keys/client/PublicKeyClientBase.h>
+using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/PublicKeyClient.h>
+using virgil::sdk::keys::client::PublicKeyClient;
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
+#include <virgil/sdk/keys/client/UserDataClientBase.h>
+using virgil::sdk::keys::client::UserDataClientBase;
+#include <virgil/sdk/keys/client/UserDataClient.h>
+using virgil::sdk::keys::client::UserDataClient;
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
+namespace virgil { namespace sdk { namespace keys { namespace client {
+    class KeysClientImpl {
+    public:
+        explicit KeysClientImpl(const std::shared_ptr<http::ConnectionBase>& connection) :
+                publicKeyClient(connection), userDataClient(connection) {
         }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
+    public:
+        PublicKeyClient publicKeyClient;
+        UserDataClient userDataClient;
+    };
+}}}}
 
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
+KeysClient::KeysClient(const std::shared_ptr<http::ConnectionBase>& connection)
+        : KeysClientBase(connection), impl_(std::make_shared<KeysClientImpl>(connection)) {
+}
+
+PublicKeyClientBase& KeysClient::publicKey() {
+    return impl_->publicKeyClient;
+}
+
+UserDataClientBase& KeysClient::userData() {
+    return impl_->userDataClient;
 }

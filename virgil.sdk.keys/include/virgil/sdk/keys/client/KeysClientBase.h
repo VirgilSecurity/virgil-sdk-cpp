@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#ifndef VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
+#define VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H
 
-#include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilKeyPair.h>
-using virgil::crypto::VirgilKeyPair;
+#include <memory>
 
-int main(int argc, char **argv) {
-    try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to store private key encrypted.
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
-        std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_public.key");
-        }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
-        std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
+#include <virgil/sdk/keys/client/PublicKeyClientBase.h>
+using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/UserDataClientBase.h>
+using virgil::sdk::keys::client::UserDataClientBase;
 
-        std::cout << "Store private key: new_private.key ..." << std::endl;
-        std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
-            throw std::runtime_error("can not write file: new_private.key");
-        }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
-        std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+namespace virgil { namespace sdk { namespace keys { namespace client {
+    /**
+     * @brief Entrypoint for interacting with Virgil Public Keys Service (PKI).
+     */
+    class KeysClientBase {
+    public:
+        /**
+         * @brief Initialize PKI client with appropriate connection.
+         */
+        explicit KeysClientBase(const std::shared_ptr<http::ConnectionBase>& connection);
+        /**
+         * @brief Return "Public Key" entrypoint.
+         */
+        virtual PublicKeyClientBase& publicKey() = 0;
+        /**
+         * @brief Return "User Data" entrypoint.
+         */
+        virtual UserDataClientBase& userData() = 0;
+        /**
+         * @brief Return PKI service connection.
+         */
+        std::shared_ptr<http::ConnectionBase> connection() const;
+    private:
+        std::shared_ptr<http::ConnectionBase> connection_;
+    };
+}}}}
+
+#endif /* VIRGIL_SDK_KEYS_CLIENT_PKI_CLIENT_H */
