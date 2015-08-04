@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Virgil Security Inc.
+# Copyright (C) 2014 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,21 +34,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+# Configurable variables:
+#     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
+#     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
+
 cmake_minimum_required (VERSION 3.0 FATAL_ERROR)
 
-# Define variables
-set (UUT_LIB_NAME keys)
-set (TEST_RUNNER test_runner)
+project (virgil-cpp)
 
-# Grab source directory
-aux_source_directory (${CMAKE_CURRENT_SOURCE_DIR} UUT_SRC_LIST)
+set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
+set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 
-# Configure test target
-add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})
-target_link_libraries (${TEST_RUNNER} ${UUT_LIB_NAME})
+if (VIRGIL_SDK_KEYS)
+    add_subdirectory (virgil.sdk.keys)
+endif (VIRGIL_SDK_KEYS)
 
-# Run tests
-add_test (
-    NAME ${TEST_RUNNER}
-    COMMAND ./${TEST_RUNNER}
-)
+if (VIRGIL_EXAMPLES)
+    add_subdirectory (examples)
+endif (VIRGIL_EXAMPLES)
