@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,9 +34,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.0 FATAL_ERROR)
 
-project (virgil-cpp)
+project (virgil-examples)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
