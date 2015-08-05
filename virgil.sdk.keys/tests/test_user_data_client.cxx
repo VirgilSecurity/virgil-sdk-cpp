@@ -98,7 +98,8 @@ TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     When(Method(connection, send)).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue);
+    UserData userData =
+            keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue, guid);
 
     Verify(Method(connection, send));
     REQUIRE(userData.accountId() == expectedAccountId);
@@ -147,7 +148,7 @@ TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     When(Method(connection, send)).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9"));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9", guid));
     Verify(Method(connection, send));
 }
 
