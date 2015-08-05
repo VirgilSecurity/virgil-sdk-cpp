@@ -59,6 +59,7 @@ namespace virgil { namespace sdk { namespace keys { namespace util {
         static const std::string publicKeyId; /*!< Json key for public key GUID. */
         static const std::string userDataId; /*!< Json key for user data GUID. */
         static const std::string expanded; /*!< Json key for expanded object. */
+        static const std::string guid; /*!< Json key for guid value. */
     private:
         JsonKey();
     };

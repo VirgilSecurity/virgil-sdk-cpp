@@ -51,3 +51,4 @@ const std::string JsonKey::accountId = "account_id";
 const std::string JsonKey::publicKeyId = "public_key_id";
 const std::string JsonKey::userDataId = "user_data_id";
 const std::string JsonKey::expanded = "expanded";
+const std::string JsonKey::guid = "guid";

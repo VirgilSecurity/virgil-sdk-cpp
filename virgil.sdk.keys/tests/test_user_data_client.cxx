@@ -78,6 +78,7 @@ static const std::string expectedClassName = "user_id";
 static const std::string expectedType = "email";
 static const std::string expectedValue = "test@virgilsecurity.com";
 static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+static const std::string guid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
 
 TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
@@ -159,7 +160,7 @@ TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data
     When(Method(connection, send)).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId));
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId, guid));
     Verify(Method(connection, send));
 }
 
