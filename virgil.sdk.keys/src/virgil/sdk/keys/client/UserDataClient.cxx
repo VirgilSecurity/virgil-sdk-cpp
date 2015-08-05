@@ -115,8 +115,10 @@ void UserDataClient::confirm(const std::string& userDataId, const std::string& c
     connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
 }
 
-void UserDataClient::resendConfirmation(const std::string& userDataId) const {
-    json payload = {};
+void UserDataClient::resendConfirmation(const std::string& userDataId, const std::string& guid) const {
+    json payload = {
+        {JsonKey::guid, guid}
+    };
 
     Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()
             .contentType("application/json").body(payload.dump());
