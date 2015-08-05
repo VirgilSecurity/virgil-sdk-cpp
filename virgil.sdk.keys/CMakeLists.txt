@@ -97,8 +97,9 @@ install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
 
 # Add unit tests
-enable_testing ()
-add_subdirectory (tests)
+if (ENABLE_TESTING)
+    add_subdirectory (tests)
+endif ()
 
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
