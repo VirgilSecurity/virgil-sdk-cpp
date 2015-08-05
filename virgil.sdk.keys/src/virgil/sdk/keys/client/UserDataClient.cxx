@@ -62,13 +62,14 @@ using virgil::sdk::keys::error::KeysError;
 using json = nlohmann::json;
 
 UserData UserDataClient::add(const std::string& publicKeyId, const std::string& className,
-        const std::string& type, const std::string& value) const {
+        const std::string& type, const std::string& value, const std::string& guid) const {
 
     json payload = {
         {JsonKey::publicKeyId, publicKeyId},
         {JsonKey::className, className},
         {JsonKey::type, type},
-        {JsonKey::value, value}
+        {JsonKey::value, value},
+        {JsonKey::guid, guid}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataAdd()).post().contentType("application/json").body(payload.dump());
@@ -104,9 +105,11 @@ UserData UserDataClient::get(const std::string& userDataId) const {
     return userData;
 }
 
-void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
+void UserDataClient::confirm(const std::string& userDataId, const std::string& code,
+        const std::string& guid) const {
     json payload = {
-        {JsonKey::code, code}
+        {JsonKey::code, code},
+        {JsonKey::guid, guid}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post()

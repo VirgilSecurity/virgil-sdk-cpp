@@ -62,10 +62,11 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param className - user data class: "user_id" or "user_info".
          * @param type - user data type: "email", "phone", "first_name", etc.
          * @param value - user data value.
+         * @param guid - transaction GUID.
          * @return Added user data.
          */
         virtual UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value) const = 0;
+                const std::string& type, const std::string& value, const std::string& guid) const = 0;
         /**
          * @brief Get user data by its identifier.
          * @param userDataId - user data GUID.
@@ -76,8 +77,10 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Confirm user data.
          * @param userDataId - user data GUID.
          * @param code - confirmation code.
+         * @param guid - transaction GUID.
          */
-        virtual void confirm(const std::string& userDataId, const std::string& code) const = 0;
+        virtual void confirm(const std::string& userDataId, const std::string& code,
+                const std::string& guid) const = 0;
         /**
          * @brief Resend user data confirmation code.
          * @param userDataId - user data GUID.
