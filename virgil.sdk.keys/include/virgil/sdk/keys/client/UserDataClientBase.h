@@ -81,8 +81,9 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Resend user data confirmation code.
          * @param userDataId - user data GUID.
+         * @param guid - transaction GUID.
          */
-        virtual void resendConfirmation(const std::string& userDataId) const = 0;
+        virtual void resendConfirmation(const std::string& userDataId, const std::string& guid) const = 0;
         /**
          * @brief Search user data.
          * @param userId - user identifier: email, phone, fax, etc.
