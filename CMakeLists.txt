@@ -37,6 +37,7 @@
 # Configurable variables:
 #     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
 #     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
+#     - ENABLE_TESTING  - boolean value that enable unit tests
 
 cmake_minimum_required (VERSION 3.0 FATAL_ERROR)
 
@@ -44,6 +45,11 @@ project (virgil-cpp)
 
 set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
 set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
+set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
+
+if (ENABLE_TESTING)
+    enable_testing ()
+endif (ENABLE_TESTING)
 
 if (VIRGIL_SDK_KEYS)
     add_subdirectory (virgil.sdk.keys)
