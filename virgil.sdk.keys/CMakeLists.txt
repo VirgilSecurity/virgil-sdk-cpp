@@ -48,7 +48,7 @@ set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SD
 # Set library version
 set (VIRGIL_SDK_KEYS_VERSION_MAJOR 1)
 set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 1)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 2)
 set (VIRGIL_SDK_KEYS_VERSION
     ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
 )
@@ -97,8 +97,9 @@ install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
 
 # Add unit tests
-enable_testing ()
-add_subdirectory (tests)
+if (ENABLE_TESTING)
+    add_subdirectory (tests)
+endif ()
 
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)

@@ -125,8 +125,13 @@ void UserDataClient::resendConfirmation(const std::string& userDataId) const {
 }
 
 std::vector<UserData> UserDataClient::search(const std::string& userId, bool expandPublicKey) const {
+    return search(userId, "id", expandPublicKey);
+}
+
+std::vector<UserData> UserDataClient::search(const std::string& userId, const std::string& userIdType,
+        bool expandPublicKey) const {
     json payload = {
-        {JsonKey::id, userId}
+        {userIdType, userId}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataSearch()).post()
