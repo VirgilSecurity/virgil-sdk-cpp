@@ -88,8 +88,18 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param userId - user identifier: email, phone, fax, etc.
          * @param expandPublicKey - if true, user data will include associated public key.
          * @return Found user data.
+         * @note This method is not supported on the server side yet. Use such method with a 3 parameters.
          */
         virtual std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const = 0;
+        /**
+         * @brief Search user data.
+         * @param userId - user identifier: email, phone, fax, etc.
+         * @param userIdType - user unique identifier type.
+         * @param expandPublicKey - if true, user data will include associated public key.
+         * @return Found user data.
+         */
+        virtual std::vector<UserData> search(const std::string& userId, const std::string& userIdType,
+                bool expandPublicKey = false) const = 0;
 
     };
 }}}}
