@@ -43,6 +43,12 @@ set (CMAKE_ARGS
     -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
 )
 
+if (CMAKE_PREFIX_PATH)
+    list (APPEND CMAKE_ARGS
+        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+    )
+endif (CMAKE_PREFIX_PATH)
+
 # Configure external project
 ExternalProject_Add (project_rest
     GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
