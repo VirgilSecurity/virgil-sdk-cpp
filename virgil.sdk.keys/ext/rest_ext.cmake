@@ -45,8 +45,8 @@ set (CMAKE_ARGS
 
 # Configure external project
 ExternalProject_Add (project_rest
-    GIT_REPOSITORY "https://github.com/anuragsoni/restless.git"
-    GIT_TAG "v0.3.0"
+    GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
+    GIT_TAG "fix-msvc-build"
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/rest"
     CMAKE_ARGS ${CMAKE_ARGS}
 )
