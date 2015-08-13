@@ -84,7 +84,7 @@ Response Connection::send(const Request& request) {
         case Request::Method::PUT:
             httpRequest.put(uri);
             break;
-        case Request::Method::DELETE:
+        case Request::Method::DEL:
             httpRequest.del(uri);
             break;
         default:
