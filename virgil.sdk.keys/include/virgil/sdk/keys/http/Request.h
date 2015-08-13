@@ -57,7 +57,7 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          * @name Inner types
          */
         //@{
-        enum class Method {GET, POST, PUT, DELETE};
+        enum class Method {GET, POST, PUT, DEL};
         //@}
         /**
          * @name Accessors

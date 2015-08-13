@@ -132,5 +132,5 @@ Request& Request::put () {
 }
 
 Request& Request::del () {
-    return method(Method::DELETE);
+    return method(Method::DEL);
 }

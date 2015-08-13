@@ -50,7 +50,7 @@ using virgil::sdk::keys::client::UserDataClient;
 namespace virgil { namespace sdk { namespace keys { namespace client {
     class KeysClientImpl {
     public:
-        explicit KeysClientImpl(const std::shared_ptr<http::ConnectionBase>& connection) :
+        explicit KeysClientImpl(const std::shared_ptr<ConnectionBase>& connection) :
                 publicKeyClient(connection), userDataClient(connection) {
         }
     public:
@@ -59,7 +59,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     };
 }}}}
 
-KeysClient::KeysClient(const std::shared_ptr<http::ConnectionBase>& connection)
+KeysClient::KeysClient(const std::shared_ptr<ConnectionBase>& connection)
         : KeysClientBase(connection), impl_(std::make_shared<KeysClientImpl>(connection)) {
 }
 

@@ -42,6 +42,9 @@
 #include <virgil/sdk/keys/client/KeysClientBase.h>
 using virgil::sdk::keys::client::KeysClientBase;
 
+#include <virgil/sdk/keys/http/ConnectionBase.h>
+using virgil::sdk::keys::http::ConnectionBase;
+
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @name Forward declaration
@@ -57,7 +60,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Initialize all clients with appropriate connection.
          */
-        explicit KeysClient(const std::shared_ptr<http::ConnectionBase>& connection);
+        explicit KeysClient(const std::shared_ptr<ConnectionBase>& connection);
         /**
          * @name Default class implementation
          */

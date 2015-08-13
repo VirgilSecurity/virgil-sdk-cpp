@@ -34,7 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 project (keys CXX)
 
@@ -48,7 +48,7 @@ set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SD
 # Set library version
 set (VIRGIL_SDK_KEYS_VERSION_MAJOR 1)
 set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 4)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 5)
 set (VIRGIL_SDK_KEYS_VERSION
     ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
 )
@@ -66,12 +66,8 @@ include_directories (${JSON_INCLUDE_DIRS})
 include ("ext/rest_ext.cmake")
 include_directories (${REST_INCLUDE_DIRS})
 
-find_library (CURL_LIB curl)
-if (CURL_LIB)
-    message (STATUS "Found CURL: ${CURL_LIB}")
-else ()
-    message (FATAL_ERROR "cURL dependency library is not found in the system.")
-endif ()
+find_package (CURL REQUIRED)
+include_directories (${CURL_INCLUDE_DIRS})
 
 # Grab source directory tree
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
@@ -87,7 +83,7 @@ file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
 add_library (keys STATIC ${SRC_LIST})
-target_link_libraries (keys rest ${CURL_LIB})
+target_link_libraries (keys rest ${CURL_LIBRARIES})
 add_dependencies (keys json)
 set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
 
