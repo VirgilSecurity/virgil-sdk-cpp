@@ -50,11 +50,11 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
     class Account {
     public:
         /**
-         * @brief Set account GUID.
+         * @brief Set account UUID.
          */
         Account& accountId (const std::string& accountId);
         /**
-         * @brief Get account GUID.
+         * @brief Get account UUID.
          */
         std::string accountId () const;
         /**

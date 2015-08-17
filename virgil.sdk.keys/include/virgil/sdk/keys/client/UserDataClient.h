@@ -55,10 +55,10 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         //@{
         UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value, const std::string& guid) const override;
+                const std::string& type, const std::string& value, const std::string& uuid) const override;
         UserData get(const std::string& userDataId) const override;
-        void confirm(const std::string& userDataId, const std::string& code, const std::string& guid) const override;
-        void resendConfirmation(const std::string& userDataId, const std::string& guid) const override;
+        void confirm(const std::string& userDataId, const std::string& code, const std::string& uuid) const override;
+        void resendConfirmation(const std::string& userDataId, const std::string& uuid) const override;
         std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const override;
         std::vector<UserData> search(const std::string& userId, const std::string& userIdType,
                 bool expandPublicKey = false) const override;

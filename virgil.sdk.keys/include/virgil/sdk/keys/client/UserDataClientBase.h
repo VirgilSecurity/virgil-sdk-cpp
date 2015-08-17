@@ -58,35 +58,35 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         using EndpointClientBase::EndpointClientBase;
         /**
          * @brief Add user data to the public key.
-         * @param publicKeyId - associated public key GUID.
+         * @param publicKeyId - associated public key UUID.
          * @param className - user data class: "user_id" or "user_info".
          * @param type - user data type: "email", "phone", "first_name", etc.
          * @param value - user data value.
-         * @param guid - transaction GUID.
+         * @param uuid - transaction UUID.
          * @return Added user data.
          */
         virtual UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value, const std::string& guid) const = 0;
+                const std::string& type, const std::string& value, const std::string& uuid) const = 0;
         /**
          * @brief Get user data by its identifier.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          * @return Retrived user data.
          */
         virtual UserData get(const std::string& userDataId) const = 0;
         /**
          * @brief Confirm user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          * @param code - confirmation code.
-         * @param guid - transaction GUID.
+         * @param uuid - transaction UUID.
          */
         virtual void confirm(const std::string& userDataId, const std::string& code,
-                const std::string& guid) const = 0;
+                const std::string& uuid) const = 0;
         /**
          * @brief Resend user data confirmation code.
-         * @param userDataId - user data GUID.
-         * @param guid - transaction GUID.
+         * @param userDataId - user data UUID.
+         * @param uuid - transaction UUID.
          */
-        virtual void resendConfirmation(const std::string& userDataId, const std::string& guid) const = 0;
+        virtual void resendConfirmation(const std::string& userDataId, const std::string& uuid) const = 0;
         /**
          * @brief Search user data.
          * @param userId - user identifier: email, phone, fax, etc.

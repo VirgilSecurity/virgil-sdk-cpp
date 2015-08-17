@@ -62,14 +62,14 @@ using virgil::sdk::keys::error::KeysError;
 using json = nlohmann::json;
 
 UserData UserDataClient::add(const std::string& publicKeyId, const std::string& className,
-        const std::string& type, const std::string& value, const std::string& guid) const {
+        const std::string& type, const std::string& value, const std::string& uuid) const {
 
     json payload = {
         {JsonKey::publicKeyId, publicKeyId},
         {JsonKey::className, className},
         {JsonKey::type, type},
         {JsonKey::value, value},
-        {JsonKey::guid, guid}
+        {JsonKey::uuid, uuid}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataAdd()).post().contentType("application/json").body(payload.dump());
@@ -106,10 +106,10 @@ UserData UserDataClient::get(const std::string& userDataId) const {
 }
 
 void UserDataClient::confirm(const std::string& userDataId, const std::string& code,
-        const std::string& guid) const {
+        const std::string& uuid) const {
     json payload = {
         {JsonKey::code, code},
-        {JsonKey::guid, guid}
+        {JsonKey::uuid, uuid}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post()
@@ -118,9 +118,9 @@ void UserDataClient::confirm(const std::string& userDataId, const std::string& c
     connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
 }
 
-void UserDataClient::resendConfirmation(const std::string& userDataId, const std::string& guid) const {
+void UserDataClient::resendConfirmation(const std::string& userDataId, const std::string& uuid) const {
     json payload = {
-        {JsonKey::guid, guid}
+        {JsonKey::uuid, uuid}
     };
 
     Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()

@@ -62,14 +62,14 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Add public key to the account.
          * @param publicKey - public key to add.
          * @param userData - user data associated with public key.
-         * @param accountId - target account GUID.
+         * @param accountId - target account UUID.
          * @note If parameter @param accountId is omitted, new account will be created.
          */
         virtual PublicKey add(const std::vector<unsigned char>& publicKey,
                 const std::vector<UserData>& userData, const std::string& accountId = "") const = 0;
         /**
          * @brief Get public key by identifier.
-         * @param publicKeyId - public key GUID.
+         * @param publicKeyId - public key UUID.
          */
         virtual PublicKey get(const std::string& publicKeyId) const = 0;
         /**

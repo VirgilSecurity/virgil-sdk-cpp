@@ -50,19 +50,19 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
     class PublicKey {
     public:
         /**
-         * @brief Set parent account GUID.
+         * @brief Set parent account UUID.
          */
         PublicKey& accountId (const std::string& accountId);
         /**
-         * @brief Get parent account GUID.
+         * @brief Get parent account UUID.
          */
         std::string accountId () const;
         /**
-         * @brief Set public key GUID.
+         * @brief Set public key UUID.
          */
         PublicKey& publicKeyId (const std::string& publicKeyId);
         /**
-         * @brief Get public key GUID.
+         * @brief Get public key UUID.
          */
         std::string publicKeyId () const;
         /**

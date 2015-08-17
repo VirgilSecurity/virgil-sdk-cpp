@@ -78,7 +78,7 @@ static const std::string expectedClassName = "user_id";
 static const std::string expectedType = "email";
 static const std::string expectedValue = "test@virgilsecurity.com";
 static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string guid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+static const std::string uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
 
 TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
@@ -99,7 +99,7 @@ TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
     UserData userData =
-            keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue, guid);
+            keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue, uuid);
 
     Verify(Method(connection, send));
     REQUIRE(userData.accountId() == expectedAccountId);
@@ -148,7 +148,7 @@ TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     When(Method(connection, send)).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9", guid));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9", uuid));
     Verify(Method(connection, send));
 }
 
@@ -161,7 +161,7 @@ TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data
     When(Method(connection, send)).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId, guid));
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId, uuid));
     Verify(Method(connection, send));
 }
 

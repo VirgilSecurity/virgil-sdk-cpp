@@ -59,7 +59,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         static std::string publicKeyAdd();
         /**
          * @brief Return endpoint that extract public key by its id.
-         * @param publicKeyId - public key GUID.
+         * @param publicKeyId - public key UUID.
          */
         static std::string publicKeyGet(const std::string& publicKeyId);
         /**
@@ -76,17 +76,17 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         static std::string userDataAdd();
         /**
-         * @brief Return endpoint that get user data by its GUID.
+         * @brief Return endpoint that get user data by its UUID.
          */
         static std::string userDataGet(const std::string& userDataId);
         /**
          * @brief Return endpoint that confirm given user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          */
         static std::string userDataConfirm(const std::string& userDataId);
         /**
          * @brief Return endpoint that resend confirmation code for the given user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          */
         static std::string userDataResendConfirm(const std::string& userDataId);
         /**
