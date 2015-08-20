@@ -62,7 +62,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using json = nlohmann::json;
 
-static const char * kHttpHeaderField_AppToken = "X-VIRGIL-APP-TOKEN";
+static const char * kHttpHeaderField_AppToken = "X-VIRGIL-APPLICATION-TOKEN";
 static const char * kHttpHeaderField_RequestSign = "X-VIRGIL-REQUEST-SIGN";
 static const char * kHttpHeaderField_RequestSignPkId = "X-VIRGIL-REQUEST-SIGN-PK-ID";
 
