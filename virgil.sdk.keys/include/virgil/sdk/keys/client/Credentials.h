@@ -60,6 +60,13 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
                 const std::string& privateKeyPassword = std::string());
         /**
+         * @brief Initialize credentials.
+         * @param privateKey - user's private key.
+         * @param privateKeyPassword - (optional) private key password if private key is encrypted.
+         */
+        Credentials(const std::vector<unsigned char>& privateKey,
+                const std::string& privateKeyPassword = std::string());
+        /**
          * @brief Perform cleanup first.
          * @see cleanup()
          */

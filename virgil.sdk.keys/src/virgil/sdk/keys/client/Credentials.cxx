@@ -45,6 +45,10 @@ Credentials::Credentials(const std::string& publicKeyId, const std::vector<unsig
         : publicKeyId_(publicKeyId), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
 
+Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
+        : publicKeyId_(), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
+}
+
 bool Credentials::isValid() const {
     return !publicKeyId_.empty() && !privateKey_.empty();
 }
