@@ -35,171 +35,94 @@
  */
 
 #include <virgil/sdk/keys/error/KeysError.h>
-using virgil::sdk::keys::error::KeysError;
 
-#include <sstream>
+#include <string>
+#include <map>
+
+using virgil::sdk::keys::error::KeysError;
+using virgil::sdk::keys::http::Response;
 
 KeysError::KeysError(KeysError::Action action, Response::StatusCode statusCode,
         unsigned int errorCode)
         : runtime_error(formatMessage(action, statusCode, errorCode)) {
 }
 
+static std::string actionStr(KeysError::Action action) {
+    static std::map<KeysError::Action, std::string> code2str = {
+        { KeysError::Action::PUBLIC_KEY_ADD, "add public key." },
+        { KeysError::Action::PUBLIC_KEY_GET, "get public key." },
+        { KeysError::Action::PUBLIC_KEY_UPDATE, "update public key." },
+        { KeysError::Action::PUBLIC_KEY_DELETE, "delete public key." },
+        { KeysError::Action::PUBLIC_KEY_GRAB, "grab public key." },
+        { KeysError::Action::USER_DATA_ADD, "add user data." },
+        { KeysError::Action::USER_DATA_DELETE, "delete user data." },
+        { KeysError::Action::USER_DATA_CONFIRM, "confirm user data." },
+        { KeysError::Action::USER_DATA_CONFIRM_RESEND, "resend user data confirmation." }
+    };
+    auto message = code2str.find(action);
+    return "Failed action: " + (message != code2str.end() ? message->second : "unknown.");
+}
+
+static std::string statusCodeStr(Response::StatusCode statusCode) {
+    static std::map<Response::StatusCode, std::string> code2str = {
+        { Response::StatusCode::REQUEST_ERROR, "request error." },
+        { Response::StatusCode::AUTHORIZATION_ERROR, "authorization error." },
+        { Response::StatusCode::ENTITY_NOT_FOUND, "entity not found." },
+        { Response::StatusCode::METHOD_NOT_ALLOWED, "method not allowed." },
+        { Response::StatusCode::SERVER_ERROR, "server error." }
+    };
+    auto message = code2str.find(statusCode);
+    return "HTTP response: " + (message != code2str.end() ? message->second : "unknown.");
+}
+
+static std::string errorCodeStr(unsigned int errorCode) {
+    static std::map<unsigned int, std::string> code2str = {
+        { 10100, "JSON specified as a request is invalid." },
+        { 10200, "The request_sign_uuid parameter was already used for another request." },
+        { 10201, "The request_sign_uuid parameter is invalid." },
+        { 10202, "The request sign header not found." },
+        { 10203, "The Public Key header not specified or incorrect." },
+        { 10204, "The request sign specified is incorrect." },
+        { 10207, "The Public Key UUID passed in header was not confirmed yet." },
+        { 10209, "Public Key specified in authorization header is registered for another application." },
+        { 10210, "Public Key value in request body for POST /public-key endpoint must be base64 encoded value." },
+        { 10205, "The Virgil application token not specified or invalid." },
+        { 10206, "The Virgil statistics application error." },
+        { 10208, "Public Key value required in request body." },
+        { 20000, "Account object not found for id specified." },
+        { 20100, "Public Key object not found for id specified." },
+        { 20101, "Public key length invalid." },
+        { 20102, "Public key not specified." },
+        { 20103, "Public key must be base64-encoded string." },
+        { 20104, "Public key must contain confirmed UserData entities." },
+        { 20105, "Public key must contain at least one 'user ID' entry." },
+        { 20107, "There is UDID registered for current application already." },
+        { 20108, "UDIDs specified are registered for several accounts." },
+        { 20110, "Public key is not found for any application." },
+        { 20111, "Public key is found for another application." },
+        { 20112, "Public key is registered for another application." },
+        { 20113, "Sign verification failed for request UUID parameter in PUT /public-key." },
+        { 20200, "User Data object not found for id specified." },
+        { 20202, "User Data type specified as user identity is invalid." },
+        { 20203, "Domain value specified for the domain identity is invalid." },
+        { 20204, "Email value specified for the email identity is invalid." },
+        { 20205, "Phone value specified for the phone identity is invalid." },
+        { 20210, "User Data integrity constraint violation." },
+        { 20211, "User Data confirmation entity not found." },
+        { 20212, "User Data confirmation token invalid." },
+        { 20213, "User Data was already confirmed and does not need further confirmation." },
+        { 20214, "User Data class specified is invalid." },
+        { 20215, "Domain value specified for the domain identity is invalid." },
+        { 20216, "This user id had been confirmed earlier." },
+        { 20217, "The user data is not confirmed yet." },
+        { 20218, "The user data value is required." },
+        { 20300, "User info data validation failed." }
+    };
+    auto message = code2str.find(errorCode);
+    return message != code2str.end() ? message->second : "Unknown error.";
+}
 
 std::string KeysError::formatMessage(KeysError::Action action, Response::StatusCode statusCode,
         unsigned int errorCode) noexcept {
-
-    std::ostringstream message;
-
-    message << "Failed to ";
-    switch (action) {
-    case KeysError::Action::PUBLIC_KEY_ADD:
-        message << "add public key.";
-        break;
-    case KeysError::Action::PUBLIC_KEY_GET:
-        message << "get public key.";
-        break;
-    case KeysError::Action::PUBLIC_KEY_SEARCH:
-        message << "search public key.";
-        break;
-    case KeysError::Action::USER_DATA_ADD:
-        message << "add user data.";
-        break;
-    case KeysError::Action::USER_DATA_GET:
-        message << "get user data.";
-        break;
-    case KeysError::Action::USER_DATA_SEARCH:
-        message << "search user data.";
-        break;
-    case KeysError::Action::USER_DATA_CONFIRM:
-        message << "confirm user data.";
-        break;
-    case KeysError::Action::USER_DATA_CONFIRM_RESEND:
-        message << "resend user data confirmation.";
-        break;
-    default:
-        message << "make unknown action.";
-        break;
-    }
-
-    switch (statusCode) {
-    case Response::StatusCode::REQUEST_ERROR:
-        message << " Request error.";
-        break;
-    case Response::StatusCode::AUTHORIZATION_ERROR:
-        message << " Authorization error.";
-        break;
-    case Response::StatusCode::ENTITY_NOT_FOUND:
-        message << " Entity not found.";
-        break;
-    case Response::StatusCode::METHOD_NOT_ALLOWED:
-        message << " Method not allowed.";
-        break;
-    case Response::StatusCode::SERVER_ERROR:
-        message << " Server error.";
-        break;
-    default:
-        message << " Unknown error.";
-        break;
-    }
-
-    switch (errorCode) {
-    case 10000:
-        message << " Internal application error.";
-        break;
-    case 10001:
-        message << " Application kernel error.";
-        break;
-    case 10010:
-        message << " Internal application error.";
-        break;
-    case 10011:
-        message << " Internal application error.";
-        break;
-    case 10012:
-        message << " Internal application error.";
-        break;
-    case 10100:
-        message << " JSON specified as a request body is invalid.";
-        break;
-    case 10200:
-        message << " Guid specified is expired already.";
-        break;
-    case 10201:
-        message << " The Guid specified is invalid.";
-        break;
-    case 10202:
-        message << " The Authorization header was not specified.";
-        break;
-    case 10203:
-        message << " Public key header not specified or incorrect.";
-        break;
-    case 10204:
-        message << " The signed digest specified is incorrect.";
-        break;
-    case 20000:
-        message << " Account object not found for id specified.";
-        break;
-    case 20100:
-        message << " Public key object not found for id specified.";
-        break;
-    case 20101:
-        message << " Public key invalid.";
-        break;
-    case 20102:
-        message << " Public key not specified.";
-        break;
-    case 20103:
-        message << " Public key must be base64-encoded string.";
-        break;
-    case 20200:
-        message << " UserData object not found for id specified.";
-        break;
-    case 20201:
-        message << " UserData type specified is invalid.";
-        break;
-    case 20202:
-        message << " UserData type specified for user identity is invalid.";
-        break;
-    case 20203:
-        message << " Domain specified for domain identity is invalid.";
-        break;
-    case 20204:
-        message << " Email specified for email identity is invalid.";
-        break;
-    case 20205:
-        message << " Phone specified for phone identity is invalid.";
-        break;
-    case 20206:
-        message << " Fax specified for fax identity is invalid.";
-        break;
-    case 20207:
-        message << " Application specified for application identity is invalid.";
-        break;
-    case 20208:
-        message << " Mac address specified for mac address identity is invalid.";
-        break;
-    case 20210:
-        message << " UserData integrity constraint violation.";
-        break;
-    case 20211:
-        message << " UserData confirmation entity not found by code specified.";
-        break;
-    case 20212:
-        message << " UserData confirmation code invalid.";
-        break;
-    case 20213:
-        message << " UserData was already confirmed and does not need further confirmation.";
-        break;
-    case 20214:
-        message << " UserData class specified is invalid.";
-        break;
-    case 20300:
-        message << " User info data validation failed. Name is invalid.";
-        break;
-    default:
-        // Do nothing.
-        break;
-    }
-
-    return message.str();
+    return actionStr(action) + " " + statusCodeStr(statusCode) + " " + errorCodeStr(errorCode);
 }

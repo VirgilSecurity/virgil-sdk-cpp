@@ -34,40 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_HTTP_CONNECTION_DEFAULT_H
-#define VIRGIL_SDK_KEYS_HTTP_CONNECTION_DEFAULT_H
+#ifndef VIRGIL_SDK_KEYS_HTTP_CONNECTION_H
+#define VIRGIL_SDK_KEYS_HTTP_CONNECTION_H
 
-#include <virgil/sdk/keys/http/ConnectionBase.h>
+#include <virgil/sdk/keys/http/Request.h>
+#include <virgil/sdk/keys/http/Response.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace http {
 
 /**
- * @brief This abstract class unifies access to the HTTP layer.
+ * @brief This class encapsulates access to the HTTP layer.
  */
-class Connection final : public ConnectionBase {
+class Connection {
     public:
         /**
-         * @brief Configure connection with base address URI.
-         * @param appToken - application specific key that is used for all service communications.
-         * @param baseAddress - service base address including API version, i.e. https://keys.virgilsecurity.com/v1
+         * @brief Send synchronous request.
+         * @param request - request to be send.
+         * @throw std::logic_error - if given parameters are inconsistent.
+         * @throw std::runtime_error - if error was occured when send request.
          */
-        explicit Connection(const std::string& appToken, const std::string& baseAddress = baseAddressDefault);
-        /**
-         * @brief Return application specific key.
-         */
-        std::string appToken() const;
-        /**
-         * @name Default class implementation.
-         */
-        //@{
-        Response send(const Request& request) override;
-        void checkResponseError(const Response& response, KeysError::Action action) override;
-        //@}
-    private:
-        std::string appToken_;
+        virtual virgil::sdk::keys::http::Response send(const virgil::sdk::keys::http::Request& request);
     };
 
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_HTTP_CONNECTION_DEFAULT_H */
+#endif /* VIRGIL_SDK_KEYS_HTTP_CONNECTION_H */
 

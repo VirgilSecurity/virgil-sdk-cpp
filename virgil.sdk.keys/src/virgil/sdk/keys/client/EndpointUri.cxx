@@ -35,36 +35,59 @@
  */
 
 #include <virgil/sdk/keys/client/EndpointUri.h>
+
 using virgil::sdk::keys::client::EndpointUri;
 
-std::string EndpointUri::publicKeyAdd() {
-    return "/public-key";
+EndpointUri::EndpointUri(EndpointUri::Version uriVersion) : version_(uriVersion) {
 }
 
-std::string EndpointUri::publicKeyGet(const std::string& publicKeyId) {
-    return "/public-key/" + publicKeyId;
+EndpointUri EndpointUri::v2() {
+    return EndpointUri(EndpointUri::Version::V2);
 }
 
-std::string EndpointUri::publicKeySearch() {
-    return "/account/actions/search";
+EndpointUri::Version EndpointUri::version() const {
+    return version_;
 }
 
-std::string EndpointUri::userDataAdd() {
-    return "/user-data";
+std::string EndpointUri::publicKeyAdd() const {
+    return addVersion("/public-key");
 }
 
-std::string EndpointUri::userDataGet(const std::string& userDataId) {
-    return "/user-data/" + userDataId;
+std::string EndpointUri::publicKeyGet(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId);
 }
 
-std::string EndpointUri::userDataConfirm(const std::string& userDataId) {
-    return "/user-data/" + userDataId + "/actions/confirm";
+std::string EndpointUri::publicKeyUpdate(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId);
 }
 
-std::string EndpointUri::userDataResendConfirm(const std::string& userDataId) {
-    return "/user-data/" + userDataId + "/actions/resend-confirmation";
+std::string EndpointUri::publicKeyRemove(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId);
 }
 
-std::string EndpointUri::userDataSearch() {
-    return "/user-data/actions/search";
+std::string EndpointUri::publicKeyGrab() const {
+    return addVersion("/public-key/actions/grab");
+}
+
+std::string EndpointUri::userDataAdd() const {
+    return addVersion("/user-data");
+}
+
+std::string EndpointUri::userDataRemove(const std::string& userDataId) const {
+    return addVersion("/user-data/" + userDataId);
+}
+
+std::string EndpointUri::userDataConfirm(const std::string& userDataId) const {
+    return addVersion("/user-data/" + userDataId + "/persist");
+}
+
+std::string EndpointUri::userDataResendConfirm(const std::string& userDataId) const {
+    return addVersion("/user-data/" + userDataId + "/actions/resend-confirmation");
+}
+
+std::string EndpointUri::addVersion(const std::string& uri) const {
+    switch (version()) {
+    case EndpointUri::Version::V2:
+        return "/v2" + uri;
+    }
 }

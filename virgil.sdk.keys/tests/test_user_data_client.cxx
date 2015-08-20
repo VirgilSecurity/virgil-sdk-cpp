@@ -36,212 +36,99 @@
 
 /**
  * @file test_user_data_client.cxx
- * @brief Covers "/public-key" endpoint.
+ * @brief Covers "/user-data" endpoint.
  */
 #include <string>
 #include <memory>
 #include <vector>
-#include <algorithm>
+
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
+#include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/http/Request.h>
+#include <virgil/sdk/keys/http/Response.h>
+#include <virgil/sdk/keys/error/KeysError.h>
+#include <virgil/sdk/keys/util/JsonKey.h>
+#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/keys/model/UserData.h>
+#include <virgil/sdk/keys/model/UserDataClass.h>
+#include <virgil/sdk/keys/model/UserDataType.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 #include <json.hpp>
-using json = nlohmann::json;
-
 #include "fakeit.hpp"
-using namespace fakeit;
 
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
+#include "fakeit_helpers.hpp"
+#include "helpers.h"
 
-#include <virgil/sdk/keys/client/KeysClient.h>
+using virgil::sdk::keys::client::KeysClientConnection;
 using virgil::sdk::keys::client::KeysClient;
-
-#include <virgil/sdk/keys/error/KeysError.h>
+using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::error::KeysError;
-
-#include <virgil/sdk/keys/util/Base64.h>
-using virgil::sdk::keys::util::Base64;
-#include <virgil/sdk/keys/util/JsonKey.h>
+using virgil::sdk::keys::http::Response;
+using virgil::sdk::keys::http::Request;
+using virgil::sdk::keys::model::UserData;
+using virgil::sdk::keys::model::UserDataClass;
+using virgil::sdk::keys::model::UserDataType;
+using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::util::JsonKey;
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
-#include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
-
-#include "fakeit_utils.hpp"
-
-static const std::string expectedAccountId = "3a768eea-cbda-4926-a82d-831cb89092aa";
-static const std::string expectedPublicKeyId = "17084b40-08f5-4bcd-a739-c0d08c176bad";
-static const std::string expectedUserDataId = "e33898de-6302-4756-8f0c-5f6c5218e02e";
-static const std::vector<unsigned char> expectedPublicKey {'t','e','s','t'};
-static const std::string expectedClassName = "user_id";
-static const std::string expectedType = "email";
-static const std::string expectedValue = "test@virgilsecurity.com";
-static const std::string appToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-static const std::string uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+using json = nlohmann::json;
+using namespace fakeit;
 
 TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json({
-        {JsonKey::id, {
-            {JsonKey::accountId, expectedAccountId},
-            {JsonKey::publicKeyId, expectedPublicKeyId},
-            {JsonKey::userDataId, expectedUserDataId},
-        }},
-        {JsonKey::className, expectedClassName},
-        {JsonKey::type, expectedType},
-        {JsonKey::value, expectedValue}
-    }).dump());
+    successResponse.body(Marshaller<UserData>::toJson(expectedUserData1()));
 
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData =
-            keysClient->userData().add(expectedPublicKeyId, expectedClassName, expectedType, expectedValue, uuid);
+    UserData userData = keysClient->userData().add(UserData::email("user@virgilsecurity.com"), credentials(), uuid());
 
-    Verify(Method(connection, send));
-    REQUIRE(userData.accountId() == expectedAccountId);
-    REQUIRE(userData.publicKeyId() == expectedPublicKeyId);
-    REQUIRE(userData.userDataId() == expectedUserDataId);
-    REQUIRE(userData.className() == expectedClassName);
-    REQUIRE(userData.type() == expectedType);
-    REQUIRE(userData.value() == expectedValue);
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    checkUserData(userData, expectedUserData1());
 }
 
-TEST_CASE("Get User Data - success", "[virgil-sdk-keys-user-data]") {
+TEST_CASE("Delete User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json({
-        {JsonKey::id, {
-            {JsonKey::accountId, expectedAccountId},
-            {JsonKey::publicKeyId, expectedPublicKeyId},
-            {JsonKey::userDataId, expectedUserDataId},
-        }},
-        {JsonKey::className, expectedClassName},
-        {JsonKey::type, expectedType},
-        {JsonKey::value, expectedValue}
-    }).dump());
+    successResponse.body({});
 
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = keysClient->userData().get(expectedUserDataId);
+    REQUIRE_NOTHROW(keysClient->userData().remove(expectedUserData1().userDataId(), credentials(), uuid()));
 
-    Verify(Method(connection, send));
-    REQUIRE(userData.accountId() == expectedAccountId);
-    REQUIRE(userData.publicKeyId() == expectedPublicKeyId);
-    REQUIRE(userData.userDataId() == expectedUserDataId);
-    REQUIRE(userData.className() == expectedClassName);
-    REQUIRE(userData.type() == expectedType);
-    REQUIRE(userData.value() == expectedValue);
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }
 
 TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json::object().dump());
+    successResponse.body({});
 
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserDataId, "F9U0W9", uuid));
-    Verify(Method(connection, send));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserData1().userDataId(), confirmationCode()));
+
+    Verify(OverloadedMethod(connection, send, Response(const Request&)));
 }
 
 TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json::object().dump());
+    successResponse.body({});
 
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
-
-    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserDataId, uuid));
-    Verify(Method(connection, send));
-}
-
-TEST_CASE("Search User Data - success", "[virgil-sdk-keys-user-data]") {
-    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json::array({
-        {
-            {JsonKey::id, {
-                {JsonKey::accountId, expectedAccountId},
-                {JsonKey::publicKeyId, expectedPublicKeyId},
-                {JsonKey::userDataId, expectedUserDataId},
-            }},
-            {JsonKey::className, expectedClassName},
-            {JsonKey::type, expectedType},
-            {JsonKey::value, expectedValue}
-        }
-    }).dump());
-
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    std::vector<UserData> allUserData = keysClient->userData().search(expectedValue);
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserData1().userDataId(), credentials(), uuid()));
 
-    Verify(Method(connection, send));
-    REQUIRE(allUserData.size() == 1);
-
-    UserData userData = allUserData.front();
-    REQUIRE(userData.accountId() == expectedAccountId);
-    REQUIRE(userData.publicKeyId() == expectedPublicKeyId);
-    REQUIRE(userData.userDataId() == expectedUserDataId);
-    REQUIRE(userData.className() == expectedClassName);
-    REQUIRE(userData.type() == expectedType);
-    REQUIRE(userData.value() == expectedValue);
-}
-
-TEST_CASE("Search User Data and Expand Key - success", "[virgil-sdk-keys-user-data]") {
-    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    successResponse.body(json::array({
-        {
-            {JsonKey::id, {
-                {JsonKey::accountId, expectedAccountId},
-                {JsonKey::publicKeyId, expectedPublicKeyId},
-                {JsonKey::userDataId, expectedUserDataId},
-            }},
-            {JsonKey::className, expectedClassName},
-            {JsonKey::type, expectedType},
-            {JsonKey::value, expectedValue},
-            {JsonKey::expanded, {
-                {JsonKey::publicKey, {
-                    {JsonKey::id, {
-                        {JsonKey::accountId, expectedAccountId},
-                        {JsonKey::publicKeyId, expectedPublicKeyId},
-                    }},
-                    {JsonKey::publicKey, Base64::encode(expectedPublicKey)}
-                }}
-            }}
-        }
-    }).dump(4));
-
-    auto connectionObj = std::make_shared<Connection>(appToken);
-    Mock<ConnectionBase> connection(*connectionObj);
-    When(Method(connection, send)).Return(successResponse);
-
-    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    std::vector<UserData> allUserData = keysClient->userData().search(expectedValue, true);
-
-    Verify(Method(connection, send));
-    REQUIRE(allUserData.size() == 1);
-
-    UserData userData = allUserData.front();
-    REQUIRE(userData.accountId() == expectedAccountId);
-    REQUIRE(userData.publicKeyId() == expectedPublicKeyId);
-    REQUIRE(userData.userDataId() == expectedUserDataId);
-    REQUIRE(userData.className() == expectedClassName);
-    REQUIRE(userData.type() == expectedType);
-    REQUIRE(userData.value() == expectedValue);
-    REQUIRE(userData.publicKey());
-    REQUIRE(userData.publicKey()->accountId() == expectedAccountId);
-    REQUIRE(userData.publicKey()->publicKeyId() == expectedPublicKeyId);
-    REQUIRE(userData.publicKey()->key() == expectedPublicKey);
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }

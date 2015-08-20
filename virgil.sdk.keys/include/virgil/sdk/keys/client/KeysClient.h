@@ -40,10 +40,7 @@
 #include <memory>
 
 #include <virgil/sdk/keys/client/KeysClientBase.h>
-using virgil::sdk::keys::client::KeysClientBase;
-
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -58,9 +55,19 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     class KeysClient final : public KeysClientBase {
     public:
         /**
-         * @brief Initialize all clients with appropriate connection.
+         * @brief Default API base address URI, i.e. https://keys.virgilsecurity.com/
          */
-        explicit KeysClient(const std::shared_ptr<ConnectionBase>& connection);
+        static const std::string kBaseAddressDefault;
+        /**
+         * @brief Initialize with appropriate connection.
+         */
+        explicit KeysClient(const std::shared_ptr<KeysClientConnection>& connection);
+        /**
+         * @brief Initialize with application specific token and srevice base address.
+         * @param appToken - application specific token.
+         * @param baseAddress - service API base address.
+         */
+        explicit KeysClient(const std::string& appToken, const std::string& baseAddress = kBaseAddressDefault);
         /**
          * @name Default class implementation
          */

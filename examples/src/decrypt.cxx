@@ -56,8 +56,8 @@ using virgil::crypto::stream::VirgilStreamDataSink;
 #include <virgil/sdk/keys/model/PublicKey.h>
 using virgil::sdk::keys::model::PublicKey;
 
-#include <virgil/sdk/keys/io/marshaller.h>
-using virgil::sdk::keys::io::marshaller;
+#include <virgil/sdk/keys/io/Marshaller.h>
+using virgil::sdk::keys::io::Marshaller;
 
 int main() {
     try {
@@ -85,7 +85,7 @@ int main() {
         std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(publicKeyData));
 
-        PublicKey publicKey = marshaller<PublicKey>::fromJson(publicKeyData);
+        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
         std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);

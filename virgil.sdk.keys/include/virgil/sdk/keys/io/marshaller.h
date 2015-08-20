@@ -46,7 +46,7 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
      * Supported classes: model::Account, model::PublicKey, model::UserData.
      */
     template <typename T>
-    class marshaller {
+    class Marshaller {
     public:
         /**
          * @brief Marshal given object to the Json representation.
@@ -61,7 +61,7 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
         /**
          * @brief Forbid object creation.
          */
-        marshaller();
+        Marshaller();
     };
 }}}}
 

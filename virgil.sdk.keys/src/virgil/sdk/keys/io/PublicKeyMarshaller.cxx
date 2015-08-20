@@ -34,29 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/io/marshaller.h>
-
-#include <json.hpp>
-using json = nlohmann::json;
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 #include <virgil/sdk/keys/util/JsonKey.h>
-using virgil::sdk::keys::util::JsonKey;
-
-#include <virgil/sdk/keys/util/Base64.h>
-using virgil::sdk::keys::util::Base64;
-
 #include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
-
 #include <virgil/sdk/keys/model/UserData.h>
+
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
+#include <json.hpp>
+
+using virgil::sdk::keys::util::JsonKey;
+using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::model::UserData;
+
+using virgil::crypto::foundation::VirgilBase64;
+
+using json = nlohmann::json;
 
 namespace virgil { namespace sdk { namespace keys { namespace io {
     /**
-     * @brief marshaller<PublicKey> specialization.
+     * @brief Marshaller<PublicKey> specialization.
      */
     template <>
-    class marshaller<PublicKey> {
+    class Marshaller<PublicKey> {
     public:
         template <int INDENT = -1>
         static std::string toJson(const PublicKey& publicKey, bool deep = false) {
@@ -66,12 +67,12 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
                 {JsonKey::publicKeyId, publicKey.publicKeyId()}
             };
 
-            publicKeyJson[JsonKey::publicKey] = Base64::encode(publicKey.key());
+            publicKeyJson[JsonKey::publicKey] = VirgilBase64::encode(publicKey.key());
 
             json userDataJson = json::array();
             if (deep) {
                 for (auto userData : publicKey.userData()) {
-                    userDataJson.push_back(json::parse(marshaller<UserData>::toJson(userData, deep)));
+                    userDataJson.push_back(json::parse(Marshaller<UserData>::toJson(userData, deep)));
                 }
             }
             if (userDataJson.size() > 0) {
@@ -85,24 +86,24 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
             json publicKeyJson = json::parse(jsonString);
             publicKey.accountId(publicKeyJson[JsonKey::id][JsonKey::accountId]);
             publicKey.publicKeyId(publicKeyJson[JsonKey::id][JsonKey::publicKeyId]);
-            publicKey.key(Base64::decode(publicKeyJson[JsonKey::publicKey]));
+            publicKey.key(VirgilBase64::decode(publicKeyJson[JsonKey::publicKey]));
 
-            json userDataJson = publicKeyJson[JsonKey::publicKeys];
+            json userDataJson = publicKeyJson[JsonKey::userData];
             if (userDataJson.is_array()) {
                 for (auto specificUserDataJson : userDataJson) {
-                    publicKey.userData().push_back(marshaller<UserData>::fromJson(specificUserDataJson.dump()));
+                    publicKey.userData().push_back(Marshaller<UserData>::fromJson(specificUserDataJson.dump()));
                 }
             }
             return publicKey;
         }
     private:
-        marshaller() {};
+        Marshaller() {};
     };
 }}}}
 
 void marshaller_public_key_init() {
-    virgil::sdk::keys::io::marshaller<PublicKey>::toJson(PublicKey());
-    virgil::sdk::keys::io::marshaller<PublicKey>::toJson<2>(PublicKey());
-    virgil::sdk::keys::io::marshaller<PublicKey>::toJson<4>(PublicKey());
-    virgil::sdk::keys::io::marshaller<PublicKey>::fromJson("");
+    virgil::sdk::keys::io::Marshaller<PublicKey>::toJson(PublicKey());
+    virgil::sdk::keys::io::Marshaller<PublicKey>::toJson<2>(PublicKey());
+    virgil::sdk::keys::io::Marshaller<PublicKey>::toJson<4>(PublicKey());
+    virgil::sdk::keys::io::Marshaller<PublicKey>::fromJson("");
 }

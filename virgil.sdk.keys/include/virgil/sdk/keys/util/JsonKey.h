@@ -52,14 +52,16 @@ namespace virgil { namespace sdk { namespace keys { namespace util {
         static const std::string type; /*!< Json key for user data type. */
         static const std::string value; /*!< Json key for user data value. */
         static const std::string isConfirmed; /*!< Json key for user data status: is confirmed. */
+        static const std::string confirmationCode; /*!< Json key for confirmation code. */
         static const std::string error; /*!< Json key for error object. */
-        static const std::string code; /*!< Json key for error code. */
+        static const std::string errorCode; /*!< Json key for error code. */
         static const std::string id; /*!< Json key for id object. */
         static const std::string accountId; /*!< Json key for account UUID. */
         static const std::string publicKeyId; /*!< Json key for public key UUID. */
         static const std::string userDataId; /*!< Json key for user data UUID. */
         static const std::string expanded; /*!< Json key for expanded object. */
         static const std::string uuid; /*!< Json key for uuid value. */
+        static const std::string uuidSign; /*!< Json key for uuid sign value. */
     private:
         JsonKey();
     };

@@ -35,7 +35,9 @@
  */
 
 #include <virgil/sdk/keys/model/PublicKey.h>
+
 using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::model::UserData;
 
 PublicKey& PublicKey::accountId(const std::string& accountId) {
     accountId_ = accountId;

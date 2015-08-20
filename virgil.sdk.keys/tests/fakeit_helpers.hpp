@@ -37,10 +37,53 @@
 #ifndef FAKEIT_UTILS_HPP
 #define FAKEIT_UTILS_HPP
 
+#include <algorithm>
+#include <vector>
+
+#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/keys/model/UserData.h>
+
+#include "fakeit.hpp"
+
 template<typename T>
-inline auto make_moc_shared(Mock<T>& mock)
+inline auto make_moc_shared(fakeit::Mock<T>& mock)
         -> std::shared_ptr<typename std::remove_reference<decltype(mock.get())>::type> {
     return std::shared_ptr<typename std::remove_reference<decltype(mock.get())>::type>(&mock.get(), [](void *){});
+}
+
+inline void checkUserData(const virgil::sdk::keys::model::UserData& lhs,
+        const virgil::sdk::keys::model::UserData& rhs) {
+    REQUIRE(lhs.accountId() == rhs.accountId());
+    REQUIRE(lhs.publicKeyId() == rhs.publicKeyId());
+    REQUIRE(lhs.userDataId() == rhs.userDataId());
+    REQUIRE(lhs.className() == rhs.className());
+    REQUIRE(lhs.type() == rhs.type());
+    REQUIRE(lhs.value() == rhs.value());
+    REQUIRE(lhs.isConfirmed() == rhs.isConfirmed());
+}
+
+inline void checkPublicKeys(const virgil::sdk::keys::model::PublicKey& lhs,
+        const virgil::sdk::keys::model::PublicKey& rhs) {
+    REQUIRE(lhs.accountId() == rhs.accountId());
+    REQUIRE(lhs.publicKeyId() == rhs.publicKeyId());
+    REQUIRE(lhs.key() == rhs.key());
+
+    auto userDataComp = [](const virgil::sdk::keys::model::UserData& lhs,
+            const virgil::sdk::keys::model::UserData& rhs) -> bool {
+        auto valueLhs = lhs.value();
+        auto valueRhs = rhs.value();
+        return std::lexicographical_compare(valueLhs.begin(), valueLhs.end(), valueRhs.begin(), valueRhs.end());
+    };
+
+    std::vector<virgil::sdk::keys::model::UserData> sortedUserDataLhs = lhs.userData();
+    std::vector<virgil::sdk::keys::model::UserData> sortedUserDataRhs = rhs.userData();
+    std::sort(sortedUserDataLhs.begin(), sortedUserDataLhs.begin(), userDataComp);
+    std::sort(sortedUserDataRhs.begin(), sortedUserDataRhs.begin(), userDataComp);
+
+    REQUIRE(sortedUserDataLhs.size() == sortedUserDataRhs.size());
+    for (size_t pos = 0; pos < sortedUserDataLhs.size(); ++pos) {
+        checkUserData(sortedUserDataLhs[pos], sortedUserDataRhs[pos]);
+    }
 }
 
 #endif /* FAKEIT_UTILS_HPP */

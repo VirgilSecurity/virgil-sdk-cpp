@@ -34,23 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/io/marshaller.h>
-
-#include <json.hpp>
-using json = nlohmann::json;
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 #include <virgil/sdk/keys/util/JsonKey.h>
-using virgil::sdk::keys::util::JsonKey;
-
 #include <virgil/sdk/keys/model/UserData.h>
+
+#include <json.hpp>
+
+using virgil::sdk::keys::util::JsonKey;
 using virgil::sdk::keys::model::UserData;
+
+using json = nlohmann::json;
 
 namespace virgil { namespace sdk { namespace keys { namespace io {
     /**
-     * @brief marshaller<UserData> specialization.
+     * @brief Marshaller<UserData> specialization.
      */
     template <>
-    class marshaller<UserData> {
+    class Marshaller<UserData> {
     public:
         template <int INDENT = -1>
         static std::string toJson(const UserData& userData, bool deep = false) {
@@ -81,13 +82,13 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
             return userData;
         }
     private:
-        marshaller() {};
+        Marshaller() {};
     };
 }}}}
 
 void marshaller_user_data_init() {
-    virgil::sdk::keys::io::marshaller<UserData>::toJson(UserData());
-    virgil::sdk::keys::io::marshaller<UserData>::toJson<2>(UserData());
-    virgil::sdk::keys::io::marshaller<UserData>::toJson<4>(UserData());
-    virgil::sdk::keys::io::marshaller<UserData>::fromJson("");
+    virgil::sdk::keys::io::Marshaller<UserData>::toJson(UserData());
+    virgil::sdk::keys::io::Marshaller<UserData>::toJson<2>(UserData());
+    virgil::sdk::keys::io::Marshaller<UserData>::toJson<4>(UserData());
+    virgil::sdk::keys::io::Marshaller<UserData>::fromJson("");
 }

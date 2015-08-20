@@ -39,31 +39,28 @@
 
 #include <string>
 
-#include <virgil/sdk/keys/http/Request.h>
-using virgil::sdk::keys::http::Request;
-#include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
-
+#include <virgil/sdk/keys/http/Connection.h>
+#include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/error/KeysError.h>
-using virgil::sdk::keys::error::KeysError;
 
-namespace virgil { namespace sdk { namespace keys { namespace http {
+namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @brief This abstract class unifies access to the HTTP layer.
+     * @brief Specific HTTP layer for Virgil Public Keys service.
      */
-    class ConnectionBase {
+    class KeysClientConnection : public virgil::sdk::keys::http::Connection {
     public:
         /**
-         * @brief Default API base address URI, i.e. https://keys.virgilsecurity.com/v1
+         * @brief Configure connection application specific token and with base address URI.
+         * @param appToken - application specific token.
+         * @param baseAddress - service API base address.
          */
-        static const std::string baseAddressDefault;
+        KeysClientConnection(const std::string& appToken, const std::string& baseAddress);
         /**
-         * @brief Configure connection with base address URI.
-         * @param baseAddress - service base address including API version, i.e. https://keys.virgilsecurity.com/v1
+         * @brief Return application specific key.
          */
-        explicit ConnectionBase(const std::string &baseAddress = baseAddressDefault);
+        std::string appToken() const;
         /**
-         * @brief Return API base address.
+         * @brief Return service API base address.
          */
         std::string baseAddress() const;
         /**
@@ -72,15 +69,26 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          * @throw std::logic_error - if given parameters are inconsistent.
          * @throw std::runtime_error - if error was occured when send request.
          */
-        virtual Response send(const Request& request) = 0;
+        virtual virgil::sdk::keys::http::Response send(const virgil::sdk::keys::http::Request& request) override;
+        /**
+         * @brief Send synchronous request.
+         * @param request - request to be send.
+         * @param credentials - credentials for operations that need user's verification.
+         * @throw std::logic_error - if given parameters are inconsistent or invalid.
+         * @throw std::runtime_error - if error was occured when send request.
+         */
+        virtual virgil::sdk::keys::http::Response send(const virgil::sdk::keys::http::Request& request,
+                const Credentials& credentials);
         /**
          * @brief Check response for errors.
          * @param response - HTTP response to check.
-         * @param action - PKI action that created the response.
+         * @param action - service action that create given response.
          * @throw KeysError, if HTTP response contains error description.
          */
-        virtual void checkResponseError(const Response& response, KeysError::Action action) = 0;
+        virtual void checkResponseError(const virgil::sdk::keys::http::Response& response,
+                virgil::sdk::keys::error::KeysError::Action action);
     private:
+        std::string appToken_;
         std::string baseAddress_;
     };
 }}}}

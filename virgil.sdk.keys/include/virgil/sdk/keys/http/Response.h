@@ -61,7 +61,7 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
          * @name Types aliases
          */
         //@{
-        using Headers = std::map<std::string, std::string>;
+        using Header = std::map<std::string, std::string>;
         using Parameters = std::map<std::string, std::string>;
         //@}
         /**
@@ -87,11 +87,11 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
         /**
          * @brief Set response header.
          */
-        Response& header(const Headers& header);
+        Response& header(const Header& header);
         /**
          * @brief Get response header.
          */
-        Headers header() const;
+        Header header() const;
         /**
          * @brief Set response status code.
          */
@@ -117,7 +117,7 @@ namespace virgil { namespace sdk { namespace keys { namespace http {
     private:
         std::string body_;
         std::string contentType_;
-        Headers header_;
+        Header header_;
         StatusCode statusCode_;
     };
 }}}}

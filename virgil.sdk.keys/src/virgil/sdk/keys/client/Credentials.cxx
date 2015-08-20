@@ -34,41 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_MODEL_ACCOUNT_H
-#define VIRGIL_SDK_KEYS_MODEL_ACCOUNT_H
+#include <virgil/sdk/keys/client/Credentials.h>
 
-#include <string>
-#include <vector>
+#include <algorithm>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::client::Credentials;
 
-namespace virgil { namespace sdk { namespace keys { namespace model {
-    /**
-     * @brief Data object represent "Virgil Account" entity.
-     */
-    class Account {
-    public:
-        /**
-         * @brief Set account UUID.
-         */
-        Account& accountId (const std::string& accountId);
-        /**
-         * @brief Get account UUID.
-         */
-        std::string accountId () const;
-        /**
-         * @brief Get account public keys.
-         */
-        std::vector<PublicKey>& publicKeys();
-        /**
-         * @brief Get account public keys.
-         */
-        const std::vector<PublicKey>& publicKeys() const;
-    private:
-        std::string accountId_;
-        std::vector<PublicKey> publicKeys_;
-    };
-}}}}
+Credentials::Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
+        const std::string& privateKeyPassword)
+        : publicKeyId_(publicKeyId), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
+}
 
-#endif /* VIRGIL_SDK_KEYS_MODEL_ACCOUNT_H */
+bool Credentials::isValid() const {
+    return !publicKeyId_.empty() && !privateKey_.empty();
+}
+
+void Credentials::cleanup() noexcept {
+    std::fill(privateKey_.begin(), privateKey_.end(), 0);
+    std::fill(privateKeyPassword_.begin(), privateKeyPassword_.end(), 0);
+
+    publicKeyId_.resize(0);
+    privateKey_.resize(0);
+    privateKeyPassword_.resize(0);
+}
+
+Credentials::~Credentials() noexcept {
+    cleanup();
+}
+
+const std::string& Credentials::publicKeyId() const {
+    return publicKeyId_;
+}
+
+const std::vector<unsigned char>& Credentials::privateKey() const {
+    return privateKey_;
+}
+
+const std::string& Credentials::privateKeyPassword() const {
+    return privateKeyPassword_;
+}
+
+

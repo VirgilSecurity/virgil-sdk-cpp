@@ -39,13 +39,8 @@
 
 #include <memory>
 
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
-
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
-using virgil::sdk::keys::client::PublicKeyClientBase;
 #include <virgil/sdk/keys/client/UserDataClientBase.h>
-using virgil::sdk::keys::client::UserDataClientBase;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -54,10 +49,6 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     class KeysClientBase {
     public:
         /**
-         * @brief Initialize PKI client with appropriate connection.
-         */
-        explicit KeysClientBase(const std::shared_ptr<http::ConnectionBase>& connection);
-        /**
          * @brief Return "Public Key" entrypoint.
          */
         virtual PublicKeyClientBase& publicKey() = 0;
@@ -65,12 +56,6 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Return "User Data" entrypoint.
          */
         virtual UserDataClientBase& userData() = 0;
-        /**
-         * @brief Return PKI service connection.
-         */
-        std::shared_ptr<http::ConnectionBase> connection() const;
-    private:
-        std::shared_ptr<http::ConnectionBase> connection_;
     };
 }}}}
 

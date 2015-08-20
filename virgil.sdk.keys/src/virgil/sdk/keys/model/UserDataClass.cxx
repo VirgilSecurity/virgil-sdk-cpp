@@ -35,6 +35,7 @@
  */
 
 #include <virgil/sdk/keys/model/UserDataClass.h>
+
 using virgil::sdk::keys::model::UserDataClass;
 
 const std::string UserDataClass::userId = "user_id";

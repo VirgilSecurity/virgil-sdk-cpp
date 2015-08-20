@@ -35,40 +35,52 @@
  */
 
 #include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
+
+#include <stdexcept>
 
 #include <virgil/sdk/keys/client/EndpointUri.h>
-using virgil::sdk::keys::client::EndpointUri;
-
-#include <virgil/sdk/keys/model/Account.h>
-using virgil::sdk::keys::model::Account;
-
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/http/Request.h>
-using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
-
-#include <virgil/sdk/keys/util/Base64.h>
-using virgil::sdk::keys::util::Base64;
 #include <virgil/sdk/keys/util/JsonKey.h>
-using virgil::sdk::keys::util::JsonKey;
-
 #include <virgil/sdk/keys/error/KeysError.h>
-using virgil::sdk::keys::error::KeysError;
+#include <virgil/sdk/keys/io/Marshaller.h>
+
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 
 #include <json.hpp>
+
+using virgil::sdk::keys::client::PublicKeyClient;
+using virgil::sdk::keys::client::KeysClientConnection;
+using virgil::sdk::keys::client::EndpointUri;
+using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::model::UserData;
+using virgil::sdk::keys::http::Request;
+using virgil::sdk::keys::http::Response;
+using virgil::sdk::keys::util::JsonKey;
+using virgil::sdk::keys::error::KeysError;
+using virgil::sdk::keys::io::Marshaller;
+
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilSigner;
+using virgil::crypto::foundation::VirgilBase64;
+
 using json = nlohmann::json;
 
-PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
-        const std::vector<UserData>& userData, const std::string& accountId) const {
-
-    json payload = json::object();
-    if (!accountId.empty()) {
-        payload[JsonKey::accountId] = accountId;
+PublicKeyClient::PublicKeyClient(const std::shared_ptr<KeysClientConnection>& connection)
+        : connection_(connection) {
+    if (!connection_) {
+        throw std::logic_error("PublicKeyClient: ConnectionBase is not defined.");
     }
-    payload[JsonKey::publicKey] = Base64::encode(publicKey);
+}
+
+PublicKey PublicKeyClient::add(const std::vector<unsigned char>& key,
+        const std::vector<UserData>& userData, const Credentials& credentials, const std::string& uuid) const {
+    json payload = json::object();
+    payload[JsonKey::publicKey] = VirgilBase64::encode(key);
     payload[JsonKey::userData] = json::array();
     for (auto data : userData) {
         payload[JsonKey::userData].push_back(
@@ -79,71 +91,68 @@ PublicKey PublicKeyClient::add(const std::vector<unsigned char>& publicKey,
             })
         );
     }
+    payload[JsonKey::uuid] = uuid;
 
-    Request request = Request().endpoint(EndpointUri::publicKeyAdd()).post()
-            .contentType("application/json").body(payload.dump());
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_ADD);
-
-    json responseBody = json::parse(response.body());
-
-    PublicKey virgilPublicKey;
-    virgilPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    virgilPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    virgilPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
-
-    return virgilPublicKey;
+    Request request = Request().endpoint(EndpointUri::v2().publicKeyAdd()).post().body(payload.dump());
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_ADD);
+    return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
-    Request request = Request().endpoint(EndpointUri::publicKeyGet(publicKeyId)).get();
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GET);
-
-    json responseBody = json::parse(response.body());
-
-    PublicKey virgilPublicKey;
-    virgilPublicKey.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    virgilPublicKey.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    virgilPublicKey.key(Base64::decode(responseBody[JsonKey::publicKey]));
-    for (auto userDataJson : responseBody[JsonKey::userData]) {
-        UserData userData;
-        userData.className(userDataJson[JsonKey::className]);
-        userData.type(userDataJson[JsonKey::type]);
-        userData.value(userDataJson[JsonKey::value]);
-        userData.isConfirmed(userDataJson[JsonKey::isConfirmed]);
-        virgilPublicKey.userData().push_back(userData);
-    }
-    return virgilPublicKey;
+virgil::sdk::keys::model::PublicKey PublicKeyClient::get(const std::string& publicKeyId) const {
+    Request request = Request().endpoint(EndpointUri::v2().publicKeyGet(publicKeyId)).get();
+    Response response = connection_->send(request);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GET);
+    return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-std::vector<PublicKey> PublicKeyClient::search(const std::string& userId, const std::string& userIdType) const {
+PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
+        const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
+        const std::string& uuid) const {
+    json payload = json::object();
+    payload[JsonKey::publicKey] = VirgilBase64::encode(newKey);
+    payload[JsonKey::uuid] = uuid;
+    payload[JsonKey::uuidSign] = VirgilBase64::encode(VirgilSigner().sign(virgil::crypto::str2bytes(uuid),
+            newKeyCredentials.privateKey(), virgil::crypto::str2bytes(newKeyCredentials.privateKeyPassword())));
+
+    std::string requestUri = EndpointUri::v2().publicKeyUpdate(oldKeyCredentials.publicKeyId());
+    Request request = Request().endpoint(requestUri).put().body(payload.dump());
+    Response response = connection_->send(request, oldKeyCredentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_UPDATE);
+
+    return Marshaller<PublicKey>::fromJson(response.body());
+}
+
+void PublicKeyClient::remove(const Credentials& credentials, const std::string& uuid) const {
     json payload = {
-        {userIdType, userId}
+        {JsonKey::uuid, uuid}
     };
 
-    Request request = Request().endpoint(EndpointUri::publicKeySearch()).post()
-            .contentType("application/json").body(payload.dump());
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::PUBLIC_KEY_SEARCH);
+    std::string requestUri = EndpointUri::v2().publicKeyRemove(credentials.publicKeyId());
+    Request request = Request().endpoint(requestUri).del().body(payload.dump());
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_DELETE);
+}
 
-    json responseBody = json::parse(response.body());
+PublicKey PublicKeyClient::grab(const std::string& userId) const {
+    json payload = {
+        {JsonKey::value, userId}
+    };
 
-    std::vector<Account> accounts;
-    for (auto accountJson : responseBody) {
-        Account account;
-        account.accountId(accountJson[JsonKey::id][JsonKey::accountId]);
-        for (auto publicKeyJson : accountJson[JsonKey::publicKeys]) {
-            PublicKey publicKey;
-            publicKey.accountId(publicKeyJson[JsonKey::id][JsonKey::accountId]);
-            publicKey.publicKeyId(publicKeyJson[JsonKey::id][JsonKey::publicKeyId]);
-            publicKey.key(Base64::decode(publicKeyJson[JsonKey::publicKey]));
-            account.publicKeys().push_back(publicKey);
-        }
-        accounts.push_back(account);
-    }
-    if (accounts.empty()) {
-        throw std::runtime_error("PublicKeyClient: public key not found.");
-    }
-    return accounts.front().publicKeys();
+    Request request = Request().endpoint(EndpointUri::v2().publicKeyGrab()).post().body(payload.dump());
+    Response response = connection_->send(request);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GRAB);
+
+    return Marshaller<PublicKey>::fromJson(response.body());
+}
+
+PublicKey PublicKeyClient::grab(const Credentials& credentials, const std::string& uuid) const {
+    json payload = {
+        {JsonKey::uuid, uuid}
+    };
+
+    Request request = Request().endpoint(EndpointUri::v2().publicKeyGrab()).post().body(payload.dump());
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GRAB);
+    return Marshaller<PublicKey>::fromJson(response.body());
 }

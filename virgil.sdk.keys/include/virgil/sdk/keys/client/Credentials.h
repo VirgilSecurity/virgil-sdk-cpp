@@ -34,58 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_MODEL_PUBLIC_KEY_H
-#define VIRGIL_SDK_KEYS_MODEL_PUBLIC_KEY_H
+#ifndef VIRGIL_SDK_KEYS_CREDENTIALS_H
+#define VIRGIL_SDK_KEYS_CREDENTIALS_H
 
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/keys/model/UserData.h>
-
-namespace virgil { namespace sdk { namespace keys { namespace model {
+namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @brief Data object represent "Virgil Public Key" entity.
+     * @brief Describe data object that stores user's credentials.
      */
-    class PublicKey {
+    class Credentials {
     public:
         /**
-         * @brief Set parent account UUID.
+         * @brief Create object with invalid credentials.
+         * @see isValid()
          */
-        PublicKey& accountId (const std::string& accountId);
+        Credentials();
         /**
-         * @brief Get parent account UUID.
+         * @brief Initialize credentials.
+         * @param publicKeyId - UUID of the public key that associated to the given private key.
+         * @param privateKey - user's private key.
+         * @param privateKeyPassword - (optional) private key password if private key is encrypted.
          */
-        std::string accountId () const;
+        Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
+                const std::string& privateKeyPassword = std::string());
         /**
-         * @brief Set public key UUID.
+         * @brief Perform cleanup first.
+         * @see cleanup()
          */
-        PublicKey& publicKeyId (const std::string& publicKeyId);
+        ~Credentials() noexcept;
         /**
-         * @brief Get public key UUID.
+         * @brief Check whether credentials are valid.
          */
-        std::string publicKeyId () const;
+        bool isValid() const;
         /**
-         * @brief Set public key.
+         * @brief Perform safe cleanup for all sensitive data.
+         * @note Credentials become invalid after perform this operation.
+         * @see isValid()
          */
-        PublicKey& key(const std::vector<unsigned char> key);
+        void cleanup() noexcept;
         /**
-         * @brief Get public key.
+         * @brief Return public key UUID.
          */
-        std::vector<unsigned char> key() const;
+        const std::string& publicKeyId() const;
         /**
-         * @brief Return user data associated with public key.
+         * @brief Return private key.
+         * @note For security reason pass it by reference only.
          */
-        const std::vector<virgil::sdk::keys::model::UserData>& userData() const;
+        const std::vector<unsigned char>& privateKey() const;
         /**
-         * @brief Return user data associated with public key.
+         * @brief Return private key password.
+         * @note For security reason pass it by reference only.
          */
-        std::vector<virgil::sdk::keys::model::UserData>& userData();
+        const std::string& privateKeyPassword() const;
     private:
-        std::string accountId_;
         std::string publicKeyId_;
-        std::vector<unsigned char> key_;
-        std::vector<virgil::sdk::keys::model::UserData> userData_;
+        std::vector<unsigned char> privateKey_;
+        std::string privateKeyPassword_;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_MODEL_PUBLIC_KEY_H */
+#endif /* VIRGIL_SDK_KEYS_CREDENTIALS_H */
