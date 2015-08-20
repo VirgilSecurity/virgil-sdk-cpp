@@ -91,7 +91,7 @@ void UserDataClient::remove(const std::string& userDataId, const Credentials& cr
 
 void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
     json payload = {
-        {JsonKey::confirmationCode, code},
+        {JsonKey::confirmationCode, code}
     };
     std::string requestUri = EndpointUri::v2().userDataConfirm(userDataId);
     Request request = Request().endpoint(requestUri).post().body(payload.dump());
