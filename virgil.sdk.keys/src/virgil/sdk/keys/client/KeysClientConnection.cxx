@@ -107,9 +107,14 @@ Response KeysClientConnection::send(const Request& request, const Credentials& c
 
 void KeysClientConnection::checkResponseError(const Response& response, KeysError::Action action) {
     if (response.fail()) {
-        json error = json::parse(response.body());
-        json errorCode = error[JsonKey::error][JsonKey::errorCode];
-        throw KeysError(action, response.statusCode(),
-                errorCode.is_number() ? errorCode.get<unsigned int>() : KeysError::undefinedErrorCode);
+        unsigned int errorCode = KeysError::kUndefinedErrorCode;
+        if (!response.body().empty()) {
+            json error = json::parse(response.body());
+            json code = error[JsonKey::error][JsonKey::errorCode];
+            if (code.is_number()) {
+                errorCode = code.get<unsigned int>();
+            }
+        }
+        throw KeysError(action, response.statusCode(), errorCode);
     }
 }
