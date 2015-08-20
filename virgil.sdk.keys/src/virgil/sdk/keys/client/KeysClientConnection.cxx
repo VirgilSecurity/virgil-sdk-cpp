@@ -85,7 +85,7 @@ Response KeysClientConnection::send(const Request& request) {
     // Add application token to the header
     auto header = request.header();
     header[kHttpHeaderField_AppToken] = appToken();
-    return Connection::send(Request(request).header(header).contentType("application/json"));
+    return Connection::send(Request(request).baseAddress(baseAddress_).header(header).contentType("application/json"));
 }
 
 Response KeysClientConnection::send(const Request& request, const Credentials& credentials) {
