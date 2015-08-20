@@ -118,6 +118,9 @@ static std::string errorCodeStr(unsigned int errorCode) {
         { 20218, "The user data value is required." },
         { 20300, "User info data validation failed." }
     };
+    if (errorCode == KeysError::kUndefinedErrorCode) {
+        return "";
+    }
     auto message = code2str.find(errorCode);
     return message != code2str.end() ? message->second : "Unknown error.";
 }

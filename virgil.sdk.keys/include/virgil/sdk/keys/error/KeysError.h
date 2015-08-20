@@ -54,7 +54,7 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
         /**
          * @brief Define constant for undefined error code.
          */
-        static const unsigned int undefinedErrorCode = 0;
+        static const unsigned int kUndefinedErrorCode = 0;
         /**
          * @brief Defines which action trigger an error.
          */
@@ -76,7 +76,7 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
          * @param errorCode - specific Virgil Public Key service error code.
          */
         KeysError(KeysError::Action action, virgil::sdk::keys::http::Response::StatusCode statusCode,
-                unsigned int errorCode = undefinedErrorCode);
+                unsigned int errorCode = kUndefinedErrorCode);
     private:
         /**
          * @brief Create formatted error message.
