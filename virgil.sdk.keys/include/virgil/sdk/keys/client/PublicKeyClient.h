@@ -63,7 +63,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
                 const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
                 const std::string& uuid) const override;
-        void remove(const Credentials& credentials, const std::string& uuid) const override;
+        void del(const Credentials& credentials, const std::string& uuid) const override;
         virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const override;
         virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials,
                 const std::string& uuid) const override;

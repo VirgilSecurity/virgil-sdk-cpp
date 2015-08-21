@@ -78,12 +78,12 @@ UserData UserDataClient::add(const UserData& userData, const Credentials& creden
     return Marshaller<UserData>::fromJson(response.body());
 }
 
-void UserDataClient::remove(const std::string& userDataId, const Credentials& credentials,
+void UserDataClient::del(const std::string& userDataId, const Credentials& credentials,
         const std::string& uuid) const {
     json payload = {
         {JsonKey::uuid, uuid}
     };
-    std::string requestUri = EndpointUri::v2().userDataRemove(userDataId);
+    std::string requestUri = EndpointUri::v2().userDataDelete(userDataId);
     Request request = Request().endpoint(requestUri).del().body(payload.dump());
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_DELETE);

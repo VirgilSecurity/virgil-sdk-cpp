@@ -65,7 +65,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
          */
-        virtual void remove(const std::string& userDataId,
+        virtual void del(const std::string& userDataId,
                 const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const = 0;
         /**
          * @brief Confirm user data.

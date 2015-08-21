@@ -87,7 +87,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Return endpoint that delete public key by its UUID.
          * @param publicKeyId - public key UUID.
          */
-        std::string publicKeyRemove(const std::string& publicKeyId) const;
+        std::string publicKeyDelete(const std::string& publicKeyId) const;
         /**
          * @brief Return endpoint that extract public key associated with user identifier.
          */
@@ -104,7 +104,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Return endpoint that delete user data by its UUID.
          */
-        std::string userDataRemove(const std::string& userDataId) const;
+        std::string userDataDelete(const std::string& userDataId) const;
         /**
          * @brief Return endpoint that confirm given user data.
          * @param userDataId - user data UUID.

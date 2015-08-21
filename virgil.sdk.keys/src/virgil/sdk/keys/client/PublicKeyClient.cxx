@@ -123,12 +123,12 @@ PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-void PublicKeyClient::remove(const Credentials& credentials, const std::string& uuid) const {
+void PublicKeyClient::del(const Credentials& credentials, const std::string& uuid) const {
     json payload = {
         {JsonKey::uuid, uuid}
     };
 
-    std::string requestUri = EndpointUri::v2().publicKeyRemove(credentials.publicKeyId());
+    std::string requestUri = EndpointUri::v2().publicKeyDelete(credentials.publicKeyId());
     Request request = Request().endpoint(requestUri).del().body(payload.dump());
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_DELETE);

@@ -134,7 +134,7 @@ TEST_CASE("Delete Public Key - success", "[virgil-sdk-keys-public-key]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->publicKey().remove(credentials(), uuid()));
+    REQUIRE_NOTHROW(keysClient->publicKey().del(credentials(), uuid()));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }

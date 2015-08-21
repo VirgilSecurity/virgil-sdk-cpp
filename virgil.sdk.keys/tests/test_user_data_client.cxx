@@ -100,7 +100,7 @@ TEST_CASE("Delete User Data - success", "[virgil-sdk-keys-user-data]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().remove(expectedUserData1().userDataId(), credentials(), uuid()));
+    REQUIRE_NOTHROW(keysClient->userData().del(expectedUserData1().userDataId(), credentials(), uuid()));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }

@@ -61,7 +61,7 @@ std::string EndpointUri::publicKeyUpdate(const std::string& publicKeyId) const {
     return addVersion("/public-key/" + publicKeyId);
 }
 
-std::string EndpointUri::publicKeyRemove(const std::string& publicKeyId) const {
+std::string EndpointUri::publicKeyDelete(const std::string& publicKeyId) const {
     return addVersion("/public-key/" + publicKeyId);
 }
 
@@ -73,7 +73,7 @@ std::string EndpointUri::userDataAdd() const {
     return addVersion("/user-data");
 }
 
-std::string EndpointUri::userDataRemove(const std::string& userDataId) const {
+std::string EndpointUri::userDataDelete(const std::string& userDataId) const {
     return addVersion("/user-data/" + userDataId);
 }
 

@@ -90,12 +90,12 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
                 const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
                 const std::string& uuid) const = 0;
         /**
-         * @brief Remove public key associated with given user's credentials.
+         * @brief Delete public key associated with given user's credentials.
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
          * @throw KeysError if error.
          */
-        virtual void remove(const Credentials& credentials, const std::string& uuid) const = 0;
+        virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
         /**
          * @brief Search public key associated with a given user identifier.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
