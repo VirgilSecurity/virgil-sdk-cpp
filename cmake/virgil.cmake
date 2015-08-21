@@ -33,7 +33,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-include (CheckCxxCompilerFlag)
+include (CheckCXXCompilerFlag)
 include (ExternalProject)
 
 function (virgil_add_dependency module target includes libraries)
