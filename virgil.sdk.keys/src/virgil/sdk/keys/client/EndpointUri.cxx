@@ -81,7 +81,7 @@ std::string EndpointUri::userDataConfirm(const std::string& userDataId) const {
     return addVersion("/user-data/" + userDataId + "/persist");
 }
 
-std::string EndpointUri::userDataResendConfirm(const std::string& userDataId) const {
+std::string EndpointUri::userDataResendConfirmation(const std::string& userDataId) const {
     return addVersion("/user-data/" + userDataId + "/actions/resend-confirmation");
 }
 

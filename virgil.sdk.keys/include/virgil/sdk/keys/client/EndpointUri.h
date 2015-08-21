@@ -114,7 +114,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Return endpoint that resend confirmation code for the given user data.
          * @param userDataId - user data UUID.
          */
-        std::string userDataResendConfirm(const std::string& userDataId) const;
+        std::string userDataResendConfirmation(const std::string& userDataId) const;
         //@}
     private:
         /**
