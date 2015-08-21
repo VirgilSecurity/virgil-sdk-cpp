@@ -3,7 +3,7 @@ branches:
   only:
     - master
     - develop
-    - virgil-sdk-keys-v2
+    - release-virgil-sdk-keys-2.0.0
 compiler:
   - g++
   - clang++
