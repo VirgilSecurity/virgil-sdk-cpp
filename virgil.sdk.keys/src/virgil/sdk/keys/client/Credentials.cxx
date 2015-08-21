@@ -50,7 +50,7 @@ Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std
 }
 
 bool Credentials::isValid() const {
-    return !publicKeyId_.empty() && !privateKey_.empty();
+    return !privateKey_.empty();
 }
 
 void Credentials::cleanup() noexcept {
