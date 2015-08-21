@@ -58,8 +58,8 @@ using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/client/KeysClient.h>
 using virgil::sdk::keys::client::KeysClient;
 
-#include <virgil/sdk/keys/io/Marshaller.h>
-using virgil::sdk::keys::io::Marshaller;
+#include <virgil/sdk/keys/io/marshaller.h>
+using virgil::sdk::keys::io::marshaller;
 
 static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -90,7 +90,7 @@ int main() {
         PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData});
 
         std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(virgilPublicKey);
+        std::string publicKeyData = marshaller<PublicKey>::toJson(virgilPublicKey);
         std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
