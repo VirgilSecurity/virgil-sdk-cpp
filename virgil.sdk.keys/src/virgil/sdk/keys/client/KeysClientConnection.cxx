@@ -89,7 +89,7 @@ Response KeysClientConnection::send(const Request& request) {
 }
 
 Response KeysClientConnection::send(const Request& request, const Credentials& credentials) {
-    if (credentials.isValid()) {
+    if (!credentials.isValid()) {
         throw std::logic_error("KeysClientConnection: Credentials is not valid.");
     }
     if (request.body().empty()) {
