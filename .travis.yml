@@ -3,7 +3,6 @@ branches:
   only:
     - master
     - develop
-    - docs-auto-publish
 compiler:
   - g++
   - clang++
