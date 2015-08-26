@@ -46,7 +46,12 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
      */
     class EndpointUri {
     public:
-        enum class Version { V2 };
+        /**
+         * @brief Enumerate supported API versions.
+         */
+        enum class Version {
+            V2 /*!< Virgil Public Key Service API version 2 */
+        };
     public:
         /**
          * @name Configuration
