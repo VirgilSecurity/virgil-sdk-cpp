@@ -31,6 +31,8 @@ before_install:
   - bash ./ci/install-cmake.sh
   - openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv
     -in ./ci/travis_ci_rsa.enc -out ./ci/travis_ci_rsa -d
+  - chmod 0600 ./ci/travis_ci_rsa
+  - cp ./ci/travis_ci_rsa ~/.ssh/id_rsa
 before_script:
   - bash ./ci/configure.sh
 script:
