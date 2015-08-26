@@ -11,6 +11,7 @@
     - [Example 5: Decrypt data](#example-5)
     - [Example 6: Sign data](#example-6)
     - [Example 7: Verify data](#example-7)
+- [See also](#see-also)
 - [License](#license)
 - [Contacts](#contacts)
 
@@ -131,6 +132,9 @@ The following example verifies a digital signature which was signed by sender.
 ``` {.cpp}
 bool verified = signer.verify(data, sign, publicKey.key());
 ```
+
+## See also
+* [Virgil Security Keys SDK API](http://virgilsecurity.github.io/virgil-cpp/)
 
 ## License
 BSD 3-Clause. See [LICENSE](https://github.com/VirgilSecurity/virgil/blob/master/LICENSE) for details.
