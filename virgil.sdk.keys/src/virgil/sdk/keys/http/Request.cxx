@@ -35,9 +35,10 @@
  */
 
 #include <virgil/sdk/keys/http/Request.h>
-using virgil::sdk::keys::http::Request;
 
 #include <sstream>
+
+using virgil::sdk::keys::http::Request;
 
 static std::string normalize_base_address(const std::string& baseAddress) {
     if (!baseAddress.empty() && baseAddress.back() == '/') {

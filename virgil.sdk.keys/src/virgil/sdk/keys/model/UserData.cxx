@@ -35,13 +35,14 @@
  */
 
 #include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
-#include <virgil/sdk/keys/model/UserDataClass.h>
-using virgil::sdk::keys::model::UserDataClass;
-#include <virgil/sdk/keys/model/UserDataType.h>
-using virgil::sdk::keys::model::UserDataType;
 
+#include <virgil/sdk/keys/model/UserDataClass.h>
+#include <virgil/sdk/keys/model/UserDataType.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
+
+using virgil::sdk::keys::model::UserData;
+using virgil::sdk::keys::model::UserDataClass;
+using virgil::sdk::keys::model::UserDataType;
 using virgil::sdk::keys::model::PublicKey;
 
 UserData UserData::email(const std::string& value) {

@@ -34,11 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H
-#define VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H
+#ifndef VIRGIL_SDK_KEYS_USER_DATA_CLIENT_H
+#define VIRGIL_SDK_KEYS_USER_DATA_CLIENT_H
 
 #include <virgil/sdk/keys/client/UserDataClientBase.h>
-using virgil::sdk::keys::client::UserDataClientBase;
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -47,23 +47,24 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     class UserDataClient final : public UserDataClientBase {
     public:
         /**
-         * @brief Inherit base class constructor.
+         * @brief Initialize client with HTTP layer connection.
          */
-        using UserDataClientBase::UserDataClientBase;
+        explicit UserDataClient(const std::shared_ptr<KeysClientConnection>& connection);
         /**
          * @name Default class implementation.
          */
         //@{
-        UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value, const std::string& guid) const override;
-        UserData get(const std::string& userDataId) const override;
-        void confirm(const std::string& userDataId, const std::string& code, const std::string& guid) const override;
-        void resendConfirmation(const std::string& userDataId, const std::string& guid) const override;
-        std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const override;
-        std::vector<UserData> search(const std::string& userId, const std::string& userIdType,
-                bool expandPublicKey = false) const override;
+        virgil::sdk::keys::model::UserData add(const virgil::sdk::keys::model::UserData& userData,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;
+        void del(const std::string& userDataId,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;
+        void confirm(const std::string& userDataId, const std::string& code) const override;
+        void resendConfirmation(const std::string& userDataId,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;        //@}
         //@}
+    private:
+        std::shared_ptr<KeysClientConnection> connection_;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_DEFAULT_H */
+#endif /* VIRGIL_SDK_KEYS_USER_DATA_CLIENT_H */

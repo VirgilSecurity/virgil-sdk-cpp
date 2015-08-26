@@ -35,57 +35,36 @@
  */
 
 #include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
 
 #include <virgil/sdk/keys/http/Request.h>
-using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
-
-#include <virgil/sdk/keys/util/JsonKey.h>
-using virgil::sdk::keys::util::JsonKey;
 
 #include <stdexcept>
 
-#include <json.hpp>
-using json = nlohmann::json;
-
 #include <restless.hpp>
+
+using virgil::sdk::keys::http::Connection;
+using virgil::sdk::keys::http::Request;
+using virgil::sdk::keys::http::Response;
+
 using HttpRequest = asoni::Handle;
 
-Connection::Connection(const std::string& appToken, const std::string& baseAddress)
-        : ConnectionBase(baseAddress), appToken_(appToken) {
-
-}
-
-std::string Connection::appToken() const {
-    return appToken_;
-}
-
 Response Connection::send(const Request& request) {
-    // Construct URI
-    std::string uri = request.baseAddress().empty() ?
-            this->baseAddress() + request.uri() : request.uri();
-    // Add custom field to the header
-    auto header = request.header();
-    if (header.find("X-VIRGIL-APP-TOKEN") == header.end()) {
-        header["X-VIRGIL-APP-TOKEN"] = appToken();
-    }
     // Make Request
     HttpRequest httpRequest;
-    httpRequest.header(header).content(request.contentType(), request.body());
+    httpRequest.header(request.header()).content(request.contentType(), request.body());
     switch (request.method()) {
         case Request::Method::GET:
-            httpRequest.get(uri);
+            httpRequest.get(request.uri());
             break;
         case Request::Method::POST:
-            httpRequest.post(uri);
+            httpRequest.post(request.uri());
             break;
         case Request::Method::PUT:
-            httpRequest.put(uri);
+            httpRequest.put(request.uri());
             break;
         case Request::Method::DEL:
-            httpRequest.del(uri);
+            httpRequest.del(request.uri());
             break;
         default:
             throw std::logic_error("Unknown HTTP method.");
@@ -100,13 +79,4 @@ Response Connection::send(const Request& request) {
         throw std::runtime_error(httpResponse.body);
     }
     return response.header(httpResponse.headers).body(httpResponse.body);
-}
-
-void Connection::checkResponseError(const Response& response, KeysError::Action action) {
-    if (response.fail()) {
-        json error = json::parse(response.body());
-        json errorCode = error[JsonKey::error][JsonKey::code];
-        throw KeysError(action, response.statusCode(),
-                errorCode.is_number() ? errorCode.get<unsigned int>() : KeysError::undefinedErrorCode);
-    }
 }

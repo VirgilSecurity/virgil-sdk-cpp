@@ -33,7 +33,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-include (CheckCCompilerFlag)
+include (CheckCXXCompilerFlag)
 include (ExternalProject)
 
 function (virgil_add_dependency module target includes libraries)
@@ -45,7 +45,7 @@ function (virgil_add_dependency module target includes libraries)
 
     if (NOT CMAKE_CROSSCOMPILING)
         # Configure compiler settings
-        check_c_compiler_flag (-fPIC COMPILER_SUPPORT_PIC)
+        check_cxx_compiler_flag (-fPIC COMPILER_SUPPORT_PIC)
         string (REGEX MATCH "-fPIC|-fpic" HAS_PIC "${CMAKE_CXX_FLAGS_ALL}")
         if (COMPILER_SUPPORT_PIC AND NOT HAS_PIC)
             set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -85,7 +85,7 @@ function (virgil_add_dependency module target includes libraries)
 
         ExternalProject_Add (${VIRGIL}_project
             GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil.git"
-            GIT_TAG "develop"
+            GIT_TAG "virgil-crypto-1.0.0"
             PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.crypto"
             CMAKE_ARGS ${CMAKE_ARGS}
         )
@@ -104,7 +104,14 @@ function (virgil_add_dependency module target includes libraries)
         set (CMAKE_ARGS
             -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
             -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+            -DVIRGIL_SDK_KEYS:BOOL=ON
         )
+
+        if (CMAKE_PREFIX_PATH)
+            list (APPEND CMAKE_ARGS
+                -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+            )
+        endif (CMAKE_PREFIX_PATH)
 
         if (CMAKE_TOOLCHAIN_FILE)
             list (APPEND CMAKE_ARGS
@@ -118,8 +125,9 @@ function (virgil_add_dependency module target includes libraries)
         endif ()
 
         ExternalProject_Add (${VIRGIL}_project
-            URL "${CMAKE_CURRENT_SOURCE_DIR}/../virgil.sdk.keys"
-            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.sdk.keys"
+            GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-cpp.git"
+            GIT_TAG "release-virgil-sdk-keys-2.0.0"
+            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil-cpp"
             CMAKE_ARGS ${CMAKE_ARGS}
         )
 
@@ -144,5 +152,4 @@ function (virgil_add_dependency module target includes libraries)
     set (${target} ${VIRGIL} PARENT_SCOPE)
     set (${includes} ${VIRGIL_INCLUDE_DIR} PARENT_SCOPE)
     set (${libraries} ${VIRGIL_LIBRARIES} PARENT_SCOPE)
-
 endfunction (virgil_add_dependency)

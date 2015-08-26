@@ -35,6 +35,7 @@
  */
 
 #include <virgil/sdk/keys/model/UserDataType.h>
+
 using virgil::sdk::keys::model::UserDataType;
 
 const std::string UserDataType::emailId = "email";

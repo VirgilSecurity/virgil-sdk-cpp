@@ -34,31 +34,44 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H
-#define VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H
+#include <cstddef>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <iterator>
+#include <string>
+#include <stdexcept>
 
-#include <memory>
+#include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
+#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
 
-namespace virgil { namespace sdk { namespace keys { namespace client {
-    /**
-     * @brief Interface for specific endpoints of the Virgil Public Keys Service.
-     */
-    class EndpointClientBase {
-    public:
-        /**
-         * @brief Initialize API client with appropriate connection.
-         */
-        explicit EndpointClientBase(const std::shared_ptr<http::ConnectionBase>& connection);
-        /**
-         * @brief Return API service connection.
-         */
-        std::shared_ptr<http::ConnectionBase> connection() const;
-    private:
-        std::shared_ptr<http::ConnectionBase> connection_;
-    };
-}}}}
+using virgil::crypto::VirgilByteArray;
 
-#endif /* VIRGIL_SDK_KEYS_ENDPOINT_CLIENT_BASE_H */
+using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::io::Marshaller;
+
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+
+int main(int argc, char **argv) {
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
+        return 0;
+    }
+    try {
+        const std::string userDataId = argv[1];
+        const std::string confirmationCode = argv[2];
+
+        std::cout << "Confirm user data with id ("<<userDataId <<
+                ") and code (" << confirmationCode << ")." << std::endl;
+        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        keysClient.userData().confirm(userDataId, confirmationCode);
+    } catch (std::exception& exception) {
+        std::cerr << "Error: " << exception.what() << std::endl;
+    }
+    return 0;
+}

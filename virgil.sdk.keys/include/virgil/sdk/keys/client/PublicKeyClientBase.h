@@ -40,46 +40,78 @@
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/keys/client/EndpointClientBase.h>
-using virgil::sdk::keys::client::EndpointClientBase;
-
+#include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
 #include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
      */
-    class PublicKeyClientBase : public EndpointClientBase {
+    class PublicKeyClientBase {
     public:
         /**
-         * @brief Inherit base class constructor.
-         */
-        using EndpointClientBase::EndpointClientBase;
-        /**
          * @brief Add public key to the account.
-         * @param publicKey - public key to add.
+         *
+         * The Virgil Account will be created implicitly when the first Public Key uploaded.
+         *     The application can get the information about Public Keys created only for current application.
+         *     When application uploads new Public Key and there is an Account created
+         *     for another application with the same UDID, the Public Key will be implicitly
+         *     attached to the existing Account instance.
+         *
+         * @param key - public key to add.
          * @param userData - user data associated with public key.
-         * @param accountId - target account GUID.
-         * @note If parameter @param accountId is omitted, new account will be created.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
+         * @return Public key and user's data associated with it.
+         * @throw KeysError if error.
          */
-        virtual PublicKey add(const std::vector<unsigned char>& publicKey,
-                const std::vector<UserData>& userData, const std::string& accountId = "") const = 0;
+        virtual virgil::sdk::keys::model::PublicKey add(const std::vector<unsigned char>& key,
+                const std::vector<virgil::sdk::keys::model::UserData>& userData,
+                const Credentials& credentials, const std::string& uuid) const = 0;
         /**
-         * @brief Get public key by identifier.
-         * @param publicKeyId - public key GUID.
+         * @brief Get public key by its UUID.
+         * @param publicKeyId - public key UUID.
+         * @return Public key.
+         * @throw KeysError if error.
          */
-        virtual PublicKey get(const std::string& publicKeyId) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey get(const std::string& publicKeyId) const = 0;
         /**
-         * @brief Search associated with given user public keys.
+         * @brief Replace stale public key with a new public key.
+         *
+         * @param newKey - new public key in the raw format.
+         * @param newKeyCredentials - user's credentials of the new public key.
+         * @param oldKeyCredentials - user's credentials of the old public key.
+         * @param uuid - transaction UUID.
+         * @return - Updated public key.
+         * @throw KeysError if error.
+         */
+        virtual virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
+                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
+                const std::string& uuid) const = 0;
+        /**
+         * @brief Delete public key associated with given user's credentials.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
+         * @throw KeysError if error.
+         */
+        virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
+        /**
+         * @brief Search public key associated with a given user identifier.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
-         * @param userIdType - user unique identifier type.
-         * @return Found public keys associated with given user.
-         * @see UserDataType.
+         * @return Public keys associated with given user.
+         * @throw KeysError if error.
          */
-        virtual std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const = 0;
+        /**
+         * @brief Search public key associated with a given user's credentials.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
+         * @return Public key and user's data associated with given user's credentials.
+         * @throw KeysError if error.
+         */
+        virtual virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials,
+                const std::string& uuid) const = 0;
     };
 }}}}
 

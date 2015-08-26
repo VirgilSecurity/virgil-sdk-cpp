@@ -34,22 +34,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/model/Account.h>
-using virgil::sdk::keys::model::Account;
+#include <virgil/sdk/keys/client/Credentials.h>
 
-Account& Account::accountId(const std::string& accountId) {
-    accountId_ = accountId;
-    return *this;
+#include <algorithm>
+
+using virgil::sdk::keys::client::Credentials;
+
+Credentials::Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
+        const std::string& privateKeyPassword)
+        : publicKeyId_(publicKeyId), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
 
-std::string Account::accountId() const {
-    return accountId_;
+Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
+        : publicKeyId_(), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
 
-std::vector<PublicKey>& Account::publicKeys() {
-    return publicKeys_;
+bool Credentials::isValid() const {
+    return !privateKey_.empty();
 }
 
-const std::vector<PublicKey>& Account::publicKeys() const {
-    return publicKeys_;
+void Credentials::cleanup() noexcept {
+    std::fill(privateKey_.begin(), privateKey_.end(), 0);
+    std::fill(privateKeyPassword_.begin(), privateKeyPassword_.end(), 0);
+
+    publicKeyId_.resize(0);
+    privateKey_.resize(0);
+    privateKeyPassword_.resize(0);
 }
+
+Credentials::~Credentials() noexcept {
+    cleanup();
+}
+
+const std::string& Credentials::publicKeyId() const {
+    return publicKeyId_;
+}
+
+const std::vector<unsigned char>& Credentials::privateKey() const {
+    return privateKey_;
+}
+
+const std::string& Credentials::privateKeyPassword() const {
+    return privateKeyPassword_;
+}
+
+

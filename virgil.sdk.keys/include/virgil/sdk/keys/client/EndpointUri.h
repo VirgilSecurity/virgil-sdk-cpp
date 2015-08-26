@@ -42,30 +42,61 @@
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @brief This class provide URIs to the Virgil Public Key endpoints.
-     * @note All endpoints start with forward slash symbol "/" and DO NOT contain version.
+     * @note All endpoints start with forward slash symbol "/" and contain version.
      */
     class EndpointUri {
     public:
+        /**
+         * @brief Enumerate supported API versions.
+         */
+        enum class Version {
+            V2 /*!< Virgil Public Key Service API version 2 */
+        };
+    public:
+        /**
+         * @name Configuration
+         */
+        //@{
+        /**
+         * @brief Configure endpoint's URI with version.
+         */
+        explicit EndpointUri(EndpointUri::Version uriVersion);
+        /**
+         * @brief Creates endpoints of version 2.
+         */
+        static EndpointUri v2();
+        /**
+         * @brief Return endpoint's URI version.
+         */
+        Version version() const;
+        //@}
         /**
          * @name Public Key management.
          */
         //@{
         /**
-         * @brief Return endpoint that add public key to the account.
-         * @note This endpoint can be used for two purposes,
-         *     first, add public key to the existing account,
-         *     second, add public key to the new account.
+         * @brief Return endpoint that add public key to the service.
          */
-        static std::string publicKeyAdd();
+        std::string publicKeyAdd() const;
         /**
-         * @brief Return endpoint that extract public key by its id.
-         * @param publicKeyId - public key GUID.
+         * @brief Return endpoint that extract public key by its UUID.
+         * @param publicKeyId - public key UUID.
          */
-        static std::string publicKeyGet(const std::string& publicKeyId);
+        std::string publicKeyGet(const std::string& publicKeyId) const;
         /**
-         * @brief Return endpoint that extract all public keys associated with user identifier.
+         * @brief Return endpoint that udpdate public key by its UUID.
+         * @param publicKeyId - public key UUID.
          */
-        static std::string publicKeySearch();
+        std::string publicKeyUpdate(const std::string& publicKeyId) const;
+        /**
+         * @brief Return endpoint that delete public key by its UUID.
+         * @param publicKeyId - public key UUID.
+         */
+        std::string publicKeyDelete(const std::string& publicKeyId) const;
+        /**
+         * @brief Return endpoint that extract public key associated with user identifier.
+         */
+        std::string publicKeyGrab() const;
         //@}
         /**
          * @name User Data management.
@@ -74,28 +105,30 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Return endpoint that add user data to existing public key.
          */
-        static std::string userDataAdd();
+        std::string userDataAdd() const;
         /**
-         * @brief Return endpoint that get user data by its GUID.
+         * @brief Return endpoint that delete user data by its UUID.
          */
-        static std::string userDataGet(const std::string& userDataId);
+        std::string userDataDelete(const std::string& userDataId) const;
         /**
          * @brief Return endpoint that confirm given user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          */
-        static std::string userDataConfirm(const std::string& userDataId);
+        std::string userDataConfirm(const std::string& userDataId) const;
         /**
          * @brief Return endpoint that resend confirmation code for the given user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          */
-        static std::string userDataResendConfirm(const std::string& userDataId);
-        /**
-         * @brief Return endpoint that extract all user data associated with given user identifier.
-         */
-        static std::string userDataSearch();
+        std::string userDataResendConfirmation(const std::string& userDataId) const;
         //@}
     private:
-        EndpointUri();
+        /**
+         * @brief Add version to the URI.
+         * @return URI with version.
+         */
+        std::string addVersion(const std::string& uri) const;
+    private:
+        Version version_;
     };
 }}}}
 

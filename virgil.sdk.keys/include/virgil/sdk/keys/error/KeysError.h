@@ -41,7 +41,6 @@
 #include <string>
 
 #include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
 
 namespace virgil { namespace sdk { namespace keys { namespace error {
     /**
@@ -55,19 +54,20 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
         /**
          * @brief Define constant for undefined error code.
          */
-        static const unsigned int undefinedErrorCode = 0;
+        static const unsigned int kUndefinedErrorCode = 0;
         /**
          * @brief Defines which action trigger an error.
          */
         enum class Action {
             PUBLIC_KEY_ADD,
             PUBLIC_KEY_GET,
-            PUBLIC_KEY_SEARCH,
+            PUBLIC_KEY_UPDATE,
+            PUBLIC_KEY_DELETE,
+            PUBLIC_KEY_GRAB,
             USER_DATA_ADD,
-            USER_DATA_GET,
+            USER_DATA_DELETE,
             USER_DATA_CONFIRM,
-            USER_DATA_CONFIRM_RESEND,
-            USER_DATA_SEARCH
+            USER_DATA_CONFIRM_RESEND
         };
         /**
          * @brief Initialize exception.
@@ -75,13 +75,13 @@ namespace virgil { namespace sdk { namespace keys { namespace error {
          * @param statusCode - HTTP response status code.
          * @param errorCode - specific Virgil Public Key service error code.
          */
-        KeysError(KeysError::Action action, Response::StatusCode statusCode,
-                unsigned int errorCode = undefinedErrorCode);
+        KeysError(KeysError::Action action, virgil::sdk::keys::http::Response::StatusCode statusCode,
+                unsigned int errorCode = kUndefinedErrorCode);
     private:
         /**
          * @brief Create formatted error message.
          */
-        std::string formatMessage(KeysError::Action action, Response::StatusCode statusCode,
+        std::string formatMessage(KeysError::Action action, virgil::sdk::keys::http::Response::StatusCode statusCode,
                 unsigned int errorCode) noexcept;
     };
 }}}}

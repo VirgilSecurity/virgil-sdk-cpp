@@ -41,7 +41,6 @@
 #include <vector>
 
 #include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
 
 namespace virgil { namespace sdk { namespace keys { namespace model {
     /**
@@ -50,19 +49,19 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
     class PublicKey {
     public:
         /**
-         * @brief Set parent account GUID.
+         * @brief Set parent account UUID.
          */
         PublicKey& accountId (const std::string& accountId);
         /**
-         * @brief Get parent account GUID.
+         * @brief Get parent account UUID.
          */
         std::string accountId () const;
         /**
-         * @brief Set public key GUID.
+         * @brief Set public key UUID.
          */
         PublicKey& publicKeyId (const std::string& publicKeyId);
         /**
-         * @brief Get public key GUID.
+         * @brief Get public key UUID.
          */
         std::string publicKeyId () const;
         /**
@@ -76,16 +75,16 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
         /**
          * @brief Return user data associated with public key.
          */
-        const std::vector<UserData>& userData() const;
+        const std::vector<virgil::sdk::keys::model::UserData>& userData() const;
         /**
          * @brief Return user data associated with public key.
          */
-        std::vector<UserData>& userData();
+        std::vector<virgil::sdk::keys::model::UserData>& userData();
     private:
         std::string accountId_;
         std::string publicKeyId_;
         std::vector<unsigned char> key_;
-        std::vector<UserData> userData_;
+        std::vector<virgil::sdk::keys::model::UserData> userData_;
     };
 }}}}
 
