@@ -35,139 +35,77 @@
  */
 
 #include <virgil/sdk/keys/client/UserDataClient.h>
-using virgil::sdk::keys::client::UserDataClient;
 
 #include <virgil/sdk/keys/client/EndpointUri.h>
-using virgil::sdk::keys::client::EndpointUri;
-
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/http/Request.h>
-using virgil::sdk::keys::http::Request;
 #include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
-
 #include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
-
-#include <virgil/sdk/keys/util/Base64.h>
-using virgil::sdk::keys::util::Base64;
 #include <virgil/sdk/keys/util/JsonKey.h>
-using virgil::sdk::keys::util::JsonKey;
-
 #include <virgil/sdk/keys/error/KeysError.h>
-using virgil::sdk::keys::error::KeysError;
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 #include <json.hpp>
+
+using virgil::sdk::keys::client::UserDataClient;
+using virgil::sdk::keys::client::KeysClientConnection;
+using virgil::sdk::keys::client::EndpointUri;
+using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::http::Request;
+using virgil::sdk::keys::http::Response;
+using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::model::UserData;
+using virgil::sdk::keys::util::JsonKey;
+using virgil::sdk::keys::error::KeysError;
+using virgil::sdk::keys::io::Marshaller;
+
 using json = nlohmann::json;
 
-UserData UserDataClient::add(const std::string& publicKeyId, const std::string& className,
-        const std::string& type, const std::string& value, const std::string& guid) const {
-
-    json payload = {
-        {JsonKey::publicKeyId, publicKeyId},
-        {JsonKey::className, className},
-        {JsonKey::type, type},
-        {JsonKey::value, value},
-        {JsonKey::guid, guid}
-    };
-
-    Request request = Request().endpoint(EndpointUri::userDataAdd()).post().contentType("application/json").body(payload.dump());
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::USER_DATA_ADD);
-
-    json responseBody = json::parse(response.body());
-
-    UserData userData;
-    userData.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    userData.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    userData.userDataId(responseBody[JsonKey::id][JsonKey::userDataId]);
-    userData.className(responseBody[JsonKey::className]);
-    userData.type(responseBody[JsonKey::type]);
-    userData.value(responseBody[JsonKey::value]);
-    return userData;
-}
-
-UserData UserDataClient::get(const std::string& userDataId) const {
-    Request request = Request().endpoint(EndpointUri::userDataGet(userDataId)).get();
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::USER_DATA_GET);
-
-    json responseBody = json::parse(response.body());
-
-    UserData userData;
-    userData.accountId(responseBody[JsonKey::id][JsonKey::accountId]);
-    userData.publicKeyId(responseBody[JsonKey::id][JsonKey::publicKeyId]);
-    userData.userDataId(responseBody[JsonKey::id][JsonKey::userDataId]);
-    userData.className(responseBody[JsonKey::className]);
-    userData.type(responseBody[JsonKey::type]);
-    userData.value(responseBody[JsonKey::value]);
-    return userData;
-}
-
-void UserDataClient::confirm(const std::string& userDataId, const std::string& code,
-        const std::string& guid) const {
-    json payload = {
-        {JsonKey::code, code},
-        {JsonKey::guid, guid}
-    };
-
-    Request request = Request().endpoint(EndpointUri::userDataConfirm(userDataId)).post()
-            .contentType("application/json").body(payload.dump());
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
-}
-
-void UserDataClient::resendConfirmation(const std::string& userDataId, const std::string& guid) const {
-    json payload = {
-        {JsonKey::guid, guid}
-    };
-
-    Request request = Request().endpoint(EndpointUri::userDataResendConfirm(userDataId)).post()
-            .contentType("application/json").body(payload.dump());
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM_RESEND);
-}
-
-std::vector<UserData> UserDataClient::search(const std::string& userId, bool expandPublicKey) const {
-    return search(userId, "id", expandPublicKey);
-}
-
-std::vector<UserData> UserDataClient::search(const std::string& userId, const std::string& userIdType,
-        bool expandPublicKey) const {
-    json payload = {
-        {userIdType, userId}
-    };
-
-    Request request = Request().endpoint(EndpointUri::userDataSearch()).post()
-            .contentType("application/json").body(payload.dump());
-    if (expandPublicKey) {
-        // TODO: Move to the class EndpointUri.
-        request.parameters({{"expand", "public_key"}});
+UserDataClient::UserDataClient(const std::shared_ptr<KeysClientConnection>& connection)
+        : connection_(connection) {
+    if (!connection_) {
+        throw std::logic_error("UserDataClient: ConnectionBase is not defined.");
     }
-    Response response = connection()->send(request);
-    connection()->checkResponseError(response, KeysError::Action::USER_DATA_SEARCH);
+}
 
-    json responseBody = json::parse(response.body());
+UserData UserDataClient::add(const UserData& userData, const Credentials& credentials,
+        const std::string& uuid) const {
 
-    std::vector<UserData> allUserData;
-    for (auto userDataJson : responseBody) {
-        UserData userData;
-        userData.accountId(userDataJson[JsonKey::id][JsonKey::accountId]);
-        userData.publicKeyId(userDataJson[JsonKey::id][JsonKey::publicKeyId]);
-        userData.userDataId(userDataJson[JsonKey::id][JsonKey::userDataId]);
-        userData.className(userDataJson[JsonKey::className]);
-        userData.type(userDataJson[JsonKey::type]);
-        userData.value(userDataJson[JsonKey::value]);
-        if (expandPublicKey) {
-            auto publicKey = std::make_shared<PublicKey>();
-            auto publicKeyJson = userDataJson[JsonKey::expanded][JsonKey::publicKey];
-            publicKey->accountId(publicKeyJson[JsonKey::id][JsonKey::accountId]);
-            publicKey->publicKeyId(publicKeyJson[JsonKey::id][JsonKey::publicKeyId]);
-            publicKey->key(Base64::decode(publicKeyJson[JsonKey::publicKey]));
-            userData.publicKey(publicKey);
-        }
-        allUserData.push_back(userData);
-    }
-    return allUserData;
+    auto payload = Marshaller<UserData>::toJson(userData);
+    Request request = Request().endpoint(EndpointUri::v2().userDataAdd()).post().body(payload);
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::USER_DATA_ADD);
+    return Marshaller<UserData>::fromJson(response.body());
+}
+
+void UserDataClient::del(const std::string& userDataId, const Credentials& credentials,
+        const std::string& uuid) const {
+    json payload = {
+        {JsonKey::uuid, uuid}
+    };
+    std::string requestUri = EndpointUri::v2().userDataDelete(userDataId);
+    Request request = Request().endpoint(requestUri).del().body(payload.dump());
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::USER_DATA_DELETE);
+}
+
+void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
+    json payload = {
+        {JsonKey::confirmationCode, code}
+    };
+    std::string requestUri = EndpointUri::v2().userDataConfirm(userDataId);
+    Request request = Request().endpoint(requestUri).post().body(payload.dump());
+    Response response = connection_->send(request);
+    connection_->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
+}
+
+void UserDataClient::resendConfirmation(const std::string& userDataId, const Credentials& credentials,
+        const std::string& uuid) const {
+    json payload = {
+        {JsonKey::uuid, uuid}
+    };
+    std::string requestUri = EndpointUri::v2().userDataResendConfirmation(userDataId);
+    Request request = Request().endpoint(requestUri).post().body(payload.dump());
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM_RESEND);
 }

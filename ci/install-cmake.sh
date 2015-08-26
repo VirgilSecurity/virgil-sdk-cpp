@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright (C) 2015 Virgil Security Inc.
 #
@@ -34,45 +35,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Dependecy to https://github.com/anuragsoni/restless
+set -ev
+if [ ! -d "$HOME/cmake/cmake-3.2.2-Linux-x86_64" ]; then
+  cd $HOME/cmake
+  wget http://www.cmake.org/files/v3.2/cmake-3.2.2-Linux-x86_64.tar.gz
+  tar -xzvf cmake-3.2.2-Linux-x86_64.tar.gz 
+else
+  echo 'Using cached directory.';
+fi
 
-# Define CMake variables
-set (CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-    -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-    -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
-)
-
-if (CMAKE_PREFIX_PATH)
-    list (APPEND CMAKE_ARGS
-        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
-    )
-endif (CMAKE_PREFIX_PATH)
-
-# Configure external project
-ExternalProject_Add (project_rest
-    GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
-    GIT_TAG "http-del-with-body"
-    GIT_SUBMODULES "ext/curl"
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/rest"
-    CMAKE_ARGS ${CMAKE_ARGS}
-)
-
-# Define output
-ExternalProject_Get_Property (project_rest INSTALL_DIR)
-
-set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-set (REST_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/rest/src/project_rest/include")
-set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
-set (REST_LIBRARIES "${REST_LIBRARY}" "${CURL_LIBRARIES}")
-
-# Workaround of http://public.kitware.com/Bug/view.php?id=14495
-file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
-
-# Make target
-add_library (rest STATIC IMPORTED)
-set_target_properties (rest PROPERTIES
-    IMPORTED_LOCATION ${REST_LIBRARY}
-    INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
-)
-add_dependencies (rest project_rest)

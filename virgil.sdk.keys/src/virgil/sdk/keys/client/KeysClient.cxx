@@ -35,23 +35,27 @@
  */
 
 #include <virgil/sdk/keys/client/KeysClient.h>
-using virgil::sdk::keys::client::KeysClient;
 
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
-using virgil::sdk::keys::client::PublicKeyClientBase;
 #include <virgil/sdk/keys/client/PublicKeyClient.h>
-using virgil::sdk::keys::client::PublicKeyClient;
-
 #include <virgil/sdk/keys/client/UserDataClientBase.h>
-using virgil::sdk::keys::client::UserDataClientBase;
 #include <virgil/sdk/keys/client/UserDataClient.h>
+
+using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::client::KeysClientConnection;
+using virgil::sdk::keys::client::PublicKeyClientBase;
+using virgil::sdk::keys::client::PublicKeyClient;
+using virgil::sdk::keys::client::UserDataClientBase;
 using virgil::sdk::keys::client::UserDataClient;
+
+const std::string KeysClient::kBaseAddressDefault = "https://keys.virgilsecurity.com/";
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     class KeysClientImpl {
     public:
-        explicit KeysClientImpl(const std::shared_ptr<ConnectionBase>& connection) :
-                publicKeyClient(connection), userDataClient(connection) {
+        explicit KeysClientImpl(const std::shared_ptr<KeysClientConnection>& connection)
+                : publicKeyClient(connection), userDataClient(connection) {
         }
     public:
         PublicKeyClient publicKeyClient;
@@ -59,8 +63,12 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     };
 }}}}
 
-KeysClient::KeysClient(const std::shared_ptr<ConnectionBase>& connection)
-        : KeysClientBase(connection), impl_(std::make_shared<KeysClientImpl>(connection)) {
+KeysClient::KeysClient(const std::shared_ptr<KeysClientConnection>& connection)
+        : impl_(std::make_shared<KeysClientImpl>(connection)) {
+}
+
+KeysClient::KeysClient(const std::string& appToken, const std::string& baseAddress)
+        : impl_(std::make_shared<KeysClientImpl>(std::make_shared<KeysClientConnection>(appToken, baseAddress))) {
 }
 
 PublicKeyClientBase& KeysClient::publicKey() {

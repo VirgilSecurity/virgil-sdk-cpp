@@ -34,44 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <iterator>
 #include <string>
 #include <stdexcept>
-#include <map>
 
 #include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
-#include <virgil/crypto/VirgilCryptoException.h>
-using virgil::crypto::VirgilCryptoException;
 
-#include <virgil/sdk/keys/model/Account.h>
-using virgil::sdk::keys::model::Account;
 #include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
-
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
-
 #include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
+
+using virgil::crypto::VirgilByteArray;
+
+using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::io::Marshaller;
 
-#include <virgil/sdk/keys/io/marshaller.h>
-using virgil::sdk::keys::io::marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
 static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {
-        std::cout << "Prepare input file: public.key..." << std::endl;
-        std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: public.key");
-        }
+        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
@@ -79,18 +70,8 @@ int main() {
             throw std::runtime_error("can not write file: virgil_public.key");
         }
 
-        std::cout << "Read public key..." << std::endl;
-        VirgilByteArray publicKey;
-        std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKey));
-
-        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        UserData userData = UserData::email(USER_EMAIL);
-        PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData});
-
         std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = marshaller<PublicKey>::toJson(virgilPublicKey);
+        std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
         std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

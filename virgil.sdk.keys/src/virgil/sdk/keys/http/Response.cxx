@@ -35,10 +35,11 @@
  */
 
 #include <virgil/sdk/keys/http/Response.h>
-using virgil::sdk::keys::http::Response;
 
 #include <stdexcept>
 #include <set>
+
+using virgil::sdk::keys::http::Response;
 
 Response& Response::body (const std::string& body) {
     body_ = body;
@@ -58,12 +59,12 @@ std::string Response::contentType () const {
     return contentType_;
 }
 
-Response& Response::header (const Response::Headers& header) {
+Response& Response::header (const Response::Header& header) {
     header_ = header;
     return *this;
 }
 
-Response::Headers Response::header () const {
+Response::Header Response::header () const {
     return header_;
 }
 

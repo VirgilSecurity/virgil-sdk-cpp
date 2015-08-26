@@ -85,27 +85,27 @@ namespace virgil { namespace sdk { namespace keys { namespace model {
         static UserData lastName(const std::string& value);
         //@}
         /**
-         * @brief Set parent account GUID.
+         * @brief Set parent account UUID.
          */
         UserData& accountId (const std::string& accountId);
         /**
-         * @brief Get parent account GUID.
+         * @brief Get parent account UUID.
          */
         std::string accountId () const;
         /**
-         * @brief Set parent public key GUID.
+         * @brief Set parent public key UUID.
          */
         UserData& publicKeyId (const std::string& publicKeyId);
         /**
-         * @brief Get parent public key GUID.
+         * @brief Get parent public key UUID.
          */
         std::string publicKeyId () const;
         /**
-         * @brief Set user data GUID.
+         * @brief Set user data UUID.
          */
         UserData& userDataId (const std::string& userDataId);
         /**
-         * @brief Get user data GUID.
+         * @brief Get user data UUID.
          */
         std::string userDataId () const;
         /**

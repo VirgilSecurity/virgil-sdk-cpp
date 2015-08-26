@@ -46,7 +46,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake" ${CMAKE_MODULE_PATH})
 
 # Find dependencies
-find_package (cURL REQUIRED)
+find_package (CURL REQUIRED)
 include_directories (${CURL_INCLUDE_DIRS})
 
 include (virgil)

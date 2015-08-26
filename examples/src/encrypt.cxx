@@ -43,30 +43,23 @@
 #include <stdexcept>
 
 #include <virgil/crypto/VirgilByteArray.h>
-using virgil::crypto::VirgilByteArray;
 #include <virgil/crypto/VirgilStreamCipher.h>
-using virgil::crypto::VirgilStreamCipher;
-
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
-using virgil::crypto::stream::VirgilStreamDataSource;
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
-using virgil::crypto::stream::VirgilStreamDataSink;
-
 #include <virgil/crypto/foundation/VirgilBase64.h>
-using virgil::crypto::foundation::VirgilBase64;
-
 #include <virgil/sdk/keys/model/PublicKey.h>
-using virgil::sdk::keys::model::PublicKey;
-#include <virgil/sdk/keys/model/UserDataType.h>
-using virgil::sdk::keys::model::UserDataType;
-
-#include <virgil/sdk/keys/http/Connection.h>
-using virgil::sdk::keys::http::Connection;
 #include <virgil/sdk/keys/client/KeysClient.h>
+
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilStreamCipher;
+using virgil::crypto::stream::VirgilStreamDataSource;
+using virgil::crypto::stream::VirgilStreamDataSink;
+using virgil::crypto::foundation::VirgilBase64;
+using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::client::KeysClient;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/v1/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
 static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 #define MAKE_URL(base, path) (base path)
@@ -89,13 +82,10 @@ int main() {
         VirgilStreamCipher cipher;
 
         std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(std::make_shared<Connection>(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE));
-        std::vector<PublicKey> publicKeys = keysClient.publicKey().search(USER_EMAIL, UserDataType::emailId);
-        if (publicKeys.empty()) {
-            throw std::runtime_error(std::string("Recipient with id: ") + USER_EMAIL + " not found.");
-        }
+        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
+
         std::cout << "Add recipient..." << std::endl;
-        PublicKey publicKey = publicKeys.front();
         cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 
         std::cout << "Encrypt and store results..." << std::endl;

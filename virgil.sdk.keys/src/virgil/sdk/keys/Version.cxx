@@ -1,8 +1,6 @@
 #include <virgil/sdk/keys/Version.h>
-using virgil::sdk::keys::Version;
 
-#include <cstddef>
-#include <string>
+using virgil::sdk::keys::Version;
 
 size_t Version::asNumber() {
     return (majorVersion() << 16) | (minorVersion() << 8) | patchVersion();

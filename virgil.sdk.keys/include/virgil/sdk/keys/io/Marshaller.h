@@ -34,20 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/KeysClientBase.h>
-using virgil::sdk::keys::client::KeysClientBase;
+#ifndef VIRGIL_SDK_KEYS_PUBLIC_MARSHALLER_H
+#define VIRGIL_SDK_KEYS_PUBLIC_MARSHALLER_H
 
-#include <virgil/sdk/keys/http/ConnectionBase.h>
-using virgil::sdk::keys::http::ConnectionBase;
+#include <string>
 
-#include <stdexcept>
+namespace virgil { namespace sdk { namespace keys { namespace io {
+    /**
+     * @brief This class responsible for the data object marshalling.
+     *
+     * Supported classes: model::Account, model::PublicKey, model::UserData.
+     */
+    template <typename T>
+    class Marshaller {
+    public:
+        /**
+         * @brief Marshal given object to the Json representation.
+         */
+        template<int INDENT = -1>
+        static std::string toJson(const T& obj, bool deep = false);
+        /**
+         * @brief Unmarshal Json representation to the associated object.
+         */
+        static T fromJson(const std::string& jsonString);
+    private:
+        /**
+         * @brief Forbid object creation.
+         */
+        Marshaller();
+    };
+}}}}
 
-KeysClientBase::KeysClientBase(const std::shared_ptr<ConnectionBase>& connection) : connection_(connection) {
-    if (!connection_) {
-        throw std::logic_error("Connection is not defined.");
-    }
-}
-
-std::shared_ptr<ConnectionBase> KeysClientBase::connection() const {
-    return connection_;
-}
+#endif /* VIRGIL_SDK_KEYS_PUBLIC_MARSHALLER_H */

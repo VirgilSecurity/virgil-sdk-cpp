@@ -34,78 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H
-#define VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H
+#ifndef VIRGIL_SDK_KEYS_USER_DATA_CLIENT_BASE_H
+#define VIRGIL_SDK_KEYS_USER_DATA_CLIENT_BASE_H
 
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/keys/client/EndpointClientBase.h>
-using virgil::sdk::keys::client::EndpointClientBase;
-
 #include <virgil/sdk/keys/model/UserData.h>
-using virgil::sdk::keys::model::UserData;
+#include <virgil/sdk/keys/client/Credentials.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @brief Endpoint "/user-data" to the Virgil Public Keys Service (API).
      */
-    class UserDataClientBase : public EndpointClientBase {
+    class UserDataClientBase {
     public:
         /**
-         * @brief Inherit base class constructor.
-         */
-        using EndpointClientBase::EndpointClientBase;
-        /**
          * @brief Add user data to the public key.
-         * @param publicKeyId - associated public key GUID.
-         * @param className - user data class: "user_id" or "user_info".
-         * @param type - user data type: "email", "phone", "first_name", etc.
-         * @param value - user data value.
-         * @param guid - transaction GUID.
-         * @return Added user data.
+         *
+         * @param userData - added user data.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
+         * @return Added user data with UUIDs.
          */
-        virtual UserData add(const std::string& publicKeyId, const std::string& className,
-                const std::string& type, const std::string& value, const std::string& guid) const = 0;
+        virtual virgil::sdk::keys::model::UserData add(const virgil::sdk::keys::model::UserData& userData,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const = 0;
         /**
-         * @brief Get user data by its identifier.
-         * @param userDataId - user data GUID.
-         * @return Retrived user data.
+         * @brief Delete specific user data.
+         * @param userDataId - user data UUID.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
          */
-        virtual UserData get(const std::string& userDataId) const = 0;
+        virtual void del(const std::string& userDataId,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const = 0;
         /**
          * @brief Confirm user data.
-         * @param userDataId - user data GUID.
+         * @param userDataId - user data UUID.
          * @param code - confirmation code.
-         * @param guid - transaction GUID.
          */
-        virtual void confirm(const std::string& userDataId, const std::string& code,
-                const std::string& guid) const = 0;
+        virtual void confirm(const std::string& userDataId, const std::string& code) const = 0;
         /**
          * @brief Resend user data confirmation code.
-         * @param userDataId - user data GUID.
-         * @param guid - transaction GUID.
+         * @param userDataId - user data UUID.
+         * @param credentials - user's credentials.
+         * @param uuid - transaction UUID.
          */
-        virtual void resendConfirmation(const std::string& userDataId, const std::string& guid) const = 0;
-        /**
-         * @brief Search user data.
-         * @param userId - user identifier: email, phone, fax, etc.
-         * @param expandPublicKey - if true, user data will include associated public key.
-         * @return Found user data.
-         * @note This method is not supported on the server side yet. Use such method with a 3 parameters.
-         */
-        virtual std::vector<UserData> search(const std::string& userId, bool expandPublicKey = false) const = 0;
-        /**
-         * @brief Search user data.
-         * @param userId - user identifier: email, phone, fax, etc.
-         * @param userIdType - user unique identifier type.
-         * @param expandPublicKey - if true, user data will include associated public key.
-         * @return Found user data.
-         */
-        virtual std::vector<UserData> search(const std::string& userId, const std::string& userIdType,
-                bool expandPublicKey = false) const = 0;
-
+        virtual void resendConfirmation(const std::string& userDataId,
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const = 0;
     };
 }}}}
 
-#endif /* VIRGIL_SDK_KEYS_CLIENT_USER_DATA_CLIENT_H */
+#endif /* VIRGIL_SDK_KEYS_USER_DATA_CLIENT_BASE_H */

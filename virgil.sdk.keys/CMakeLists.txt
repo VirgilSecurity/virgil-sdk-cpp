@@ -46,9 +46,9 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SDK library name.")
 
 # Set library version
-set (VIRGIL_SDK_KEYS_VERSION_MAJOR 1)
+set (VIRGIL_SDK_KEYS_VERSION_MAJOR 2)
 set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 5)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 0)
 set (VIRGIL_SDK_KEYS_VERSION
     ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
 )
@@ -65,6 +65,14 @@ include_directories (${JSON_INCLUDE_DIRS})
 
 include ("ext/rest_ext.cmake")
 include_directories (${REST_INCLUDE_DIRS})
+
+include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
+virgil_add_dependency ("crypto"
+    VIRGIL_CRYPTO_DEPENDENCIES
+    VIRGIL_CRYPTO_INCLUDE_DIRS
+    VIRGIL_CRYPTO_LIBRARIES
+)
+include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
 
 find_package (CURL REQUIRED)
 include_directories (${CURL_INCLUDE_DIRS})
@@ -83,8 +91,8 @@ file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
 add_library (keys STATIC ${SRC_LIST})
-target_link_libraries (keys rest ${CURL_LIBRARIES})
-add_dependencies (keys json)
+target_link_libraries (keys rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
+add_dependencies (keys json ${VIRGIL_CRYPTO_DEPENDENCIES})
 set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
 
 # Install
@@ -94,6 +102,7 @@ install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
 
 # Add unit tests
 if (ENABLE_TESTING)
+    include(CTest)
     add_subdirectory (tests)
 endif ()
 

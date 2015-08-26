@@ -37,8 +37,10 @@
 #ifndef VIRGIL_SDK_KEYS_PUBLIC_KEY_CLIENT_H
 #define VIRGIL_SDK_KEYS_PUBLIC_KEY_CLIENT_H
 
+#include <memory>
+
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
-using virgil::sdk::keys::client::PublicKeyClientBase;
+#include <virgil/sdk/keys/client/KeysClientConnection.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -47,18 +49,27 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
     class PublicKeyClient final : public PublicKeyClientBase {
     public:
         /**
-         * @brief Inherit base class constructor.
+         * @brief Initialize client with HTTP layer connection.
          */
-        using PublicKeyClientBase::PublicKeyClientBase;
+        explicit PublicKeyClient(const std::shared_ptr<KeysClientConnection>& connection);
         /**
-         * @name Default class implementation
+         * @name Base class implementation
          */
         //@{
-        PublicKey add(const std::vector<unsigned char>& publicKey,
-                const std::vector<UserData>& userData, const std::string& accountId = "") const override;
-        PublicKey get(const std::string& publicKeyId) const override;
-        std::vector<PublicKey> search(const std::string& userId, const std::string& userIdType) const override;
+        virgil::sdk::keys::model::PublicKey add(const std::vector<unsigned char>& key,
+                const std::vector<virgil::sdk::keys::model::UserData>& userData,
+                const Credentials& credentials, const std::string& uuid) const override;
+        virgil::sdk::keys::model::PublicKey get(const std::string& publicKeyId) const override;
+        virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
+                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
+                const std::string& uuid) const override;
+        void del(const Credentials& credentials, const std::string& uuid) const override;
+        virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const override;
+        virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials,
+                const std::string& uuid) const override;
         //@}
+    private:
+        std::shared_ptr<KeysClientConnection> connection_;
     };
 }}}}
 

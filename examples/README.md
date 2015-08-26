@@ -7,8 +7,8 @@ This directory contains project with examples that shows how to use Virgil Secur
 1. Examples MUST be run from their directory.
 1. All results are stored in the same directory.
 1. To produce file `virgil_public.key` run:
-    - `get_public_key` - if user is registered;
-    - `register_user` - if user is not registered.
+    - `public_key_get` - if user's public key is already registered;
+    - `public_key_add` and `user_data_confirm` - if user's public key is not registered yet.
 1. To produce `test.txt.sign` run `sign`.
 1. To produce `text.txt.enc` run `encrypt`.
 1. To produce `decrypted_text.txt` run `decrypt`.
