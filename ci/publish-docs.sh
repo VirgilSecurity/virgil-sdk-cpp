@@ -37,26 +37,32 @@
 
 # Settings
 REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
-HTML_PATH=virgil.sdk.keys/docs/html
+HTML_PATH_SRC="${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html"
+HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/virgil.sdk.keys/docs/html"
 COMMIT_USER="Travis CI documentation builder."
 COMMIT_EMAIL="sergey.seroshtan@gmail.com"
 CHANGESET=$(git rev-parse --verify HEAD)
 
 # Get a clean version of the HTML documentation repo.
-rm -rf ${HTML_PATH}
-mkdir -p ${HTML_PATH}
-git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH}
+rm -rf ${HTML_PATH_DST}
+mkdir -p ${HTML_PATH_DST}
+git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
 # rm all the files through git to prevent stale files.
-cd ${HTML_PATH}
+cd ${HTML_PATH_DST}
 git rm -rf .
 cd -
 
 # Generate the HTML documentation.
+cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
 make doc
+cd -
+
+# Copy new documentation
+cp -Rf "${HTML_PATH_SRC}" "${HTML_PATH_DST}"
 
 # Create and commit the documentation repo.
-cd ${HTML_PATH}
+cd ${HTML_PATH_DST}
 git add .
 git config user.name "${COMMIT_USER}"
 git config user.email "${COMMIT_EMAIL}"
