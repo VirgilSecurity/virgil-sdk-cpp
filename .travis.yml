@@ -3,7 +3,7 @@ branches:
   only:
     - master
     - develop
-    - release-virgil-sdk-keys-2.0.0
+    - docs-auto-publish
 compiler:
   - g++
   - clang++
@@ -28,8 +28,12 @@ env:
     - BUILD_DIR_NAME=build
 before_install:
   - bash ./ci/install-cmake.sh
+  - openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv
+    -in ./ci/travis_ci_rsa.enc -out ./ci/travis_ci_rsa -d
 before_script:
   - bash ./ci/configure.sh
 script:
   - bash ./ci/run.sh
+after_success:
+  - bash ./ci/publish-docs.sh
 sudo: false

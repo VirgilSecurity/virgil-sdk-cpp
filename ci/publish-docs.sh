@@ -35,10 +35,31 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-set -ev
+# Settings
+REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
+HTML_PATH=virgil.sdk.keys/docs/html
+COMMIT_USER="Travis CI documentation builder."
+COMMIT_EMAIL="sergey.seroshtan@gmail.com"
+CHANGESET=$(git rev-parse --verify HEAD)
 
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
-make -j2 VERBOSE=1
-make test
-make install
-make doc
+# Get a clean version of the HTML documentation repo.
+rm -rf ${HTML_PATH}
+mkdir -p ${HTML_PATH}
+git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH}
+
+# rm all the files through git to prevent stale files.
+cd ${HTML_PATH}
+git rm -rf .
+cd -
+
+# Generate the HTML documentation.
+make doxygen
+
+# Create and commit the documentation repo.
+cd ${HTML_PATH}
+git add .
+git config user.name "${COMMIT_USER}"
+git config user.email "${COMMIT_EMAIL}"
+git commit -m "Automated documentation build for changeset ${CHANGESET}."
+git push origin gh-pages
+cd -
