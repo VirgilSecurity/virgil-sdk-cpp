@@ -3,7 +3,6 @@ branches:
   only:
     - master
     - develop
-    - release-virgil-sdk-keys-2.0.0
 compiler:
   - g++
   - clang++
@@ -21,6 +20,8 @@ addons:
       - g++-4.8
       - libcurl4-openssl-dev
       - python-yaml
+      - doxygen
+      - graphviz
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 env:
@@ -28,8 +29,14 @@ env:
     - BUILD_DIR_NAME=build
 before_install:
   - bash ./ci/install-cmake.sh
+  - openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv
+    -in ./ci/travis_ci_rsa.enc -out ./ci/travis_ci_rsa -d
+  - chmod 0600 ./ci/travis_ci_rsa
+  - cp ./ci/travis_ci_rsa ~/.ssh/id_rsa
 before_script:
   - bash ./ci/configure.sh
 script:
   - bash ./ci/run.sh
+after_success:
+  - bash ./ci/publish-docs.sh
 sudo: false

@@ -1,4 +1,4 @@
-## Virgil Keys SDK
+## Virgil Security Keys SDK
 This project simplify interaction with [Keys Service](https://virgilsecurity.com/documents/cpp/keys-service).<br>
 For usage details see [Virgil Security C++ library stack](https://github.com/VirgilSecurity/virgil-cpp/tree/develop).
 
