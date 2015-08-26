@@ -59,7 +59,7 @@ make doc
 cd -
 
 # Copy new documentation
-cp -Rf "${HTML_PATH_SRC}" "${HTML_PATH_DST}"
+cp -af "${HTML_PATH_SRC}/." "${HTML_PATH_DST}/"
 
 # Create and commit the documentation repo.
 cd ${HTML_PATH_DST}
