@@ -41,4 +41,3 @@ cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
 make -j2 VERBOSE=1
 make test
 make install
-make doc
