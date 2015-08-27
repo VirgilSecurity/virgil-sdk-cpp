@@ -1,5 +1,10 @@
 Virgil Security Public Keys SDK ChangeLog (Sorted per date)
 
+= Version 2.0.1 released 2015-08-27
+
+Bugfix:
+  * Use fixed crypto library v1.0.1.
+
 = Version 2.0.0 released 2015-08-26
 
 Features:
