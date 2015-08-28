@@ -35,37 +35,39 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Settings
-REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
-HTML_PATH_SRC="${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html"
-HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/virgil.sdk.keys/docs/html"
-COMMIT_USER="Travis CI documentation builder."
-COMMIT_EMAIL="sergey.seroshtan@gmail.com"
-CHANGESET=$(git rev-parse --verify HEAD)
+set -ev
 
-# Get a clean version of the HTML documentation repo.
-rm -rf ${HTML_PATH_DST}
-mkdir -p ${HTML_PATH_DST}
-git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    # Settings
+    REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
+    HTML_PATH_SRC="${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html"
+    HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/virgil.sdk.keys/docs/html"
+    COMMIT_USER="Travis CI documentation builder."
+    COMMIT_EMAIL="sergey.seroshtan@gmail.com"
+    CHANGESET=$(git rev-parse --verify HEAD)
 
-# rm all the files through git to prevent stale files.
-cd ${HTML_PATH_DST}
-git rm -rf .
-cd -
+    # Get a clean version of the HTML documentation repo.
+    rm -rf ${HTML_PATH_DST}
+    mkdir -p ${HTML_PATH_DST}
+    git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
-# Generate the HTML documentation.
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
-make doc
-cd -
+    # rm all the files through git to prevent stale files.
+    cd ${HTML_PATH_DST} && git rm -rf ./*
+    cd -
 
-# Copy new documentation
-cp -af "${HTML_PATH_SRC}/." "${HTML_PATH_DST}/"
+    # Generate the HTML documentation.
+    cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}" && make doc
+    cd -
 
-# Create and commit the documentation repo.
-cd ${HTML_PATH_DST}
-git add .
-git config user.name "${COMMIT_USER}"
-git config user.email "${COMMIT_EMAIL}"
-git commit -m "Automated documentation build for changeset ${CHANGESET}."
-git push origin gh-pages
-cd -
+    # Copy new documentation
+    cp -af "${HTML_PATH_SRC}/." "${HTML_PATH_DST}/"
+
+    # Create and commit the documentation repo.
+    cd ${HTML_PATH_DST}
+    git add .
+    git config user.name "${COMMIT_USER}"
+    git config user.email "${COMMIT_EMAIL}"
+    git commit -m "Automated documentation build for changeset ${CHANGESET}."
+    git push origin gh-pages
+    cd -
+fi
