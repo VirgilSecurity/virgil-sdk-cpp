@@ -1,16 +1,17 @@
 language: cpp
-branches:
-  only:
-    - master
-    - develop
 compiler:
-  - g++
-  - clang++
+  - gcc
+  - clang
 os:
   - linux
+env:
+  global:
+    - BUILD_DIR_NAME=build
+    - PUBLISH_DOCS=ON
 cache:
   directories:
     - $HOME/cmake
+    - $HOME/doxygen
 addons:
   apt:
     sources:
@@ -20,19 +21,13 @@ addons:
       - g++-4.8
       - libcurl4-openssl-dev
       - python-yaml
-      - doxygen
       - graphviz
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-env:
-  global:
-    - BUILD_DIR_NAME=build
 before_install:
   - bash ./ci/install-cmake.sh
-  - openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv
-    -in ./ci/travis_ci_rsa.enc -out ./ci/travis_ci_rsa -d
-  - chmod 0600 ./ci/travis_ci_rsa
-  - cp ./ci/travis_ci_rsa ~/.ssh/id_rsa
+  - bash ./ci/install-credentials.sh
+  - bash ./ci/install-doxygen.sh
 before_script:
   - bash ./ci/configure.sh
 script:

@@ -36,11 +36,13 @@
 #
 
 set -ev
-if [ ! -d "$HOME/cmake/bin" ]; then
-    wget http://www.cmake.org/files/v3.2/cmake-3.2.2-Linux-x86_64.tar.gz
-    tar -xzf cmake-3.2.2-Linux-x86_64.tar.gz
-    cp -fa cmake-3.2.2-Linux-x86_64/. $HOME/cmake/
-else
-    echo "Using CMake cached directory."
-fi
 
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    if [ ! -d "$HOME/doxygen/bin" ]; then
+        wget http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.10.linux.bin.tar.gz
+        tar -xzf doxygen-1.8.10.linux.bin.tar.gz
+        cp -fa doxygen-1.8.10/. $HOME/doxygen/
+    else
+        echo "Using Doxygen cached directory."
+    fi
+fi
