@@ -78,8 +78,15 @@ aux_source_directory ("src" SRC_LIST)
 foreach (SRC ${SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME} ${VIRGIL_CRYPTO_LIBRARIES} ${VIRGIL_KEYS_PUBLIC_LIBRARIES} ${CURL_LIBRARIES})
-    add_dependencies (${TARGET_NAME} ${VIRGIL_CRYPTO_DEPENDENCIES} ${VIRGIL_KEYS_PUBLIC_DEPENDENCIES})
+    target_link_libraries (${TARGET_NAME}
+        ${VIRGIL_KEYS_PUBLIC_LIBRARIES}
+        ${VIRGIL_CRYPTO_LIBRARIES}
+        ${CURL_LIBRARIES}
+    )
+    add_dependencies (${TARGET_NAME}
+        ${VIRGIL_CRYPTO_DEPENDENCIES}
+        ${VIRGIL_KEYS_PUBLIC_DEPENDENCIES}
+    )
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)
 install (DIRECTORY "data/" DESTINATION ".")
