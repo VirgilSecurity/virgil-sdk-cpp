@@ -8,6 +8,9 @@ env:
   global:
     - BUILD_DIR_NAME=build
     - PUBLISH_DOCS=ON
+  matrix:
+    - BUILD_MODULE_NAME=VIRGIL_SDK_KEYS
+    - BUILD_MODULE_NAME=VIRGIL_EXAMPLES
 cache:
   directories:
     - $HOME/cmake
