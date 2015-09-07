@@ -34,44 +34,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
 #include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/sdk/privatekeys/client/Credentials.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+using virgil::sdk::privatekeys::client::Credentials;
 
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
+Credentials::Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
+        const std::string& privateKeyPassword)
+        : publicKeyId_(publicKeyId), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
+
+Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
+        : publicKeyId_(), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
+}
+
+bool Credentials::isValid() const {
+    return !privateKey_.empty();
+}
+
+void Credentials::cleanup() noexcept {
+    std::fill(privateKey_.begin(), privateKey_.end(), 0);
+    std::fill(privateKeyPassword_.begin(), privateKeyPassword_.end(), 0);
+
+    publicKeyId_.resize(0);
+    privateKey_.resize(0);
+    privateKeyPassword_.resize(0);
+}
+
+Credentials::~Credentials() noexcept {
+    cleanup();
+}
+
+const std::string& Credentials::publicKeyId() const {
+    return publicKeyId_;
+}
+
+const std::vector<unsigned char>& Credentials::privateKey() const {
+    return privateKey_;
+}
+
+const std::string& Credentials::privateKeyPassword() const {
+    return privateKeyPassword_;
+}
+
+

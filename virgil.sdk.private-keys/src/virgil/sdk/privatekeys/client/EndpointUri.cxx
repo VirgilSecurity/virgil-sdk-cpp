@@ -34,44 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#include <virgil/sdk/privatekeys/client/EndpointUri.h>
 
-#include <virgil/crypto/VirgilByteArray.h>
+using virgil::sdk::privatekeys::client::EndpointUri;
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
-
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
+EndpointUri::EndpointUri(EndpointUri::Version uriVersion) : version_(uriVersion) {
 }
+
+EndpointUri EndpointUri::v2() {
+    return EndpointUri(EndpointUri::Version::V2);
+}
+
+EndpointUri::Version EndpointUri::version() const {
+    return version_;
+}
+
+std::string EndpointUri::updateSession() const {
+    return addVersion("/authentication/get-token");
+}
+
+std::string EndpointUri::createContainer() const {
+    return addVersion("/container");
+}
+
+std::string EndpointUri::getContainerDetails(const std::string& publicKeyID) const {
+    return addVersion("/container/public-key-id/" + publicKeyID);
+}
+
+std::string EndpointUri::updateContainerInformation() const {
+    return addVersion("/container");
+}
+
+std::string EndpointUri::resetContainerPassword() const {
+      return addVersion("/container/actions/reset-password");
+}
+
+std::string EndpointUri::confirmToken() const {
+    return addVersion("/container/actions/persist");
+}
+
+std::string EndpointUri::deleteContainer() const {
+    return addVersion("/container");
+}
+
+std::string EndpointUri::addPrivateKey() const {
+    return addVersion("/private-key");
+}
+
+std::string EndpointUri::getPrivateKey(const std::string& publicKeyID) const {
+    return addVersion("/private-key/public-key-id/" + publicKeyID);
+}
+
+std::string EndpointUri::deletePrivateKey() const {
+    return addVersion("/private-key");
+}
+
+std::string EndpointUri::addVersion(const std::string& uri) const {
+    switch (version()) {
+    case EndpointUri::Version::V2:
+        return "/v2" + uri;
+    }
+}
+

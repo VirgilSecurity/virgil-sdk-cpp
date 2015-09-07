@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,33 +34,29 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Configurable variables:
-#     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
-#     - VIRGIL_SDK_PRIVATE_KEYS - boolean value that enable build of Private Keys SDK
-#     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
-#     - ENABLE_TESTING  - boolean value that enable unit tests
+# Dependecy to https://github.com/nlohmann/json
 
-cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
+# Configure external project
+if (NOT TARGET project_json)
+    ExternalProject_Add (project_json
+        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/json"
+        CMAKE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND ""
+        TEST_COMMAND ""
+    )
+endif ()
 
-project (virgil-cpp)
+# Configure output
+set (JSON_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/json/src/project_json/src")
 
-set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
-set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
-set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
+# Workaround of http://public.kitware.com/Bug/view.php?id=14495
+file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})
 
-if (ENABLE_TESTING)
-    enable_testing ()
-endif (ENABLE_TESTING)
-
-if (VIRGIL_SDK_KEYS)
-    add_subdirectory (virgil.sdk.keys)
-endif (VIRGIL_SDK_KEYS)
-
-if (VIRGIL_SDK_PRIVATE_KEYS)
-    add_subdirectory (virgil.sdk.private-keys)
-endif (VIRGIL_SDK_PRIVATE_KEYS)
-
-if (VIRGIL_EXAMPLES)
-    add_subdirectory (examples)
-endif (VIRGIL_EXAMPLES)
+# Make target
+add_library (json STATIC IMPORTED)
+set_target_properties (json PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES ${JSON_INCLUDE_DIRS}
+)
+add_dependencies (json project_json)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,33 +34,21 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Configurable variables:
-#     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
-#     - VIRGIL_SDK_PRIVATE_KEYS - boolean value that enable build of Private Keys SDK
-#     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
-#     - ENABLE_TESTING  - boolean value that enable unit tests
-
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil-cpp)
+# Define variables
+set (UUT_LIB_NAME private_keys)
+set (TEST_RUNNER test_private_key_runner)
 
-set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
-set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
-set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
+# Grab source directory
+aux_source_directory (${CMAKE_CURRENT_SOURCE_DIR} UUT_SRC_LIST)
 
-if (ENABLE_TESTING)
-    enable_testing ()
-endif (ENABLE_TESTING)
+# Configure test target
+add_executable (${TEST_RUNNER} ${UUT_SRC_LIST})
+target_link_libraries (${TEST_RUNNER} ${UUT_LIB_NAME})
 
-if (VIRGIL_SDK_KEYS)
-    add_subdirectory (virgil.sdk.keys)
-endif (VIRGIL_SDK_KEYS)
-
-if (VIRGIL_SDK_PRIVATE_KEYS)
-    add_subdirectory (virgil.sdk.private-keys)
-endif (VIRGIL_SDK_PRIVATE_KEYS)
-
-if (VIRGIL_EXAMPLES)
-    add_subdirectory (examples)
-endif (VIRGIL_EXAMPLES)
+# Run tests
+add_test (
+    NAME ${TEST_RUNNER}
+    COMMAND ./${TEST_RUNNER}
+)

@@ -34,44 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
+#define VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <memory>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/privatekeys/client/PrivateKeysClientBase.h>
+#include <virgil/sdk/privatekeys/client/KeysClientConnection.h>
 
-using virgil::crypto::VirgilByteArray;
+namespace virgil { namespace sdk { namespace privatekeys { namespace client {
+    /**
+     * @name Forward declaration
+     */
+    //@{
+    class KeysClientImpl;
+    //@}
+    /**
+     * @brief Default implementation of PrivateKeysClientBase.
+     */
+    class PrivateKeysClient final : public PrivateKeysClientBase {
+    public:
+        /**
+         * @brief Default API base address URI, i.e. https://keys-stg.virgilsecurity.com/
+         */
+        static const std::string kBaseAddressDefault;
+        /**
+         * @brief Initialize with appropriate connection.
+         */
+        explicit PrivateKeysClient(const std::shared_ptr<KeysClientConnection>& connection);
+        /**
+         * @brief Initialize with application specific token and srevice base address.
+         * @param appToken - application specific token.
+         * @param baseAddress - service API base address.
+         */
+        explicit PrivateKeysClient(const std::string& appToken, const std::string& baseAddress = kBaseAddressDefault);
+        /**
+         * @name Default class implementation
+         */
+        //@{
+        AuthEndpointBase& auth() override;
+        ContainerEndpointBase& container() override;
+        PrivateKeyEndpointBase& privateKey() override;
+        //@}
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
+    private:
+        std::shared_ptr<KeysClientImpl> impl_;
+    };
+}}}}
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H */

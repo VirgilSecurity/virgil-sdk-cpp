@@ -34,44 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
+#ifndef VIRGIL_STRING_JSON_KEY_H
+#define VIRGIL_STRING_JSON_KEY_H
+
 #include <string>
-#include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+namespace virgil { namespace sdk { namespace privatekeys { namespace util {
+    /**
+     * @brief This class holds string constants of Json keys.
+     */
+    class JsonKey {
+    public:
+        static const std::string newContainerPassword; /*!< Json key for represents new container password. */
+        static const std::string containerPassword; /*!< Json key for container password object. */
+        static const std::string authToken; /*!< Json key for authentication token object. */
+        static const std::string userData; /*!< Json key for user data object. */
+        static const std::string className; /*!< Json key for user data class name. */
+        static const std::string type; /*!< Json key for user data type. */
+        static const std::string value; /*!< Json key for user data value. */
+        static const std::string error; /*!< Json key for error object. */
+        static const std::string errorCode; /*!< Json key for error code. */
+        static const std::string containerType; /*!< container type. */
+        static const std::string requestSignUuid; /*!< request sign uuid. */
+        static const std::string confirmToken; /*!< the confirmation token. */
+        static const std::string publicKeyID; /*!< Json key for the user public key id. */
+        static const std::string privateKey; /*!< Json key for the user private key. */
+    private:
+        JsonKey();
+    };
+}}}}
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
-
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_STRING_JSON_KEY_H */

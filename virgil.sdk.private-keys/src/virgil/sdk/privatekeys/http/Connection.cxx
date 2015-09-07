@@ -34,44 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
 #include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <restless.hpp>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/privatekeys/http/Connection.h>
+#include <virgil/sdk/privatekeys/http/Request.h>
+#include <virgil/sdk/privatekeys/http/Response.h>
 
-using virgil::crypto::VirgilByteArray;
+using HttpRequest = asoni::Handle;
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::privatekeys::http::Connection;
+using virgil::sdk::privatekeys::http::Request;
+using virgil::sdk::privatekeys::http::Response;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
 
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
+Response Connection::send(const Request& request) {
+    // Make Request
+    HttpRequest httpRequest;
+    httpRequest.header(request.header()).content(request.contentType(), request.body());
+    switch (request.method()) {
+        case Request::Method::GET:
+            httpRequest.get(request.uri());
+            break;
+        case Request::Method::POST:
+            httpRequest.post(request.uri());
+            break;
+        case Request::Method::PUT:
+            httpRequest.put(request.uri());
+            break;
+        case Request::Method::DEL:
+            httpRequest.del(request.uri());
+            break;
+        default:
+            throw std::logic_error("Unknown HTTP method.");
     }
+    // Execute
+    auto httpResponse = httpRequest.exec();
+    // Make response
+    Response response;
     try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        response.statusCodeRaw(httpResponse.code);
+    } catch (const std::logic_error&) {
+        throw std::runtime_error(httpResponse.body);
     }
-    return 0;
+    return response.header(httpResponse.headers).body(httpResponse.body);
 }

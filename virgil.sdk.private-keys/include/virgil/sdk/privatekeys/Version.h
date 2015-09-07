@@ -34,44 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_VERSION_H
+#define VIRGIL_SDK_PRIVATE_KEYS_VERSION_H
+
 #include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
 #include <string>
-#include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+namespace virgil { namespace sdk { namespace privatekeys {
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+/**
+ * @brief Provides information about Virgil Private Keys SDK version.
+ */
+class Version {
+public:
+    /**
+     * Return version number in the format MMNNPP (Major, Minor, Patch).
+     *
+     */
+    static size_t asNumber();
+    /**
+     * Return the version number as string.
+     */
+    static std::string asString();
+    /**
+     * Return the major version number.
+     */
+    static size_t majorVersion();
+    /**
+     * Return the minor version number.
+     */
+    static size_t  minorVersion();
+    /**
+     * Return the minor version number.
+     */
+    static size_t patchVersion();
+};
 
-using virgil::crypto::VirgilByteArray;
+}}}
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_VERSION_H */
