@@ -34,44 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_PRIVATE_KEY_ENDPOINT_H
+#define VIRGIL_SDK_PRIVATE_KEYS_PRIVATE_KEY_ENDPOINT_H
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <memory>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/privatekeys/client/KeysClientConnection.h>
+#include <virgil/sdk/privatekeys/client/PrivateKeyEndpointBase.h>
 
-using virgil::crypto::VirgilByteArray;
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
+namespace virgil { namespace sdk { namespace privatekeys { namespace client {
+    /**
+    * @brief Default implenetation of class PrivateKeyEndpointBase.
+    */
+    class PrivateKeyEndpoint final : public PrivateKeyEndpointBase {
+    public:
+        /**
+         * @brief Initialize client with HTTP layer connection.
+         * @throw logic_error if invalid connection.
+         */
+        explicit PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnection>& connection);
+        /**
+         * @name Base class implementation
+         */
+        //@{
+        void add(const privatekeys::client::Credentials& credentials, const std::string& uuid) const override;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+        virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const override;
 
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
+        void del(const Credentials &credentials, const std::string& uuid) const override;
+        //@}
+    private:
+        std::shared_ptr<KeysClientConnection> connection_;
+    };
+}}}}
 
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_PRIVATE_KEY_ENDPOINT_H */

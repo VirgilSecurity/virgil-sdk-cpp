@@ -34,44 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_MODEL_USER_DATA_CLASS_H
+#define VIRGIL_SDK_PRIVATE_KEYS_MODEL_USER_DATA_CLASS_H
+
 #include <string>
-#include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+namespace virgil { namespace sdk { namespace privatekeys { namespace model {
+    /**
+     * @brief Contains string representation of "Virgil User Data" class name.
+     */
+    class UserDataClass {
+    public:
+        /**
+         * @property userId
+         * @brief Class name for UserData object that contains user's identifier.
+         */
+        static const std::string userId;
+        /**
+         * @property userInfo
+         * @brief Class name for UserData object that contains user's information.
+         */
+        static const std::string userInfo;
+    };
+}}}}
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
-
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
-    }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
-
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_MODEL_USER_DATA_CLASS_H */

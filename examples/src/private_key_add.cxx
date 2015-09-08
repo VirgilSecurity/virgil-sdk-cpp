@@ -1,3 +1,4 @@
+
 /**
  * Copyright (C) 2015 Virgil Security Inc.
  *
@@ -34,37 +35,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
-#include <map>
+#include <cstddef>
 #include <chrono>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <random>
+#include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/VirgilCryptoException.h>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/client/Credentials.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/model/UserData.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/keys/model/PublicKey.h>
+
+#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
+#include <virgil/sdk/privatekeys/model/UserData.h>
 
 using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilCryptoException;
 
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::client::Credentials;
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::model::UserData;
 using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::model::PublicKey;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-static const std::string USER_EMAIL = "test-vs@mailinator.com";
+using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::PrivateKeysClient;
+using virgil::sdk::privatekeys::model::UserData;
+
+const std::string VIRGIL_PK_URL_BASE = "https://keys-private-stg.virgilsecurity.com";
+const std::string VIRGIL_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+const std::string USER_EMAIL = "test-vs@mailinator.com";
+const std::string CONTAINER_PASSWORD = "123456789";
 
 /**
  * @brief Generate new UUID
@@ -73,49 +74,41 @@ std::string uuid();
 
 int main() {
     try {
-        std::cout << "Prepare input file: public.key..." << std::endl;
-        std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: public.key");
+        std::cout << "Reading virgil public key..." << std::endl;
+        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!publicKeyFile.good()) {
+            throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
+        std::string publicKeyData((std::istreambuf_iterator<char>(publicKeyFile)),
+                std::istreambuf_iterator<char>());
 
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
-        }
+        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
-        std::cout << "Read public key..." << std::endl;
-        VirgilByteArray publicKey;
-        std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKey));
-
-        std::cout << "Read private key..." << std::endl;
+        std::cout << "Reading private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
         if (!keyFile.good()) {
             throw std::runtime_error("can not read private key: private.key");
         }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
 
-        Credentials credentials(privateKey);
+        VirgilByteArray privateKey((std::istreambuf_iterator<char>(keyFile)),
+                std::istreambuf_iterator<char>());
 
-        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        Credentials credentials(publicKey.publicKeyId(), privateKey);
+
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
+        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+
+        std::cout << "Authenticate session..." << std::endl;
         UserData userData = UserData::email(USER_EMAIL);
-        PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData}, credentials, uuid());
+        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
 
-        std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(virgilPublicKey);
-        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
-
-        std::cout << "Added user data id: " << virgilPublicKey.userData().front().userDataId() << std::endl;
-        std::cout << "Confirmation code can be found in the email." << std::endl;
-        std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;
+        std::cout << "Call the Private Key service to add a Private Key instance." << std::endl;
+        privateKeysClient.privateKey().add(credentials, uuid());
+        std::cout << "Private Key instance successfully added in the Private Keys service." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
 }
 

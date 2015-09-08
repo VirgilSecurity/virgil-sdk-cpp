@@ -34,44 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
+#include <set>
 #include <stdexcept>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/sdk/privatekeys/http/Response.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+using virgil::sdk::privatekeys::http::Response;
 
-using virgil::crypto::VirgilByteArray;
+Response& Response::body (const std::string& body) {
+    body_ = body;
+    return *this;
+}
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
+std::string Response::body () const {
+    return body_;
+}
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+Response& Response::contentType (const std::string& contentType) {
+    contentType_ = contentType;
+    return *this;
+}
 
-int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
-        return 0;
+std::string Response::contentType () const {
+    return contentType_;
+}
+
+Response& Response::header (const Response::Header& header) {
+    header_ = header;
+    return *this;
+}
+
+Response::Header Response::header () const {
+    return header_;
+}
+
+Response& Response::statusCode(Response::StatusCode statusCode) {
+    statusCode_ = statusCode;
+    return *this;
+}
+
+Response::StatusCode Response::statusCode() const {
+    return statusCode_;
+}
+
+Response& Response::statusCodeRaw(int code) {
+    std::set<int> availableCodes {200, 400, 401, 404, 405, 500};
+    if (availableCodes.find(code) != availableCodes.end()) {
+        statusCode_ = static_cast<Response::StatusCode>(code);
+    } else {
+        throw std::logic_error("Given status code is not supported.");
     }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
+    return *this;
+}
 
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
-    } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
-    }
-    return 0;
+int Response::statusCodeRaw() const {
+    return static_cast<int>(statusCode_);
+}
+
+bool Response::fail() const {
+    return statusCode_ != StatusCode::OK;
 }

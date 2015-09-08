@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,33 +34,47 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Configurable variables:
-#     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
-#     - VIRGIL_SDK_PRIVATE_KEYS - boolean value that enable build of Private Keys SDK
-#     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
-#     - ENABLE_TESTING  - boolean value that enable unit tests
+# Dependecy to https://github.com/anuragsoni/restless
 
-cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
+# Define CMake variables
+set (CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+    -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+    -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+)
 
-project (virgil-cpp)
+if (CMAKE_PREFIX_PATH)
+    list (APPEND CMAKE_ARGS
+        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+    )
+endif (CMAKE_PREFIX_PATH)
 
-set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
-set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
-set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
+# Configure external project
+if (NOT TARGET project_rest)
+    ExternalProject_Add (project_rest
+        GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
+        GIT_TAG "http-del-with-body"
+        GIT_SUBMODULES "ext/curl"
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/rest"
+        CMAKE_ARGS ${CMAKE_ARGS}
+)
+endif ()
 
-if (ENABLE_TESTING)
-    enable_testing ()
-endif (ENABLE_TESTING)
+# Define output
+ExternalProject_Get_Property (project_rest INSTALL_DIR)
 
-if (VIRGIL_SDK_KEYS)
-    add_subdirectory (virgil.sdk.keys)
-endif (VIRGIL_SDK_KEYS)
+set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
+set (REST_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/rest/src/project_rest/include")
+set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
+set (REST_LIBRARIES "${REST_LIBRARY}" "${CURL_LIBRARIES}")
 
-if (VIRGIL_SDK_PRIVATE_KEYS)
-    add_subdirectory (virgil.sdk.private-keys)
-endif (VIRGIL_SDK_PRIVATE_KEYS)
+# Workaround of http://public.kitware.com/Bug/view.php?id=14495
+file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
 
-if (VIRGIL_EXAMPLES)
-    add_subdirectory (examples)
-endif (VIRGIL_EXAMPLES)
+# Make target
+add_library (rest STATIC IMPORTED)
+set_target_properties (rest PROPERTIES
+    IMPORTED_LOCATION ${REST_LIBRARY}
+    INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
+)
+add_dependencies (rest project_rest)

@@ -64,6 +64,13 @@ virgil_add_dependency ("keys-public"
 )
 include_directories (${VIRGIL_KEYS_PUBLIC_INCLUDE_DIRS})
 
+virgil_add_dependency ("keys-private"
+    VIRGIL_KEYS_PRIVATE_DEPENDENCIES
+    VIRGIL_KEYS_PRIVATE_INCLUDE_DIRS
+    VIRGIL_KEYS_PRIVATE_LIBRARIES
+)
+include_directories (${VIRGIL_KEYS_PRIVATE_INCLUDE_DIRS})
+
 file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 foreach (DATA_FILE ${DATA_FILES})
     string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
@@ -80,12 +87,14 @@ foreach (SRC ${SRC_LIST})
     add_executable (${TARGET_NAME} ${SRC})
     target_link_libraries (${TARGET_NAME}
         ${VIRGIL_KEYS_PUBLIC_LIBRARIES}
+        ${VIRGIL_KEYS_PRIVATE_LIBRARIES}
         ${VIRGIL_CRYPTO_LIBRARIES}
         ${CURL_LIBRARIES}
     )
     add_dependencies (${TARGET_NAME}
         ${VIRGIL_CRYPTO_DEPENDENCIES}
         ${VIRGIL_KEYS_PUBLIC_DEPENDENCIES}
+        ${VIRGIL_KEYS_PRIVATE_DEPENDENCIES}
     )
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)
