@@ -34,44 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
 #include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
+#include <virgil/sdk/privatekeys/model/UserData.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+using virgil::sdk::privatekeys::client::PrivateKeysClient;
+using virgil::sdk::privatekeys::model::UserData;
 
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+const std::string VIRGIL_PK_URL_BASE = "https://keys-private-stg.virgilsecurity.com";
+const std::string VIRGIL_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+const std::string USER_EMAIL = "test-vs@mailinator.com";
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id> <confirmation_code>" << std::endl;
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <new_container_password>" << std::endl;
         return 0;
     }
-    try {
-        const std::string userDataId = argv[1];
-        const std::string confirmationCode = argv[2];
 
-        std::cout << "Confirm user data with id ("<<userDataId <<
-                ") and code (" << confirmationCode << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().confirm(userDataId, confirmationCode);
+    try {
+        const std::string kNewContainerPassword = argv[1];
+
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
+        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+
+        std::cout << "Call the Private Key service to reset a Container password." << std::endl;
+        privateKeysClient.container().resetPassword(UserData::email(USER_EMAIL), kNewContainerPassword);
+        std::cout << "Container password successfully reset." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
 }
