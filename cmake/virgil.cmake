@@ -83,12 +83,14 @@ function (virgil_add_dependency module target includes libraries)
             )
         endif ()
 
-        ExternalProject_Add (${VIRGIL}_project
-            GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil.git"
-            GIT_TAG "v1.0.1"
-            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.crypto"
-            CMAKE_ARGS ${CMAKE_ARGS}
-        )
+        if (NOT TARGET ${VIRGIL}_project)
+            ExternalProject_Add (${VIRGIL}_project
+                GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil.git"
+                GIT_TAG "v1.0.1"
+                PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.crypto"
+                CMAKE_ARGS ${CMAKE_ARGS}
+            )
+        endif ()
 
         # Payload targets and output variables
         ExternalProject_Get_Property (${VIRGIL}_project INSTALL_DIR)
@@ -124,12 +126,14 @@ function (virgil_add_dependency module target includes libraries)
             )
         endif ()
 
-        ExternalProject_Add (${VIRGIL}_project
-            GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-cpp.git"
-            GIT_TAG "virgil-sdk-keys-2.0.1"
-            PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil-cpp"
-            CMAKE_ARGS ${CMAKE_ARGS}
-        )
+        if (NOT TARGET ${VIRGIL}_project)
+            ExternalProject_Add (${VIRGIL}_project
+                GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-cpp.git"
+                GIT_TAG "virgil-sdk-keys-2.0.1"
+                PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil-cpp"
+                CMAKE_ARGS ${CMAKE_ARGS}
+            )
+        endif ()
 
         # Payload targets and output variables
         ExternalProject_Get_Property (${VIRGIL}_project INSTALL_DIR)
