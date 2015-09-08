@@ -45,18 +45,18 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
-    * @brief  Endpoint "/authentication/get-token" to the Virgil Private Keys Service (API).
+    * @brief  Endpoint "/authentication" of the Virgil Private Keys Service API.
     */
     class AuthEndpointBase {
     public:
         /**
-         * @brief Authenticate requests to Virgil’s Private Keys service..
+         * @brief Authenticate requests to Virgil’s Private Keys service.
          *
          * @param userData - added user data.
          * @param containerPassword - represents container password.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void authenticate(const privatekeys::model::UserData& userData,
+        virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& containerPassword) = 0;
     };
 }}}}

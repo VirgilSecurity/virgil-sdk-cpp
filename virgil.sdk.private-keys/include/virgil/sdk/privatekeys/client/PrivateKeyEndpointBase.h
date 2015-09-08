@@ -45,32 +45,33 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
-    * @brief Endpoint "/private-key" to the Virgil Private Keys Service (API).
+    * @brief Endpoint "/private-key" of the Virgil Private Keys Service API.
     */
     class PrivateKeyEndpointBase {
     public:
         /**
-         * @brief Create a Private Key inside the Container Object
-         *  Load an existing Private Key into the Private Keys service and associate it with the
-         *  existing Container object.
+         * @brief Create a Private Key inside the Container Object.
+         *
+         * Load an given Private Key into the Private Keys service and associate it with the existing Container.
          *
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void add(const privatekeys::client::Credentials& credentials, const std::string& uuid) const = 0;
+        virtual void add(const virgil::sdk::privatekeys::client::Credentials& credentials,
+                const std::string& uuid) const = 0;
         /**
          * @brief Get private key by its UUID.
          * @param publicKeyId - public key UUID.
          * @return Private key.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual privatekeys::model::PrivateKey get(const std::string& publicKeyId) const = 0;
+        virtual virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const = 0;
         /**
          * @brief Delete private key associated with given user's credentials.
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual void del(const Credentials &credentials, const std::string& uuid) const = 0;
     };

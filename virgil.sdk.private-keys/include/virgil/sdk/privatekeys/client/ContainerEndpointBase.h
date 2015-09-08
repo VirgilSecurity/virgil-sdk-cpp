@@ -45,7 +45,7 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
-    * @brief Endpoint "/container" to the Virgil Private Keys Service (API).
+    * @brief Endpoint "/container" of the Virgil Private Keys Service API.
     */
     class ContainerEndpointBase {
     public:
@@ -56,54 +56,56 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual void create(const Credentials& credentials,
-                const privatekeys::model::ContainerType& containerType,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword,
                 const std::string& uuid) const = 0;
         /**
          * @brief Get Container Object Data with public key id.
          *
          * @param publicKeyId - public key UUID.
-         * @return - container type.
-         * @throw KeysError if error.
+         * @return Container type.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual privatekeys::model::ContainerType getDetails(const std::string& publicKeyID) const = 0;
+        virtual virgil::sdk::privatekeys::model::ContainerType getDetails(const std::string& publicKeyId) const = 0;
         /**
-         * @brief Update Container object. Update an existing Container object.
-         * Note:
-         * By invoking this method you can change the Container Type or|and Container Password.
+         * @brief Update information of existing Container.
+         *
+         * By invoking this method you can change the Container's Type or/and Container's Password.
          *
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual void update(const Credentials& credentials,
-                const privatekeys::model::ContainerType& containerType,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword, const std::string& uuid) const = 0;
         /**
-         * @brief Reset the Container Password. Reset a user's forgotten Private Key password.
-         * Note:
-         * A user can reset their Private Key object password if the Container Type equals 'easy'. If the Container Type
-         * equals 'normal', the Private Key object will be stored in its original form.
+         * @brief Reset the Container Password.
          *
          * @param userData - added user data.
-         * @param containerPassword - represents new container password.
-         * @throw KeysError if error.
+         * @param newContainerPassword - represents new container password.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note A user can reset their Private Key password if the Container Type equals 'easy'.
+         *     If the Container Type equals 'normal', the Private Key will be stored in its original form.
+         * @see confirm()
          */
-        virtual void resetPassword(const privatekeys::model::UserData& userData,
+        virtual void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& newContainerPassword) const = 0;
         /**
-         * @brief Persist Container object Confirm the password reset action.
-         * Note:
-         * The token generated during the container reset invocation only lives for 60 minutes.
+         * @brief Confirm password token.
          *
          * @param confirmToken - confirm the password token.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note The token generated during the container reset password invocation only lives for 60 minutes.
+         * @see resetPassword()
          */
         virtual void confirm(const std::string& confirmToken, const std::string& uuid) const = 0;
         /**
@@ -111,7 +113,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          *
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
-         * @throw KeysError if error.
+         * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
     };

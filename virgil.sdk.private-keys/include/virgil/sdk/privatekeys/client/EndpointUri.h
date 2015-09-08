@@ -46,7 +46,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
      */
     class EndpointUri {
     public:
-        enum class Version { V2 };
+        /**
+         * @brief Enumerate supported API versions.
+         */
+        enum class Version {
+            V2 /*!< Virgil Private Key Service API version 2 */
+        };
     public:
         /**
          * @name Configuration
@@ -69,8 +74,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @name Authentication management.
          */
         //@{
-
-        std::string updateSession() const;
+        /**
+         * @brief Return endpoint that authenticate user and provide correspond token.
+         */
+        std::string getAuthToken() const;
         //@}
 
         /**
@@ -85,7 +92,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @brief Return endpoint that get Container Object Data with public key id.
          * @param publicKeyId - public key UUID.
          */
-        std::string getContainerDetails(const std::string& publicKeyID) const;
+        std::string getContainerDetails(const std::string& publicKeyId) const;
         /**
          * @brief Return endpoint that udpdate container information.
          */
@@ -113,10 +120,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         std::string addPrivateKey() const;
         /**
-         * @brief Return endpoint that extract private key by its UUID.
+         * @brief Return endpoint that extract private key by correspond public key UUID.
          * @param publicKeyId - public key UUID.
          */
-        std::string getPrivateKey(const std::string& publicKeyID) const;
+        std::string getPrivateKey(const std::string& publicKeyId) const;
         /**
          * @brief Return endpoint that delete private key.
          */

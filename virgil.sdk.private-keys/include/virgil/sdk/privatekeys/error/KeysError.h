@@ -45,10 +45,10 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace error {
     /**
-     * @brief Virgil Public Key service exception.
+     * @brief Virgil Private Keys service exception.
      *
-     * This class defines the type of objects thrown as exceptions
-     *     to report errors that occurs during Virgil Keys Service communication.
+     * This class defines the type of object thrown as exception
+     *     to report errors that occurs during Virgil Private Keys Service communication.
      */
     class KeysError final : public std::runtime_error {
     public:
@@ -60,12 +60,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace error {
          * @brief Defines which action trigger an error.
          */
         enum class Action {
-            AUTHENTICATION_SESSION,
+            GET_AUTH_TOKEN,
             CREATE_CONTAINER,
             GET_CONTAINER_DETAILS,
             UPDATE_CONTAINER_INFORMATION,
             RESET_CONTAINER_PASSWORD,
-            CONFIRM_TOKEN,
+            CONFIRM_OPERATION,
             DELETE_CONTAINER,
             ADD_PRIVATE_KEY,
             GET_PRIVATE_KEY,
@@ -75,7 +75,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace error {
          * @brief Initialize exception.
          * @param action - defines which action trigger an error.
          * @param statusCode - HTTP response status code.
-         * @param errorCode - specific Virgil Public Key service error code.
+         * @param errorCode - specific Virgil Private Keys service error code.
          */
         KeysError(KeysError::Action action, virgil::sdk::privatekeys::http::Response::StatusCode statusCode,
                 unsigned int errorCode = kUndefinedErrorCode);

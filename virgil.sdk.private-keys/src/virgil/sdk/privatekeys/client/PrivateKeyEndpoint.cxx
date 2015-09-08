@@ -65,14 +65,14 @@ using virgil::sdk::privatekeys::util::JsonKey;
 PrivateKeyEndpoint::PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
         : connection_(connection) {
     if (!connection_) {
-        throw std::logic_error("PublicKeyClient: ConnectionBase is not defined.");
+        throw std::logic_error("PrivateKeyEndpoint: connection is not defined.");
     }
 }
 
 void PrivateKeyEndpoint::add(const Credentials &credentials, const std::string& uuid) const {
     std::string encodePrivateKey = VirgilBase64::encode(credentials.privateKey());
     json payload = {
-        {JsonKey::privateKey, encodePrivateKey},
+        { JsonKey::privateKey, encodePrivateKey },
         { JsonKey::requestSignUuid, uuid}
     };
 
@@ -87,7 +87,7 @@ PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId) const {
     connection_->checkResponseError(response, KeysError::Action::GET_PRIVATE_KEY);
 
     json responseTypeJson = json::parse(response.body());
-    std::string responsePublicKeyId = responseTypeJson[JsonKey::publicKeyID];
+    std::string responsePublicKeyId = responseTypeJson[JsonKey::publicKeyId];
     std::string responsePrivateKey = responseTypeJson[JsonKey::privateKey];
 
     PrivateKey privateKey;

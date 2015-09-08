@@ -49,7 +49,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
      * @brief Specific HTTP layer for Virgil Public Keys service.
      */
-    class KeysClientConnection : public privatekeys::http::Connection {
+    class KeysClientConnection : public virgil::sdk::privatekeys::http::Connection {
     public:
         /**
          * @brief Configure connection application specific token and with base address URI.
@@ -66,12 +66,18 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         std::string baseAddress() const;
         /**
+         * @brief Update authentication token for current session.
+         * @param authToken - authentication token.
+         */
+        void updateSession(const std::string& authToken);
+        /**
          * @brief Send synchronous request.
          * @param request - request to be send.
          * @throw std::logic_error - if given parameters are inconsistent.
          * @throw std::runtime_error - if error was occured when send request.
          */
-        virtual privatekeys::http::Response send(const virgil::sdk::privatekeys::http::Request& request) override;
+        virtual virgil::sdk::privatekeys::http::Response send(
+                const virgil::sdk::privatekeys::http::Request& request) override;
         /**
          * @brief Send synchronous request.
          * @param request - request to be send.
@@ -79,21 +85,16 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @throw std::logic_error - if given parameters are inconsistent or invalid.
          * @throw std::runtime_error - if error was occured when send request.
          */
-        virtual privatekeys::http::Response send(const virgil::sdk::privatekeys::http::Request& request,
-                const Credentials& credentials);
+        virtual virgil::sdk::privatekeys::http::Response send(
+                const virgil::sdk::privatekeys::http::Request& request, const Credentials& credentials);
         /**
          * @brief Check response for errors.
          * @param response - HTTP response to check.
          * @param action - service action that create given response.
-         * @throw KeysError, if HTTP response contains error description.
+         * @throw KeysError - if HTTP response contains error description.
          */
-        virtual void checkResponseError(const privatekeys::http::Response& response,
-                privatekeys::error::KeysError::Action action);
-
-
-        void updateSession(const std::string& authToken);
-
-
+        virtual void checkResponseError(const virgil::sdk::privatekeys::http::Response& response,
+                virgil::sdk::privatekeys::error::KeysError::Action action);
     private:
         std::string appToken_;
         std::string authToken_;

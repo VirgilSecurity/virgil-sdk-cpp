@@ -41,12 +41,20 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace model {
 
-enum class ContainerType { Easy, Normal };
+/**
+ * @brief Enumerete supported types of the Virgil Private Keys Service Container.
+ */
+enum class ContainerType {
+    Easy, /*!< Private Key is encrypted with Container's passowrd */
+    Normal /*!< Private Key is encrypted with individual passowrd  */
+};
 
+/**
+ * @brief Return string representation of the given Container type.
+ */
 inline std::string toString(const ContainerType& containerType) {
     return containerType == ContainerType::Easy ? "easy" : "normal";
 }
-
 
 }}}}
 

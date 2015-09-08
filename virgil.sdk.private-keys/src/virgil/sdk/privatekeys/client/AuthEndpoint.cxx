@@ -60,7 +60,7 @@ using virgil::sdk::privatekeys::util::JsonKey;
 AuthEndpoint::AuthEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
         : connection_(connection) {
     if (!connection_) {
-        throw std::logic_error("ContainerClient: ConnectionBase is not defined.");
+        throw std::logic_error("AuthEndpoint: connection is not defined.");
     }
 }
 
@@ -73,9 +73,9 @@ void AuthEndpoint::authenticate(const UserData& userData, const std::string& con
         {JsonKey::value, userData.value()}
     };
 
-    Request request = Request().endpoint(EndpointUri::v2().updateSession()).post().body(payload.dump());
+    Request request = Request().endpoint(EndpointUri::v2().getAuthToken()).post().body(payload.dump());
     Response response = connection_->send(request);
-    connection_->checkResponseError(response, KeysError::Action::AUTHENTICATION_SESSION);
+    connection_->checkResponseError(response, KeysError::Action::GET_AUTH_TOKEN);
 
     json authTokenJson = json::parse(response.body());
     std::string authToken = authTokenJson[JsonKey::authToken];

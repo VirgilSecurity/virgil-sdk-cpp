@@ -49,7 +49,7 @@ using virgil::sdk::privatekeys::client::PrivateKeyEndpointBase;
 using virgil::sdk::privatekeys::client::PrivateKeyEndpoint;
 
 
-const std::string PrivateKeysClient::kBaseAddressDefault = "https://keys-private-stg.virgilsecurity.com";
+const std::string PrivateKeysClient::kBaseAddressDefault = "https://keys-private.virgilsecurity.com";
 
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {

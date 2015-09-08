@@ -70,7 +70,7 @@ const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
 
 
 KeysClientConnection::KeysClientConnection(const std::string& appToken, const std::string& baseAddress)
-        : appToken_(appToken), baseAddress_(baseAddress) {
+        : appToken_(appToken), authToken_(), baseAddress_(baseAddress) {
     if (!baseAddress_.empty() && baseAddress_.back() == '/') {
         baseAddress_.pop_back();
     }
@@ -82,6 +82,11 @@ std::string KeysClientConnection::appToken() const {
 
 std::string KeysClientConnection::baseAddress() const {
     return baseAddress_;
+}
+
+
+void KeysClientConnection::updateSession(const std::string& authToken) {
+    authToken_ = authToken;
 }
 
 Response KeysClientConnection::send(const Request& request) {
@@ -124,8 +129,4 @@ void KeysClientConnection::checkResponseError(const Response& response, KeysErro
         }
         throw KeysError(action, response.statusCode(), errorCode);
     }
-}
-
-void KeysClientConnection::updateSession(const std::string& authToken) {
-    authToken_ = authToken;
 }

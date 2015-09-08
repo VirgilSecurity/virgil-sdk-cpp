@@ -35,7 +35,7 @@
  */
 
 #ifndef VIRGIL_SDK_PRIVATE_KEYS_CONTAINER_ENDPOINT_H
-#define VIRGIL_SDK_PRIVATE_KEYS_CONTAINER_CLIENT_H
+#define VIRGIL_SDK_PRIVATE_KEYS_CONTAINER_ENDPOINT_H
 
 #include <memory>
 
@@ -49,8 +49,9 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class ContainerEndpoint final : public ContainerEndpointBase {
     public:
         /**
-         * @brief Initialize client with HTTP layer connection.
-         * @throw logic_error if invalid connection.
+         * @brief Initialize with HTTP layer connection.
+         * @param connection - HTTP layer connection.
+         * @throw std::logic_error - if connection is invalid.
          */
         explicit ContainerEndpoint(const std::shared_ptr<KeysClientConnection>& connection);
 
@@ -59,21 +60,16 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         //@{
         void create(const Credentials& credentials,
-                const privatekeys::model::ContainerType& containerType,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword,
                 const std::string& uuid) const override;
-
-        privatekeys::model::ContainerType getDetails(const std::string& publicKeyID) const override;
-
+        virgil::sdk::privatekeys::model::ContainerType getDetails(const std::string& publicKeyId) const override;
         void update(const Credentials& credentials,
-                const privatekeys::model::ContainerType& containerType,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword, const std::string& uuid) const override;
-
-        void resetPassword(const privatekeys::model::UserData& userData,
+        void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& newContainerPassword) const override;
-
         void confirm(const std::string& confirmToken, const std::string& uuid) const override;
-
         void del(const Credentials& credentials, const std::string& uuid) const override;
         //@}
     private:

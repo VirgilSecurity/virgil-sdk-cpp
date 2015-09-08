@@ -57,7 +57,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace util {
         static const std::string containerType; /*!< container type. */
         static const std::string requestSignUuid; /*!< request sign uuid. */
         static const std::string confirmToken; /*!< the confirmation token. */
-        static const std::string publicKeyID; /*!< Json key for the user public key id. */
+        static const std::string publicKeyId; /*!< Json key for the user public key id. */
         static const std::string privateKey; /*!< Json key for the user private key. */
     private:
         JsonKey();

@@ -60,7 +60,7 @@ using virgil::sdk::privatekeys::util::JsonKey;
 ContainerEndpoint::ContainerEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
         : connection_(connection) {
     if (!connection_) {
-        throw std::logic_error("ContainerClient: ConnectionBase is not defined.");
+        throw std::logic_error("ContainerEndpoint: connection is not defined.");
     }
 }
 
@@ -77,8 +77,8 @@ void ContainerEndpoint::create(const Credentials& credentials, const ContainerTy
         connection_->checkResponseError(response, KeysError::Action::CREATE_CONTAINER);
 }
 
-ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyID) const {
-    Request request = Request().endpoint(EndpointUri::v2().getContainerDetails(publicKeyID)).get();
+ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyId) const {
+    Request request = Request().endpoint(EndpointUri::v2().getContainerDetails(publicKeyId)).get();
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::GET_CONTAINER_DETAILS);
 
@@ -123,7 +123,7 @@ void ContainerEndpoint::confirm(const std::string& confirmToken, const std::stri
 
     Request request = Request().endpoint(EndpointUri::v2().confirmToken()).put().body(payload.dump());
     Response response = connection_->send(request);
-    connection_->checkResponseError(response, KeysError::Action::CONFIRM_TOKEN);
+    connection_->checkResponseError(response, KeysError::Action::CONFIRM_OPERATION);
 }
 
 void ContainerEndpoint::del(const Credentials& credentials, const std::string& uuid) const {

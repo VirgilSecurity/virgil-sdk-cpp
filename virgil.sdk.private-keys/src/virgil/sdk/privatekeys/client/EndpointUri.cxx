@@ -49,7 +49,7 @@ EndpointUri::Version EndpointUri::version() const {
     return version_;
 }
 
-std::string EndpointUri::updateSession() const {
+std::string EndpointUri::getAuthToken() const {
     return addVersion("/authentication/get-token");
 }
 
@@ -57,8 +57,8 @@ std::string EndpointUri::createContainer() const {
     return addVersion("/container");
 }
 
-std::string EndpointUri::getContainerDetails(const std::string& publicKeyID) const {
-    return addVersion("/container/public-key-id/" + publicKeyID);
+std::string EndpointUri::getContainerDetails(const std::string& publicKeyId) const {
+    return addVersion("/container/public-key-id/" + publicKeyId);
 }
 
 std::string EndpointUri::updateContainerInformation() const {
@@ -81,8 +81,8 @@ std::string EndpointUri::addPrivateKey() const {
     return addVersion("/private-key");
 }
 
-std::string EndpointUri::getPrivateKey(const std::string& publicKeyID) const {
-    return addVersion("/private-key/public-key-id/" + publicKeyID);
+std::string EndpointUri::getPrivateKey(const std::string& publicKeyId) const {
+    return addVersion("/private-key/public-key-id/" + publicKeyId);
 }
 
 std::string EndpointUri::deletePrivateKey() const {

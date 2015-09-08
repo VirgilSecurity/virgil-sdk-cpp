@@ -50,18 +50,18 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class PrivateKeyEndpoint final : public PrivateKeyEndpointBase {
     public:
         /**
-         * @brief Initialize client with HTTP layer connection.
-         * @throw logic_error if invalid connection.
+         * @brief Initialize with HTTP layer connection.
+         * @param connection - HTTP layer connection.
+         * @throw std::logic_error - if connection is invalid.
          */
         explicit PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnection>& connection);
         /**
          * @name Base class implementation
          */
         //@{
-        void add(const privatekeys::client::Credentials& credentials, const std::string& uuid) const override;
-
+        void add(const virgil::sdk::privatekeys::client::Credentials& credentials,
+                const std::string& uuid) const override;
         virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const override;
-
         void del(const Credentials &credentials, const std::string& uuid) const override;
         //@}
     private:

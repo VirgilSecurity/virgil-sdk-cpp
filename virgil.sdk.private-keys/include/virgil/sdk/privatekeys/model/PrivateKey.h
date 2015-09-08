@@ -42,26 +42,27 @@
 
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace model {
-
+    /**
+     * @brief Data object represent "Virgil Private Key" entity.
+     */
     class PrivateKey {
     public:
         /**
-         * @brief Set public key UUID.
+         * @brief Set public key UUID, that is related to correspond private key.
          */
         PrivateKey& publicKeyId (const std::string& publicKeyId);
         /**
-         * @brief Get public key UUID.
+         * @brief Get public key UUID, that is related to correspond private key.
          */
         std::string publicKeyId () const;
         /**
-         * @brief Set public key.
+         * @brief Set private key.
          */
         PrivateKey& key(const std::vector<unsigned char> key);
         /**
-         * @brief Get public key.
+         * @brief Get private key.
          */
         std::vector<unsigned char> key() const;
-
     private:
         std::string publicKeyId_;
         std::vector<unsigned char> key_;

@@ -45,7 +45,7 @@
 
 using virgil::sdk::privatekeys::client::PrivateKeysClient;
 
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private-stg.virgilsecurity.com";
+const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
 const std::string VIRGIL_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
 
 /**

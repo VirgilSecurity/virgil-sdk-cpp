@@ -54,7 +54,7 @@ class Connection {
          * @throw std::logic_error - if given parameters are inconsistent.
          * @throw std::runtime_error - if error was occured when send request.
          */
-        virtual privatekeys::http::Response send(const privatekeys::http::Request& request);
+        virtual virgil::sdk::privatekeys::http::Response send(const virgil::sdk::privatekeys::http::Request& request);
     };
 
 }}}}

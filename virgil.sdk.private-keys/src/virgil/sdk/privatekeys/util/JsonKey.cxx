@@ -50,5 +50,5 @@ const std::string JsonKey::errorCode = "code";
 const std::string JsonKey::containerType = "container_type";
 const std::string JsonKey::requestSignUuid = "request_sign_uuid";
 const std::string JsonKey::confirmToken = "token";
-const std::string JsonKey::publicKeyID = "public_key_id";
+const std::string JsonKey::publicKeyId = "public_key_id";
 const std::string JsonKey::privateKey = "private_key";

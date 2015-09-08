@@ -57,7 +57,7 @@ using virgil::sdk::keys::client::KeysClient;
 
 static const std::string VIRGIL_PKI_URL_BASE = "https://keys-stg.virgilsecurity.com/";
 static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
-static const std::string SIGNER_EMAIL = "test-vs@mailinator.com";
+static const std::string SIGNER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 int main() {
     try {

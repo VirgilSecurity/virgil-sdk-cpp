@@ -55,11 +55,13 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class PrivateKeysClient final : public PrivateKeysClientBase {
     public:
         /**
-         * @brief Default API base address URI, i.e. https://keys-stg.virgilsecurity.com/
+         * @brief Default API base address URI, i.e. https://keys.virgilsecurity.com/
          */
         static const std::string kBaseAddressDefault;
         /**
-         * @brief Initialize with appropriate connection.
+         * @brief Initialize with HTTP layer connection.
+         * @param connection - HTTP layer connection.
+         * @throw std::logic_error - if connection is invalid.
          */
         explicit PrivateKeysClient(const std::shared_ptr<KeysClientConnection>& connection);
         /**

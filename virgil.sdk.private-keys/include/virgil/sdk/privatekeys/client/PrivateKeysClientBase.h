@@ -46,20 +46,20 @@
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
-     * @brief Entrypoint for interacting with Virgil Private Keys Service (PKI).
+     * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
      */
     class PrivateKeysClientBase {
     public:
         /**
-         * @brief Return "Authentication" entrypoint.
+         * @brief Return "Authentication" endpoint§.
          */
         virtual AuthEndpointBase& auth() = 0;
         /**
-         * @brief Return "Container" entrypoint.
+         * @brief Return "Container" endpoint§.
          */
         virtual ContainerEndpointBase& container() = 0;
         /**
-         * @brief Return "Private Key" entrypoint.
+         * @brief Return "Private Key" endpoint§.
          */
         virtual PrivateKeyEndpointBase& privateKey() = 0;
     };
