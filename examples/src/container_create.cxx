@@ -62,7 +62,7 @@ using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::model::ContainerType;
 
 const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 const ContainerType CONTAINER_TYPE = ContainerType::Normal;
 const std::string CONTAINER_PASSWORD = "123456789";
 
