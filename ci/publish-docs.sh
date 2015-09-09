@@ -83,7 +83,7 @@ fix_html_source_file_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
 
 # Generate root HTML file
 function get_dir_names {
-    local DIRS=`find -type d -maxdepth 1 -name "$1" "$2"`
+    local DIRS=`find "$1" -maxdepth 1 -type d -name "$2"`
     local DIR_NAMES=()
     for dir in ${DIRS}; do
         DIR_NAMES+=("${dir#${1}/}")
