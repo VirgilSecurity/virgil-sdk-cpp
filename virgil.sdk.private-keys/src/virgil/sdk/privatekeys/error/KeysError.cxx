@@ -42,6 +42,8 @@
 using virgil::sdk::privatekeys::error::KeysError;
 using virgil::sdk::privatekeys::http::Response;
 
+const unsigned int KeysError::kUndefinedErrorCode;
+
 KeysError::KeysError(KeysError::Action action, Response::StatusCode statusCode,
         unsigned int errorCode)
         : runtime_error(formatMessage(action, statusCode, errorCode)) {
