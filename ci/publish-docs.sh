@@ -51,10 +51,6 @@ rm -rf ${HTML_PATH_DST}
 mkdir -p ${HTML_PATH_DST}
 git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
-# Generate the HTML documentation.
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}" && make doc-sdk-public-keys doc-sdk-private-keys
-cd -
-
 # Define SDK versions
 PUBLIC_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
 PRIVATE_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.private-keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
