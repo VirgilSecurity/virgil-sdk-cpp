@@ -37,7 +37,7 @@
 
 set -ev
 
-if [ "${PUBLISH_DOCS}" != "ON" ]; then exit; fi
+if [ "${PUBLISH_DOCS}" != "ON" ] || if [ "${TRAVIS_BRANCH}" != "${DOC_BRANCH}" ]; then exit; fi
 
 # Settings
 REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
@@ -87,7 +87,7 @@ fix_html_source_file_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
 
 # Generate root HTML file
 function get_dir_names {
-    local DIRS=`find "$1" -type d -maxdepth 1 -name "$2"`
+    local DIRS=`find -type d -maxdepth 1 -name "$1" "$2"`
     local DIR_NAMES=()
     for dir in ${DIRS}; do
         DIR_NAMES+=("${dir#${1}/}")
