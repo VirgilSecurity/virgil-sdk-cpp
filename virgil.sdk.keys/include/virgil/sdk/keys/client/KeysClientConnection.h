@@ -83,7 +83,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Check response for errors.
          * @param response - HTTP response to check.
          * @param action - service action that create given response.
-         * @throw KeysError, if HTTP response contains error description.
+         * @throw KeysError - if HTTP response contains error description.
          */
         virtual void checkResponseError(const virgil::sdk::keys::http::Response& response,
                 virgil::sdk::keys::error::KeysError::Action action);
