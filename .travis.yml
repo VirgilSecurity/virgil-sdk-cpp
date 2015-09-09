@@ -10,6 +10,7 @@ env:
     - DOC_BRANCH=release
   matrix:
     - BUILD_MODULE_NAME=VIRGIL_SDK_KEYS
+    - BUILD_MODULE_NAME=VIRGIL_SDK_PRIVATE_KEYS
     - BUILD_MODULE_NAME=VIRGIL_EXAMPLES
 cache:
   directories:
