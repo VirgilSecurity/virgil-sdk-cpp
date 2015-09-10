@@ -36,43 +36,47 @@
 
 # Dependecy to https://github.com/anuragsoni/restless
 
-# Define CMake variables
-set (CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-    -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-    -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
-)
-
-if (CMAKE_PREFIX_PATH)
-    list (APPEND CMAKE_ARGS
-        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+if (NOT TARGET project_rest)
+    # Define CMake variables
+    set (CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+        -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
     )
-endif (CMAKE_PREFIX_PATH)
 
-# Configure external project
-ExternalProject_Add (project_rest
-    GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
-    GIT_TAG "http-del-with-body"
-    GIT_SUBMODULES "ext/curl"
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/rest"
-    CMAKE_ARGS ${CMAKE_ARGS}
-)
+    if (CMAKE_PREFIX_PATH)
+        list (APPEND CMAKE_ARGS
+            -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
+        )
+    endif (CMAKE_PREFIX_PATH)
+
+    # Configure external project
+    ExternalProject_Add (project_rest
+        GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
+        GIT_TAG "http-del-with-body"
+        GIT_SUBMODULES "ext/curl"
+        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/rest"
+        CMAKE_ARGS ${CMAKE_ARGS}
+    )
+endif ()
 
 # Define output
 ExternalProject_Get_Property (project_rest INSTALL_DIR)
 
 set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-set (REST_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/rest/src/project_rest/include")
+set (REST_INCLUDE_DIRS "${INSTALL_DIR}/src/project_rest/include")
 set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
 set (REST_LIBRARIES "${REST_LIBRARY}" "${CURL_LIBRARIES}")
 
 # Workaround of http://public.kitware.com/Bug/view.php?id=14495
 file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
 
-# Make target
-add_library (rest STATIC IMPORTED)
-set_target_properties (rest PROPERTIES
-    IMPORTED_LOCATION ${REST_LIBRARY}
-    INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
-)
-add_dependencies (rest project_rest)
+if (NOT TARGET rest)
+    # Make target
+    add_library (rest STATIC IMPORTED)
+    set_target_properties (rest PROPERTIES
+        IMPORTED_LOCATION ${REST_LIBRARY}
+        INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
+    )
+    add_dependencies (rest project_rest)
+endif ()
