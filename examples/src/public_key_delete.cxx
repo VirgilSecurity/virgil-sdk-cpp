@@ -59,7 +59,7 @@ using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::io::Marshaller;
 
 static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "5cb9c07669b6a941d3f01b767ff5af84";
+static const std::string VIRGIL_PKI_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 
 /**
  * @brief Generate new UUID

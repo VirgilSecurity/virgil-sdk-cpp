@@ -35,10 +35,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+set -ev
+
+if [ "${PUBLISH_DOCS}" != "ON" ] || [ "${TRAVIS_BRANCH}" != "${DOC_BRANCH}" ]; then exit; fi
+
 # Settings
 REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
-HTML_PATH_SRC="${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html"
-HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/virgil.sdk.keys/docs/html"
+HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/docs/html"
 COMMIT_USER="Travis CI documentation builder."
 COMMIT_EMAIL="sergey.seroshtan@gmail.com"
 CHANGESET=$(git rev-parse --verify HEAD)
@@ -48,18 +51,77 @@ rm -rf ${HTML_PATH_DST}
 mkdir -p ${HTML_PATH_DST}
 git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
-# rm all the files through git to prevent stale files.
-cd ${HTML_PATH_DST}
-git rm -rf .
-cd -
+# Define SDK versions
+PUBLIC_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
+PRIVATE_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.private-keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
 
-# Generate the HTML documentation.
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
-make doc
-cd -
+PUBLIC_KEYS_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk-keys/${PUBLIC_KEYS_SDK_VERSION}"
+PRIVATE_KEYS_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk-private-keys/${PRIVATE_KEYS_SDK_VERSION}"
+
+# Prepare destination folders
+rm -fr "${PUBLIC_KEYS_SDK_HTML_PATH_DST}" && mkdir -p "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
+rm -fr "${PRIVATE_KEYS_SDK_HTML_PATH_DST}" && mkdir -p "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
 
 # Copy new documentation
-cp -af "${HTML_PATH_SRC}/." "${HTML_PATH_DST}/"
+cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html/." "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
+cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk.private-keys/docs/html/." "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
+
+# Fix source file names
+function fix_html_source_file_names {
+    cd "${1}"
+    for f in _*.html; do
+        old_name=$f
+        new_name=${f/${f:0:1}/}
+        mv $old_name $new_name
+        sed -i"" "s/$old_name/$new_name/g" *.html
+    done
+    cd -
+}
+
+fix_html_source_file_names "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
+fix_html_source_file_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
+
+# Generate root HTML file
+function get_dir_names {
+    local DIRS=`find "$1" -maxdepth 1 -type d -name "$2"`
+    local DIR_NAMES=()
+    for dir in ${DIRS}; do
+        DIR_NAMES+=("${dir#${1}/}")
+    done
+    echo ${DIR_NAMES[*]}
+}
+
+cat >"${HTML_PATH_DST}/index.html" <<EOL
+<!DOCTYPE HTML>
+<html>
+   <head>
+        <meta charset="utf-8">
+        <title>Virgil SDK Documentation</title>
+   </head>
+   <body>
+        Virgil Public Keys SDK
+        <ul>
+EOL
+
+for dir in `get_dir_names "${PUBLIC_KEYS_SDK_HTML_PATH_DST}/.." "v*"`; do
+    echo "<li><p><a href=\"sdk-keys/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
+done
+
+cat >>"${HTML_PATH_DST}/index.html" <<EOL
+        </ul>
+        Virgil Private Keys SDK
+        <ul>
+EOL
+
+for dir in `get_dir_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}/.." "v*"`; do
+    echo "<li><p><a href=\"sdk-private-keys/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
+done
+
+cat >>"${HTML_PATH_DST}/index.html" <<EOL
+        </ul>
+   </body>
+</html>
+EOL
 
 # Create and commit the documentation repo.
 cd ${HTML_PATH_DST}

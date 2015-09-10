@@ -38,6 +38,11 @@
 set -ev
 
 cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
-make -j2 VERBOSE=1
-make test
-make install
+
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    make doc-sdk-public-keys doc-sdk-private-keys
+else
+    make -j2 VERBOSE=1
+    make test
+    make install
+fi

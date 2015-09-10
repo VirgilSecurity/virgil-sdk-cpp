@@ -48,7 +48,7 @@ set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SD
 # Set library version
 set (VIRGIL_SDK_KEYS_VERSION_MAJOR 2)
 set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 1)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 2)
 set (VIRGIL_SDK_KEYS_VERSION
     ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
 )
@@ -60,10 +60,10 @@ include_directories ("include")
 # Add external dependencies
 include (ExternalProject)
 
-include ("ext/json_ext.cmake")
+include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/json.cmake")
 include_directories (${JSON_INCLUDE_DIRS})
 
-include ("ext/rest_ext.cmake")
+include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/rest.cmake")
 include_directories (${REST_INCLUDE_DIRS})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
@@ -118,7 +118,7 @@ endif (DOT_PROGRAM)
 
 if(DOXYGEN_FOUND)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target (doc
+    add_custom_target ("doc-sdk-public-keys"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs
         COMMENT "Generating API documentation with Doxygen" VERBATIM

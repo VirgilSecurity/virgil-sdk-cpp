@@ -5,12 +5,13 @@
 - [Usage examples](#usage-examples)
     - [General statements](#general-statements)
     - [Example 1: Generate keys](#example-1)
-    - [Example 2: Add user's public key](#example-2)
-    - [Example 3: Get user's public key](#example-3)
-    - [Example 4: Encrypt data](#example-4)
-    - [Example 5: Decrypt data](#example-5)
+    - [Example 2: Register user](#example-2)
+    - [Example 3: Store private key](#example-3)
+    - [Example 4: Get user's public key](#example-4)
+    - [Example 5: Encrypt data](#example-5)
     - [Example 6: Sign data](#example-6)
     - [Example 7: Verify data](#example-7)
+    - [Example 8: Decrypt data](#example-8)
 - [See also](#see-also)
 - [License](#license)
 - [Contacts](#contacts)
@@ -44,6 +45,7 @@ This section describes common case library usage scenarios, like
 Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-cpp/tree/master/examples) in public access.
 
 ### <a name="example-1"></a> Example 1: Generate keys
+
 Working with Virgil Security Services it is requires the creation of both a public key and a private key. The public key can be made public to anyone using the Virgil Public Keys Service while the private key must be known only to the party or parties who will decrypt the data encrypted with the public key.
 
 > __Private keys should never be stored verbatim or in plain text on the local computer.__<br>
@@ -78,7 +80,31 @@ KeysClient keysClient("{Application Token}");
 keysClient.userData().confirm(userDataId, confirmationCode);
 ```
 
-### <a name="example-3"></a> Example 3: Get user's public key
+### <a name="example-3"></a> Example 3: Store private key
+
+This example shows how to store private keys on Virgil Private Keys service using SDK, this step is optional and you can use your own secure storage.
+
+``` {.cpp}
+// Create client
+PrivateKeysClient privateKeysClient("{Application Token}");
+
+// Prepare parameters
+Credentials credentials(publicKey.publicKeyId(), privateKey);
+auto containerType = ContainerType::Easy; // ContainerType::Normal
+auto containerPassword = "12345678";
+
+// Create container for private keys storage.
+privateKeysClient.container().create(credentials, containerType, containerPassword, "{random generated UUID}");
+
+// Authenticate user with email and password
+UserData userData = UserData::email("{User's email}");
+privateKeysClient.auth().authenticate(userData, containerPassword);
+
+// Push private key to the container.
+privateKeysClient.privateKey().add(credentials, "{random generated UUID}");
+```
+
+### <a name="example-4"></a> Example 4: Get user's public key
 
 Get public key from Public Keys Service.
 
@@ -87,7 +113,7 @@ KeysClient keysClient("{Application Token}");
 PublicKey publicKey = keysClient.publicKey().grab("mail@server.com");
 ```
 
-### <a name="example-4"></a> Example 4: Encrypt data
+### <a name="example-5"></a> Example 5: Encrypt data
 
 The procedure for encrypting and decrypting documents is straightforward with this mental model. For example: if you want to encrypt the data to Bob, you encrypt it using Bobs's public key which you can get from Public Keys Service, and he decrypts it with his private key. If Bob wants to encrypt data to you, he encrypts it using your public key, and you decrypt it with your private key.
 
@@ -97,14 +123,6 @@ In code example below data encrypted with public key previously loaded from Virg
 VirgilCipher cipher;
 cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 VirgilByteArray encryptedData = cipher.encrypt(virgil::crypto::str2bytes("Data to be encrypted."), true);
-```
-
-### <a name="example-5"></a> Example 5: Decrypt data
-
-The following example illustrates the decryption of encrypted data by public key.
-
-``` {.cpp}
-VirgilByteArray decryptedData = cipher.decrypt(encryptedData, publicKey.publicKeyId(), privateKey);
 ```
 
 ### <a name="example-6"></a> Example 6: Sign data
@@ -133,8 +151,16 @@ The following example verifies a digital signature which was signed by sender.
 bool verified = signer.verify(data, sign, publicKey.key());
 ```
 
+### <a name="example-8"></a> Example 8: Decrypt data
+
+The following example illustrates the decryption of encrypted data by public key.
+
+``` {.cpp}
+VirgilByteArray decryptedData = cipher.decrypt(encryptedData, publicKey.publicKeyId(), privateKey);
+```
+
 ## See also
-* [Virgil Security Keys SDK API](http://virgilsecurity.github.io/virgil-cpp/)
+* [Virgil Security SDKs API](http://virgilsecurity.github.io/virgil-cpp/)
 
 ## License
 BSD 3-Clause. See [LICENSE](https://github.com/VirgilSecurity/virgil/blob/master/LICENSE) for details.

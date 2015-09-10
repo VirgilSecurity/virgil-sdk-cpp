@@ -36,11 +36,11 @@
 #
 
 set -ev
-if [ ! -d "$HOME/cmake/cmake-3.2.2-Linux-x86_64" ]; then
-  cd $HOME/cmake
-  wget http://www.cmake.org/files/v3.2/cmake-3.2.2-Linux-x86_64.tar.gz
-  tar -xzvf cmake-3.2.2-Linux-x86_64.tar.gz 
+if [ ! -d "$HOME/cmake/bin" ]; then
+    wget http://www.cmake.org/files/v3.2/cmake-3.2.2-Linux-x86_64.tar.gz
+    tar -xzf cmake-3.2.2-Linux-x86_64.tar.gz
+    cp -fa cmake-3.2.2-Linux-x86_64/. $HOME/cmake/
 else
-  echo 'Using cached directory.';
+    echo "Using CMake cached directory."
 fi
 

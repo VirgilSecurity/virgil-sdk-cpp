@@ -43,7 +43,7 @@ namespace virgil { namespace sdk { namespace keys { namespace io {
     /**
      * @brief This class responsible for the data object marshalling.
      *
-     * Supported classes: model::Account, model::PublicKey, model::UserData.
+     * Supported classes: model::PublicKey, model::UserData.
      */
     template <typename T>
     class Marshaller {

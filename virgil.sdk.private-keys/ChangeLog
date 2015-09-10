@@ -1,0 +1,6 @@
+Virgil Security Private Keys SDK ChangeLog (Sorted per date)
+
+= Version 1.0.0 released 2015-09-10
+
+Features:
+  * Implement first version that conforms Virgil Security Private Keys Service API v2.

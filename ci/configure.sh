@@ -38,7 +38,11 @@
 set -ev
 
 # Configure CMake arguments
-CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=install -DVIRGIL_SDK_KEYS=ON -DENABLE_TESTING=ON"
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    CMAKE_ARGS="-DVIRGIL_SDK_KEYS=ON -DVIRGIL_SDK_PRIVATE_KEYS=ON"
+else
+    CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=install -D${BUILD_MODULE_NAME}=ON -DENABLE_TESTING=ON"
+fi
 
 # Run CMake
 cd "${TRAVIS_BUILD_DIR}"
@@ -48,5 +52,12 @@ fi
 mkdir "${BUILD_DIR_NAME}"
 cd "${BUILD_DIR_NAME}"
 
-$HOME/cmake/cmake-3.2.2-Linux-x86_64/bin/cmake --version
-$HOME/cmake/cmake-3.2.2-Linux-x86_64/bin/cmake ${CMAKE_ARGS} ..
+export PATH=$HOME/cmake/bin:$PATH
+cmake --version
+
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    export PATH=$HOME/doxygen/bin:$PATH
+    doxygen --version
+fi
+
+cmake ${CMAKE_ARGS} ..

@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright (C) 2015 Virgil Security Inc.
 #
@@ -34,27 +35,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Dependecy to https://github.com/nlohmann/json
+set -ev
 
-# Configure external project
-ExternalProject_Add (project_json
-    GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/json"
-    CMAKE_COMMAND ""
-    BUILD_COMMAND ""
-    INSTALL_COMMAND ""
-    TEST_COMMAND ""
-)
-
-# Configure output
-set (JSON_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/json/src/project_json/src")
-
-# Workaround of http://public.kitware.com/Bug/view.php?id=14495
-file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})
-
-# Make target
-add_library (json STATIC IMPORTED)
-set_target_properties (json PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES ${JSON_INCLUDE_DIRS}
-)
-add_dependencies (json project_json)
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv \
+        -in "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa.enc" -out "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" -d
+    chmod 0600 "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa"
+    cp "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" "$HOME/.ssh/id_rsa"
+fi
