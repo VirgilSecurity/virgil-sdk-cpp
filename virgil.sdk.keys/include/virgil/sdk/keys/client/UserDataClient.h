@@ -58,9 +58,9 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
                 const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;
         void del(const std::string& userDataId,
                 const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;
-        void confirm(const std::string& userDataId, const std::string& code) const override;
+        void confirm(const std::string& userDataId, const std::string& code, const std::string& uuid) const override;
         void resendConfirmation(const std::string& userDataId,
-                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;        //@}
+                const virgil::sdk::keys::client::Credentials& credentials, const std::string& uuid) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

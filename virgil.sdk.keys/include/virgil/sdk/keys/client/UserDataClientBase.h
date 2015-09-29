@@ -71,8 +71,9 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Confirm user data.
          * @param userDataId - user data UUID.
          * @param code - confirmation code.
+         * @param uuid - transaction UUID.
          */
-        virtual void confirm(const std::string& userDataId, const std::string& code) const = 0;
+        virtual void confirm(const std::string& userDataId, const std::string& code, const std::string& uuid) const = 0;
         /**
          * @brief Resend user data confirmation code.
          * @param userDataId - user data UUID.

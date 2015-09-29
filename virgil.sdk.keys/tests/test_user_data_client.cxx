@@ -114,7 +114,7 @@ TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserData1().userDataId(), confirmationCode()));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserData1().userDataId(), confirmationCode(), uuid()));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
 }
