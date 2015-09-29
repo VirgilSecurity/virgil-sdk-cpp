@@ -49,7 +49,7 @@ const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
 
-int main() {
+int main(int argc, char **argv) {
     try {
         std::cout << "Authenticate session..." << std::endl;
         PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);

@@ -53,7 +53,6 @@ using virgil::sdk::keys::model::PublicKey;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 
 /**
  * @brief Generate new UUID
@@ -62,19 +61,21 @@ std::string uuid();
 
 int main(int argc, char **argv) {
     try {
-        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL, uuid());
-
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
+        std::cout << "Read virgil public key..." << std::endl;
+        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!publicKeyFile.good()) {
+            throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
+        std::string publicKeyData;
+        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(publicKeyData));
 
-        std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
-        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
+        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
+
+        std::cout << "Remove public key with id (" << publicKey.publicKeyId() << ")." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        std::string confirmInfo = keysClient.publicKey().del(publicKey.publicKeyId(), uuid());
+        std::cout << confirmInfo << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }

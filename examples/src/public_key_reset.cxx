@@ -43,13 +43,21 @@
 #include <stdexcept>
 #include <string>
 
+#include <virgil/crypto/VirgilByteArray.h>
+
 #include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/keys/model/UserData.h>
+
+using virgil::crypto::VirgilByteArray;
 
 using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::model::UserData;
+using virgil::sdk::keys::io::Marshaller;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
@@ -62,22 +70,49 @@ std::string uuid();
 
 int main(int argc, char **argv) {
     try {
-        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL, uuid());
-
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
+        std::cout << "Read old virgil public key..." << std::endl;
+        std::ifstream oldPublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!oldPublicKeyFile.good()) {
+            throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
+        std::string oldPublicKeyData((std::istreambuf_iterator<char>(oldPublicKeyFile)),
+                std::istreambuf_iterator<char>());
 
-        std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
-        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
+        PublicKey oldPublicKey = Marshaller<PublicKey>::fromJson(oldPublicKeyData);
+
+        std::cout << "Read new virgil public key..." << std::endl;
+        std::ifstream newPublicKeyFile("new_public.key", std::ios::in | std::ios::binary);
+        if (!newPublicKeyFile.good()) {
+            throw std::runtime_error("can not read virgil public key: new_public.key");
+        }
+        VirgilByteArray newPublicKey;
+        std::copy(std::istreambuf_iterator<char>(newPublicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(newPublicKey));
+
+        std::cout << "Read new private key..." << std::endl;
+        std::ifstream newPrivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
+        if (!newPrivateKeyFile.good()) {
+            throw std::runtime_error("can not read private key: new_private.key");
+        }
+        VirgilByteArray newPrivateKey;
+        std::copy(std::istreambuf_iterator<char>(newPrivateKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(newPrivateKey));
+
+        Credentials newKeyCredentials(newPrivateKey);
+
+        std::cout << "Create Keys Service HTTP Client" << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+
+        std::cout << "Call Keys Service to reset Public Key instance." << std::endl;
+        std::string confirmInfo = keysClient.publicKey().reset(oldPublicKey.publicKeyId(),
+                newPublicKey, newKeyCredentials, uuid());
+        std::cout << confirmInfo << std::endl;
+        std::cout << "Public Key instance successfully reset." << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
 }
 
