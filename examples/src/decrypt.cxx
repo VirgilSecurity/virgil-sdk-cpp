@@ -34,30 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/VirgilCryptoException.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
+
 #include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilCryptoException;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
+
 using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::io::Marshaller;
 
-int main() {
+int main(int argc, char **argv) {
     try {
         std::cout << "Prepare input file: test.txt.enc..." << std::endl;
         std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);

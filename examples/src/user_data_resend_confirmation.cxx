@@ -34,32 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
-#include <fstream>
 #include <algorithm>
-#include <iterator>
-#include <string>
-#include <stdexcept>
 #include <chrono>
+#include <fstream>
+#include <iostream>
+#include <iterator>
 #include <random>
+#include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/keys/model/PublicKey.h>
 
 using virgil::crypto::VirgilByteArray;
 
-using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::model::PublicKey;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 
 /**
  * @brief Generate new UUID
@@ -97,7 +96,7 @@ int main(int argc, char **argv) {
         Credentials credentials(publicKey.publicKeyId(), privateKey);
 
         std::cout << "Resend confirmation code for user data with id (" << userDataId << ")." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         keysClient.userData().resendConfirmation(userDataId, credentials, uuid());
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

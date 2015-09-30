@@ -34,35 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <random>
 #include <stdexcept>
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/VirgilStreamSigner.h>
-#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+
+#include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/keys/model/PublicKey.h>
 
 using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamSigner;
-using virgil::crypto::stream::VirgilStreamDataSource;
+
+using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::model::PublicKey;
+
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
+const std::string PUBLIC_KEY_ID = "d6dc4428-4e3d-c672-2b9e-6f0919a11a3d";
+
+/**
+ * @brief Generate new UUID
+ */
+std::string uuid();
 
 int main(int argc, char **argv) {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
-        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt");
-        }
-
-        std::cout << "Prepare output file: test.txt.sign..." << std::endl;
-        std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.sign");
-        }
-
         std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
         if (!keyFile.good()) {
@@ -72,19 +76,41 @@ int main(int argc, char **argv) {
         std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        std::cout << "Initialize signer..." << std::endl;
-        VirgilStreamSigner signer;
+        Credentials credentials(PUBLIC_KEY_ID, privateKey);
 
-        std::cout << "Sign data..." << std::endl;
-        VirgilStreamDataSource dataSource(inFile);
-        VirgilByteArray sign = signer.sign(dataSource, privateKey);
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
-        std::cout << "Save sign..." << std::endl;
-        std::copy(sign.begin(), sign.end(), std::ostreambuf_iterator<char>(outFile));
+        std::cout << "Call Keys service to search Public Key instance." << std::endl;
+        PublicKey publicKey = keysClient.publicKey().grab(credentials, uuid());
 
-        std::cout << "Sign is successfully stored in the output file." << std::endl;
+        std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey, true);
+        std::cout << publicKeyData << std::endl;
+        std::cout << "Public Key instance successfully searched in Keys Service." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
+}
+
+std::string uuid () {
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
+
+    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
+    uint16_t time_mid = generator() & 0xffff;
+    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
+    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
+    uint8_t node [6];
+    for (size_t i = 0; i < 6; ++i) {
+        node[i] = generator() & 0xff;
+    }
+
+    char buffer[37] = {0x0};
+    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
+        node[0], node[1], node[2], node[3], node[4], node[5]);
+
+    return std::string(buffer);
 }

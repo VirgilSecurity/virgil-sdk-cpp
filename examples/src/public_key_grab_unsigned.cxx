@@ -34,11 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
 #include <chrono>
-#include <fstream>
 #include <iostream>
-#include <iterator>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -62,22 +59,20 @@ std::string uuid();
 
 int main(int argc, char **argv) {
     try {
-        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+
+        std::cout << "Call Keys service to search Public Key instance." << std::endl;
         PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL, uuid());
 
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
-        }
-
-        std::cout << "Store virgil public key to the output file..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
-        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
+        std::cout << publicKeyData << std::endl;
+
+        std::cout << "Public Key instance successfully searched in Keys Service." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
 }
 

@@ -47,7 +47,6 @@
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/model/UserData.h>
 
-
 using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
@@ -60,9 +59,9 @@ const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
 
-int main() {
+int main(int argc, char **argv) {
     try {
-        std::cout << "Reading virgil public key..." << std::endl;
+        std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
