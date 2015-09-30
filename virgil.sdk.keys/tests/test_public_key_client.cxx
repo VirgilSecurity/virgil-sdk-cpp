@@ -139,6 +139,77 @@ TEST_CASE("Delete Public Key - success", "[virgil-sdk-keys-public-key]") {
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }
 
+TEST_CASE("Delete Public Key (unsigned) - success", "[virgil-sdk-keys-public-key]") {
+    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
+    json payload = {
+        { "action_token", "57516f1b-f17c-3154-c91e-edb86c514c5d" },
+        { "user_ids", { "test-vs@mailinator.com", "cyber_bob@mailinator.com" } }
+    };
+    successResponse.body(payload.dump());
+
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
+
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    std::string responseBody = keysClient->publicKey().del(expectedPublicKeyId(), uuid());
+
+    Verify(OverloadedMethod(connection, send, Response(const Request&)));
+    REQUIRE(responseBody == payload.dump());
+}
+
+TEST_CASE("Confirm Delete Public operation - success", "[virgil-sdk-keys-public-key]") {
+    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
+    successResponse.body("{}");
+
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
+
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    REQUIRE_NOTHROW(keysClient->publicKey().confirmDel(expectedPublicKeyId(), actionToken(), confirmationCodes()));
+
+    Verify(OverloadedMethod(connection, send, Response(const Request&)));
+}
+
+TEST_CASE("Reset Public Key - success", "[virgil-sdk-keys-public-key]") {
+    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
+    json payload = {
+        { "action_token", "57516f1b-f17c-3154-c91e-edb86c514c5d" },
+        { "user_ids", { "test-vs@mailinator.com", "cyber_bob@mailinator.com" } }
+    };
+    successResponse.body(payload.dump());
+
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+
+    Credentials credentials(expectedPrivateKeyData());
+
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    std::string responseBody = keysClient->publicKey().reset(expectedPublicKeyId(),
+            expectedPublicKeyData(), credentials, uuid());
+
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    REQUIRE(responseBody == payload.dump());
+}
+
+TEST_CASE("Confirm Reset Public Key - success", "[virgil-sdk-keys-public-key]") {
+    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
+    successResponse.body(Marshaller<PublicKey>::toJson(expectedPublicKeyWithUserData(), true));
+
+    auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+
+    auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    PublicKey publicKey = keysClient->publicKey().confirmReset(expectedPublicKeyId(), credentials(), actionToken(),
+            confirmationCodes());
+
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    checkPublicKeys(publicKey, expectedPublicKeyWithUserData());
+}
+
 TEST_CASE("Grab Public Key by UDID - success", "[virgil-sdk-keys-public-key]") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     successResponse.body(Marshaller<PublicKey>::toJson(expectedPublicKey()));
@@ -148,7 +219,7 @@ TEST_CASE("Grab Public Key by UDID - success", "[virgil-sdk-keys-public-key]") {
     When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = keysClient->publicKey().grab("user@virgilsecurity.com");
+    PublicKey publicKey = keysClient->publicKey().grab("user@virgilsecurity.com", uuid());
 
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
     checkPublicKeys(publicKey, expectedPublicKey());

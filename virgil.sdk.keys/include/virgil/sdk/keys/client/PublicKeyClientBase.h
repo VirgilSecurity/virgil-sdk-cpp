@@ -97,12 +97,55 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
         /**
+         * @brief Deletes public key without HTTP request sign by known private key.
+         * Should be used when private key is lost.
+         * @param publicKeyId - public key UUID.
+         * @param uuid - transaction UUID.
+         * @return action_token and userIds to json.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual std::string del(const std::string& publicKeyId, const std::string& uuid) const = 0;
+        /**
+         * @brief Confirm Delete Public Key operation.
+         * @param publicKeyId - public key UUID.
+         * @param actionToken - The action token received on Reset Public Key endpoint invocation.
+         * @param confirmationCodes - the list of confirmation codes received on all confirmed UDIDs.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual void confirmDel(const std::string& publicKeyId, const std::string& actionToken,
+                const std::vector<std::string>& confirmationCodes) const = 0;
+        /**
+         * @brief Resets the specified old public key with new value.
+         *
+         * @param oldPublicKeyId - the old public key identifier.
+         * @param newKey - new public key in the raw format.
+         * @param newKeyCredentials - user's credentials of the new public key.
+         * @param uuid - transaction UUID.
+         * @return action_token and userIds to json.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual std::string reset(const std::string& oldPublicKeyId, const std::vector<unsigned char>& newKey,
+                const Credentials& newKeyCredentials, const std::string& uuid) const = 0;
+        /**
+         * @brief Confirm Reset Public Key operation.
+         *
+         * @param oldPublicKeyId - the old public key identifier.
+         * @param newKeyCredentials - user's credentials of the new public key.
+         * @param actionToken - The action token received on Reset Public Key endpoint invocation.
+         * @param confirmationCodes - the list of confirmation codes received on all confirmed UDIDs.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual virgil::sdk::keys::model::PublicKey confirmReset(const std::string& oldPublicKeyId,
+                const Credentials& newKeyCredentials, const std::string& actionToken,
+                const std::vector<std::string>& confirmationCodes) const = 0;
+        /**
          * @brief Search public key associated with a given user identifier.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
+         * @param uuid - transaction UUID.
          * @return Public keys associated with given user.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey grab(const std::string& userId, const std::string& uuid) const = 0;
         /**
          * @brief Search public key associated with a given user's credentials.
          * @param credentials - user's credentials.

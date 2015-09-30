@@ -70,9 +70,11 @@ UserDataClient::UserDataClient(const std::shared_ptr<KeysClientConnection>& conn
 
 UserData UserDataClient::add(const UserData& userData, const Credentials& credentials,
         const std::string& uuid) const {
+    json payload = json::object();
+    payload = json::parse(Marshaller<UserData>::toJson(userData));
+    payload[JsonKey::uuid] = uuid;
 
-    auto payload = Marshaller<UserData>::toJson(userData);
-    Request request = Request().endpoint(EndpointUri::v2().userDataAdd()).post().body(payload);
+    Request request = Request().endpoint(EndpointUri::v2().userDataAdd()).post().body(payload.dump());
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_ADD);
     return Marshaller<UserData>::fromJson(response.body());
@@ -89,9 +91,10 @@ void UserDataClient::del(const std::string& userDataId, const Credentials& crede
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_DELETE);
 }
 
-void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
+void UserDataClient::confirm(const std::string& userDataId, const std::string& code, const std::string& uuid) const {
     json payload = {
-        {JsonKey::confirmationCode, code}
+        {JsonKey::confirmationCode, code},
+        {JsonKey::uuid, uuid}
     };
     std::string requestUri = EndpointUri::v2().userDataConfirm(userDataId);
     Request request = Request().endpoint(requestUri).post().body(payload.dump());
