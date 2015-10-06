@@ -34,10 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/keys/client/PublicKeyClient.h>
-
 #include <stdexcept>
 
+#include <virgil/sdk/keys/client/PublicKeyClient.h>
 #include <virgil/sdk/keys/client/EndpointUri.h>
 #include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/http/Request.h>
@@ -134,15 +133,69 @@ void PublicKeyClient::del(const Credentials& credentials, const std::string& uui
     connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_DELETE);
 }
 
-PublicKey PublicKeyClient::grab(const std::string& userId) const {
+std::string PublicKeyClient::del(const std::string& publicKeyId, const std::string& uuid) const {
     json payload = {
-        {JsonKey::value, userId}
+        {JsonKey::uuid, uuid}
+    };
+
+    std::string requestUri = EndpointUri::v2().publicKeyDelete(publicKeyId);
+    Request request = Request().endpoint(requestUri).del().body(payload.dump());
+    Response response = connection_->send(request);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_DELETE);
+    return response.body();
+}
+
+void PublicKeyClient::confirmDel(const std::string& publicKeyId, const std::string& actionToken,
+        const std::vector<std::string>& confirmationCodes) const {
+    json payload = {
+        {JsonKey::actionToken, actionToken},
+        {JsonKey::confirmationCodes, confirmationCodes}
+    };
+
+    std::string requestUri = EndpointUri::v2().publicKeyConfirmDelete(publicKeyId);
+    Request request = Request().endpoint(requestUri).post().body(payload.dump());
+    Response response = connection_->send(request);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_CONFIRM_DELETE);
+}
+
+std::string PublicKeyClient::reset(const std::string& oldPublicKeyId, const std::vector<unsigned char>& newKey,
+        const Credentials& newKeyCredentials, const std::string& uuid) const {
+    json payload = {
+        {JsonKey::publicKey, VirgilBase64::encode(newKey)},
+        {JsonKey::uuid, uuid}
+    };
+
+    std::string requestUri = EndpointUri::v2().publicKeyReset(oldPublicKeyId);
+    Request request = Request().endpoint(requestUri).post().body(payload.dump());
+    Response response = connection_->send(request, newKeyCredentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_RESET);
+    return response.body();
+}
+
+PublicKey PublicKeyClient::confirmReset(const std::string& oldPublicKeyId, const Credentials& newKeyCredentials,
+        const std::string& actionToken, const std::vector<std::string>& confirmationCodes) const {
+    json payload = {
+        {JsonKey::actionToken, actionToken},
+        {JsonKey::confirmationCodes, confirmationCodes}
+    };
+
+    std::string requestUri = EndpointUri::v2().publicKeyConfirmReset(oldPublicKeyId);
+    Request request = Request().endpoint(requestUri).post().body(payload.dump());
+
+    Response response = connection_->send(request, newKeyCredentials);
+    connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_CONFIRM_RESET);
+    return Marshaller<PublicKey>::fromJson(response.body());
+}
+
+PublicKey PublicKeyClient::grab(const std::string& userId, const std::string& uuid) const {
+    json payload = {
+        {JsonKey::value, userId},
+        {JsonKey::uuid, uuid}
     };
 
     Request request = Request().endpoint(EndpointUri::v2().publicKeyGrab()).post().body(payload.dump());
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_GRAB);
-
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 

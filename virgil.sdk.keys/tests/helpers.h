@@ -53,8 +53,16 @@ inline std::string uuid() {
     return "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
 }
 
+inline std::string actionToken() {
+    return "57516f1b-f17c-3154-c91e-edb86c514c5d";
+}
+
 inline std::string confirmationCode() {
     return "A3F4S3";
+}
+
+inline std::vector<std::string> confirmationCodes() {
+    return {"A4D2B6","B4G3F1"};
 }
 
 inline std::string expectedAccountId() {
