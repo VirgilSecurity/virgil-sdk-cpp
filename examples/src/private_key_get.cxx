@@ -62,7 +62,7 @@ const std::string CONTAINER_PASSWORD = "123456789";
 
 int main() {
     try {
-        std::cout << "Reading virgil public key..." << std::endl;
+        std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");

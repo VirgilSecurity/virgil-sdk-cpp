@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
 #include <chrono>
+#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -73,7 +73,7 @@ std::string uuid();
 
 int main() {
     try {
-        std::cout << "Reading virgil public key..." << std::endl;
+        std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
@@ -83,7 +83,7 @@ int main() {
 
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
-        std::cout << "Reading private key..." << std::endl;
+        std::cout << "Read private key..." << std::endl;
         std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
         if (!keyFile.good()) {
             throw std::runtime_error("can not read private key: private.key");

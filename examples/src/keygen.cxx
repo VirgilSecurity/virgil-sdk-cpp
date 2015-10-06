@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilKeyPair.h>
@@ -47,7 +47,7 @@
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilKeyPair;
 
-int main(int argc, char **argv) {
+int main() {
     try {
         std::cout << "Generate keys" << std::endl;
         VirgilKeyPair newKeyPair; // Specify password in the constructor to make private key encrypted.

@@ -34,37 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <random>
-#include <stdexcept>
 #include <string>
+#include <stdexcept>
 
 #include <virgil/crypto/VirgilByteArray.h>
 
+#include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
-
-#include <virgil/sdk/privatekeys/client/Credentials.h>
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+#include <virgil/sdk/keys/model/UserData.h>
 
 using virgil::crypto::VirgilByteArray;
 
+using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::model::UserData;
 
-using virgil::sdk::privatekeys::client::Credentials;
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::ContainerType;
-using virgil::sdk::privatekeys::model::UserData;
-
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
-const std::string CONTAINER_PASSWORD = "123456789";
 
 /**
  * @brief Generate new UUID
@@ -88,22 +85,23 @@ int main() {
         if (!keyFile.good()) {
             throw std::runtime_error("can not read private key: private.key");
         }
-
-        VirgilByteArray privateKey((std::istreambuf_iterator<char>(keyFile)),
-                std::istreambuf_iterator<char>());
+        VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(privateKey));
 
         Credentials credentials(publicKey.publicKeyId(), privateKey);
 
-        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
-
-        std::cout << "Authenticate session..." << std::endl;
+        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
 
-        std::cout << "Call Private Key service to delete Private Key instance." << std::endl;
-        privateKeysClient.privateKey().del(credentials, uuid());
-        std::cout << "The Private Key instance was successfully deleted from the Private Keys service." << std::endl;
+        std::cout << "Call Keys service to create User Data instance." << std::endl;
+        UserData userDataResponse = keysClient.userData().add(userData, credentials, uuid());
+
+        std::string data = Marshaller<UserData>::toJson(userDataResponse);
+        std::cout << data << std::endl;
+        std::cout << "User Data instance successfully created in Public Keys service." << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }

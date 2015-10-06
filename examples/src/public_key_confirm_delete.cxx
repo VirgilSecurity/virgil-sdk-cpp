@@ -34,45 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <random>
 #include <stdexcept>
 #include <string>
 
-#include <virgil/crypto/VirgilByteArray.h>
-
+#include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
-
-using virgil::crypto::VirgilByteArray;
-
+using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
-using virgil::sdk::privatekeys::client::Credentials;
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::ContainerType;
-using virgil::sdk::privatekeys::model::UserData;
-
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
-const std::string CONTAINER_PASSWORD = "123456789";
 
-/**
- * @brief Generate new UUID
- */
-std::string uuid();
-
-int main() {
+int main(int argc, char **argv) {
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <action_token> <confirmation_codes>" << std::endl;
+        return 0;
+    }
     try {
+        const std::string actionToken = argv[1];
+        const std::string confirmationCodes = argv[2];
+
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
@@ -83,51 +70,15 @@ int main() {
 
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
-        std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
-
-        VirgilByteArray privateKey((std::istreambuf_iterator<char>(keyFile)),
-                std::istreambuf_iterator<char>());
-
-        Credentials credentials(publicKey.publicKeyId(), privateKey);
-
         std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
-        std::cout << "Authenticate session..." << std::endl;
-        UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
-
-        std::cout << "Call Private Key service to delete Private Key instance." << std::endl;
-        privateKeysClient.privateKey().del(credentials, uuid());
-        std::cout << "The Private Key instance was successfully deleted from the Private Keys service." << std::endl;
+        std::cout << "Call Keys service to confirm delete Public Key instance." << std::endl;
+        keysClient.publicKey().confirmDel(publicKey.publicKeyId(), actionToken, {confirmationCodes});
+        std::cout << "Call Keys service to confirm delete Public Key instance." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
 
     return 0;
-}
-
-std::string uuid () {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
-
-    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
-    uint16_t time_mid = generator() & 0xffff;
-    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
-    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
-    uint8_t node [6];
-    for (size_t i = 0; i < 6; ++i) {
-        node[i] = generator() & 0xff;
-    }
-
-    char buffer[37] = {0x0};
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
-        node[0], node[1], node[2], node[3], node[4], node[5]);
-
-    return std::string(buffer);
 }
