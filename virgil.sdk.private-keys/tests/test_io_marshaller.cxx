@@ -44,47 +44,50 @@
 
 #include <json.hpp>
 
+#include "fakeit.hpp"
+
+#include "helpers.h"
+#include "fakeit_helpers.hpp"
+
+
 using virgil::crypto::foundation::VirgilBase64;
 
+using virgil::sdk::privatekeys::io::Marshaller;
 using virgil::sdk::privatekeys::util::JsonKey;
 using virgil::sdk::privatekeys::model::PrivateKey;
 
 using json = nlohmann::json;
 
+using namespace fakeit;
 
-namespace virgil { namespace sdk { namespace privatekeys { namespace io {
-    /**
-     * @brief Marshaller<PrivateKey> specialization.
-     */
-    template <>
-    class Marshaller<PrivateKey> {
-    public:
-        template <int INDENT = -1>
-        static std::string toJson(const PrivateKey& privateKey) {
-            json privateKeyJson = json::object();
-            privateKeyJson[JsonKey::publicKeyId] = privateKey.publicKeyId();
 
-            std::string encodePrivateKey = VirgilBase64::encode(privateKey.key());
-            privateKeyJson[JsonKey::privateKey] = encodePrivateKey;
-            return privateKeyJson.dump(INDENT);
-        }
-        static PrivateKey fromJson(const std::string& jsonString) {
-            json typeJson = json::parse(jsonString);
-            std::string publicKeyId = typeJson[JsonKey::publicKeyId];
-            std::string key = typeJson[JsonKey::privateKey];
+TEST_CASE("Private Key -> Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
+    std::string encodePrivateKey = VirgilBase64::encode(expectedUserPrivateKeyData());
 
-            PrivateKey privateKey;
-            privateKey.publicKeyId(publicKeyId).key(VirgilBase64::decode(key));
-            return privateKey;
-        }
-    private:
-        Marshaller() {}
+    json privateKeyJson = {
+        { JsonKey::publicKeyId, USER_PUBLIC_KEY_ID },
+        { JsonKey::privateKey, encodePrivateKey }
     };
-}}}}
 
-void marshaller_user_data_init() {
-    virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson(PrivateKey());
-    virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson<2>(PrivateKey());
-    virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson<4>(PrivateKey());
-    virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::fromJson("");
+    PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(privateKeyJson.dump());
+
+    REQUIRE( privateKey.publicKeyId() == USER_PUBLIC_KEY_ID );
+    REQUIRE( privateKey.key() == expectedUserPrivateKeyData() );
+}
+
+TEST_CASE("Private Key <- Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
+    PrivateKey privateKey;
+    privateKey.key(expectedUserPrivateKeyData());
+    privateKey.publicKeyId(USER_PUBLIC_KEY_ID);
+
+    std::string privateKeyData =  Marshaller<PrivateKey>::toJson(privateKey);
+    json privateKeyJson = json::parse(privateKeyData);
+
+    std::string publicKeyId = privateKeyJson[JsonKey::publicKeyId];
+    std::string keyData = privateKeyJson[JsonKey::privateKey];
+
+    VirgilByteArray key = VirgilBase64::decode(keyData);
+
+    REQUIRE( publicKeyId == USER_PUBLIC_KEY_ID );
+    REQUIRE( key == expectedUserPrivateKeyData() );
 }
