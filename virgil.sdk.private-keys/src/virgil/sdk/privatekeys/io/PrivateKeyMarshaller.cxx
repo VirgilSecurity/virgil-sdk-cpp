@@ -82,7 +82,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace io {
     };
 }}}}
 
-void marshaller_user_data_init() {
+void marshaller_private_key_init() {
     virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson(PrivateKey());
     virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson<2>(PrivateKey());
     virgil::sdk::privatekeys::io::Marshaller<PrivateKey>::toJson<4>(PrivateKey());
