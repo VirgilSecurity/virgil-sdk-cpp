@@ -56,24 +56,24 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class KeysClientImpl {
     public:
         explicit KeysClientImpl(const std::shared_ptr<KeysClientConnection>& connection)
-                : authEndpoint(connection), privateKeyEndpoint(connection), containerEndpoint(connection) {}
+                : authEndpoint(connection), privateKeyEndpoint(connection), containerEndpoint(connection),
+                        connectionImpl(connection) {}
     public:
         AuthEndpoint authEndpoint;
         PrivateKeyEndpoint privateKeyEndpoint;
         ContainerEndpoint containerEndpoint;
+        std::shared_ptr<KeysClientConnection> connectionImpl; 
     };
 
 }}}}
 
 
 PrivateKeysClient::PrivateKeysClient(const std::shared_ptr<KeysClientConnection>& connection)
-        : impl_(std::make_shared<KeysClientImpl>(connection)), 
-          connection_(std::make_shared<KeysClientImpl>(connection)) {
+        : impl_(std::make_shared<KeysClientImpl>(connection)) {
 }
 
 PrivateKeysClient::PrivateKeysClient(const std::string& appToken, const std::string& baseAddress)
-        : impl_(std::make_shared<KeysClientImpl>(std::make_shared<KeysClientConnection>(appToken, baseAddress))),
-          connection_(std::make_shared<KeysClientConnection>(appToken, baseAddress)) {
+        : impl_(std::make_shared<KeysClientImpl>(std::make_shared<KeysClientConnection>(appToken, baseAddress))) {
 }
 
 AuthEndpointBase& PrivateKeysClient::auth() {
@@ -90,9 +90,9 @@ ContainerEndpointBase& PrivateKeysClient::container() {
 
 void PrivateKeysClient::authenticate(const UserData& userData, const std::string& containerPassword) {
     std::string authToken = impl_->authEndpoint.getAuthToken(userData, containerPassword);
-    connection_->updateSession(authToken);
+    impl_->connectionImpl->updateSession(authToken);
 }
 
 void PrivateKeysClient::authenticate(const std::string& token) {
-    connection_->updateSession(token);
+    impl_->connectionImpl->updateSession(token);
 }

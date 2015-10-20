@@ -83,7 +83,6 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         //@}
     private:
         std::shared_ptr<KeysClientImpl> impl_;
-        std::shared_ptr<KeysClientConnection> connection_; 
     };
 }}}}
 

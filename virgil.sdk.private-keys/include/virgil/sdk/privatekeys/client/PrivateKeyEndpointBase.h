@@ -54,6 +54,9 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          *
          * Load an given Private Key into the Private Keys service and associate it with the existing Container.
          *
+         * @note Require authentication
+         * @see VirgilPrivateKeysService::authenticate
+         *
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
@@ -62,6 +65,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
                 const std::string& uuid) const = 0;
         /**
          * @brief Get private key by its UUID.
+         *
+         * @note Require authentication
+         * @see VirgilPrivateKeysService::authenticate
+         *
          * @param publicKeyId - public key UUID.
          * @return Private key.
          * @throw KeysError - if request to service failed, or service return error code.
@@ -69,6 +76,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         virtual virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const = 0;
         /**
          * @brief Delete private key associated with given user's credentials.
+         *
+         * @note Require authentication
+         * @see VirgilPrivateKeysService::authenticate
+         *
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
