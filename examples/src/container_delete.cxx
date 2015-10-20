@@ -98,7 +98,7 @@ int main() {
 
         std::cout << "Authenticate session..." << std::endl;
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
         std::cout << "Call Private Key service to delete Container instance." << std::endl;
         privateKeysClient.container().del(credentials, uuid());

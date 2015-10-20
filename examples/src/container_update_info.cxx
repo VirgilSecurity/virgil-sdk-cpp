@@ -103,7 +103,7 @@ int main() {
 
         std::cout << "Authenticate session..." << std::endl;
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
         std::cout << "Call the Private Key service to update Container instance." << std::endl;
         privateKeysClient.container().update(credentials, CONTAINER_NEW_TYPE, CONTAINER_NEW_PASSWORD, uuid());
