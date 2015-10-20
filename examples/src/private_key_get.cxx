@@ -62,7 +62,7 @@ const std::string CONTAINER_PASSWORD = "123456789";
 
 int main() {
     try {
-        std::cout << "Reading virgil public key..." << std::endl;
+        std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
@@ -78,7 +78,7 @@ int main() {
 
         std::cout << "Authenticate session..." << std::endl;
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
         std::cout << "Call the Private Key service to get a Private Key instance." << std::endl;
         PrivateKey privateKey = privateKeysClient.privateKey().get(publicKey.publicKeyId());

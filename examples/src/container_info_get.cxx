@@ -47,7 +47,6 @@
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/model/UserData.h>
 
-
 using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
@@ -62,7 +61,7 @@ const std::string CONTAINER_PASSWORD = "123456789";
 
 int main() {
     try {
-        std::cout << "Reading virgil public key..." << std::endl;
+        std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
@@ -77,7 +76,7 @@ int main() {
 
         std::cout << "Authenticate session." << std::endl;
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
         std::cout << "Call Private Key service to get Container Details instance." << std::endl;
         ContainerType containerType = privateKeysClient.container().getDetails(publicKey.publicKeyId());

@@ -34,93 +34,68 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <random>
 #include <stdexcept>
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
 
 using virgil::crypto::VirgilByteArray;
 
-using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 
-/**
- * @brief Generate new UUID
- */
-std::string uuid();
-
 int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_data_id>" << std::endl;
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <action_token> <confirmation_codes>" << std::endl;
         return 0;
     }
     try {
-        const std::string kUserDataId = argv[1];
+        const std::string actionToken = argv[1];
+        const std::string confirmationCodes = argv[2];
 
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
+        std::cout << "Read old virgil public key..." << std::endl;
+        std::ifstream oldPublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!oldPublicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
+        std::string oldPublicKeyData((std::istreambuf_iterator<char>(oldPublicKeyFile)),
+                std::istreambuf_iterator<char>());
 
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
+        PublicKey oldPublicKey = Marshaller<PublicKey>::fromJson(oldPublicKeyData);
 
-        std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::cout << "Read new private key..." << std::endl;
+        std::ifstream newPrivateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!newPrivateKeyFile.good()) {
             throw std::runtime_error("can not read private key: private.key");
         }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
+        VirgilByteArray newPrivateKey((std::istreambuf_iterator<char>(newPrivateKeyFile)),
+                std::istreambuf_iterator<char>());
 
-        Credentials credentials(publicKey.publicKeyId(), privateKey);
+        Credentials newKeyCredentials(newPrivateKey);
 
-        std::cout << "Resend confirmation code for user data with id (" << kUserDataId << ")." << std::endl;
+        std::cout << "Create Keys Service HTTP Client" << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.userData().resendConfirmation(kUserDataId, credentials, uuid());
+
+        std::cout << "Call Keys service to confirm reset Public Key instance." << std::endl;
+        keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), newKeyCredentials,
+                actionToken, {confirmationCodes});
+        std::cout << "Public Key instance successfully confirm reset." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }
+
     return 0;
-}
-
-std::string uuid () {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
-
-    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
-    uint16_t time_mid = generator() & 0xffff;
-    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
-    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
-    uint8_t node [6];
-    for (size_t i = 0; i < 6; ++i) {
-        node[i] = generator() & 0xff;
-    }
-
-    char buffer[37] = {0x0};
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
-        node[0], node[1], node[2], node[3], node[4], node[5]);
-
-    return std::string(buffer);
 }

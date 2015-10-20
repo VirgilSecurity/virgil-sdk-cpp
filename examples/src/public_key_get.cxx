@@ -34,45 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
 #include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
-#include <virgil/crypto/VirgilByteArray.h>
-
-#include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/keys/model/PublicKey.h>
 
-using virgil::crypto::VirgilByteArray;
-
-using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::model::PublicKey;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
 
-int main() {
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <public-key-id> " << std::endl;
+        return 0;
+    }
     try {
-        std::cout << "Get user ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
+        const std::string kPublicKeyId = argv[1];
 
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
-        }
+        std::cout << "Get user ("<< kPublicKeyId << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        PublicKey publicKey = keysClient.publicKey().get(kPublicKeyId);
 
-        std::cout << "Store virgil public key to the output file..." << std::endl;
+        std::cout << "Store virgil public key without User Data to the stdout..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
-        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
+        std::cout << publicKeyData << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
     }

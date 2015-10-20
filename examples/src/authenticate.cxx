@@ -54,7 +54,8 @@ int main() {
         std::cout << "Authenticate session..." << std::endl;
         PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+        std::string authenticationToken = privateKeysClient.auth().getAuthToken(userData, CONTAINER_PASSWORD);
+        std::cout << "An authentication token: " << authenticationToken << std::endl;
         std::cout << "Authenticate session - success." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
