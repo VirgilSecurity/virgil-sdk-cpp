@@ -39,6 +39,7 @@
 #define VIRGIL_SDK_PRIVATE_KEYS_AUTH_ENDPOINT_H
 
 #include <memory>
+#include <string>
 
 #include <virgil/sdk/privatekeys/client/AuthEndpointBase.h>
 #include <virgil/sdk/privatekeys/client/KeysClientConnection.h>
@@ -61,6 +62,8 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         //@{
         void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& containerPassword) override;
+        void authenticate(const std::string& token) override;
+        std::string getAuthToken() const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

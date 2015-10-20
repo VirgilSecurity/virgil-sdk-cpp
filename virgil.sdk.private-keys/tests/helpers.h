@@ -49,11 +49,17 @@
 #include <virgil/sdk/privatekeys/util/JsonKey.h>
 
 constexpr char VIRGIL_APP_TOKEN[] = "45fd8a505f50243fa8400594ba0b2b29";
+constexpr char VIRGIL_AUTHENTICATION_TOKEN[] = "dbbbe6a906aa4d567531827beb66a2aadbbbe6a906aa4d567531827beb66a2aa";
+
+// dbb -> 666  - new
+constexpr char NEW_VIRGIL_AUTHENTICATION_TOKEN[] = "666be6a906aa4d567531827beb66a2aadbbbe6a906aa4d567531827beb66a2aa";
+
 constexpr char USER_PUBLIC_KEY_ID[] = "f437d5b1-90e3-ec3b-3744-d9e23a892c41";
 constexpr char USER_EMAIL[] = "test.virgilsecurity@mailinator.com";
 constexpr char CONTAINER_PASSWORD[] = "123456789";
 constexpr char CONFIRMATION_CODE[] = "A3F4S3";
 constexpr char UUID[] = "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
+
 
 inline virgil::crypto::VirgilByteArray expectedUserPrivateKeyData() {
     std::string privateKeys =

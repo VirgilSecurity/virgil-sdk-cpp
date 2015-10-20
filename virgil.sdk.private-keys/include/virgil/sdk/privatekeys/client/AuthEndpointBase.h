@@ -58,6 +58,19 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& containerPassword) = 0;
+        /**
+         * @brief Authenticate requests to Virgil’s Private Keys service.
+         *
+         * @param token - an authentication token
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual void authenticate(const std::string& token) = 0;
+        /**
+         * @brief Get an authentication token.
+         *
+         * @return an authentication token.
+         */
+        virtual std::string getAuthToken() const = 0;
     };
 }}}}
 

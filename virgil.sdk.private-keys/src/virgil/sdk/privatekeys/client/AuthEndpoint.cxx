@@ -81,3 +81,11 @@ void AuthEndpoint::authenticate(const UserData& userData, const std::string& con
     std::string authToken = authTokenJson[JsonKey::authToken];
     connection_->updateSession(authToken);
 }
+
+void AuthEndpoint::authenticate(const std::string& token) {
+    connection_->updateSession(token);
+}
+
+std::string AuthEndpoint::getAuthToken() const {
+    return connection_->getAuthToken();
+}
