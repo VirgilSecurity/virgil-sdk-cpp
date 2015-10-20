@@ -38,7 +38,7 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 # Define variables
 set (UUT_LIB_NAME private_keys)
-set (TEST_RUNNER test_private_key_runner)
+set (TEST_RUNNER test_runner)
 
 # Grab source directory
 aux_source_directory (${CMAKE_CURRENT_SOURCE_DIR} UUT_SRC_LIST)

@@ -62,6 +62,9 @@ using virgil::sdk::privatekeys::http::Response;
 using virgil::sdk::privatekeys::util::JsonKey;
 
 
+static const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
+
+
 PrivateKeyEndpoint::PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
         : connection_(connection) {
     if (!connection_) {
@@ -77,12 +80,24 @@ void PrivateKeyEndpoint::add(const Credentials &credentials, const std::string& 
     };
 
     Request request = Request().endpoint(EndpointUri::v2().addPrivateKey()).post().body(payload.dump());
+
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::ADD_PRIVATE_KEY);
 }
 
 PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId) const {
     Request request = Request().endpoint(EndpointUri::v2().getPrivateKey(publicKeyId)).get();
+
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::GET_PRIVATE_KEY);
 
@@ -99,6 +114,12 @@ void PrivateKeyEndpoint::del(const Credentials &credentials, const std::string& 
     json payload = {{ JsonKey::requestSignUuid, uuid}};
 
     Request request = Request().endpoint(EndpointUri::v2().deletePrivateKey()).del().body(payload.dump());
+
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+    
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::DELETE_PRIVATE_KEY);
 }

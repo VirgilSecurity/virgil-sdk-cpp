@@ -34,39 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef FAKEIT_UTILS_HPP
+#define FAKEIT_UTILS_HPP
 
-#ifndef VIRGIL_SDK_PRIVATE_KEYS_AUTH_ENDPOINT_H
-#define VIRGIL_SDK_PRIVATE_KEYS_AUTH_ENDPOINT_H
+#include "fakeit.hpp"
 
-#include <memory>
-#include <string>
+template<typename T>
+inline auto make_moc_shared(fakeit::Mock<T>& mock)
+        -> std::shared_ptr<typename std::remove_reference<decltype(mock.get())>::type> {
+    return std::shared_ptr<typename std::remove_reference<decltype(mock.get())>::type>(&mock.get(), [](void *){});
+}
 
-#include <virgil/sdk/privatekeys/client/AuthEndpointBase.h>
-#include <virgil/sdk/privatekeys/client/KeysClientConnection.h>
-
-namespace virgil { namespace sdk { namespace privatekeys { namespace client {
-    /**
-    * @brief Default implenetation of class AuthEndpointBase.
-    */
-    class AuthEndpoint final : public AuthEndpointBase {
-    public:
-        /**
-         * @brief Initialize with HTTP layer connection.
-         * @param connection - HTTP layer connection.
-         * @throw std::logic_error - if connection is invalid.
-         */
-        explicit AuthEndpoint(const std::shared_ptr<KeysClientConnection>& connection);
-        /**
-         * @name Default class implementation.
-         */
-        //@{
-        std::string getAuthToken(const virgil::sdk::privatekeys::model::UserData& userData,
-                const std::string& containerPassword) const override;
-        //@}
-    private:
-        std::shared_ptr<KeysClientConnection> connection_;
-    };
-}}}}
-
-#endif /* VIRGIL_SDK_PRIVATE_KEYS_AUTH_ENDPOINT_H */
-
+#endif /* FAKEIT_UTILS_HPP */

@@ -77,8 +77,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         AuthEndpointBase& auth() override;
         ContainerEndpointBase& container() override;
         PrivateKeyEndpointBase& privateKey() override;
+        void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
+                const std::string& containerPassword) override;
+        void authenticate(const std::string& token) override;     
         //@}
-
     private:
         std::shared_ptr<KeysClientImpl> impl_;
     };

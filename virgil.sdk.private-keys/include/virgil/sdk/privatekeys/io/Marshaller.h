@@ -34,51 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PRIVATE_KEYS_CLIENT_PK_CLIENT_H
-#define VIRGIL_SDK_PRIVATE_KEYS_CLIENT_PK_CLIENT_H
+#ifndef VIRGIL_SDK_KEYS_PRIVATE_MARSHALLER_H
+#define VIRGIL_SDK_KEYS_PRIVATE_MARSHALLER_H
 
-#include <memory>
+#include <string>
 
-#include <virgil/sdk/privatekeys/client/AuthEndpointBase.h>
-#include <virgil/sdk/privatekeys/client/ContainerEndpointBase.h>
-#include <virgil/sdk/privatekeys/client/PrivateKeyEndpointBase.h>
-#include <virgil/sdk/privatekeys/model/UserData.h> 
-
-namespace virgil { namespace sdk { namespace privatekeys { namespace client {
+namespace virgil { namespace sdk { namespace privatekeys { namespace io {
     /**
-     * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
+     * @brief This class responsible for the data object marshalling.
+     *
+     * Supported classes: model::PrivateKey.
      */
-    class PrivateKeysClientBase {
+    template <typename T>
+    class Marshaller {
     public:
         /**
-         * @brief Return "Authentication" endpoint§.
+         * @brief Marshal given object to the Json representation.
          */
-        virtual AuthEndpointBase& auth() = 0;
+        template<int INDENT = -1>
+        static std::string toJson(const T& obj);
         /**
-         * @brief Return "Container" endpoint§.
+         * @brief Unmarshal Json representation to the associated object.
          */
-        virtual ContainerEndpointBase& container() = 0;
+        static T fromJson(const std::string& jsonString);
+    private:
         /**
-         * @brief Return "Private Key" endpoint§.
+         * @brief Forbid object creation.
          */
-        virtual PrivateKeyEndpointBase& privateKey() = 0;
-        /**
-         * @brief Authenticate requests to Virgil’s Private Keys service and set 
-         *  the authentication token.  
-         *
-         * @param userData - added user data.
-         * @param containerPassword - represents container password.
-         * @throw KeysError - if request to service failed, or service return error code.
-         */
-        virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
-                const std::string& containerPassword) = 0;
-        /**
-         * @brief Set the authentication token
-         *
-         * @param token - an authentication token
-         */
-        virtual void authenticate(const std::string& token) = 0;        
+        Marshaller();
     };
 }}}}
 
-#endif /* VIRGIL_SDK_PRIVATE_KEYS_CLIENT_PK_CLIENT_H */
+#endif /* VIRGIL_SDK_KEYS_PRIVATE_MARSHALLER_H */

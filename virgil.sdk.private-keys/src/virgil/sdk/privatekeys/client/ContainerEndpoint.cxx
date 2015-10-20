@@ -57,6 +57,9 @@ using virgil::sdk::privatekeys::model::UserData;
 using virgil::sdk::privatekeys::util::JsonKey;
 
 
+static const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
+
+
 ContainerEndpoint::ContainerEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
         : connection_(connection) {
     if (!connection_) {
@@ -79,6 +82,12 @@ void ContainerEndpoint::create(const Credentials& credentials, const ContainerTy
 
 ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyId) const {
     Request request = Request().endpoint(EndpointUri::v2().getContainerDetails(publicKeyId)).get();
+
+    // Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::GET_CONTAINER_DETAILS);
 
@@ -96,6 +105,12 @@ void ContainerEndpoint::update(const Credentials& credentials, const ContainerTy
     };
 
     Request request = Request().endpoint(EndpointUri::v2().updateContainerInformation()).put().body(payload.dump());
+    
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::UPDATE_CONTAINER_INFORMATION);
 }
@@ -122,6 +137,8 @@ void ContainerEndpoint::confirm(const std::string& confirmToken, const std::stri
     };
 
     Request request = Request().endpoint(EndpointUri::v2().confirmToken()).put().body(payload.dump());
+
+
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::CONFIRM_OPERATION);
 }
@@ -130,6 +147,12 @@ void ContainerEndpoint::del(const Credentials& credentials, const std::string& u
     json payload = {{JsonKey::requestSignUuid, uuid}};
 
     Request request = Request().endpoint(EndpointUri::v2().deleteContainer()).del().body(payload.dump());
+
+    // Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::DELETE_CONTAINER);
 }

@@ -47,7 +47,7 @@ using virgil::sdk::privatekeys::client::ContainerEndpoint;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::client::PrivateKeyEndpointBase;
 using virgil::sdk::privatekeys::client::PrivateKeyEndpoint;
-
+using virgil::sdk::privatekeys::model::UserData;
 
 const std::string PrivateKeysClient::kBaseAddressDefault = "https://keys-private.virgilsecurity.com";
 
@@ -56,11 +56,13 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class KeysClientImpl {
     public:
         explicit KeysClientImpl(const std::shared_ptr<KeysClientConnection>& connection)
-                : authEndpoint(connection), privateKeyEndpoint(connection), containerEndpoint(connection) {}
+                : authEndpoint(connection), privateKeyEndpoint(connection), containerEndpoint(connection),
+                        connectionImpl(connection) {}
     public:
         AuthEndpoint authEndpoint;
         PrivateKeyEndpoint privateKeyEndpoint;
         ContainerEndpoint containerEndpoint;
+        std::shared_ptr<KeysClientConnection> connectionImpl; 
     };
 
 }}}}
@@ -84,4 +86,13 @@ PrivateKeyEndpointBase& PrivateKeysClient::privateKey() {
 
 ContainerEndpointBase& PrivateKeysClient::container() {
     return impl_->containerEndpoint;
+}
+
+void PrivateKeysClient::authenticate(const UserData& userData, const std::string& containerPassword) {
+    std::string authToken = impl_->authEndpoint.getAuthToken(userData, containerPassword);
+    impl_->connectionImpl->updateSession(authToken);
+}
+
+void PrivateKeysClient::authenticate(const std::string& token) {
+    impl_->connectionImpl->updateSession(token);
 }

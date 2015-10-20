@@ -71,6 +71,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         void updateSession(const std::string& authToken);
         /**
+         * @brief Get an authentication token.
+         *
+         * @return an authentication token.
+         */
+        std::string getAuthToken() const;
+        /**
          * @brief Send synchronous request.
          * @param request - request to be send.
          * @throw std::logic_error - if given parameters are inconsistent.

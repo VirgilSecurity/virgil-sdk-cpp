@@ -34,50 +34,60 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
+#include <string>
+
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
+#include <virgil/sdk/privatekeys/io/Marshaller.h>
+#include <virgil/sdk/privatekeys/util/JsonKey.h>
+#include <virgil/sdk/privatekeys/model/PrivateKey.h>
 
 #include <json.hpp>
 
-#include <virgil/sdk/privatekeys/client/AuthEndpoint.h>
-#include <virgil/sdk/privatekeys/client/EndpointUri.h>
-#include <virgil/sdk/privatekeys/error/KeysError.h>
-#include <virgil/sdk/privatekeys/http/Request.h>
-#include <virgil/sdk/privatekeys/http/Response.h>
-#include <virgil/sdk/privatekeys/util/JsonKey.h>
+#include "fakeit.hpp"
+
+#include "helpers.h"
+#include "fakeit_helpers.hpp"
+
+
+using virgil::crypto::foundation::VirgilBase64;
+
+using virgil::sdk::privatekeys::io::Marshaller;
+using virgil::sdk::privatekeys::util::JsonKey;
+using virgil::sdk::privatekeys::model::PrivateKey;
 
 using json = nlohmann::json;
 
-using virgil::sdk::privatekeys::client::EndpointUri;
-using virgil::sdk::privatekeys::client::AuthEndpoint;
-using virgil::sdk::privatekeys::client::KeysClientConnection;
-using virgil::sdk::privatekeys::error::KeysError;
-using virgil::sdk::privatekeys::http::Request;
-using virgil::sdk::privatekeys::http::Response;
-using virgil::sdk::privatekeys::model::UserData;
-using virgil::sdk::privatekeys::util::JsonKey;
+using namespace fakeit;
 
 
-AuthEndpoint::AuthEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
-        : connection_(connection) {
-    if (!connection_) {
-        throw std::logic_error("AuthEndpoint: connection is not defined.");
-    }
-}
+TEST_CASE("Private Key -> Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
+    std::string encodePrivateKey = VirgilBase64::encode(expectedUserPrivateKeyData());
 
-std::string AuthEndpoint::getAuthToken(const UserData& userData, const std::string& containerPassword) const {
-    json payload = json::object();
-    payload[JsonKey::containerPassword] = containerPassword;
-    payload[JsonKey::userData] = {
-        {JsonKey::className, userData.className()},
-        {JsonKey::type, userData.type()},
-        {JsonKey::value, userData.value()}
+    json privateKeyJson = {
+        { JsonKey::publicKeyId, USER_PUBLIC_KEY_ID },
+        { JsonKey::privateKey, encodePrivateKey }
     };
 
-    Request request = Request().endpoint(EndpointUri::v2().getAuthToken()).post().body(payload.dump());
-    Response response = connection_->send(request);
-    connection_->checkResponseError(response, KeysError::Action::GET_AUTH_TOKEN);
+    PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(privateKeyJson.dump());
 
-    json authTokenJson = json::parse(response.body());
-    std::string authToken = authTokenJson[JsonKey::authToken];
-    return authToken;
+    REQUIRE( privateKey.publicKeyId() == USER_PUBLIC_KEY_ID );
+    REQUIRE( privateKey.key() == expectedUserPrivateKeyData() );
+}
+
+TEST_CASE("Private Key <- Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
+    PrivateKey privateKey;
+    privateKey.key(expectedUserPrivateKeyData());
+    privateKey.publicKeyId(USER_PUBLIC_KEY_ID);
+
+    std::string privateKeyData =  Marshaller<PrivateKey>::toJson(privateKey);
+    json privateKeyJson = json::parse(privateKeyData);
+
+    std::string publicKeyId = privateKeyJson[JsonKey::publicKeyId];
+    std::string keyData = privateKeyJson[JsonKey::privateKey];
+
+    VirgilByteArray key = VirgilBase64::decode(keyData);
+
+    REQUIRE( publicKeyId == USER_PUBLIC_KEY_ID );
+    REQUIRE( key == expectedUserPrivateKeyData() );
 }

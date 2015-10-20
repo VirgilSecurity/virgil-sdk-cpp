@@ -34,50 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
+#include <memory>
 
-#include <json.hpp>
+#include "fakeit.hpp"
 
-#include <virgil/sdk/privatekeys/client/AuthEndpoint.h>
-#include <virgil/sdk/privatekeys/client/EndpointUri.h>
-#include <virgil/sdk/privatekeys/error/KeysError.h>
+#include <virgil/sdk/privatekeys//client/KeysClientConnection.h>
+#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
 #include <virgil/sdk/privatekeys/http/Request.h>
 #include <virgil/sdk/privatekeys/http/Response.h>
-#include <virgil/sdk/privatekeys/util/JsonKey.h>
+#include <virgil/sdk/privatekeys/model/UserData.h>
+
+#include "helpers.h"
+#include "fakeit_helpers.hpp" 
+
+using namespace fakeit;
 
 using json = nlohmann::json;
 
-using virgil::sdk::privatekeys::client::EndpointUri;
-using virgil::sdk::privatekeys::client::AuthEndpoint;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
-using virgil::sdk::privatekeys::error::KeysError;
+using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::http::Request;
 using virgil::sdk::privatekeys::http::Response;
-using virgil::sdk::privatekeys::model::UserData;
 using virgil::sdk::privatekeys::util::JsonKey;
+using virgil::sdk::privatekeys::model::UserData;
 
 
-AuthEndpoint::AuthEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
-        : connection_(connection) {
-    if (!connection_) {
-        throw std::logic_error("AuthEndpoint: connection is not defined.");
-    }
-}
-
-std::string AuthEndpoint::getAuthToken(const UserData& userData, const std::string& containerPassword) const {
+TEST_CASE(" std::string getAuthToken()", "AuthEndpoint") {
+    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     json payload = json::object();
-    payload[JsonKey::containerPassword] = containerPassword;
-    payload[JsonKey::userData] = {
-        {JsonKey::className, userData.className()},
-        {JsonKey::type, userData.type()},
-        {JsonKey::value, userData.value()}
-    };
+    payload[JsonKey::authToken] = VIRGIL_AUTHENTICATION_TOKEN;
+    successResponse.body(payload.dump());
 
-    Request request = Request().endpoint(EndpointUri::v2().getAuthToken()).post().body(payload.dump());
-    Response response = connection_->send(request);
-    connection_->checkResponseError(response, KeysError::Action::GET_AUTH_TOKEN);
+    auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
+            PrivateKeysClient::kBaseAddressDefault);
+    Mock<KeysClientConnection> connection(*connectionObj);
+    When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
-    json authTokenJson = json::parse(response.body());
-    std::string authToken = authTokenJson[JsonKey::authToken];
-    return authToken;
+    auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
+    UserData userData = UserData::email(USER_EMAIL);
+
+    std::string responseAuthToken =  privateKeysClient->auth().getAuthToken(userData, CONTAINER_PASSWORD);
+    Verify(OverloadedMethod(connection, send, Response(const Request&)));
+
+    REQUIRE(responseAuthToken == VIRGIL_AUTHENTICATION_TOKEN);  
 }
