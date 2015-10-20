@@ -60,10 +60,8 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @name Default class implementation.
          */
         //@{
-        void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
-                const std::string& containerPassword) override;
-        void authenticate(const std::string& token) override;
-        std::string getAuthToken() const override;
+        std::string getAuthToken(const virgil::sdk::privatekeys::model::UserData& userData,
+                const std::string& containerPassword) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

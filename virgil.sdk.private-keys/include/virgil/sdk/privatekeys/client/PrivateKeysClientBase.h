@@ -42,7 +42,7 @@
 #include <virgil/sdk/privatekeys/client/AuthEndpointBase.h>
 #include <virgil/sdk/privatekeys/client/ContainerEndpointBase.h>
 #include <virgil/sdk/privatekeys/client/PrivateKeyEndpointBase.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+#include <virgil/sdk/privatekeys/model/UserData.h> 
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
@@ -62,6 +62,22 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @brief Return "Private Key" endpoint§.
          */
         virtual PrivateKeyEndpointBase& privateKey() = 0;
+        /**
+         * @brief Authenticate requests to Virgil’s Private Keys service and set 
+         *  the authentication token.  
+         *
+         * @param userData - added user data.
+         * @param containerPassword - represents container password.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
+                const std::string& containerPassword) = 0;
+        /**
+         * @brief Set the authentication token
+         *
+         * @param token - an authentication token
+         */
+        virtual void authenticate(const std::string& token) = 0;        
     };
 }}}}
 

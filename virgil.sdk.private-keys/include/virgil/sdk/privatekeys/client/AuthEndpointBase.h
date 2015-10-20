@@ -40,8 +40,7 @@
 
 #include <string>
 
-#include <virgil/sdk/privatekeys/model/UserData.h>
-
+ #include <virgil/sdk/privatekeys/model/UserData.h> 
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
@@ -50,29 +49,15 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class AuthEndpointBase {
     public:
         /**
-         * @brief Authenticate requests to Virgil’s Private Keys service.
+         * @brief Authenticate requests to Virgil’s Private Keys service. Get an authentication token.
          *
          * @param userData - added user data.
          * @param containerPassword - represents container password.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
-                const std::string& containerPassword) = 0;
-        /**
-         * @brief Authenticate requests to Virgil’s Private Keys service.
-         *
-         * @param token - an authentication token
-         * @throw KeysError - if request to service failed, or service return error code.
-         */
-        virtual void authenticate(const std::string& token) = 0;
-        /**
-         * @brief Get an authentication token.
-         *
-         * @return an authentication token.
-         */
-        virtual std::string getAuthToken() const = 0;
+        virtual std::string getAuthToken(const virgil::sdk::privatekeys::model::UserData& userData,
+                const std::string& containerPassword) const = 0;
     };
 }}}}
 
 #endif /* VIRGIL_SDK_PRIVATE_KEYS_AUTH_ENDPOINT_BASE_H */
-

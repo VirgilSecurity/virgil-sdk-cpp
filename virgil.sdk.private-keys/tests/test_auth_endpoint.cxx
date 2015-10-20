@@ -59,7 +59,7 @@ using virgil::sdk::privatekeys::util::JsonKey;
 using virgil::sdk::privatekeys::model::UserData;
 
 
-TEST_CASE(" void authenticate(const virgil::sdk::privatekeys::model::UserData& userData, const std::string& containerPassword) ", "AuthEndpoint") {
+TEST_CASE(" std::string getAuthToken()", "AuthEndpoint") {
     Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
     json payload = json::object();
     payload[JsonKey::authToken] = VIRGIL_AUTHENTICATION_TOKEN;
@@ -72,59 +72,9 @@ TEST_CASE(" void authenticate(const virgil::sdk::privatekeys::model::UserData& u
 
     auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
     UserData userData = UserData::email(USER_EMAIL);
-    REQUIRE_NOTHROW(privateKeysClient->auth().authenticate(userData, CONTAINER_PASSWORD));
 
+    std::string responseAuthToken =  privateKeysClient->auth().getAuthToken(userData, CONTAINER_PASSWORD);
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
 
-    std::string responseAuthToken =  privateKeysClient->auth().getAuthToken();
     REQUIRE(responseAuthToken == VIRGIL_AUTHENTICATION_TOKEN);  
-}
-
-TEST_CASE("void authenticate(const std::string& token)", "AuthEndpoint") {
-    Response successResponse = Response().statusCode(Response::StatusCode::OK).contentType("application/json");
-    json payload = json::object();
-    payload[JsonKey::authToken] = VIRGIL_AUTHENTICATION_TOKEN;
-    successResponse.body(payload.dump());
-
-    auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
-            PrivateKeysClient::kBaseAddressDefault);
-    Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
-
-    auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
-    UserData userData = UserData::email(USER_EMAIL);
-    REQUIRE_NOTHROW(privateKeysClient->auth().authenticate(userData, CONTAINER_PASSWORD));
-
-    Verify(OverloadedMethod(connection, send, Response(const Request&)));
-
-    std::string responseAuthToken =  privateKeysClient->auth().getAuthToken();
-    REQUIRE(responseAuthToken == VIRGIL_AUTHENTICATION_TOKEN);  
-
-    // Change Auth Token
-    //  Set New Auth Token
-    REQUIRE_NOTHROW(privateKeysClient->auth().authenticate(NEW_VIRGIL_AUTHENTICATION_TOKEN));
-
-    std::string responseNewAuthToken =  privateKeysClient->auth().getAuthToken();       
-    REQUIRE(responseNewAuthToken == NEW_VIRGIL_AUTHENTICATION_TOKEN);
-}
-
-TEST_CASE("std::string getAuthToken()", "AuthEndpoint") {
-    // auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
-    //         PrivateKeysClient::kBaseAddressDefault);
-    // Mock<KeysClientConnection> connection(*connectionObj);
-
-    // When(OverloadedMethod(connection, getAuthToken, std::string(const char *))).Return(VIRGIL_AUTHENTICATION_TOKEN);
-    // auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
-
-    // std::string responseAuthToken =  privateKeysClient->auth().getAuthToken();
-    // Verify(OverloadedMethod(connection, getAuthToken, std::string(const char *)));    
-    // REQUIRE(responseAuthToken == VIRGIL_AUTHENTICATION_TOKEN);
-
-    // Empty 
-    // When(OverloadedMethod(connection, getAuthToken).Return("");
-    // auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
-
-    // std::string responseEmptyAuthToken =  privateKeysClient->auth().getAuthToken();
-    // Verify(OverloadedMethod(connection, getAuthToken);       
-    // REQUIRE(responseEmptyAuthToken == "");
 }

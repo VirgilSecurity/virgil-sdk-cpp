@@ -64,7 +64,7 @@ AuthEndpoint::AuthEndpoint(const std::shared_ptr<KeysClientConnection>& connecti
     }
 }
 
-void AuthEndpoint::authenticate(const UserData& userData, const std::string& containerPassword) {
+std::string AuthEndpoint::getAuthToken(const UserData& userData, const std::string& containerPassword) const {
     json payload = json::object();
     payload[JsonKey::containerPassword] = containerPassword;
     payload[JsonKey::userData] = {
@@ -79,13 +79,5 @@ void AuthEndpoint::authenticate(const UserData& userData, const std::string& con
 
     json authTokenJson = json::parse(response.body());
     std::string authToken = authTokenJson[JsonKey::authToken];
-    connection_->updateSession(authToken);
-}
-
-void AuthEndpoint::authenticate(const std::string& token) {
-    connection_->updateSession(token);
-}
-
-std::string AuthEndpoint::getAuthToken() const {
-    return connection_->getAuthToken();
+    return authToken;
 }
