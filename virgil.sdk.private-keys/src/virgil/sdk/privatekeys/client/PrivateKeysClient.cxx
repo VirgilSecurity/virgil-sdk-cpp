@@ -67,7 +67,8 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
 
 
 PrivateKeysClient::PrivateKeysClient(const std::shared_ptr<KeysClientConnection>& connection)
-        : impl_(std::make_shared<KeysClientImpl>(connection)), connection_(connection) {
+        : impl_(std::make_shared<KeysClientImpl>(connection)), 
+          connection_(std::make_shared<KeysClientImpl>(connection)) {
 }
 
 PrivateKeysClient::PrivateKeysClient(const std::string& appToken, const std::string& baseAddress)
