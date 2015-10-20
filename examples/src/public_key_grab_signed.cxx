@@ -86,12 +86,13 @@ int main() {
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey, true);
+        std::cout << publicKeyData << std::endl;
 
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
         if (!outFile.good()) {
             throw std::runtime_error("can not write file: virgil_public.key");
         }
-        std::cout << "Store virgil public key to the output file..." << std::endl;
+        std::cout << "Store virgil public key with User Data to the output file..." << std::endl;
         std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Public Key instance successfully searched in Keys Service." << std::endl;

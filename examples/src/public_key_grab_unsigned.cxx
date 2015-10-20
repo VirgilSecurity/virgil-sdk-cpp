@@ -35,7 +35,9 @@
  */
 
 #include <chrono>
-#include <iostream>
+#include <fstream>
+#include <iostream> 
+#include <iterator>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -67,6 +69,13 @@ int main() {
 
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
         std::cout << publicKeyData << std::endl;
+
+        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
+        if (!outFile.good()) {
+            throw std::runtime_error("can not write file: virgil_public.key");
+        }
+        std::cout << "Store virgil public key without User Data to the output file..." << std::endl;
+        std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Public Key instance successfully searched in Keys Service." << std::endl;
     } catch (std::exception& exception) {

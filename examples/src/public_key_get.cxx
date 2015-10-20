@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         PublicKey publicKey = keysClient.publicKey().get(kPublicKeyId);
 
-        std::cout << "Store virgil public key to the stdout..." << std::endl;
+        std::cout << "Store virgil public key without User Data to the stdout..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
         std::cout << publicKeyData << std::endl;
     } catch (std::exception& exception) {
