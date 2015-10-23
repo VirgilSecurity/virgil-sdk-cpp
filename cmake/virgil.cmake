@@ -87,7 +87,7 @@ function (virgil_add_dependency module target includes libraries)
             ExternalProject_Add (${VIRGIL}_project
                 GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil.git"
                 GIT_TAG "v1.0.1"
-                PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/virgil.crypto"
+                PREFIX "${CMAKE_BINARY_DIR}/ext/virgil.crypto"
                 CMAKE_ARGS ${CMAKE_ARGS}
             )
         endif ()
@@ -130,7 +130,7 @@ function (virgil_add_dependency module target includes libraries)
             ExternalProject_Add (${VIRGIL}_project
                 GIT_REPOSITORY "https://github.com/VladEvka/virgil-cpp"
                 GIT_TAG "sdk.keys"
-                PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/keys-public"
+                PREFIX "${CMAKE_BINARY_DIR}/ext/keys-public"
                 CMAKE_ARGS ${CMAKE_ARGS}
             )
         endif ()
@@ -173,7 +173,7 @@ function (virgil_add_dependency module target includes libraries)
             ExternalProject_Add (${VIRGIL}_project
                 GIT_REPOSITORY "https://github.com/VladEvka/virgil-cpp"
                 GIT_TAG "sdk.private-keys"
-                PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/keys-private"
+                PREFIX "${CMAKE_BINARY_DIR}/ext/keys-private"
                 CMAKE_ARGS ${CMAKE_ARGS}
             )
         endif ()
