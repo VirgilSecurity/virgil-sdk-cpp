@@ -60,13 +60,13 @@ include_directories ("include")
 # Add external dependencies
 include (ExternalProject)
 
-include ("ext/json_ext.cmake")
+include (json)
 include_directories (${JSON_INCLUDE_DIRS})
 
-include ("ext/rest_ext.cmake")
+include (rest)
 include_directories (${REST_INCLUDE_DIRS})
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
+include (virgil)
 virgil_add_dependency ("crypto"
     VIRGIL_CRYPTO_DEPENDENCIES
     VIRGIL_CRYPTO_INCLUDE_DIRS
@@ -116,7 +116,7 @@ else ()
     set (DOT_FOUND "NO")
 endif (DOT_PROGRAM)
 
-if(DOXYGEN_FOUND)
+if (DOXYGEN_FOUND)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target ("doc-sdk-public-keys"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile

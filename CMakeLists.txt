@@ -49,6 +49,8 @@ set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
 set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
 
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
 if (ENABLE_TESTING)
     enable_testing ()
 endif (ENABLE_TESTING)
