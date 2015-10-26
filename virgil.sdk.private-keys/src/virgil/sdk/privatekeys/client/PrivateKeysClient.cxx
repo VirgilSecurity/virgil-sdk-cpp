@@ -62,7 +62,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         AuthEndpoint authEndpoint;
         PrivateKeyEndpoint privateKeyEndpoint;
         ContainerEndpoint containerEndpoint;
-        std::shared_ptr<KeysClientConnection> connectionImpl; 
+        std::shared_ptr<KeysClientConnection> connectionImpl;
     };
 
 }}}}

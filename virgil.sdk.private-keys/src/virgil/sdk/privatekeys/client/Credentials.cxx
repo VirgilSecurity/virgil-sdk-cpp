@@ -77,5 +77,3 @@ const std::vector<unsigned char>& Credentials::privateKey() const {
 const std::string& Credentials::privateKeyPassword() const {
     return privateKeyPassword_;
 }
-
-
