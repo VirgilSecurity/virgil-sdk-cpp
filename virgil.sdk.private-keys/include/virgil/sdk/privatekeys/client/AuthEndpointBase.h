@@ -40,7 +40,7 @@
 
 #include <string>
 
- #include <virgil/sdk/privatekeys/model/UserData.h> 
+ #include <virgil/sdk/privatekeys/model/UserData.h>
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     /**
@@ -49,10 +49,11 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
     class AuthEndpointBase {
     public:
         /**
-         * @brief Authenticate requests to Virgil’s Private Keys service. Get an authentication token.
+         * @brief Request authentication token from Virgil Security Private Keys service.
          *
          * @param userData - added user data.
          * @param containerPassword - represents container password.
+         * @return Authenticatin token.
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual std::string getAuthToken(const virgil::sdk::privatekeys::model::UserData& userData,

@@ -65,12 +65,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         /**
          * @brief Get Container Object Data with public key id.
          *
-         * @note Require authentication
-         * @see VirgilPrivateKeysService::authenticate
-         *         
          * @param publicKeyId - public key UUID.
          * @return Container type.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
         virtual virgil::sdk::privatekeys::model::ContainerType getDetails(const std::string& publicKeyId) const = 0;
         /**
@@ -78,14 +78,14 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          *
          * By invoking this method you can change the Container's Type or/and Container's Password.
          *
-         * @note Require authentication
-         * @see VirgilPrivateKeysService::authenticate
-         *         
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
          * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
         virtual void update(const Credentials& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
@@ -98,7 +98,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note A user can reset their Private Key password if the Container Type equals 'easy'.
-         *     If the Container Type equals 'normal', the Private Key will be stored in its original form.
+         *       If the Container Type equals 'normal', the Private Key will be stored in its original form.
          * @see confirm()
          */
         virtual void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
@@ -117,12 +117,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         /**
          * @brief Delete Container Object. Delete existing container object from the Private Key service.
          *
-         * @note Require authentication
-         * @see VirgilPrivateKeysService::authenticate
-         *         
          * @param credentials - user's credentials.
          * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
         virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
     };
