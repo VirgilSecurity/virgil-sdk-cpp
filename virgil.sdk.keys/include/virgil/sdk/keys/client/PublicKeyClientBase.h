@@ -41,8 +41,10 @@
 #include <vector>
 
 #include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/CredentialsExt.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/model/UserData.h>
+
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -85,13 +87,13 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials) const = 0;
+                const Credentials& newKeyCredentials, const CredentialsExt& oldKeyCredentials) const = 0;
         /**
          * @brief Delete public key associated with given user's credentials.
          * @param credentials - user's credentials.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void del(const Credentials& credentials) const = 0;
+        virtual void del(const CredentialsExt& credentials) const = 0;
         /**
          * @brief Deletes public key without HTTP request sign by known private key.
          * @note Should be used when private key is lost.
@@ -145,7 +147,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @return Public key and user's data associated with given user's credentials.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey grab(const CredentialsExt& credentials) const = 0;
     };
 }}}}
 

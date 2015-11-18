@@ -42,6 +42,7 @@
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
 #include <virgil/sdk/keys/client/KeysClientConnection.h>
 
+
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @brief Default implenetation of class PublicKeyClientBase.
@@ -63,9 +64,9 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         virgil::sdk::keys::model::PublicKey get(const std::string& publicKeyId) const override;
 
         virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials) const override;
+                const Credentials& newKeyCredentials, const CredentialsExt& oldKeyCredentials) const override;
 
-        void del(const Credentials& credentials) const override;
+        void del(const CredentialsExt& credentials) const override;
 
         std::string del(const std::string& publicKeyId) const override;
 
@@ -81,7 +82,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
 
         virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const override;
 
-        virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials) const override;
+        virgil::sdk::keys::model::PublicKey grab(const CredentialsExt& credentials) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

@@ -37,8 +37,8 @@
 #include <stdexcept>
 
 #include <virgil/sdk/keys/client/PublicKeyClient.h>
+
 #include <virgil/sdk/keys/client/EndpointUri.h>
-#include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/http/Request.h>
 #include <virgil/sdk/keys/http/Response.h>
 #include <virgil/sdk/keys/util/JsonKey.h>
@@ -52,10 +52,11 @@
 
 #include <json.hpp>
 
+using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::CredentialsExt;
 using virgil::sdk::keys::client::PublicKeyClient;
 using virgil::sdk::keys::client::KeysClientConnection;
 using virgil::sdk::keys::client::EndpointUri;
-using virgil::sdk::keys::client::Credentials;
 using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::model::UserData;
 using virgil::sdk::keys::http::Request;
@@ -108,7 +109,7 @@ virgil::sdk::keys::model::PublicKey PublicKeyClient::get(const std::string& publ
 }
 
 PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
-        const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials) const {
+        const Credentials& newKeyCredentials, const CredentialsExt& oldKeyCredentials) const {
     std::string gen_uuid = uuid();
     json payload = json::object();
     payload[JsonKey::publicKey] = VirgilBase64::encode(newKey);
@@ -124,7 +125,7 @@ PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-void PublicKeyClient::del(const Credentials& credentials) const {
+void PublicKeyClient::del(const CredentialsExt& credentials) const {
     json payload = {
         {JsonKey::uuid, uuid()}
     };
@@ -201,7 +202,7 @@ PublicKey PublicKeyClient::grab(const std::string& userId) const {
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-PublicKey PublicKeyClient::grab(const Credentials& credentials) const {
+PublicKey PublicKeyClient::grab(const CredentialsExt& credentials) const {
     json payload = {
         {JsonKey::uuid, uuid()}
     };

@@ -42,6 +42,8 @@
 
 #include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/model/UserData.h>
+#include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/CredentialsExt.h>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
@@ -91,9 +93,14 @@ inline std::vector<unsigned char> expectedPrivateKeyData() {
     );
 }
 
-inline virgil::sdk::keys::client::Credentials expectedCredentialsPubIdKey() {
-    return virgil::sdk::keys::client::Credentials(expectedPublicKeyId(), expectedPrivateKeyData());
+inline virgil::sdk::keys::client::CredentialsExt expectedCredentialsExt() {
+    return virgil::sdk::keys::client::CredentialsExt(expectedPublicKeyId(), expectedPrivateKeyData());
 }
+
+inline virgil::sdk::keys::client::Credentials expectedCredentials() {
+    return virgil::sdk::keys::client::Credentials(expectedPrivateKeyData());
+}
+
 
 inline virgil::sdk::keys::model::UserData expectedUserData1() {
     virgil::sdk::keys::model::UserData userData =

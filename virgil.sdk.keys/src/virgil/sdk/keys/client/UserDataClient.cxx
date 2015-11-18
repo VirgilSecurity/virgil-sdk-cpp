@@ -52,6 +52,7 @@ using virgil::sdk::keys::client::UserDataClient;
 using virgil::sdk::keys::client::KeysClientConnection;
 using virgil::sdk::keys::client::EndpointUri;
 using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::CredentialsExt;
 using virgil::sdk::keys::http::Request;
 using virgil::sdk::keys::http::Response;
 using virgil::sdk::keys::model::PublicKey;
@@ -70,7 +71,7 @@ UserDataClient::UserDataClient(const std::shared_ptr<KeysClientConnection>& conn
     }
 }
 
-UserData UserDataClient::add(const UserData& userData, const Credentials& credentials) const {
+UserData UserDataClient::add(const UserData& userData, const CredentialsExt& credentials) const {
     json payload = json::object();
     payload = json::parse(Marshaller<UserData>::toJson(userData));
     payload[JsonKey::uuid] = uuid();
@@ -81,7 +82,7 @@ UserData UserDataClient::add(const UserData& userData, const Credentials& creden
     return Marshaller<UserData>::fromJson(response.body());
 }
 
-void UserDataClient::del(const std::string& userDataId, const Credentials& credentials) const {
+void UserDataClient::del(const std::string& userDataId, const CredentialsExt& credentials) const {
     json payload = {
         {JsonKey::uuid, uuid()}
     };
@@ -102,7 +103,7 @@ void UserDataClient::confirm(const std::string& userDataId, const std::string& c
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
 }
 
-void UserDataClient::resendConfirmation(const std::string& userDataId, const Credentials& credentials) const {
+void UserDataClient::resendConfirmation(const std::string& userDataId, const CredentialsExt& credentials) const {
     json payload = {
         {JsonKey::uuid, uuid()}
     };

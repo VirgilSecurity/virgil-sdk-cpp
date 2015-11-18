@@ -40,8 +40,9 @@
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/keys/model/UserData.h>
 #include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/CredentialsExt.h>
+#include <virgil/sdk/keys/model/UserData.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
@@ -57,14 +58,14 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @return Added user data with UUIDs.
          */
         virtual virgil::sdk::keys::model::UserData add(const virgil::sdk::keys::model::UserData& userData,
-                const virgil::sdk::keys::client::Credentials& credentials) const = 0;
+                const virgil::sdk::keys::client::CredentialsExt& credentials) const = 0;
         /**
          * @brief Delete specific user data.
          * @param userDataId - user data UUID.
          * @param credentials - user's credentials.
          */
         virtual void del(const std::string& userDataId,
-                const virgil::sdk::keys::client::Credentials& credentials) const = 0;
+                const virgil::sdk::keys::client::CredentialsExt& credentials) const = 0;
         /**
          * @brief Confirm user data.
          * @param userDataId - user data UUID.
@@ -78,7 +79,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param uuid - transaction UUID.
          */
         virtual void resendConfirmation(const std::string& userDataId,
-                const virgil::sdk::keys::client::Credentials& credentials) const = 0;
+                const virgil::sdk::keys::client::CredentialsExt& credentials) const = 0;
     };
 }}}}
 
