@@ -47,7 +47,8 @@ using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -64,8 +65,11 @@ int main(int argc, char **argv) {
         std::cout << "Store virgil public key without User Data to the stdout..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
         std::cout << publicKeyData << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+    
     return 0;
 }

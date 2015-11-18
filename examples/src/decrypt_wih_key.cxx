@@ -38,39 +38,51 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilStreamCipher.h>
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/client/CredentialsExt.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/model/UserData.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilStreamCipher;
+using virgil::crypto::stream::VirgilStreamDataSource;
+using virgil::crypto::stream::VirgilStreamDataSink;
 
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::client::CredentialsExt;
-using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::model::UserData;
-
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
+using virgil::sdk::keys::io::Marshaller;
 
 
 int main() {
     try {
+        std::cout << "Prepare input file: test.txt.enc..." << std::endl;
+        std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);
+        if (!inFile.good()) {
+            throw std::runtime_error("can not read file: test.txt.enc");
+        }
+
+        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
+        if (!outFile.good()) {
+            throw std::runtime_error("can not write file: decrypted_test.txt");
+        }
+
+        std::cout << "Initialize cipher..." << std::endl;
+        VirgilStreamCipher cipher;
+
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
-        std::string publicKeyData((std::istreambuf_iterator<char>(publicKeyFile)),
-                std::istreambuf_iterator<char>());
+        std::string publicKeyData;
+        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(publicKeyData));
 
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
@@ -83,26 +95,16 @@ int main() {
         std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        CredentialsExt credentials(publicKey.publicKeyId(), privateKey);
-
-        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        UserData userData = UserData::email(USER_EMAIL);
-
-        std::cout << "Call Keys service to create User Data instance." << std::endl;
-        UserData userDataResponse = keysClient.userData().add(userData, credentials);
-
-        std::string data = Marshaller<UserData>::toJson(userDataResponse);
-        std::cout << data << std::endl;
-        std::cout << "User Data instance successfully created in Public Keys service." << std::endl;
-
-        std::cout << "Confirmation code can be found in the email." << std::endl;
-        std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;        
-
+        std::cout << "Decrypt with key..." << std::endl;
+        VirgilStreamDataSource dataSource(inFile);
+        VirgilStreamDataSink dataSink(outFile);
+        cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
+        std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-
+    
     return 0;
 }

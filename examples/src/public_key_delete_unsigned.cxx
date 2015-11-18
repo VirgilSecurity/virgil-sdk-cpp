@@ -35,11 +35,9 @@
  */
 
 #include <algorithm>
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -52,12 +50,8 @@ using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
 
-/**
- * @brief Generate new UUID
- */
-std::string uuid();
 
 int main() {
     try {
@@ -74,31 +68,17 @@ int main() {
 
         std::cout << "Remove public key with id (" << publicKey.publicKeyId() << ")." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        std::string confirmInfo = keysClient.publicKey().del(publicKey.publicKeyId(), uuid());
+        std::string confirmInfo = keysClient.publicKey().del(publicKey.publicKeyId());
         std::cout << confirmInfo << std::endl;
+
+        std::cout << "Confirmation code can be found in the email." << std::endl;
+        std::cout << "Now launch next command: "  << std::endl;
+        std::cout << "public_key_confirm_del <action_token> <confirmation_codes>" << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+    
     return 0;
-}
-
-std::string uuid () {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
-
-    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
-    uint16_t time_mid = generator() & 0xffff;
-    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
-    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
-    uint8_t node [6];
-    for (size_t i = 0; i < 6; ++i) {
-        node[i] = generator() & 0xff;
-    }
-
-    char buffer[37] = {0x0};
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
-        node[0], node[1], node[2], node[3], node[4], node[5]);
-
-    return std::string(buffer);
 }

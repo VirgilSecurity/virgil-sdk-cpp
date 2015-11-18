@@ -55,7 +55,8 @@ using virgil::sdk::keys::io::Marshaller;
 using virgil::sdk::keys::model::PublicKey;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+
 
 int main(int argc, char **argv) {
     if (argc < 3) {
@@ -93,8 +94,10 @@ int main(int argc, char **argv) {
         keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), newKeyCredentials,
                 actionToken, {confirmationCodes});
         std::cout << "Public Key instance successfully confirm reset." << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
 
     return 0;

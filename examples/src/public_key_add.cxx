@@ -35,11 +35,9 @@
  */
 
 #include <algorithm>
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <random>
 #include <stdexcept>
 #include <string>
 
@@ -62,13 +60,9 @@ using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::model::UserData;
 
 const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
 
-/**
- * @brief Generate new UUID
- */
-std::string uuid();
 
 int main() {
     try {
@@ -76,12 +70,6 @@ int main() {
         std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
         if (!inFile.good()) {
             throw std::runtime_error("can not read file: public.key");
-        }
-
-        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
-        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: virgil_public.key");
         }
 
         std::cout << "Read public key..." << std::endl;
@@ -100,41 +88,32 @@ int main() {
 
         Credentials credentials(privateKey);
 
-        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         UserData userData = UserData::email(USER_EMAIL);
-        PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData}, credentials, uuid());
+
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+
+        std::cout << "Create user (" << USER_EMAIL << ") account on the Virgil PKI service..." << std::endl;
+        PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData}, credentials);
+        std::string publicKeyData = Marshaller<PublicKey>::toJson(virgilPublicKey);
+
+        std::cout << "Prepare output file: virgil_public.key..." << std::endl;
+        std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
+        if (!outFile.good()) {
+            throw std::runtime_error("can not write file: virgil_public.key");
+        }
 
         std::cout << "Store virgil public key to the output file..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(virgilPublicKey);
         std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Added user data id: " << virgilPublicKey.userData().front().userDataId() << std::endl;
         std::cout << "Confirmation code can be found in the email." << std::endl;
         std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+    
     return 0;
-}
-
-std::string uuid () {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
-
-    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
-    uint16_t time_mid = generator() & 0xffff;
-    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
-    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
-    uint8_t node [6];
-    for (size_t i = 0; i < 6; ++i) {
-        node[i] = generator() & 0xff;
-    }
-
-    char buffer[37] = {0x0};
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
-        node[0], node[1], node[2], node[3], node[4], node[5]);
-
-    return std::string(buffer);
 }
