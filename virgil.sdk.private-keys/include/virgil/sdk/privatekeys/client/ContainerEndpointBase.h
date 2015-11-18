@@ -74,7 +74,9 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         /**
          * @brief Update information of existing Container.
          *
-         * By invoking this method you can change the Container's Type or/and Container's Password.
+         * By invoking this method you can change the Container's Type and Container's Password.
+         *
+         * @deprecated - this method will be removed in the next version.
          *
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
@@ -86,6 +88,36 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         virtual void update(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
+                const std::string& containerPassword) const = 0;
+        /**
+         * @brief Update information of existing Container.
+         *
+         * By invoking this method you can change the Container's Type Password.
+         *
+         * @deprecated - this method will be removed in the next version.
+         *
+         * @param credentials - user's credentials.
+         * @param containerType - the type of private keys container.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
+         */
+        virtual void update(const CredentialsExt& credentials,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType) const = 0;
+        /**
+         * @brief Update information of existing Container.
+         *
+         * By invoking this method you can change the Container's Password.
+         *
+         * @param credentials - user's credentials.
+         * @param containerPassword - represents container password.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
+         */
+        virtual void update(const CredentialsExt& credentials,
                 const std::string& containerPassword) const = 0;
         /**
          * @brief Reset the Container Password.

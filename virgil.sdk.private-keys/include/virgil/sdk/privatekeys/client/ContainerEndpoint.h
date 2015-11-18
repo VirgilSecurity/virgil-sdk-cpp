@@ -67,6 +67,10 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
         void update(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword) const override;
+        void update(const CredentialsExt& credentials,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType) const override;
+        void update(const CredentialsExt& credentials,
+                const std::string& containerPassword) const override;
         void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& newContainerPassword) const override;
         void confirm(const std::string& confirmToken) const override;
