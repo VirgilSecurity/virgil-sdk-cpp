@@ -42,6 +42,7 @@
 #include <virgil/sdk/keys/http/Request.h>
 #include <virgil/sdk/keys/http/Response.h>
 #include <virgil/sdk/keys/util/JsonKey.h>
+#include <virgil/sdk/keys/util/uuid.h>
 #include <virgil/sdk/keys/error/KeysError.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 
@@ -60,6 +61,7 @@ using virgil::sdk::keys::model::UserData;
 using virgil::sdk::keys::http::Request;
 using virgil::sdk::keys::http::Response;
 using virgil::sdk::keys::util::JsonKey;
+using virgil::sdk::keys::util::uuid;
 using virgil::sdk::keys::error::KeysError;
 using virgil::sdk::keys::io::Marshaller;
 
@@ -77,7 +79,7 @@ PublicKeyClient::PublicKeyClient(const std::shared_ptr<KeysClientConnection>& co
 }
 
 PublicKey PublicKeyClient::add(const std::vector<unsigned char>& key,
-        const std::vector<UserData>& userData, const Credentials& credentials, const std::string& uuid) const {
+        const std::vector<UserData>& userData, const Credentials& credentials) const {
     json payload = json::object();
     payload[JsonKey::publicKey] = VirgilBase64::encode(key);
     payload[JsonKey::userData] = json::array();
@@ -90,7 +92,7 @@ PublicKey PublicKeyClient::add(const std::vector<unsigned char>& key,
             })
         );
     }
-    payload[JsonKey::uuid] = uuid;
+    payload[JsonKey::uuid] = uuid();
 
     Request request = Request().endpoint(EndpointUri::v2().publicKeyAdd()).post().body(payload.dump());
     Response response = connection_->send(request, credentials);
@@ -106,12 +108,12 @@ virgil::sdk::keys::model::PublicKey PublicKeyClient::get(const std::string& publ
 }
 
 PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
-        const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
-        const std::string& uuid) const {
+        const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials) const {
+    std::string gen_uuid = uuid();
     json payload = json::object();
     payload[JsonKey::publicKey] = VirgilBase64::encode(newKey);
-    payload[JsonKey::uuid] = uuid;
-    payload[JsonKey::uuidSign] = VirgilBase64::encode(VirgilSigner().sign(virgil::crypto::str2bytes(uuid),
+    payload[JsonKey::uuid] = gen_uuid;
+    payload[JsonKey::uuidSign] = VirgilBase64::encode(VirgilSigner().sign(virgil::crypto::str2bytes(gen_uuid),
             newKeyCredentials.privateKey(), virgil::crypto::str2bytes(newKeyCredentials.privateKeyPassword())));
 
     std::string requestUri = EndpointUri::v2().publicKeyUpdate(oldKeyCredentials.publicKeyId());
@@ -122,9 +124,9 @@ PublicKey PublicKeyClient::update(const std::vector<unsigned char>& newKey,
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-void PublicKeyClient::del(const Credentials& credentials, const std::string& uuid) const {
+void PublicKeyClient::del(const Credentials& credentials) const {
     json payload = {
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
 
     std::string requestUri = EndpointUri::v2().publicKeyDelete(credentials.publicKeyId());
@@ -133,9 +135,9 @@ void PublicKeyClient::del(const Credentials& credentials, const std::string& uui
     connection_->checkResponseError(response, KeysError::Action::PUBLIC_KEY_DELETE);
 }
 
-std::string PublicKeyClient::del(const std::string& publicKeyId, const std::string& uuid) const {
+std::string PublicKeyClient::del(const std::string& publicKeyId) const {
     json payload = {
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
 
     std::string requestUri = EndpointUri::v2().publicKeyDelete(publicKeyId);
@@ -159,10 +161,10 @@ void PublicKeyClient::confirmDel(const std::string& publicKeyId, const std::stri
 }
 
 std::string PublicKeyClient::reset(const std::string& oldPublicKeyId, const std::vector<unsigned char>& newKey,
-        const Credentials& newKeyCredentials, const std::string& uuid) const {
+        const Credentials& newKeyCredentials) const {
     json payload = {
         {JsonKey::publicKey, VirgilBase64::encode(newKey)},
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
 
     std::string requestUri = EndpointUri::v2().publicKeyReset(oldPublicKeyId);
@@ -187,10 +189,10 @@ PublicKey PublicKeyClient::confirmReset(const std::string& oldPublicKeyId, const
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-PublicKey PublicKeyClient::grab(const std::string& userId, const std::string& uuid) const {
+PublicKey PublicKeyClient::grab(const std::string& userId) const {
     json payload = {
         {JsonKey::value, userId},
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
 
     Request request = Request().endpoint(EndpointUri::v2().publicKeyGrab()).post().body(payload.dump());
@@ -199,9 +201,9 @@ PublicKey PublicKeyClient::grab(const std::string& userId, const std::string& uu
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-PublicKey PublicKeyClient::grab(const Credentials& credentials, const std::string& uuid) const {
+PublicKey PublicKeyClient::grab(const Credentials& credentials) const {
     json payload = {
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
 
     Request request = Request().endpoint(EndpointUri::v2().publicKeyGrab()).post().body(payload.dump());

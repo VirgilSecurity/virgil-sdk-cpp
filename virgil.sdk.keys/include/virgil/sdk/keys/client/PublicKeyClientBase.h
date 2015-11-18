@@ -62,13 +62,12 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param key - public key to add.
          * @param userData - user data associated with public key.
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @return Public key and user's data associated with it.
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual virgil::sdk::keys::model::PublicKey add(const std::vector<unsigned char>& key,
                 const std::vector<virgil::sdk::keys::model::UserData>& userData,
-                const Credentials& credentials, const std::string& uuid) const = 0;
+                const Credentials& credentials) const = 0;
         /**
          * @brief Get public key by its UUID.
          * @param publicKeyId - public key UUID.
@@ -82,29 +81,25 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param newKey - new public key in the raw format.
          * @param newKeyCredentials - user's credentials of the new public key.
          * @param oldKeyCredentials - user's credentials of the old public key.
-         * @param uuid - transaction UUID.
          * @return Updated public key.
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
-                const std::string& uuid) const = 0;
+                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials) const = 0;
         /**
          * @brief Delete public key associated with given user's credentials.
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
+        virtual void del(const Credentials& credentials) const = 0;
         /**
          * @brief Deletes public key without HTTP request sign by known private key.
          * @note Should be used when private key is lost.
          * @param publicKeyId - public key UUID.
-         * @param uuid - transaction UUID.
          * @return action_token and userIds to json.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual std::string del(const std::string& publicKeyId, const std::string& uuid) const = 0;
+        virtual std::string del(const std::string& publicKeyId) const = 0;
         /**
          * @brief Confirm Delete Public Key operation.
          * @param publicKeyId - public key UUID.
@@ -120,12 +115,11 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @param oldPublicKeyId - the old public key identifier.
          * @param newKey - new public key in the raw format.
          * @param newKeyCredentials - user's credentials of the new public key.
-         * @param uuid - transaction UUID.
          * @return action_token and userIds to json.
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual std::string reset(const std::string& oldPublicKeyId, const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const std::string& uuid) const = 0;
+                const Credentials& newKeyCredentials) const = 0;
         /**
          * @brief Confirm Reset Public Key operation.
          *
@@ -141,20 +135,17 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         /**
          * @brief Search public key associated with a given user identifier.
          * @param userId - user unique identifier: email, phone, fax, application, etc.
-         * @param uuid - transaction UUID.
          * @return Public keys associated with given user.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual virgil::sdk::keys::model::PublicKey grab(const std::string& userId, const std::string& uuid) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const = 0;
         /**
          * @brief Search public key associated with a given user's credentials.
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @return Public key and user's data associated with given user's credentials.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials,
-                const std::string& uuid) const = 0;
+        virtual virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials) const = 0;
     };
 }}}}
 

@@ -49,10 +49,6 @@ inline std::string appToken() {
     return "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
 }
 
-inline std::string uuid() {
-    return "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
-}
-
 inline std::string actionToken() {
     return "57516f1b-f17c-3154-c91e-edb86c514c5d";
 }
@@ -95,7 +91,7 @@ inline std::vector<unsigned char> expectedPrivateKeyData() {
     );
 }
 
-inline virgil::sdk::keys::client::Credentials credentials() {
+inline virgil::sdk::keys::client::Credentials expectedCredentialsPubIdKey() {
     return virgil::sdk::keys::client::Credentials(expectedPublicKeyId(), expectedPrivateKeyData());
 }
 

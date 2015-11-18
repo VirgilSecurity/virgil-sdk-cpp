@@ -85,7 +85,8 @@ TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = keysClient->userData().add(UserData::email("user@virgilsecurity.com"), credentials(), uuid());
+    Credentials credentials = expectedCredentialsPubIdKey();
+    UserData userData = keysClient->userData().add(UserData::email("user@virgilsecurity.com"), credentials);
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
     checkUserData(userData, expectedUserData1());
@@ -100,7 +101,8 @@ TEST_CASE("Delete User Data - success", "[virgil-sdk-keys-user-data]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().del(expectedUserData1().userDataId(), credentials(), uuid()));
+    Credentials credentials = expectedCredentialsPubIdKey();
+    REQUIRE_NOTHROW(keysClient->userData().del(expectedUserData1().userDataId(), credentials));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }
@@ -114,7 +116,7 @@ TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
     When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserData1().userDataId(), confirmationCode(), uuid()));
+    REQUIRE_NOTHROW(keysClient->userData().confirm(expectedUserData1().userDataId(), confirmationCode()));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
 }
@@ -128,7 +130,8 @@ TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserData1().userDataId(), credentials(), uuid()));
+    Credentials credentials = expectedCredentialsPubIdKey();
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserData1().userDataId(), credentials));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }

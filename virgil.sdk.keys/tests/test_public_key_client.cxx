@@ -86,9 +86,10 @@ TEST_CASE("Add Public Key (new account) - success", "[virgil-sdk-keys-public-key
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    Credentials credentials = expectedCredentialsPubIdKey();
     PublicKey publicKey = keysClient->publicKey().add(expectedPublicKeyData(),
             {expectedUserData1(), expectedUserData2(), expectedUserData3(), expectedUserData4()},
-            credentials(), uuid());
+            credentials);
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
     checkPublicKeys(publicKey, expectedPublicKeyWithUserData());
@@ -118,8 +119,10 @@ TEST_CASE("Update Public Key - success", "[virgil-sdk-keys-public-key]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    Credentials newKeyCredentials = expectedCredentialsPubIdKey();
+    Credentials oldKeyCredentials = expectedCredentialsPubIdKey();
     PublicKey publicKey = keysClient->publicKey().update(expectedPublicKeyData(),
-            credentials(), credentials(), uuid());
+            newKeyCredentials, oldKeyCredentials);
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
     checkPublicKeys(publicKey, expectedPublicKey());
@@ -134,7 +137,8 @@ TEST_CASE("Delete Public Key - success", "[virgil-sdk-keys-public-key]") {
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->publicKey().del(credentials(), uuid()));
+    Credentials credentials = expectedCredentialsPubIdKey();
+    REQUIRE_NOTHROW(keysClient->publicKey().del(credentials));
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
 }
@@ -152,7 +156,7 @@ TEST_CASE("Delete Public Key (unsigned) - success", "[virgil-sdk-keys-public-key
     When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    std::string responseBody = keysClient->publicKey().del(expectedPublicKeyId(), uuid());
+    std::string responseBody = keysClient->publicKey().del(expectedPublicKeyId());
 
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
     REQUIRE(responseBody == payload.dump());
@@ -184,11 +188,10 @@ TEST_CASE("Reset Public Key - success", "[virgil-sdk-keys-public-key]") {
     Mock<KeysClientConnection> connection(*connectionObj);
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
-    Credentials credentials(expectedPrivateKeyData());
-
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
+    Credentials credentials(expectedPrivateKeyData());    
     std::string responseBody = keysClient->publicKey().reset(expectedPublicKeyId(),
-            expectedPublicKeyData(), credentials, uuid());
+            expectedPublicKeyData(), credentials);
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
     REQUIRE(responseBody == payload.dump());
@@ -203,7 +206,8 @@ TEST_CASE("Confirm Reset Public Key - success", "[virgil-sdk-keys-public-key]") 
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = keysClient->publicKey().confirmReset(expectedPublicKeyId(), credentials(), actionToken(),
+    Credentials credentials = expectedCredentialsPubIdKey();
+    PublicKey publicKey = keysClient->publicKey().confirmReset(expectedPublicKeyId(), credentials, actionToken(),
             confirmationCodes());
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
@@ -219,7 +223,7 @@ TEST_CASE("Grab Public Key by UDID - success", "[virgil-sdk-keys-public-key]") {
     When(OverloadedMethod(connection, send, Response(const Request&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = keysClient->publicKey().grab("user@virgilsecurity.com", uuid());
+    PublicKey publicKey = keysClient->publicKey().grab("user@virgilsecurity.com");
 
     Verify(OverloadedMethod(connection, send, Response(const Request&)));
     checkPublicKeys(publicKey, expectedPublicKey());
@@ -234,7 +238,8 @@ TEST_CASE("Grab Public Key by credentials - success", "[virgil-sdk-keys-public-k
     When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    PublicKey publicKey = keysClient->publicKey().grab(credentials(), uuid());
+    Credentials credentials = expectedCredentialsPubIdKey();
+    PublicKey publicKey = keysClient->publicKey().grab(credentials);
 
     Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
     checkPublicKeys(publicKey, expectedPublicKeyWithUserData());
