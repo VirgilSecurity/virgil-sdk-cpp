@@ -37,6 +37,8 @@
 #include <stdexcept>
 #include <json.hpp>
 
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilCipher.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
 #include <virgil/sdk/privatekeys/client/Credentials.h>
@@ -46,12 +48,16 @@
 #include <virgil/sdk/privatekeys/http/Request.h>
 #include <virgil/sdk/privatekeys/http/Response.h>
 #include <virgil/sdk/privatekeys/util/JsonKey.h>
+#include <virgil/sdk/privatekeys/util/uuid.h> 
 
 using json = nlohmann::json;
 
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilCipher;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::EndpointUri;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::error::KeysError;
@@ -60,6 +66,7 @@ using virgil::sdk::privatekeys::model::PrivateKey;
 using virgil::sdk::privatekeys::http::Request;
 using virgil::sdk::privatekeys::http::Response;
 using virgil::sdk::privatekeys::util::JsonKey;
+using virgil::sdk::privatekeys::util::uuid;
 
 
 static const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
@@ -72,11 +79,14 @@ PrivateKeyEndpoint::PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnectio
     }
 }
 
-void PrivateKeyEndpoint::add(const Credentials &credentials, const std::string& uuid) const {
-    std::string encodePrivateKey = VirgilBase64::encode(credentials.privateKey());
+void PrivateKeyEndpoint::add(const CredentialsExt &credentials, const std::string& pass) const {
+    VirgilCipher cipher;
+    cipher.addPasswordRecipient(virgil::crypto::str2bytes(pass));
+    VirgilByteArray encryptedPrivateKey = cipher.encrypt(credentials.privateKey(), true);
+
     json payload = {
-        { JsonKey::privateKey, encodePrivateKey },
-        { JsonKey::requestSignUuid, uuid}
+        { JsonKey::privateKey, VirgilBase64::encode(encryptedPrivateKey) },
+        { JsonKey::requestSignUuid, uuid() }
     };
 
     Request request = Request().endpoint(EndpointUri::v2().addPrivateKey()).post().body(payload.dump());
@@ -90,7 +100,7 @@ void PrivateKeyEndpoint::add(const Credentials &credentials, const std::string& 
     connection_->checkResponseError(response, KeysError::Action::ADD_PRIVATE_KEY);
 }
 
-PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId) const {
+PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId, const std::string& pass) const {
     Request request = Request().endpoint(EndpointUri::v2().getPrivateKey(publicKeyId)).get();
 
     //Add an authentication token to the header
@@ -105,13 +115,19 @@ PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId) const {
     std::string responsePublicKeyId = responseTypeJson[JsonKey::publicKeyId];
     std::string responsePrivateKey = responseTypeJson[JsonKey::privateKey];
 
+    VirgilByteArray encryptedPrivateKey = VirgilBase64::decode(responsePrivateKey);
+    VirgilCipher cipher;
+    VirgilByteArray passBytes = virgil::crypto::str2bytes(pass);
+    VirgilByteArray decryptedPrivateKey = cipher.decryptWithPassword(encryptedPrivateKey, passBytes);
+
     PrivateKey privateKey;
-    privateKey.publicKeyId(responsePublicKeyId).key(VirgilBase64::decode(responsePrivateKey));
+    privateKey.publicKeyId(responsePublicKeyId).key(decryptedPrivateKey);
+
     return privateKey;
 }
 
-void PrivateKeyEndpoint::del(const Credentials &credentials, const std::string& uuid) const {
-    json payload = {{ JsonKey::requestSignUuid, uuid}};
+void PrivateKeyEndpoint::del(const CredentialsExt &credentials) const {
+    json payload = {{ JsonKey::requestSignUuid, uuid() }};
 
     Request request = Request().endpoint(EndpointUri::v2().deletePrivateKey()).del().body(payload.dump());
 

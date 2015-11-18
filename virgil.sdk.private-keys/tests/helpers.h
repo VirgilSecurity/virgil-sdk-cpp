@@ -44,7 +44,7 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/util/JsonKey.h>
 
@@ -56,25 +56,46 @@ constexpr char NEW_VIRGIL_AUTHENTICATION_TOKEN[] = "666be6a906aa4d567531827beb66
 
 constexpr char USER_PUBLIC_KEY_ID[] = "f437d5b1-90e3-ec3b-3744-d9e23a892c41";
 constexpr char USER_EMAIL[] = "test.virgilsecurity@mailinator.com";
+constexpr char USER_PASSWORD[] = "123456789";
 constexpr char CONTAINER_PASSWORD[] = "123456789";
 constexpr char CONFIRMATION_CODE[] = "A3F4S3";
-constexpr char UUID[] = "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
 
+constexpr char PASS_PRIVATE_KEY[] = "666";
 
-inline virgil::crypto::VirgilByteArray expectedUserPrivateKeyData() {
+inline virgil::crypto::VirgilByteArray expectedPrivateKeyDataWithPass() {
     std::string privateKeys =
-        "-----BEGIN PRIVATE KEY-----"
-        "MIHsAgEAMBQGByqGSM49AgEGCSskAwMCCAEBDQSB0DCBzQIBAQRAYfsONejc+RyL"
-        "TEa6TXizoAggmLPjQR6ywkGAr2ua5C/faveunixw1CoaBmkBxUomRnQeyvDIW1at"
-        "04vexApRAaGBhQOBggAEmievpkVDuymIV7+MtOmwq/4qDxYE/18HcCvmmosOCcOt"
-        "gs2hVzH4cLnoaFt8Wz0qERjffVqnfkq14Lx6SwPOi5ZLJo/Jzk8Z89LVbZWAyGgg"
-        "n7pCoQeg9sPZHczFBy0RZEeuuJq0bQYEgx00ZqZ2ecBUxJFmcQkUDI9nbVQthYc="
-        "-----END PRIVATE KEY-----";
+            "-----BEGIN ENCRYPTED PRIVATE KEY-----"
+            "MIIBMTA0BgoqhkiG9w0BDAEDMCYEIISrD85zdxtAmgPkqBmIWraKTCuMwMd23B7j"
+            "ncySx7Z9AgIgAASB+ETiRAFVxk5kBlJMd2+N1tf89tCcr+rkBhJV2ux02lBluOhG"
+            "jbX/ydiRSVPpobO+TH37X90Ypae74cXfSL38lBy0mshzIXOEGujAQ1mbxOPjyGJc"
+            "zQVMdo8/2dQAIVqG0d1C0EHeHAsXsI+yqn9hWtUxYa+qUT/TICBvzq+71i7elAbb"
+            "YO/B+At+d/IjlWWEpWpaFz5rOoWUFLjb5jkVEhF6vA4RYrm0907pyNzbi5i2Tiiy"
+            "3bC2R8wCvSIxR66L+ZXOO5Qfx0YG3dxwLnfEmII8mKkxySPO0rEaUcB6d7CPwgm0"
+            "UyTZ7nK48dzkauSG/6DjJH/SCKib"
+            "-----END ENCRYPTED PRIVATE KEY-----";
     return virgil::crypto::str2bytes(privateKeys);
 }
 
-inline virgil::sdk::privatekeys::client::Credentials expectedCredentials() {
-    return virgil::sdk::privatekeys::client::Credentials(USER_PUBLIC_KEY_ID, expectedUserPrivateKeyData());
+inline virgil::crypto::VirgilByteArray expectedPrivateKeyData() {
+    std::string privateKeys =
+            "-----BEGIN EC PRIVATE KEY-----"
+            "MIHbAgEBBEEAhbT3jHL8eU7QAuHplFlUzXssLtBRTLb5qT/eXVvq/Xe1+2PkzjXe"
+            "M+556naXKA/Rfk6AKYKu6a4ML+2DJ16xhKALBgkrJAMDAggBAQ2hgYUDgYIABHev"
+            "+jQIyCA/CZ71t57sJDBUEO1QTpsPhJxoKbWiVkF+kzBcNjFnRo/DvQ4cVEalJz+Z"
+            "pzbJ7b9FV3FHbDaFFW9sSlAjOZSCsSb+oYE1EREtITHPnEdAq8haOBa/oN1IlzZD"
+            "eqEq3uryZb25NeEx94UoGprKPBetMyWPD8v+L6RF"
+            "-----END EC PRIVATE KEY-----";
+   return virgil::crypto::str2bytes(privateKeys);
+}
+
+inline virgil::sdk::privatekeys::client::CredentialsExt expectedCredentialsExt() {
+    return virgil::sdk::privatekeys::client::CredentialsExt(USER_PUBLIC_KEY_ID, expectedPrivateKeyData());
+}
+
+inline virgil::sdk::privatekeys::client::CredentialsExt expectedCredentialsExtWithPass() {
+    return virgil::sdk::privatekeys::client::CredentialsExt(USER_PUBLIC_KEY_ID, 
+            expectedPrivateKeyDataWithPass(),
+            PASS_PRIVATE_KEY);
 }
 
 #endif /* HELPERS_H */

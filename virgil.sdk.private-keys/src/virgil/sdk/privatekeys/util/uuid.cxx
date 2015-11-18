@@ -34,38 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
+#include <virgil/sdk/privatekeys/util/uuid.h>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <chrono>
+#include <random>
+#include <cstdint>
+#include <stdio.h>
 
-using virgil::sdk::privatekeys::client::Credentials;
+std::string virgil::sdk::privatekeys::util::uuid () {
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
 
-Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
-        : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
-}
-
-bool Credentials::isValid() const {
-    return !privateKey_.empty();
-}
-
-void Credentials::cleanup() noexcept {
-    if(!privateKey_.empty()) {
-        virgil::crypto::bytes_zeroize(privateKey_);
+    uint32_t time_low = ((generator() << 16) & 0xffff0000) | (generator() & 0xffff);
+    uint16_t time_mid = generator() & 0xffff;
+    uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
+    uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
+    uint8_t node [6];
+    for (size_t i = 0; i < 6; ++i) {
+        node[i] = generator() & 0xff;
     }
 
-    if (!privateKeyPassword_.empty()) {
-        virgil::crypto::string_zeroize(privateKeyPassword_);
-    }
-}
+    char buffer[37] = {0x0};
+    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
+        node[0], node[1], node[2], node[3], node[4], node[5]);
 
-Credentials::~Credentials() noexcept {
-    cleanup();
-}
-
-const std::vector<unsigned char>& Credentials::privateKey() const {
-    return privateKey_;
-}
-
-const std::string& Credentials::privateKeyPassword() const {
-    return privateKeyPassword_;
+    return std::string(buffer);
 }
