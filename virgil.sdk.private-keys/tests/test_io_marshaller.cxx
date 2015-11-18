@@ -49,7 +49,7 @@
 #include "helpers.h"
 #include "fakeit_helpers.hpp"
 
-
+using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::privatekeys::io::Marshaller;
@@ -62,7 +62,7 @@ using namespace fakeit;
 
 
 TEST_CASE("Private Key -> Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
-    std::string encodePrivateKey = VirgilBase64::encode(expectedUserPrivateKeyData());
+    std::string encodePrivateKey = VirgilBase64::encode(expectedPrivateKeyData());
 
     json privateKeyJson = {
         { JsonKey::publicKeyId, USER_PUBLIC_KEY_ID },
@@ -72,13 +72,13 @@ TEST_CASE("Private Key -> Json Private Key - FAILED:", "[virgil-sdk-private-keys
     PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(privateKeyJson.dump());
 
     REQUIRE( privateKey.publicKeyId() == USER_PUBLIC_KEY_ID );
-    REQUIRE( privateKey.key() == expectedUserPrivateKeyData() );
+    REQUIRE( privateKey.key() == expectedPrivateKeyData() );
 }
 
 TEST_CASE("Private Key <- Json Private Key - FAILED:", "[virgil-sdk-private-keys]") {
     PrivateKey privateKey;
-    privateKey.key(expectedUserPrivateKeyData());
     privateKey.publicKeyId(USER_PUBLIC_KEY_ID);
+    privateKey.key(expectedPrivateKeyData());
 
     std::string privateKeyData =  Marshaller<PrivateKey>::toJson(privateKey);
     json privateKeyJson = json::parse(privateKeyData);
@@ -89,5 +89,5 @@ TEST_CASE("Private Key <- Json Private Key - FAILED:", "[virgil-sdk-private-keys
     VirgilByteArray key = VirgilBase64::decode(keyData);
 
     REQUIRE( publicKeyId == USER_PUBLIC_KEY_ID );
-    REQUIRE( key == expectedUserPrivateKeyData() );
+    REQUIRE( key == expectedPrivateKeyData() );
 }

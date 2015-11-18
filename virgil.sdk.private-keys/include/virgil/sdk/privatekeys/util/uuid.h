@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H
-#define VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H
+#ifndef VIRGIL_SDK_PRIVATE_PRIVATE_KEYS_UTIL_UUID_H
+#define VIRGIL_SDK_PRIVATE_PRIVATE_KEYS_UTIL_UUID_H
 
 #include <string>
 
@@ -47,4 +47,4 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace util {
 
 }}}}
 
-#endif /* VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H */
+#endif /* VIRGIL_SDK_PRIVATE_PRIVATE_KEYS_UTIL_UUID_H */

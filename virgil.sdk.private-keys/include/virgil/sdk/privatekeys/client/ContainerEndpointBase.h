@@ -55,13 +55,11 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          */
         virtual void create(const Credentials& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword,
-                const std::string& uuid) const = 0;
+                const std::string& containerPassword) const = 0;
         /**
          * @brief Get Container Object Data with public key id.
          *
@@ -81,7 +79,6 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note Require authentication.
@@ -89,7 +86,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         virtual void update(const Credentials& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword, const std::string& uuid) const = 0;
+                const std::string& containerPassword) const = 0;
         /**
          * @brief Reset the Container Password.
          *
@@ -107,24 +104,22 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @brief Confirm password token.
          *
          * @param confirmToken - confirm the password token.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note The token generated during the container reset password invocation only lives for 60 minutes.
          * @see resetPassword()
          */
-        virtual void confirm(const std::string& confirmToken, const std::string& uuid) const = 0;
+        virtual void confirm(const std::string& confirmToken) const = 0;
         /**
          * @brief Delete Container Object. Delete existing container object from the Private Key service.
          *
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
+        virtual void del(const Credentials& credentials) const = 0;
     };
 }}}}
 

@@ -54,7 +54,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          *
          * Load an given Private Key into the Private Keys service and associate it with the existing Container.
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
+         * @param pass - user's password. if container type easy: pass must be equal container pass.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note Require authentication.
@@ -62,7 +62,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          *
          */
         virtual void add(const virgil::sdk::privatekeys::client::Credentials& credentials,
-                const std::string& uuid) const = 0;
+                const std::string& pass) const = 0;
         /**
          * @brief Get private key by its UUID.
          *
@@ -73,18 +73,18 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const = 0;
+        virtual virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId,
+                const std::string& pass) const = 0;
         /**
          * @brief Delete private key associated with given user's credentials.
          *
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual void del(const Credentials &credentials, const std::string& uuid) const = 0;
+        virtual void del(const Credentials &credentials) const = 0;
     };
 }}}}
 
