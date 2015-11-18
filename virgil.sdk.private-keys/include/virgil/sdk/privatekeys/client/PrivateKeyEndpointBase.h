@@ -40,7 +40,7 @@
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/model/PrivateKey.h>
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
@@ -61,7 +61,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @see PrivateKeysClient::authenticate()
          *
          */
-        virtual void add(const virgil::sdk::privatekeys::client::Credentials& credentials,
+        virtual void add(const virgil::sdk::privatekeys::client::CredentialsExt& credentials,
                 const std::string& pass) const = 0;
         /**
          * @brief Get private key by its UUID.
@@ -84,7 +84,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual void del(const Credentials &credentials) const = 0;
+        virtual void del(const CredentialsExt &credentials) const = 0;
     };
 }}}}
 

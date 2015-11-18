@@ -53,7 +53,7 @@ using json = nlohmann::json;
 
 using virgil::crypto::VirgilByteArray;
 
-using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::http::Request;
@@ -69,14 +69,14 @@ TEST_CASE("Create container(new account) - FAILED", "[virgil-sdk-private-keys]")
     auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
             PrivateKeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
 
-    REQUIRE_NOTHROW(privateKeysClient->container().create(expectedCredentialsPubIdKey(), ContainerType::Easy,
+    REQUIRE_NOTHROW(privateKeysClient->container().create(expectedCredentialsExtWithPass(), ContainerType::Easy,
             CONTAINER_PASSWORD));
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
 }
 
 TEST_CASE("Get container details - FAILED", "[virgil-sdk-private-keys]") {
@@ -103,14 +103,14 @@ TEST_CASE("Update container info - FAILED", "[virgil-sdk-private-keys]") {
     auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
             PrivateKeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
 
-    REQUIRE_NOTHROW(privateKeysClient->container().update(expectedCredentialsPubIdKey(), ContainerType::Easy,
+    REQUIRE_NOTHROW(privateKeysClient->container().update(expectedCredentialsExtWithPass(), ContainerType::Easy,
             CONTAINER_PASSWORD));
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
 }
 
 TEST_CASE("Reset container password - FAILED", "[virgil-sdk-private-keys]") {
@@ -148,10 +148,10 @@ TEST_CASE("Delete container - FAILED", "[virgil-sdk-private-keys]") {
     auto connectionObj = std::make_shared<KeysClientConnection>(VIRGIL_APP_TOKEN,
             PrivateKeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto privateKeysClient = std::make_shared<PrivateKeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(privateKeysClient->container().del(expectedCredentialsPubIdKey()));
+    REQUIRE_NOTHROW(privateKeysClient->container().del(expectedCredentialsExtWithPass()));
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
 }

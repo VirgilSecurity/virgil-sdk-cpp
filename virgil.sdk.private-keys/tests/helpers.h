@@ -44,7 +44,7 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/util/JsonKey.h>
 
@@ -88,12 +88,12 @@ inline virgil::crypto::VirgilByteArray expectedPrivateKeyData() {
    return virgil::crypto::str2bytes(privateKeys);
 }
 
-inline virgil::sdk::privatekeys::client::Credentials expectedCredentialsPubIdKey() {
-    return virgil::sdk::privatekeys::client::Credentials(USER_PUBLIC_KEY_ID, expectedPrivateKeyData());
+inline virgil::sdk::privatekeys::client::CredentialsExt expectedCredentialsExt() {
+    return virgil::sdk::privatekeys::client::CredentialsExt(USER_PUBLIC_KEY_ID, expectedPrivateKeyData());
 }
 
-inline virgil::sdk::privatekeys::client::Credentials expectedCredentialsPubIdKeyPass() {
-    return virgil::sdk::privatekeys::client::Credentials(USER_PUBLIC_KEY_ID, 
+inline virgil::sdk::privatekeys::client::CredentialsExt expectedCredentialsExtWithPass() {
+    return virgil::sdk::privatekeys::client::CredentialsExt(USER_PUBLIC_KEY_ID, 
             expectedPrivateKeyDataWithPass(),
             PASS_PRIVATE_KEY);
 }

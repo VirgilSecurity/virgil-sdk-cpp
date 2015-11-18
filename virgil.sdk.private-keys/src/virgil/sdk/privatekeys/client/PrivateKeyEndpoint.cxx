@@ -57,6 +57,7 @@ using virgil::crypto::VirgilCipher;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::EndpointUri;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::error::KeysError;
@@ -78,7 +79,7 @@ PrivateKeyEndpoint::PrivateKeyEndpoint(const std::shared_ptr<KeysClientConnectio
     }
 }
 
-void PrivateKeyEndpoint::add(const Credentials &credentials, const std::string& pass) const {
+void PrivateKeyEndpoint::add(const CredentialsExt &credentials, const std::string& pass) const {
     VirgilCipher cipher;
     cipher.addPasswordRecipient(virgil::crypto::str2bytes(pass));
     VirgilByteArray encryptedPrivateKey = cipher.encrypt(credentials.privateKey(), true);
@@ -125,7 +126,7 @@ PrivateKey PrivateKeyEndpoint::get(const std::string& publicKeyId, const std::st
     return privateKey;
 }
 
-void PrivateKeyEndpoint::del(const Credentials &credentials) const {
+void PrivateKeyEndpoint::del(const CredentialsExt &credentials) const {
     json payload = {{ JsonKey::requestSignUuid, uuid() }};
 
     Request request = Request().endpoint(EndpointUri::v2().deletePrivateKey()).del().body(payload.dump());

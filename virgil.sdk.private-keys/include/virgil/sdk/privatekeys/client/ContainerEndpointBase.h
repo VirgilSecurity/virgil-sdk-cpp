@@ -39,7 +39,7 @@
 
 #include <string>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/model/UserData.h>
 
@@ -57,7 +57,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @param containerPassword - represents container password.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void create(const Credentials& credentials,
+        virtual void create(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword) const = 0;
         /**
@@ -84,7 +84,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual void update(const Credentials& credentials,
+        virtual void update(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
                 const std::string& containerPassword) const = 0;
         /**
@@ -119,7 +119,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @note Require authentication.
          * @see PrivateKeysClient::authenticate()
          */
-        virtual void del(const Credentials& credentials) const = 0;
+        virtual void del(const CredentialsExt& credentials) const = 0;
     };
 }}}}
 

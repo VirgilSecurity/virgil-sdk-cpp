@@ -54,7 +54,7 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilSigner;
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::http::Connection;
 using virgil::sdk::privatekeys::http::Request;
@@ -100,7 +100,7 @@ Response KeysClientConnection::send(const Request& request) {
     return Connection::send(Request(request).baseAddress(baseAddress_).header(header).contentType("application/json"));
 }
 
-Response KeysClientConnection::send(const Request& request, const Credentials& credentials) {
+Response KeysClientConnection::send(const Request& request, const CredentialsExt& credentials) {
     if (!credentials.isValid()) {
         throw std::logic_error("KeysClientConnection: Credentials is not valid.");
     }

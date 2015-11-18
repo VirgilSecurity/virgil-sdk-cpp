@@ -48,6 +48,7 @@ using json = nlohmann::json;
 
 using virgil::sdk::privatekeys::client::ContainerEndpoint;
 using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::EndpointUri;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::error::KeysError;
@@ -69,7 +70,7 @@ ContainerEndpoint::ContainerEndpoint(const std::shared_ptr<KeysClientConnection>
     }
 }
 
-void ContainerEndpoint::create(const Credentials& credentials, const ContainerType& containerType,
+void ContainerEndpoint::create(const CredentialsExt& credentials, const ContainerType& containerType,
         const std::string& containerPassword) const {
         json payload = {
             { JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType) },
@@ -98,7 +99,7 @@ ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyId) cons
     return containerTypeStr == "easy" ? ContainerType::Easy : ContainerType::Normal;
 }
 
-void ContainerEndpoint::update(const Credentials& credentials, const ContainerType& containerType,
+void ContainerEndpoint::update(const CredentialsExt& credentials, const ContainerType& containerType,
         const std::string& containerPassword) const {
     json payload = {
         { JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType) },
@@ -144,7 +145,7 @@ void ContainerEndpoint::confirm(const std::string& confirmToken) const {
     connection_->checkResponseError(response, KeysError::Action::CONFIRM_OPERATION);
 }
 
-void ContainerEndpoint::del(const Credentials& credentials) const {
+void ContainerEndpoint::del(const CredentialsExt& credentials) const {
     json payload = {{ JsonKey::requestSignUuid, uuid() }};
 
     Request request = Request().endpoint(EndpointUri::v2().deleteContainer()).del().body(payload.dump());
