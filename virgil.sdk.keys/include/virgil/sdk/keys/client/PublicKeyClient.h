@@ -42,6 +42,7 @@
 #include <virgil/sdk/keys/client/PublicKeyClientBase.h>
 #include <virgil/sdk/keys/client/KeysClientConnection.h>
 
+
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
      * @brief Default implenetation of class PublicKeyClientBase.
@@ -58,32 +59,30 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
         //@{
         virgil::sdk::keys::model::PublicKey add(const std::vector<unsigned char>& key,
                 const std::vector<virgil::sdk::keys::model::UserData>& userData,
-                const Credentials& credentials, const std::string& uuid) const override;
+                const Credentials& credentials) const override;
 
         virgil::sdk::keys::model::PublicKey get(const std::string& publicKeyId) const override;
 
         virgil::sdk::keys::model::PublicKey update(const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const Credentials& oldKeyCredentials,
-                const std::string& uuid) const override;
+                const Credentials& newKeyCredentials, const CredentialsExt& oldKeyCredentials) const override;
 
-        void del(const Credentials& credentials, const std::string& uuid) const override;
+        void del(const CredentialsExt& credentials) const override;
 
-        std::string del(const std::string& publicKeyId, const std::string& uuid) const override;
+        std::string del(const std::string& publicKeyId) const override;
 
         void confirmDel(const std::string& publicKeyId, const std::string& actionToken,
                 const std::vector<std::string>& confirmationCodes) const override;
 
         std::string reset(const std::string& oldPublicKeyId, const std::vector<unsigned char>& newKey,
-                const Credentials& newKeyCredentials, const std::string& uuid) const override;
+                const Credentials& newKeyCredentials) const override;
 
         virgil::sdk::keys::model::PublicKey confirmReset(const std::string& oldPublicKeyId,
                 const Credentials& newKeyCredentials, const std::string& actionToken,
                 const std::vector<std::string>& confirmationCodes) const override;
 
-        virgil::sdk::keys::model::PublicKey grab(const std::string& userId, const std::string& uuid) const override;
+        virgil::sdk::keys::model::PublicKey grab(const std::string& userId) const override;
 
-        virgil::sdk::keys::model::PublicKey grab(const Credentials& credentials,
-                const std::string& uuid) const override;
+        virgil::sdk::keys::model::PublicKey grab(const CredentialsExt& credentials) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

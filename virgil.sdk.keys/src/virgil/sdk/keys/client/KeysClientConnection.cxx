@@ -50,6 +50,8 @@
 #include <json.hpp>
 
 using virgil::sdk::keys::client::KeysClientConnection;
+using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::CredentialsExt;
 using virgil::sdk::keys::http::Connection;
 using virgil::sdk::keys::http::Request;
 using virgil::sdk::keys::http::Response;
@@ -95,13 +97,33 @@ Response KeysClientConnection::send(const Request& request, const Credentials& c
     if (request.body().empty()) {
         throw std::logic_error("KeysClientConnection: Request body is empty, so can not be signed.");
     }
+    
     VirgilByteArray sign = VirgilSigner().sign(virgil::crypto::str2bytes(request.body()),
             credentials.privateKey(), virgil::crypto::str2bytes(credentials.privateKeyPassword()));
+
     auto header = request.header();
     header[kHttpHeaderField_RequestSign] = VirgilBase64::encode(sign);
-    if (!credentials.publicKeyId().empty()) {
-        header[kHttpHeaderField_RequestSignPkId] = credentials.publicKeyId();
+
+    return send(Request(request).header(header));
+}
+
+Response KeysClientConnection::send(const Request& request, const CredentialsExt& credentialsExt) {
+    if (!credentialsExt.isValid()) {
+        throw std::logic_error("KeysClientConnection: CredentialsExt is not valid.");
     }
+    if (request.body().empty()) {
+        throw std::logic_error("KeysClientConnection: Request body is empty, so can not be signed.");
+    }
+
+    VirgilByteArray sign = VirgilSigner().sign(virgil::crypto::str2bytes(request.body()),
+            credentialsExt.privateKey(), virgil::crypto::str2bytes(credentialsExt.privateKeyPassword()));
+
+    auto header = request.header();
+    header[kHttpHeaderField_RequestSign] = VirgilBase64::encode(sign);
+    if (!credentialsExt.publicKeyId().empty()) {
+        header[kHttpHeaderField_RequestSignPkId] = credentialsExt.publicKeyId();
+    }
+
     return send(Request(request).header(header));
 }
 

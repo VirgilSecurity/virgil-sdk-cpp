@@ -50,15 +50,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Create object with invalid credentials.
          * @see isValid()
          */
-        Credentials();
-        /**
-         * @brief Initialize credentials.
-         * @param publicKeyId - UUID of the public key that associated to the given private key.
-         * @param privateKey - user's private key.
-         * @param privateKeyPassword - (optional) private key password if private key is encrypted.
-         */
-        Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
-                const std::string& privateKeyPassword = std::string());
+        Credentials() = default;
         /**
          * @brief Initialize credentials.
          * @param privateKey - user's private key.
@@ -70,7 +62,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Perform cleanup first.
          * @see cleanup()
          */
-        ~Credentials() noexcept;
+        virtual ~Credentials() noexcept;
         /**
          * @brief Check whether credentials are valid.
          */
@@ -82,10 +74,6 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         void cleanup() noexcept;
         /**
-         * @brief Return public key UUID.
-         */
-        const std::string& publicKeyId() const;
-        /**
          * @brief Return private key.
          * @note For security reason pass it by reference only.
          */
@@ -96,7 +84,6 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         const std::string& privateKeyPassword() const;
     private:
-        std::string publicKeyId_;
         std::vector<unsigned char> privateKey_;
         std::string privateKeyPassword_;
     };

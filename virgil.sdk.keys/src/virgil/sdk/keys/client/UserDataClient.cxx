@@ -42,6 +42,7 @@
 #include <virgil/sdk/keys/http/Response.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/util/JsonKey.h>
+#include <virgil/sdk/keys/util/uuid.h>
 #include <virgil/sdk/keys/error/KeysError.h>
 #include <virgil/sdk/keys/io/Marshaller.h>
 
@@ -51,11 +52,13 @@ using virgil::sdk::keys::client::UserDataClient;
 using virgil::sdk::keys::client::KeysClientConnection;
 using virgil::sdk::keys::client::EndpointUri;
 using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::CredentialsExt;
 using virgil::sdk::keys::http::Request;
 using virgil::sdk::keys::http::Response;
 using virgil::sdk::keys::model::PublicKey;
 using virgil::sdk::keys::model::UserData;
 using virgil::sdk::keys::util::JsonKey;
+using virgil::sdk::keys::util::uuid;
 using virgil::sdk::keys::error::KeysError;
 using virgil::sdk::keys::io::Marshaller;
 
@@ -68,11 +71,10 @@ UserDataClient::UserDataClient(const std::shared_ptr<KeysClientConnection>& conn
     }
 }
 
-UserData UserDataClient::add(const UserData& userData, const Credentials& credentials,
-        const std::string& uuid) const {
+UserData UserDataClient::add(const UserData& userData, const CredentialsExt& credentials) const {
     json payload = json::object();
     payload = json::parse(Marshaller<UserData>::toJson(userData));
-    payload[JsonKey::uuid] = uuid;
+    payload[JsonKey::uuid] = uuid();
 
     Request request = Request().endpoint(EndpointUri::v2().userDataAdd()).post().body(payload.dump());
     Response response = connection_->send(request, credentials);
@@ -80,10 +82,9 @@ UserData UserDataClient::add(const UserData& userData, const Credentials& creden
     return Marshaller<UserData>::fromJson(response.body());
 }
 
-void UserDataClient::del(const std::string& userDataId, const Credentials& credentials,
-        const std::string& uuid) const {
+void UserDataClient::del(const std::string& userDataId, const CredentialsExt& credentials) const {
     json payload = {
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
     std::string requestUri = EndpointUri::v2().userDataDelete(userDataId);
     Request request = Request().endpoint(requestUri).del().body(payload.dump());
@@ -91,10 +92,10 @@ void UserDataClient::del(const std::string& userDataId, const Credentials& crede
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_DELETE);
 }
 
-void UserDataClient::confirm(const std::string& userDataId, const std::string& code, const std::string& uuid) const {
+void UserDataClient::confirm(const std::string& userDataId, const std::string& code) const {
     json payload = {
         {JsonKey::confirmationCode, code},
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
     std::string requestUri = EndpointUri::v2().userDataConfirm(userDataId);
     Request request = Request().endpoint(requestUri).post().body(payload.dump());
@@ -102,10 +103,9 @@ void UserDataClient::confirm(const std::string& userDataId, const std::string& c
     connection_->checkResponseError(response, KeysError::Action::USER_DATA_CONFIRM);
 }
 
-void UserDataClient::resendConfirmation(const std::string& userDataId, const Credentials& credentials,
-        const std::string& uuid) const {
+void UserDataClient::resendConfirmation(const std::string& userDataId, const CredentialsExt& credentials) const {
     json payload = {
-        {JsonKey::uuid, uuid}
+        {JsonKey::uuid, uuid()}
     };
     std::string requestUri = EndpointUri::v2().userDataResendConfirmation(userDataId);
     Request request = Request().endpoint(requestUri).post().body(payload.dump());
