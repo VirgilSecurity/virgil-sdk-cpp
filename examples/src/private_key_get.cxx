@@ -98,7 +98,7 @@ int main() {
         }
         std::cout << "Store virgil private key to the output file..." << std::endl;
         std::copy(key.begin(), key.end(), std::ostreambuf_iterator<char>(outFile));
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

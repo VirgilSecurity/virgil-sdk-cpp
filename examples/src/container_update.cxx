@@ -101,7 +101,7 @@ int main() {
         std::cout << "Call the Private Key service to update Container instance." << std::endl;
         privateKeysClient.container().update(credentials, CONTAINER_NEW_PASSWORD);
         std::cout << "Container instance successfully update in the Private Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

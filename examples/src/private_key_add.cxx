@@ -98,7 +98,7 @@ int main() {
         std::cout << "Call the Private Key service to add a Private Key instance." << std::endl;
         privateKeysClient.privateKey().add(credentials, CONTAINER_PASSWORD);
         std::cout << "Private Key instance successfully added in the Private Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

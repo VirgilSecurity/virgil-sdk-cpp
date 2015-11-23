@@ -98,7 +98,7 @@ int main() {
         std::cout << "Call Private Key service to delete Container instance." << std::endl;
         privateKeysClient.container().del(credentials);
         std::cout << "Container instance successfully deleted from Private Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

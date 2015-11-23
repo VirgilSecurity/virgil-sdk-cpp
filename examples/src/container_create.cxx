@@ -93,7 +93,7 @@ int main() {
         std::cout << "Call the Private Key service to create a Container instance." << std::endl;
         privateKeysClient.container().create(credentials, CONTAINER_TYPE, CONTAINER_PASSWORD);
         std::cout << "Container instance successfully created in the Private Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

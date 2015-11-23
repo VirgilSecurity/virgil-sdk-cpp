@@ -99,7 +99,7 @@ int main() {
         std::cout << "Call Private Key service to delete Private Key instance." << std::endl;
         privateKeysClient.privateKey().del(credentials);
         std::cout << "The Private Key instance was successfully deleted from the Private Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

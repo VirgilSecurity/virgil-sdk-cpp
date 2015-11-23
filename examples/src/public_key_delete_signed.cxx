@@ -86,11 +86,11 @@ int main() {
         std::cout << "Remove public key with id (" << publicKey.publicKeyId() << ")." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         keysClient.publicKey().del(credentials);
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

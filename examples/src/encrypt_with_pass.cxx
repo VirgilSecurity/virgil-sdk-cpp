@@ -80,11 +80,11 @@ int main() {
         std::cout << "Encrypt and store results..." << std::endl;
         cipher.encrypt(dataSource, dataSink, true);
         std::cout << "Encrypted data with pass is successfully stored in the output file..." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

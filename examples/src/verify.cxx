@@ -88,11 +88,11 @@ int main() {
         VirgilStreamDataSource dataSource(inFile);
         bool verified = signer.verify(dataSource, sign, publicKey.key());
         std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

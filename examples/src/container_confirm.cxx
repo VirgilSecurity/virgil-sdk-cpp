@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
         std::cout << "Call the Private Key service to persist the container." << std::endl;
         privateKeysClient.container().confirm(kConfirmationToken);
         std::cout << "Container successfully persisted." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

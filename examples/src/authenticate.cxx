@@ -62,7 +62,7 @@ int main() {
 
         std::cout << "An authentication token: " << authenticationToken << std::endl;
         std::cout << "Authenticate session - success." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

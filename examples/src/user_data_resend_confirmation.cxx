@@ -91,15 +91,15 @@ int main(int argc, char **argv) {
 
         std::cout << "Create Keys Service HTTP Client." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        
+
         std::cout << "Resend confirmation code for user data with id (" << kUserDataId << ")." << std::endl;
         keysClient.userData().resendConfirmation(kUserDataId, credentials);
         std::cout << "Confirmation successfully sent." << std::endl;
-    
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

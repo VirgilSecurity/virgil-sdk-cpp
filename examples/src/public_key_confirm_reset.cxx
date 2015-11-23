@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
         keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), newKeyCredentials,
                 actionToken, {confirmationCodes});
         std::cout << "Public Key instance successfully confirm reset." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

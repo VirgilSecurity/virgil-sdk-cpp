@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
         std::cout << "Call Keys service to delete User Data instance." << std::endl;
         keysClient.userData().del(kUserDataId, credentials);
         std::cout << "User Data instance successfully deleted from Public Keys service." << std::endl;
-    
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

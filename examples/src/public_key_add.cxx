@@ -109,11 +109,11 @@ int main() {
         std::cout << "Added user data id: " << virgilPublicKey.userData().front().userDataId() << std::endl;
         std::cout << "Confirmation code can be found in the email." << std::endl;
         std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

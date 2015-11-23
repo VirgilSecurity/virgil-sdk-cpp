@@ -114,7 +114,7 @@ int main() {
         std::cout << "Call Keys Service to update the Public Key instance." << std::endl;
         keysClient.publicKey().update(newPublicKey, newKeyCredentials, oldKeyCredentials);
         std::cout << "Public Key instance successfully updated in Public Keys service." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

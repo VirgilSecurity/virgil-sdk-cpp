@@ -100,11 +100,11 @@ int main() {
         VirgilStreamDataSink dataSink(outFile);
         cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
         std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

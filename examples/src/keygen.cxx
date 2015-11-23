@@ -68,11 +68,11 @@ int main() {
         }
         VirgilByteArray privateKey = newKeyPair.privateKey();
         std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-    
+
     return 0;
 }

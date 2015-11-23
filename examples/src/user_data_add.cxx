@@ -97,7 +97,7 @@ int main() {
         std::cout << "User Data instance successfully created in Public Keys service." << std::endl;
 
         std::cout << "Confirmation code can be found in the email." << std::endl;
-        std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;        
+        std::cout << "Now launch next command 'user_data_confirm <user_data_id> <confirmation_code>'" << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
