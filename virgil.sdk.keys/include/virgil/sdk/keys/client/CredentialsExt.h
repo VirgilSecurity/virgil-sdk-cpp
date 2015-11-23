@@ -44,7 +44,9 @@
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
     /**
-     * @brief Extension class Credentials (add publicKeyId) that stores user's credentials.
+     * @brief Extend class Credentials by adding property 'publicKeyId'.
+     *
+     * This class is used when Public Key UUID associated with Private Key is needed.
      */
     class CredentialsExt final : public Credentials {
     public:
@@ -52,7 +54,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          * @brief Create object with invalid credentials.
          * @see isValid()
          */
-        CredentialsExt(); 
+        CredentialsExt();
         /**
          * @brief Initialize credentials.
          * @param publicKeyId - UUID of the public key that associated to the given private key.
@@ -66,7 +68,7 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         const std::string& publicKeyId() const;
     private:
-        std::string publicKeyId_;    
+        std::string publicKeyId_;
     };
 }}}}
 
