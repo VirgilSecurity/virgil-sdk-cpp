@@ -42,12 +42,11 @@ project (virgil-examples)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Update module search path
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake" ${CMAKE_MODULE_PATH})
+include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.keys/include")
+include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.private-keys/include")
 
-# Find dependencies
-find_package (CURL REQUIRED)
-include_directories (${CURL_INCLUDE_DIRS})
+set (VIRGIL_SDK_KEYS keys)
+set (VIRGIL_SDK_PRIVATE_KEYS private_keys)
 
 include (virgil)
 virgil_add_dependency ("crypto"
@@ -56,20 +55,6 @@ virgil_add_dependency ("crypto"
     VIRGIL_CRYPTO_LIBRARIES
 )
 include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
-
-virgil_add_dependency ("keys-public"
-    VIRGIL_KEYS_PUBLIC_DEPENDENCIES
-    VIRGIL_KEYS_PUBLIC_INCLUDE_DIRS
-    VIRGIL_KEYS_PUBLIC_LIBRARIES
-)
-include_directories (${VIRGIL_KEYS_PUBLIC_INCLUDE_DIRS})
-
-virgil_add_dependency ("keys-private"
-    VIRGIL_KEYS_PRIVATE_DEPENDENCIES
-    VIRGIL_KEYS_PRIVATE_INCLUDE_DIRS
-    VIRGIL_KEYS_PRIVATE_LIBRARIES
-)
-include_directories (${VIRGIL_KEYS_PRIVATE_INCLUDE_DIRS})
 
 file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 foreach (DATA_FILE ${DATA_FILES})
@@ -81,21 +66,21 @@ foreach (DATA_FILE ${DATA_FILES})
     )
 endforeach (DATA_FILE)
 
+set (SRC_LIST "")
 aux_source_directory ("src" SRC_LIST)
 foreach (SRC ${SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
     target_link_libraries (${TARGET_NAME}
-        ${VIRGIL_KEYS_PUBLIC_LIBRARIES}
-        ${VIRGIL_KEYS_PRIVATE_LIBRARIES}
+        ${VIRGIL_SDK_KEYS}
+        ${VIRGIL_SDK_PRIVATE_KEYS}
         ${VIRGIL_CRYPTO_LIBRARIES}
-        ${CURL_LIBRARIES}
     )
+
     add_dependencies (${TARGET_NAME}
         ${VIRGIL_CRYPTO_DEPENDENCIES}
-        ${VIRGIL_KEYS_PUBLIC_DEPENDENCIES}
-        ${VIRGIL_KEYS_PRIVATE_DEPENDENCIES}
     )
+
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)
 install (DIRECTORY "data/" DESTINATION ".")
