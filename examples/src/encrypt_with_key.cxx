@@ -34,10 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <stdexcept>
 #include <string>
 
@@ -46,61 +44,57 @@
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
+#include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
 
+using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::io::Marshaller;
+
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
+
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt.enc..." << std::endl;
-        std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);
+        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt.enc");
+            throw std::runtime_error("can not read file: test.txt");
         }
 
-        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
-        std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
+        std::cout << "Prepare output file: test.txt.enc..." << std::endl;
+        std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
         if (!outFile.good()) {
-            throw std::runtime_error("can not write file: decrypted_test.txt");
+            throw std::runtime_error("can not write file: test.txt.enc");
         }
 
         std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
-            throw std::runtime_error("can not read virgil public key: virgil_public.key");
-        }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
+        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
 
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
+        std::cout << "Add recipient..." << std::endl;
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 
-        std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
-
-        std::cout << "Decrypt..." << std::endl;
         VirgilStreamDataSource dataSource(inFile);
         VirgilStreamDataSink dataSink(outFile);
-        cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
-        std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
+
+        std::cout << "Encrypt and store results..." << std::endl;
+        cipher.encrypt(dataSource, dataSink, true);
+        std::cout << "Encrypted data with key is successfully stored in the output file..." << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+    
     return 0;
 }

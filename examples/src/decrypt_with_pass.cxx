@@ -34,45 +34,59 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilStreamCipher.h>
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::UserData;
+#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
 
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilStreamCipher;
+using virgil::crypto::stream::VirgilStreamDataSource;
+using virgil::crypto::stream::VirgilStreamDataSink;
 
+using virgil::sdk::keys::model::PublicKey;
+using virgil::sdk::keys::io::Marshaller;
 
-int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <new_container_password>" << std::endl;
-        return 0;
-    }
+const std::string PASSWORD = "qwerty";
 
+int main() {
     try {
-        const std::string kNewContainerPassword = argv[1];
+        std::cout << "Prepare input file: test.txt.encp..." << std::endl;
+        std::ifstream inFile("test.txt.encp", std::ios::in | std::ios::binary);
+        if (!inFile.good()) {
+            throw std::runtime_error("can not read file: test.txt.enc");
+        }
 
-        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
+        if (!outFile.good()) {
+            throw std::runtime_error("can not write file: decrypted_test.txt");
+        }
 
-        std::cout << "Call the Private Key service to reset a Container password." << std::endl;
-        privateKeysClient.container().resetPassword(UserData::email(USER_EMAIL), kNewContainerPassword);
-        std::cout << "Container password successfully reset." << std::endl;
+        std::cout << "Initialize cipher..." << std::endl;
+        VirgilStreamCipher cipher;
 
-        std::cout << "Confirmation code can be found in the email." << std::endl;
-        std::cout << "Now launch next command: "  << std::endl;
-        std::cout << "container_confirm <confirmation_token>" << std::endl;
+        VirgilStreamDataSource dataSource(inFile);
+        VirgilStreamDataSink dataSink(outFile);
+
+        std::cout << "Decrypt with pass..." << std::endl;
+        cipher.decryptWithPassword(dataSource, dataSink, virgil::crypto::str2bytes(PASSWORD));
+        std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;
     }
-
+    
     return 0;
 }

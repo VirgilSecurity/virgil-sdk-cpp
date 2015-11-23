@@ -54,10 +54,11 @@ using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::model::ContainerType;
 using virgil::sdk::privatekeys::model::UserData;
 
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_PK_URL_BASE = "https://keys-privatewhe.virgilsecurity.com";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
+
 
 int main() {
     try {
@@ -82,8 +83,10 @@ int main() {
         ContainerType containerType = privateKeysClient.container().getDetails(publicKey.publicKeyId());
         std::cout << "Container instance successfully fetched from Private Keys service." << std::endl;
         std::cout << "container_type: " << virgil::sdk::privatekeys::model::toString(containerType) << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
 
     return 0;

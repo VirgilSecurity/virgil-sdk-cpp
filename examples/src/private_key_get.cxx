@@ -56,9 +56,10 @@ using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::model::UserData;
 
 const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
+
 
 int main() {
     try {
@@ -67,6 +68,7 @@ int main() {
         if (!publicKeyFile.good()) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
+
         std::string publicKeyData;
         std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
             std::back_inserter(publicKeyData));
@@ -81,15 +83,25 @@ int main() {
         privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
         std::cout << "Call the Private Key service to get a Private Key instance." << std::endl;
-        PrivateKey privateKey = privateKeysClient.privateKey().get(publicKey.publicKeyId());
+        PrivateKey privateKey = privateKeysClient.privateKey().get(publicKey.publicKeyId(), CONTAINER_PASSWORD);
 
         std::cout << "Private Key instance successfully fetched from the Private Keys service." << std::endl;
         std::cout << "Public key id: " << privateKey.publicKeyId() << std::endl;
         std::cout << "Private key: " << std::endl;
         std::vector<unsigned char> key = privateKey.key();
         std::copy(key.begin(), key.end(), std::ostreambuf_iterator<char>(std::cout));
+
+        std::cout << "Prepare output file: private.key..." << std::endl;
+        std::ofstream outFile("private.key", std::ios::out | std::ios::binary);
+        if (!outFile.good()) {
+            throw std::runtime_error("can not write file: virgil_public.key");
+        }
+        std::cout << "Store virgil private key to the output file..." << std::endl;
+        std::copy(key.begin(), key.end(), std::ostreambuf_iterator<char>(outFile));
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
 
     return 0;

@@ -49,6 +49,7 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilStreamSigner;
 using virgil::crypto::stream::VirgilStreamDataSource;
 
+
 int main() {
     try {
         std::cout << "Prepare input file: test.txt..." << std::endl;
@@ -85,6 +86,8 @@ int main() {
         std::cout << "Sign is successfully stored in the output file." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+    
     return 0;
 }
