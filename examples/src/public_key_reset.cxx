@@ -86,12 +86,12 @@ int main() {
                 std::back_inserter(newPublicKey));
 
         std::cout << "Read new private key..." << std::endl;
-        std::ifstream newPrivateprivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
-        if (!newPrivateprivateKeyFile) {
+        std::ifstream newPrivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
+        if (!newPrivateKeyFile) {
             throw std::runtime_error("can not read private key: new_private.key");
         }
         VirgilByteArray newPrivateKey;
-        std::copy(std::istreambuf_iterator<char>(newPrivateprivateKeyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(newPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(newPrivateKey));
 
         Credentials newKeyCredentials(newPrivateKey);
