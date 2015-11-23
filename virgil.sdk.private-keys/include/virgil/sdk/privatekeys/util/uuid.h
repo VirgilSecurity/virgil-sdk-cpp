@@ -34,38 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H
+#define VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <string>
 
-using virgil::sdk::privatekeys::client::Credentials;
+namespace virgil { namespace sdk { namespace privatekeys { namespace util {
+    /**
+    * @brief Generate new UUID
+    */
+    std::string uuid();
 
-Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
-        : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
-}
+}}}}
 
-bool Credentials::isValid() const {
-    return !privateKey_.empty();
-}
-
-void Credentials::cleanup() noexcept {
-    if(!privateKey_.empty()) {
-        virgil::crypto::bytes_zeroize(privateKey_);
-    }
-
-    if (!privateKeyPassword_.empty()) {
-        virgil::crypto::string_zeroize(privateKeyPassword_);
-    }
-}
-
-Credentials::~Credentials() noexcept {
-    cleanup();
-}
-
-const std::vector<unsigned char>& Credentials::privateKey() const {
-    return privateKey_;
-}
-
-const std::string& Credentials::privateKeyPassword() const {
-    return privateKeyPassword_;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_UTIL_UUID_H */

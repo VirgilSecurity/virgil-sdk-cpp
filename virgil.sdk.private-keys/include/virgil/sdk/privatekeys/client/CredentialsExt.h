@@ -34,38 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
+#ifndef VIRGIL_SDK_PRIVATE_KEYS_CREDENTIALS_EXT_H
+#define VIRGIL_SDK_PRIVATE_KEYS_CREDENTIALS_EXT_H
+
+#include <string>
+#include <vector>
 
 #include <virgil/sdk/privatekeys/client/Credentials.h>
 
-using virgil::sdk::privatekeys::client::Credentials;
+namespace virgil { namespace sdk { namespace privatekeys { namespace client {
+    /**
+     * @brief Extension class Credentials (add publicKeyId) that stores user's credentials.
+     */
+    class CredentialsExt final : public Credentials {
+    public:
+        /**
+         * @brief Create object with invalid credentials.
+         * @see isValid()
+         */
+        CredentialsExt() = default; 
+        /**
+         * @brief Initialize credentials.
+         * @param publicKeyId - UUID of the public key that associated to the given private key.
+         * @param privateKey - user's private key.
+         * @param privateKeyPassword - (optional) private key password if private key is encrypted.
+         */
+        CredentialsExt(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
+                const std::string& privateKeyPassword = std::string());
+        /**
+         * @brief Return public key UUID.
+         */
+        const std::string& publicKeyId() const;
+    private:
+        std::string publicKeyId_;    
+    };
+}}}}
 
-Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
-        : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
-}
-
-bool Credentials::isValid() const {
-    return !privateKey_.empty();
-}
-
-void Credentials::cleanup() noexcept {
-    if(!privateKey_.empty()) {
-        virgil::crypto::bytes_zeroize(privateKey_);
-    }
-
-    if (!privateKeyPassword_.empty()) {
-        virgil::crypto::string_zeroize(privateKeyPassword_);
-    }
-}
-
-Credentials::~Credentials() noexcept {
-    cleanup();
-}
-
-const std::vector<unsigned char>& Credentials::privateKey() const {
-    return privateKey_;
-}
-
-const std::string& Credentials::privateKeyPassword() const {
-    return privateKeyPassword_;
-}
+#endif /* VIRGIL_SDK_PRIVATE_KEYS_CREDENTIALS_EXT_H */
