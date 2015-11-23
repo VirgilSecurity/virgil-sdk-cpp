@@ -66,18 +66,19 @@ const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
 int main() {
     try {
         std::cout << "Read old virgil public key..." << std::endl;
-        std::ifstream oldPublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!oldPublicKeyFile.good()) {
+        std::ifstream oldpublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!oldpublicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
-        std::string oldPublicKeyData((std::istreambuf_iterator<char>(oldPublicKeyFile)),
-                std::istreambuf_iterator<char>());
+        std::string oldPublicKeyData;
+        std::copy(std::istreambuf_iterator<char>(oldpublicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(oldPublicKeyData));
 
         PublicKey oldPublicKey = Marshaller<PublicKey>::fromJson(oldPublicKeyData);
 
-        std::cout << "Read new virgil public key..." << std::endl;
+        std::cout << "Read new public key..." << std::endl;
         std::ifstream newPublicKeyFile("new_public.key", std::ios::in | std::ios::binary);
-        if (!newPublicKeyFile.good()) {
+        if (!newPublicKeyFile) {
             throw std::runtime_error("can not read virgil public key: new_public.key");
         }
         VirgilByteArray newPublicKey;
@@ -85,12 +86,12 @@ int main() {
                 std::back_inserter(newPublicKey));
 
         std::cout << "Read new private key..." << std::endl;
-        std::ifstream newPrivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
-        if (!newPrivateKeyFile.good()) {
+        std::ifstream newPrivateprivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
+        if (!newPrivateprivateKeyFile) {
             throw std::runtime_error("can not read private key: new_private.key");
         }
         VirgilByteArray newPrivateKey;
-        std::copy(std::istreambuf_iterator<char>(newPrivateKeyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(newPrivateprivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(newPrivateKey));
 
         Credentials newKeyCredentials(newPrivateKey);
@@ -101,8 +102,13 @@ int main() {
         std::cout << "Call Keys Service to reset Public Key instance." << std::endl;
         std::string confirmInfo = keysClient.publicKey().reset(oldPublicKey.publicKeyId(),
                 newPublicKey, newKeyCredentials);
+        
         std::cout << confirmInfo << std::endl;
         std::cout << "Public Key instance successfully reset." << std::endl;
+
+        std::cout << "Confirmation code can be found in the email." << std::endl;
+        std::cout << "Now launch next command: "  << std::endl;
+        std::cout << "public_key_confirm_reset <action_token> <confirmation_codes>" << std::endl;        
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

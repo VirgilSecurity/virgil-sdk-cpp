@@ -34,10 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <stdexcept>
 #include <string>
 
@@ -63,21 +61,19 @@ int main() {
     try {
         std::cout << "Prepare input file: test.txt.encp..." << std::endl;
         std::ifstream inFile("test.txt.encp", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
+        if (!inFile) {
             throw std::runtime_error("can not read file: test.txt.enc");
         }
+        VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
-        std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: decrypted_test.txt");
+        std::ofstream outFile("decrypted_testp.txt", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: decrypted_testp.txt");
         }
-
-        std::cout << "Initialize cipher..." << std::endl;
-        VirgilStreamCipher cipher;
-
-        VirgilStreamDataSource dataSource(inFile);
         VirgilStreamDataSink dataSink(outFile);
+
+        VirgilStreamCipher cipher;
 
         std::cout << "Decrypt with pass..." << std::endl;
         cipher.decryptWithPassword(dataSource, dataSink, virgil::crypto::str2bytes(PASSWORD));

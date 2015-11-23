@@ -54,36 +54,36 @@ int main() {
     try {
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
+        if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-
-        std::cout << "Prepare output file: test.txt.sign..." << std::endl;
-        std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.sign");
-        }
+        VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        std::cout << "Initialize signer..." << std::endl;
         VirgilStreamSigner signer;
 
         std::cout << "Sign data..." << std::endl;
-        VirgilStreamDataSource dataSource(inFile);
         VirgilByteArray sign = signer.sign(dataSource, privateKey);
+
+        std::cout << "Prepare output file: test.txt.sign..." << std::endl;
+        std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: test.txt.sign");
+        }
 
         std::cout << "Save sign..." << std::endl;
         std::copy(sign.begin(), sign.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Sign is successfully stored in the output file." << std::endl;
+        
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

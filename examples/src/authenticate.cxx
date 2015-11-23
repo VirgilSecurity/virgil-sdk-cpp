@@ -52,10 +52,10 @@ const std::string CONTAINER_PASSWORD = "123456789";
 
 int main() {
     try {
+        UserData userData = UserData::email(USER_EMAIL);
+
         std::cout << "Create Private Keys Service HTTP Client." << std::endl;
         PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
-
-        UserData userData = UserData::email(USER_EMAIL);
 
         std::cout << "Authenticate session..." << std::endl;
         std::string authenticationToken = privateKeysClient.auth().getAuthToken(userData, CONTAINER_PASSWORD);

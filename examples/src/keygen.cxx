@@ -55,7 +55,7 @@ int main() {
 
         std::cout << "Store public key: new_public.key ..." << std::endl;
         std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
+        if (!publicKeyStream) {
             throw std::runtime_error("can not write file: new_public.key");
         }
         VirgilByteArray publicKey = newKeyPair.publicKey();
@@ -63,7 +63,7 @@ int main() {
 
         std::cout << "Store private key: new_private.key ..." << std::endl;
         std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
+        if (!privateKeyStream) {
             throw std::runtime_error("can not write file: new_private.key");
         }
         VirgilByteArray privateKey = newKeyPair.privateKey();

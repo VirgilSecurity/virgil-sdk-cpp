@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -64,35 +65,37 @@ int main(int argc, char **argv) {
         return 0;
     }
     try {
-        const std::string actionToken = argv[1];
-        const std::string confirmationCodes = argv[2];
-
         std::cout << "Read old virgil public key..." << std::endl;
-        std::ifstream oldPublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!oldPublicKeyFile.good()) {
+        std::ifstream oldpublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
+        if (!oldpublicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
-        std::string oldPublicKeyData((std::istreambuf_iterator<char>(oldPublicKeyFile)),
-                std::istreambuf_iterator<char>());
+        std::string oldPublicKeyData;
+        std::copy(std::istreambuf_iterator<char>(oldpublicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(oldPublicKeyData));
 
         PublicKey oldPublicKey = Marshaller<PublicKey>::fromJson(oldPublicKeyData);
 
-        std::cout << "Read new private key..." << std::endl;
-        std::ifstream newPrivateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!newPrivateKeyFile.good()) {
+        std::cout << "Read old private key..." << std::endl;
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
-        VirgilByteArray newPrivateKey((std::istreambuf_iterator<char>(newPrivateKeyFile)),
-                std::istreambuf_iterator<char>());
+        VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(privateKey));
+        
+        Credentials credentials(privateKey);
 
-        Credentials newKeyCredentials(newPrivateKey);
+        const std::string kActionToken = argv[1];
+        const std::string kConfirmationCodes = argv[2];
 
         std::cout << "Create Keys Service HTTP Client" << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
         std::cout << "Call Keys service to confirm reset Public Key instance." << std::endl;
-        keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), newKeyCredentials,
-                actionToken, {confirmationCodes});
+        keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), credentials,
+                kActionToken, {kConfirmationCodes});
         std::cout << "Public Key instance successfully confirm reset." << std::endl;
 
     } catch (std::exception& exception) {

@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
+        if (!publicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
         std::string publicKeyData;
@@ -80,21 +80,21 @@ int main(int argc, char **argv) {
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
         std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        CredentialsExt credentials(publicKey.publicKeyId(), privateKey);
+        CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 
         std::cout << "Create Keys Service HTTP Client." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
         std::cout << "Call Keys service to delete User Data instance." << std::endl;
-        keysClient.userData().del(kUserDataId, credentials);
+        keysClient.userData().del(kUserDataId, credentialsExt);
         std::cout << "User Data instance successfully deleted from Public Keys service." << std::endl;
 
     } catch (std::exception& exception) {

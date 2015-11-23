@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -58,24 +59,25 @@ int main(int argc, char **argv) {
         return 0;
     }
     try {
-        const std::string actionToken = argv[1];
-        const std::string confirmationCodes = argv[2];
-
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
+        if (!publicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
-        std::string publicKeyData((std::istreambuf_iterator<char>(publicKeyFile)),
-                std::istreambuf_iterator<char>());
+        std::string publicKeyData;
+        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
+                std::back_inserter(publicKeyData));
 
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
+
+        const std::string kActionToken = argv[1];
+        const std::string kConfirmationCodes = argv[2];
 
         std::cout << "Create Private Keys Service HTTP Client." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
         std::cout << "Call Keys service to confirm delete Public Key instance." << std::endl;
-        keysClient.publicKey().confirmDel(publicKey.publicKeyId(), actionToken, {confirmationCodes});
+        keysClient.publicKey().confirmDel(publicKey.publicKeyId(), kActionToken, {kConfirmationCodes});
         std::cout << "Call Keys service to confirm delete Public Key instance." << std::endl;
 
     } catch (std::exception& exception) {

@@ -68,22 +68,21 @@ int main() {
     try {
         std::cout << "Prepare input file: public.key..." << std::endl;
         std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
+        if (!inFile) {
             throw std::runtime_error("can not read file: public.key");
         }
-
         std::cout << "Read public key..." << std::endl;
         VirgilByteArray publicKey;
         std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(publicKey));
 
         std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
         Credentials credentials(privateKey);
@@ -99,10 +98,9 @@ int main() {
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
+        if (!outFile) {
             throw std::runtime_error("can not write file: virgil_public.key");
         }
-
         std::cout << "Store virgil public key to the output file..." << std::endl;
         std::copy(publicKeyData.begin(), publicKeyData.end(), std::ostreambuf_iterator<char>(outFile));
 

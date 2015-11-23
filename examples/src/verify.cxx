@@ -64,13 +64,14 @@ int main() {
     try {
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
+        if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
+        VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Read virgil sign..." << std::endl;
         std::ifstream signFile("test.txt.sign", std::ios::in | std::ios::binary);
-        if (!signFile.good()) {
+        if (!signFile) {
             throw std::runtime_error("can not read sign: test.txt.sign");
         }
         VirgilByteArray sign;
@@ -81,11 +82,9 @@ int main() {
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
         PublicKey publicKey = keysClient.publicKey().grab(SIGNER_EMAIL);
 
-        std::cout << "Initialize verifier..." << std::endl;
         VirgilStreamSigner signer;
 
         std::cout << "Verify data..." << std::endl;
-        VirgilStreamDataSource dataSource(inFile);
         bool verified = signer.verify(dataSource, sign, publicKey.key());
         std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
 

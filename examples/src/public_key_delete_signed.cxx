@@ -63,7 +63,7 @@ int main() {
     try {
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
+        if (!publicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
         std::string publicKeyData;
@@ -73,19 +73,19 @@ int main() {
         PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
 
         std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        CredentialsExt credentials(publicKey.publicKeyId(), privateKey);
+        CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 
         std::cout << "Remove public key with id (" << publicKey.publicKeyId() << ")." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        keysClient.publicKey().del(credentials);
+        keysClient.publicKey().del(credentialsExt);
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

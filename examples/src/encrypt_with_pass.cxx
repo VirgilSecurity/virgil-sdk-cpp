@@ -55,26 +55,24 @@ const std::string PASSWORD = "qwerty";
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
-        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt");
-        }
-
-        std::cout << "Prepare output file: test.txt.encp..." << std::endl;
-        std::ofstream outFile("test.txt.encp", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.enc");
-        }
-
-        std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;
         VirgilByteArray recipientPass = virgil::crypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPass);
 
+        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
+        if (!inFile) {
+            throw std::runtime_error("can not read file: test.txt");
+        }
         VirgilStreamDataSource dataSource(inFile);
+        
+        std::cout << "Prepare output file: test.txt.encp..." << std::endl;
+        std::ofstream outFile("test.txt.encp", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: test.txt.enc");
+        }
         VirgilStreamDataSink dataSink(outFile);
 
         std::cout << "Encrypt and store results..." << std::endl;

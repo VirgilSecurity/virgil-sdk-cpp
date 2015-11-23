@@ -69,28 +69,28 @@ int main(int argc, char **argv) {
         const std::string kPublicKeyId = argv[1];
 
         std::cout << "Read private key..." << std::endl;
-        std::ifstream keyFile("private.key", std::ios::in | std::ios::binary);
-        if (!keyFile.good()) {
+        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
+        if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(keyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        CredentialsExt credentials(kPublicKeyId, privateKey);
+        CredentialsExt credentialsExt(kPublicKeyId, privateKey);
 
         std::cout << "Create Private Keys Service HTTP Client." << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
         std::cout << "Call Keys service to search Public Key instance." << std::endl;
-        PublicKey publicKey = keysClient.publicKey().grab(credentials);
+        PublicKey publicKey = keysClient.publicKey().grab(credentialsExt);
 
         std::cout << "Prepare output file: virgil_public.key..." << std::endl;
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey, true);
         std::cout << publicKeyData << std::endl;
 
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
+        if (!outFile) {
             throw std::runtime_error("can not write file: virgil_public.key");
         }
         std::cout << "Store virgil public key with User Data to the output file..." << std::endl;

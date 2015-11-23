@@ -62,19 +62,6 @@ const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
-        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt");
-        }
-
-        std::cout << "Prepare output file: test.txt.enc..." << std::endl;
-        std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.enc");
-        }
-
-        std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
         std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
@@ -84,7 +71,18 @@ int main() {
         std::cout << "Add recipient..." << std::endl;
         cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
 
+        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
+        if (!inFile) {
+            throw std::runtime_error("can not read file: test.txt");
+        }
         VirgilStreamDataSource dataSource(inFile);
+
+        std::cout << "Prepare output file: test.txt.enc..." << std::endl;
+        std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: test.txt.enc");
+        }
         VirgilStreamDataSink dataSink(outFile);
 
         std::cout << "Encrypt and store results..." << std::endl;

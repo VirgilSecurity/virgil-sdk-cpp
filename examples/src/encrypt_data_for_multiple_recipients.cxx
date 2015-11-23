@@ -34,59 +34,65 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <iterator>
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilStreamCipher.h>
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
+
+#include <virgil/sdk/keys/client/KeysClient.h>
 #include <virgil/sdk/keys/model/PublicKey.h>
 
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/ContainerType.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilStreamCipher;
+using virgil::crypto::stream::VirgilStreamDataSource;
+using virgil::crypto::stream::VirgilStreamDataSink;
 
-using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::model::PublicKey;
 
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::ContainerType;
-using virgil::sdk::privatekeys::model::UserData;
-
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
+const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
 const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
 const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
-const std::string CONTAINER_PASSWORD = "123456789";
+const std::string PASSWORD = "qwerty";
 
 
 int main() {
     try {
-        UserData userData = UserData::email(USER_EMAIL);
+        VirgilStreamCipher cipher;
 
-        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
+        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
+        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
 
-        std::cout << "Authenticate session." << std::endl;
-        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
+        std::cout << "Add recipient pass..." << std::endl;
+        VirgilByteArray recipientPass = virgil::crypto::str2bytes(PASSWORD);
+        cipher.addPasswordRecipient(recipientPass);
 
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile) {
-            throw std::runtime_error("can not read virgil public key: virgil_public.key");
+        std::cout << "Add recipient with key..." << std::endl;
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
+
+        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
+        if (!inFile) {
+            throw std::runtime_error("can not read file: test.txt");
         }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
+        VirgilStreamDataSource dataSource(inFile);
 
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
+        std::cout << "Prepare output file: test.txt.encpk..." << std::endl;
+        std::ofstream outFile("test.txt.encpk", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: test.txt.enc");
+        }
+        VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Call Private Key service to get Container Details instance." << std::endl;
-        ContainerType containerType = privateKeysClient.container().getDetails(publicKey.publicKeyId());
-        std::cout << "Container instance successfully fetched from Private Keys service." << std::endl;
-        
-        std::cout << "container_type: " << virgil::sdk::privatekeys::model::toString(containerType) << std::endl;
+        std::cout << "Encrypt and store results..." << std::endl;
+        cipher.encrypt(dataSource, dataSink, true);
+        std::cout << "Encrypted data with key is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

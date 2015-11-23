@@ -57,7 +57,7 @@ int main() {
     try {
         std::cout << "Read virgil public key..." << std::endl;
         std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile.good()) {
+        if (!publicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
         std::string publicKeyData;
@@ -73,7 +73,7 @@ int main() {
 
         std::cout << "Confirmation code can be found in the email." << std::endl;
         std::cout << "Now launch next command: "  << std::endl;
-        std::cout << "public_key_confirm_del <action_token> <confirmation_codes>" << std::endl;
+        std::cout << "public_key_confirm_delete <action_token> <confirmation_codes>" << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

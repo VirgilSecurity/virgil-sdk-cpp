@@ -68,17 +68,16 @@ int main() {
     try {
         std::cout << "Read new public key..." << std::endl;
         std::ifstream newPublicKeyFile("new_public.key", std::ios::in | std::ios::binary);
-        if (!newPublicKeyFile.good()) {
+        if (!newPublicKeyFile) {
             throw std::runtime_error("can not read public key: new_public.key");
         }
         VirgilByteArray newPublicKey;
         std::copy(std::istreambuf_iterator<char>(newPublicKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(newPublicKey));
 
-
         std::cout << "Read new private key..." << std::endl;
         std::ifstream newPrivateKeyFile("new_private.key", std::ios::in | std::ios::binary);
-        if (!newPrivateKeyFile.good()) {
+        if (!newPrivateKeyFile) {
             throw std::runtime_error("can not read private key: new_private.key");
         }
         VirgilByteArray newPrivateKey;
@@ -89,7 +88,7 @@ int main() {
 
         std::cout << "Read old virgil public key..." << std::endl;
         std::ifstream oldPublicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!oldPublicKeyFile.good()) {
+        if (!oldPublicKeyFile) {
             throw std::runtime_error("can not read virgil public key: virgil_public.key");
         }
         std::string oldPublicKeyData((std::istreambuf_iterator<char>(oldPublicKeyFile)),
@@ -99,20 +98,20 @@ int main() {
 
         std::cout << "Read old private key..." << std::endl;
         std::ifstream oldPrivateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!oldPrivateKeyFile.good()) {
+        if (!oldPrivateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
         VirgilByteArray oldPrivateKey;
         std::copy(std::istreambuf_iterator<char>(oldPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(oldPrivateKey));
 
-        CredentialsExt oldKeyCredentials(oldPublicKey.publicKeyId(), oldPrivateKey);
+        CredentialsExt oldKeyCredentialsExt(oldPublicKey.publicKeyId(), oldPrivateKey);
 
         std::cout << "Create Keys Service HTTP Client" << std::endl;
         KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
 
         std::cout << "Call Keys Service to update the Public Key instance." << std::endl;
-        keysClient.publicKey().update(newPublicKey, newKeyCredentials, oldKeyCredentials);
+        keysClient.publicKey().update(newPublicKey, newKeyCredentials, oldKeyCredentialsExt);
         std::cout << "Public Key instance successfully updated in Public Keys service." << std::endl;
 
     } catch (std::exception& exception) {

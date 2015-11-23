@@ -61,12 +61,11 @@ int main() {
 
         std::cout << "Call Keys service to search Public Key instance." << std::endl;
         PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
-
         std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
         std::cout << publicKeyData << std::endl;
 
         std::ofstream outFile("virgil_public.key", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
+        if (!outFile) {
             throw std::runtime_error("can not write file: virgil_public.key");
         }
         std::cout << "Store virgil public key without User Data to the output file..." << std::endl;
