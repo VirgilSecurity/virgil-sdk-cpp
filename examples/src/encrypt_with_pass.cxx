@@ -67,7 +67,7 @@ int main() {
             throw std::runtime_error("can not read file: test.txt");
         }
         VirgilStreamDataSource dataSource(inFile);
-        
+
         std::cout << "Prepare output file: test.txt.encp..." << std::endl;
         std::ofstream outFile("test.txt.encp", std::ios::out | std::ios::binary);
         if (!outFile) {

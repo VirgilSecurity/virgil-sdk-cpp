@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
         VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        
+
         Credentials credentials(privateKey);
 
         const std::string kActionToken = argv[1];

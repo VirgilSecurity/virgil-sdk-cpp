@@ -83,7 +83,7 @@ int main() {
         std::copy(sign.begin(), sign.end(), std::ostreambuf_iterator<char>(outFile));
 
         std::cout << "Sign is successfully stored in the output file." << std::endl;
-        
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
         return 1;

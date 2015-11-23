@@ -102,13 +102,13 @@ int main() {
         std::cout << "Call Keys Service to reset Public Key instance." << std::endl;
         std::string confirmInfo = keysClient.publicKey().reset(oldPublicKey.publicKeyId(),
                 newPublicKey, newKeyCredentials);
-        
+
         std::cout << confirmInfo << std::endl;
         std::cout << "Public Key instance successfully reset." << std::endl;
 
         std::cout << "Confirmation code can be found in the email." << std::endl;
         std::cout << "Now launch next command: "  << std::endl;
-        std::cout << "public_key_confirm_reset <action_token> <confirmation_codes>" << std::endl;        
+        std::cout << "public_key_confirm_reset <action_token> <confirmation_codes>" << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;

@@ -85,7 +85,7 @@ int main() {
         std::cout << "Call Private Key service to get Container Details instance." << std::endl;
         ContainerType containerType = privateKeysClient.container().getDetails(publicKey.publicKeyId());
         std::cout << "Container instance successfully fetched from Private Keys service." << std::endl;
-        
+
         std::cout << "container_type: " << virgil::sdk::privatekeys::model::toString(containerType) << std::endl;
 
     } catch (std::exception& exception) {
