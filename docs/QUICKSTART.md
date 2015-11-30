@@ -44,7 +44,7 @@ This section describes common case library usage scenarios, like
 - sign data with private key;
 - verify data with signer identified by email, phone, etc.
 
-Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples) in public access.
+Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-cpp/tree/master/examples) in public access.
 
 ### <a name="example-1"></a> Example 1: Generate keys
 
