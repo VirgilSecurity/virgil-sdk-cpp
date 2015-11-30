@@ -41,7 +41,8 @@ Credentials credentials(privateKey);
 KeysClient keysClient("{Application Token}");
 PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData}, credentials);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_add.cxx)
+
 >If registration successfull confirmation code will be sent to the user email.
 To confirm, you must use - [Confirm User Data.](#confirm-user-data)
 
@@ -52,7 +53,7 @@ To confirm, you must use - [Confirm User Data.](#confirm-user-data)
 KeysClient keysClient("{Application Token}");
 PublicKey publicKey = keysClient.publicKey().get(publicKeyId);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_get.cxx)
 
 
 ## Search Public Key Data
@@ -61,7 +62,7 @@ See full example [here.]()
 KeysClient keysClient("{Application Token}");
 PublicKey publicKey = keysClient.publicKey().grab("mail@server.com");
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_grab.cxx)
 
 
 ## Search Public Key Signed Data
@@ -73,7 +74,7 @@ CredentialsExt credentialsExt(publicKeyId, privateKey);
 KeysClient keysClient("{Application Token}");
 PublicKey publicKey = keysClient.publicKey().grab(credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_grab_signed.cxx)
 
 
 ## Update Public Key Data
@@ -87,7 +88,7 @@ CredentialsExt oldKeyCredentialsExt(oldPublicKey.publicKeyId(), oldPrivateKey);
 KeysClient keysClient("{Application Token}");
 keysClient.publicKey().update(newPublicKey, newKeyCredentials, oldKeyCredentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_update.cxx)
 
 
 ## Delete Public Key Data
@@ -104,7 +105,7 @@ See full example [here.]()
 KeysClient keysClient("{Application Token}");
 std::string confirmInfo = keysClient.publicKey().del(publicKey.publicKeyId());
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_delete.cxx)
 
 ### Signed version
 ```cpp
@@ -112,7 +113,7 @@ CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 KeysClient keysClient("{Application Token}");
 keysClient.publicKey().del(credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_delete_signed.cxx)
 
 
 ## Reset a Public Key
@@ -127,7 +128,7 @@ KeysClient keysClient("{Application Token}");
 std::string confirmInfo = keysClient.publicKey().reset(oldPublicKey.publicKeyId(),
 	    newPublicKey, newKeyCredentials);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_reset.cxx)
 
 
 ## Confirm a Public Key reset operation
@@ -139,7 +140,7 @@ Credentials credentials(privateKey);
 keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), credentials,
 		<action_token>, {<confirmation_codes>});
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_confirm_reset.cxx)
 
 
 ## Confirm a Public Key delete operation
@@ -150,7 +151,7 @@ KeysClient keysClient("{Application Token}");
 keysClient.publicKey().confirmDel(publicKey.publicKeyId(),
 		<action_token>, {<confirmation_codes>});
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_confirm_delete.cxx)
 
 
 ## Create Public Key User Data
@@ -164,7 +165,7 @@ UserData userData = UserData::email("newmail@server.com");
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 UserData userDataResponse = keysClient.userData().add(userData, credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_add.cxx)
 
 
 ## Delete User Data from the Public Key
@@ -175,7 +176,7 @@ KeysClient keysClient("{Application Token}");
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 keysClient.userData().del(<user_data_id>, credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_del.cxx)
 
 
 ## Confirm User Data
@@ -189,7 +190,7 @@ Confirmation code provided for user after:
 KeysClient keysClient("{Application Token}");
 keysClient.userData().confirm(<user_data_id>, <confirmation_code>);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_confirm.cxx)
 
 ## Resend a User's Confirmation Code
 > Resend confirmation code to the user for given user's identifier.
@@ -199,4 +200,4 @@ KeysClient keysClient("{Application Token}");
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 keysClient.userData().resendConfirmation(<user_data_id>, credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_resend_confirmation.cxx)

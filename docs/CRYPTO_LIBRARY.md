@@ -17,7 +17,7 @@ VirgilKeyPair newKeyPair;
 VirgilByteArray publicKey = newKeyPair.publicKey();
 VirgilByteArray privateKey = newKeyPair.privateKey();
 ```
-See full example [here.](https://github.com/VladEvka/virgil-sdk-cpp/blob/develop/examples/src/keygen.cxx)
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/keygen.cxx)
 
 
 ## Encrypt and Decrypt data
@@ -31,7 +31,7 @@ VirgilByteArray recipientPass = virgil::crypto::str2bytes("strong password");
 cipher.addPasswordRecipient(recipientPass);
 cipher.encrypt(dataSource, dataSink, true);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_pass.cxx)
 
 #### Decrypt data
 ```cpp
@@ -39,7 +39,7 @@ VirgilStreamCipher cipher;
 VirgilByteArray recipientPass = virgil::crypto::str2bytes("strong password");
 cipher.decryptWithPassword(dataSource, dataSink, recipientPass);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/decrypt_with_pass.cxx)
 
 ## Encrypt and Decrypt data using Key
 ### Encrypt data
@@ -48,7 +48,7 @@ VirgilStreamCipher cipher;
 cipher.addKeyRecipient(publicKeyId, publicKey.key());
 cipher.encrypt(dataSource, dataSink, true);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_key.cxx)
 
 ### Decrypt data
 ```cpp
@@ -57,7 +57,7 @@ VirgilStreamCipher cipher;
 // cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey, privateKeyPass);
 cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/decrypt_with_key.cxx)
 
 
 ## Encrypt data for multiple recipients
@@ -69,7 +69,7 @@ VirgilByteArray recipientPass = virgil::crypto::str2bytes("strong password");
 cipher.addPasswordRecipient(recipientPass);
 cipher.encrypt(dataSource, dataSink, true);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_multiple_recipients.cxx)
 
 ## Sign and Verify data
 
@@ -81,10 +81,12 @@ VirgilStreamSigner signer;
 // VirgilByteArray sign = signer.sign(dataSource, privateKey, privateKeyPass);
 VirgilByteArray sign = signer.sign(dataSource, privateKey);
 ```
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/sign.cxx)
+
 
 ### Verify data
 ```cpp
 VirgilStreamSigner signer;
 bool verified = signer.verify(dataSource, sign, publicKey.key());
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/verify.cxx)

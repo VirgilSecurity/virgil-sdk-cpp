@@ -51,7 +51,7 @@ Full source code examples are available on [GitHub](https://github.com/VirgilSec
 Working with Virgil Security Services it is requires the creation of both a public key and a private key. The public key can be made public to anyone using the Virgil Public Keys Service while the private key must be known only to the party or parties who will decrypt the data encrypted with the public key.
 
 > __Private keys should never be stored verbatim or in plain text on the local computer.__<br>
-> \- If you need to store a private key, you should use a secure key container depending on your platform. You also can use Virgil Security Services. This will allows you to easily synchronize private keys between clients devices and applications. Please read more about [Virgil Private Keys Service](https://virgilsecurity.com/documents/cpp/keys-service).
+> \- If you need to store a private key, you should use a secure key container depending on your platform. You also can use Virgil Security Services. This will allows you to easily synchronize private keys between clients devices and applications. Please read more about [Virgil Private Keys Service](https://www.virgilsecurity.com/documents/cpp/keys-private-service).
 
 The following code example creates a new public/private key pair.
 ``` {.cpp}
@@ -182,9 +182,9 @@ VirgilByteArray decryptedData = cipher.decrypt(encryptedData, publicKey.publicKe
 ```
 
 ## More examples
-* [Virgil Security Crypto Library]()
-* [Virgil Security SDK Public Keys]()
-* [Virgil Security SDK Private Keys]()
+* [Virgil Security Crypto Library](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/CRYPTO_LIBRARY.md)
+* [Virgil Security SDK Public Keys](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/PUBLIC_KEYS_SERVICE.md)
+* [Virgil Security SDK Private Keys](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/PRIVATE_KEYS_SERVICE.md)
 
 ## See also
 * [Virgil Security SDKs API](http://virgilsecurity.github.io/virgil-cpp/)

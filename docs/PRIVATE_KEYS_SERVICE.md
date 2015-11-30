@@ -52,7 +52,7 @@ ContainerType CONTAINER_TYPE = ContainerType::Easy;
 std::string CONTAINER_PASSWORD = "123456789";
 privateKeysClient.container().create(credentialsExt, CONTAINER_TYPE, CONTAINER_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_create.cxx)
 
 
 ## Authenticate Session
@@ -76,7 +76,7 @@ PrivateKeysClient privateKeysClient("{Application Token}");
 UserData userData = UserData::email(USER_EMAIL);
 std::string authenticationToken = privateKeysClient.auth().getAuthToken(userData, CONTAINER_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/authenticate.cxx)
 
 
 ## Get Container Object
@@ -94,6 +94,7 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
 ContainerType containerType = privateKeysClient.container().getDetails(publicKeyId);
 ```
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_info_get.cxx)
 
 
 ## Delete Container Object
@@ -112,7 +113,7 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 CredentialsExt credentialsExt(publicKeyId, privateKey);
 privateKeysClient.container().del(credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_delete.cxx)
 
 
 ## Update Container Object
@@ -131,7 +132,7 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 privateKeysClient.container().update(credentials, CONTAINER_NEW_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_update.cxx)
 
 
 ## Reset Container Password
@@ -144,7 +145,7 @@ PrivateKeysClient privateKeysClient("{Application Token}");
 UserData userData = UserData::email(USER_EMAIL);
 privateKeysClient.container().resetPassword(userData, CONTAINER_NEW_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_reset_password.cxx)
 
 
 ## Persist Container Object
@@ -158,7 +159,7 @@ container type is `easy`.
 PrivateKeysClient privateKeysClient("{Application Token}");
 privateKeysClient.container().confirm(<confirmation_token>);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_confirm.cxx)
 
 
 ## Create a Private Key inside the Container Object
@@ -182,7 +183,7 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 CredentialsExt credentials(publicKeyId, privateKey);
 privateKeysClient.privateKey().add(credentials, CONTAINER_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_add.cxx)
 
 
 ## Get Private Key Object
@@ -200,7 +201,7 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 
 PrivateKey privateKey = privateKeysClient.privateKey().get(publicKeyId, CONTAINER_PASSWORD);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_get.cxx)
 
 
 ## Delete Private Key Object
@@ -219,4 +220,4 @@ privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 privateKeysClient.container().del(credentialsExt);
 ```
-See full example [here.]()
+See full example [here.](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_delete.cxx)
