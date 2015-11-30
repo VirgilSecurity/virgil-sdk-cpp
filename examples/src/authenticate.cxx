@@ -46,7 +46,7 @@ using virgil::sdk::privatekeys::model::UserData;
 
 const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
 const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "test.virgil-cpp@mailinator.com";
+const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
 
 
