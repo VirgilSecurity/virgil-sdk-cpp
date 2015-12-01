@@ -45,13 +45,21 @@ if [ "${PUBLISH_DOCS}" == "ON" ]; then
     make doc-sdk-private-keys
 fi
 
-if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_scan" ] && [ "${CC}" == "clang" ]; then
+if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_scan" ] && [ "${CC}" == "gcc-4.8" ]; then
     # Build for Coverity Scan.
     export COVERITY_SCAN_PROJECT_NAME="VirgilSecurity/virgil-sdk-cpp"
     export COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
     export COVERITY_SCAN_NOTIFICATION_EMAIL="sergey.seroshtan@gmail.com"
     export COVERITY_SCAN_BUILD_COMMAND="make -j2"
-    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
+
+    # Write Coverity Scan configuration commands
+    COVERITY_SCAN_CONFIGURE_SCRIPT="coverity_scan_configure.sh"
+    echo ""                                                        > ${COVERITY_SCAN_CONFIGURE_SCRIPT}
+    echo "# Configure"                                             >> ${COVERITY_SCAN_CONFIGURE_SCRIPT}
+    echo "cov-configure --compiler \`which ${CC}\` --comptype gcc" >> ${COVERITY_SCAN_CONFIGURE_SCRIPT}
+
+    # Run Coverity Scan build
+    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | sed '/export PATH/ r ${COVERITY_SCAN_CONFIGURE_SCRIPT}' | bash
 else
     # Build
     make -j2 VERBOSE=1
