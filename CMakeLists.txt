@@ -46,27 +46,27 @@ project (virgil-cpp)
 
 set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
 set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
+set (VIRGIL_SDK_ALL OFF CACHE BOOL "Enable build of all SDKs")
 set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 if (VIRGIL_EXAMPLES)
-    set (VIRGIL_SDK_KEYS ON CACHE BOOL "" FORCE)
-    set (VIRGIL_SDK_PRIVATE_KEYS ON CACHE BOOL "" FORCE)
+    set (VIRGIL_SDK_ALL ON CACHE BOOL "Force: Enable build of all SDKs" FORCE)
 endif (VIRGIL_EXAMPLES)
 
 if (ENABLE_TESTING)
     enable_testing ()
 endif (ENABLE_TESTING)
 
-if (VIRGIL_SDK_KEYS)
+if (VIRGIL_SDK_KEYS OR VIRGIL_SDK_ALL)
     add_subdirectory (virgil.sdk.keys)
-endif (VIRGIL_SDK_KEYS)
+endif ()
 
-if (VIRGIL_SDK_PRIVATE_KEYS)
+if (VIRGIL_SDK_PRIVATE_KEYS OR VIRGIL_SDK_ALL)
     add_subdirectory (virgil.sdk.private-keys)
-endif (VIRGIL_SDK_PRIVATE_KEYS)
+endif ()
 
 if (VIRGIL_EXAMPLES)
     add_subdirectory (examples)
