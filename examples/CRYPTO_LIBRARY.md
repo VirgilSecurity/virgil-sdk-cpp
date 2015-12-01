@@ -33,7 +33,7 @@ cipher.encrypt(dataSource, dataSink, true);
 ```cpp
 VirgilStreamCipher cipher;
 // using private key with password
-// cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey, privateKeyPass);
+// cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey, privateKeyPwd);
 cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey);
 ```
 
@@ -77,8 +77,8 @@ cipher.encrypt(dataSource, dataSink, true);
 ```cpp
 VirgilStreamSigner signer;
 // if Signer has a private key with password
-// std::string privateKeyPass = "strong private key password";
-// VirgilByteArray sign = signer.sign(dataSource, privateKey, privateKeyPass);
+// std::string privateKeyPwd = "strong private key password";
+// VirgilByteArray sign = signer.sign(dataSource, privateKey, privateKeyPwd);
 VirgilByteArray sign = signer.sign(dataSource, privateKey);
 ```
 

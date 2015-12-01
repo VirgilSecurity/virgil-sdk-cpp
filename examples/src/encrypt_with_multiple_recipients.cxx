@@ -70,8 +70,8 @@ int main() {
         PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
 
         std::cout << "Add recipient pass..." << std::endl;
-        VirgilByteArray recipientPass = virgil::crypto::str2bytes(PASSWORD);
-        cipher.addPasswordRecipient(recipientPass);
+        VirgilByteArray recipientPwd = virgil::crypto::str2bytes(PASSWORD);
+        cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Add recipient with key..." << std::endl;
         cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());

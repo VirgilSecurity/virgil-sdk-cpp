@@ -58,8 +58,8 @@ int main() {
         VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;
-        VirgilByteArray recipientPass = virgil::crypto::str2bytes(PASSWORD);
-        cipher.addPasswordRecipient(recipientPass);
+        VirgilByteArray recipientPwd = virgil::crypto::str2bytes(PASSWORD);
+        cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
