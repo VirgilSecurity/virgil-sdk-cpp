@@ -38,6 +38,13 @@
 set -ev
 
 cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
-make -j2 VERBOSE=1
-make test
-make install
+
+if [ "${PUBLISH_DOCS}" == "ON" ]; then
+    # Generate the HTML documentation.
+    make doc-sdk-public-keys
+    make doc-sdk-private-keys
+else
+    make -j2 VERBOSE=1
+    ctest --verbose
+    make install
+fi

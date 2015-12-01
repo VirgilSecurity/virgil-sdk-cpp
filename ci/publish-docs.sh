@@ -37,7 +37,7 @@
 
 set -ev
 
-if [ "${PUBLISH_DOCS}" != "ON" ]; then exit; fi
+if [ "${PUBLISH_DOCS}" != "ON" ] || [ "${TRAVIS_BRANCH}" != "${DOC_BRANCH}" ] || [ "${CC}" != "gcc" ]; then exit; fi
 
 # Settings
 REPO_PATH=git@github.com:VirgilSecurity/virgil-sdk-cpp.git
@@ -50,10 +50,6 @@ CHANGESET=$(git rev-parse --verify HEAD)
 rm -rf ${HTML_PATH_DST}
 mkdir -p ${HTML_PATH_DST}
 git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
-
-# Generate the HTML documentation.
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}" && make doc-sdk-public-keys doc-sdk-private-keys
-cd -
 
 # Define SDK versions
 PUBLIC_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`

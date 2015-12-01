@@ -12,6 +12,7 @@ env:
     - BUILD_MODULE_NAME=VIRGIL_SDK_KEYS
     - BUILD_MODULE_NAME=VIRGIL_SDK_PRIVATE_KEYS
     - BUILD_MODULE_NAME=VIRGIL_EXAMPLES
+    - PUBLISH_DOCS=ON
 cache:
   directories:
     - $HOME/cmake
@@ -29,12 +30,13 @@ addons:
 install:
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 before_install:
-  - if [ "${TRAVIS_BRANCH}" == "${DOC_BRANCH}" ] && [ "$CXX" == "clang++" ]; then export PUBLISH_DOCS="ON"; fi
   - bash ./ci/install-cmake.sh
   - bash ./ci/install-credentials.sh
   - bash ./ci/install-doxygen.sh
 before_script:
   - bash ./ci/configure.sh
 script:
-  - if [ "${PUBLISH_DOCS}" == "ON" ]; then bash "./ci/publish-docs.sh"; else bash "./ci/run.sh"; fi
+  - bash ./ci/run.sh
+after_success:
+  - bash ./ci/publish-docs.sh
 sudo: false
