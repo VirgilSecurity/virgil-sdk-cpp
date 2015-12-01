@@ -59,7 +59,7 @@ cipher.decryptWithPassword(dataSource, dataSink, recipientPwd);
 
 ## <a name="encrypt-using-multiple-recipients"></a> Encrypt data for multiple recipients
 
-### Encrypt data \[[src]((https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_multiple_recipients.cxx)\]
+### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_multiple_recipients.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
