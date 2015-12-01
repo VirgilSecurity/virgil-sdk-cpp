@@ -43,8 +43,9 @@ if [ "${PUBLISH_DOCS}" == "ON" ]; then
     # Generate the HTML documentation.
     make doc-sdk-public-keys
     make doc-sdk-private-keys
-else
-    make -j2 VERBOSE=1
-    ctest --verbose
-    make install
 fi
+
+# Build
+make -j2 VERBOSE=1
+ctest --verbose
+make install
