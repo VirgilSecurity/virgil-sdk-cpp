@@ -3,7 +3,6 @@
 - [Introduction](#introduction)
 - [Obtain Application Token](#obtain-application-token)
 - [Usage examples](#usage-examples)
-    - [General statements](#general-statements)
     - [Example 1: Generate keys](#example-1)
     - [Example 2: Register user](#example-2)
     - [Example 3: Get user's public key](#example-3)
@@ -14,6 +13,7 @@
     - [Example 8: Verify data](#example-8)
     - [Example 9: Decrypt data](#example-9)
 - [More examples](#more-examples)
+- [Build](#build)
 - [See also](#see-also)
 - [License](#license)
 - [Contacts](#contacts)
@@ -40,16 +40,8 @@ X-VIRGIL-APPLICATION-TOKEN: <YOUR_APPLICATION_TOKEN>
 
 ## Usage examples
 
-This section describes common case library usage scenarios, like
-
-- generate new keys;
-- register user's public key on the Virgil PKI service;
-- encrypt data for user identified by email, phone, etc;
-- decrypt data with private key;
-- sign data with private key;
-- verify data with signer identified by email, phone, etc.
-
-Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples/src) in public access.
+This section describes common case library usage scenarios.
+Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples/src) in public access, also see section [More examples](#more-examples).
 
 ### <a name="example-1"></a> Example 1: Generate keys
 
@@ -185,6 +177,40 @@ The following example illustrates the decryption of encrypted data by public key
 ``` {.cpp}
 VirgilByteArray decryptedData = cipher.decrypt(encryptedData, publicKey.publicKeyId(), privateKey);
 ```
+## Build
+
+Run one of the following commands in the project's root folder.
+
+  * Build Public Keys SDK
+
+    * Unix:
+
+            mkdir build && cd build && cmake -DVIRGIL_SDK_KEYS=ON .. && make -j4
+
+    * Windows:
+
+            mkdir build && cd build && cmake -DVIRGIL_SDK_KEYS=ON .. && nmake
+
+  * Build Private Keys SDK
+
+    * Unix:
+
+            mkdir build && cd build && cmake -DVIRGIL_SDK_PRIVATE_KEYS=ON .. && make -j4
+
+    * Windows:
+
+            mkdir build && cd build && cmake -DVIRGIL_SDK_PRIVATE_KEYS=ON .. && nmake
+
+  * Build Examples
+
+    * Unix:
+
+            mkdir build && cd build && cmake -DVIRGIL_EXAMPLES=ON .. && make -j4
+
+    * Windows:
+
+            mkdir build && cd build && cmake -DVIRGIL_EXAMPLES=ON .. && nmake
+
 
 ## More examples
 
