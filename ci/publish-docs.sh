@@ -40,7 +40,7 @@ set -ev
 if [ "${PUBLISH_DOCS}" != "ON" ]; then exit; fi
 
 # Settings
-REPO_PATH=git@github.com:VirgilSecurity/virgil-cpp.git
+REPO_PATH=git@github.com:VirgilSecurity/virgil-sdk-cpp.git
 HTML_PATH_DST="${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}/docs/html"
 COMMIT_USER="Travis CI documentation builder."
 COMMIT_EMAIL="sergey.seroshtan@gmail.com"
