@@ -1,36 +1,7 @@
 ## Examples
-This directory contains project with examples that shows how to use Virgil Security libraries
-    that can be used to solve specific tasks.
 
-### General statements
+This directory contains examples that show how to solve specific tasks with Virgil Security libraries:
 
-1. Examples MUST be run from their directory.
-1. All results are stored in the same directory.
-1. To produce file `virgil_public.key` run:
-    - `public_key_get` - if user's public key is already registered;
-    - `public_key_add` and `user_data_confirm` - if user's public key is not registered yet.
-1. To produce `test.txt.sign` run `sign`.
-1. To produce `text.txt.enc` run `encrypt`.
-1. To produce `decrypted_text.txt` run `decrypt`.
-
-## Build
-
-### Build prerequisite:
-
-1. [CMake](http://www.cmake.org/).
-1. [Git](http://git-scm.com/).
-1. [Python](http://python.org/).
-1. [Python YAML](http://pyyaml.org/).
-1. C/C++ compiler:
-    * [gcc](https://gcc.gnu.org/)
-    * [clang](http://clang.llvm.org/)
-    * [MinGW](http://www.mingw.org/)
-    * [Microsoft Visual Studio](http://www.visualstudio.com/), or other.
-1. [libcurl](http://curl.haxx.se/libcurl/).
-
-### Build steps:
-
-1. `mkdir build`
-1. `cd build`
-1. `cmake ../examples`
-1. `make`
+  * [How to use Crypto Library](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/CRYPTO_LIBRARY.md)
+  * [How to use Public Keys SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/PUBLIC_KEYS_SERVICE.md)
+  * [How to use Private Keys SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/PRIVATE_KEYS_SERVICE.md)

@@ -1,7 +1,7 @@
-# Virgil Security C++ library stack
+# Virgil Security C++ SDKs
 
 - [Introduction](#introduction)
-- [Obtaining an App Token](#obtaining-an-application-token)
+- [Obtain Application Token](#obtain-application-token)
 - [Usage examples](#usage-examples)
     - [General statements](#general-statements)
     - [Example 1: Generate keys](#example-1)
@@ -19,18 +19,23 @@
 - [Contacts](#contacts)
 
 ## Introduction
-This guide will help you get started using the [Virgil Crypto Library](https://github.com/VirgilSecurity/virgil-crypto.git) and Virgil Keys Service, for the most popular platforms and languages.
 
-This branch focuses on the C++ library implementation and covers it's usage.
+This is quickstart guide that helps to start using C++ implementation of:
 
-## Obtaining an Application Token
-First you must create a free Virgil Security developer account by signing up [here](https://virgilsecurity.com/signup). Once you have your account you can [sign in](https://virgilsecurity.com/signin) and generate an app token for your application.
+  * [Virgil Crypto Library](https://github.com/VirgilSecurity/virgil-crypto.git)
+  * [Virgil Public Keys Service](https://virgilsecurity.com/documents/cpp/keys-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/virgil.sdk.keys)
+  * [Virgil Private Keys Service](https://virgilsecurity.com/documents/cpp/keys-private-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/virgil.sdk.private-keys).
 
-The application token provides authenticated secure access to Virgil’s Keys Service and is passed with each API call. The app token also allows the API to associate your app’s requests with your Virgil Security developer account.
+## <a name="obtain-application-token"></a> Obtain Application Token
 
-Simply add your application token to the HTTP header for each request:
+First you must create a free Virgil Security developer account by [sign up](https://virgilsecurity.com/account/signup). Once you have your account you can [sign in](https://virgilsecurity.com/account/signin) and generate an app token for your application.
+
+The app token provides authenticated secure access to Virgil’s Keys Service and is passed with each API call. The app token also allows the API to associate your app’s requests with your Virgil Security developer account.
+
+Simply add your app token to the HTTP header for each request:
+
 ```
-X-VIRGIL-APPLICATION-TOKEN: { YOUR_APPLICATION_TOKEN }
+X-VIRGIL-APPLICATION-TOKEN: <YOUR_APPLICATION_TOKEN>
 ```
 
 ## Usage examples
@@ -44,14 +49,14 @@ This section describes common case library usage scenarios, like
 - sign data with private key;
 - verify data with signer identified by email, phone, etc.
 
-Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples) in public access.
+Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples/src) in public access.
 
 ### <a name="example-1"></a> Example 1: Generate keys
 
-Working with Virgil Security Services it is requires the creation of both a public key and a private key. The public key can be made public to anyone using the Virgil Public Keys Service while the private key must be known only to the party or parties who will decrypt the data encrypted with the public key.
+To use Virgil Security Services it is required to create public key and a private key. The public key can be made public to anyone using the [Virgil Public Keys Service] while the private key must be known only to the party or parties who will decrypt the data encrypted with the public key.
 
 > __Private keys should never be stored verbatim or in plain text on the local computer.__<br>
-> \- If you need to store a private key, you should use a secure key container depending on your platform. You also can use Virgil Security Services. This will allows you to easily synchronize private keys between clients devices and applications. Please read more about [Virgil Private Keys Service](https://www.virgilsecurity.com/documents/cpp/keys-private-service).
+> \- If you need to store a private key, you should use a secure key container depending on your platform. You also can use Virgil Security Services. This will allows you to easily synchronize private keys between clients devices and applications. Please read more about [Virgil Private Keys Service](https://virgilsecurity.com/documents/cpp/keys-private-service).
 
 The following code example creates a new public/private key pair.
 ``` {.cpp}
@@ -78,7 +83,7 @@ Then Confirm User Data using your user data type (Currently supported only Email
 ``` {.cpp}
 auto userDataId = virgilPublicKey.userData().front().userDataId();
 // Confirmation code you received on your email box.
-auto confirmationCode = ""; 
+auto confirmationCode = "";
 KeysClient keysClient("{Application Token}");
 keysClient.userData().confirm(userDataId, confirmationCode);
 ```
@@ -104,7 +109,7 @@ PrivateKeysClient privateKeysClient("{Application Token}");
 // Prepare parameters
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 // ContainerType::Easy or ContainerType::Normal
-auto containerType = ContainerType::Easy; 
+auto containerType = ContainerType::Easy;
 auto containerPassword = "123456789";
 
 // Create container for private keys storage.
@@ -182,15 +187,17 @@ VirgilByteArray decryptedData = cipher.decrypt(encryptedData, publicKey.publicKe
 ```
 
 ## More examples
-* [Virgil Security Crypto Library](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/CRYPTO_LIBRARY.md)
-* [Virgil Security SDK Public Keys](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/PUBLIC_KEYS_SERVICE.md)
-* [Virgil Security SDK Private Keys](https://github.com/VladEvka/virgil-sdk-cpp/blob/update-docs/docs/PRIVATE_KEYS_SERVICE.md)
+
+* [Examples list](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples)
 
 ## See also
-* [Virgil Security SDKs API](http://virgilsecurity.github.io/virgil-cpp/)
+
+* [Virgil Security SDKs API](http://virgilsecurity.github.io/virgil-sdk-cpp)
 
 ## License
+
 BSD 3-Clause. See [LICENSE](https://github.com/VirgilSecurity/virgil/blob/master/LICENSE) for details.
 
 ## Contacts
+
 Email: <support@virgilsecurity.com>
