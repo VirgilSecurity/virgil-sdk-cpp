@@ -59,10 +59,11 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @name Base class implementation
          */
         //@{
-        void add(const virgil::sdk::privatekeys::client::Credentials& credentials,
-                const std::string& uuid) const override;
-        virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId) const override;
-        void del(const Credentials &credentials, const std::string& uuid) const override;
+        void add(const virgil::sdk::privatekeys::client::CredentialsExt& credentials,
+                const std::string& pass) const override;
+        virgil::sdk::privatekeys::model::PrivateKey get(const std::string& publicKeyId,
+                const std::string& pass) const override;
+        void del(const CredentialsExt &credentials) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

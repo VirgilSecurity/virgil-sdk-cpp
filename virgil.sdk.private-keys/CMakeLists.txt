@@ -61,16 +61,13 @@ include_directories ("include")
 # Add external dependencies
 include (ExternalProject)
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/json.cmake")
+include (json)
 include_directories (${JSON_INCLUDE_DIRS})
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/rest.cmake")
+include (rest)
 include_directories (${REST_INCLUDE_DIRS})
-message (STATUS "=============================")
-message (STATUS "${JSON_INCLUDE_DIRS}")
-message (STATUS "${REST_INCLUDE_DIRS}")
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
+include (virgil)
 virgil_add_dependency ("crypto"
     VIRGIL_CRYPTO_DEPENDENCIES
     VIRGIL_CRYPTO_INCLUDE_DIRS

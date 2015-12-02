@@ -65,6 +65,18 @@ std::string EndpointUri::publicKeyDelete(const std::string& publicKeyId) const {
     return addVersion("/public-key/" + publicKeyId);
 }
 
+std::string EndpointUri::publicKeyConfirmDelete(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId + "/persist");
+}
+
+std::string EndpointUri::publicKeyReset(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId + "/actions/reset");
+}
+
+std::string EndpointUri::publicKeyConfirmReset(const std::string& publicKeyId) const {
+    return addVersion("/public-key/" + publicKeyId + "/persist");
+}
+
 std::string EndpointUri::publicKeyGrab() const {
     return addVersion("/public-key/actions/grab");
 }

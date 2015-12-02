@@ -34,68 +34,55 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <iostream>
 #include <fstream>
-#include <algorithm>
-#include <iterator>
-#include <string>
+#include <iostream>
 #include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
-#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/client/KeysClient.h>
+#include <virgil/sdk/keys/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
-using virgil::crypto::foundation::VirgilBase64;
+
 using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::client::KeysClient;
+using virgil::sdk::keys::io::Marshaller;
 
-static const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-static const std::string VIRGIL_PKI_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-static const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
-
-#define MAKE_URL(base, path) (base path)
+const std::string PASSWORD = "qwerty";
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
-        std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
-        if (!inFile.good()) {
-            throw std::runtime_error("can not read file: test.txt");
+        std::cout << "Prepare input file: test.txt.encp..." << std::endl;
+        std::ifstream inFile("test.txt.encp", std::ios::in | std::ios::binary);
+        if (!inFile) {
+            throw std::runtime_error("can not read file: test.txt.enc");
         }
+        VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: test.txt.enc..." << std::endl;
-        std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
-        if (!outFile.good()) {
-            throw std::runtime_error("can not write file: test.txt.enc");
+        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::ofstream outFile("decrypted_testp.txt", std::ios::out | std::ios::binary);
+        if (!outFile) {
+            throw std::runtime_error("can not write file: decrypted_testp.txt");
         }
+        VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Initialize cipher..." << std::endl;
         VirgilStreamCipher cipher;
 
-        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_PKI_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
+        std::cout << "Decrypt with pass..." << std::endl;
+        cipher.decryptWithPassword(dataSource, dataSink, virgil::crypto::str2bytes(PASSWORD));
+        std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
 
-        std::cout << "Add recipient..." << std::endl;
-        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
-
-        std::cout << "Encrypt and store results..." << std::endl;
-        VirgilStreamDataSource dataSource(inFile);
-        VirgilStreamDataSink dataSink(outFile);
-        cipher.encrypt(dataSource, dataSink, true);
-
-        std::cout << "Encrypted data is successfully stored in the output file..." << std::endl;
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+
     return 0;
 }

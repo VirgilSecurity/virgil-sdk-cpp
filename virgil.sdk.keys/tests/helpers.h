@@ -42,6 +42,8 @@
 
 #include <virgil/sdk/keys/model/PublicKey.h>
 #include <virgil/sdk/keys/model/UserData.h>
+#include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/CredentialsExt.h>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
@@ -49,12 +51,16 @@ inline std::string appToken() {
     return "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
 }
 
-inline std::string uuid() {
-    return "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
+inline std::string actionToken() {
+    return "57516f1b-f17c-3154-c91e-edb86c514c5d";
 }
 
 inline std::string confirmationCode() {
     return "A3F4S3";
+}
+
+inline std::vector<std::string> confirmationCodes() {
+    return {"A4D2B6","B4G3F1"};
 }
 
 inline std::string expectedAccountId() {
@@ -87,9 +93,14 @@ inline std::vector<unsigned char> expectedPrivateKeyData() {
     );
 }
 
-inline virgil::sdk::keys::client::Credentials credentials() {
-    return virgil::sdk::keys::client::Credentials(expectedPublicKeyId(), expectedPrivateKeyData());
+inline virgil::sdk::keys::client::CredentialsExt expectedCredentialsExt() {
+    return virgil::sdk::keys::client::CredentialsExt(expectedPublicKeyId(), expectedPrivateKeyData());
 }
+
+inline virgil::sdk::keys::client::Credentials expectedCredentials() {
+    return virgil::sdk::keys::client::Credentials(expectedPrivateKeyData());
+}
+
 
 inline virgil::sdk::keys::model::UserData expectedUserData1() {
     virgil::sdk::keys::model::UserData userData =

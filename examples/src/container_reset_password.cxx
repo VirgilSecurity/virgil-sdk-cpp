@@ -45,8 +45,9 @@ using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::model::UserData;
 
 const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
+
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -63,8 +64,14 @@ int main(int argc, char **argv) {
         std::cout << "Call the Private Key service to reset a Container password." << std::endl;
         privateKeysClient.container().resetPassword(UserData::email(USER_EMAIL), kNewContainerPassword);
         std::cout << "Container password successfully reset." << std::endl;
+
+        std::cout << "Confirmation code can be found in the email." << std::endl;
+        std::cout << "Now launch next command: "  << std::endl;
+        std::cout << "container_confirm <confirmation_token>" << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
 
     return 0;

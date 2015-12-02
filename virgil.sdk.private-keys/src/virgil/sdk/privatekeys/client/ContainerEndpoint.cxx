@@ -42,11 +42,13 @@
 #include <virgil/sdk/privatekeys/http/Request.h>
 #include <virgil/sdk/privatekeys/http/Response.h>
 #include <virgil/sdk/privatekeys/util/JsonKey.h>
+#include <virgil/sdk/privatekeys/util/uuid.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::privatekeys::client::ContainerEndpoint;
 using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::EndpointUri;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::error::KeysError;
@@ -55,6 +57,10 @@ using virgil::sdk::privatekeys::http::Response;
 using virgil::sdk::privatekeys::model::ContainerType;
 using virgil::sdk::privatekeys::model::UserData;
 using virgil::sdk::privatekeys::util::JsonKey;
+using virgil::sdk::privatekeys::util::uuid;
+
+
+static const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
 
 
 ContainerEndpoint::ContainerEndpoint(const std::shared_ptr<KeysClientConnection>& connection)
@@ -64,12 +70,12 @@ ContainerEndpoint::ContainerEndpoint(const std::shared_ptr<KeysClientConnection>
     }
 }
 
-void ContainerEndpoint::create(const Credentials& credentials, const ContainerType& containerType,
-        const std::string& containerPassword, const std::string& uuid) const {
+void ContainerEndpoint::create(const CredentialsExt& credentials, const ContainerType& containerType,
+        const std::string& containerPassword) const {
         json payload = {
-            {JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType)},
-            {JsonKey::containerPassword, containerPassword},
-            {JsonKey::requestSignUuid, uuid},
+            { JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType) },
+            { JsonKey::containerPassword, containerPassword },
+            { JsonKey::requestSignUuid, uuid() },
         };
 
         Request request = Request().endpoint(EndpointUri::v2().createContainer()).post().body(payload.dump());
@@ -79,6 +85,12 @@ void ContainerEndpoint::create(const Credentials& credentials, const ContainerTy
 
 ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyId) const {
     Request request = Request().endpoint(EndpointUri::v2().getContainerDetails(publicKeyId)).get();
+
+    // Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::GET_CONTAINER_DETAILS);
 
@@ -87,15 +99,55 @@ ContainerType ContainerEndpoint::getDetails(const std::string& publicKeyId) cons
     return containerTypeStr == "easy" ? ContainerType::Easy : ContainerType::Normal;
 }
 
-void ContainerEndpoint::update(const Credentials& credentials, const ContainerType& containerType,
-        const std::string& containerPassword, const std::string& uuid) const {
+void ContainerEndpoint::update(const CredentialsExt& credentials, const ContainerType& containerType,
+        const std::string& containerPassword) const {
     json payload = {
-        {JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType)},
-        {JsonKey::containerPassword, containerPassword},
-        {JsonKey::requestSignUuid, uuid}
+        { JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType) },
+        { JsonKey::containerPassword, containerPassword },
+        { JsonKey::requestSignUuid, uuid() }
     };
 
     Request request = Request().endpoint(EndpointUri::v2().updateContainerInformation()).put().body(payload.dump());
+    
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::UPDATE_CONTAINER_INFORMATION);
+}
+
+void ContainerEndpoint::update(const CredentialsExt& credentials, const ContainerType& containerType) const {
+    json payload = {
+        { JsonKey::containerType, virgil::sdk::privatekeys::model::toString(containerType) },
+        { JsonKey::requestSignUuid, uuid() }
+    };
+
+    Request request = Request().endpoint(EndpointUri::v2().updateContainerInformation()).put().body(payload.dump());
+    
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
+    Response response = connection_->send(request, credentials);
+    connection_->checkResponseError(response, KeysError::Action::UPDATE_CONTAINER_INFORMATION);
+}
+
+void ContainerEndpoint::update(const CredentialsExt& credentials, const std::string& containerPassword) const {
+    json payload = {
+        { JsonKey::containerPassword, containerPassword },
+        { JsonKey::requestSignUuid, uuid() }
+    };
+
+    Request request = Request().endpoint(EndpointUri::v2().updateContainerInformation()).put().body(payload.dump());
+    
+    //Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::UPDATE_CONTAINER_INFORMATION);
 }
@@ -103,11 +155,11 @@ void ContainerEndpoint::update(const Credentials& credentials, const ContainerTy
 void ContainerEndpoint::resetPassword(const UserData& userData, const std::string& newContainerPassword) const {
      json payload = {
          { JsonKey::userData, {
-             {JsonKey::className, userData.className()},
-             {JsonKey::type, userData.type()},
-             {JsonKey::value, userData.value()}
+             { JsonKey::className, userData.className() },
+             { JsonKey::type, userData.type() },
+             { JsonKey::value, userData.value() }
          }},
-         {JsonKey::newContainerPassword, newContainerPassword}
+         { JsonKey::newContainerPassword, newContainerPassword }
      };
 
      Request request = Request().endpoint(EndpointUri::v2().resetContainerPassword()).put().body(payload.dump());
@@ -115,21 +167,28 @@ void ContainerEndpoint::resetPassword(const UserData& userData, const std::strin
      connection_->checkResponseError(response, KeysError::Action::RESET_CONTAINER_PASSWORD);
 }
 
-void ContainerEndpoint::confirm(const std::string& confirmToken, const std::string& uuid) const {
+void ContainerEndpoint::confirm(const std::string& confirmToken) const {
     json payload = {
-        {JsonKey::confirmToken, confirmToken},
-        {JsonKey::requestSignUuid, uuid}
+        {JsonKey::confirmToken, confirmToken },
+        {JsonKey::requestSignUuid, uuid() }
     };
 
     Request request = Request().endpoint(EndpointUri::v2().confirmToken()).put().body(payload.dump());
+
     Response response = connection_->send(request);
     connection_->checkResponseError(response, KeysError::Action::CONFIRM_OPERATION);
 }
 
-void ContainerEndpoint::del(const Credentials& credentials, const std::string& uuid) const {
-    json payload = {{JsonKey::requestSignUuid, uuid}};
+void ContainerEndpoint::del(const CredentialsExt& credentials) const {
+    json payload = {{ JsonKey::requestSignUuid, uuid() }};
 
     Request request = Request().endpoint(EndpointUri::v2().deleteContainer()).del().body(payload.dump());
+
+    // Add an authentication token to the header
+    auto header = request.header();
+    header[kHttpHeaderField_Athentication] = connection_->getAuthToken();
+    request.header(header);
+
     Response response = connection_->send(request, credentials);
     connection_->checkResponseError(response, KeysError::Action::DELETE_CONTAINER);
 }

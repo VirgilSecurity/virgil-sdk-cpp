@@ -62,6 +62,22 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @brief Return "Private Key" endpoint§.
          */
         virtual PrivateKeyEndpointBase& privateKey() = 0;
+        /**
+         * @brief Get authentiction token from Virgil Security Private Keys service
+         *        and set it for all endpoints.
+         *
+         * @param userData - added user data.
+         * @param containerPassword - represents container password.
+         * @throw KeysError - if request to service failed, or service return error code.
+         */
+        virtual void authenticate(const virgil::sdk::privatekeys::model::UserData& userData,
+                const std::string& containerPassword) = 0;
+        /**
+         * @brief Set the authentication token for all endpoints.
+         *
+         * @param token - an authentication token.
+         */
+        virtual void authenticate(const std::string& token) = 0;
     };
 }}}}
 

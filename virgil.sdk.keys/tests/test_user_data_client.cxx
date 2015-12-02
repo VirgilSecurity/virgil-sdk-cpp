@@ -44,7 +44,6 @@
 
 #include <virgil/sdk/keys/client/KeysClientConnection.h>
 #include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/client/Credentials.h>
 #include <virgil/sdk/keys/http/Request.h>
 #include <virgil/sdk/keys/http/Response.h>
 #include <virgil/sdk/keys/error/KeysError.h>
@@ -64,6 +63,7 @@
 using virgil::sdk::keys::client::KeysClientConnection;
 using virgil::sdk::keys::client::KeysClient;
 using virgil::sdk::keys::client::Credentials;
+using virgil::sdk::keys::client::CredentialsExt;
 using virgil::sdk::keys::error::KeysError;
 using virgil::sdk::keys::http::Response;
 using virgil::sdk::keys::http::Request;
@@ -82,12 +82,13 @@ TEST_CASE("Add User Data - success", "[virgil-sdk-keys-user-data]") {
 
     auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    UserData userData = keysClient->userData().add(UserData::email("user@virgilsecurity.com"), credentials(), uuid());
+    CredentialsExt credentials = expectedCredentialsExt();
+    UserData userData = keysClient->userData().add(UserData::email("user@virgilsecurity.com"), credentials);
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
     checkUserData(userData, expectedUserData1());
 }
 
@@ -97,12 +98,13 @@ TEST_CASE("Delete User Data - success", "[virgil-sdk-keys-user-data]") {
 
     auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().del(expectedUserData1().userDataId(), credentials(), uuid()));
+    CredentialsExt credentials = expectedCredentialsExt();
+    REQUIRE_NOTHROW(keysClient->userData().del(expectedUserData1().userDataId(), credentials));
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
 }
 
 TEST_CASE("Confirm User Data - success", "[virgil-sdk-keys-user-data]") {
@@ -125,10 +127,11 @@ TEST_CASE("Resend User Data Confirmation - success", "[virgil-sdk-keys-user-data
 
     auto connectionObj = std::make_shared<KeysClientConnection>(appToken(), KeysClient::kBaseAddressDefault);
     Mock<KeysClientConnection> connection(*connectionObj);
-    When(OverloadedMethod(connection, send, Response(const Request&, const Credentials&))).Return(successResponse);
+    When(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&))).Return(successResponse);
 
     auto keysClient = std::make_shared<KeysClient>(make_moc_shared(connection));
-    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserData1().userDataId(), credentials(), uuid()));
+    CredentialsExt credentials = expectedCredentialsExt();
+    REQUIRE_NOTHROW(keysClient->userData().resendConfirmation(expectedUserData1().userDataId(), credentials));
 
-    Verify(OverloadedMethod(connection, send, Response(const Request&, const Credentials&)));
+    Verify(OverloadedMethod(connection, send, Response(const Request&, const CredentialsExt&)));
 }

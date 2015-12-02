@@ -36,26 +36,28 @@
 
 # Dependecy to https://github.com/anuragsoni/restless
 
-if (NOT TARGET project_rest)
-    # Define CMake variables
-    set (CMAKE_ARGS
-        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-        -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-        -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+# Define CMake variables
+set (CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+    -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+    -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+)
+
+if (CMAKE_PREFIX_PATH)
+    list (APPEND CMAKE_ARGS
+        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
     )
+endif (CMAKE_PREFIX_PATH)
 
-    if (CMAKE_PREFIX_PATH)
-        list (APPEND CMAKE_ARGS
-            -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
-        )
-    endif (CMAKE_PREFIX_PATH)
 
+if (NOT TARGET project_rest)
     # Configure external project
     ExternalProject_Add (project_rest
         GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
         GIT_TAG "http-del-with-body"
         GIT_SUBMODULES "ext/curl"
-        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/rest"
+        PREFIX "${CMAKE_BINARY_DIR}/ext/rest"
+        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest"
         CMAKE_ARGS ${CMAKE_ARGS}
     )
 endif ()
@@ -64,7 +66,7 @@ endif ()
 ExternalProject_Get_Property (project_rest INSTALL_DIR)
 
 set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-set (REST_INCLUDE_DIRS "${INSTALL_DIR}/src/project_rest/include")
+set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
 set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
 set (REST_LIBRARIES "${REST_LIBRARY}" "${CURL_LIBRARIES}")
 
