@@ -6,7 +6,7 @@
 - [Encrypt data for multiple recipients](#encrypt-using-multiple-recipients)
 - [Sign and Verify data](#sign-and-verify-data)
 
-## <a name="generate-keys"></a> Generate Keys \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/keygen.cxx)\]
+## <a name="generate-keys"></a> Generate Keys \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/keygen.cxx)\]
 
 ```cpp
 // Specify password in the constructor to store private key encrypted.
@@ -20,7 +20,7 @@ VirgilByteArray privateKey = newKeyPair.privateKey();
 
 ## <a name="encrypt-and-decrypt-using-keys"></a> Encrypt and Decrypt data using keys
 
-### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_key.cxx)\]
+### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/encrypt_with_key.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
@@ -28,7 +28,7 @@ cipher.addKeyRecipient(publicKeyId, publicKey.key());
 cipher.encrypt(dataSource, dataSink, true);
 ```
 
-### Decrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/decrypt_with_key.cxx)\]
+### Decrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/decrypt_with_key.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
@@ -39,7 +39,7 @@ cipher.decryptWithKey(dataSource, dataSink, publicKeyId, privateKey);
 
 ## <a name="encrypt-and-decrypt-using-password"></a> Encrypt and Decrypt data using password
 
-### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_pass.cxx)\]
+### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/encrypt_with_pass.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
@@ -48,7 +48,7 @@ cipher.addPasswordRecipient(recipientPwd);
 cipher.encrypt(dataSource, dataSink, true);
 ```
 
-### Decrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/decrypt_with_pass.cxx)\]
+### Decrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/decrypt_with_pass.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
@@ -59,7 +59,7 @@ cipher.decryptWithPassword(dataSource, dataSink, recipientPwd);
 
 ## <a name="encrypt-using-multiple-recipients"></a> Encrypt data for multiple recipients
 
-### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/encrypt_with_multiple_recipients.cxx)\]
+### Encrypt data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/encrypt_with_multiple_recipients.cxx)\]
 
 ```cpp
 VirgilStreamCipher cipher;
@@ -72,7 +72,7 @@ cipher.encrypt(dataSource, dataSink, true);
 
 ## <a name="sign-and-verify-data"></a> Sign and Verify data
 
-### Sign data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/sign.cxx)\]
+### Sign data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/sign.cxx)\]
 
 ```cpp
 VirgilStreamSigner signer;
@@ -82,7 +82,7 @@ VirgilStreamSigner signer;
 VirgilByteArray sign = signer.sign(dataSource, privateKey);
 ```
 
-### Verify data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/verify.cxx)\]
+### Verify data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/verify.cxx)\]
 
 ```cpp
 VirgilStreamSigner signer;

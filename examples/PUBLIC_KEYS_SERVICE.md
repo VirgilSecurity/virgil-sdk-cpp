@@ -28,7 +28,7 @@ Simply add your app token to the HTTP header for each request:
 X-VIRGIL-APPLICATION-TOKEN: <YOUR_APPLICATION_TOKEN>
 ```
 
-## <a name="register-new-user"></a> Register a New User \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_add.cxx)\]
+## <a name="register-new-user"></a> Register a New User \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_add.cxx)\]
 
 A Virgil Account will be created when the first Public Key is uploaded. An application can only get information about Public Keys created for the current application. When the application uploads a new Public Key and there is an Account created for another application with the same UDID, the Public Key will be implicitly attached it to the existing Account instance.
 
@@ -44,7 +44,7 @@ PublicKey virgilPublicKey = keysClient.publicKey().add(publicKey, {userData}, cr
 If registration successfull confirmation code will be sent to the user email. To confirm, you can use - [Confirm User Data.](#confirm-user-data)
 
 
-## <a name="get-user-public-key"></a> Get User's Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_get.cxx)\]
+## <a name="get-user-public-key"></a> Get User's Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_get.cxx)\]
 
 ```cpp
 KeysClient keysClient("{Application Token}");
@@ -52,7 +52,7 @@ PublicKey publicKey = keysClient.publicKey().get(publicKeyId);
 ```
 
 
-## <a name="search-public-key"></a> Search Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_grab.cxx)\]
+## <a name="search-public-key"></a> Search Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_grab.cxx)\]
 
 ```cpp
 KeysClient keysClient("{Application Token}");
@@ -60,7 +60,7 @@ PublicKey publicKey = keysClient.publicKey().grab("mail@server.com");
 ```
 
 
-## <a name="search-public-with-data"></a> Search Public Key With Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_grab_signed.cxx)\]
+## <a name="search-public-with-data"></a> Search Public Key With Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_grab_signed.cxx)\]
 
 If a signed version of the action is used, the Public Key will be returned with all of the `user_data` items for this Public Key.
 
@@ -71,7 +71,7 @@ PublicKey publicKey = keysClient.publicKey().grab(credentialsExt);
 ```
 
 
-## <a name="update-public-key-data"></a> Update Public Key Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_update.cxx)\]
+## <a name="update-public-key-data"></a> Update Public Key Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_update.cxx)\]
 
 Public Key modification takes place immediately after action invocation.
 
@@ -91,20 +91,20 @@ The action will return an `action_token` response object and will send confirmat
 The list of masked UDID’s will be returned in user_ids response object property.
 To commit a Public Key remove call [Confirm Delete Public Key operation](#confirm-public-key-delete) action with `action_token` value and the list of confirmation codes.
 
-### Unsigned version \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_delete.cxx)\]
+### Unsigned version \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_delete.cxx)\]
 ```cpp
 KeysClient keysClient("{Application Token}");
 std::string confirmInfo = keysClient.publicKey().del(publicKey.publicKeyId());
 ```
 
-### Signed version \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_delete_signed.cxx)\]
+### Signed version \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_delete_signed.cxx)\]
 ```cpp
 CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 KeysClient keysClient("{Application Token}");
 keysClient.publicKey().del(credentialsExt);
 ```
 
-## <a name="reset-public-key"></a> Reset Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_reset.cxx)\]
+## <a name="reset-public-key"></a> Reset Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_reset.cxx)\]
 
 After action invocation the user will receive the confirmation tokens on all his confirmed UDIDs.
 The Public Key data won’t be updated until the call [Confirm Reset Public Key operation](#confirm-public-key-reset) is invoked with the token value from this step and confirmation codes sent to UDIDs. The list of UDIDs used as confirmation tokens will be listed as `user_ids` parameter of the response.
@@ -116,7 +116,7 @@ std::string confirmInfo = keysClient.publicKey().reset(oldPublicKey.publicKeyId(
         newPublicKey, newKeyCredentials);
 ```
 
-## <a name="confirm-public-key-delete"></a> Confirm Delete Public Key operation \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_confirm_delete.cxx)\]
+## <a name="confirm-public-key-delete"></a> Confirm Delete Public Key operation \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_confirm_delete.cxx)\]
 
 Send confirmation code to the Virgil Keys service to finish Public Key delete operation.
 
@@ -126,7 +126,7 @@ keysClient.publicKey().confirmDel(publicKey.publicKeyId(),
         <action_token>, {<confirmation_codes>});
 ```
 
-## <a name="confirm-public-key-reset"></a> Confirm Reset Public Key operation \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/public_key_confirm_reset.cxx)\]
+## <a name="confirm-public-key-reset"></a> Confirm Reset Public Key operation \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/public_key_confirm_reset.cxx)\]
 
 Send confirmation code to the Virgil Keys service to finish Public Key reset operation.
 
@@ -137,7 +137,7 @@ keysClient.publicKey().confirmReset(oldPublicKey.publicKeyId(), credentials,
         <action_token>, {<confirmation_codes>});
 ```
 
-## <a name="create-public-key-user-data"></a> Create Public Key User Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_add.cxx)\]
+## <a name="create-public-key-user-data"></a> Create Public Key User Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/user_data_add.cxx)\]
 
 Add user data, i.e. email. If registration successfull confirmation code will be sent to the user.
 To confirm user data use [Confirm User Data](#confirm-user-data).
@@ -150,7 +150,7 @@ UserData userDataResponse = keysClient.userData().add(userData, credentialsExt);
 ```
 
 
-## <a name="delete-user-data"></a> Delete User Data from the Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_del.cxx)\]
+## <a name="delete-user-data"></a> Delete User Data from the Public Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/user_data_del.cxx)\]
 
 Remove user data item from the associated Public Key.
 
@@ -161,7 +161,7 @@ keysClient.userData().del(<user_data_id>, credentialsExt);
 ```
 
 
-## <a name="confirm-user-data"></a> Confirm User Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_confirm.cxx)\]
+## <a name="confirm-user-data"></a> Confirm User Data \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/user_data_confirm.cxx)\]
 
 Send confirmation code to the Virgil Keys service. Confirmation code provided for user after:
 
@@ -174,7 +174,7 @@ keysClient.userData().confirm(<user_data_id>, <confirmation_code>);
 ```
 
 
-## <a name="resend-confirmation-code"></a> Resend User's Confirmation Code \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/user_data_resend_confirmation.cxx)\]
+## <a name="resend-confirmation-code"></a> Resend User's Confirmation Code \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/user_data_resend_confirmation.cxx)\]
 Resend confirmation code to the user for given user's identifier.
 
 ```cpp

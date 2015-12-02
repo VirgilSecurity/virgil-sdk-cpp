@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/VirgilSecurity/virgil-sdk-cpp.svg?branch=master)](https://travis-ci.org/VirgilSecurity/virgil-sdk-cpp)
-[![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/develop/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 [![Documentation Developers](https://img.shields.io/badge/docs-developers-green.svg)](https://virgilsecurity.com/documents/cpp/quickstart)
 [![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/virgil-sdk-cpp)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/7135/badge.svg)](https://scan.coverity.com/projects/virgilsecurity-virgil-sdk-cpp)
@@ -29,8 +29,8 @@
 This is quickstart guide that helps to start using C++ implementation of:
 
   * [Virgil Crypto Library](https://github.com/VirgilSecurity/virgil-crypto.git)
-  * [Virgil Public Keys Service](https://virgilsecurity.com/documents/cpp/keys-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/virgil.sdk.keys)
-  * [Virgil Private Keys Service](https://virgilsecurity.com/documents/cpp/keys-private-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/virgil.sdk.private-keys).
+  * [Virgil Public Keys Service](https://virgilsecurity.com/documents/cpp/keys-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/release/virgil.sdk.keys)
+  * [Virgil Private Keys Service](https://virgilsecurity.com/documents/cpp/keys-private-service) and it's [SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/release/virgil.sdk.private-keys).
 
 ## <a name="obtain-application-token"></a> Obtain Application Token
 
@@ -47,7 +47,7 @@ X-VIRGIL-APPLICATION-TOKEN: <YOUR_APPLICATION_TOKEN>
 ## Usage examples
 
 This section describes common case library usage scenarios.
-Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples/src) in public access, also see section [More examples](#more-examples).
+Full source code examples are available on [GitHub](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/release/examples/src) in public access, also see section [More examples](#more-examples).
 
 ### <a name="example-1"></a> Example 1: Generate keys
 
@@ -220,7 +220,7 @@ Run one of the following commands in the project's root folder.
 
 ## More examples
 
-* [Examples list](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/develop/examples)
+* [Examples list](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/release/examples)
 
 ## See also
 
@@ -228,7 +228,7 @@ Run one of the following commands in the project's root folder.
 
 ## License
 
-BSD 3-Clause. See [LICENSE](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/develop/LICENSE) for details.
+BSD 3-Clause. See [LICENSE](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE) for details.
 
 ## Contacts
 

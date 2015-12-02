@@ -35,7 +35,7 @@ X-VIRGIL-APPLICATION-TOKEN: <YOUR_APPLICATION_TOKEN>
 1. Use the same email that you used for the Public Key service.
 
 
-## <a name="create-container"></a> Create Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_create.cxx)\]
+## <a name="create-container"></a> Create Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_create.cxx)\]
 
 Create container for storing Private Keys on the Virgil Private Keys Service.
 Container type:
@@ -51,7 +51,7 @@ privateKeysClient.container().create(credentialsExt, CONTAINER_TYPE, CONTAINER_P
 ```
 
 
-## <a name="authenticate-session"></a> Authenticate Session \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/authenticate.cxx)\]
+## <a name="authenticate-session"></a> Authenticate Session \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/authenticate.cxx)\]
 
 Service will create **Authentication token** that will be available during the 60 minutes after creation. During this time service will automatically prolong life time of the token in case if **Authentication token** widely used so don't need to prolong it manually. In case when **Authentication token** is used after 60 minutes of life time, service will throw the appropriate error.
 
@@ -73,7 +73,7 @@ std::string authenticationToken = privateKeysClient.auth().getAuthToken(userData
 ```
 
 
-## <a name="get-container"></a> Get Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_info_get.cxx)\]
+## <a name="get-container"></a> Get Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_info_get.cxx)\]
 
 Return container type. It can be `easy` or `normal`.
 
@@ -90,7 +90,7 @@ ContainerType containerType = privateKeysClient.container().getDetails(publicKey
 ```
 
 
-## <a name="delete-container"></a> Delete Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_delete.cxx)\]
+## <a name="delete-container"></a> Delete Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_delete.cxx)\]
 
 Delete existing container from the Virgil Private Key service.
 
@@ -108,7 +108,7 @@ privateKeysClient.container().del(credentialsExt);
 ```
 
 
-## <a name="update-container"></a> Update Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_update.cxx)\]
+## <a name="update-container"></a> Update Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_update.cxx)\]
 
 By invoking this method you can change the Container Password
 
@@ -125,7 +125,7 @@ CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
 privateKeysClient.container().update(credentials, CONTAINER_NEW_PASSWORD);
 ```
 
-## <a name="reset-container-password"></a> Reset Container Password \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_reset_password.cxx)\]
+## <a name="reset-container-password"></a> Reset Container Password \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_reset_password.cxx)\]
 
 A user can reset their Private Key password if the Container Type equals `easy`.
 If the Container Type equals `normal`, the Private Key will be stored in its original form.
@@ -137,7 +137,7 @@ privateKeysClient.container().resetPassword(userData, CONTAINER_NEW_PASSWORD);
 ```
 
 
-## <a name="persist-container"></a> Persist Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/container_confirm.cxx)\]
+## <a name="persist-container"></a> Persist Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/container_confirm.cxx)\]
 
 Confirm password reset action and re-encrypt Private Key data with the new password if
 container type is `easy`.
@@ -150,7 +150,7 @@ privateKeysClient.container().confirm(<confirmation_token>);
 ```
 
 
-## <a name="push-private-key"></a> Push Private Key to the Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_add.cxx)\]
+## <a name="push-private-key"></a> Push Private Key to the Container \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/private_key_add.cxx)\]
 
 Load an existing Private Key into the Private Keys service and associate it with the existing Container.
 
@@ -173,7 +173,7 @@ privateKeysClient.privateKey().add(credentials, CONTAINER_PASSWORD);
 ```
 
 
-## <a name="get-private-key"></a> Get Private Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_get.cxx)\]
+## <a name="get-private-key"></a> Get Private Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/private_key_get.cxx)\]
 
 Get user's Private Key from the Virgil Private Keys service.
 
@@ -190,7 +190,7 @@ PrivateKey privateKey = privateKeysClient.privateKey().get(publicKeyId, CONTAINE
 ```
 
 
-## <a name="delete-private-key"></a> Delete Private Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/develop/examples/src/private_key_delete.cxx)\]
+## <a name="delete-private-key"></a> Delete Private Key \[[src](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/release/examples/src/private_key_delete.cxx)\]
 
 Delete a Private Key. First it will be disconnected from the Container and then deleted from the Private Key Service.
 
