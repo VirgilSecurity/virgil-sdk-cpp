@@ -55,9 +55,6 @@ if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_s
 
     # Run Coverity Scan build
     curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
-
-    cat ./cov-int/build-log.txt || true
-    cat ./cov-int/scm_log.txt   || true
 else
     # Build
     make -j2 VERBOSE=1
