@@ -1,5 +1,16 @@
 Virgil Security Public Keys SDK ChangeLog (Sorted per date)
 
+= Version 3.0.0 released 2015-12-02
+
+Bugfix:
+  * Use crypto library version 1.1.0.
+
+Changes:
+  * Split class Credentials.
+  * Remove ‘uuid’ parameter from methods signature.
+  * Implement UUID generation in SDK.
+  * Add missed methods from API.
+
 = Version 2.0.2 released 2015-09-10
 
 Bugfix:
