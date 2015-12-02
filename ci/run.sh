@@ -51,14 +51,13 @@ if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_s
     export COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
     export COVERITY_SCAN_NOTIFICATION_EMAIL="sergey.seroshtan@gmail.com"
     export COVERITY_SCAN_BUILD_COMMAND="make -j2"
+    export COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --compiler \`which ${CC}\` --comptype gcc"
 
     # Run Coverity Scan build
-    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh"                          | \
-        sed 's/\(# Build\)/# Configure\ncov-configure --compiler \`which ${CC}\` --comptype gcc\n\n\1/g' | \
-        bash
+    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
 
-    cat ./cov-int/build-log.txt | true
-    cat ./cov-int/scm_log.txt   | true
+    cat ./cov-int/build-log.txt || true
+    cat ./cov-int/scm_log.txt   || true
 else
     # Build
     make -j2 VERBOSE=1
