@@ -1,4 +1,4 @@
-# С++ Private Keys Service
+# С++ Private Keys Service SDK
 
 - [Obtain Application Token](#obtain-application-token)
 - [Create Container](#create-container)

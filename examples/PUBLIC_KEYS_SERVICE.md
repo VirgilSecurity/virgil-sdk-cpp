@@ -1,4 +1,4 @@
-# C++ Keys Service
+# C++ Keys Service SDK
 
 - [Obtain Application Token](#obtain-application-token)
 - [Register a New User](#register-new-user)
