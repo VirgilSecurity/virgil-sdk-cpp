@@ -59,7 +59,14 @@ if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_s
     echo "cov-configure --compiler \`which ${CC}\` --comptype gcc" >> ${COVERITY_SCAN_CONFIGURE_SCRIPT}
 
     # Run Coverity Scan build
-    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | sed '/export PATH/ r ${COVERITY_SCAN_CONFIGURE_SCRIPT}' | bash
+    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | \
+        sed '/export PATH/ r ${COVERITY_SCAN_CONFIGURE_SCRIPT}'                 | \
+        tee travisci_build_coverity_scan.sh                                     | \
+        bash
+
+    cat travisci_build_coverity_scan.sh
+    cat ./cov-int/build-log.txt | true
+    cat ./cov-int/scm-log.txt   | true
 else
     # Build
     make -j2 VERBOSE=1
