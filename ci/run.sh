@@ -57,7 +57,7 @@ if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_s
         sed 's/\(# Build\)/# Configure\ncov-configure --compiler \`which ${CC}\` --comptype gcc\n\n\1/g' | \
         bash
 
-    cat ./cov-int/build_log.txt | true
+    cat ./cov-int/build-log.txt | true
     cat ./cov-int/scm_log.txt   | true
 else
     # Build
