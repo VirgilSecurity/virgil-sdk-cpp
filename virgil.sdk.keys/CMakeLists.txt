@@ -46,9 +46,9 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk_keys" CACHE STRING "Virgil Keys SDK library name.")
 
 # Set library version
-set (VIRGIL_SDK_KEYS_VERSION_MAJOR 2)
+set (VIRGIL_SDK_KEYS_VERSION_MAJOR 3)
 set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 2)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 0)
 set (VIRGIL_SDK_KEYS_VERSION
     ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
 )
@@ -60,13 +60,13 @@ include_directories ("include")
 # Add external dependencies
 include (ExternalProject)
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/json.cmake")
+include (json)
 include_directories (${JSON_INCLUDE_DIRS})
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/rest.cmake")
+include (rest)
 include_directories (${REST_INCLUDE_DIRS})
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
+include (virgil)
 virgil_add_dependency ("crypto"
     VIRGIL_CRYPTO_DEPENDENCIES
     VIRGIL_CRYPTO_INCLUDE_DIRS
@@ -116,7 +116,7 @@ else ()
     set (DOT_FOUND "NO")
 endif (DOT_PROGRAM)
 
-if(DOXYGEN_FOUND)
+if (DOXYGEN_FOUND)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target ("doc-sdk-public-keys"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile

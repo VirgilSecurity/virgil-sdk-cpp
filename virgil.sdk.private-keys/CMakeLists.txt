@@ -47,13 +47,11 @@ set (VIRGIL_SDK_PRIVATE_KEYS_LIBRARY_NAME "virgil_sdk_private_keys"
         CACHE STRING "Virgil Private Keys SDK library name.")
 
 # Set library version
-set (VIRGIL_SDK_PRIVATE_KEYS_VERSION_MAJOR 1)
+set (VIRGIL_SDK_PRIVATE_KEYS_VERSION_MAJOR 2)
 set (VIRGIL_SDK_PRIVATE_KEYS_VERSION_MINOR 0)
 set (VIRGIL_SDK_PRIVATE_KEYS_VERSION_PATCH 0)
 set (VIRGIL_SDK_PRIVATE_KEYS_VERSION
-    ${VIRGIL_SDK_PRIVATE_KEYS_VERSION_MAJOR}.
-    ${VIRGIL_SDK_PRIVATE_KEYS_VERSION_MINOR}.
-    ${VIRGIL_SDK_PRIVATE_KEYS_VERSION_PATCH}
+    ${VIRGIL_SDK_PRIVATE_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_PRIVATE_KEYS_VERSION_MINOR}.${VIRGIL_SDK_PRIVATE_KEYS_VERSION_PATCH}
 )
 message (STATUS "Virgil Private Keys SDK version: " ${VIRGIL_SDK_PRIVATE_KEYS_VERSION})
 
@@ -63,16 +61,13 @@ include_directories ("include")
 # Add external dependencies
 include (ExternalProject)
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/json.cmake")
+include (json)
 include_directories (${JSON_INCLUDE_DIRS})
 
-include ("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/rest.cmake")
+include (rest)
 include_directories (${REST_INCLUDE_DIRS})
-message (STATUS "=============================")
-message (STATUS "${JSON_INCLUDE_DIRS}")
-message (STATUS "${REST_INCLUDE_DIRS}")
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/virgil.cmake")
+include (virgil)
 virgil_add_dependency ("crypto"
     VIRGIL_CRYPTO_DEPENDENCIES
     VIRGIL_CRYPTO_INCLUDE_DIRS

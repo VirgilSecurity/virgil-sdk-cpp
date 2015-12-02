@@ -45,19 +45,27 @@ using virgil::sdk::privatekeys::client::PrivateKeysClient;
 using virgil::sdk::privatekeys::model::UserData;
 
 const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "45fd8a505f50243fa8400594ba0b2b29";
-const std::string USER_EMAIL = "test.virgilsecurity@mailinator.com";
+const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 const std::string CONTAINER_PASSWORD = "123456789";
+
 
 int main() {
     try {
-        std::cout << "Authenticate session..." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
         UserData userData = UserData::email(USER_EMAIL);
-        privateKeysClient.auth().authenticate(userData, CONTAINER_PASSWORD);
+
+        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
+        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+
+        std::cout << "Authenticate session..." << std::endl;
+        std::string authenticationToken = privateKeysClient.auth().getAuthToken(userData, CONTAINER_PASSWORD);
+
+        std::cout << "An authentication token: " << authenticationToken << std::endl;
         std::cout << "Authenticate session - success." << std::endl;
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
 
     return 0;

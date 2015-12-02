@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <iterator>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilKeyPair.h>
@@ -47,14 +47,15 @@
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilKeyPair;
 
-int main(int argc, char **argv) {
+
+int main() {
     try {
         std::cout << "Generate keys" << std::endl;
         VirgilKeyPair newKeyPair; // Specify password in the constructor to make private key encrypted.
 
         std::cout << "Store public key: new_public.key ..." << std::endl;
         std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
-        if (!publicKeyStream.good()) {
+        if (!publicKeyStream) {
             throw std::runtime_error("can not write file: new_public.key");
         }
         VirgilByteArray publicKey = newKeyPair.publicKey();
@@ -62,13 +63,16 @@ int main(int argc, char **argv) {
 
         std::cout << "Store private key: new_private.key ..." << std::endl;
         std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
-        if (!privateKeyStream.good()) {
+        if (!privateKeyStream) {
             throw std::runtime_error("can not write file: new_private.key");
         }
         VirgilByteArray privateKey = newKeyPair.privateKey();
         std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
+
     } catch (std::exception& exception) {
         std::cerr << "Error: " << exception.what() << std::endl;
+        return 1;
     }
+
     return 0;
 }

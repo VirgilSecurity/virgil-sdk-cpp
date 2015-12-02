@@ -95,4 +95,3 @@ std::string EndpointUri::addVersion(const std::string& uri) const {
         return "/v2" + uri;
     }
 }
-

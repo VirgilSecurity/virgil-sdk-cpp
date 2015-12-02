@@ -41,6 +41,7 @@
 
 #include <virgil/sdk/keys/http/Connection.h>
 #include <virgil/sdk/keys/client/Credentials.h>
+#include <virgil/sdk/keys/client/CredentialsExt.h>
 #include <virgil/sdk/keys/error/KeysError.h>
 
 namespace virgil { namespace sdk { namespace keys { namespace client {
@@ -79,6 +80,15 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         virtual virgil::sdk::keys::http::Response send(const virgil::sdk::keys::http::Request& request,
                 const Credentials& credentials);
+        /**
+         * @brief Send synchronous request.
+         * @param request - request to be send.
+         * @param credentialsExt - credentialsExt for operations that need user's verification.
+         * @throw std::logic_error - if given parameters are inconsistent or invalid.
+         * @throw std::runtime_error - if error was occured when send request.
+         */
+        virtual virgil::sdk::keys::http::Response send(const virgil::sdk::keys::http::Request& request,
+                const CredentialsExt& credentialsExt);
         /**
          * @brief Check response for errors.
          * @param response - HTTP response to check.

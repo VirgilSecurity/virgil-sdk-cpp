@@ -39,7 +39,7 @@
 
 #include <string>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/model/ContainerType.h>
 #include <virgil/sdk/privatekeys/model/UserData.h>
 
@@ -55,35 +55,70 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          */
-        virtual void create(const Credentials& credentials,
+        virtual void create(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword,
-                const std::string& uuid) const = 0;
+                const std::string& containerPassword) const = 0;
         /**
          * @brief Get Container Object Data with public key id.
          *
          * @param publicKeyId - public key UUID.
          * @return Container type.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
         virtual virgil::sdk::privatekeys::model::ContainerType getDetails(const std::string& publicKeyId) const = 0;
         /**
          * @brief Update information of existing Container.
          *
-         * By invoking this method you can change the Container's Type or/and Container's Password.
+         * By invoking this method you can change the Container's Type and Container's Password.
+         *
+         * @deprecated - this method will be removed in the next version.
          *
          * @param credentials - user's credentials.
          * @param containerType - the type of private keys container.
          * @param containerPassword - represents container password.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
-        virtual void update(const Credentials& credentials,
+        virtual void update(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword, const std::string& uuid) const = 0;
+                const std::string& containerPassword) const = 0;
+        /**
+         * @brief Update information of existing Container.
+         *
+         * By invoking this method you can change the Container's Type Password.
+         *
+         * @deprecated - this method will be removed in the next version.
+         *
+         * @param credentials - user's credentials.
+         * @param containerType - the type of private keys container.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
+         */
+        virtual void update(const CredentialsExt& credentials,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType) const = 0;
+        /**
+         * @brief Update information of existing Container.
+         *
+         * By invoking this method you can change the Container's Password.
+         *
+         * @param credentials - user's credentials.
+         * @param containerPassword - represents container password.
+         * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
+         */
+        virtual void update(const CredentialsExt& credentials,
+                const std::string& containerPassword) const = 0;
         /**
          * @brief Reset the Container Password.
          *
@@ -92,7 +127,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note A user can reset their Private Key password if the Container Type equals 'easy'.
-         *     If the Container Type equals 'normal', the Private Key will be stored in its original form.
+         *       If the Container Type equals 'normal', the Private Key will be stored in its original form.
          * @see confirm()
          */
         virtual void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
@@ -101,21 +136,22 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @brief Confirm password token.
          *
          * @param confirmToken - confirm the password token.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
          *
          * @note The token generated during the container reset password invocation only lives for 60 minutes.
          * @see resetPassword()
          */
-        virtual void confirm(const std::string& confirmToken, const std::string& uuid) const = 0;
+        virtual void confirm(const std::string& confirmToken) const = 0;
         /**
          * @brief Delete Container Object. Delete existing container object from the Private Key service.
          *
          * @param credentials - user's credentials.
-         * @param uuid - transaction UUID.
          * @throw KeysError - if request to service failed, or service return error code.
+         *
+         * @note Require authentication.
+         * @see PrivateKeysClient::authenticate()
          */
-        virtual void del(const Credentials& credentials, const std::string& uuid) const = 0;
+        virtual void del(const CredentialsExt& credentials) const = 0;
     };
 }}}}
 

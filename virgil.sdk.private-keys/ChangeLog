@@ -1,5 +1,29 @@
 Virgil Security Private Keys SDK ChangeLog (Sorted per date)
 
+= Version 2.0.0 released 2015-12-02
+
+Bugfix:
+  * Use crypto library version 1.1.0.
+  * Fix bug to Marshaller: multiple definition of marshaller_user_data_init().
+  * Fix string representation of the version number: was '1.;0.;0'.
+
+Features:
+  * Add missed methods: update(CredentialsExt, ContainerType),update(CredentialsExt, ContainerPassword).
+
+Changes:
+  * Split class Credentials.
+  * Remove ‘uuid’ parameter from methods signature.
+  * Implement UUID generation in SDK.
+  * Add missed std::make_shared<KeysClientConnection> to PrivateKeysClient ctor.
+  * Move AuthEndpoint methods 'athenticate' to PrivateKeyClient.
+  * Move initiaization of AuthToken from KeysClientConnection to ContainerEndpoint.
+
+Improvements:
+  * Update documentation.
+  * Add test for Marshaller.
+  * Add converter Private key to/from Json.
+  * Add unit tests.
+
 = Version 1.0.0 released 2015-09-10
 
 Features:

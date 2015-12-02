@@ -34,19 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
+#include <virgil/crypto/VirgilByteArrayUtils.h>
 
 #include <virgil/sdk/privatekeys/client/Credentials.h>
 
 using virgil::sdk::privatekeys::client::Credentials;
 
-Credentials::Credentials(const std::string& publicKeyId, const std::vector<unsigned char>& privateKey,
-        const std::string& privateKeyPassword)
-        : publicKeyId_(publicKeyId), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
-}
-
 Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
-        : publicKeyId_(), privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
+        : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
 
 bool Credentials::isValid() const {
@@ -54,20 +49,17 @@ bool Credentials::isValid() const {
 }
 
 void Credentials::cleanup() noexcept {
-    std::fill(privateKey_.begin(), privateKey_.end(), 0);
-    std::fill(privateKeyPassword_.begin(), privateKeyPassword_.end(), 0);
+    if(!privateKey_.empty()) {
+        virgil::crypto::bytes_zeroize(privateKey_);
+    }
 
-    publicKeyId_.resize(0);
-    privateKey_.resize(0);
-    privateKeyPassword_.resize(0);
+    if (!privateKeyPassword_.empty()) {
+        virgil::crypto::string_zeroize(privateKeyPassword_);
+    }
 }
 
 Credentials::~Credentials() noexcept {
     cleanup();
-}
-
-const std::string& Credentials::publicKeyId() const {
-    return publicKeyId_;
 }
 
 const std::vector<unsigned char>& Credentials::privateKey() const {
@@ -77,5 +69,3 @@ const std::vector<unsigned char>& Credentials::privateKey() const {
 const std::string& Credentials::privateKeyPassword() const {
     return privateKeyPassword_;
 }
-
-

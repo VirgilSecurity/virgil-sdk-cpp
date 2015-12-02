@@ -39,7 +39,7 @@
 
 #include <string>
 
-#include <virgil/sdk/privatekeys/client/Credentials.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/error/KeysError.h>
 #include <virgil/sdk/privatekeys/http/Connection.h>
 #include <virgil/sdk/privatekeys/model/UserData.h>
@@ -71,6 +71,12 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          */
         void updateSession(const std::string& authToken);
         /**
+         * @brief Get an authentication token.
+         *
+         * @return an authentication token.
+         */
+        std::string getAuthToken() const;
+        /**
          * @brief Send synchronous request.
          * @param request - request to be send.
          * @throw std::logic_error - if given parameters are inconsistent.
@@ -86,7 +92,7 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @throw std::runtime_error - if error was occured when send request.
          */
         virtual virgil::sdk::privatekeys::http::Response send(
-                const virgil::sdk::privatekeys::http::Request& request, const Credentials& credentials);
+                const virgil::sdk::privatekeys::http::Request& request, const CredentialsExt& credentials);
         /**
          * @brief Check response for errors.
          * @param response - HTTP response to check.

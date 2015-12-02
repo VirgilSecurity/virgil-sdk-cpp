@@ -40,6 +40,7 @@
 #include <memory>
 
 #include <virgil/sdk/privatekeys/client/ContainerEndpointBase.h>
+#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
 #include <virgil/sdk/privatekeys/client/KeysClientConnection.h>
 
 namespace virgil { namespace sdk { namespace privatekeys { namespace client {
@@ -59,18 +60,21 @@ namespace virgil { namespace sdk { namespace privatekeys { namespace client {
          * @name Default class implementation.
          */
         //@{
-        void create(const Credentials& credentials,
+        void create(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword,
-                const std::string& uuid) const override;
+                const std::string& containerPassword) const override;
         virgil::sdk::privatekeys::model::ContainerType getDetails(const std::string& publicKeyId) const override;
-        void update(const Credentials& credentials,
+        void update(const CredentialsExt& credentials,
                 const virgil::sdk::privatekeys::model::ContainerType& containerType,
-                const std::string& containerPassword, const std::string& uuid) const override;
+                const std::string& containerPassword) const override;
+        void update(const CredentialsExt& credentials,
+                const virgil::sdk::privatekeys::model::ContainerType& containerType) const override;
+        void update(const CredentialsExt& credentials,
+                const std::string& containerPassword) const override;
         void resetPassword(const virgil::sdk::privatekeys::model::UserData& userData,
                 const std::string& newContainerPassword) const override;
-        void confirm(const std::string& confirmToken, const std::string& uuid) const override;
-        void del(const Credentials& credentials, const std::string& uuid) const override;
+        void confirm(const std::string& confirmToken) const override;
+        void del(const CredentialsExt& credentials) const override;
         //@}
     private:
         std::shared_ptr<KeysClientConnection> connection_;

@@ -40,7 +40,9 @@
 if (NOT TARGET project_json)
     ExternalProject_Add (project_json
         GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-        PREFIX "${CMAKE_CURRENT_BINARY_DIR}/ext/json"
+        GIT_TAG "v1.0.0-rc1"
+        PREFIX "${CMAKE_BINARY_DIR}/ext/json"
+        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/json/src/project_json"
         CMAKE_COMMAND ""
         BUILD_COMMAND ""
         INSTALL_COMMAND ""
@@ -49,14 +51,13 @@ if (NOT TARGET project_json)
 endif ()
 
 # Configure output
-ExternalProject_Get_Property (project_json PREFIX)
-set (JSON_INCLUDE_DIRS "${PREFIX}/src/project_json/src")
+set (JSON_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/json/src/project_json/src")
 
 # Workaround of http://public.kitware.com/Bug/view.php?id=14495
 file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})
 
-# Make target
 if (NOT TARGET json)
+    # Make target
     add_library (json STATIC IMPORTED)
     set_target_properties (json PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES ${JSON_INCLUDE_DIRS}

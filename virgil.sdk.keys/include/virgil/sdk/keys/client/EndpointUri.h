@@ -94,6 +94,21 @@ namespace virgil { namespace sdk { namespace keys { namespace client {
          */
         std::string publicKeyDelete(const std::string& publicKeyId) const;
         /**
+         * @brief Return endpoint that confirm delete public key by its UUID.
+         * @param publicKeyId - public key UUID.
+         */
+        std::string publicKeyConfirmDelete(const std::string& publicKeyId) const;
+        /**
+         * @brief Return endpoint that reset public key by its UUID.
+         * @param publicKeyId - public key UUID.
+         */
+        std::string publicKeyReset(const std::string& publicKeyId) const;
+        /**
+         * @brief Return endpoint that confirm reset public key by its UUID.
+         * @param publicKeyId - public key UUID.
+         */
+        std::string publicKeyConfirmReset(const std::string& publicKeyId) const;
+        /**
          * @brief Return endpoint that extract public key associated with user identifier.
          */
         std::string publicKeyGrab() const;

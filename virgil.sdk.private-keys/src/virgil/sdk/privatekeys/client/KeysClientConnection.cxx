@@ -54,7 +54,7 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::VirgilSigner;
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::privatekeys::client::Credentials;
+using virgil::sdk::privatekeys::client::CredentialsExt;
 using virgil::sdk::privatekeys::client::KeysClientConnection;
 using virgil::sdk::privatekeys::http::Connection;
 using virgil::sdk::privatekeys::http::Request;
@@ -63,10 +63,9 @@ using virgil::sdk::privatekeys::error::KeysError;
 using virgil::sdk::privatekeys::util::JsonKey;
 
 
-const char * kHttpHeaderField_AppToken = "X-VIRGIL-APPLICATION-TOKEN";
-const char * kHttpHeaderField_RequestSign = "X-VIRGIL-REQUEST-SIGN";
-const char * kHttpHeaderField_RequestSignPkId = "X-VIRGIL-REQUEST-SIGN-PK-ID";
-const char * kHttpHeaderField_Athentication = "X-VIRGIL-AUTHENTICATION";
+static const char * kHttpHeaderField_AppToken = "X-VIRGIL-APPLICATION-TOKEN";
+static const char * kHttpHeaderField_RequestSign = "X-VIRGIL-REQUEST-SIGN";
+static const char * kHttpHeaderField_RequestSignPkId = "X-VIRGIL-REQUEST-SIGN-PK-ID";
 
 
 KeysClientConnection::KeysClientConnection(const std::string& appToken, const std::string& baseAddress)
@@ -89,16 +88,19 @@ void KeysClientConnection::updateSession(const std::string& authToken) {
     authToken_ = authToken;
 }
 
+std::string KeysClientConnection::getAuthToken() const {
+    return authToken_;
+}
+
 Response KeysClientConnection::send(const Request& request) {
     // Add application token to the header
     auto header = request.header();
     header[kHttpHeaderField_AppToken] = appToken();
-    header[kHttpHeaderField_Athentication] = authToken_;
 
     return Connection::send(Request(request).baseAddress(baseAddress_).header(header).contentType("application/json"));
 }
 
-Response KeysClientConnection::send(const Request& request, const Credentials& credentials) {
+Response KeysClientConnection::send(const Request& request, const CredentialsExt& credentials) {
     if (!credentials.isValid()) {
         throw std::logic_error("KeysClientConnection: Credentials is not valid.");
     }
