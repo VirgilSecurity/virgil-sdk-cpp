@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
 #include <json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -41,7 +42,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/VirgilCardsClient.h>
-#include <virgil/sdk/client/ResponseVerify.h>
+#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Headers.h>
 #include <virgil/sdk/http/Request.h>
@@ -66,6 +67,7 @@ using virgil::sdk::io::Marshaller;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::IdentityToken;
 using virgil::sdk::model::Identity;
+using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -75,12 +77,12 @@ VirgilCardsClient::VirgilCardsClient(const std::string& accessToken, const std::
 
 }
 
-VirgilByteArray VirgilCardsClient::getServicePublicKey() const {
-    return publicKeyPublicKeysService_;
+VirgilCard VirgilCardsClient::getServiceVirgilCard() const {
+    return publicKeysServiceCard_;
 }
 
-void VirgilCardsClient::setServicePublicKey(const VirgilByteArray& publicKey) {
-    publicKeyPublicKeysService_ = publicKey;
+void VirgilCardsClient::setServiceVirgilCard(const VirgilCard& publicKeysServiceCard) {
+    publicKeysServiceCard_ = publicKeysServiceCard;
 }
 
 VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const VirgilByteArray& publicKey,
@@ -98,7 +100,7 @@ VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const V
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardCreate())
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(credentials, request);
@@ -112,7 +114,7 @@ VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const V
     return virgilCard;
 }
 
-void VirgilCardsClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
+TrustCardResponse VirgilCardsClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
         const std::string& ownerCardId, const Credentials& credentials) {
 
     ClientConnection connection(accessToken_);
@@ -125,26 +127,28 @@ void VirgilCardsClient::trust(const std::string& trustedCardId, const std::strin
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardTrust(ownerCardId))
-            .body(payload);
+            .body(payload.dump(4));
 
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_TRUST);
     this->verifyResponse(response);
+
+    json jsonResponse = json::parse(response.body());
+    TrustCardResponse trustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonResponse.dump(4));
+    return trustCardResponse;
 }
 
 void VirgilCardsClient::untrust(const std::string& trustedCardId, const std::string& ownerCardId,
         const Credentials& credentials) {
-    json payload = {
-        { JsonKey::signedVirgilCardId, trustedCardId }
-    };
+    json payload = {{ JsonKey::signedVirgilCardId, trustedCardId }};
 
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardUntrust(ownerCardId))
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
@@ -156,7 +160,6 @@ void VirgilCardsClient::untrust(const std::string& trustedCardId, const std::str
 
 std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity,
         const std::vector<std::string>& relations, const bool includeUnconfirmed) {
-
     json jsonRelations(relations);
     json payload = {
         { JsonKey::value, identity.getValue() },
@@ -169,27 +172,37 @@ std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity,
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardSearch())
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH);
     this->verifyResponse(response);
 
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(response.body());
+    json jsonVirgilCards = json::parse(response.body());
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
     return virgilCards;
 }
 
 std::vector<VirgilCard> VirgilCardsClient::searchApp(const std::string& applicationIdentity) {
-    Response response = this->getAppCard(applicationIdentity);
+    Request request = this->getAppCard(applicationIdentity);
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
     this->verifyResponse(response);
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(response.body());
+    json jsonVirgilCards = json::parse(response.body());
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
     return virgilCards;
 }
 
 std::vector<VirgilCard> VirgilCardsClient::getServiceCard(const std::string& serviceIdentity) {
-    Response response = this->getAppCard(serviceIdentity);
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(response.body());
+    Request request = this->getAppCard(serviceIdentity);
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SERVICE_GET);
+
+    json jsonVirgilCards = json::parse(response.body());
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
     return virgilCards;
 }
 
@@ -206,7 +219,7 @@ void VirgilCardsClient::revoke(const std::string& ownerCardId, const IdentityTok
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardRevoke(ownerCardId))
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
@@ -216,25 +229,23 @@ void VirgilCardsClient::revoke(const std::string& ownerCardId, const IdentityTok
     this->verifyResponse(response);
 }
 
-Response VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
-    json payload = {
-        { JsonKey::value, applicationIdentity }
-    };
+Request VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
+    json payload = {{ JsonKey::value, applicationIdentity }};
 
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PublicKeysEndpointUri::virgilCardSearchApp())
-            .body(payload);
+            .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
-    Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
-    return response;
+    return request;
 }
 
 void VirgilCardsClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeyPublicKeysService_);
+    bool verifed = virgil::sdk::client::verifyResponse(
+            response, 
+            publicKeysServiceCard_.getPublicKey().getKey() );
+
     if ( ! verifed) {
         throw std::runtime_error("VirgilCardsClient: The response verification has failed. Signature doesn't match "
                                  "PublicKeyService public key.");

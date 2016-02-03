@@ -40,7 +40,6 @@
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
@@ -48,40 +47,34 @@
 #include <virgil/sdk/model/PublicKey.h>
 #include <virgil/sdk/io/Marshaller.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::foundation::VirgilBase64;
-using virgil::crypto::VirgilStreamCipher;
-using virgil::crypto::stream::VirgilStreamDataSource;
-using virgil::crypto::stream::VirgilStreamDataSink;
-
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::io::Marshaller;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
 const std::string PASSWORD = "qwerty";
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt.encp..." << std::endl;
+        std::cout << "Prepare input file: test.txt.encp..." << "\n";
         std::ifstream inFile("test.txt.encp", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt.enc");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::cout << "Prepare output file: decrypted_test.txt..." << "\n";
         std::ofstream outFile("decrypted_testp.txt", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: decrypted_testp.txt");
         }
-        VirgilStreamDataSink dataSink(outFile);
+        vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        VirgilStreamCipher cipher;
-        std::cout << "Decrypt with pass..." << std::endl;
-        cipher.decryptWithPassword(dataSource, dataSink, VirgilBase64::decode(PASSWORD));
-        std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
+        vcrypto::VirgilStreamCipher cipher;
+        std::cout << "Decrypt with pass..." << "\n";
+        cipher.decryptWithPassword(dataSource, dataSink, vcrypto::str2bytes(PASSWORD));
+        std::cout << "Decrypted data with pass is successfully stored in the output file..." << "\n";
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

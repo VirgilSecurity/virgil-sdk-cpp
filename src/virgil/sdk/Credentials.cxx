@@ -41,7 +41,7 @@
 using virgil::sdk::Credentials;
 
 
-Credentials::Credentials(const std::vector<unsigned char>& privateKey, const std::string& privateKeyPassword)
+Credentials::Credentials(const virgil::crypto::VirgilByteArray& privateKey, const std::string& privateKeyPassword)
         : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 
 }
@@ -64,7 +64,7 @@ void Credentials::cleanup() noexcept {
     }
 }
 
-const std::vector<unsigned char>& Credentials::privateKey() const {
+const virgil::crypto::VirgilByteArray& Credentials::privateKey() const {
     return privateKey_;
 }
 

@@ -39,6 +39,7 @@
 
 #include <virgil/sdk/client/VirgilCardsClientBase.h>
 #include <virgil/sdk/http/Response.h>
+#include <virgil/sdk/http/Request.h> 
 
 
 namespace virgil { namespace sdk { namespace client {
@@ -49,16 +50,18 @@ namespace virgil { namespace sdk { namespace client {
     public:
         VirgilCardsClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-        virgil::crypto::VirgilByteArray getServicePublicKey () const override;
+        virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
 
-        void setServicePublicKey(const virgil::crypto::VirgilByteArray& publicKey) override;
+        void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
+
 
         virgil::sdk::model::VirgilCard create(const virgil::sdk::model::IdentityToken& identityToken,
                 const virgil::crypto::VirgilByteArray& publicKey,
                 const virgil::sdk::Credentials& credentials) override;
 
-        void trust(const std::string& trustedCardId, const std::string& trustedCardHash,
-                const std::string& ownerCardId, const Credentials& credentials) override;
+        virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId, 
+                const std::string& trustedCardHash, const std::string& ownerCardId, 
+                const Credentials& credentials) override;
 
         void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                 const virgil::sdk::Credentials& credentials) override;
@@ -77,10 +80,10 @@ namespace virgil { namespace sdk { namespace client {
     private:
         std::string accessToken_;
         std::string baseServiceUri_;
-        virgil::crypto::VirgilByteArray publicKeyPublicKeysService_;
+        virgil::sdk::model::VirgilCard publicKeysServiceCard_;
 
     private:
-        virgil::sdk::http::Response getAppCard(const std::string& applicationIdentity);
+        virgil::sdk::http::Request getAppCard(const std::string& applicationIdentity);
         void verifyResponse(const virgil::sdk::http::Response& response);
     };
 

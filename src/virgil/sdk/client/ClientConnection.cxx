@@ -34,6 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
+#include <string>
+
 #include <stdexcept>
 
 #include <json.hpp>
@@ -60,11 +63,12 @@ using virgil::crypto::VirgilSigner;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Credentials;
+using virgil::sdk::Error;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
-using virgil::sdk::Error;
+using virgil::sdk::model::VirgilCard;
 using virgil::sdk::util::JsonKey;
 
 using virgil::sdk::http::kHeaderField_Id;
@@ -85,7 +89,7 @@ std::string ClientConnection::accessToken() const {
 Response ClientConnection::send(const Request& request) {
     // Add application token to the header
     auto header = request.header();
-    header[kHeaderField_AccessToken] = accessToken();
+    header[kHeaderField_AccessToken] = this->accessToken();
     return Connection::send(Request(request).header(header).contentType("application/json"));
 }
 
@@ -100,26 +104,39 @@ Request ClientConnection::signRequest(const std::string& virgilCardId, const Cre
 Request ClientConnection::signRequest(const Credentials& credentials, const Request& request) {
     std::string uuid = virgil::sdk::util::uuid();
     std::string requestText = uuid + request.body();
-    VirgilByteArray sign = VirgilSigner().sign(VirgilBase64::decode(requestText),
-            credentials.privateKey(), VirgilBase64::decode(credentials.privateKeyPassword()));
 
-    auto header = request.header();
-    header[kHeaderField_Id] = uuid;
-    header[kHeaderField_Sign] = VirgilBase64::encode(sign);
-    return Request(request).header(header);
+    VirgilSigner signer;
+    VirgilByteArray sign = signer.sign(
+            virgil::crypto::str2bytes(requestText),
+            credentials.privateKey(),
+            virgil::crypto::str2bytes(credentials.privateKeyPassword())
+    );
+
+    auto headers = request.header();
+    headers[kHeaderField_Id] = uuid;
+    headers[kHeaderField_Sign] = VirgilBase64::encode(sign);
+    return Request(request).header(headers);
 }
 
 std::string ClientConnection::signHash(const std::string& hash, const Credentials& credentials) {
-    VirgilByteArray signHash = VirgilSigner().sign(VirgilBase64::decode(hash),
-            credentials.privateKey(), VirgilBase64::decode(credentials.privateKeyPassword()));
+    VirgilSigner signer;
+    VirgilByteArray signHash = signer.sign(
+            virgil::crypto::str2bytes(hash),
+            credentials.privateKey(),
+            virgil::crypto::str2bytes(credentials.privateKeyPassword())
+    );
+
     return VirgilBase64::encode(signHash);
 }
 
-std::string ClientConnection::encryptJsonBody(const std::string& virgilCardId, const VirgilByteArray& publicKey,
-        const std::string& jsonBody) {
+std::string ClientConnection::encryptJsonBody(const VirgilCard& privateKeysServiceCard, const std::string& jsonBody) {
     VirgilCipher cipher;
-    cipher.addKeyRecipient(VirgilBase64::decode(virgilCardId), publicKey);
-    VirgilByteArray encryptedJsonBody = cipher.encrypt(VirgilBase64::decode(jsonBody), true);
+    cipher.addKeyRecipient(
+            virgil::crypto::str2bytes( privateKeysServiceCard.getId() ), 
+            privateKeysServiceCard.getPublicKey().getKey() 
+    );
+
+    VirgilByteArray encryptedJsonBody = cipher.encrypt(virgil::crypto::str2bytes(jsonBody), true);
     return VirgilBase64::encode(encryptedJsonBody);
 }
 
@@ -128,7 +145,7 @@ void ClientConnection::checkResponseError(const Response& response, Error::Actio
         unsigned int errorCode = Error::kUndefinedErrorCode;
         if (!response.body().empty()) {
             json error = json::parse(response.body());
-            json code = error[JsonKey::error][JsonKey::errorCode];
+            json code = error[JsonKey::errorCode];
             if (code.is_number()) {
                 errorCode = code.get<unsigned int>();
             }

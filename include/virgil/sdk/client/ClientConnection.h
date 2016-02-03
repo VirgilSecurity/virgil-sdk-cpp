@@ -44,6 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/http/Connection.h>
 #include <virgil/sdk/Error.h>
+#include <virgil/sdk/model/VirgilCard.h>
 
 
 namespace virgil { namespace sdk { namespace client {
@@ -79,7 +80,7 @@ namespace virgil { namespace sdk { namespace client {
 
         std::string signHash(const std::string& hash, const Credentials& credentials);
 
-         std::string encryptJsonBody(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
+         std::string encryptJsonBody(const virgil::sdk::model::VirgilCard& privateKeysServiceCard, 
                 const std::string& jsonBody);
 
         /**

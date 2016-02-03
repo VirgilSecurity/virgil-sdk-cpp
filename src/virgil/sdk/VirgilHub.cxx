@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
 #include <vector>
 
 #include <virgil/crypto/VirgilByteArray.h>
@@ -72,22 +73,26 @@ namespace virgil { namespace sdk {
                 const VirgilUri& baseServiceUri)
             : 
               identityClient(accessToken, baseServiceUri.getIdentityService() ),
-              privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService() ),
               publicKeysClient(accessToken, baseServiceUri.getPublicKeyService() ),
-              virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService() ) {
+              virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService() ),
+              privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService() ) {
 
         }
 
     public:
         IdentityClient identityClient;
-        PrivateKeysClient privateKeysClient;
         PublicKeysClient publicKeysClient;
         VirgilCardsClient virgilCardsClient;
+        PrivateKeysClient privateKeysClient;
+
     };
 }}
 
 VirgilHub::VirgilHub(const std::string& accessToken, const VirgilUri& baseServiceUri)
-    : impl_( std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken, baseServiceUri) ) {
+    : 
+      accessToken_(accessToken),
+      virgilUri_(baseServiceUri),
+      impl_( std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken_, virgilUri_) ) {
 
 }
 
@@ -112,12 +117,12 @@ void VirgilHub::loadServicePublicKeys() {
     auto publicKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPublicKeyServiceApplicationId);
     auto privateKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPrivateKeyServiceApplicationId);
 
-    VirgilByteArray identityServicePublicKey = identityServiceVirgilCards.at(0).getPublicKey().getKey();
-    VirgilByteArray publicKeysServicePublicKey = publicKeysServiceVirgilCards.at(0).getPublicKey().getKey();
-    VirgilByteArray privateKeysServicePublicKey = privateKeysServiceVirgilCards.at(0).getPublicKey().getKey();
+    auto identityServiceVirgilCard = identityServiceVirgilCards.at(0);
+    auto publicKeysServiceVirgilCard = publicKeysServiceVirgilCards.at(0);
+    auto privateKeysServiceVirgilCard = privateKeysServiceVirgilCards.at(0);
 
-    impl_->identityClient.setServicePublicKey(identityServicePublicKey);
-    impl_->publicKeysClient.setServicePublicKey(publicKeysServicePublicKey);
-    impl_->virgilCardsClient.setServicePublicKey(publicKeysServicePublicKey);
-    impl_->privateKeysClient.setServicePublicKey(privateKeysServicePublicKey);
+    impl_->identityClient.setServiceVirgilCard(identityServiceVirgilCard);
+    impl_->publicKeysClient.setServiceVirgilCard(publicKeysServiceVirgilCard);
+    impl_->virgilCardsClient.setServiceVirgilCard(publicKeysServiceVirgilCard);
+    impl_->privateKeysClient.setServiceVirgilCard(privateKeysServiceVirgilCard);
 }

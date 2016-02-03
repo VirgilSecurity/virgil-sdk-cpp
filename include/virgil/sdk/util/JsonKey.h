@@ -59,6 +59,7 @@ namespace virgil { namespace sdk { namespace util {
         static const std::string publicKeyId;
         static const std::string data;
         static const std::string signs;
+        static const std::string signerVirgilCardId;
         static const std::string signedVirgilCardId;
         static const std::string signedDigest;
         static const std::string relations;

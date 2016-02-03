@@ -44,6 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/VirgilCard.h>
 #include <virgil/sdk/model/IdentityToken.h>
+#include <virgil/sdk/model/TrustCardResponse.h>
 
 
 namespace virgil { namespace sdk { namespace client {
@@ -52,16 +53,16 @@ namespace virgil { namespace sdk { namespace client {
      */
     class VirgilCardsClientBase {
     public:
-        virtual virgil::crypto::VirgilByteArray getServicePublicKey() const = 0;
+        virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
 
-        virtual void setServicePublicKey(const virgil::crypto::VirgilByteArray& publicKey) = 0;
+        virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
         virtual virgil::sdk::model::VirgilCard create(
                 const virgil::sdk::model::IdentityToken& identityToken,
                 const virgil::crypto::VirgilByteArray& publicKey,
                 const virgil::sdk::Credentials& credentials) = 0;
 
-        virtual void trust(
+        virtual virgil::sdk::model::TrustCardResponse trust(
                 const std::string& trustedCardId,
                 const std::string& trustedCardHash,
                 const std::string& ownerCardId,

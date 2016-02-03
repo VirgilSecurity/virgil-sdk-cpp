@@ -42,9 +42,13 @@ using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::endpoints::PublicKeysEndpointUri;
 using virgil::sdk::endpoints::PrivateKeysEndpointUri;
 
-const std::string VirgilUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
-const std::string VirgilUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
-const std::string VirgilUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
+const std::string VirgilUri::kIdentityServiceUri = "https://identity-stg.virgilsecurity.com";
+const std::string VirgilUri::kPublicKeyServiceUri = "https://keys-stg.virgilsecurity.com";
+const std::string VirgilUri::kPrivateKeyServiceUri = "https://keys-private-stg.virgilsecurity.com";
+
+// const std::string VirgilUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
+// const std::string VirgilUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
+// const std::string VirgilUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
 
 
 VirgilUri::VirgilUri()

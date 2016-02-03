@@ -50,9 +50,10 @@ namespace virgil { namespace sdk { namespace client {
     public:
         IdentityClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-        virgil::crypto::VirgilByteArray getServicePublicKey() const override;
+        virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
 
-        void setServicePublicKey(const virgil::crypto::VirgilByteArray& publicKey) override;
+        void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& identityServiceCard) override;
+
 
         std::string verify(const virgil::sdk::model::Identity& identity) override;
 
@@ -61,20 +62,25 @@ namespace virgil { namespace sdk { namespace client {
 
         bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validationToken) override;
 
+        bool isValid(const virgil::sdk::model::IdentityToken& identityToken) override;
+
+
     private:
         std::string accessToken_;
         std::string baseServiceUri_;
-        virgil::crypto::VirgilByteArray publicKeyIdentityService_;
+        virgil::sdk::model::VirgilCard identityServiceCard_;
 
     private:
 
         virgil::sdk::http::Request verifyRequest(const virgil::sdk::model::Identity& identity);
 
         virgil::sdk::http::Request confirmRequest(const std::string& actionId,
-                const std::string& confirmationCode, const int timeToLive = 3600, const int countToLive = 1);
+                const std::string& confirmationCode, const int timeToLive = 3600, const int countToLive = 12);
 
         virgil::sdk::http::Request isValidRequest(const virgil::sdk::model::Identity& identity, 
                 const std::string& validationToken);
+
+
 
         void verifyResponse(const virgil::sdk::http::Response& response);
     };

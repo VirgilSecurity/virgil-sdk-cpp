@@ -48,7 +48,8 @@ using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::VirgilCardIdentity;
-using virgil::sdk::util::JsonKey;
+using virgil::sdk::model::TrustCardResponse; 
+using virgil::sdk::util::JsonKey;   
 
 using json = nlohmann::json;
 
@@ -173,7 +174,7 @@ namespace virgil { namespace test {
             return virgilCards;
         }
 
-        nlohmann::json getJsonVirgilCards() {
+        nlohmann::json getResponseJsonVirgilCards() {
             PublicKey publicKey = virgil::test::getPubKey();
 
             json getResponse;
@@ -190,4 +191,30 @@ namespace virgil { namespace test {
 
             return getResponse;
         }
+
+        TrustCardResponse getResponseTrustCardResponse() {
+            return TrustCardResponse(
+                    "9e0bb253-879b-4fbd-a504-829faae7e958",
+                    "2015-12-22T07:03:42+0000",
+                    "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c",
+                    "9ab9d4a4-0440-499f-bdc6-f99c83f900dd",
+                    "MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGEAkAM29/DTFvTTDrab8hH7QDWGR6a5I"
+                    "gq+4Qw39fg3mLXtRWCv2YG2D/fsIn+CcdtvsDNQT8aWjTBbbY+J0BZQV40AkBEl"
+                    "UXjYBZINHiWsC/Q4yhgeRDjip9wGjpXqUH5FU38P8HqPIHCwJE/1ErhQzL6xdiR"
+                    "UWXhXR+1PhNJ1H5DZV7j");
+        }
+
+        nlohmann::json getJsonResponseTrustCardResponse() {
+            TrustCardResponse trustCardResponse = virgil::test::getResponseTrustCardResponse();
+            json jsonTrustCardResponse = {
+                { JsonKey::id, trustCardResponse.getId() },
+                { JsonKey::createdAt, trustCardResponse.getCreatedAt() },
+                { JsonKey::signerVirgilCardId, trustCardResponse.getSignedVirgilCardId() },
+                { JsonKey::signedVirgilCardId, trustCardResponse.getSignedVirgilCardId() },
+                { JsonKey::signedDigest, trustCardResponse.getSignedDigest() },
+            };
+
+            return jsonTrustCardResponse;
+        }
+
 }}

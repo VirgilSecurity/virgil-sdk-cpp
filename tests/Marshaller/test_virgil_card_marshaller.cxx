@@ -100,7 +100,9 @@ TEST_CASE("VirgilCard -> JSON VirgilCard - FAILED", "class Marshaller") {
 }
 
 TEST_CASE("JSON VirgilCards -> std::vector<VirgilCard> - FAILED", "class Marshaller") {
-    json jsonVirgilCards = virgil::test::getJsonVirgilCards();
+    json jsonResponse = virgil::test::getResponseJsonVirgilCards();
+    json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
+
     std::vector<VirgilCard> trueVirgilCard = virgil::test::getVirgilCards();
     std::vector<VirgilCard> testVirgilCards =  virgil::sdk::io::fromJsonVirgilCards( jsonVirgilCards.dump(4) );
 
@@ -137,9 +139,10 @@ TEST_CASE("JSON VirgilCards -> std::vector<VirgilCard> - FAILED", "class Marshal
 TEST_CASE("std::vector<VirgilCard> -> JSON Virgil Cards - FAILED", "class Marshaller") {
     std::vector<VirgilCard> virgilCards = virgil::test::getVirgilCards();
 
-    std::string jsonStrVirgilCards = virgil::sdk::io::toJsonVirgilCards(virgilCards, 4);
+    json jsonResponse = virgil::test::getResponseJsonVirgilCards();
+    json trueJsonVirgilCards = jsonResponse[JsonKey::virgilCards];
 
-    //std::cout << jsonStrVirgilCards << std::endl;
+    std::string testJsonVirgilCards = virgil::sdk::io::toJsonVirgilCards(virgilCards, 4);
 
-
+    REQUIRE( trueJsonVirgilCards.dump(4) == testJsonVirgilCards );
 }

@@ -79,7 +79,7 @@ namespace virgil { namespace sdk {
          * @brief Return private key.
          * @note For security reason pass it by reference only.
          */
-        const std::vector<unsigned char>& privateKey() const;
+        const virgil::crypto::VirgilByteArray& privateKey() const;
         /**
          * @brief Return private key password.
          * @note For security reason pass it by reference only.

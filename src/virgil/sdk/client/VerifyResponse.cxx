@@ -34,51 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/VirgilHub.h>
-#include <virgil/sdk/VirgilUri.h>
-#include <virgil/sdk/io/Marshaller.h>
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 
-namespace vsdk = virgil::sdk;
-namespace vcrypto = virgil::crypto;
+#include <virgil/sdk/client/VerifyResponse.h>
+#include <virgil/sdk/http/Headers.h>
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
-        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
-        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
-        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
-        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
-        "L8A4+ii+zd";
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilSigner;
+using virgil::crypto::foundation::VirgilBase64;
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+using virgil::sdk::http::Response;
 
-
-int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> " << "\n";
-        return 1;
-    }
-
-    try {
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
-
-        std::string publicKeyId = argv[1];
-
-        std::cout << "Get a Public Key" << "\n";
-        vsdk::model::PublicKey publicKey = virgilHub.publicKeys().get(publicKeyId);
-        std::string publicKeyStr = vsdk::io::Marshaller<vsdk::model::PublicKey>::toJson<4>(publicKey);
-        std::cout << "Public Key:" << "\n";
-        std::cout << publicKeyStr << "\n";
+using virgil::sdk::http::kHeaderField_ResponseId;
+using virgil::sdk::http::kHeaderField_ResponseSign;
 
 
-    } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
-        return 1;
-    }
+bool virgil::sdk::client::verifyResponse(const Response& response, const VirgilByteArray& publicKey) {
+    auto responseHeader = response.header();
+    std::string responseData = responseHeader[kHeaderField_ResponseId] + response.body();
+    std::string responseSign = responseHeader[kHeaderField_ResponseSign];
 
-    return 0;
+    VirgilSigner signer;
+    bool verifed = signer.verify(
+            virgil::crypto::str2bytes(responseData), 
+            VirgilBase64::decode(responseSign), 
+            publicKey);
+
+    return verifed;
 }

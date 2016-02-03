@@ -49,9 +49,9 @@ namespace virgil { namespace sdk { namespace client {
     public:
         PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-        virgil::crypto::VirgilByteArray getServicePublicKey () const override;
+        virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
 
-        void setServicePublicKey(const virgil::crypto::VirgilByteArray& publicKey) override;
+        void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
 
 
         virgil::sdk::model::PublicKey get(const std::string& publicKeyId) override;
@@ -66,7 +66,7 @@ namespace virgil { namespace sdk { namespace client {
     private:
         std::string accessToken_;
         std::string baseServiceUri_;
-        virgil::crypto::VirgilByteArray publicKeyPublicKeysService_;
+        virgil::sdk::model::VirgilCard publicKeysServiceCard_;
 
     private:
         void verifyResponse(const virgil::sdk::http::Response& response);

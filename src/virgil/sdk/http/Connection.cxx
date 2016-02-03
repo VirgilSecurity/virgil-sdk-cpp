@@ -34,37 +34,86 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
+#include <stdexcept>
+
+#include <json.hpp>
+
+#include <restless.hpp>
+
 #include <virgil/sdk/http/Connection.h>
 
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
-#include <stdexcept>
+using json = nlohmann::json;
 
-#include <restless.hpp>
+using HttpRequest = asoni::Handle;
 
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 
-using HttpRequest = asoni::Handle;
+
+void virgilTest(const Request& request) {
+
+    auto headers = request.header();
+    for(const auto& header : headers) {
+        std::cout << header.first << " : " << header.second << "\n\n";
+    }
+
+    std::cout << "uri" << "\n" << request.uri() << "\n\n";
+    std::cout << "json body\n" << request.body() << "\n\n";
+
+    std::cout << "__________________________________\n\n";
+
+}
+
+void virgilTest(const Response& response) {
+
+    std::cout << "RESPONSE:" << "\n\n";
+
+    auto headers = response.header();
+    for(const auto& header : headers) {
+        std::cout << header.first << " : " << header.second << "\n\n";
+    }
+
+    std::cout << "json body\n" << response.body() << "\n\n";
+
+
+    std::cout << "__________________________________\n\n";
+
+}
 
 Response Connection::send(const Request& request) {
     // Make Request
     HttpRequest httpRequest;
     httpRequest.header(request.header()).content(request.contentType(), request.body());
+
     switch (request.method()) {
         case Request::Method::GET:
             httpRequest.get(request.uri());
+            std::cout << "_____________________________\n";
+            std::cout << "Request::Method::GET\n\n";
+            virgilTest(request);
             break;
         case Request::Method::POST:
             httpRequest.post(request.uri());
+            std::cout << "_____________________________\n";
+            std::cout << "Request::Method::POST\n\n";
+            virgilTest(request);
             break;
         case Request::Method::PUT:
             httpRequest.put(request.uri());
+            std::cout << "_____________________________\n";
+            std::cout << "Request::Method::PUT\n\n";
+            virgilTest(request);
             break;
         case Request::Method::DEL:
             httpRequest.del(request.uri());
+            std::cout << "_____________________________\n";
+            std::cout << "Request::Method::DEL\n\n";
+            virgilTest(request);
             break;
         default:
             throw std::logic_error("Unknown HTTP method.");
@@ -75,8 +124,15 @@ Response Connection::send(const Request& request) {
     Response response;
     try {
         response.statusCodeRaw(httpResponse.code);
+        std::cout << "httpResponse.code = " << httpResponse.code << "\n";
+ 
     } catch (const std::logic_error&) {
         throw std::runtime_error(httpResponse.body);
     }
-    return response.header(httpResponse.headers).body(httpResponse.body);
+
+    response.header(httpResponse.headers).body(httpResponse.body);
+
+    virgilTest(response);
+
+    return response;
 }

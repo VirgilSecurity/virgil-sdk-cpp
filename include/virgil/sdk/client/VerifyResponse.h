@@ -34,51 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <stdexcept>
-#include <string>
+#ifndef VIRGIL_SDK_VERIFY_RESPONSE_H
+#define VIRGIL_SDK_VERIFY_RESPONSE_H
 
-#include <virgil/sdk/VirgilHub.h>
-#include <virgil/sdk/VirgilUri.h>
-#include <virgil/sdk/io/Marshaller.h>
+#include <virgil/crypto/VirgilByteArray.h>
 
-namespace vsdk = virgil::sdk;
-namespace vcrypto = virgil::crypto;
-
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
-        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
-        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
-        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
-        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
-        "L8A4+ii+zd";
-
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+#include <virgil/sdk/http/Response.h>
 
 
-int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> " << "\n";
-        return 1;
-    }
+namespace virgil { namespace sdk { namespace client {
+    /**
+     * @brief
+     */
+    bool verifyResponse(const virgil::sdk::http::Response& response,
+            const virgil::crypto::VirgilByteArray& publicKey);
 
-    try {
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+}}}
 
-        std::string publicKeyId = argv[1];
-
-        std::cout << "Get a Public Key" << "\n";
-        vsdk::model::PublicKey publicKey = virgilHub.publicKeys().get(publicKeyId);
-        std::string publicKeyStr = vsdk::io::Marshaller<vsdk::model::PublicKey>::toJson<4>(publicKey);
-        std::cout << "Public Key:" << "\n";
-        std::cout << publicKeyStr << "\n";
+#endif /* VIRGIL_SDK_VERIFY_RESPONSE_H */
 
 
-    } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
-        return 1;
-    }
 
-    return 0;
-}
+

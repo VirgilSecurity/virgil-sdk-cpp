@@ -60,7 +60,7 @@ namespace virgil { namespace sdk { namespace io {
     class Marshaller<IdentityToken> {
     public:
         template <int INDENT = -1>
-        static std::string toJson(const IdentityToken& identityToken, bool deep = false) {
+        static std::string toJson(const IdentityToken& identityToken) {
             json jsonIdentityToken = {
                 { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
                 { JsonKey::value, identityToken.getIdentity().getValue() },

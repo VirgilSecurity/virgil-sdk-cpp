@@ -54,7 +54,7 @@ namespace virgil { namespace sdk { namespace io {
     class Marshaller<PublicKey> {
     public:
         template <int INDENT = -1>
-        static std::string toJson(const PublicKey& publicKey, bool deep = false) {
+        static std::string toJson(const PublicKey& publicKey) {
             json jsonPublicKey = {
                 { JsonKey::id, publicKey.getId() },
                 { JsonKey::publicKey, publicKey.getKeyBase64() },

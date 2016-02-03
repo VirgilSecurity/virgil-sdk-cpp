@@ -45,7 +45,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
-#include <virgil/sdk/client/ResponseVerify.h>
+#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -72,6 +72,7 @@ using virgil::sdk::model::IdentityToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::PrivateKey;
+using virgil::sdk::model::VirgilCard;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -82,18 +83,17 @@ PrivateKeysClient::PrivateKeysClient(const std::string& accessToken, const std::
 
 }
 
-VirgilByteArray PrivateKeysClient::getServicePublicKey() const {
-    return publicKeyPrivateKeysService_;
+VirgilCard PrivateKeysClient::getServiceVirgilCard() const {
+    return privateKeysServiceCard_;
 }
 
-void PrivateKeysClient::setServicePublicKey(const VirgilByteArray& publicKey) {
-    publicKeyPrivateKeysService_ = publicKey;
+void PrivateKeysClient::setServiceVirgilCard(const VirgilCard& privateKeysServiceCard) {
+    privateKeysServiceCard_ = privateKeysServiceCard;
 }
 
-void PrivateKeysClient::stash(const std::string& virgilCardId, const VirgilByteArray& publicKey,
-        const Credentials& credentials) {
+void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials& credentials) {
     json payload = {
-        { JsonKey::privateKey, credentials.privateKey() },
+        { JsonKey::privateKey, virgil::crypto::bytes2str( credentials.privateKey() ) },
         { JsonKey::virgilCardId, virgilCardId }
     };
 
@@ -101,11 +101,12 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const VirgilByteA
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PrivateKeysEndpointUri::privateKeyStash())
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(virgilCardId, credentials, request);
-    std::string encryptJsonBody = connection.encryptJsonBody(virgilCardId, publicKey, signRequest.body());
+
+    std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, signRequest.body());
     signRequest.body(encryptJsonBody);
 
     Response response = connection.send(signRequest);
@@ -137,7 +138,7 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Identit
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PrivateKeysEndpointUri::privateKeyGet())
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
@@ -145,11 +146,12 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Identit
     this->verifyResponse(response);
 
     VirgilCipher cipher;
-    VirgilByteArray jsonPrivateKeyByteArray = cipher.decryptWithPassword(VirgilBase64::decode(response.body()),
+    VirgilByteArray decryptResponseBody = cipher.decryptWithPassword(VirgilBase64::decode(response.body()),
             VirgilBase64::decode(responsePassword));
 
-    std::string jsonPrivateKey = VirgilBase64::encode(jsonPrivateKeyByteArray);
-    PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(jsonPrivateKey);
+    json jsonPrivateKey = json::parse(VirgilBase64::encode(decryptResponseBody));
+
+    PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(jsonPrivateKey.dump(4));
     return privateKey;
 }
 
@@ -163,11 +165,11 @@ void PrivateKeysClient::destroy(const std::string& virgilCardId, const VirgilByt
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(PrivateKeysEndpointUri::privateKeyDestroy())
-            .body(payload);
+            .body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(virgilCardId, credentials, request);
-    std::string encryptJsonBody = connection.encryptJsonBody(virgilCardId, publicKey, signRequest.body());
+    std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, signRequest.body());
     signRequest.body(encryptJsonBody);
 
     Response response = connection.send(signRequest);
@@ -176,7 +178,10 @@ void PrivateKeysClient::destroy(const std::string& virgilCardId, const VirgilByt
 }
 
 void PrivateKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeyPrivateKeysService_);
+    bool verifed = virgil::sdk::client::verifyResponse(
+            response, 
+            privateKeysServiceCard_.getPublicKey().getKey() );
+
     if ( ! verifed) {
         throw std::runtime_error("PrivateKeysClient: The response verification has failed. Signature doesn't match "
                                  "PrivateKeyService public key.");

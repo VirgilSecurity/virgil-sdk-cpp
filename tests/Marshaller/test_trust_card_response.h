@@ -34,31 +34,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <string>
+/**
+ * @file test_identity_token_marshaller.cxx
+ * @brief Convert json <-> TrustCardResponse.
+ */
 
-#include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/VirgilSigner.h>
-#include <virgil/crypto/foundation/VirgilBase64.h>
+#include "../catch.hpp"
 
-#include <virgil/sdk/client/ResponseVerify.h>
-#include <virgil/sdk/http/Headers.h>
+#include <json.hpp>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilSigner;
-using virgil::crypto::foundation::VirgilBase64;
+#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-using virgil::sdk::http::Response;
+using json = nlohmann::json;
 
-using virgil::sdk::http::kHeaderField_ResponseId;
-using virgil::sdk::http::kHeaderField_ResponseSign;
+using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::io::Marshaller;
 
 
-bool virgil::sdk::client::verifyResponse(const Response& response, const VirgilByteArray& publicKey) {
-    auto responseHeader = response.header();
-    std::string responseData = responseHeader[kHeaderField_ResponseId] + response.body();
-    std::string responseSign = responseHeader[kHeaderField_ResponseSign];
+TEST_CASE("TrustCardResponse -> Json IdentityToken - FAILED", "class Marshaller") {
+    json trueJsonTrustCardResponse = virgil::test::getJsonResponseTrustCardResponse();
 
-    VirgilSigner signer;
-    bool verifed = signer.verify(VirgilBase64::decode(responseData), VirgilBase64::decode(responseSign), publicKey);
-    return verifed;
+    TrustCardResponse trustCardResponse = virgil::test::getResponseTrustCardResponse();
+    std::string testJsonTrustCardResponse = Marshaller<TrustCardResponse>::toJson<4>(trustCardResponse);
+
+    REQUIRE( trueJsonTrustCardResponse.dump(4) == testJsonTrustCardResponse);
+}
+
+TEST_CASE("Json TrustCardResponse -> TrustCardResponse - FAILED", "class Marshaller") {
+    TrustCardResponse trueTrustCardResponse = virgil::test::getResponseTrustCardResponse();
+
+    json jsonTrustCardResponse = virgil::test::getJsonResponseTrustCardResponse();
+    TrustCardResponse testTrustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonTrustCardResponse.dump(4));
+
+    REQUIRE( trueTrustCardResponse == testTrustCardResponse);
 }

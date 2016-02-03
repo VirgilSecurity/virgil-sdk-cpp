@@ -49,61 +49,54 @@
 #include <virgil/sdk/VirgilHub.h>
 #include <virgil/sdk/VirgilUri.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamSigner;
-using virgil::crypto::stream::VirgilStreamDataSource;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::VirgilHub;
-using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::VirgilUri;
+const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+        "L8A4+ii+zd";
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjIxMDk4ZjhlLWFjMzQtNGFkYy04YTBmLWFkZmM1YzBhNWE0OSIsImFwcGxpY2"
-                                        "F0aW9uX2NhcmRfaWQiOiI2OWRlYzc1MC1hMDNmLTRmNmYtYTJlYi1iNTE2MzJkZmE3MTIiL"
-                                        "CJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGaMA0GCWCGSAFlAwQCAgUABIGI"
-                                        "MIGFAkEAhc7LGcy2qyRBJLsZu1Casdr6pcoub/pR3j1SB4E0HFx+XlfPqE9xIViG/Em3l+y2"
-                                        "EkFvvjbSWdaMkHroO+UmOQJAMMEZB7rAynJuUog8ZbxabsYZ5TUtnOfRCIdkjYq+26BDIA7d"
-                                        "n9lSE1s8TstZHP9f/ICmc2SMgAV7okyyomm5uQ==";
-const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
 const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::cout << "Prepare input file: test.txt..." << "\n";
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Read virgil sign..." << std::endl;
+        std::cout << "Read virgil sign..." << "\n";
         std::ifstream signFile("test.txt.sign", std::ios::in | std::ios::binary);
         if (!signFile) {
             throw std::runtime_error("can not read sign: test.txt.sign");
         }
-        VirgilByteArray sign;
+        vcrypto::VirgilByteArray sign;
         std::copy(std::istreambuf_iterator<char>(signFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(sign));
 
-        std::cout << "Get signer ("<< USER_EMAIL << ") public key from the Virgil PKI service..." << std::endl;
-        VirgilUri virgilUri;
-        virgilUri.setPublicKeyService(VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE);
-        VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        std::cout << "Get signer ("<< USER_EMAIL << ") public key from the Virgil PKI service..." << "\n";
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        std::vector<VirgilCard> recipientCards = virgilHub.cards().search(Identity(USER_EMAIL, IdentityType::Email));
-        PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
+        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub
+                .cards()
+                .search(vsdk::model::Identity(USER_EMAIL, vsdk::model::IdentityType::Email));
 
-        VirgilStreamSigner signer;
-        std::cout << "Verify data..." << std::endl;
+        vsdk::model::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
+
+        vcrypto::VirgilStreamSigner signer;
+        std::cout << "Verify data..." << "\n";
         bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKey());
-        std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
+        std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << "\n";
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

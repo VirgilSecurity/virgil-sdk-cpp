@@ -45,67 +45,57 @@
 #include <virgil/sdk/VirgilUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
-using virgil::crypto::VirgilByteArray;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::VirgilHub;
-using virgil::sdk::VirgilUri;
-using virgil::sdk::Credentials;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::IdentityToken;
-using virgil::sdk::model::VirgilCard;
-using virgil::sdk::io::Marshaller;
+const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+        "L8A4+ii+zd";
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjIxMDk4ZjhlLWFjMzQtNGFkYy04YTBmLWFkZmM1YzBhNWE0OSIsImFwcGxpY2"
-                                        "F0aW9uX2NhcmRfaWQiOiI2OWRlYzc1MC1hMDNmLTRmNmYtYTJlYi1iNTE2MzJkZmE3MTIiL"
-                                        "CJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGaMA0GCWCGSAFlAwQCAgUABIGI"
-                                        "MIGFAkEAhc7LGcy2qyRBJLsZu1Casdr6pcoub/pR3j1SB4E0HFx+XlfPqE9xIViG/Em3l+y2"
-                                        "EkFvvjbSWdaMkHroO+UmOQJAMMEZB7rAynJuUog8ZbxabsYZ5TUtnOfRCIdkjYq+26BDIA7d"
-                                        "n9lSE1s8TstZHP9f/ICmc2SMgAV7okyyomm5uQ==";
-const std::string VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE = "https://keys-private-stg.virgilsecurity.com";
 const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" << std::endl;
+        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" << "\n";
         return 1;
     }
 
     try {
-        VirgilUri virgilUri;
-        virgilUri.setPrivateKeyService(VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
-        VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
         std::string virgilCardId = argv[1];
 
-        std::cout << "Prepare input file: public.key..." << std::endl;
+        std::cout << "Prepare input file: public.key..." << "\n";
         std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: public.key");
         }
-        std::cout << "Read public key..." << std::endl;
-        VirgilByteArray publicKey;
+        std::cout << "Read public key..." << "\n";
+        vcrypto::VirgilByteArray publicKey;
         std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(publicKey));
 
-        std::cout << "Read private key..." << std::endl;
+        std::cout << "Read private key..." << "\n";
         std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
         if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
-        VirgilByteArray privateKey;
+        vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
+        vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
-        std::cout << "Destroy a Private Key" << std::endl;
+        std::cout << "Destroy a Private Key" << "\n";
         virgilHub.privateKeys().destroy(virgilCardId, publicKey, credentials);
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

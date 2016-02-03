@@ -69,7 +69,7 @@ namespace virgil { namespace sdk { namespace io {
     class Marshaller<VirgilCard> {
     public:
         template <int INDENT = -1>
-        static std::string toJson(const VirgilCard& virgilCard, bool deep = false) {
+        static std::string toJson(const VirgilCard& virgilCard) {
             json jsonVirgilCard = {
                 { JsonKey::id, virgilCard.getId() },
                 { JsonKey::createdAt, virgilCard.getCreatedAt() },
@@ -150,7 +150,8 @@ namespace virgil { namespace sdk { namespace io {
 
     std::string toJsonVirgilCards(const std::vector<virgil::sdk::model::VirgilCard> virgilCards, const int INDENT) {
         json jsonVirgilCards;
-        jsonVirgilCards[JsonKey::virgilCards] = json::array();
+        jsonVirgilCards = json::array();
+
         for(const auto& virgilCard : virgilCards) {
             json jsonVirgilCard = {
                 { JsonKey::id, virgilCard.getId() },
@@ -183,16 +184,14 @@ namespace virgil { namespace sdk { namespace io {
             }
             jsonVirgilCard[JsonKey::data] = jsonCustomData;
 
-            jsonVirgilCards[JsonKey::virgilCards] = jsonVirgilCard;
+            jsonVirgilCards.push_back(jsonVirgilCard);
         }
 
         return jsonVirgilCards.dump(INDENT);
     }
 
     std::vector<VirgilCard> fromJsonVirgilCards(const std::string& jsonStringVirgilCards) {
-        json jsonResponse = json::parse(jsonStringVirgilCards);
-        json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
-
+        json jsonVirgilCards = json::parse(jsonStringVirgilCards);
         std::vector<VirgilCard> virgilCards;
         for(const auto& jsonVirgilCard: jsonVirgilCards) {
             VirgilCard virgilCard;

@@ -34,12 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
 #include <json.hpp>
 
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
-#include <virgil/sdk/client/ResponseVerify.h>
+#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints//PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -72,12 +73,12 @@ PublicKeysClient::PublicKeysClient(const std::string& accessToken, const std::st
 
 }
 
-VirgilByteArray PublicKeysClient::getServicePublicKey() const {
-    return publicKeyPublicKeysService_;
+VirgilCard PublicKeysClient::getServiceVirgilCard() const {
+    return publicKeysServiceCard_;
 }
 
-void PublicKeysClient::setServicePublicKey(const VirgilByteArray& publicKey) {
-    publicKeyPublicKeysService_ = publicKey;
+void PublicKeysClient::setServiceVirgilCard(const VirgilCard& publicKeysServiceCard) {
+    publicKeysServiceCard_ = publicKeysServiceCard;
 }
 
 PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
@@ -112,7 +113,9 @@ std::vector<VirgilCard> PublicKeysClient::get(const std::string& publicKeyId, co
     this->verifyResponse(response);
 
     json jsonResponse = json::parse(response.body());
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonResponse.dump(4));
+    json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
+
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
     return virgilCards;
 }
 
@@ -142,7 +145,10 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
 }
 
 void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {    
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeyPublicKeysService_);
+    bool verifed = virgil::sdk::client::verifyResponse(
+            response, 
+            publicKeysServiceCard_.getPublicKey().getKey() );
+
     if ( ! verifed) {
         throw std::runtime_error("PublicKeysClient: The response verification has failed. Signature doesn't match "
                                  "PublicKeyService public key.");

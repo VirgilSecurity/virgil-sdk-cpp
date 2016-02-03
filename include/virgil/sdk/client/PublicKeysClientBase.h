@@ -52,9 +52,9 @@ namespace virgil { namespace sdk { namespace client {
      */
     class PublicKeysClientBase {
     public:
-        virtual virgil::crypto::VirgilByteArray getServicePublicKey() const = 0;
+        virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
 
-        virtual void setServicePublicKey(const virgil::crypto::VirgilByteArray& publicKey) = 0;
+        virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
         virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
 

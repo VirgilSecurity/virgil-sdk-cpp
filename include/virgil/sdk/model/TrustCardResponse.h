@@ -34,25 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RESPONSE_VERIFY_H
-#define VIRGIL_SDK_RESPONSE_VERIFY_H
+#ifndef VIRGIL_SDK_MODEL_TRUST_CARD_RESPONSE_H
+#define VIRGIL_SDK_MODEL_TRUST_CARD_RESPONSE_H
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <string>
+ 
 
-#include <virgil/sdk/http/Response.h>
-
-
-namespace virgil { namespace sdk { namespace client {
+namespace virgil { namespace sdk { namespace model {
     /**
      * @brief
      */
-    bool verifyResponse(const virgil::sdk::http::Response& response,
-            const virgil::crypto::VirgilByteArray& publicKey);
+    class TrustCardResponse {
+    public:
+        TrustCardResponse() = default;
 
+        TrustCardResponse(
+                const std::string& id,
+                const std::string& createdAt,
+                const std::string& signerVirgilCardId,
+                const std::string& signedVirgilCardId,
+                const std::string& signedDigest
+        );
+
+        std::string getId() const;
+        std::string getCreatedAt() const;
+        std::string getSignerVirgilCardId() const;
+        std::string getSignedVirgilCardId() const;
+        std::string getSignedDigest() const;
+
+        void setId(const std::string& id);
+        void setCreatedAt(const std::string& createdAt);
+        void setSignerVirgilCardId(const std::string& signerVirgilCardId);
+        void setSignedVirgilCardId(const std::string& signedVirgilCardId);
+        void setSignedDigest(const std::string& signedDigest);
+
+    private:
+        std::string id_;
+        std::string createdAt_;
+        std::string signerVirgilCardId_;
+        std::string signedVirgilCardId_;
+        std::string signedDigest_;
+    };
 }}}
 
-#endif /* VIRGIL_SDK_RESPONSE_VERIFY_H */
-
-
-
-
+#endif /* VIRGIL_SDK_MODEL_TRUST_CARD_RESPONSE_H */

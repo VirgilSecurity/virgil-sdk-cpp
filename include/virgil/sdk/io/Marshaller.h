@@ -56,7 +56,7 @@ namespace virgil { namespace sdk { namespace io {
          * @brief Marshal given object to the Json representation.
          */
         template<int INDENT = -1>
-        static std::string toJson(const T& obj, bool deep = false);
+        static std::string toJson(const T& obj);
         /**
          * @brief Unmarshal Json representation to the associated object.
          */

@@ -49,66 +49,53 @@
 #include <virgil/sdk/VirgilHub.h>
 #include <virgil/sdk/VirgilUri.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamCipher;
-using virgil::crypto::foundation::VirgilBase64;
-using virgil::crypto::stream::VirgilStreamDataSource;
-using virgil::crypto::stream::VirgilStreamDataSink;
+namespace vcrypto = virgil::crypto;
+namespace vsdk = virgil::sdk;
 
-using virgil::sdk::VirgilHub;
-using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::VirgilUri;
+const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+        "L8A4+ii+zd";
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjIxMDk4ZjhlLWFjMzQtNGFkYy04YTBmLWFkZmM1YzBhNWE0OSIsImFwcGxpY2"
-                                        "F0aW9uX2NhcmRfaWQiOiI2OWRlYzc1MC1hMDNmLTRmNmYtYTJlYi1iNTE2MzJkZmE3MTIiL"
-                                        "CJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGaMA0GCWCGSAFlAwQCAgUABIGI"
-                                        "MIGFAkEAhc7LGcy2qyRBJLsZu1Casdr6pcoub/pR3j1SB4E0HFx+XlfPqE9xIViG/Em3l+y2"
-                                        "EkFvvjbSWdaMkHroO+UmOQJAMMEZB7rAynJuUog8ZbxabsYZ5TUtnOfRCIdkjYq+26BDIA7d"
-                                        "n9lSE1s8TstZHP9f/ICmc2SMgAV7okyyomm5uQ==";
-const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
 const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 
 
 int main() {
     try {
-        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-
-        VirgilUri virgilUri;
-        virgilUri.setPublicKeyService(VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE);
-        VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << "\n";
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        std::vector<VirgilCard> recipientCards = virgilHub.cards().search(Identity(USER_EMAIL, IdentityType::Email));
+        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(vsdk::model::Identity(USER_EMAIL, vsdk::model::IdentityType::Email));
 
-        VirgilStreamCipher cipher;
-        std::cout << "Add recipient..." << std::endl;
+        vcrypto::VirgilStreamCipher cipher;
+        std::cout << "Add recipient..." << "\n";
 
-        PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
-        cipher.addKeyRecipient(VirgilBase64::decode(recipientPublicKey.getId()), recipientPublicKey.getKey());
+        vsdk::model::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
+        cipher.addKeyRecipient(vcrypto::foundation::VirgilBase64::decode(recipientPublicKey.getId()), recipientPublicKey.getKey());
 
-        std::cout << "Prepare input file: test.txt..." << std::endl;
+        std::cout << "Prepare input file: test.txt..." << "\n";
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: test.txt.enc..." << std::endl;
+        std::cout << "Prepare output file: test.txt.enc..." << "\n";
         std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: test.txt.enc");
         }
-        VirgilStreamDataSink dataSink(outFile);
+        vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Encrypt and store results..." << std::endl;
+        std::cout << "Encrypt and store results..." << "\n";
         cipher.encrypt(dataSource, dataSink, true);
-        std::cout << "Encrypted data with key is successfully stored in the output file..." << std::endl;
+        std::cout << "Encrypted data with key is successfully stored in the output file..." << "\n";
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

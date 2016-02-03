@@ -69,6 +69,7 @@ namespace virgil { namespace sdk {
             VIRGIL_CARD_UTRUST,
             VIRGIL_CARD_SEARCH,
             VIRGIL_CARD_SEARCH_APP,
+            VIRGIL_CARD_SERVICE_GET,
             VIRGIL_CARD_REVOKE,
 
             PRIVATE_KEY_STASH,

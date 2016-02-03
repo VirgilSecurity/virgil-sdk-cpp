@@ -43,56 +43,60 @@
 
 #include <virgil/sdk/VirgilHub.h>
 #include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-using virgil::crypto::VirgilByteArray;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::VirgilHub;
-using virgil::sdk::VirgilUri;
-using virgil::sdk::Credentials;
+const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+        "L8A4+ii+zd";
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjIxMDk4ZjhlLWFjMzQtNGFkYy04YTBmLWFkZmM1YzBhNWE0OSIsImFwcGxpY2"
-                                        "F0aW9uX2NhcmRfaWQiOiI2OWRlYzc1MC1hMDNmLTRmNmYtYTJlYi1iNTE2MzJkZmE3MTIiL"
-                                        "CJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGaMA0GCWCGSAFlAwQCAgUABIGI"
-                                        "MIGFAkEAhc7LGcy2qyRBJLsZu1Casdr6pcoub/pR3j1SB4E0HFx+XlfPqE9xIViG/Em3l+y2"
-                                        "EkFvvjbSWdaMkHroO+UmOQJAMMEZB7rAynJuUog8ZbxabsYZ5TUtnOfRCIdkjYq+26BDIA7d"
-                                        "n9lSE1s8TstZHP9f/ICmc2SMgAV7okyyomm5uQ==";
-const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
 int main(int argc, char **argv) {
     if (argc < 4) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <trusted_card_id> "
-                + " <trusted_card_hash> " + " <owner_card_id> " << std::endl;
+                + " <trusted_card_hash> " + " <owner_card_id> " << "\n";
         return 1;
     }
 
     try {
-        VirgilUri virgilUri;
-        virgilUri.setPublicKeyService(VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE);
-        VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
         std::string trustedCardId = argv[1];
         std::string trustedCardHash = argv[2];
         std::string ownerCardId = argv[3];
 
-        std::cout << "Read private key..." << std::endl;
+        std::cout << "Read private key..." << "\n";
         std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
         if (!privateKeyFile) {
             throw std::runtime_error("can not read private key: private.key");
         }
-        VirgilByteArray privateKey;
+        vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
+        vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
-        std::cout << "Trust a Virgil Card" << std::endl;
-        virgilHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
+        std::cout << "Trust a Virgil Card" << "\n";
+        vsdk::model::TrustCardResponse trustCardResponse = virgilHub.cards().trust(
+                trustedCardId, 
+                trustedCardHash, 
+                ownerCardId, 
+                credentials
+        );
 
+        std::string trustCardResponseStr = vsdk::io::Marshaller<vsdk::model::TrustCardResponse>::toJson<4>(trustCardResponse);
+        std::cout << "TrustCardResponse:\n" << trustCardResponseStr << "\n";
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

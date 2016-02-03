@@ -44,6 +44,7 @@
 #include <virgil/sdk/model/PrivateKey.h>
 #include <virgil/sdk/model/IdentityToken.h>
 #include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/TrustCardResponse.h>
 #include <virgil/sdk/util/JsonKey.h>
 
 #include <json.hpp>
@@ -71,10 +72,11 @@ namespace virgil { namespace test {
 
     std::vector<virgil::sdk::model::VirgilCard> getVirgilCards();
 
+    nlohmann::json getResponseJsonVirgilCards();
 
-    // SIGN + GET /public-key/{public-key-id}
-    // All json response. Get VirgilCards.
-    nlohmann::json getJsonVirgilCards();
+    virgil::sdk::model::TrustCardResponse getResponseTrustCardResponse();
+
+    nlohmann::json getJsonResponseTrustCardResponse();
 
 
 }}

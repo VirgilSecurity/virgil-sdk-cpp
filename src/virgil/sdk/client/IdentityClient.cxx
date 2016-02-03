@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
 #include <stdexcept>
 
 #include <json.hpp>
@@ -42,7 +43,7 @@
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/VirgilCardsClient.h>
-#include <virgil/sdk/client/ResponseVerify.h>
+#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/IdentityEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -75,13 +76,14 @@ IdentityClient::IdentityClient(const std::string& accessToken, const std::string
 
 }
 
-VirgilByteArray IdentityClient::getServicePublicKey() const {
-    return publicKeyIdentityService_;
+VirgilCard IdentityClient::getServiceVirgilCard() const {
+    return identityServiceCard_;
 }
 
-void IdentityClient::setServicePublicKey(const VirgilByteArray& publicKeyIdentityService) {
-    publicKeyIdentityService_ = publicKeyIdentityService;
+void IdentityClient::setServiceVirgilCard(const VirgilCard& identityServiceCard) {
+    identityServiceCard_ = identityServiceCard;
 }
+
 
 std::string IdentityClient::verify(const Identity& identity) {
     Request request = this->verifyRequest(identity);
@@ -91,7 +93,7 @@ std::string IdentityClient::verify(const Identity& identity) {
     this->verifyResponse(response);
 
     json jsonResponse = json::parse(response.body());
-    std::string actionId = jsonResponse["action_id"];
+    std::string actionId = jsonResponse[JsonKey::actionId];
     return actionId;
 }
 
@@ -105,7 +107,7 @@ IdentityToken IdentityClient::confirm(const std::string& actionId, const std::st
     this->verifyResponse(response);
 
     json jsonResponse = json::parse(response.body());
-    IdentityToken identityToken = Marshaller<IdentityToken>::fromJson(jsonResponse);
+    IdentityToken identityToken = Marshaller<IdentityToken>::fromJson(jsonResponse.dump(4));
     return identityToken;
 }
 
@@ -121,6 +123,11 @@ bool IdentityClient::isValid(const Identity& identity, const std::string& valida
     return true;
 }
 
+bool IdentityClient::isValid(const virgil::sdk::model::IdentityToken& identityToken) {
+    return bool( this->isValid(identityToken.getIdentity(), identityToken.getValidationToken()) );
+}
+
+
 Request IdentityClient::verifyRequest(const Identity& identity) {
     json payload = {
         { JsonKey::type, identity.getTypeAsString() },
@@ -131,7 +138,7 @@ Request IdentityClient::verifyRequest(const Identity& identity) {
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(IdentityEndpointUri::verify())
-            .body(payload);
+            .body(payload.dump());
 
     return request;
 }
@@ -151,7 +158,7 @@ Request IdentityClient::confirmRequest(const std::string& actionId,
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(IdentityEndpointUri::confirm())
-            .body(payload);
+            .body(payload.dump());
 
     return request;
 }
@@ -167,15 +174,18 @@ Request IdentityClient::isValidRequest(const Identity& identity, const std::stri
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint(IdentityEndpointUri::validate())
-            .body(payload);
+            .body(payload.dump());
 
     return request;
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeyIdentityService_);
+    bool verifed = virgil::sdk::client::verifyResponse(
+            response, 
+            identityServiceCard_.getPublicKey().getKey() );
+
     if ( ! verifed) {
         throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "
-                                 "IdentityService public key.");
+                "IdentityService public key.");
     }
 }
