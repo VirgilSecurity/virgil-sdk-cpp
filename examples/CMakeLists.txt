@@ -38,23 +38,7 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 project (virgil-examples)
 
-# Enable C++11
-set (CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
-
-include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.keys/include")
-include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.private-keys/include")
-
 set (VIRGIL_SDK_KEYS keys)
-set (VIRGIL_SDK_PRIVATE_KEYS private_keys)
-
-include (virgil)
-virgil_add_dependency ("crypto"
-    VIRGIL_CRYPTO_DEPENDENCIES
-    VIRGIL_CRYPTO_INCLUDE_DIRS
-    VIRGIL_CRYPTO_LIBRARIES
-)
-include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
 
 file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 foreach (DATA_FILE ${DATA_FILES})
@@ -73,7 +57,6 @@ foreach (SRC ${SRC_LIST})
     add_executable (${TARGET_NAME} ${SRC})
     target_link_libraries (${TARGET_NAME}
         ${VIRGIL_SDK_KEYS}
-        ${VIRGIL_SDK_PRIVATE_KEYS}
         ${VIRGIL_CRYPTO_LIBRARIES}
     )
 

@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" assignedExecutableTargets="true" buildAllGenerated="true">
+    <generated>
+      <config projectName="keys" targetName="ContinuousUpdate" />
+      <config projectName="keys" targetName="ContinuousStart" />
+      <config projectName="keys" targetName="Nightly" />
+      <config projectName="keys" targetName="test_runner" />
+      <config projectName="keys" targetName="NightlyCoverage" />
+      <config projectName="keys" targetName="NightlyConfigure" />
+      <config projectName="keys" targetName="NightlyBuild" />
+      <config projectName="keys" targetName="ExperimentalSubmit" />
+      <config projectName="keys" targetName="ExperimentalTest" />
+      <config projectName="keys" targetName="NightlyTest" />
+      <config projectName="keys" targetName="ExperimentalCoverage" />
+      <config projectName="keys" targetName="NightlyMemoryCheck" />
+      <config projectName="keys" targetName="Continuous" />
+      <config projectName="keys" targetName="doc-sdk-keys" />
+      <config projectName="keys" targetName="NightlySubmit" />
+      <config projectName="keys" targetName="ContinuousCoverage" />
+      <config projectName="keys" targetName="keys" />
+      <config projectName="keys" targetName="project_json" />
+      <config projectName="keys" targetName="ContinuousSubmit" />
+      <config projectName="keys" targetName="NightlyUpdate" />
+      <config projectName="keys" targetName="ExperimentalStart" />
+      <config projectName="keys" targetName="ContinuousTest" />
+      <config projectName="keys" targetName="project_rest" />
+      <config projectName="keys" targetName="ContinuousMemCheck" />
+      <config projectName="keys" targetName="virgil_crypto_project" />
+      <config projectName="keys" targetName="ContinuousBuild" />
+      <config projectName="keys" targetName="ExperimentalMemCheck" />
+      <config projectName="keys" targetName="ExperimentalBuild" />
+      <config projectName="keys" targetName="ContinuousConfigure" />
+      <config projectName="keys" targetName="Experimental" />
+      <config projectName="keys" targetName="ExperimentalConfigure" />
+      <config projectName="keys" targetName="ExperimentalUpdate" />
+      <config projectName="keys" targetName="NightlyStart" />
+      <config projectName="keys" targetName="NightlyMemCheck" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="false" GENERATION_PASS_SYSTEM_ENVIRONMENT="true" BUILD_OUTPUT_DIR="build" ADDITIONAL_BUILD_OPTIONS="-j8">
+    <ADDITIONAL_GENERATION_ENVIRONMENT>
+      <envs />
+    </ADDITIONAL_GENERATION_ENVIRONMENT>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e0368b5b-6e52-4af1-8a23-adaf0a88fa59" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/authenticate.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_confirm.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_create.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_delete.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_info_get.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_reset_password.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/container_update.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/private_key_add.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/private_key_delete.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/examples/src/private_key_get.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/CMakeLists.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/ChangeLog" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/Doxyfile.in" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/VERSION" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/docs/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/Version.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/Credentials.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/CredentialsExt.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/EndpointUri.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/KeysClient.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/KeysClientBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/KeysClientConnection.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/PublicKeyClient.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/PublicKeyClientBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/UserDataClient.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/client/UserDataClientBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/error/KeysError.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/http/Connection.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/http/Request.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/http/Response.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/io/Marshaller.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/model/PublicKey.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/model/UserData.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/model/UserDataClass.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/model/UserDataType.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/util/JsonKey.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/include/virgil/sdk/keys/util/uuid.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/mainpage.dox" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/Version.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/Credentials.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/CredentialsExt.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/EndpointUri.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/KeysClient.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/KeysClientConnection.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/PublicKeyClient.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/client/UserDataClient.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/error/KeysError.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/http/Connection.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/http/Request.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/http/Response.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/io/PublicKeyMarshaller.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/io/UserDataMarshaller.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/model/PublicKey.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/model/UserData.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/model/UserDataClass.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/model/UserDataType.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/util/JsonKey.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/src/virgil/sdk/keys/util/uuid.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/CMakeLists.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/fakeit.hpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/fakeit_helpers.hpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/helpers.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/test_public_key_client.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/test_runner.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.keys/tests/test_user_data_client.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/CMakeLists.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/ChangeLog" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/Doxyfile.in" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/README.md" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/VERSION" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/docs/.gitignore" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/Version.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/AuthEndpoint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/AuthEndpointBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/ContainerEndpoint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/ContainerEndpointBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/Credentials.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/CredentialsExt.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/EndpointUri.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/KeysClientConnection.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/PrivateKeyEndpoint.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/PrivateKeyEndpointBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/PrivateKeysClient.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/client/PrivateKeysClientBase.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/error/KeysError.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/http/Connection.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/http/Request.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/http/Response.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/io/Marshaller.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/model/ContainerType.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/model/PrivateKey.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/model/UserData.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/model/UserDataClass.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/model/UserDataType.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/util/JsonKey.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/include/virgil/sdk/privatekeys/util/uuid.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/mainpage.dox" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/Version.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/AuthEndpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/ContainerEndpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/Credentials.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/CredentialsExt.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/EndpointUri.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/KeysClientConnection.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/PrivateKeyEndpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/client/PrivateKeysClient.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/error/KeysError.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/http/Connection.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/http/Request.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/http/Response.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/io/PrivateKeyMarshaller.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/model/PrivateKey.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/model/UserData.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/model/UserDataClass.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/model/UserDataType.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/util/JsonKey.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/src/virgil/sdk/privatekeys/util/uuid.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/CMakeLists.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/fakeit.hpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/fakeit_helpers.hpp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/helpers.h" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/test_auth_endpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/test_container_endpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/test_io_marshaller.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/test_private_key_endpoint.cxx" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/virgil.sdk.private-keys/tests/test_runner.cxx" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LICENSE" afterPath="$PROJECT_DIR$/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake/json.cmake" afterPath="$PROJECT_DIR$/cmake/json.cmake" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake/virgil.cmake" afterPath="$PROJECT_DIR$/cmake/virgil.cmake" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/CMakeLists.txt" afterPath="$PROJECT_DIR$/examples/CMakeLists.txt" />
+    </list>
+    <ignored path="virgil-sdk-cpp.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="virgil-sdk-cpp" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="IdentityToken.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/include/virgil/sdk/keys/model/IdentityToken.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.6757321">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/include/virgil/sdk/keys/model/IdentityToken.h" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsBuildToolPackageJson" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="873" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>C/C++</id>
+          </State>
+          <State>
+            <id>RELAX NG</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>UnusedDefine</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="include" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sdk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keys" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="include" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sdk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keys" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil-sdk-cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="virgil" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sdk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="keys" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager" selected="Application.Build All">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="Continuous" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Continuous" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="Continuous" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousBuild">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousConfigure">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousCoverage">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousMemCheck">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousStart">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousSubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousSubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousSubmit">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousTest">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ContinuousUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ContinuousUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ContinuousUpdate">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="doc-sdk-keys" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="doc-sdk-keys" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Experimental" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="Experimental" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalBuild">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalConfigure">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalCoverage">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalMemCheck">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalStart">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalSubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalSubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalSubmit">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalTest">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ExperimentalUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="ExperimentalUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="ExperimentalUpdate">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="keys" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="keys" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Nightly" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="Nightly" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyBuild" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyBuild" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyBuild">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyConfigure" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyConfigure" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyConfigure">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyCoverage" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyCoverage" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyCoverage">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyMemCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyMemCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyMemCheck">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyMemoryCheck" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyMemoryCheck" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyMemoryCheck">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyStart" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyStart" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyStart">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlySubmit" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlySubmit" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlySubmit">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyTest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyTest" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyTest">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="NightlyUpdate" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="NightlyUpdate" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="NightlyUpdate">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="project_json" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="project_json" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="project_rest" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="project_rest" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="virgil_crypto_project" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="virgil_crypto_project" CONFIG_NAME="Debug">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="test_runner" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="test_runner" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="test_runner">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Build All" type="CMakeRunConfiguration" factoryName="Application" editBeforeRun="true" WORKING_DIR="file://$PROJECT_DIR$/build" PASS_PARENT_ENVS="FALSE" PROJECT_NAME="keys" TARGET_NAME="keys" CONFIG_NAME="Release" RUN_TARGET_PROJECT_NAME="keys" RUN_TARGET_NAME="test_runner">
+      <envs />
+      <method />
+    </configuration>
+    <list size="35">
+      <item index="0" class="java.lang.String" itemvalue="Application.Continuous" />
+      <item index="1" class="java.lang.String" itemvalue="Application.ContinuousBuild" />
+      <item index="2" class="java.lang.String" itemvalue="Application.ContinuousConfigure" />
+      <item index="3" class="java.lang.String" itemvalue="Application.ContinuousCoverage" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ContinuousMemCheck" />
+      <item index="5" class="java.lang.String" itemvalue="Application.ContinuousStart" />
+      <item index="6" class="java.lang.String" itemvalue="Application.ContinuousSubmit" />
+      <item index="7" class="java.lang.String" itemvalue="Application.ContinuousTest" />
+      <item index="8" class="java.lang.String" itemvalue="Application.ContinuousUpdate" />
+      <item index="9" class="java.lang.String" itemvalue="Application.doc-sdk-keys" />
+      <item index="10" class="java.lang.String" itemvalue="Application.Experimental" />
+      <item index="11" class="java.lang.String" itemvalue="Application.ExperimentalBuild" />
+      <item index="12" class="java.lang.String" itemvalue="Application.ExperimentalConfigure" />
+      <item index="13" class="java.lang.String" itemvalue="Application.ExperimentalCoverage" />
+      <item index="14" class="java.lang.String" itemvalue="Application.ExperimentalMemCheck" />
+      <item index="15" class="java.lang.String" itemvalue="Application.ExperimentalStart" />
+      <item index="16" class="java.lang.String" itemvalue="Application.ExperimentalSubmit" />
+      <item index="17" class="java.lang.String" itemvalue="Application.ExperimentalTest" />
+      <item index="18" class="java.lang.String" itemvalue="Application.ExperimentalUpdate" />
+      <item index="19" class="java.lang.String" itemvalue="Application.keys" />
+      <item index="20" class="java.lang.String" itemvalue="Application.Nightly" />
+      <item index="21" class="java.lang.String" itemvalue="Application.NightlyBuild" />
+      <item index="22" class="java.lang.String" itemvalue="Application.NightlyConfigure" />
+      <item index="23" class="java.lang.String" itemvalue="Application.NightlyCoverage" />
+      <item index="24" class="java.lang.String" itemvalue="Application.NightlyMemCheck" />
+      <item index="25" class="java.lang.String" itemvalue="Application.NightlyMemoryCheck" />
+      <item index="26" class="java.lang.String" itemvalue="Application.NightlyStart" />
+      <item index="27" class="java.lang.String" itemvalue="Application.NightlySubmit" />
+      <item index="28" class="java.lang.String" itemvalue="Application.NightlyTest" />
+      <item index="29" class="java.lang.String" itemvalue="Application.NightlyUpdate" />
+      <item index="30" class="java.lang.String" itemvalue="Application.project_json" />
+      <item index="31" class="java.lang.String" itemvalue="Application.project_rest" />
+      <item index="32" class="java.lang.String" itemvalue="Application.virgil_crypto_project" />
+      <item index="33" class="java.lang.String" itemvalue="Application.test_runner" />
+      <item index="34" class="java.lang.String" itemvalue="Application.Build All" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e0368b5b-6e52-4af1-8a23-adaf0a88fa59" name="Default" comment="" />
+      <created>1452567801773</created>
+      <option name="number" value="Default" />
+      <updated>1452567801773</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="873" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.66754967" sideWeight="0.49753347" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32980132" sideWeight="0.4947146" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32980132" sideWeight="0.50528544" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.49753347" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980132" sideWeight="0.49753347" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/include/virgil/sdk/keys/model/IdentityToken.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.6757321">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

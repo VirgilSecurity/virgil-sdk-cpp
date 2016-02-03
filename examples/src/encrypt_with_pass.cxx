@@ -40,25 +40,26 @@
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
 
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
 const std::string PASSWORD = "qwerty";
+
 
 int main() {
     try {
         VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;
-        VirgilByteArray recipientPwd = virgil::crypto::str2bytes(PASSWORD);
+        VirgilByteArray recipientPwd = VirgilBase64::decode(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Prepare input file: test.txt..." << std::endl;

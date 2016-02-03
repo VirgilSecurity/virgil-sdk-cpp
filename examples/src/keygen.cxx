@@ -51,7 +51,8 @@ using virgil::crypto::VirgilKeyPair;
 int main() {
     try {
         std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to make private key encrypted.
+        // Specify password in the constructor to make private key encrypted.
+        VirgilKeyPair newKeyPair;
 
         std::cout << "Store public key: new_public.key ..." << std::endl;
         std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);

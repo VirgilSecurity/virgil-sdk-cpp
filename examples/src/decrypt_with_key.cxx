@@ -42,20 +42,22 @@
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/model/PublicKey.h>
+#include <virgil/sdk/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::model::PublicKey;
+using virgil::sdk::io::Marshaller;
 
 
 int main() {
@@ -96,7 +98,7 @@ int main() {
 
         VirgilStreamCipher cipher;
         std::cout << "Decrypt with key..." << std::endl;
-        cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
+        cipher.decryptWithKey(dataSource, dataSink, VirgilBase64::decode(publicKey.getId()), privateKey);
         std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {

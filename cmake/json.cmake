@@ -40,7 +40,7 @@
 if (NOT TARGET project_json)
     ExternalProject_Add (project_json
         GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-        GIT_TAG "v1.0.0-rc1"
+        GIT_TAG "v1.0.0"
         PREFIX "${CMAKE_BINARY_DIR}/ext/json"
         SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/json/src/project_json"
         CMAKE_COMMAND ""

@@ -40,20 +40,22 @@
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/model/PublicKey.h>
+#include <virgil/sdk/io/Marshaller.h>
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 using virgil::crypto::VirgilStreamCipher;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::io::Marshaller;
+using virgil::sdk::model::PublicKey;
+using virgil::sdk::io::Marshaller;
 
 const std::string PASSWORD = "qwerty";
 
@@ -74,9 +76,8 @@ int main() {
         VirgilStreamDataSink dataSink(outFile);
 
         VirgilStreamCipher cipher;
-
         std::cout << "Decrypt with pass..." << std::endl;
-        cipher.decryptWithPassword(dataSource, dataSink, virgil::crypto::str2bytes(PASSWORD));
+        cipher.decryptWithPassword(dataSource, dataSink, VirgilBase64::decode(PASSWORD));
         std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {

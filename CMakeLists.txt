@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 Virgil Security Inc.
+# Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,40 +34,110 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Configurable variables:
-#     - VIRGIL_SDK_KEYS - boolean value that enable build of Public Keys SDK
-#     - VIRGIL_SDK_PRIVATE_KEYS - boolean value that enable build of Private Keys SDK
-#     - VIRGIL_EXAMPLES - boolean value that enable build of Examples
-#     - ENABLE_TESTING  - boolean value that enable unit tests
-
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil-cpp)
+project (keys CXX)
 
-set (VIRGIL_SDK_KEYS OFF CACHE BOOL "Enable build of Public Keys SDK")
-set (VIRGIL_SDK_PRIVATE_KEYS OFF CACHE BOOL "Enable build of Private Keys SDK")
-set (VIRGIL_SDK_ALL OFF CACHE BOOL "Enable build of all SDKs")
-set (VIRGIL_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (ENABLE_TESTING  OFF CACHE BOOL "Enable unit tests")
+# Enable C++11
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Configurable variables
+set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil.sdk" CACHE STRING "Virgil Keys SDK library name.")
+set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
+set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+
+# Set library version
+set (VIRGIL_SDK_KEYS_VERSION_MAJOR 3)
+set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
+set (VIRGIL_SDK_KEYS_VERSION_PATCH 0)
+set (VIRGIL_SDK_KEYS_VERSION
+    ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
+)
+message (STATUS "Virgil Keys SDK version: " ${VIRGIL_SDK_KEYS_VERSION})
+
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-if (VIRGIL_EXAMPLES)
-    set (VIRGIL_SDK_ALL ON CACHE BOOL "Force: Enable build of all SDKs" FORCE)
-endif (VIRGIL_EXAMPLES)
+# Add self includes
+include_directories ("include")
 
+# Add external dependencies
+include (ExternalProject)
+
+include (json)
+include_directories (${JSON_INCLUDE_DIRS})
+
+include (rest)
+include_directories (${REST_INCLUDE_DIRS})
+
+include (virgil)
+virgil_add_dependency ("crypto"
+    VIRGIL_CRYPTO_DEPENDENCIES
+    VIRGIL_CRYPTO_INCLUDE_DIRS
+    VIRGIL_CRYPTO_LIBRARIES
+)
+include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
+
+find_package (CURL REQUIRED)
+include_directories (${CURL_INCLUDE_DIRS})
+
+# Grab source directory tree
+file (GLOB_RECURSE SRC_LIST "src/*.cxx")
+foreach (SRC_FILE ${SRC_LIST})
+    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src/" "" SRC_REL_PATH ${SRC_FILE})
+    configure_file (
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}"
+        "${CMAKE_CURRENT_BINARY_DIR}/src/${SRC_REL_PATH}"
+        @ONLY
+    )
+endforeach ()
+file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
+
+# Configure library build
+add_library (keys STATIC ${SRC_LIST})
+target_link_libraries (keys rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
+add_dependencies (keys json ${VIRGIL_CRYPTO_DEPENDENCIES})
+set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
+
+# Install
+install (TARGETS keys DESTINATION lib)
+install (FILES ${REST_LIBRARY} DESTINATION lib)
+install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
+
+# Add unit tests
 if (ENABLE_TESTING)
-    enable_testing ()
+    enable_testing()
+    include (CTest)
+    add_subdirectory (tests)
+    message (STATUS "Unit tests status: ENABLED")
+else (ENABLE_TESTING)
+    message (STATUS "Unit tests status: DISABLED")
 endif (ENABLE_TESTING)
 
-if (VIRGIL_SDK_KEYS OR VIRGIL_SDK_ALL)
-    add_subdirectory (virgil.sdk.keys)
-endif ()
-
-if (VIRGIL_SDK_PRIVATE_KEYS OR VIRGIL_SDK_ALL)
-    add_subdirectory (virgil.sdk.private-keys)
-endif ()
-
+# Add examples
 if (VIRGIL_EXAMPLES)
     add_subdirectory (examples)
+    message (STATUS "Examples status: ENABLED")
+else (VIRGIL_EXAMPLES)
+    message (STATUS "Examples status: DISABLED")
 endif (VIRGIL_EXAMPLES)
+
+# Add a target to generate API documentation with Doxygen
+find_package(Doxygen)
+
+find_program(dot DOT_PROGRAM)
+if (DOT_PROGRAM)
+    set (DOT_FOUND "YES")
+else ()
+    set (DOT_FOUND "NO")
+endif (DOT_PROGRAM)
+
+if (DOXYGEN_FOUND)
+    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+    add_custom_target ("doc-sdk-keys"
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs
+        COMMENT "Generating API documentation with Doxygen" VERBATIM
+    )
+endif (DOXYGEN_FOUND)
