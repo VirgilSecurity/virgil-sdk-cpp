@@ -70,6 +70,9 @@ namespace virgil { namespace sdk { namespace endpoints {
          * @brief Returns the endpoint in charge of a Virgil Card creation.
          */
         static std::string virgilCardCreate();
+
+        static std::string virgilCardGet(const std::string& virgilCardId);
+
         /**
          * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
          */

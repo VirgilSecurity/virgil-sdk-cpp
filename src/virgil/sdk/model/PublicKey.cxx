@@ -44,8 +44,8 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
 
-PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const std::string& keyBase64)
-     : id_(id), createdAt_(createdAt), key_(VirgilBase64::decode(keyBase64)) {
+PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const std::string& key)
+     : id_(id), createdAt_(createdAt), key_( virgil::crypto::str2bytes(key) ) {
 
 }
 
@@ -58,11 +58,11 @@ std::string PublicKey::getId() const {
     return id_;
 }
 
-std::string PublicKey::getKeyBase64() const {
-    return VirgilBase64::encode(key_);
+std::string PublicKey::getKeyStr() const {
+    return virgil::crypto::bytes2str(key_);
 }
 
-VirgilByteArray PublicKey::getKey() const {
+VirgilByteArray PublicKey::getKeyByteArray() const {
     return key_;
 }
 
@@ -78,10 +78,10 @@ void PublicKey::setCreatedAt(const std::string& createdAt) {
     createdAt_ = createdAt;
 }
 
-void PublicKey::setKeyBase64(const std::string& keyBase64) {
-    key_ = VirgilBase64::decode(keyBase64);
+void PublicKey::setKeyStr(const std::string& key) {
+    key_ = virgil::crypto::str2bytes(key);
 }
 
-void PublicKey::setKey(const VirgilByteArray& key) {
+void PublicKey::setKeyByteArray(const VirgilByteArray& key) {
     key_ = key;
 }

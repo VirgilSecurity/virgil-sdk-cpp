@@ -52,23 +52,26 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-
 
 int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id> " + " <validation_token>" << "\n";
+    if (argc < 4) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <user_email>"
+                + " <virgil_card_id> "
+                + " <validation_token>"
+                << "\n";
         return 1;
     }
 
     try {
+        std::string userEmail = argv[1];
+        std::string virgilCardId = argv[2];
+        std::string validationToken = argv[3];
+
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        std::string virgilCardId = argv[1];
-
-        vsdk::model::Identity identity(USER_EMAIL, vsdk::model::IdentityType::Email);
-        std::string validationToken = argv[2];
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         vsdk::model::IdentityToken identityToken(identity, validationToken);
 
         std::cout << "Get a Private Key" << "\n";

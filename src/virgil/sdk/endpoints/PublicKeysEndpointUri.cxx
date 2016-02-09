@@ -51,6 +51,10 @@ std::string PublicKeysEndpointUri::virgilCardCreate() {
     return "/v3/virgil-card";
 }
 
+std::string PublicKeysEndpointUri::virgilCardGet(const std::string& virgilCardId) {
+	return "/v3/virgil-card/" + virgilCardId;
+}
+
 std::string PublicKeysEndpointUri::virgilCardSearch() {
     return "/v3/virgil-card/actions/search";
 }
@@ -70,3 +74,5 @@ std::string PublicKeysEndpointUri::virgilCardUntrust(const std::string& virgilCa
 std::string PublicKeysEndpointUri::virgilCardRevoke(const std::string& virgilCardId) {
     return "/v3/virgil-card/" + virgilCardId;
 }
+
+

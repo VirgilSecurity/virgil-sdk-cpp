@@ -57,7 +57,7 @@ namespace virgil { namespace sdk { namespace io {
         static std::string toJson(const PublicKey& publicKey) {
             json jsonPublicKey = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyBase64() },
+                { JsonKey::publicKey, publicKey.getKeyStr() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
             return jsonPublicKey.dump(INDENT);

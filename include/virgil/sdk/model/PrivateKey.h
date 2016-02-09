@@ -49,17 +49,17 @@ namespace virgil { namespace sdk { namespace model {
     class PrivateKey {
     public:
         PrivateKey() = default;
-        PrivateKey(const std::string& virgilCardId, const std::string& keyBase64);
+        PrivateKey(const std::string& virgilCardId, const std::string& key);
         PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);         
         ~PrivateKey() noexcept;
 
         std::string getVirgilCardId() const;
-        std::string getKeyBase64() const;
-        virgil::crypto::VirgilByteArray getKey() const;
+        std::string getKeyStr() const;
+        virgil::crypto::VirgilByteArray getKeyByteArray() const;
 
         void setVirgilCardId(const std::string& virgilCardId);
-        void setKey(const std::string& keyBase64);
-        void setKey(const virgil::crypto::VirgilByteArray& key);
+        void setKeyStr(const std::string& key);
+        void setKeyByteArray(const virgil::crypto::VirgilByteArray& key);
 
         void cleanup() noexcept;
 

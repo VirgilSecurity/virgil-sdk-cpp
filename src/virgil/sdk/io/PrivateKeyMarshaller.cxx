@@ -63,7 +63,7 @@ namespace virgil { namespace sdk { namespace io {
         static std::string toJson(const PrivateKey& privateKey) {
             json jsonPrivateKey = {
                 { JsonKey::virgilCardId, privateKey.getVirgilCardId() },
-                { JsonKey::privateKey, privateKey.getKeyBase64() }
+                { JsonKey::privateKey, privateKey.getKeyStr() }
             };
             return jsonPrivateKey.dump(INDENT);
         }

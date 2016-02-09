@@ -58,7 +58,7 @@ namespace virgil { namespace sdk { namespace client {
         virtual void stash(const std::string& virgilCardId, const Credentials& credentials) = 0;
 
         virtual virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                const virgil::sdk::model::IdentityToken& identityToken) = 0;
+                const virgil::sdk::model::IdentityToken& identityToken) = 0;        
 
         virtual void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
                 const Credentials& credentials) = 0;

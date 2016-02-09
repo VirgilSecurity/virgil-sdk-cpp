@@ -52,6 +52,7 @@ namespace vcrypto = virgil::crypto;
 
 const std::string PASSWORD = "qwerty";
 
+
 int main() {
     try {
         std::cout << "Prepare input file: test.txt.encp..." << "\n";

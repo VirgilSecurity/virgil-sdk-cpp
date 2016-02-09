@@ -51,19 +51,28 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <user_email>"
+                << "\n";
+        return 1;
+    }
 
-int main() {
     try {
+        std::string userEmail = argv[1];
+
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
         
         std::cout << "Verify the Identity..." << "\n";
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         std::string actionId = virgilHub
                 .identity()
-                .verify(vsdk::model::Identity(USER_EMAIL, vsdk::model::IdentityType::Email));
-        std::cout << "action_id = " << actionId << "\n";
+                .verify(identity);
+
+        std::cout << "action_id:\n" << actionId << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

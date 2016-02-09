@@ -66,8 +66,11 @@ namespace virgil { namespace sdk { namespace client {
         void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                 const virgil::sdk::Credentials& credentials) override;
 
-        std::vector<virgil::sdk::model::VirgilCard> search(const virgil::sdk::model::Identity& identity,
-                const std::vector<std::string>& relations = {""}, const bool includeUnconfirmed = false) override;
+        std::vector<virgil::sdk::model::VirgilCard> search(
+            const virgil::sdk::model::Identity& identity,
+            const bool includeUnconfirmed = true,
+            const std::vector<std::string>& relations = std::vector<std::string>()
+        ) override;
 
         std::vector<virgil::sdk::model::VirgilCard> searchApp(const std::string& applicationIdentity) override;
 
@@ -76,6 +79,12 @@ namespace virgil { namespace sdk { namespace client {
         void revoke(const std::string& ownerCardId,
                 const virgil::sdk::model::IdentityToken& identityToken,
                 const virgil::sdk::Credentials& credentials) override;
+
+
+        std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,
+                const std::string& virgilCardId, const Credentials& credentials) override;
+
+        virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) override;
 
     private:
         std::string accessToken_;

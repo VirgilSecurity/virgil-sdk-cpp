@@ -49,18 +49,18 @@ namespace virgil { namespace sdk { namespace model {
     class PublicKey {
     public:
         PublicKey() = default;
-        PublicKey(const std::string& id, const std::string& createdAt, const std::string& keyBase64);
+        PublicKey(const std::string& id, const std::string& createdAt, const std::string& key);
         PublicKey(const std::string& id, const std::string& createdAt, const virgil::crypto::VirgilByteArray& key);
 
         std::string getId() const;
-        std::string getKeyBase64() const;
-        virgil::crypto::VirgilByteArray getKey() const;
+        std::string getKeyStr() const;
+        virgil::crypto::VirgilByteArray getKeyByteArray() const;
         std::string getCreatedAt() const;
 
         void setId(const std::string& id);
+        void setKeyStr(const std::string& key);
+        void setKeyByteArray(const virgil::crypto::VirgilByteArray& key);
         void setCreatedAt(const std::string& createdAt);
-        void setKeyBase64(const std::string& keyBase64);
-        void setKey(const virgil::crypto::VirgilByteArray& key);
 
     private:
         std::string id_;

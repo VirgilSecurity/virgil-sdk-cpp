@@ -40,7 +40,8 @@ project (virgil-examples)
 
 set (VIRGIL_SDK_KEYS keys)
 
-file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
+file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
+
 foreach (DATA_FILE ${DATA_FILES})
     string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
     configure_file (

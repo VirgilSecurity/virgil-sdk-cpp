@@ -85,56 +85,36 @@ PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
     Request request = Request()
             .get()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
+            .endpoint( PublicKeysEndpointUri::publicKeyGet(publicKeyId) );
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_UNSIGN);
     this->verifyResponse(response);
 
-    json jsonResponse = json::parse(response.body());
-    PublicKey publicKey = Marshaller<PublicKey>::fromJson(jsonResponse.dump(4));
+    PublicKey publicKey = Marshaller<PublicKey>::fromJson( response.body() );
     return publicKey;
-}
-
-std::vector<VirgilCard> PublicKeysClient::get(const std::string& publicKeyId, const std::string& virgilCardId,
-        const Credentials& credentials) {
-
-    Request request = Request()
-            .get()
-            .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
-
-    ClientConnection connection(accessToken_);
-    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
-
-    Response response = connection.send(signRequest);
-    connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_SIGN);
-    this->verifyResponse(response);
-
-    json jsonResponse = json::parse(response.body());
-    json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
-
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
-    return virgilCards;
 }
 
 void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<IdentityToken> identityTokens,
         const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
-    json jsonIdentityTokens = json::array();
+    json jsonArray = json::array();
     for(const auto& identityToken : identityTokens) {
         json jsonIdentityToken = {
             { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
             { JsonKey::value, identityToken.getValidationToken() },
             { JsonKey::validationToken, identityToken.getValidationToken() }
         };
-        jsonIdentityTokens[JsonKey::identity] = jsonIdentityToken;
+        jsonArray.push_back(jsonIdentityToken);
     }
+    json jsonIdentityTokens;
+    jsonIdentityTokens[JsonKey::identities] = jsonArray;
 
     Request request = Request()
             .del()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::publicKeyRevoke(publicKeyId));
+            .endpoint( PublicKeysEndpointUri::publicKeyRevoke(publicKeyId) )
+            .body( jsonIdentityTokens.dump() );
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(virgilCardId, credentials, request);
@@ -147,7 +127,7 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
 void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {    
     bool verifed = virgil::sdk::client::verifyResponse(
             response, 
-            publicKeysServiceCard_.getPublicKey().getKey() );
+            publicKeysServiceCard_.getPublicKey().getKeyByteArray() );
 
     if ( ! verifed) {
         throw std::runtime_error("PublicKeysClient: The response verification has failed. Signature doesn't match "

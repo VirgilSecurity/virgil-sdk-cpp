@@ -59,8 +59,8 @@ namespace virgil { namespace sdk {
          * @brief Defines which action trigger an error.
          */
         enum class Action {
-            PUBLIC_KEY_GET_UNSIGN,
             PUBLIC_KEY_GET_SIGN,
+            PUBLIC_KEY_GET_UNSIGN,
             PUBLIC_KEY_REVOKE,
 
             VIRGIL_CARD_CREATE,

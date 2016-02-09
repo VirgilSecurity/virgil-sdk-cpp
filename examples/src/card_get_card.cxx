@@ -35,9 +35,8 @@
  */
 
 #include <iostream>
-#include <string>
 #include <stdexcept>
-#include <vector>
+#include <string>
 
 #include <virgil/sdk/VirgilHub.h>
 #include <virgil/sdk/VirgilUri.h>
@@ -46,7 +45,6 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-
 const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
         "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
         "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
@@ -54,48 +52,28 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string VIRGIL_IDENTITY_SERVICE_URI_BASE = "https://identity-stg.virgilsecurity.com";
-const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
-const std::string VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE = "https://private-stg.virgilsecurity.com";
-
-const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
-const std::string kPublicKeyServiceApplicationId = "com.virgilsecurity.keys";
-const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-keys";
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
-int main() {
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] 
+                + " <virgil_card_id>"
+                << "\n";
+        return 1;
+    }
+
     try {
-        vsdk::VirgilUri virgilUri(
-				VIRGIL_IDENTITY_SERVICE_URI_BASE,
-				VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
-       			VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE
-        );
+        std::string virgilCardId = argv[1];
 
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceVirgilCards = virgilHub.cards().getServiceCard(kIdentityServiceApplicationId);
-        auto publicKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
-        auto privateKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        virgilHub.loadServicePublicKeys();
 
-        vsdk::model::VirgilCard identityServiceVirgilCard = identityServiceVirgilCards.at(0);
-        vsdk::model::VirgilCard publicKeysServiceVirgilCard = publicKeysServiceVirgilCards.at(0);
-        vsdk::model::VirgilCard privateKeysServiceVirgilCard = privateKeysServiceVirgilCards.at(0);
-
-        std::cout << "\n\nIdentity Service VirgilCard:" << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>
-                ::toJson<4>(identityServiceVirgilCard) << "\n\n\n";
-
-        std::cout << "Public Keys Service VirgilCard:" << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>
-                ::toJson<4>(publicKeysServiceVirgilCard) << "\n\n\n";
-
-        std::cout << "Private Keys Service VirgilCard:" << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>
-                ::toJson<4>(privateKeysServiceVirgilCard) << "\n\n\n";
-
-        virgilHub.identity().setServiceVirgilCard(identityServiceVirgilCard);
-        virgilHub.publicKeys().setServiceVirgilCard(publicKeysServiceVirgilCard);
-        virgilHub.cards().setServiceVirgilCard(publicKeysServiceVirgilCard);
-        virgilHub.privateKeys().setServiceVirgilCard(privateKeysServiceVirgilCard);
+        std::cout << "Get a Virgil Card" << "\n";
+        vsdk::model::VirgilCard virgilCard = virgilHub.cards().get(virgilCardId);
+        std::string virgilCardStr = vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(virgilCard);
+        std::cout << "A Virgil Card:" << "\n";
+        std::cout << virgilCardStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

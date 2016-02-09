@@ -34,18 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/crypto/foundation/VirgilBase64.h>
-
 #include <virgil/sdk/model/PrivateKey.h>
 
 using virgil::sdk::model::PrivateKey;
 
 using virgil::crypto::VirgilByteArray;
-using virgil::crypto::foundation::VirgilBase64;
 
 
-PrivateKey::PrivateKey(const std::string& virgilCardId, const std::string& keyBase64)
-     : virgilCardId_(virgilCardId), key_(VirgilBase64::decode(keyBase64)) {
+PrivateKey::PrivateKey(const std::string& virgilCardId, const std::string& key)
+     : virgilCardId_(virgilCardId), key_( virgil::crypto::str2bytes(key) ) {
 
 }
 
@@ -62,11 +59,11 @@ std::string PrivateKey::getVirgilCardId() const {
     return virgilCardId_;
 }
 
-std::string PrivateKey::getKeyBase64() const {
-    return VirgilBase64::encode(key_);
+std::string PrivateKey::getKeyStr() const {
+    return virgil::crypto::bytes2str(key_);
 }
 
-VirgilByteArray PrivateKey::getKey() const {
+VirgilByteArray PrivateKey::getKeyByteArray() const {
     return key_;
 }
 
@@ -74,11 +71,11 @@ void PrivateKey::setVirgilCardId(const std::string& virgilCardId) {
     virgilCardId_ = virgilCardId;
 }
 
-void PrivateKey::setKey(const std::string& key) {
-    key_ = VirgilBase64::decode(key);
+void PrivateKey::setKeyStr(const std::string& key) {
+    key_ = virgil::crypto::str2bytes(key);
 }
 
-void PrivateKey::setKey(const VirgilByteArray& key) {
+void PrivateKey::setKeyByteArray(const VirgilByteArray& key) {
     key_ = key;
 }
 

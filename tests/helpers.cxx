@@ -66,7 +66,7 @@ namespace virgil { namespace test {
             PublicKey publicKey = virgil::test::getPubKey();
             json jsonPublicKey = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyBase64() },
+                { JsonKey::publicKey, publicKey.getKeyStr() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
             return jsonPublicKey;
@@ -90,7 +90,7 @@ namespace virgil { namespace test {
             PrivateKey privateKey = virgil::test::getPrvKey();
             json jsonPrivateKey = {
                 { JsonKey::virgilCardId, privateKey.getVirgilCardId() },
-                { JsonKey::privateKey, privateKey.getKeyBase64() }
+                { JsonKey::privateKey, privateKey.getKeyStr() }
             };
             return jsonPrivateKey;
         }
@@ -144,7 +144,7 @@ namespace virgil { namespace test {
             PublicKey publicKey = virgilCard.getPublicKey();
             jsonVirgilCard[JsonKey::publicKey] = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyBase64() },
+                { JsonKey::publicKey, publicKey.getKeyStr() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
 
@@ -180,7 +180,7 @@ namespace virgil { namespace test {
             json getResponse;
             getResponse[JsonKey::id] = publicKey.getId();
             getResponse[JsonKey::createdAt] = publicKey.getCreatedAt();
-            getResponse[JsonKey::publicKey] = publicKey.getKeyBase64();
+            getResponse[JsonKey::publicKey] = publicKey.getKeyStr();
 
             json jsonVirgilCard1 = virgil::test::getJsonVirgilCard();
             json jsonVirgilCard2 = virgil::test::getJsonVirgilCard();

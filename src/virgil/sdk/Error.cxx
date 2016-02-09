@@ -51,8 +51,8 @@ Error::Error(Error::Action action, Response::StatusCode statusCode,
 
 static std::string actionStr(Error::Action action) {
     static std::map<Error::Action, std::string> code2str = {
-        { Error::Action::PUBLIC_KEY_GET_UNSIGN, "get a Public Key." },
         { Error::Action::PUBLIC_KEY_GET_SIGN, "get Virgil Cards." },
+        { Error::Action::PUBLIC_KEY_GET_UNSIGN, "get a Public Key." },
         { Error::Action::PUBLIC_KEY_REVOKE, "revoke a Public Key." },
 
         { Error::Action::VIRGIL_CARD_CREATE, "create a Virgil Card." },
@@ -65,7 +65,7 @@ static std::string actionStr(Error::Action action) {
         { Error::Action::VIRGIL_CARD_REVOKE, "revoke a Virgil Card." },
 
         { Error::Action::PRIVATE_KEY_STASH, "load a Private Key into the Private"
-                "Keys Service storage." },
+                " Keys Service storage." },
         { Error::Action::PRIVATE_KEY_GET, "get an existing private key." },
         { Error::Action::PRIVATE_KEY_DESTROY, "destroy a Private Key." },    
 

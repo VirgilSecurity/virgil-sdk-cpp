@@ -99,8 +99,8 @@ VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const V
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardCreate())
-            .body(payload.dump());
+            .endpoint( PublicKeysEndpointUri::virgilCardCreate() )
+            .body( payload.dump() );
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(credentials, request);
@@ -109,8 +109,7 @@ VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const V
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_CREATE);
     this->verifyResponse(response);
 
-    json jsonResponse = json::parse(response.body());
-    VirgilCard virgilCard = Marshaller<VirgilCard>::fromJson(jsonResponse.dump(4));
+    VirgilCard virgilCard = Marshaller<VirgilCard>::fromJson( response.body() );
     return virgilCard;
 }
 
@@ -126,8 +125,8 @@ TrustCardResponse VirgilCardsClient::trust(const std::string& trustedCardId, con
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardTrust(ownerCardId))
-            .body(payload.dump(4));
+            .endpoint( PublicKeysEndpointUri::virgilCardTrust(ownerCardId) )
+            .body( payload.dump() );
 
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
 
@@ -135,8 +134,7 @@ TrustCardResponse VirgilCardsClient::trust(const std::string& trustedCardId, con
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_TRUST);
     this->verifyResponse(response);
 
-    json jsonResponse = json::parse(response.body());
-    TrustCardResponse trustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonResponse.dump(4));
+    TrustCardResponse trustCardResponse = Marshaller<TrustCardResponse>::fromJson( response.body() );
     return trustCardResponse;
 }
 
@@ -147,8 +145,8 @@ void VirgilCardsClient::untrust(const std::string& trustedCardId, const std::str
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardUntrust(ownerCardId))
-            .body(payload.dump());
+            .endpoint( PublicKeysEndpointUri::virgilCardUntrust(ownerCardId) )
+            .body( payload.dump() );
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
@@ -159,7 +157,7 @@ void VirgilCardsClient::untrust(const std::string& trustedCardId, const std::str
 }
 
 std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity,
-        const std::vector<std::string>& relations, const bool includeUnconfirmed) {
+        const bool includeUnconfirmed, const std::vector<std::string>& relations) {
     json jsonRelations(relations);
     json payload = {
         { JsonKey::value, identity.getValue() },
@@ -171,16 +169,15 @@ std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity,
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardSearch())
-            .body(payload.dump());
+            .endpoint( PublicKeysEndpointUri::virgilCardSearch() )
+            .body( payload.dump() );
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH);
     this->verifyResponse(response);
 
-    json jsonVirgilCards = json::parse(response.body());
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( response.body() );
     return virgilCards;
 }
 
@@ -190,8 +187,9 @@ std::vector<VirgilCard> VirgilCardsClient::searchApp(const std::string& applicat
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
     this->verifyResponse(response);
-    json jsonVirgilCards = json::parse(response.body());
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
+
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( response.body() );
+    
     return virgilCards;
 }
 
@@ -201,9 +199,42 @@ std::vector<VirgilCard> VirgilCardsClient::getServiceCard(const std::string& ser
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SERVICE_GET);
 
-    json jsonVirgilCards = json::parse(response.body());
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards(jsonVirgilCards.dump(4));
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( response.body() );
     return virgilCards;
+}
+
+std::vector<VirgilCard> VirgilCardsClient::get(const std::string& publicKeyId, const std::string& virgilCardId, const Credentials& credentials) {
+    Request request = Request()
+            .get()
+            .baseAddress(baseServiceUri_)
+            .endpoint( PublicKeysEndpointUri::publicKeyGet(publicKeyId) );
+
+    ClientConnection connection(accessToken_);
+    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
+
+    Response response = connection.send(signRequest);
+    connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_SIGN);
+    this->verifyResponse(response);
+
+    json jsonResponse = json::parse( response.body() );
+    json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( jsonVirgilCards.dump() );
+    return virgilCards;
+}
+
+VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
+    Request request = Request()
+            .get()
+            .baseAddress(baseServiceUri_)
+            .endpoint( PublicKeysEndpointUri::virgilCardGet(virgilCardId) );
+
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_GET);
+    this->verifyResponse(response);
+
+    VirgilCard virgilCard = Marshaller<VirgilCard>::fromJson( response.body() );
+    return virgilCard;
 }
 
 void VirgilCardsClient::revoke(const std::string& ownerCardId, const IdentityToken& identityToken,
@@ -218,8 +249,8 @@ void VirgilCardsClient::revoke(const std::string& ownerCardId, const IdentityTok
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardRevoke(ownerCardId))
-            .body(payload.dump());
+            .endpoint( PublicKeysEndpointUri::virgilCardRevoke(ownerCardId) )
+            .body( payload.dump() );
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(ownerCardId, credentials, request);
@@ -235,8 +266,8 @@ Request VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(PublicKeysEndpointUri::virgilCardSearchApp())
-            .body(payload.dump());
+            .endpoint( PublicKeysEndpointUri::virgilCardSearchApp() )
+            .body( payload.dump() );
 
     return request;
 }
@@ -244,7 +275,7 @@ Request VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
 void VirgilCardsClient::verifyResponse(const virgil::sdk::http::Response& response) {
     bool verifed = virgil::sdk::client::verifyResponse(
             response, 
-            publicKeysServiceCard_.getPublicKey().getKey() );
+            publicKeysServiceCard_.getPublicKey().getKeyByteArray() );
 
     if ( ! verifed) {
         throw std::runtime_error("VirgilCardsClient: The response verification has failed. Signature doesn't match "

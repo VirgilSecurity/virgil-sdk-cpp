@@ -80,7 +80,7 @@ namespace virgil { namespace sdk { namespace io {
             PublicKey publicKey = virgilCard.getPublicKey();
             jsonVirgilCard[JsonKey::publicKey] = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyBase64() },
+                { JsonKey::publicKey, publicKey.getKeyStr() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
 
@@ -115,7 +115,7 @@ namespace virgil { namespace sdk { namespace io {
             json jsonPublicKey = jsonVirgilCard[JsonKey::publicKey];
             PublicKey publicKey;
             publicKey.setId( jsonPublicKey[JsonKey::id] );
-            publicKey.setKeyBase64( jsonPublicKey[JsonKey::publicKey] );
+            publicKey.setKeyStr( jsonPublicKey[JsonKey::publicKey] );
             publicKey.setCreatedAt( jsonPublicKey[JsonKey::createdAt] );
             virgilCard.setPublicKey(publicKey);
 
@@ -163,7 +163,7 @@ namespace virgil { namespace sdk { namespace io {
             PublicKey publicKey = virgilCard.getPublicKey();
             jsonVirgilCard[JsonKey::publicKey] = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyBase64() },
+                { JsonKey::publicKey, publicKey.getKeyStr() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
 
@@ -203,7 +203,7 @@ namespace virgil { namespace sdk { namespace io {
             json jsonPublicKey = jsonVirgilCard[JsonKey::publicKey];
             PublicKey publicKey;
             publicKey.setId( jsonPublicKey[JsonKey::id] );
-            publicKey.setKeyBase64( jsonPublicKey[JsonKey::publicKey] );
+            publicKey.setKeyStr( jsonPublicKey[JsonKey::publicKey] );
             publicKey.setCreatedAt( jsonPublicKey[JsonKey::createdAt] );
             virgilCard.setPublicKey(publicKey);
 

@@ -64,7 +64,7 @@ TEST_CASE("JSON VirgilCard -> VirgilCard - FAILED", "class Marshaller") {
     json  jsonVirgilCard = virgil::test::getJsonVirgilCard();
     VirgilCard trueVirgilCard = virgil::test::getVirgilCard();
     // JSON VirgilCard -> VirgilCard
-    VirgilCard testVirgilCard = Marshaller<VirgilCard>::fromJson(jsonVirgilCard.dump(4));
+    VirgilCard testVirgilCard = Marshaller<VirgilCard>::fromJson(jsonVirgilCard.dump());
 
     REQUIRE( trueVirgilCard.getCreatedAt() == testVirgilCard.getCreatedAt() );
     REQUIRE( trueVirgilCard.getData() == testVirgilCard.getData() );
@@ -88,7 +88,7 @@ TEST_CASE("JSON VirgilCard -> VirgilCard - FAILED", "class Marshaller") {
 
     REQUIRE( truePublicKey.getId() == testPublicKey.getId() );
     REQUIRE( truePublicKey.getCreatedAt() == testPublicKey.getCreatedAt() );
-    REQUIRE( truePublicKey.getKey() == testPublicKey.getKey() );
+    REQUIRE( truePublicKey.getKeyStr() == testPublicKey.getKeyStr() );
 }
 
 TEST_CASE("VirgilCard -> JSON VirgilCard - FAILED", "class Marshaller") {
@@ -131,7 +131,7 @@ TEST_CASE("JSON VirgilCards -> std::vector<VirgilCard> - FAILED", "class Marshal
 
             REQUIRE( truePublicKey.getId() == testPublicKey.getId() );
             REQUIRE( truePublicKey.getCreatedAt() == testPublicKey.getCreatedAt() );
-            REQUIRE( truePublicKey.getKey() == testPublicKey.getKey() );
+            REQUIRE( truePublicKey.getKeyStr() == testPublicKey.getKeyStr() );
         }
     }
 }

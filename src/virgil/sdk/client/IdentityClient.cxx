@@ -106,8 +106,7 @@ IdentityToken IdentityClient::confirm(const std::string& actionId, const std::st
     connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
     this->verifyResponse(response);
 
-    json jsonResponse = json::parse(response.body());
-    IdentityToken identityToken = Marshaller<IdentityToken>::fromJson(jsonResponse.dump(4));
+    IdentityToken identityToken = Marshaller<IdentityToken>::fromJson( response.body() );
     return identityToken;
 }
 
@@ -137,8 +136,8 @@ Request IdentityClient::verifyRequest(const Identity& identity) {
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(IdentityEndpointUri::verify())
-            .body(payload.dump());
+            .endpoint( IdentityEndpointUri::verify() )
+            .body( payload.dump() );
 
     return request;
 }
@@ -157,8 +156,8 @@ Request IdentityClient::confirmRequest(const std::string& actionId,
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(IdentityEndpointUri::confirm())
-            .body(payload.dump());
+            .endpoint( IdentityEndpointUri::confirm() )
+            .body( payload.dump() );
 
     return request;
 }
@@ -173,8 +172,8 @@ Request IdentityClient::isValidRequest(const Identity& identity, const std::stri
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
-            .endpoint(IdentityEndpointUri::validate())
-            .body(payload.dump());
+            .endpoint( IdentityEndpointUri::validate() )
+            .body( payload.dump() );
 
     return request;
 }
@@ -182,7 +181,7 @@ Request IdentityClient::isValidRequest(const Identity& identity, const std::stri
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
     bool verifed = virgil::sdk::client::verifyResponse(
             response, 
-            identityServiceCard_.getPublicKey().getKey() );
+            identityServiceCard_.getPublicKey().getKeyByteArray() );
 
     if ( ! verifed) {
         throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "

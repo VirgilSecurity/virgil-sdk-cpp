@@ -48,6 +48,7 @@ const std::string JsonKey::virgilCardId = "virgil_card_id";
 const std::string JsonKey::isConfirmed = "is_confirmed";
 const std::string JsonKey::hash = "hash";
 const std::string JsonKey::identity = "identity";
+const std::string JsonKey::identities = "identities";
 const std::string JsonKey::type = "type";
 const std::string JsonKey::value = "value";
 const std::string JsonKey::publicKeyId = "public_key_id";

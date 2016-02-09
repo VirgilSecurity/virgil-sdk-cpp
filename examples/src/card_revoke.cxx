@@ -55,33 +55,41 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "L8A4+ii+zd";
 
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 
 
 int main(int argc, char **argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <owner_card_id> " + " <validation_token> " << "\n";
+    if (argc < 5) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <user_email>"
+                + " <owner_card_id>"
+                + " <validation_token>"
+                + " <path_private_key>"
+                 << "\n";
         return 1;
     }
 
     try {
+        std::string userEmail = argv[1];
+        std::string ownerCardId = argv[2];
+        std::string validationToken = argv[3];
+        std::string pathPrivateKey = argv[4];
+
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        std::string ownerCardId = argv[1];
-
-        vsdk::model::Identity identity(USER_EMAIL, vsdk::model::IdentityType::Email);
-        std::string validationToken = argv[2];
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         vsdk::model::IdentityToken identityToken(identity, validationToken);
 
+        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..." << "\n";
-        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!privateKeyFile) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }        
         vcrypto::VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
+        
         vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
         std::cout << "Revoke a Virgil Card" << "\n";

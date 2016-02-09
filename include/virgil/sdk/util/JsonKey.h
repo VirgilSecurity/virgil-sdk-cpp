@@ -54,6 +54,7 @@ namespace virgil { namespace sdk { namespace util {
         static const std::string isConfirmed;
         static const std::string hash;
         static const std::string identity;
+        static const std::string identities;
         static const std::string type;
         static const std::string value;
         static const std::string publicKeyId;

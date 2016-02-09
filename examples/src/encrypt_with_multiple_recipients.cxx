@@ -59,30 +59,39 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 const std::string PASSWORD = "qwerty";
 
 
-int main() {
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <user_email>"
+                << "\n";
+        return 1;
+    }
+
     try {
+        std::string userEmail = argv[1];
+
         vcrypto::VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << "\n";
-        vcrypto::VirgilByteArray recipientPwd = vcrypto::foundation::VirgilBase64::decode(PASSWORD);
+        vcrypto::VirgilByteArray recipientPwd = vcrypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
-        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << "\n";
+        std::cout << "Get recipient ("<< userEmail << ") information from the Virgil PKI service..." << "\n";
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
-        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(
-                    vsdk::model::Identity(
-                            USER_EMAIL, 
-                            vsdk::model::IdentityType::Email)
-        );
+
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);   
+        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(identity);
 
         std::cout << "Add recipient with key..." << "\n";
-        vsdk::model::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
-        cipher.addKeyRecipient(vcrypto::foundation::VirgilBase64::decode(recipientPublicKey.getId()), recipientPublicKey.getKey());
+        vsdk::model::VirgilCard recipientCard = recipientCards.at(0);
+        cipher.addKeyRecipient(
+                vcrypto::str2bytes( recipientCard.getId() ), 
+                recipientCard.getPublicKey().getKeyByteArray()
+        );
 
         std::cout << "Prepare input file: test.txt..." << "\n";
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);

@@ -56,10 +56,8 @@ namespace virgil { namespace sdk { namespace client {
 
         virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
-        virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
 
-        virtual std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,
-                const std::string& virgilCardId, const Credentials& credentials) = 0;
+        virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
 
         virtual void revoke(const std::string& publicKeyId,
                 const std::vector<virgil::sdk::model::IdentityToken> identityTokens,

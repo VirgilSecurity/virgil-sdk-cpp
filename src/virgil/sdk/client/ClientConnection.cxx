@@ -133,7 +133,7 @@ std::string ClientConnection::encryptJsonBody(const VirgilCard& privateKeysServi
     VirgilCipher cipher;
     cipher.addKeyRecipient(
             virgil::crypto::str2bytes( privateKeysServiceCard.getId() ), 
-            privateKeysServiceCard.getPublicKey().getKey() 
+            privateKeysServiceCard.getPublicKey().getKeyByteArray()
     );
 
     VirgilByteArray encryptedJsonBody = cipher.encrypt(virgil::crypto::str2bytes(jsonBody), true);

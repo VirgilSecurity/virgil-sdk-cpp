@@ -75,13 +75,25 @@ namespace virgil { namespace sdk { namespace client {
 
         virtual std::vector<virgil::sdk::model::VirgilCard> search(
                 const virgil::sdk::model::Identity& identity,
-                const std::vector<std::string>& relations = {""},
-                const bool includeUnconfirmed = false) = 0;
+                const bool includeUnconfirmed = true,
+                const std::vector<std::string>& relations = std::vector<std::string>()
+        ) = 0;
 
         virtual std::vector<virgil::sdk::model::VirgilCard> searchApp(
                 const std::string& applicationIdentity) = 0;
 
         virtual std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) = 0;
+
+
+
+        virtual std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,
+                const std::string& virgilCardId, const Credentials& credentials) = 0;
+
+
+        virtual virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) = 0;
+
+
+
 
         virtual void revoke(
                 const std::string& ownerCardId,

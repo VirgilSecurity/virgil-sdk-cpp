@@ -52,13 +52,14 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
+
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> " << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <public_key_id> " << "\n";
         return 1;
     }
 

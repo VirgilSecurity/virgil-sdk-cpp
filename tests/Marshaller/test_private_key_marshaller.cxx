@@ -71,5 +71,5 @@ TEST_CASE("Json PrivateKey -> PrivateKey - FAILED", "class Marshaller") {
     PrivateKey truePrivateKey = virgil::test::getPrvKey();
 
     REQUIRE( truePrivateKey.getVirgilCardId() == testPrivateKey.getVirgilCardId() );
-    REQUIRE( truePrivateKey.getKey() == testPrivateKey.getKey() );
+    REQUIRE( truePrivateKey.getKeyStr() == testPrivateKey.getKeyStr() );
 }

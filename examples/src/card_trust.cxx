@@ -60,28 +60,35 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
 int main(int argc, char **argv) {
-    if (argc < 4) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <trusted_card_id> "
-                + " <trusted_card_hash> " + " <owner_card_id> " << "\n";
+    if (argc < 5) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <trusted_card_id>"
+                + " <trusted_card_hash>"
+                + " <owner_card_id>"
+                + " <path_private_key>"
+                << "\n";
         return 1;
     }
 
     try {
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
-
         std::string trustedCardId = argv[1];
         std::string trustedCardHash = argv[2];
         std::string ownerCardId = argv[3];
+        std::string pathPrivateKey = argv[4];
 
+        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        virgilHub.loadServicePublicKeys();
+
+        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..." << "\n";
-        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!privateKeyFile) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }        
         vcrypto::VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
+        
         vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
         std::cout << "Trust a Virgil Card" << "\n";

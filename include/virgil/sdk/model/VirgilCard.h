@@ -53,10 +53,16 @@ namespace virgil { namespace sdk { namespace model {
     class VirgilCard {
     public:
         VirgilCard() = default;
-        VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt, const std::string& hash,
+
+        VirgilCard(
+                const bool confirme, 
+                const std::string& id, 
+                const std::string& createdAt, 
+                const std::string& hash,
                 const virgil::sdk::model::VirgilCardIdentity& identity,
                 const std::vector<PairStrStr>& data,
-                const virgil::sdk::model::PublicKey& publicKey);
+                const virgil::sdk::model::PublicKey& publicKey
+        );
 
         bool isConfirmed() const;
         std::string getId() const;

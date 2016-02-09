@@ -52,21 +52,21 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-
 
 int main(int argc, char **argv) {
     if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <action_id>" + " <confirmation_code>" << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <action_id>"
+                + " <confirmation_code>" << "\n";
         return 1;
     }
 
     try {
+        std::string actionId = argv[1];
+        std::string confirmationCode = argv[2];
+
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
-
-        const std::string actionId = argv[1];
-        const std::string confirmationCode = argv[2];
         vsdk::model::IdentityToken identityToken = virgilHub.identity().confirm(actionId, confirmationCode);
 
         std::string identityTokenStr = vsdk::io::Marshaller<vsdk::model::IdentityToken>::toJson<4>(identityToken);

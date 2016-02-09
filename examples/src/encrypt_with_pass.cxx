@@ -55,7 +55,7 @@ int main() {
         vcrypto::VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << "\n";
-        vcrypto::VirgilByteArray recipientPwd = vcrypto::foundation::VirgilBase64::decode(PASSWORD);
+        vcrypto::VirgilByteArray recipientPwd = vcrypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Prepare input file: test.txt..." << "\n";

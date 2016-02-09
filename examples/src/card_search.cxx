@@ -53,20 +53,28 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
 
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <user_email>"
+                << "\n";
+        return 1;
+    }
 
-int main() {
     try {
+        std::string userEmail = argv[1];
+
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        vsdk::model::Identity identity(USER_EMAIL, vsdk::model::IdentityType::Email);
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Search for Cards" << "\n";
-        std::vector<vsdk::model::VirgilCard> foundCards = virgilHub
-                .cards()
-                .search(identity);
+        std::vector<vsdk::model::VirgilCard> foundCards = virgilHub.cards().search(
+                identity); 
+                //{"9bb31464-d9be-4ba8-9e74-eacfbae94bca"},
+                //true);
 
         std::string foundCardsStr = vsdk::io::toJsonVirgilCards(foundCards, 4);
         std::cout << foundCardsStr << "\n";
