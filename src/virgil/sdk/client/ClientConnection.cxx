@@ -130,13 +130,20 @@ std::string ClientConnection::signHash(const std::string& hash, const Credential
 }
 
 std::string ClientConnection::encryptJsonBody(const VirgilCard& privateKeysServiceCard, const std::string& jsonBody) {
-    VirgilCipher cipher;
-    cipher.addKeyRecipient(
-            virgil::crypto::str2bytes( privateKeysServiceCard.getId() ), 
-            privateKeysServiceCard.getPublicKey().getKeyByteArray()
+    VirgilByteArray publicKey = VirgilBase64::decode(
+        privateKeysServiceCard.getPublicKey().getKey()
     );
 
-    VirgilByteArray encryptedJsonBody = cipher.encrypt(virgil::crypto::str2bytes(jsonBody), true);
+    VirgilCipher cipher;
+    cipher.addKeyRecipient(
+            virgil::crypto::str2bytes(privateKeysServiceCard.getId()),
+            publicKey
+    );
+
+    VirgilByteArray encryptedJsonBody = cipher.encrypt(
+        virgil::crypto::str2bytes(jsonBody),
+        true
+    );
     return VirgilBase64::encode(encryptedJsonBody);
 }
 

@@ -64,14 +64,14 @@ Identity::Identity(const std::string& value, const IdentityType& type) : value_(
 
 }
 
+std::string Identity::getValue() const {
+    return value_;
+}
+
 IdentityType Identity::getType() const {
     return type_;
 }
 
 std::string Identity::getTypeAsString() const {
     return virgil::sdk::model::toString(type_);
-}
-
-std::string Identity::getValue() const {
-    return value_;
 }

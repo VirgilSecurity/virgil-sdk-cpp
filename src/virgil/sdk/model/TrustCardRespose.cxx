@@ -39,56 +39,29 @@
 using virgil::sdk::model::TrustCardResponse;
 
 
-TrustCardResponse::TrustCardResponse(
-		const std::string& id,
-        const std::string& createdAt,
-        const std::string& signerVirgilCardId,
-        const std::string& signedVirgilCardId,
-        const std::string& signedDigest) 
-        	: id_(id),
-        	  createdAt_(createdAt),
-        	  signerVirgilCardId_(signerVirgilCardId),
-        	  signedVirgilCardId_(signedVirgilCardId),
-        	  signedDigest_(signedDigest) {
+TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& createdAt,
+        const std::string& signerVirgilCardId, const std::string& signedVirgilCardId, const std::string& signedDigest)
+            : id_(id), createdAt_(createdAt), signerVirgilCardId_(signerVirgilCardId),
+                signedVirgilCardId_(signedVirgilCardId), signedDigest_(signedDigest) {
 
 }
 
 std::string TrustCardResponse::getId() const {
-	return id_;
+    return id_;
 }
 
 std::string TrustCardResponse::getCreatedAt() const {
-	return createdAt_;
+    return createdAt_;
 }
 
 std::string TrustCardResponse::getSignerVirgilCardId() const {
-	return signerVirgilCardId_;
+    return signerVirgilCardId_;
 }
 
 std::string TrustCardResponse::getSignedVirgilCardId() const {
-	return signedVirgilCardId_;
+    return signedVirgilCardId_;
 }
 
 std::string TrustCardResponse::getSignedDigest() const {
-	return signedDigest_;
-}
-
-void TrustCardResponse::setId(const std::string& id) {
-	id_ = id;
-}
-
-void TrustCardResponse::setCreatedAt(const std::string& createdAt) {
-	createdAt_ = createdAt;
-}
-
-void TrustCardResponse::setSignerVirgilCardId(const std::string& signerVirgilCardId) {
-	signerVirgilCardId_ = signerVirgilCardId;
-}
-
-void TrustCardResponse::setSignedVirgilCardId(const std::string& signedVirgilCardId) {
-	signedVirgilCardId_ = signedVirgilCardId;
-}
-
-void TrustCardResponse::setSignedDigest(const std::string& signedDigest) {
-	signedDigest_ = signedDigest;
+    return signedDigest_;
 }

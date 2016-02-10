@@ -43,7 +43,7 @@
 
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/VirgilCard.h>
-#include <virgil/sdk/model/IdentityToken.h>
+#include <virgil/sdk/model/ValidationToken.h>
 #include <virgil/sdk/model/TrustCardResponse.h>
 
 
@@ -58,7 +58,7 @@ namespace virgil { namespace sdk { namespace client {
         virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
         virtual virgil::sdk::model::VirgilCard create(
-                const virgil::sdk::model::IdentityToken& identityToken,
+                const virgil::sdk::model::ValidationToken& validationToken,
                 const virgil::crypto::VirgilByteArray& publicKey,
                 const virgil::sdk::Credentials& credentials) = 0;
 
@@ -97,7 +97,7 @@ namespace virgil { namespace sdk { namespace client {
 
         virtual void revoke(
                 const std::string& ownerCardId,
-                const virgil::sdk::model::IdentityToken& identityToken,
+                const virgil::sdk::model::ValidationToken& validationToken,
                 const virgil::sdk::Credentials& credentials) = 0;
     };
 }}}

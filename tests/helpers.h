@@ -42,7 +42,7 @@
 
 #include <virgil/sdk/model/PublicKey.h>
 #include <virgil/sdk/model/PrivateKey.h>
-#include <virgil/sdk/model/IdentityToken.h>
+#include <virgil/sdk/model/ValidationToken.h>
 #include <virgil/sdk/model/VirgilCard.h>
 #include <virgil/sdk/model/TrustCardResponse.h>
 #include <virgil/sdk/util/JsonKey.h>
@@ -60,9 +60,9 @@ namespace virgil { namespace test {
 
     nlohmann::json getJsonPrvKey();
 
-    virgil::sdk::model::IdentityToken getIdentityToken();
+    virgil::sdk::model::ValidationToken getToken();
 
-    nlohmann::json getJsonIdentityToken();
+    nlohmann::json getJsonValidationToken();
 
 
     virgil::sdk::model::VirgilCard getVirgilCard();

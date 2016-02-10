@@ -53,7 +53,7 @@ namespace virgil { namespace sdk { namespace endpoints {
          */
         //@{
         /**
-          * @brief Returns the endpoint in charge of initiates the process to verify the Identity.   
+          * @brief Returns the endpoint in charge of initiates the process to verify the Identity.
          */
         static std::string verify();
         /**
@@ -67,7 +67,6 @@ namespace virgil { namespace sdk { namespace endpoints {
         static std::string validate();
         //@}
     };
-    
 }}}
 
 #endif /* VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H */

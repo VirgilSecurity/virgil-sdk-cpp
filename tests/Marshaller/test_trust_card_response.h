@@ -54,7 +54,7 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
 
-TEST_CASE("TrustCardResponse -> Json IdentityToken - FAILED", "class Marshaller") {
+TEST_CASE("TrustCardResponse -> Json ValidationToken - FAILED", "class Marshaller") {
     json trueJsonTrustCardResponse = virgil::test::getJsonResponseTrustCardResponse();
 
     TrustCardResponse trustCardResponse = virgil::test::getResponseTrustCardResponse();

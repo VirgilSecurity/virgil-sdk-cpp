@@ -37,6 +37,8 @@
 #include <iostream>
 #include <json.hpp>
 
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
@@ -51,6 +53,7 @@
 using json = nlohmann::json;
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Credentials;
 using virgil::sdk::Error;
@@ -61,7 +64,7 @@ using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::IdentityToken;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
@@ -96,25 +99,25 @@ PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
     return publicKey;
 }
 
-void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<IdentityToken> identityTokens,
+void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidationToken> validationTokens,
         const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
-    for(const auto& identityToken : identityTokens) {
-        json jsonIdentityToken = {
-            { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
-            { JsonKey::value, identityToken.getValidationToken() },
-            { JsonKey::validationToken, identityToken.getValidationToken() }
+    for(const auto& validationToken : validationTokens) {
+        json jsonValidationToken = {
+            { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
+            { JsonKey::value, validationToken.getToken() },
+            { JsonKey::validationToken, validationToken.getToken() }
         };
-        jsonArray.push_back(jsonIdentityToken);
+        jsonArray.push_back(jsonValidationToken);
     }
-    json jsonIdentityTokens;
-    jsonIdentityTokens[JsonKey::identities] = jsonArray;
+    json jsonValidationTokens;
+    jsonValidationTokens[JsonKey::identities] = jsonArray;
 
     Request request = Request()
             .del()
             .baseAddress(baseServiceUri_)
             .endpoint( PublicKeysEndpointUri::publicKeyRevoke(publicKeyId) )
-            .body( jsonIdentityTokens.dump() );
+            .body( jsonValidationTokens.dump() );
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(virgilCardId, credentials, request);
@@ -124,10 +127,11 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
     this->verifyResponse(response);
 }
 
-void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {    
+void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {
     bool verifed = virgil::sdk::client::verifyResponse(
-            response, 
-            publicKeysServiceCard_.getPublicKey().getKeyByteArray() );
+            response,
+            publicKeysServiceCard_.getPublicKey().getKeyBytes()
+    );
 
     if ( ! verifed) {
         throw std::runtime_error("PublicKeysClient: The response verification has failed. Signature doesn't match "

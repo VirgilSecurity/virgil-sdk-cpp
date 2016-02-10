@@ -36,11 +36,17 @@
 
 #include <json.hpp>
 
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/model/PublicKey.h>
 
 using json = nlohmann::json;
+
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::model::PublicKey;
@@ -57,8 +63,8 @@ namespace virgil { namespace sdk { namespace io {
         static std::string toJson(const PublicKey& publicKey) {
             json jsonPublicKey = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyStr() },
-                { JsonKey::createdAt, publicKey.getCreatedAt() }
+                { JsonKey::createdAt, publicKey.getCreatedAt() },
+                { JsonKey::publicKey, VirgilBase64::encode(publicKey.getKeyBytes()) }
             };
             return jsonPublicKey.dump(INDENT);
         }
@@ -66,9 +72,10 @@ namespace virgil { namespace sdk { namespace io {
         static PublicKey fromJson(const std::string& jsonString) {
             json jsonPublicKey = json::parse(jsonString);
             std::string id = jsonPublicKey[JsonKey::id];
-            std::string publicKey = jsonPublicKey[JsonKey::publicKey];
             std::string createdAt = jsonPublicKey[JsonKey::createdAt];
-            return PublicKey(id, createdAt, publicKey);
+            std::string publicKey = jsonPublicKey[JsonKey::publicKey];
+
+            return PublicKey(id, createdAt, VirgilBase64::decode(publicKey));
         }
 
     private:

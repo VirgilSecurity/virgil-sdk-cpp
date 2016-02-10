@@ -41,11 +41,6 @@ using virgil::sdk::model::PrivateKey;
 using virgil::crypto::VirgilByteArray;
 
 
-PrivateKey::PrivateKey(const std::string& virgilCardId, const std::string& key)
-     : virgilCardId_(virgilCardId), key_( virgil::crypto::str2bytes(key) ) {
-
-}
-
 PrivateKey::PrivateKey(const std::string& virgilCardId, const VirgilByteArray& key)
      : virgilCardId_(virgilCardId), key_(key) {
 
@@ -59,24 +54,8 @@ std::string PrivateKey::getVirgilCardId() const {
     return virgilCardId_;
 }
 
-std::string PrivateKey::getKeyStr() const {
-    return virgil::crypto::bytes2str(key_);
-}
-
-VirgilByteArray PrivateKey::getKeyByteArray() const {
+const VirgilByteArray& PrivateKey::getKeyBytes() const {
     return key_;
-}
-
-void PrivateKey::setVirgilCardId(const std::string& virgilCardId) {
-    virgilCardId_ = virgilCardId;
-}
-
-void PrivateKey::setKeyStr(const std::string& key) {
-    key_ = virgil::crypto::str2bytes(key);
-}
-
-void PrivateKey::setKeyByteArray(const VirgilByteArray& key) {
-    key_ = key;
 }
 
 void PrivateKey::cleanup() noexcept {

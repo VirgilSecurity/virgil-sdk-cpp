@@ -38,12 +38,10 @@
 #define VIRGIL_SDK_MODEL_VIRGIL_CARD_H
 
 #include <string>
-#include <vector>
+#include <map>
 
 #include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/VirgilCardIdentity.h>
-
-using PairStrStr = std::pair<std::string, std::string>;
+#include <virgil/sdk/model/IdentityExtended.h>
 
 
 namespace virgil { namespace sdk { namespace model {
@@ -53,40 +51,26 @@ namespace virgil { namespace sdk { namespace model {
     class VirgilCard {
     public:
         VirgilCard() = default;
-
-        VirgilCard(
-                const bool confirme, 
-                const std::string& id, 
-                const std::string& createdAt, 
-                const std::string& hash,
-                const virgil::sdk::model::VirgilCardIdentity& identity,
-                const std::vector<PairStrStr>& data,
-                const virgil::sdk::model::PublicKey& publicKey
+        VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt, const std::string& hash,
+                const virgil::sdk::model::IdentityExtended& identityExtended,
+                const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey
         );
 
-        bool isConfirmed() const;
+        bool getConfirme() const;
         std::string getId() const;
         std::string getCreatedAt() const;
         std::string getHash() const;
-        virgil::sdk::model::VirgilCardIdentity getIdentity() const;
-        std::vector<PairStrStr> getData() const;
+        virgil::sdk::model::IdentityExtended getIdentityExtended() const;
+        std::map<std::string, std::string> getData() const;
         virgil::sdk::model::PublicKey getPublicKey() const;
-
-        void setConfirme(const bool confirme);
-        void setId(const std::string& id);
-        void setCreatedAt(const std::string& createdAt);
-        void setHash(const std::string& hash);
-        void setIdentity(const virgil::sdk::model::VirgilCardIdentity& identity);
-        void setData(const std::vector<PairStrStr>& data);
-        void setPublicKey(const virgil::sdk::model::PublicKey& publicKey);
 
     private:
         bool confirme_ = false;
         std::string id_;
         std::string createdAt_;
         std::string hash_;
-        virgil::sdk::model::VirgilCardIdentity identity_;
-        std::vector<PairStrStr> data_;
+        virgil::sdk::model::IdentityExtended identityExtended_;
+        std::map<std::string, std::string> data_;
         virgil::sdk::model::PublicKey publicKey_;
     };
 }}}

@@ -57,7 +57,7 @@ namespace virgil { namespace sdk { namespace client {
         void stash(const std::string& virgilCardId, const Credentials& credentials) override;
 
         virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                const virgil::sdk::model::IdentityToken& identityToken) override;
+                const virgil::sdk::model::ValidationToken& validationToken) override;
 
         void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
                 const Credentials& credentials) override;
@@ -67,8 +67,6 @@ namespace virgil { namespace sdk { namespace client {
         std::string baseServiceUri_;
         virgil::sdk::model::VirgilCard privateKeysServiceCard_;
 
-    private:
-        void verifyResponse(const virgil::sdk::http::Response& response);
     };
 
 }}}

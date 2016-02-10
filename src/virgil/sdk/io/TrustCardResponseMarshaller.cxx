@@ -40,19 +40,15 @@
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/model/TrustCardResponse.h>
 
-#include <virgil/crypto/foundation/VirgilBase64.h>
-
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::model::TrustCardResponse;
 
-using virgil::crypto::foundation::VirgilBase64;
-
 
 namespace virgil { namespace sdk { namespace io {
     /**
-     * @brief Marshaller<IdentityToken> specialization.
+     * @brief Marshaller<ValidationToken> specialization.
      */
     template <>
     class Marshaller<TrustCardResponse> {
@@ -73,14 +69,13 @@ namespace virgil { namespace sdk { namespace io {
         static TrustCardResponse fromJson(const std::string& jsonString) {
             json typeJson = json::parse(jsonString);
 
-            TrustCardResponse trustCardResponse;
-            trustCardResponse.setId( typeJson[JsonKey::id] );
-            trustCardResponse.setId( typeJson[JsonKey::createdAt] );
-            trustCardResponse.setId( typeJson[JsonKey::signerVirgilCardId] );
-            trustCardResponse.setId( typeJson[JsonKey::signedVirgilCardId] );
-            trustCardResponse.setId( typeJson[JsonKey::signedDigest] );
+            std::string id = typeJson[JsonKey::id];
+            std::string createdAt = typeJson[JsonKey::createdAt];
+            std::string signerVirgilCardId = typeJson[JsonKey::signerVirgilCardId];
+            std::string signedVirgilCardId = typeJson[JsonKey::signedVirgilCardId];
+            std::string signedDigest = typeJson[JsonKey::signedDigest];
 
-            return trustCardResponse;
+            return TrustCardResponse(id, createdAt, signerVirgilCardId, signedVirgilCardId, signedDigest);
         }
 
     private:

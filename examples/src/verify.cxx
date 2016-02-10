@@ -58,7 +58,7 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
-        
+
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
 
         vcrypto::VirgilStreamSigner signer;
         std::cout << "Verify data..." << "\n";
-        bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKeyByteArray());
+        bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKeyBytes());
         std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << "\n";
 
     } catch (std::exception& exception) {

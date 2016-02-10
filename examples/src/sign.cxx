@@ -75,8 +75,7 @@ int main(int argc, char **argv) {
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }        
-        vcrypto::VirgilByteArray privateKey;
+        }            vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
@@ -85,7 +84,7 @@ int main(int argc, char **argv) {
         std::cout << "Sign data..." << "\n";
         vcrypto::VirgilByteArray streamSign = streamSigner.sign(
                 dataSource,
-                privateKey, 
+                privateKey,
                 vcrypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Prepare output file: test.txt.sign..." << "\n";

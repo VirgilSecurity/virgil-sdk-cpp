@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
     try {
         std::string userEmail = argv[1];
         std::string publicKeyId = argv[2];
-        std::string validationToken = argv[3];
+        std::string token = argv[3];
         std::string virgilCardId = argv[4];
         std::string pathPrivateKey = argv[5];
 
@@ -81,22 +81,22 @@ int main(int argc, char **argv) {
         virgilHub.loadServicePublicKeys();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::IdentityToken identityToken(identity, validationToken);
+        vsdk::model::ValidationToken validationToken(identity, token);
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..." << "\n";
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }        
+        }
         vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
-        
+
         vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
         std::cout << "Revoke the Public Key" << "\n";
-        virgilHub.publicKeys().revoke(publicKeyId, {identityToken}, virgilCardId, credentials);
+        virgilHub.publicKeys().revoke(publicKeyId, {validationToken}, virgilCardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

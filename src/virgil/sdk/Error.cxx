@@ -61,14 +61,12 @@ static std::string actionStr(Error::Action action) {
         { Error::Action::VIRGIL_CARD_UTRUST, "untrust the Virgil Card." },
         { Error::Action::VIRGIL_CARD_SEARCH, "search a Virgil Card." },
         { Error::Action::VIRGIL_CARD_SEARCH_APP, "search an Application Virgil Card." },
-        { Error::Action::VIRGIL_CARD_SERVICE_GET, "get a Service Virgil Card." },        
-        { Error::Action::VIRGIL_CARD_REVOKE, "revoke a Virgil Card." },
+        { Error::Action::VIRGIL_CARD_SERVICE_GET, "get a Service Virgil Card." },            { Error::Action::VIRGIL_CARD_REVOKE, "revoke a Virgil Card." },
 
         { Error::Action::PRIVATE_KEY_STASH, "load a Private Key into the Private"
                 " Keys Service storage." },
         { Error::Action::PRIVATE_KEY_GET, "get an existing private key." },
-        { Error::Action::PRIVATE_KEY_DESTROY, "destroy a Private Key." },    
-
+        { Error::Action::PRIVATE_KEY_DESTROY, "destroy a Private Key." },
         { Error::Action::IDENTITY_VERIFY, "verify the Identity." },
         { Error::Action::IDENTITY_CONFIRM, "confirms the Identity." },
         { Error::Action::IDENTITY_IS_VALID, "validates the passed token." }

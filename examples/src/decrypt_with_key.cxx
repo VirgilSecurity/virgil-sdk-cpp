@@ -85,17 +85,16 @@ int main(int argc, char **argv) {
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }        
-        vcrypto::VirgilByteArray privateKey;
+        }            vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
         vcrypto::VirgilStreamCipher cipher;
         std::cout << "Decrypt with key..." << "\n";
         cipher.decryptWithKey(
-                dataSource, 
-                dataSink, 
-                vcrypto::str2bytes(virgilCardId), 
+                dataSource,
+                dataSink,
+                vcrypto::str2bytes(virgilCardId),
                 privateKey
         );
 

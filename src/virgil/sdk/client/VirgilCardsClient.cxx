@@ -65,7 +65,7 @@ using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::IdentityToken;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
@@ -85,14 +85,14 @@ void VirgilCardsClient::setServiceVirgilCard(const VirgilCard& publicKeysService
     publicKeysServiceCard_ = publicKeysServiceCard;
 }
 
-VirgilCard VirgilCardsClient::create(const IdentityToken& identityToken, const VirgilByteArray& publicKey,
+VirgilCard VirgilCardsClient::create(const ValidationToken& validationToken, const VirgilByteArray& publicKey,
         const Credentials& credentials) {
     json payload = {
         { JsonKey::publicKey, VirgilBase64::encode(publicKey) },
         { JsonKey::identity, {
-            { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
-            { JsonKey::value, identityToken.getIdentity().getValue() },
-            { JsonKey::validationToken, identityToken.getValidationToken() }
+            { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
+            { JsonKey::value, validationToken.getIdentity().getValue() },
+            { JsonKey::validationToken, validationToken.getToken() }
         }}
     };
 
@@ -189,7 +189,7 @@ std::vector<VirgilCard> VirgilCardsClient::searchApp(const std::string& applicat
     this->verifyResponse(response);
 
     std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( response.body() );
-    
+
     return virgilCards;
 }
 
@@ -237,13 +237,13 @@ VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
     return virgilCard;
 }
 
-void VirgilCardsClient::revoke(const std::string& ownerCardId, const IdentityToken& identityToken,
+void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidationToken& validationToken,
         const Credentials& credentials) {
 
     json payload = {
-        { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
-        { JsonKey::value, identityToken.getIdentity().getValue()  },
-        { JsonKey::validationToken, identityToken.getValidationToken() }
+        { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
+        { JsonKey::value, validationToken.getIdentity().getValue()  },
+        { JsonKey::validationToken, validationToken.getToken() }
     };
 
     Request request = Request()
@@ -274,8 +274,9 @@ Request VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
 
 void VirgilCardsClient::verifyResponse(const virgil::sdk::http::Response& response) {
     bool verifed = virgil::sdk::client::verifyResponse(
-            response, 
-            publicKeysServiceCard_.getPublicKey().getKeyByteArray() );
+            response,
+            publicKeysServiceCard_.getPublicKey().getKeyBytes()
+    );
 
     if ( ! verifed) {
         throw std::runtime_error("VirgilCardsClient: The response verification has failed. Signature doesn't match "

@@ -39,23 +39,18 @@
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::VirgilCardIdentity;
+using virgil::sdk::model::IdentityExtended;
 
 
 VirgilCard::VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
-        const std::string& hash, const VirgilCardIdentity& identity, const std::vector<PairStrStr>& data,
+        const std::string& hash, const IdentityExtended& identityExtended, const std::map<std::string, std::string>& data,
         const PublicKey& publicKey)
-        : confirme_(confirme), 
-        id_(id), 
-        createdAt_(createdAt), 
-        hash_(hash), 
-        identity_(identity),
-        data_(data),
-        publicKey_(publicKey){
+         : confirme_(confirme), id_(id), createdAt_(createdAt), hash_(hash), identityExtended_(identityExtended),
+                data_(data), publicKey_(publicKey){
 
 }
 
-bool VirgilCard::isConfirmed() const {
+bool VirgilCard::getConfirme() const {
     return confirme_;
 }
 
@@ -71,42 +66,14 @@ std::string VirgilCard::getHash() const {
     return hash_;
 }
 
-VirgilCardIdentity VirgilCard::getIdentity() const {
-    return identity_;
+IdentityExtended VirgilCard::getIdentityExtended() const {
+    return identityExtended_;
 }
 
-std::vector<PairStrStr> VirgilCard::getData() const {
+std::map<std::string, std::string> VirgilCard::getData() const {
     return data_;
 }
 
 PublicKey VirgilCard::getPublicKey() const {
     return publicKey_;
-}
-
-void VirgilCard::setConfirme(const bool confirme) {
-    confirme_ = confirme;
-}
-
-void VirgilCard::setId(const std::string& id) {
-    id_ = id;
-}
-
-void VirgilCard::setCreatedAt(const std::string& createdAt) {
-    createdAt_ = createdAt;
-}
-
-void VirgilCard::setHash(const std::string& hash) {
-    hash_ = hash;
-}
-
-void VirgilCard::setIdentity(const VirgilCardIdentity& identity) {
-    identity_ = identity;
-}
-
-void VirgilCard::setData(const std::vector<PairStrStr>& data) {
-    data_ = data;
-}
-
-void VirgilCard::setPublicKey(const PublicKey& publicKey) {
-    publicKey_ = publicKey;
 }

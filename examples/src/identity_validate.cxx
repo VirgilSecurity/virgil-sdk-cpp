@@ -63,22 +63,22 @@ int main(int argc, char **argv) {
 
     try {
         std::string userEmail = argv[1];
-        std::string validationToken = argv[2];
+        std::string token = argv[2];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::IdentityToken identityToken(identity, validationToken);
+        vsdk::model::ValidationToken validationToken(identity, token);
 
-        bool validateToken = virgilHub.identity().isValid(identityToken);
-        std::string identityTokenStr = vsdk::io::Marshaller<vsdk::model::IdentityToken>::toJson<4>(identityToken);
+        bool validateToken = virgilHub.identity().isValid(validationToken);
+        std::string validationTokenStr = vsdk::io::Marshaller<vsdk::model::ValidationToken>::toJson<4>(validationToken);
         if (validateToken) {
             std::cout << "Validation Token is valid!\n";
-            std::cout << identityTokenStr << "\n";
+            std::cout << validationTokenStr << "\n";
         } else {
             std::cout << "Validation Token is NOT valid!\n";
-            std::cout << identityTokenStr << "\n";
+            std::cout << validationTokenStr << "\n";
         }
 
     } catch (std::exception& exception) {

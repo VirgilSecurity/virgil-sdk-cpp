@@ -62,7 +62,8 @@ bool virgil::sdk::client::verifyResponse(const Response& response, const VirgilB
     bool verifed = signer.verify(
             virgil::crypto::str2bytes(responseData), 
             VirgilBase64::decode(responseSign), 
-            publicKey);
+            publicKey
+    );
 
     return verifed;
 }

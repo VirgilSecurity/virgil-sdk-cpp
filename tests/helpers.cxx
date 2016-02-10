@@ -39,34 +39,35 @@
 
 #include "helpers.h"
 
-#include <virgil/sdk/model/VirgilCardIdentity.h>
+#include <virgil/sdk/model/IdentityExtended.h>
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::PrivateKey;
-using virgil::sdk::model::IdentityToken;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::VirgilCardIdentity;
-using virgil::sdk::model::TrustCardResponse; 
-using virgil::sdk::util::JsonKey;   
+using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::util::JsonKey;
 
 using json = nlohmann::json;
 
-using PairStrStr = std::pair<std::string, std::string>;
+
 
 
 namespace virgil { namespace test {
 
       PublicKey getPubKey() {
-            return PublicKey("e33898de-6302-4756-8f0c-5f6c5218e02e", "2015-12-22T07:03:42+0000","HaisUjRlcTY0cipNcUp");
+            return PublicKey("e33898de-6302-4756-8f0c-5f6c5218e02e", "2015-12-22T07:03:42+0000",
+                virgil::crypto::str2bytes("HaisUjRlcTY0cipNcUp"));
         }
 
         json getJsonPubKey() {
             PublicKey publicKey = virgil::test::getPubKey();
             json jsonPublicKey = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyStr() },
+                { JsonKey::publicKey, publicKey.getKey() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
             return jsonPublicKey;
@@ -83,53 +84,53 @@ namespace virgil { namespace test {
                     "K90m28BOpjX2ay9k68WEydV9gDbnqS+o+bnXrbv9"
                     "-----END EC PRIVATE KEY-----";
 
-            return PrivateKey(virgilCardId, privateKeyBase64);
+            return PrivateKey(virgilCardId, virgil::crypto::str2bytes(privateKeyBase64));
         }
 
         json getJsonPrvKey() {
             PrivateKey privateKey = virgil::test::getPrvKey();
             json jsonPrivateKey = {
                 { JsonKey::virgilCardId, privateKey.getVirgilCardId() },
-                { JsonKey::privateKey, privateKey.getKeyStr() }
+                { JsonKey::privateKey, privateKey.getKeyBytes() }
             };
             return jsonPrivateKey;
         }
 
 
-      IdentityToken getIdentityToken() {
+      ValidationToken getToken() {
             Identity identity("user@virgilsecurity.com", IdentityType::Email);
             std::string validationToken = "QwaVl3alF";
 
-            return IdentityToken(identity, validationToken);
+            return ValidationToken(identity, validationToken);
         }
 
-        json getJsonIdentityToken() {
-            IdentityToken identityToken = virgil::test::getIdentityToken();
-            json jsonIdentityToken = {
-                { JsonKey::type, identityToken.getIdentity().getTypeAsString() },
-                { JsonKey::value, identityToken.getIdentity().getValue() },
-                { JsonKey::validationToken, identityToken.getValidationToken() }
+        json getJsonValidationToken() {
+            ValidationToken validationToken = virgil::test::getToken();
+            json jsonValidationToken = {
+                { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
+                { JsonKey::value, validationToken.getIdentity().getValue() },
+                { JsonKey::validationToken, validationToken.getToken() }
             };
 
-            return jsonIdentityToken;
+            return jsonValidationToken;
         }
 
         VirgilCard getVirgilCard() {
             std::string hash =
                     "hash";
 
-            VirgilCardIdentity virgilCardIdentity(true, "607bc05d-3810-4e60-9ccd-0d0c4842350b",
+            IdentityExtended identityExtended(true, "607bc05d-3810-4e60-9ccd-0d0c4842350b",
                     "2015-12-22T07:03:42+0000",
                     Identity("username@virgilsecurity.com", IdentityType::Email));
 
-            std::vector<PairStrStr> customData;
-            customData.push_back(std::make_pair("parameter1", "value1"));
-            customData.push_back(std::make_pair("parameter2", "value2"));
+            std::map<std::string, std::string> customData;
+            customData["parameter1"] = "value1";
+            customData["parameter2"] = "value2";
 
             PublicKey publicKey = virgil::test::getPubKey();
 
             return VirgilCard(true, "d4de27e5-361d-4b50-a40a-91de41727e22", "2015-12-22T07:03:42+0000", hash,
-                    virgilCardIdentity, customData, publicKey);
+                    identityExtended, customData, publicKey);
         }
 
         json getJsonVirgilCard() {
@@ -137,28 +138,28 @@ namespace virgil { namespace test {
             json jsonVirgilCard = {
                 { JsonKey::id, virgilCard.getId() },
                 { JsonKey::createdAt, virgilCard.getCreatedAt() },
-                { JsonKey::isConfirmed, virgilCard.isConfirmed() },
+                { JsonKey::isConfirmed, virgilCard.getConfirme() },
                 { JsonKey::hash, virgilCard.getHash() },
             };
 
             PublicKey publicKey = virgilCard.getPublicKey();
             jsonVirgilCard[JsonKey::publicKey] = {
                 { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKeyStr() },
+                { JsonKey::publicKey, publicKey.getKey() },
                 { JsonKey::createdAt, publicKey.getCreatedAt() }
             };
 
-            VirgilCardIdentity virgilCardIdentity = virgilCard.getIdentity();
-            Identity identity = virgilCardIdentity.getIdentity();
+            IdentityExtended identityExtended = virgilCard.getIdentityExtended();
+            Identity identity = identityExtended.getIdentity();
             jsonVirgilCard[JsonKey::identity] = {
-                { JsonKey::id, virgilCardIdentity.getId() },
+                { JsonKey::id, identityExtended.getId() },
                 { JsonKey::type, identity.getTypeAsString() },
                 { JsonKey::value, identity.getValue() },
-                { JsonKey::isConfirmed, virgilCardIdentity.isConfirmed() },
-                { JsonKey::createdAt, virgilCardIdentity.getCreatedAt() }
+                { JsonKey::isConfirmed, identityExtended.getConfirme() },
+                { JsonKey::createdAt, identityExtended.getCreatedAt() }
             };
 
-            std::vector<PairStrStr> customData = virgilCard.getData();
+            std::map<std::string, std::string> customData = virgilCard.getData();
             json jsonCustomData;
             for(const auto& i: customData) {
                 jsonCustomData[i.first] = i.second;
@@ -180,7 +181,7 @@ namespace virgil { namespace test {
             json getResponse;
             getResponse[JsonKey::id] = publicKey.getId();
             getResponse[JsonKey::createdAt] = publicKey.getCreatedAt();
-            getResponse[JsonKey::publicKey] = publicKey.getKeyStr();
+            getResponse[JsonKey::publicKey] = publicKey.getKey();
 
             json jsonVirgilCard1 = virgil::test::getJsonVirgilCard();
             json jsonVirgilCard2 = virgil::test::getJsonVirgilCard();

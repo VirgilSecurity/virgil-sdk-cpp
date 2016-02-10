@@ -38,7 +38,7 @@
 #define VIRGIL_SDK_MODEL_TRUST_CARD_RESPONSE_H
 
 #include <string>
- 
+
 
 namespace virgil { namespace sdk { namespace model {
     /**
@@ -47,26 +47,14 @@ namespace virgil { namespace sdk { namespace model {
     class TrustCardResponse {
     public:
         TrustCardResponse() = default;
-
-        TrustCardResponse(
-                const std::string& id,
-                const std::string& createdAt,
-                const std::string& signerVirgilCardId,
-                const std::string& signedVirgilCardId,
-                const std::string& signedDigest
-        );
+        TrustCardResponse(const std::string& id, const std::string& createdAt, const std::string& signerVirgilCardId,
+                const std::string& signedVirgilCardId, const std::string& signedDigest);
 
         std::string getId() const;
         std::string getCreatedAt() const;
         std::string getSignerVirgilCardId() const;
         std::string getSignedVirgilCardId() const;
         std::string getSignedDigest() const;
-
-        void setId(const std::string& id);
-        void setCreatedAt(const std::string& createdAt);
-        void setSignerVirgilCardId(const std::string& signerVirgilCardId);
-        void setSignedVirgilCardId(const std::string& signedVirgilCardId);
-        void setSignedDigest(const std::string& signedDigest);
 
     private:
         std::string id_;

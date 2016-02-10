@@ -38,7 +38,7 @@
 #define VIRGIL_SDK_MODEL_IDENTITY_TOKEN_H
 
 #include <string>
- 
+
 #include <virgil/sdk/model/Identity.h>
 
 
@@ -46,23 +46,17 @@ namespace virgil { namespace sdk { namespace model {
     /**
      * @brief
      */
-    class IdentityToken {
+    class ValidationToken {
     public:
-        IdentityToken() = default;
-
-        explicit IdentityToken(const virgil::sdk::model::Identity& identity);
-
-        IdentityToken(const virgil::sdk::model::Identity& identity, const std::string& validationToken);
+        ValidationToken() = default;
+        ValidationToken(const virgil::sdk::model::Identity& identity, const std::string& token);
 
         virgil::sdk::model::Identity getIdentity() const;
-        std::string getValidationToken() const;
-
-        void setIdentity(const virgil::sdk::model::Identity& identity);
-        void setValidationToken(const std::string& validationToken);
+        std::string getToken() const;
 
     private:
         virgil::sdk::model::Identity identity_;
-        std::string validationToken_;
+        std::string token_;
     };
 }}}
 

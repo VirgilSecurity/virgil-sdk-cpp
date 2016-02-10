@@ -57,12 +57,12 @@ namespace virgil { namespace sdk { namespace client {
 
         std::string verify(const virgil::sdk::model::Identity& identity) override;
 
-        virgil::sdk::model::IdentityToken confirm(const std::string& actionId,
+        virgil::sdk::model::ValidationToken confirm(const std::string& actionId,
                 const std::string& confirmationCode, const int timeToLive = 3600, const int countToLive = 1) override;
 
         bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validationToken) override;
 
-        bool isValid(const virgil::sdk::model::IdentityToken& identityToken) override;
+        bool isValid(const virgil::sdk::model::ValidationToken& validationToken) override;
 
 
     private:
@@ -71,17 +71,6 @@ namespace virgil { namespace sdk { namespace client {
         virgil::sdk::model::VirgilCard identityServiceCard_;
 
     private:
-
-        virgil::sdk::http::Request verifyRequest(const virgil::sdk::model::Identity& identity);
-
-        virgil::sdk::http::Request confirmRequest(const std::string& actionId,
-                const std::string& confirmationCode, const int timeToLive = 3600, const int countToLive = 12);
-
-        virgil::sdk::http::Request isValidRequest(const virgil::sdk::model::Identity& identity, 
-                const std::string& validationToken);
-
-
-
         void verifyResponse(const virgil::sdk::http::Response& response);
     };
 

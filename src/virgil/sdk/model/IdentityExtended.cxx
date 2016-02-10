@@ -34,41 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
-#define VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
-
-#include <string>
- 
+#include <virgil/sdk/model/IdentityExtended.h>
 #include <virgil/sdk/model/Identity.h>
 
+using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::Identity;
 
-namespace virgil { namespace sdk { namespace model {
-    /**
-     * @brief
-     */
-    class VirgilCardIdentity {
-    public:
-        VirgilCardIdentity() = default;
 
-        VirgilCardIdentity(const bool confirme, const std::string& id, 
-                const std::string& createdAt, const Identity& identity);
+IdentityExtended::IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
+    const Identity& identity) : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
 
-        bool isConfirmed() const;
-        std::string getId() const;
-        std::string getCreatedAt() const;
-        Identity getIdentity() const; 
+}
 
-        void setConfirme(const bool confirme);
-        void setId(const std::string& id);
-        void setCreatedAt(const std::string& createdAt);
-        void setIdentity(const Identity& identity);
+bool IdentityExtended::getConfirme() const {
+    return confirme_;
+}
 
-    private:
-        bool confirme_ = false;
-        std::string id_;
-        std::string createdAt_;
-        Identity identity_;
-    };
-}}}
+std::string IdentityExtended::getId() const {
+    return id_;
+}
 
-#endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H */
+std::string IdentityExtended::getCreatedAt() const {
+    return createdAt_;
+}
+
+Identity IdentityExtended::getIdentity() const {
+    return identity_;
+}

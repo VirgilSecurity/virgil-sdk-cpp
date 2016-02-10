@@ -68,7 +68,7 @@ using virgil::sdk::endpoints::PrivateKeysEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::IdentityToken;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::PrivateKey;
@@ -93,7 +93,7 @@ void PrivateKeysClient::setServiceVirgilCard(const VirgilCard& privateKeysServic
 
 void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials& credentials) {
     json payload = {
-        { JsonKey::privateKey, virgil::crypto::bytes2str( credentials.privateKey() ) },
+        { JsonKey::privateKey, VirgilBase64::encode( credentials.privateKey() ) },
         { JsonKey::virgilCardId, virgilCardId }
     };
 
@@ -104,55 +104,61 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials
             .body( payload.dump() );
 
     ClientConnection connection(accessToken_);
-    Request signRequest = connection.signRequest(credentials, request);
+    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
 
-    std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, signRequest.body());
+    std::string encryptJsonBody = connection.encryptJsonBody(
+            privateKeysServiceCard_,
+            payload.dump()
+    );
+
     signRequest.body(encryptJsonBody);
-
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_STASH);
-    this->verifyResponse(response);
 }
 
-PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const IdentityToken& identityToken) {
-    Identity identity = identityToken.getIdentity();
+PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const ValidationToken& validationToken) {
+    Identity identity = validationToken.getIdentity();
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
-    if(responsePassword.size() > 32) {
-        while(responsePassword.size() > 32) {
-            responsePassword.pop_back();
-        }
+    while(responsePassword.size() > 31) {
+        responsePassword.pop_back();
     }
 
     json payload = {
         { JsonKey::identity, {
             { JsonKey::type, identity.getTypeAsString() },
             { JsonKey::value, identity.getValue() },
-            { JsonKey::validationToken, identityToken.getValidationToken() }
+            { JsonKey::validationToken, validationToken.getToken() }
         }},
         { JsonKey::responsePassword, responsePassword },
         { JsonKey::virgilCardId, virgilCardId }
     };
 
+    ClientConnection connection(accessToken_);
+    std::string encryptedRequestJsonBody = connection.encryptJsonBody(
+            privateKeysServiceCard_,
+            payload.dump()
+    );
+
     Request request = Request()
             .post()
             .baseAddress(baseServiceUri_)
             .endpoint( PrivateKeysEndpointUri::privateKeyGet() )
-            .body( payload.dump() );
+            .body(encryptedRequestJsonBody);
 
-    ClientConnection connection(accessToken_);
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_GET);
-    this->verifyResponse(response);
 
     VirgilCipher cipher;
     VirgilByteArray decryptResponseBody = cipher.decryptWithPassword(
-            virgil::crypto::str2bytes( response.body() ),
-            virgil::crypto::str2bytes( responsePassword) );
+            VirgilBase64::decode( response.body() ),
+            virgil::crypto::str2bytes(responsePassword)
+    );
 
     PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(
-            VirgilBase64::encode(decryptResponseBody)
+            virgil::crypto::bytes2str( decryptResponseBody )
     );
+
     return privateKey;
 }
 
@@ -175,16 +181,4 @@ void PrivateKeysClient::destroy(const std::string& virgilCardId, const VirgilByt
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_DESTROY);
-    this->verifyResponse(response);
-}
-
-void PrivateKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(
-            response, 
-            privateKeysServiceCard_.getPublicKey().getKeyByteArray() );
-
-    if ( ! verifed) {
-        throw std::runtime_error("PrivateKeysClient: The response verification has failed. Signature doesn't match "
-                                 "PrivateKeyService public key.");
-    }
 }

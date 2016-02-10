@@ -34,20 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/crypto/foundation/VirgilBase64.h>
-
 #include <virgil/sdk/model/PublicKey.h>
+
+using virgil::crypto::VirgilByteArray;
 
 using virgil::sdk::model::PublicKey;
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::foundation::VirgilBase64;
-
-
-PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const std::string& key)
-     : id_(id), createdAt_(createdAt), key_( virgil::crypto::str2bytes(key) ) {
-
-}
 
 PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
      : id_(id), createdAt_(createdAt), key_(key) {
@@ -58,30 +50,14 @@ std::string PublicKey::getId() const {
     return id_;
 }
 
-std::string PublicKey::getKeyStr() const {
-    return virgil::crypto::bytes2str(key_);
-}
-
-VirgilByteArray PublicKey::getKeyByteArray() const {
-    return key_;
-}
-
 std::string PublicKey::getCreatedAt() const {
     return createdAt_;
 }
 
-void PublicKey::setId(const std::string& id) {
-    id_ = id;
+std::string PublicKey::getKey() const {
+    return virgil::crypto::bytes2str(key_);
 }
 
-void PublicKey::setCreatedAt(const std::string& createdAt) {
-    createdAt_ = createdAt;
-}
-
-void PublicKey::setKeyStr(const std::string& key) {
-    key_ = virgil::crypto::str2bytes(key);
-}
-
-void PublicKey::setKeyByteArray(const VirgilByteArray& key) {
-    key_ = key;
+VirgilByteArray PublicKey::getKeyBytes() const {
+    return key_;
 }

@@ -66,17 +66,19 @@ int main(int argc, char **argv) {
     try {
         std::string userEmail = argv[1];
         std::string virgilCardId = argv[2];
-        std::string validationToken = argv[3];
+        std::string token = argv[3];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::IdentityToken identityToken(identity, validationToken);
+        vsdk::model::ValidationToken validationToken(identity, token);
 
         std::cout << "Get a Private Key" << "\n";
-        vsdk::model::PrivateKey privateKey = virgilHub.privateKeys().get(virgilCardId, identityToken);
-        std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson(privateKey);
+        vsdk::model::PrivateKey privateKey = virgilHub.privateKeys().get(virgilCardId, validationToken);
+        std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson<4>(privateKey);
+
+        std::cout << "Private Key:" << "\n";
         std::cout << privateKeyStr << "\n";
 
     } catch (std::exception& exception) {

@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }       
+        }
         vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
@@ -89,7 +89,8 @@ int main(int argc, char **argv) {
         vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
         std::cout << "Get Virgil Cards" << "\n";
-        std::vector<vsdk::model::VirgilCard> virgilCards = virgilHub.cards().get(publicKeyId, virgilCardId, credentials);
+        std::vector<vsdk::model::VirgilCard> virgilCards = virgilHub.cards().get(publicKeyId, virgilCardId,
+                credentials);
         std::string virgilCardsStr = vsdk::io::toJsonVirgilCards(virgilCards, 4);
         std::cout << "Virgil Cards:" << "\n";
         std::cout << virgilCardsStr << "\n";

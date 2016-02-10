@@ -34,35 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/IdentityToken.h>
+#ifndef VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
+#define VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
 
-using virgil::sdk::model::IdentityToken;
-using virgil::sdk::model::Identity;
+#include <string>
 
-using virgil::sdk::model::IdentityType;
+#include <virgil/sdk/model/Identity.h>
 
 
-IdentityToken::IdentityToken(const Identity& identity) : identity_(identity) {
+namespace virgil { namespace sdk { namespace model {
+    /**
+     * @brief
+     */
+    class IdentityExtended {
+    public:
+        IdentityExtended() = default;
+        IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
+                const Identity& identity);
 
-}
+        bool getConfirme() const;
+        std::string getId() const;
+        std::string getCreatedAt() const;
+        Identity getIdentity() const;
 
-IdentityToken::IdentityToken(const Identity& identity, const std::string& validationToken)
-    : identity_(identity), validationToken_(validationToken) {
+    private:
+        bool confirme_ = false;
+        std::string id_;
+        std::string createdAt_;
+        Identity identity_;
+    };
+}}}
 
-}
-
-Identity IdentityToken::getIdentity() const {
-    return identity_;
-}
-
-std::string IdentityToken::getValidationToken() const {
-    return validationToken_;
-}
-
-void IdentityToken::setIdentity(const Identity& identity) {
-    identity_ = identity;
-}
-
-void IdentityToken::setValidationToken(const std::string& validationToken) {
-    validationToken_ = validationToken;
-}
+#endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H */

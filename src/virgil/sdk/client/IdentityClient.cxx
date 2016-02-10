@@ -39,6 +39,8 @@
 
 #include <json.hpp>
 
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/IdentityClient.h>
@@ -54,6 +56,7 @@
 using json = nlohmann::json;
 
 using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Error;
 using virgil::sdk::client::IdentityClient;
@@ -63,7 +66,7 @@ using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::IdentityToken;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::util::JsonKey;
@@ -71,8 +74,7 @@ using virgil::sdk::util::uuid;
 
 
 IdentityClient::IdentityClient(const std::string& accessToken, const std::string& baseServiceUri)
-        : accessToken_(accessToken),
-          baseServiceUri_(baseServiceUri) {
+        : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
 
 }
 
@@ -86,48 +88,6 @@ void IdentityClient::setServiceVirgilCard(const VirgilCard& identityServiceCard)
 
 
 std::string IdentityClient::verify(const Identity& identity) {
-    Request request = this->verifyRequest(identity);
-    ClientConnection connection(accessToken_);
-    Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::IDENTITY_VERIFY);
-    this->verifyResponse(response);
-
-    json jsonResponse = json::parse(response.body());
-    std::string actionId = jsonResponse[JsonKey::actionId];
-    return actionId;
-}
-
-IdentityToken IdentityClient::confirm(const std::string& actionId, const std::string& confirmationCode,
-        const int timeToLive, const int countToLive) {
-
-    Request request = this->confirmRequest(actionId, confirmationCode, timeToLive, countToLive);
-    ClientConnection connection(accessToken_);
-    Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
-    this->verifyResponse(response);
-
-    IdentityToken identityToken = Marshaller<IdentityToken>::fromJson( response.body() );
-    return identityToken;
-}
-
-bool IdentityClient::isValid(const Identity& identity, const std::string& validationToken) {
-    Request request = this->isValidRequest(identity, validationToken);
-    ClientConnection connection(accessToken_);
-    Response response = connection.send(request);
-
-    // if false throwing exeption
-    connection.checkResponseError(response, Error::Action::IDENTITY_IS_VALID);
-    this->verifyResponse(response);
-
-    return true;
-}
-
-bool IdentityClient::isValid(const virgil::sdk::model::IdentityToken& identityToken) {
-    return bool( this->isValid(identityToken.getIdentity(), identityToken.getValidationToken()) );
-}
-
-
-Request IdentityClient::verifyRequest(const Identity& identity) {
     json payload = {
         { JsonKey::type, identity.getTypeAsString() },
         { JsonKey::value, identity.getValue() }
@@ -139,11 +99,19 @@ Request IdentityClient::verifyRequest(const Identity& identity) {
             .endpoint( IdentityEndpointUri::verify() )
             .body( payload.dump() );
 
-    return request;
+
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::IDENTITY_VERIFY);
+    this->verifyResponse(response);
+
+    json jsonResponse = json::parse(response.body());
+    std::string actionId = jsonResponse[JsonKey::actionId];
+    return actionId;
 }
 
-Request IdentityClient::confirmRequest(const std::string& actionId,
-        const std::string& confirmationCode, const int timeToLive, const int countToLive) {
+ValidationToken IdentityClient::confirm(const std::string& actionId, const std::string& confirmationCode,
+        const int timeToLive, const int countToLive) {
     json payload = {
         { JsonKey::confirmationCode, confirmationCode },
         { JsonKey::actionId, actionId },
@@ -159,10 +127,16 @@ Request IdentityClient::confirmRequest(const std::string& actionId,
             .endpoint( IdentityEndpointUri::confirm() )
             .body( payload.dump() );
 
-    return request;
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
+    this->verifyResponse(response);
+
+    ValidationToken validationToken = Marshaller<ValidationToken>::fromJson( response.body() );
+    return validationToken;
 }
 
-Request IdentityClient::isValidRequest(const Identity& identity, const std::string& validationToken) {
+bool IdentityClient::isValid(const Identity& identity, const std::string& validationToken) {
     json payload = {
         { JsonKey::type, identity.getTypeAsString() },
         { JsonKey::value, identity.getValue() },
@@ -175,13 +149,25 @@ Request IdentityClient::isValidRequest(const Identity& identity, const std::stri
             .endpoint( IdentityEndpointUri::validate() )
             .body( payload.dump() );
 
-    return request;
+    ClientConnection connection(accessToken_);
+    Response response = connection.send(request);
+
+    // if false throwing exeption
+    connection.checkResponseError(response, Error::Action::IDENTITY_IS_VALID);
+    this->verifyResponse(response);
+
+    return true;
+}
+
+bool IdentityClient::isValid(const virgil::sdk::model::ValidationToken& validationToken) {
+    return bool( this->isValid(validationToken.getIdentity(), validationToken.getToken()) );
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
     bool verifed = virgil::sdk::client::verifyResponse(
-            response, 
-            identityServiceCard_.getPublicKey().getKeyByteArray() );
+            response,
+            identityServiceCard_.getPublicKey().getKeyBytes()
+    );
 
     if ( ! verifed) {
         throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "

@@ -34,46 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/VirgilCardIdentity.h>
-#include <virgil/sdk/model/Identity.h>
+#include <virgil/sdk/model/ValidationToken.h>
 
-using virgil::sdk::model::VirgilCardIdentity;
+using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
+using virgil::sdk::model::IdentityType;
 
 
-VirgilCardIdentity::VirgilCardIdentity(const bool confirme, const std::string& id, const std::string& createdAt,
-    const Identity& identity) : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
+ValidationToken::ValidationToken(const Identity& identity, const std::string& token)
+    : identity_(identity), token_(token) {
 
 }
 
-bool VirgilCardIdentity::isConfirmed() const {
-    return confirme_;
-}
-
-std::string VirgilCardIdentity::getId() const {
-    return id_;
-}
-
-std::string VirgilCardIdentity::getCreatedAt() const {
-    return createdAt_;
-}
-
-Identity VirgilCardIdentity::getIdentity() const {
+Identity ValidationToken::getIdentity() const {
     return identity_;
 }
 
-void VirgilCardIdentity::setConfirme(const bool confirme) {
-    confirme_ = confirme;
-}
-
-void VirgilCardIdentity::setId(const std::string& id) {
-    id_ = id;
-}
-
-void VirgilCardIdentity::setCreatedAt(const std::string& createdAt) {
-    createdAt_ = createdAt;
-}
-
-void VirgilCardIdentity::setIdentity(const Identity& identity) {
-    identity_ = identity;
+std::string ValidationToken::getToken() const {
+    return token_;
 }

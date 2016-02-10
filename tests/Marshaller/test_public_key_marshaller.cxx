@@ -59,7 +59,7 @@ TEST_CASE("PublicKey -> Json PublicKey - FAILED", "class Marshaller") {
 
     json trueJsonPublicKey = {
         { JsonKey::id, publicKey.getId() },
-        { JsonKey::publicKey, publicKey.getKeyStr() },
+        { JsonKey::publicKey, publicKey.getKey() },
         { JsonKey::createdAt, publicKey.getCreatedAt() }
     };
 
@@ -78,5 +78,5 @@ TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
 
     REQUIRE( truePublicKey.getId() == testPublicKey.getId() );
     REQUIRE( truePublicKey.getCreatedAt() == testPublicKey.getCreatedAt() );
-    REQUIRE( truePublicKey.getKeyStr() == testPublicKey.getKeyStr() );
+    REQUIRE( truePublicKey.getKey() == testPublicKey.getKey() );
 }

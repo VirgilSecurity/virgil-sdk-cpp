@@ -40,7 +40,7 @@
 
 #include <virgil/sdk/VirgilHub.h>
 #include <virgil/sdk/VirgilUri.h>
-#include <virgil/sdk/io/Marshaller.h> 
+#include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -67,10 +67,15 @@ int main(int argc, char **argv) {
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
-        vsdk::model::IdentityToken identityToken = virgilHub.identity().confirm(actionId, confirmationCode);
+        vsdk::model::ValidationToken validationToken = virgilHub.identity().confirm(
+                actionId,
+                confirmationCode,
+                3600,
+                100
+        );
 
-        std::string identityTokenStr = vsdk::io::Marshaller<vsdk::model::IdentityToken>::toJson<4>(identityToken);
-        std::cout << "IdentityToken:\n" << identityTokenStr << "\n";
+        std::string validationTokenStr = vsdk::io::Marshaller<vsdk::model::ValidationToken>::toJson<4>(validationToken);
+        std::cout << "ValidationToken:\n" << validationTokenStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

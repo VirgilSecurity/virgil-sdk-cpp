@@ -73,13 +73,13 @@ int main(int argc, char **argv) {
         std::string userEmail = argv[1];
         std::string pathPublicKey = argv[2];
         std::string pathPrivateKey = argv[3];
-        std::string validationToken = argv[4];
+        std::string token = argv[4];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::IdentityToken identityToken(identity, validationToken);
+        vsdk::model::ValidationToken validationToken(identity, token);
 
         std::cout << "Prepare public key file: " << pathPublicKey << "\n";
         std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }        
+        }
         vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
@@ -104,9 +104,9 @@ int main(int argc, char **argv) {
         vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
 
         std::cout << "Create a Virgil Card" << "\n";
-        vsdk::model::VirgilCard virgilCard = virgilHub.cards().create(identityToken, publicKey, credentials);
+        vsdk::model::VirgilCard virgilCard = virgilHub.cards().create(validationToken, publicKey, credentials);
         std::string virgilCardStr = vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(virgilCard);
-        
+
         std::cout << "Virgil Card:\n";
         std::cout << virgilCardStr << "\n";
 

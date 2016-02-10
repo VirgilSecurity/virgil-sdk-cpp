@@ -39,7 +39,7 @@
 
 #include <virgil/sdk/client/VirgilCardsClientBase.h>
 #include <virgil/sdk/http/Response.h>
-#include <virgil/sdk/http/Request.h> 
+#include <virgil/sdk/http/Request.h>
 
 
 namespace virgil { namespace sdk { namespace client {
@@ -55,12 +55,12 @@ namespace virgil { namespace sdk { namespace client {
         void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
 
 
-        virgil::sdk::model::VirgilCard create(const virgil::sdk::model::IdentityToken& identityToken,
+        virgil::sdk::model::VirgilCard create(const virgil::sdk::model::ValidationToken& validationToken,
                 const virgil::crypto::VirgilByteArray& publicKey,
                 const virgil::sdk::Credentials& credentials) override;
 
-        virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId, 
-                const std::string& trustedCardHash, const std::string& ownerCardId, 
+        virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
+                const std::string& trustedCardHash, const std::string& ownerCardId,
                 const Credentials& credentials) override;
 
         void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
@@ -77,7 +77,7 @@ namespace virgil { namespace sdk { namespace client {
         std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) override;
 
         void revoke(const std::string& ownerCardId,
-                const virgil::sdk::model::IdentityToken& identityToken,
+                const virgil::sdk::model::ValidationToken& validationToken,
                 const virgil::sdk::Credentials& credentials) override;
 
 

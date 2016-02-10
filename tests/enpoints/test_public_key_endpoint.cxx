@@ -56,8 +56,7 @@ TEST_CASE("std::string publicKeyGet(const std::string& publicKeyId) const", "cla
 }
 
 TEST_CASE("std::string publicKeyRevoke(const std::string& publicKeyId) const", "class PublicKeysEndpointUri") {
-    std::string publicKeyId = "456";    
-    REQUIRE(
+    std::string publicKeyId = "456";    REQUIRE(
         PublicKeysEndpointUri::publicKeyRevoke(publicKeyId) == "/v3/public-key/" + publicKeyId);
 }
 

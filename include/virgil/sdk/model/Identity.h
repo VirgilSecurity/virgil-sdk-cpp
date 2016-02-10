@@ -38,7 +38,7 @@
 #define VIRGIL_SDK_MODEL_IDENTITY_H
 
 #include <string>
- 
+
 
 namespace virgil { namespace sdk { namespace model {
     /**
@@ -60,18 +60,15 @@ namespace virgil { namespace sdk { namespace model {
     class Identity {
     public:
         Identity() = default;
-
         Identity(const std::string& value, const virgil::sdk::model::IdentityType& type);
 
+        std::string getValue() const;
         virgil::sdk::model::IdentityType getType() const;
-
         std::string getTypeAsString() const;
 
-        std::string getValue() const;
-
     private:
-        std::string value_ = "";
-        virgil::sdk::model::IdentityType type_ = virgil::sdk::model::IdentityType::None;
+        std::string value_;
+        IdentityType type_ = IdentityType::None;
     };
 }}}
 
