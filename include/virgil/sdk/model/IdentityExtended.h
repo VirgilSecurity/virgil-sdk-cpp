@@ -53,9 +53,9 @@ namespace virgil { namespace sdk { namespace model {
                 const Identity& identity);
 
         bool getConfirme() const;
-        std::string getId() const;
-        std::string getCreatedAt() const;
-        Identity getIdentity() const;
+        const std::string& getId() const;
+        const std::string& getCreatedAt() const;
+        const Identity& getIdentity() const;
 
     private:
         bool confirme_ = false;
@@ -63,6 +63,23 @@ namespace virgil { namespace sdk { namespace model {
         std::string createdAt_;
         Identity identity_;
     };
+
+    inline bool operator==(const IdentityExtended& left, const IdentityExtended& right) {
+        if (left.getConfirme() == right.getConfirme()   &&
+            left.getId() == right.getId()               &&
+            left.getCreatedAt() == right.getCreatedAt() &&
+            left.getIdentity() == right.getIdentity()) {
+                return 1;
+        }
+
+        return 0;
+    }
+
+    inline bool operator!=(const IdentityExtended& left, const IdentityExtended& right) {
+        return !(left == right);
+    }
+
+
 }}}
 
 #endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H */

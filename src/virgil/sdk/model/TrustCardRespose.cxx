@@ -46,22 +46,22 @@ TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& c
 
 }
 
-std::string TrustCardResponse::getId() const {
+ const std::string& TrustCardResponse::getId() const {
     return id_;
 }
 
-std::string TrustCardResponse::getCreatedAt() const {
+ const std::string& TrustCardResponse::getCreatedAt() const {
     return createdAt_;
 }
 
-std::string TrustCardResponse::getSignerVirgilCardId() const {
+ const std::string& TrustCardResponse::getSignerVirgilCardId() const {
     return signerVirgilCardId_;
 }
 
-std::string TrustCardResponse::getSignedVirgilCardId() const {
+ const std::string& TrustCardResponse::getSignedVirgilCardId() const {
     return signedVirgilCardId_;
 }
 
-std::string TrustCardResponse::getSignedDigest() const {
+ const std::string& TrustCardResponse::getSignedDigest() const {
     return signedDigest_;
 }

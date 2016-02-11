@@ -62,14 +62,30 @@ namespace virgil { namespace sdk { namespace model {
         Identity() = default;
         Identity(const std::string& value, const virgil::sdk::model::IdentityType& type);
 
-        std::string getValue() const;
-        virgil::sdk::model::IdentityType getType() const;
+        const std::string& getValue() const;
+        const virgil::sdk::model::IdentityType& getType() const;
+
         std::string getTypeAsString() const;
 
     private:
         std::string value_;
         IdentityType type_ = IdentityType::None;
     };
+
+
+    inline bool operator==(const Identity& left, const Identity& right) {
+        if (left.getValue() == right.getValue() &&
+            left.getType() == right.getType()) {
+                return 1;
+        }
+
+        return 0;
+    }
+
+    inline bool operator!=(const Identity& left, const Identity& right) {
+        return !(left == right);
+    }
+
 }}}
 
 #endif /* VIRGIL_SDK_MODEL_IDENTITY_H */

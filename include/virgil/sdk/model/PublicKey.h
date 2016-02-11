@@ -51,16 +51,31 @@ namespace virgil { namespace sdk { namespace model {
         PublicKey() = default;
         PublicKey(const std::string& id, const std::string& createdAt, const virgil::crypto::VirgilByteArray& key);
 
-        std::string getId() const;
-        std::string getCreatedAt() const;
+        const std::string& getId() const;
+        const std::string& getCreatedAt() const;
+        const virgil::crypto::VirgilByteArray& getKeyBytes() const;
+
         std::string getKey() const;
-        virgil::crypto::VirgilByteArray getKeyBytes() const;
 
     private:
         std::string id_;
         std::string createdAt_;
         virgil::crypto::VirgilByteArray key_;
     };
+
+    inline bool operator==(const PublicKey& left, const PublicKey& right) {
+        if (left.getId() == right.getId()               &&
+            left.getCreatedAt() == right.getCreatedAt() &&
+            left.getKeyBytes() == right.getKeyBytes()) {
+                return 1;
+        }
+        return 0;
+    }
+
+    inline bool operator!=(const PublicKey& left, const PublicKey& right) {
+        return !(left == right);
+    }
+
 }}}
 
 #endif /* VIRGIL_SDK_MODEL_PUBLIC_KEY_H */

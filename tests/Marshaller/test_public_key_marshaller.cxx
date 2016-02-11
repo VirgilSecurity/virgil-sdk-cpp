@@ -39,15 +39,20 @@
  * @brief Convert json <-> PublicKey.
  */
 
+#include <iostream>
 #include <string>
 
 #include "../catch.hpp"
 
-#include "../helpers.h"
+#include <virgil/crypto/foundation/VirgilBase64.h>
 
 #include <virgil/sdk/io/Marshaller.h>
 
+#include "../helpers.h"
+
 using json = nlohmann::json;
+
+using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::util::JsonKey;
@@ -55,28 +60,23 @@ using virgil::sdk::io::Marshaller;
 
 
 TEST_CASE("PublicKey -> Json PublicKey - FAILED", "class Marshaller") {
-    PublicKey publicKey = virgil::test::getPubKey();
-
-    json trueJsonPublicKey = {
-        { JsonKey::id, publicKey.getId() },
-        { JsonKey::publicKey, publicKey.getKey() },
-        { JsonKey::createdAt, publicKey.getCreatedAt() }
-    };
-
-    // Identity -> Json
+    PublicKey publicKey = virgil::test::getPublicKey();
+    // PublicKey -> Json
     std::string testJsonPublicKey = Marshaller<PublicKey>::toJson<4>(publicKey);
 
-    REQUIRE( trueJsonPublicKey.dump(4) == testJsonPublicKey );
+    REQUIRE( virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey );
 }
 
 TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
-    json jsonPublicKey = virgil::test::getJsonPubKey();
-
+    json jsonPublicKey = virgil::test::getJsonPublicKey();
     // Json -> PublicKey
     PublicKey testPublicKey = Marshaller<PublicKey>::fromJson(jsonPublicKey.dump());
-    PublicKey truePublicKey = virgil::test::getPubKey();
 
-    REQUIRE( truePublicKey.getId() == testPublicKey.getId() );
-    REQUIRE( truePublicKey.getCreatedAt() == testPublicKey.getCreatedAt() );
-    REQUIRE( truePublicKey.getKey() == testPublicKey.getKey() );
+    // Beutiful!!!
+    //std::cout << testPublicKey.getKey() << "\n\n";
+
+    // Real world (*
+    //std::cout << VirgilBase64::encode( testPublicKey.getKeyBytes() )<< "\n\n";
+
+    REQUIRE( virgil::test::getPublicKey() == testPublicKey );
 }

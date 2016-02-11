@@ -46,10 +46,10 @@ ValidationToken::ValidationToken(const Identity& identity, const std::string& to
 
 }
 
-Identity ValidationToken::getIdentity() const {
+const Identity& ValidationToken::getIdentity() const {
     return identity_;
 }
 
-std::string ValidationToken::getToken() const {
+const std::string& ValidationToken::getToken() const {
     return token_;
 }

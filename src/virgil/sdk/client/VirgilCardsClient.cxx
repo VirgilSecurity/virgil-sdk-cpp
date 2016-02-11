@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #include <iostream>
 #include <json.hpp>
 
@@ -157,7 +158,7 @@ void VirgilCardsClient::untrust(const std::string& trustedCardId, const std::str
 }
 
 std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity,
-        const bool includeUnconfirmed, const std::vector<std::string>& relations) {
+        const std::vector<std::string>& relations, const bool includeUnconfirmed) {
     json jsonRelations(relations);
     json payload = {
         { JsonKey::value, identity.getValue() },
@@ -203,7 +204,8 @@ std::vector<VirgilCard> VirgilCardsClient::getServiceCard(const std::string& ser
     return virgilCards;
 }
 
-std::vector<VirgilCard> VirgilCardsClient::get(const std::string& publicKeyId, const std::string& virgilCardId, const Credentials& credentials) {
+std::vector<VirgilCard> VirgilCardsClient::get(const std::string& publicKeyId, const std::string& virgilCardId,
+        const Credentials& credentials) {
     Request request = Request()
             .get()
             .baseAddress(baseServiceUri_)
@@ -216,9 +218,8 @@ std::vector<VirgilCard> VirgilCardsClient::get(const std::string& publicKeyId, c
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_SIGN);
     this->verifyResponse(response);
 
-    json jsonResponse = json::parse( response.body() );
-    json jsonVirgilCards = jsonResponse[JsonKey::virgilCards];
-    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( jsonVirgilCards.dump() );
+    json jsonResponseVirgilCards = json::parse( response.body() );
+    std::vector<VirgilCard> virgilCards = virgil::sdk::io::fromJsonVirgilCards( jsonResponseVirgilCards.dump() );
     return virgilCards;
 }
 
@@ -239,15 +240,16 @@ VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
 
 void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidationToken& validationToken,
         const Credentials& credentials) {
-
     json payload = {
-        { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
-        { JsonKey::value, validationToken.getIdentity().getValue()  },
-        { JsonKey::validationToken, validationToken.getToken() }
+        { JsonKey::identity, {
+            { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
+            { JsonKey::value, validationToken.getIdentity().getValue() },
+            { JsonKey::validationToken, validationToken.getToken() }
+        }}
     };
 
     Request request = Request()
-            .post()
+            .del()
             .baseAddress(baseServiceUri_)
             .endpoint( PublicKeysEndpointUri::virgilCardRevoke(ownerCardId) )
             .body( payload.dump() );

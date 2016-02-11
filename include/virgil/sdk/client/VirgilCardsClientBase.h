@@ -57,6 +57,9 @@ namespace virgil { namespace sdk { namespace client {
 
         virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
+        //
+        virtual std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) = 0;
+
         virtual virgil::sdk::model::VirgilCard create(
                 const virgil::sdk::model::ValidationToken& validationToken,
                 const virgil::crypto::VirgilByteArray& publicKey,
@@ -75,25 +78,17 @@ namespace virgil { namespace sdk { namespace client {
 
         virtual std::vector<virgil::sdk::model::VirgilCard> search(
                 const virgil::sdk::model::Identity& identity,
-                const bool includeUnconfirmed = true,
-                const std::vector<std::string>& relations = std::vector<std::string>()
-        ) = 0;
+                const std::vector<std::string>& relations = std::vector<std::string>(),
+                const bool includeUnconfirmed = true) = 0;
 
         virtual std::vector<virgil::sdk::model::VirgilCard> searchApp(
                 const std::string& applicationIdentity) = 0;
-
-        virtual std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) = 0;
-
 
 
         virtual std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,
                 const std::string& virgilCardId, const Credentials& credentials) = 0;
 
-
         virtual virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) = 0;
-
-
-
 
         virtual void revoke(
                 const std::string& ownerCardId,

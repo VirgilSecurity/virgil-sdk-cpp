@@ -62,8 +62,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-// 
-
     try {
         std::string userEmail = argv[1];
 
@@ -73,10 +71,7 @@ int main(int argc, char **argv) {
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Search for Cards" << "\n";
-        std::vector<vsdk::model::VirgilCard> foundCards = virgilHub.cards().search(
-                identity); 
-                //{"9bb31464-d9be-4ba8-9e74-eacfbae94bca"},
-                //true);
+        std::vector<vsdk::model::VirgilCard> foundCards = virgilHub.cards().search(identity);
 
         std::string foundCardsStr = vsdk::io::toJsonVirgilCards(foundCards, 4);
         std::cout << foundCardsStr << "\n";

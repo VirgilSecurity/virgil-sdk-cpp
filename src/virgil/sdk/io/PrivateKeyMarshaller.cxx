@@ -85,5 +85,5 @@ void marshaller_private_key_init() {
     virgil::sdk::io::Marshaller<PrivateKey>::toJson(PrivateKey());
     virgil::sdk::io::Marshaller<PrivateKey>::toJson<2>(PrivateKey());
     virgil::sdk::io::Marshaller<PrivateKey>::toJson<4>(PrivateKey());
-    virgil::sdk::io::Marshaller<PrivateKey>::fromJson("");
+    virgil::sdk::io::Marshaller<PrivateKey>::fromJson(std::string());
 }

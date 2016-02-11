@@ -68,9 +68,8 @@ namespace virgil { namespace sdk { namespace client {
 
         std::vector<virgil::sdk::model::VirgilCard> search(
             const virgil::sdk::model::Identity& identity,
-            const bool includeUnconfirmed = true,
-            const std::vector<std::string>& relations = std::vector<std::string>()
-        ) override;
+            const std::vector<std::string>& relations = std::vector<std::string>(),
+            const bool includeUnconfirmed = true) override;
 
         std::vector<virgil::sdk::model::VirgilCard> searchApp(const std::string& applicationIdentity) override;
 

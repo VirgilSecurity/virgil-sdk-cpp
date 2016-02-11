@@ -50,14 +50,14 @@ bool IdentityExtended::getConfirme() const {
     return confirme_;
 }
 
-std::string IdentityExtended::getId() const {
+const std::string& IdentityExtended::getId() const {
     return id_;
 }
 
-std::string IdentityExtended::getCreatedAt() const {
+const std::string& IdentityExtended::getCreatedAt() const {
     return createdAt_;
 }
 
-Identity IdentityExtended::getIdentity() const {
+const Identity& IdentityExtended::getIdentity() const {
     return identity_;
 }

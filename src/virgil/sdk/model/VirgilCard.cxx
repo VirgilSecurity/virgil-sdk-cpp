@@ -54,26 +54,26 @@ bool VirgilCard::getConfirme() const {
     return confirme_;
 }
 
-std::string VirgilCard::getId() const {
+ const std::string& VirgilCard::getId() const {
     return id_;
 }
 
-std::string VirgilCard::getCreatedAt() const {
+ const std::string& VirgilCard::getCreatedAt() const {
     return createdAt_;
 }
 
-std::string VirgilCard::getHash() const {
+ const std::string& VirgilCard::getHash() const {
     return hash_;
 }
 
-IdentityExtended VirgilCard::getIdentityExtended() const {
+ const IdentityExtended& VirgilCard::getIdentityExtended() const {
     return identityExtended_;
 }
 
-std::map<std::string, std::string> VirgilCard::getData() const {
+ const std::map<std::string, std::string>& VirgilCard::getData() const {
     return data_;
 }
 
-PublicKey VirgilCard::getPublicKey() const {
+ const PublicKey& VirgilCard::getPublicKey() const {
     return publicKey_;
 }

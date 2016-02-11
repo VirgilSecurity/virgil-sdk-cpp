@@ -51,13 +51,27 @@ namespace virgil { namespace sdk { namespace model {
         ValidationToken() = default;
         ValidationToken(const virgil::sdk::model::Identity& identity, const std::string& token);
 
-        virgil::sdk::model::Identity getIdentity() const;
-        std::string getToken() const;
+        const virgil::sdk::model::Identity& getIdentity() const;
+        const std::string& getToken() const;
 
     private:
         virgil::sdk::model::Identity identity_;
         std::string token_;
     };
+
+    inline bool operator==(const ValidationToken& left, const ValidationToken& right) {
+        if (left.getIdentity() == right.getIdentity() &&
+            left.getToken() == right.getToken()) {
+                return 1;
+        }
+
+        return 0;
+    }
+
+    inline bool operator!=(const ValidationToken& left, const ValidationToken& right) {
+        return !(left == right);
+    }
+
 }}}
 
 #endif /* VIRGIL_SDK_MODEL_IDENTITY_TOKEN_H */

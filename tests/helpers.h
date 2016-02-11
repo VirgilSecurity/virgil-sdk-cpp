@@ -52,32 +52,24 @@
 
 namespace virgil { namespace test {
 
-    virgil::sdk::model::PublicKey getPubKey();
-
-    nlohmann::json getJsonPubKey();
-
-    virgil::sdk::model::PrivateKey getPrvKey();
-
-    nlohmann::json getJsonPrvKey();
-
-    virgil::sdk::model::ValidationToken getToken();
-
     nlohmann::json getJsonValidationToken();
+    virgil::sdk::model::ValidationToken getValidationToken();
 
-
-    virgil::sdk::model::VirgilCard getVirgilCard();
+    nlohmann::json getJsonPublicKey();
+    virgil::sdk::model::PublicKey getPublicKey();
 
     nlohmann::json getJsonVirgilCard();
+    virgil::sdk::model::VirgilCard getVirgilCard();
 
-
+    nlohmann::json getJsonResponseVirgilCards();
+    nlohmann::json getJsonVirgilCards();
     std::vector<virgil::sdk::model::VirgilCard> getVirgilCards();
 
-    nlohmann::json getResponseJsonVirgilCards();
+    nlohmann::json getJsonTrustCardResponse();
+    virgil::sdk::model::TrustCardResponse getTrustCardResponse();
 
-    virgil::sdk::model::TrustCardResponse getResponseTrustCardResponse();
-
-    nlohmann::json getJsonResponseTrustCardResponse();
-
+    nlohmann::json getJsonPrivateKey();
+    virgil::sdk::model::PrivateKey getPrivateKey();
 
 }}
 

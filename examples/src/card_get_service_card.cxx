@@ -66,9 +66,9 @@ const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-
 int main() {
     try {
         vsdk::VirgilUri virgilUri(
-				VIRGIL_IDENTITY_SERVICE_URI_BASE,
-				VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
-       			VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE
+                VIRGIL_IDENTITY_SERVICE_URI_BASE,
+                VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
+                VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE
         );
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);

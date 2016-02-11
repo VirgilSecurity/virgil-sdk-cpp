@@ -39,7 +39,15 @@
 
 #include "helpers.h"
 
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/sdk/model/IdentityExtended.h>
+
+using json = nlohmann::json;
+
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::PrivateKey;
@@ -51,171 +59,302 @@ using virgil::sdk::model::IdentityExtended;
 using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
 
-using json = nlohmann::json;
 
+const std::string kToken = "MIIB5wIBADCCAeAGCSqGSIb3DQEHA6CCAd"
+        "EwggHNAgECMYIBnjCCAZoCAQKgJgQkZTY1ZTljYmEtOTRlZS00ZjI3LWJi"
+        "ZTktNjI2MTg2ZDIyMDI4MBQGByqGSM49AgEGCSskAwMCCAEBDQSCAVUwgg"
+        "FRAgEAMIGbMBQGByqGSM49AgEGCSskAwMCCAEBDQOBggAEZ/IM0sOygWT9"
+        "h9jkugltok1LznnIlvtn4P9vyKB0L64m0huqQKUAV9CU9J1OhM0HntEUQd"
+        "aWP1kUtd8agB7AiXdygNjlE8mo9Eg9Y7qTHUaLpL0EeN4FKRJ5GoS+3f6X"
+        "Xd9z3wR1gySamIk2sDjM9GQr9PKN8dsN829QMxg2CywwGAYHKIGMcQIFAT"
+        "ANBglghkgBZQMEAgIFADBBMA0GCWCGSAFlAwQCAgUABDAKv/eUXcx5k7xr"
+        "dxTdrE9C7uybR4hHTgN7aOoRRpnOmrza1FNrb7jxxQOIkcao1EMwUTAdBg"
+        "lghkgBZQMEASoEEP+aUylfNTMITh5Ea/R2tcQEMDppR5iEvwmedff1jbgG"
+        "2zlE6HjIkar3wGs+MvxkX4gTaHK5ghBtC4pjF+BfDF00xzAmBgkqhkiG9w"
+        "0BBwEwGQYJYIZIAWUDBAEuBAx+e6AMDx4rHQfdEJRvy1T+48cDebA8ZPuW"
+        "U0UIZI4TjgQ6OTBNcHJnjyWnYumXv66tQsrqGaKr01w25g3hutVVZTOeq6"
+        "uMNQlC8OxQnUilmlPB84hqJRfk62TjJ5UGv6dyZF69UpuoTHN6AwYRqG4W"
+        "nQlCwACKlZhMWe3z1Oolkbui6DjiOBdjURIb1IUFblN88sEPG4gW4iOyir"
+        "DBGADE3/0EnkLzkiO99v2tJO9aLtwchmLY7Y3fXLKSU7UStm4hKQGRb4Yr"
+        "mfw4SG6McBEKkHFcjvnQ6Euu8QZEItAdI/tD1j8PkdNpmiqb3YxNgaYY43"
+        "AGnCD43vjJaOYd/oqV";
 
+const std::string kPublicKeyBase64 = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUl"
+        "HYk1CUUdCeXFHU000OUFnRUdDU3NrQXdNQ0NBRUJEUU9CZ2dBRUNnL1dp"
+        "czVtSWx6R3NOKzlFdEFrNEFMRApGRHJXRmVQc0RYRzR2SlI4TTV6MG5Qc"
+        "XBSSldBQ05yU214WkxubWZhMTROK0MyY3IzbGdEbkVrMFNqMUlEeGttCm"
+        "9yVWdzWGlMSSswZDFqeWpOcEVpSEQ0VUlQUHA3eVBZZlFUTXRtaFFCNkd"
+        "IMnkxMGtaczhzSU40MythNGwzZkEKSUU3cnFWd0FXeFpGSG0rQ0JOST0K"
+        "LS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==";
 
+const std::string kHash = "9U7gpoLjX8MDcC66tF1TPkCSkoidlz6c86t54C"
+        "Bz7U/snzu1k0cDRLLO3+jZsKhzn7T16HWXdYE/KtIiSJ3wZw==";
+
+const std::string kSignedDigest = "MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGEAk"
+        "AM29/DTFvTTDrab8hH7QDWGR6a5Igq+4Qw39fg3mLXtRWCv2YG2D/fsIn+Cc"
+        "dtvsDNQT8aWjTBbbY+J0BZQV40AkBElUXjYBZINHiWsC/Q4yhgeRDjip9wGj"
+        "pXqUH5FU38P8HqPIHCwJE/1ErhQzL6xdiRUWXhXR+1PhNJ1H5DZV7j";
+
+const std::string kPrivateKey = "LS0tLS1CRUdJTiBFTkNSWVBURUQgUFJJVkFU"
+        "RSBLRVktLS0tLQpNSUlCS1RBMEJnb3Foa2lHOXcwQkRBRURNQ1lFSVBNdXA3"
+        "cVRoY0UyWFhNNk5hT0hQZjBsVFYxcE9ySEhTK09wCnZMeUdVbm9EQWdJZ0FB"
+        "U0I4QThNYUZMOWtQYXUyNzFSOTFucjkxemtPODRkZlBFV3h2a095M2xOUmZU"
+        "Y1FHSkkKNS9ibzdWZUt4am9PcTZQOE8yb084UHBEUVlpNHhUVHFNeDFWbWV1"
+        "VXpLRC9YT2ZvQUp5VW1lMVZpK1pnNzNiSAp4U0ZoLzQ5dWlrRURHQkhjUXpL"
+        "WVRCZmVGaHI2dG1VN2t6RWxucE0xdFFCSHRJN2NNcHNaNFBBWjVsNTRTUndw"
+        "CkdydXNKSW9Eam1mNnBIbHg5NmxYWk05bkpVczRwaDErdnNoUVJEbVYzd1k1"
+        "QVp5ZVlXYmp2UEZVTWUwMzRoWFEKeldzOHVGZFhCQm8vcnFMUTF5aUpCeU5p"
+        "cC9YTGU5M3R5MXpUZjVUTHg1S1VhQ3c4RW9rMUtjU1RmTkgvSGFUQQpwRzdy"
+        "YWpBdis2TCt5bmlnc3c9PQotLS0tLUVORCBFTkNSWVBURUQgUFJJVkFURSBL"
+        "RVktLS0tLQo=";
 
 namespace virgil { namespace test {
 
-      PublicKey getPubKey() {
-            return PublicKey("e33898de-6302-4756-8f0c-5f6c5218e02e", "2015-12-22T07:03:42+0000",
-                virgil::crypto::str2bytes("HaisUjRlcTY0cipNcUp"));
-        }
-
-        json getJsonPubKey() {
-            PublicKey publicKey = virgil::test::getPubKey();
-            json jsonPublicKey = {
-                { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKey() },
-                { JsonKey::createdAt, publicKey.getCreatedAt() }
-            };
-            return jsonPublicKey;
-        }
-
-      PrivateKey getPrvKey() {
-            std::string virgilCardId = "57e0a766-28ef-355e-7ca2-d8a2dcf23fc4";
-            std::string privateKeyBase64 =
-                    "-----BEGIN EC PRIVATE KEY-----"
-                    "MIHbAgEBBEEAgZH5dMUXx7qJ3En0Y1/WdPkuhT4GNiDO29Vpa3nKuLhmWfsSsdSa"
-                    "RDY58ToL/VS+U8I9WJl+xec1GK9Yj+uyU6ALBgkrJAMDAggBAQ2hgYUDgYIABC98"
-                    "WzVmV2zddeqrQ/VZieMfEstq3Gp4oXDzKYm91Jmo1ts10PsmairLwDxw25CPeN2l"
-                    "kDYyISVXXtIkPKgCk81QJzoUxXAIB6l8btBrK5fP5RiqCqO8dcbG4/ybTLZvdeyI"
-                    "K90m28BOpjX2ay9k68WEydV9gDbnqS+o+bnXrbv9"
-                    "-----END EC PRIVATE KEY-----";
-
-            return PrivateKey(virgilCardId, virgil::crypto::str2bytes(privateKeyBase64));
-        }
-
-        json getJsonPrvKey() {
-            PrivateKey privateKey = virgil::test::getPrvKey();
-            json jsonPrivateKey = {
-                { JsonKey::virgilCardId, privateKey.getVirgilCardId() },
-                { JsonKey::privateKey, privateKey.getKeyBytes() }
-            };
-            return jsonPrivateKey;
-        }
-
-
-      ValidationToken getToken() {
-            Identity identity("user@virgilsecurity.com", IdentityType::Email);
-            std::string validationToken = "QwaVl3alF";
-
-            return ValidationToken(identity, validationToken);
-        }
-
-        json getJsonValidationToken() {
-            ValidationToken validationToken = virgil::test::getToken();
-            json jsonValidationToken = {
-                { JsonKey::type, validationToken.getIdentity().getTypeAsString() },
-                { JsonKey::value, validationToken.getIdentity().getValue() },
-                { JsonKey::validationToken, validationToken.getToken() }
-            };
-
-            return jsonValidationToken;
-        }
-
-        VirgilCard getVirgilCard() {
-            std::string hash =
-                    "hash";
-
-            IdentityExtended identityExtended(true, "607bc05d-3810-4e60-9ccd-0d0c4842350b",
-                    "2015-12-22T07:03:42+0000",
-                    Identity("username@virgilsecurity.com", IdentityType::Email));
-
-            std::map<std::string, std::string> customData;
-            customData["parameter1"] = "value1";
-            customData["parameter2"] = "value2";
-
-            PublicKey publicKey = virgil::test::getPubKey();
-
-            return VirgilCard(true, "d4de27e5-361d-4b50-a40a-91de41727e22", "2015-12-22T07:03:42+0000", hash,
-                    identityExtended, customData, publicKey);
-        }
-
-        json getJsonVirgilCard() {
-            VirgilCard virgilCard = virgil::test::getVirgilCard();
-            json jsonVirgilCard = {
-                { JsonKey::id, virgilCard.getId() },
-                { JsonKey::createdAt, virgilCard.getCreatedAt() },
-                { JsonKey::isConfirmed, virgilCard.getConfirme() },
-                { JsonKey::hash, virgilCard.getHash() },
-            };
-
-            PublicKey publicKey = virgilCard.getPublicKey();
-            jsonVirgilCard[JsonKey::publicKey] = {
-                { JsonKey::id, publicKey.getId() },
-                { JsonKey::publicKey, publicKey.getKey() },
-                { JsonKey::createdAt, publicKey.getCreatedAt() }
-            };
-
-            IdentityExtended identityExtended = virgilCard.getIdentityExtended();
-            Identity identity = identityExtended.getIdentity();
-            jsonVirgilCard[JsonKey::identity] = {
-                { JsonKey::id, identityExtended.getId() },
-                { JsonKey::type, identity.getTypeAsString() },
-                { JsonKey::value, identity.getValue() },
-                { JsonKey::isConfirmed, identityExtended.getConfirme() },
-                { JsonKey::createdAt, identityExtended.getCreatedAt() }
-            };
-
-            std::map<std::string, std::string> customData = virgilCard.getData();
-            json jsonCustomData;
-            for(const auto& i: customData) {
-                jsonCustomData[i.first] = i.second;
+    json getJsonValidationToken() {
+        return json(
+             {
+                { JsonKey::type, "email" },
+                { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" },
+                { JsonKey::validationToken, kToken }
             }
-            jsonVirgilCard[JsonKey::data] = jsonCustomData;
-            return jsonVirgilCard;
+        );
+    }
+
+    ValidationToken getValidationToken() {
+        return ValidationToken(
+            Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+            kToken);
+    }
+
+
+    json getJsonPublicKey() {
+        return json(
+            {
+                { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                { JsonKey::publicKey, kPublicKeyBase64 }
+            }
+        );
+    }
+
+    PublicKey getPublicKey() {
+        return PublicKey(
+            "ce8abd8c-2ff3-4226-b793-26051aebbda7",
+            "2016-02-08T14:33:08+0000",
+            VirgilBase64::decode(kPublicKeyBase64)
+        );
+    }
+
+
+    json getJsonVirgilCard() {
+        return json(
+            {
+                { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                { JsonKey::data, {} },
+                { JsonKey::hash, kHash },
+                { JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95" },
+
+                { JsonKey::identity, {
+                    { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                    { JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d" },
+                    { JsonKey::isConfirmed, true },
+                    { JsonKey::type, "email" },
+                    { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" }
+                }},
+                { JsonKey::isConfirmed, true },
+                { JsonKey::publicKey, {
+                    { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                    { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                    { JsonKey::publicKey, kPublicKeyBase64 }
+                }}
+            }
+        );
+    }
+
+    VirgilCard getVirgilCard() {
+        return VirgilCard(
+            true,
+            "ea14f729-676f-47f1-8cc9-8adbf2a66a95",
+            "2016-02-08T14:33:08+0000",
+            kHash,
+            IdentityExtended(
+                true,
+                "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
+                "2016-02-08T14:33:08+0000",
+                Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email)
+            ),
+            std::map<std::string, std::string>(),
+            getPublicKey()
+        );
+    }
+
+
+    json getJsonResponseVirgilCards() {
+        return json(
+            {
+                { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                { JsonKey::publicKey, kPublicKeyBase64 },
+                { JsonKey::virgilCards, {
+                    {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::data, {} },
+                        { JsonKey::hash, kHash },
+                        { JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95" },
+
+                        { JsonKey::identity, {
+                            { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                            { JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d" },
+                            { JsonKey::isConfirmed, true },
+                            { JsonKey::type, "email" },
+                            { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" }
+                        }},
+                        { JsonKey::isConfirmed, true },
+                        { JsonKey::publicKey, {
+                            { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                            { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                            { JsonKey::publicKey, kPublicKeyBase64 }
+                        }}
+                    },
+                    {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::data, {
+                            { "google", "calendar" },
+                            { "test", "draft1" }
+                        }},
+                        { JsonKey::hash, kHash },
+                        { JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95" },
+
+                        { JsonKey::identity, {
+                            { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                            { JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d" },
+                            { JsonKey::isConfirmed, true },
+                            { JsonKey::type, "email" },
+                            { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" }
+                        }},
+                        { JsonKey::isConfirmed, true },
+                        { JsonKey::publicKey, {
+                            { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                            { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                            { JsonKey::publicKey, kPublicKeyBase64 }
+                        }}
+                    }
+                }}
+            }
+    );
+    }
+
+    json getJsonVirgilCards() {
+        return json(
+            {
+                {
+                    { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                    { JsonKey::data, {} },
+                    { JsonKey::hash, kHash },
+                    { JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95" },
+
+                    { JsonKey::identity, {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d" },
+                        { JsonKey::isConfirmed, true },
+                        { JsonKey::type, "email" },
+                        { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" }
+                    }},
+                    { JsonKey::isConfirmed, true },
+                    { JsonKey::publicKey, {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                        { JsonKey::publicKey, kPublicKeyBase64 }
+                    }}
+                },
+                {
+                    { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                    { JsonKey::data, {
+                        { "google", "calendar" },
+                        { "test", "draft1" }
+                    }},
+                    { JsonKey::hash, kHash },
+                    { JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95" },
+
+                    { JsonKey::identity, {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d" },
+                        { JsonKey::isConfirmed, true },
+                        { JsonKey::type, "email" },
+                        { JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com" }
+                    }},
+                    { JsonKey::isConfirmed, true },
+                    { JsonKey::publicKey, {
+                        { JsonKey::createdAt, "2016-02-08T14:33:08+0000" },
+                        { JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7" },
+                        { JsonKey::publicKey, kPublicKeyBase64 }
+                    }}
+                }
+            }
+    );
+    }
+
+    std::vector<VirgilCard> getVirgilCards() {
+        std::vector<VirgilCard> virgilCards;
+        virgilCards.push_back( getVirgilCard() );
+
+        VirgilCard virgilCard(
+            true,
+            "ea14f729-676f-47f1-8cc9-8adbf2a66a95",
+            "2016-02-08T14:33:08+0000",
+            kHash,
+            IdentityExtended(
+                true,
+                "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
+                "2016-02-08T14:33:08+0000",
+                Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email)
+            ),
+            { { "google", "calendar" }, { "test", "draft1" } },
+            getPublicKey()
+        );
+
+        virgilCards.push_back(virgilCard);
+        return virgilCards;
+    }
+
+
+    json getJsonTrustCardResponse() {
+        return json(
+            {
+                { JsonKey::id, "9e0bb253-879b-4fbd-a504-829faae7e958" },
+                { JsonKey::createdAt, "2015-12-22T07:03:42+0000" },
+                { JsonKey::signerVirgilCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c" },
+                { JsonKey::signedVirgilCardId, "9ab9d4a4-0440-499f-bdc6-f99c83f900dd" },
+                { JsonKey::signedDigest, kSignedDigest }
+            }
+        );
+    }
+
+    TrustCardResponse getTrustCardResponse() {
+        return TrustCardResponse(
+            "9e0bb253-879b-4fbd-a504-829faae7e958",
+            "2015-12-22T07:03:42+0000",
+            "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c",
+            "9ab9d4a4-0440-499f-bdc6-f99c83f900dd",
+            kSignedDigest
+        );
+    }
+
+
+    json getJsonPrivateKey() {
+        return json(
+        {
+            { JsonKey::privateKey, kPrivateKey },
+            { JsonKey::virgilCardId, "cd4a35f7-6b15-4be4-b1d6-dea44a7af6df" }
         }
+        );
+    }
 
-        std::vector<VirgilCard> getVirgilCards() {
-            std::vector<VirgilCard> virgilCards;
-            virgilCards.push_back(virgil::test::getVirgilCard());
-            virgilCards.push_back(virgil::test::getVirgilCard());
-            return virgilCards;
-        }
-
-        nlohmann::json getResponseJsonVirgilCards() {
-            PublicKey publicKey = virgil::test::getPubKey();
-
-            json getResponse;
-            getResponse[JsonKey::id] = publicKey.getId();
-            getResponse[JsonKey::createdAt] = publicKey.getCreatedAt();
-            getResponse[JsonKey::publicKey] = publicKey.getKey();
-
-            json jsonVirgilCard1 = virgil::test::getJsonVirgilCard();
-            json jsonVirgilCard2 = virgil::test::getJsonVirgilCard();
-
-            json jsonVirgilCards = json::array( {jsonVirgilCard1, jsonVirgilCard2} );
-
-            getResponse[JsonKey::virgilCards] = jsonVirgilCards;
-
-            return getResponse;
-        }
-
-        TrustCardResponse getResponseTrustCardResponse() {
-            return TrustCardResponse(
-                    "9e0bb253-879b-4fbd-a504-829faae7e958",
-                    "2015-12-22T07:03:42+0000",
-                    "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c",
-                    "9ab9d4a4-0440-499f-bdc6-f99c83f900dd",
-                    "MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGEAkAM29/DTFvTTDrab8hH7QDWGR6a5I"
-                    "gq+4Qw39fg3mLXtRWCv2YG2D/fsIn+CcdtvsDNQT8aWjTBbbY+J0BZQV40AkBEl"
-                    "UXjYBZINHiWsC/Q4yhgeRDjip9wGjpXqUH5FU38P8HqPIHCwJE/1ErhQzL6xdiR"
-                    "UWXhXR+1PhNJ1H5DZV7j");
-        }
-
-        nlohmann::json getJsonResponseTrustCardResponse() {
-            TrustCardResponse trustCardResponse = virgil::test::getResponseTrustCardResponse();
-            json jsonTrustCardResponse = {
-                { JsonKey::id, trustCardResponse.getId() },
-                { JsonKey::createdAt, trustCardResponse.getCreatedAt() },
-                { JsonKey::signerVirgilCardId, trustCardResponse.getSignedVirgilCardId() },
-                { JsonKey::signedVirgilCardId, trustCardResponse.getSignedVirgilCardId() },
-                { JsonKey::signedDigest, trustCardResponse.getSignedDigest() },
-            };
-
-            return jsonTrustCardResponse;
-        }
+    PrivateKey getPrivateKey() {
+        return PrivateKey(
+            "cd4a35f7-6b15-4be4-b1d6-dea44a7af6df",
+            VirgilBase64::decode(kPrivateKey)
+        );
+    }
 
 }}

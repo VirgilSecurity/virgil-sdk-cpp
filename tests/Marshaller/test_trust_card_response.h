@@ -47,6 +47,8 @@
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/io/Marshaller.h>
 
+#include "../helpers.h"
+
 using json = nlohmann::json;
 
 using virgil::sdk::model::TrustCardResponse;
@@ -55,19 +57,15 @@ using virgil::sdk::io::Marshaller;
 
 
 TEST_CASE("TrustCardResponse -> Json ValidationToken - FAILED", "class Marshaller") {
-    json trueJsonTrustCardResponse = virgil::test::getJsonResponseTrustCardResponse();
-
-    TrustCardResponse trustCardResponse = virgil::test::getResponseTrustCardResponse();
+    TrustCardResponse trustCardResponse = virgil::test::getTrustCardResponse();
+    // TrustCardResponse -> Json
     std::string testJsonTrustCardResponse = Marshaller<TrustCardResponse>::toJson<4>(trustCardResponse);
-
-    REQUIRE( trueJsonTrustCardResponse.dump(4) == testJsonTrustCardResponse);
+    REQUIRE( virgil::test::getTrustCardResponse().dump(4)  == testJsonTrustCardResponse);
 }
 
 TEST_CASE("Json TrustCardResponse -> TrustCardResponse - FAILED", "class Marshaller") {
-    TrustCardResponse trueTrustCardResponse = virgil::test::getResponseTrustCardResponse();
-
-    json jsonTrustCardResponse = virgil::test::getJsonResponseTrustCardResponse();
+    json jsonTrustCardResponse = virgil::test::getJsonTrustCardResponse();
+    // Json -> TrustCardResponse
     TrustCardResponse testTrustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonTrustCardResponse.dump(4));
-
-    REQUIRE( trueTrustCardResponse == testTrustCardResponse);
+    REQUIRE( virgil::test::getTrustCardResponse() == testTrustCardResponse);
 }

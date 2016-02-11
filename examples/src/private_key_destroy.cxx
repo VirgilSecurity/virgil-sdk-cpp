@@ -70,13 +70,14 @@ int main(int argc, char **argv) {
 
     try {
         std::string virgilCardId = argv[1];
-        std::string pathPrivateKey = argv[2];
+        std::string pathPublicKey = argv[2];
+        std::string pathPrivateKey = argv[3];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();
 
-        std::cout << "Prepare input file: public.key..." << "\n";
-        std::ifstream inFile("public.key", std::ios::in | std::ios::binary);
+        std::cout << "Prepare input file: " << pathPublicKey << "\n";
+        std::ifstream inFile(pathPublicKey, std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: public.key");
         }

@@ -91,5 +91,5 @@ void marshaller_validation_token_init() {
     virgil::sdk::io::Marshaller<ValidationToken>::toJson(ValidationToken());
     virgil::sdk::io::Marshaller<ValidationToken>::toJson<2>(ValidationToken());
     virgil::sdk::io::Marshaller<ValidationToken>::toJson<4>(ValidationToken());
-    virgil::sdk::io::Marshaller<ValidationToken>::fromJson("");
+    virgil::sdk::io::Marshaller<ValidationToken>::fromJson(std::string());
 }

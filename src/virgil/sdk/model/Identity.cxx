@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
 #include <virgil/sdk/model/Identity.h>
 
 using virgil::sdk::model::Identity;
@@ -64,11 +65,11 @@ Identity::Identity(const std::string& value, const IdentityType& type) : value_(
 
 }
 
-std::string Identity::getValue() const {
+const std::string& Identity::getValue() const {
     return value_;
 }
 
-IdentityType Identity::getType() const {
+const IdentityType& Identity::getType() const {
     return type_;
 }
 

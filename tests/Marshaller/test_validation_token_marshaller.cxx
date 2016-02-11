@@ -35,11 +35,13 @@
  */
 
 /**
- * @file test_identity_token_marshaller.cxx
+ * @file test_validation_token_marshaller.cxx
  * @brief Convert json <-> ValidationToken.
  */
 
 #include "../catch.hpp"
+
+#include "../helpers.h"
 
 #include <json.hpp>
 
@@ -57,49 +59,15 @@ using virgil::sdk::io::Marshaller;
 
 
 TEST_CASE("ValidationToken -> Json ValidationToken - FAILED", "class Marshaller") {
-    std::string value = "user@virgilsecurity.com";
-    IdentityType type  = IdentityType::Email;
-
-    Identity identity(value, type);
-    std::string token = "qwerty";
-
-    ValidationToken validationToken(identity, token);
-
-    json trueJsonValidationToken = {
-        { JsonKey::type, virgil::sdk::model::toString(type) },
-        { JsonKey::value, validationToken.getIdentity().getValue() },
-        { JsonKey::validationToken, validationToken.getToken() }
-    };
-
+    ValidationToken validationToken = virgil::test::getValidationToken();
     // ValidationToken -> Json
-    std::string testJsonValidationToken = Marshaller<ValidationToken>::toJson(validationToken);
-
-    REQUIRE( trueJsonValidationToken.dump() == testJsonValidationToken );
+    std::string testJsonValidationToken = Marshaller<ValidationToken>::toJson<4>(validationToken);
+    REQUIRE( virgil::test::getJsonValidationToken().dump(4) == testJsonValidationToken );
 }
 
 TEST_CASE("Json ValidationToken -> ValidationToken - FAILED", "class Marshaller") {
-    std::string value = "user@virgilsecurity.com";
-    IdentityType type  = IdentityType::Email;
-    Identity identity(value, type);
-
-    std::string validationToken = "0KTUlHYk1CUUdCeXFHU000OUFnRUdDU3NrQXdNQ0NBRUJEUU9CZ2dBRUN"
-            "hV3k5VVVVMDFWcjdQLzExWHpubk0vRAowTi9KODhnY0dMV3pYMGFLaGcxSjdib3B6RGV4b0QwaVl3alF";
-
-    ValidationToken trueValidationToken(identity, validationToken);
-
-    json jsonValidationToken = {
-        { JsonKey::type, virgil::sdk::model::toString(type) },
-        { JsonKey::value, trueValidationToken.getIdentity().getValue() },
-        { JsonKey::validationToken, trueValidationToken.getToken() }
-    };
-
+    json jsonValidationToken = virgil::test::getJsonValidationToken();
     // Json -> ValidationToken
     ValidationToken testValidationToken = Marshaller<ValidationToken>::fromJson(jsonValidationToken.dump());
-
-    Identity trueIdentity = trueValidationToken.getIdentity();
-    Identity testIdentity = testValidationToken.getIdentity();
-
-    REQUIRE( trueIdentity.getType() == testIdentity.getType() );
-    REQUIRE( trueIdentity.getValue() == testIdentity.getValue() );
-    REQUIRE( trueValidationToken.getToken() == testValidationToken.getToken() );
+    REQUIRE( virgil::test::getValidationToken() == testValidationToken );
 }

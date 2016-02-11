@@ -50,11 +50,11 @@ namespace virgil { namespace sdk { namespace model {
         TrustCardResponse(const std::string& id, const std::string& createdAt, const std::string& signerVirgilCardId,
                 const std::string& signedVirgilCardId, const std::string& signedDigest);
 
-        std::string getId() const;
-        std::string getCreatedAt() const;
-        std::string getSignerVirgilCardId() const;
-        std::string getSignedVirgilCardId() const;
-        std::string getSignedDigest() const;
+        const std::string& getId() const;
+        const std::string& getCreatedAt() const;
+        const std::string& getSignerVirgilCardId() const;
+        const std::string& getSignedVirgilCardId() const;
+        const std::string& getSignedDigest() const;
 
     private:
         std::string id_;
@@ -63,6 +63,22 @@ namespace virgil { namespace sdk { namespace model {
         std::string signedVirgilCardId_;
         std::string signedDigest_;
     };
+
+    inline bool operator==(const TrustCardResponse& left, const TrustCardResponse& right) {
+        if (left.getId() == right.getId()                                 &&
+            left.getCreatedAt() == right.getCreatedAt()                   &&
+            left.getSignerVirgilCardId() == right.getSignerVirgilCardId() &&
+            left.getSignedVirgilCardId() == right.getSignedVirgilCardId() &&
+            left.getSignedDigest() == right.getSignedDigest()) {
+                return 1;
+        }
+        return 0;
+    }
+
+    inline bool operator!=(const TrustCardResponse& left, const TrustCardResponse& right) {
+        return !(left == right);
+    }
+
 }}}
 
 #endif /* VIRGIL_SDK_MODEL_TRUST_CARD_RESPONSE_H */

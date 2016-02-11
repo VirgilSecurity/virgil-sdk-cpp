@@ -52,8 +52,7 @@ namespace virgil { namespace sdk { namespace model {
         PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);
         ~PrivateKey() noexcept;
 
-        std::string getVirgilCardId() const;
-
+        const std::string& getVirgilCardId() const;
         const virgil::crypto::VirgilByteArray& getKeyBytes() const;
 
         void cleanup() noexcept;

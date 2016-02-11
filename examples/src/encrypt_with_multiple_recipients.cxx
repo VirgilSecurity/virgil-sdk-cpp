@@ -59,7 +59,7 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZTh
         "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
         "L8A4+ii+zd";
 
-const std::string PASSWORD = "qwerty";
+const std::string PASSWORD = "123456789";
 
 
 int main(int argc, char **argv) {

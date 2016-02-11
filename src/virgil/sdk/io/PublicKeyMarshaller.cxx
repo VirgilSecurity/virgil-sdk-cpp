@@ -74,7 +74,6 @@ namespace virgil { namespace sdk { namespace io {
             std::string id = jsonPublicKey[JsonKey::id];
             std::string createdAt = jsonPublicKey[JsonKey::createdAt];
             std::string publicKey = jsonPublicKey[JsonKey::publicKey];
-
             return PublicKey(id, createdAt, VirgilBase64::decode(publicKey));
         }
 
@@ -87,5 +86,5 @@ void marshaller_public_key_init() {
     virgil::sdk::io::Marshaller<PublicKey>::toJson(PublicKey());
     virgil::sdk::io::Marshaller<PublicKey>::toJson<2>(PublicKey());
     virgil::sdk::io::Marshaller<PublicKey>::toJson<4>(PublicKey());
-    virgil::sdk::io::Marshaller<PublicKey>::fromJson("");
+    virgil::sdk::io::Marshaller<PublicKey>::fromJson(std::string());
 }

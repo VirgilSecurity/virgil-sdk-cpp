@@ -47,7 +47,7 @@
 
 namespace vcrypto = virgil::crypto;
 
-const std::string PASSWORD = "qwerty";
+const std::string PASSWORD = "123456789";
 
 
 int main() {

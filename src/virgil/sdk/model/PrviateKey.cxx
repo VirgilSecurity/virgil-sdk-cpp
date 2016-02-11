@@ -50,7 +50,7 @@ PrivateKey::~PrivateKey() noexcept {
     cleanup();
 }
 
-std::string PrivateKey::getVirgilCardId() const {
+const std::string& PrivateKey::getVirgilCardId() const {
     return virgilCardId_;
 }
 

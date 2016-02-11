@@ -62,8 +62,8 @@ int main(int argc, char **argv) {
         std::cerr << std::string("USAGE: ") + argv[0]
                 + " <user_email>"
                 + " <owner_card_id>"
-                + " <validation_token>"
                 + " <path_private_key>"
+                + " <validation_token>"
                  << "\n";
         return 1;
     }
@@ -71,8 +71,8 @@ int main(int argc, char **argv) {
     try {
         std::string userEmail = argv[1];
         std::string ownerCardId = argv[2];
-        std::string token = argv[3];
-        std::string pathPrivateKey = argv[4];
+        std::string pathPrivateKey = argv[3];
+        std::string token = argv[4];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicePublicKeys();

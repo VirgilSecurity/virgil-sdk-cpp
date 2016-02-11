@@ -87,5 +87,5 @@ void marshaller_trust_card_response_init() {
     virgil::sdk::io::Marshaller<TrustCardResponse>::toJson(TrustCardResponse());
     virgil::sdk::io::Marshaller<TrustCardResponse>::toJson<2>(TrustCardResponse());
     virgil::sdk::io::Marshaller<TrustCardResponse>::toJson<4>(TrustCardResponse());
-    virgil::sdk::io::Marshaller<TrustCardResponse>::fromJson("");
+    virgil::sdk::io::Marshaller<TrustCardResponse>::fromJson(std::string());
 }

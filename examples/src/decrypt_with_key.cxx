@@ -52,6 +52,8 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+
 
 int main(int argc, char **argv) {
     if (argc < 3) {
@@ -95,7 +97,8 @@ int main(int argc, char **argv) {
                 dataSource,
                 dataSink,
                 vcrypto::str2bytes(virgilCardId),
-                privateKey
+                privateKey,
+                vcrypto::str2bytes(PRIVATE_KEY_PASSWORD)
         );
 
         std::cout << "Decrypted data is successfully stored in the output file..." << "\n";

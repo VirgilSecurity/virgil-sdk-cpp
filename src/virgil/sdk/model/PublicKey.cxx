@@ -46,18 +46,18 @@ PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const 
 
 }
 
-std::string PublicKey::getId() const {
+const std::string& PublicKey::getId() const {
     return id_;
 }
 
-std::string PublicKey::getCreatedAt() const {
+const std::string& PublicKey::getCreatedAt() const {
     return createdAt_;
+}
+
+const VirgilByteArray& PublicKey::getKeyBytes() const {
+    return key_;
 }
 
 std::string PublicKey::getKey() const {
     return virgil::crypto::bytes2str(key_);
-}
-
-VirgilByteArray PublicKey::getKeyBytes() const {
-    return key_;
 }
