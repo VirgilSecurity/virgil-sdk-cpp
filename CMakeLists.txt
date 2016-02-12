@@ -36,16 +36,18 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil-sdk CXX)
+project (virgil_sdk CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
-set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk" CACHE STRING "Virgil Keys SDK library name.")
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+
+# Define library name
+set (VIRGIL_SDK_NAME ${CMAKE_PROJECT_NAME})
 
 # Set library version
 set (VIRGIL_SDK_VERSION_MAJOR 1)
@@ -95,20 +97,18 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
-add_library (virgil-sdk STATIC ${SRC_LIST})
-target_link_libraries (virgil-sdk rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
-add_dependencies (virgil-sdk json ${VIRGIL_CRYPTO_DEPENDENCIES})
-set_target_properties (virgil-sdk PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
+add_library (${VIRGIL_SDK_NAME} STATIC ${SRC_LIST})
+target_link_libraries (${VIRGIL_SDK_NAME} rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
+add_dependencies (${VIRGIL_SDK_NAME} json)
 
 # Install
-install (TARGETS virgil-sdk DESTINATION lib)
+install (TARGETS ${VIRGIL_SDK_NAME} DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
 
 # Add unit tests
 if (ENABLE_TESTING)
     enable_testing()
-    include (CTest)
     add_subdirectory (tests)
     message (STATUS "Unit tests status: ENABLED")
 else (ENABLE_TESTING)
