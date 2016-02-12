@@ -52,19 +52,14 @@ mkdir -p ${HTML_PATH_DST}
 git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
 # Define SDK versions
-PUBLIC_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
-PRIVATE_KEYS_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk.private-keys/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
-
-PUBLIC_KEYS_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk-keys/${PUBLIC_KEYS_SDK_VERSION}"
-PRIVATE_KEYS_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk-private-keys/${PRIVATE_KEYS_SDK_VERSION}"
+VIRGIL_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
+VIRGIL_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk/${VIRGIL_SDK_VERSION}"
 
 # Prepare destination folders
-rm -fr "${PUBLIC_KEYS_SDK_HTML_PATH_DST}" && mkdir -p "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
-rm -fr "${PRIVATE_KEYS_SDK_HTML_PATH_DST}" && mkdir -p "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
+rm -fr "${VIRGIL_SDK_HTML_PATH_DST}" && mkdir -p "${VIRGIL_SDK_HTML_PATH_DST}"
 
 # Copy new documentation
-cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk.keys/docs/html/." "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
-cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk.private-keys/docs/html/." "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
+cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk/docs/html/." "${VIRGIL_SDK_HTML_PATH_DST}"
 
 # Fix source file names
 function fix_html_source_file_names {
@@ -78,8 +73,7 @@ function fix_html_source_file_names {
     cd -
 }
 
-fix_html_source_file_names "${PUBLIC_KEYS_SDK_HTML_PATH_DST}"
-fix_html_source_file_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}"
+fix_html_source_file_names "${VIRGIL_SDK_HTML_PATH_DST}"
 
 # Generate root HTML file
 function get_dir_names {
@@ -99,29 +93,14 @@ cat >"${HTML_PATH_DST}/index.html" <<EOL
         <title>Virgil SDK Documentation</title>
    </head>
    <body>
-        Virgil Public Keys SDK
+        Virgil SDK
         <ul>
 EOL
 
-for dir in `get_dir_names "${PUBLIC_KEYS_SDK_HTML_PATH_DST}/.." "v*"`; do
-    echo "<li><p><a href=\"sdk-keys/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
+for dir in `get_dir_names "${VIRGIL_SDK_HTML_PATH_DST}/.." "v*"`; do
+    echo "<li><p><a href=\"sdk/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
 done
 
-cat >>"${HTML_PATH_DST}/index.html" <<EOL
-        </ul>
-        Virgil Private Keys SDK
-        <ul>
-EOL
-
-for dir in `get_dir_names "${PRIVATE_KEYS_SDK_HTML_PATH_DST}/.." "v*"`; do
-    echo "<li><p><a href=\"sdk-private-keys/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
-done
-
-cat >>"${HTML_PATH_DST}/index.html" <<EOL
-        </ul>
-   </body>
-</html>
-EOL
 
 # Create and commit the documentation repo.
 cd ${HTML_PATH_DST}
