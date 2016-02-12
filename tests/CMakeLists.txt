@@ -37,7 +37,7 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 # Define variables
-set (UUT_LIB_NAME keys)
+set (UUT_LIB_NAME virgil-sdk)
 set (TEST_RUNNER test_runner)
 
 file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")

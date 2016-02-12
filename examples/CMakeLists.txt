@@ -36,9 +36,9 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil-examples)
+project (virgil-sdk-examples)
 
-set (VIRGIL_SDK_KEYS keys)
+set (VIRGIL_SDK virgil-sdk)
 
 file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 
@@ -57,7 +57,7 @@ foreach (SRC ${SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
     target_link_libraries (${TARGET_NAME}
-        ${VIRGIL_SDK_KEYS}
+        ${VIRGIL_SDK}
         ${VIRGIL_CRYPTO_LIBRARIES}
     )
 

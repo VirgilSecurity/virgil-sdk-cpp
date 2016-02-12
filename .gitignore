@@ -1,4 +1,3 @@
-
 #####
 *build*/
 origin_lib/
@@ -11,3 +10,6 @@ examples_bin/
 *.swp
 *.lock
 profile
+
+docs/html/
+docs/latex/

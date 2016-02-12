@@ -36,25 +36,25 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (keys CXX)
+project (virgil-sdk CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
-set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil.sdk" CACHE STRING "Virgil Keys SDK library name.")
+set (VIRGIL_SDK_KEYS_LIBRARY_NAME "virgil_sdk" CACHE STRING "Virgil Keys SDK library name.")
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
 
 # Set library version
-set (VIRGIL_SDK_KEYS_VERSION_MAJOR 3)
-set (VIRGIL_SDK_KEYS_VERSION_MINOR 0)
-set (VIRGIL_SDK_KEYS_VERSION_PATCH 0)
-set (VIRGIL_SDK_KEYS_VERSION
-    ${VIRGIL_SDK_KEYS_VERSION_MAJOR}.${VIRGIL_SDK_KEYS_VERSION_MINOR}.${VIRGIL_SDK_KEYS_VERSION_PATCH}
+set (VIRGIL_SDK_VERSION_MAJOR 3)
+set (VIRGIL_SDK_VERSION_MINOR 0)
+set (VIRGIL_SDK_VERSION_PATCH 0)
+set (VIRGIL_SDK_VERSION
+    ${VIRGIL_SDK_VERSION_MAJOR}.${VIRGIL_SDK_VERSION_MINOR}.${VIRGIL_SDK_VERSION_PATCH}
 )
-message (STATUS "Virgil Keys SDK version: " ${VIRGIL_SDK_KEYS_VERSION})
+message (STATUS "Virgil SDK version: " ${VIRGIL_SDK_VERSION})
 
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
@@ -95,13 +95,13 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
-add_library (keys STATIC ${SRC_LIST})
-target_link_libraries (keys rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
-add_dependencies (keys json ${VIRGIL_CRYPTO_DEPENDENCIES})
-set_target_properties (keys PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
+add_library (virgil-sdk STATIC ${SRC_LIST})
+target_link_libraries (virgil-sdk rest ${VIRGIL_CRYPTO_LIBRARIES} ${CURL_LIBRARIES})
+add_dependencies (virgil-sdk json ${VIRGIL_CRYPTO_DEPENDENCIES})
+set_target_properties (virgil-sdk PROPERTIES OUTPUT_NAME ${VIRGIL_SDK_KEYS_LIBRARY_NAME})
 
 # Install
-install (TARGETS keys DESTINATION lib)
+install (TARGETS virgil-sdk DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
 install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
 
@@ -135,7 +135,7 @@ endif (DOT_PROGRAM)
 
 if (DOXYGEN_FOUND)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target ("doc-sdk-keys"
+    add_custom_target ("doc-sdk"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs
         COMMENT "Generating API documentation with Doxygen" VERBATIM
