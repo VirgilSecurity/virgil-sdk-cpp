@@ -88,11 +88,12 @@ namespace sdk {
 
                     IdentityExtended identityExtended = virgilCard.getIdentityExtended();
                     Identity identity = identityExtended.getIdentity();
-                    jsonVirgilCard[JsonKey::identity] = {{JsonKey::id, identityExtended.getId()},
-                                                         {JsonKey::type, identity.getTypeAsString()},
-                                                         {JsonKey::value, identity.getValue()},
-                                                         {JsonKey::isConfirmed, identityExtended.getConfirme()},
-                                                         {JsonKey::createdAt, identityExtended.getCreatedAt()}};
+                    jsonVirgilCard[JsonKey::identity] = {
+                        {JsonKey::id, identityExtended.getId()},
+                        {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
+                        {JsonKey::value, identity.getValue()},
+                        {JsonKey::isConfirmed, identityExtended.getConfirme()},
+                        {JsonKey::createdAt, identityExtended.getCreatedAt()}};
 
                     if (virgilCard.getData().empty()) {
                         jsonVirgilCard[JsonKey::data] = nullptr;

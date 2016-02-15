@@ -49,6 +49,7 @@ using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::fromString;
+using virgil::sdk::model::toString;
 
 using virgil::crypto::foundation::VirgilBase64;
 
@@ -61,7 +62,7 @@ namespace sdk {
         template <> class Marshaller<ValidationToken> {
         public:
             template <int INDENT = -1> static std::string toJson(const ValidationToken& validationToken) {
-                json jsonValidationToken = {{JsonKey::type, validationToken.getIdentity().getTypeAsString()},
+                json jsonValidationToken = {{JsonKey::type, toString(validationToken.getIdentity().getType())},
                                             {JsonKey::value, validationToken.getIdentity().getValue()},
                                             {JsonKey::validationToken, validationToken.getToken()}};
 

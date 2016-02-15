@@ -43,40 +43,70 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief
+         * @brief Enumerate possible identity types
          */
-        enum class IdentityType { Email, Application, None };
-
-        std::string toString(const IdentityType& identityType);
-
-        IdentityType fromString(const std::string& identityType);
+        enum class IdentityType {
+            Email,       // Identity is email
+            Application, // Identity is application
+            None         // Identity is undefined
+        };
+        /**
+         * @brief Return string representation of the identity type
+         */
+        std::string toString(const virgil::sdk::model::IdentityType& identityType);
+        /**
+         * @brief Use string representation to construct identity type
+         */
+        virgil::sdk::model::IdentityType fromString(const std::string& identityType);
 
         /**
-         * @brief
+         * @brief Represents unique identifer, i.e. email, application, etc
          */
         class Identity {
         public:
+            /**
+             * @brief Creates empty not valid identity
+             */
             Identity() = default;
-            Identity(const std::string& value, const virgil::sdk::model::IdentityType& type);
-
+            /**
+             * @brief Creates identity with given values
+             *
+             * @param value - identity identifier, i.e. support@virgilsecurity.com
+             * @param type - identity type, i.e. IdentityType::Email
+             *
+             * @note
+             *     If type is omitted, then server try to gess type of the identity according
+             *     to the value format
+             */
+            Identity(const std::string& value, const IdentityType& type = IdentityType::None);
+            /**
+             * @brief Return identity value
+             */
             const std::string& getValue() const;
+            /**
+             * @brief Return identity type
+             */
             const virgil::sdk::model::IdentityType& getType() const;
-
-            std::string getTypeAsString() const;
 
         private:
             std::string value_;
             IdentityType type_ = IdentityType::None;
         };
 
+        /**
+         * @brief Compare identities for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const Identity& left, const Identity& right) {
-            if (left.getValue() == right.getValue() && left.getType() == right.getType()) {
-                return 1;
-            }
-
-            return 0;
+            return left.getType() == right.getType() && left.getValue() == right.getValue();
         }
 
+        /**
+         * @brief Compare identities for inequality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator!=(const Identity& left, const Identity& right) {
             return !(left == right);
         }

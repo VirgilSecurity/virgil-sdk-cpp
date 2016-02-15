@@ -70,7 +70,3 @@ const std::string& Identity::getValue() const {
 const IdentityType& Identity::getType() const {
     return type_;
 }
-
-std::string Identity::getTypeAsString() const {
-    return virgil::sdk::model::toString(type_);
-}

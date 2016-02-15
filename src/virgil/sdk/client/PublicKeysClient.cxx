@@ -65,6 +65,7 @@ using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::toString;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
@@ -98,7 +99,7 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
                               const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& validationToken : validationTokens) {
-        json jsonValidationToken = {{JsonKey::type, validationToken.getIdentity().getTypeAsString()},
+        json jsonValidationToken = {{JsonKey::type, toString(validationToken.getIdentity().getType())},
                                     {JsonKey::value, validationToken.getIdentity().getValue()},
                                     {JsonKey::validationToken, validationToken.getToken()}};
         jsonArray.push_back(jsonValidationToken);

@@ -68,6 +68,7 @@ using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::toString;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -87,7 +88,7 @@ VirgilCard VirgilCardsClient::create(const ValidationToken& validationToken, con
                                      const Credentials& credentials) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
-                     {{JsonKey::type, validationToken.getIdentity().getTypeAsString()},
+                     {{JsonKey::type, toString(validationToken.getIdentity().getType())},
                       {JsonKey::value, validationToken.getIdentity().getValue()},
                       {JsonKey::validationToken, validationToken.getToken()}}}};
 
@@ -153,7 +154,7 @@ std::vector<VirgilCard> VirgilCardsClient::search(const Identity& identity, cons
                                                   const bool includeUnconfirmed) {
     json jsonRelations(relations);
     json payload = {{JsonKey::value, identity.getValue()},
-                    {JsonKey::type, identity.getTypeAsString()},
+                    {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                     {JsonKey::relations, jsonRelations},
                     {JsonKey::includeUnconfirmed, includeUnconfirmed}};
 
@@ -227,7 +228,7 @@ VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
 void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidationToken& validationToken,
                                const Credentials& credentials) {
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, validationToken.getIdentity().getTypeAsString()},
+                     {{JsonKey::type, toString(validationToken.getIdentity().getType())},
                       {JsonKey::value, validationToken.getIdentity().getValue()},
                       {JsonKey::validationToken, validationToken.getToken()}}}};
 

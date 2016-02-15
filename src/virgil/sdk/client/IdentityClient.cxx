@@ -85,7 +85,8 @@ void IdentityClient::setServiceVirgilCard(const VirgilCard& identityServiceCard)
 }
 
 std::string IdentityClient::verify(const Identity& identity) {
-    json payload = {{JsonKey::type, identity.getTypeAsString()}, {JsonKey::value, identity.getValue()}};
+    json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
+                    {JsonKey::value, identity.getValue()}};
 
     Request request =
         Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::verify()).body(payload.dump());
@@ -119,7 +120,7 @@ ValidationToken IdentityClient::confirm(const std::string& actionId, const std::
 }
 
 bool IdentityClient::isValid(const Identity& identity, const std::string& validationToken) {
-    json payload = {{JsonKey::type, identity.getTypeAsString()},
+    json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                     {JsonKey::value, identity.getValue()},
                     {JsonKey::validationToken, validationToken}};
 
