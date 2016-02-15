@@ -41,54 +41,56 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-
-namespace virgil { namespace sdk {
+namespace virgil {
+namespace sdk {
     /**
-     * @brief Describe data object that stores user's credentials.
+     * @brief Describe data object that stores user's credentials
      */
     class Credentials {
     public:
         /**
-         * @brief Create object with invalid credentials.
+         * @brief Create object with invalid credentials
          * @see isValid()
          */
         Credentials() = default;
         /**
-         * @brief Initialize credentials.
-         * @param privateKey - user's private key.
-         * @param privateKeyPassword - (optional) private key password if private key is encrypted.
+         * @brief Initialize credentials
+         * @param privateKey - user's private key
+         * @param privateKeyPassword - (optional) private key password if private key is encrypted
          */
         Credentials(const virgil::crypto::VirgilByteArray& privateKey,
-                const std::string& privateKeyPassword = std::string());
+                    const virgil::crypto::VirgilByteArray& privateKeyPassword = virgil::crypto::VirgilByteArray());
         /**
-         * @brief Perform cleanup first.
+         * @brief Perform cleanup first
          * @see cleanup()
          */
         ~Credentials() noexcept;
         /**
-         * @brief Check whether credentials are valid.
+         * @brief Check whether credentials are valid
          */
         bool isValid() const;
         /**
-         * @brief Perform safe cleanup for all sensitive data.
-         * @note Credentials become invalid after perform this operation.
+         * @brief Perform safe cleanup for all sensitive data
+         * @note Credentials become invalid after perform this operation
          * @see isValid()
          */
         void cleanup() noexcept;
         /**
-         * @brief Return private key.
-         * @note For security reason pass it by reference only.
+         * @brief Return private key
+         * @note For security reason pass it by reference only
          */
         const virgil::crypto::VirgilByteArray& privateKey() const;
         /**
-         * @brief Return private key password.
-         * @note For security reason pass it by reference only.
+         * @brief Return private key password
+         * @note For security reason pass it by reference only
          */
-        const std::string& privateKeyPassword() const;
+        const virgil::crypto::VirgilByteArray& privateKeyPassword() const;
+
     private:
         virgil::crypto::VirgilByteArray privateKey_;
-        std::string privateKeyPassword_;
+        virgil::crypto::VirgilByteArray privateKeyPassword_;
     };
-}}
+}
+}
 
 #endif /* VIRGIL_SDK_CREDENTIALS_H */

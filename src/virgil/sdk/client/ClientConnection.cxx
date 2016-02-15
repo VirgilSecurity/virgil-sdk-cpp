@@ -109,7 +109,7 @@ Request ClientConnection::signRequest(const Credentials& credentials, const Requ
     VirgilByteArray sign = signer.sign(
             virgil::crypto::str2bytes(requestText),
             credentials.privateKey(),
-            virgil::crypto::str2bytes(credentials.privateKeyPassword())
+            credentials.privateKeyPassword()
     );
 
     auto headers = request.header();
@@ -123,7 +123,7 @@ std::string ClientConnection::signHash(const std::string& hash, const Credential
     VirgilByteArray signHash = signer.sign(
             virgil::crypto::str2bytes(hash),
             credentials.privateKey(),
-            virgil::crypto::str2bytes(credentials.privateKeyPassword())
+            credentials.privateKeyPassword()
     );
 
     return VirgilBase64::encode(signHash);

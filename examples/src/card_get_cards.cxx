@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Get Virgil Cards" << "\n";
         std::vector<vsdk::model::VirgilCard> virgilCards = virgilHub.cards().get(publicKeyId, virgilCardId,

@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        vsdk::Credentials credentials(privateKey, PRIVATE_KEY_PASSWORD);
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Revoke a Virgil Card" << "\n";
         virgilHub.cards().revoke(ownerCardId, validationToken, credentials);
