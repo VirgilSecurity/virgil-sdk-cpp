@@ -44,33 +44,35 @@
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilKeyPair.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilKeyPair;
+namespace vcrypto = virgil::crypto;
+
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
 int main() {
     try {
-        std::cout << "Generate keys" << std::endl;
-        VirgilKeyPair newKeyPair; // Specify password in the constructor to make private key encrypted.
+        std::cout << "Generate keys" << "\n";
+        // Specify password in the constructor to make private key encrypted.
+        vcrypto::VirgilKeyPair newKeyPair(vcrypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Store public key: new_public.key ..." << std::endl;
+        std::cout << "Store public key: new_public.key ..." << "\n";
         std::ofstream publicKeyStream("new_public.key", std::ios::out | std::ios::binary);
         if (!publicKeyStream) {
             throw std::runtime_error("can not write file: new_public.key");
         }
-        VirgilByteArray publicKey = newKeyPair.publicKey();
+        vcrypto::VirgilByteArray publicKey = newKeyPair.publicKey();
         std::copy(publicKey.begin(), publicKey.end(), std::ostreambuf_iterator<char>(publicKeyStream));
 
-        std::cout << "Store private key: new_private.key ..." << std::endl;
+        std::cout << "Store private key: new_private.key ..." << "\n";
         std::ofstream privateKeyStream("new_private.key", std::ios::out | std::ios::binary);
         if (!privateKeyStream) {
             throw std::runtime_error("can not write file: new_private.key");
         }
-        VirgilByteArray privateKey = newKeyPair.privateKey();
+        vcrypto::VirgilByteArray privateKey = newKeyPair.privateKey();
         std::copy(privateKey.begin(), privateKey.end(), std::ostreambuf_iterator<char>(privateKeyStream));
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 

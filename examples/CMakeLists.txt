@@ -36,27 +36,10 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil-examples)
+project (virgil-sdk-examples)
 
-# Enable C++11
-set (CMAKE_CXX_STANDARD 11)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
+file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 
-include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.keys/include")
-include_directories ("${PROJECT_SOURCE_DIR}/../virgil.sdk.private-keys/include")
-
-set (VIRGIL_SDK_KEYS keys)
-set (VIRGIL_SDK_PRIVATE_KEYS private_keys)
-
-include (virgil)
-virgil_add_dependency ("crypto"
-    VIRGIL_CRYPTO_DEPENDENCIES
-    VIRGIL_CRYPTO_INCLUDE_DIRS
-    VIRGIL_CRYPTO_LIBRARIES
-)
-include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
-
-file (GLOB DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 foreach (DATA_FILE ${DATA_FILES})
     string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
     configure_file (
@@ -66,20 +49,11 @@ foreach (DATA_FILE ${DATA_FILES})
     )
 endforeach (DATA_FILE)
 
-set (SRC_LIST "")
-aux_source_directory ("src" SRC_LIST)
-foreach (SRC ${SRC_LIST})
+aux_source_directory ("src" EXAMPLES_SRC_LIST)
+foreach (SRC ${EXAMPLES_SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME}
-        ${VIRGIL_SDK_KEYS}
-        ${VIRGIL_SDK_PRIVATE_KEYS}
-        ${VIRGIL_CRYPTO_LIBRARIES}
-    )
-
-    add_dependencies (${TARGET_NAME}
-        ${VIRGIL_CRYPTO_DEPENDENCIES}
-    )
+    target_link_libraries (${TARGET_NAME} ${VIRGIL_SDK})
 
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)

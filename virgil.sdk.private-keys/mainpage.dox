@@ -1,6 +1,0 @@
-/**
- * \mainpage Virgil Security Keys SDK
- *
- * The Virgil Security Keys SDK offers set of methods that enable the manage of the
- *     Virgil Security Private Keys Service from C++ applications.
- */

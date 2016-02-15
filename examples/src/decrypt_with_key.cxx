@@ -46,61 +46,65 @@
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/keys/model/PublicKey.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
+#include <virgil/sdk/model/PublicKey.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamCipher;
-using virgil::crypto::stream::VirgilStreamDataSource;
-using virgil::crypto::stream::VirgilStreamDataSink;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::keys::model::PublicKey;
-using virgil::sdk::keys::io::Marshaller;
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 
-int main() {
+int main(int argc, char **argv) {
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0]
+                + " <virgil_card_id>"
+                + " <path_private_key>"
+                << "\n";
+        return 1;
+    }
+
     try {
-        std::cout << "Prepare input file: test.txt.enc..." << std::endl;
+        std::string virgilCardId = argv[1];
+        std::string pathPrivateKey = argv[2];
+
+        std::cout << "Prepare input file: test.txt.enc..." << "\n";
         std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt.enc");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        std::cout << "Prepare output file: decrypted_test.txt..." << "\n";
         std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: decrypted_test.txt");
         }
-        VirgilStreamDataSink dataSink(outFile);
+        vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile) {
-            throw std::runtime_error("can not read virgil public key: virgil_public.key");
-        }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
-
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
-
-        std::cout << "Read private key..." << std::endl;
-        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!privateKeyFile) {
-            throw std::runtime_error("can not read private key: private.key");
-        }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
+        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
+        std::cout << "Read private key..." << "\n";
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }            vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
                 std::back_inserter(privateKey));
 
-        VirgilStreamCipher cipher;
-        std::cout << "Decrypt with key..." << std::endl;
-        cipher.decryptWithKey(dataSource, dataSink, virgil::crypto::str2bytes(publicKey.publicKeyId()), privateKey);
-        std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
+        vcrypto::VirgilStreamCipher cipher;
+        std::cout << "Decrypt with key..." << "\n";
+        cipher.decryptWithKey(
+                dataSource,
+                dataSink,
+                vcrypto::str2bytes(virgilCardId),
+                privateKey,
+                vcrypto::str2bytes(PRIVATE_KEY_PASSWORD)
+        );
+
+        std::cout << "Decrypted data is successfully stored in the output file..." << "\n";
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << "\n";
         return 1;
     }
 
