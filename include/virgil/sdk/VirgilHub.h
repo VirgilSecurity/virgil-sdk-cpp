@@ -46,8 +46,8 @@
 #include <virgil/sdk/client/VirgilCardsClientBase.h>
 #include <virgil/sdk/ServiceUri.h>
 
-
-namespace virgil { namespace sdk {
+namespace virgil {
+namespace sdk {
     /**
      * @name Forward declaration
      */
@@ -55,18 +55,44 @@ namespace virgil { namespace sdk {
     class VirgilHubClientImpl;
     //@}
     /**
-     * @brief
+     * @brief Entry point for all Virgil Security Services
      */
     class VirgilHub {
     public:
+        /**
+         * @brief Configure hub
+         *
+         * @param accessToken - provides an authenticated secure access to the Keys Service
+         *                      and is passed with each API call @see
+         * @param serviceUri - collection of Virgil Services URIs
+         *
+         * @note First you must create a free Virgil Security developer’s account by signing up.
+         *       Once you have your account you can sign in and generate an access token for your application.
+         */
         explicit VirgilHub(const std::string& accessToken,
-                const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
+                           const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
+        /**
+         * @brief Return entrypoint for Virgil Identity Service
+         */
         virgil::sdk::client::IdentityClientBase& identity();
-        virgil::sdk::client::PrivateKeysClientBase& privateKeys();
-        virgil::sdk::client::PublicKeysClientBase& publicKeys();
+        /**
+         * @brief Return entrypoint for Virgil Cards Service
+         */
         virgil::sdk::client::VirgilCardsClientBase& cards();
-
+        /**
+         * @brief Return entrypoint for Virgil Public Keys Service
+         */
+        virgil::sdk::client::PublicKeysClientBase& publicKeys();
+        /**
+         * @brief Return entrypoint for Virgil Private Keys Service
+         */
+        virgil::sdk::client::PrivateKeysClientBase& privateKeys();
+        /**
+         * @brief Load Virgil Card for all services from the default locations
+         *
+         * @note Virgil Cards can be defined manually for each service
+         */
         void loadServicePublicKeys();
 
     private:
@@ -74,7 +100,7 @@ namespace virgil { namespace sdk {
         virgil::sdk::ServiceUri virgilUri_;
         std::shared_ptr<VirgilHubClientImpl> impl_;
     };
-
-}}
+}
+}
 
 #endif /* VIRGIL_SDK_VERSION_H */

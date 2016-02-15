@@ -60,23 +60,19 @@ using virgil::sdk::client::VirgilCardsClient;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::ServiceUri;
 
-
 const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
 const std::string kPublicKeyServiceApplicationId = "com.virgilsecurity.keys";
 const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-keys";
 
-
-namespace virgil { namespace sdk {
+namespace virgil {
+namespace sdk {
     class VirgilHubClientImpl {
     public:
-        explicit VirgilHubClientImpl(const std::string& accessToken,
-                const ServiceUri& baseServiceUri)
-            :
-              identityClient(accessToken, baseServiceUri.getIdentityService() ),
-              publicKeysClient(accessToken, baseServiceUri.getPublicKeyService() ),
-              virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService() ),
-              privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService() ) {
-
+        explicit VirgilHubClientImpl(const std::string& accessToken, const ServiceUri& baseServiceUri)
+            : identityClient(accessToken, baseServiceUri.getIdentityService()),
+              publicKeysClient(accessToken, baseServiceUri.getPublicKeyService()),
+              virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService()),
+              privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService()) {
         }
 
     public:
@@ -84,16 +80,13 @@ namespace virgil { namespace sdk {
         PublicKeysClient publicKeysClient;
         VirgilCardsClient virgilCardsClient;
         PrivateKeysClient privateKeysClient;
-
     };
-}}
+}
+}
 
 VirgilHub::VirgilHub(const std::string& accessToken, const ServiceUri& baseServiceUri)
-    :
-      accessToken_(accessToken),
-      virgilUri_(baseServiceUri),
-      impl_( std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken_, virgilUri_) ) {
-
+    : accessToken_(accessToken), virgilUri_(baseServiceUri),
+      impl_(std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken_, virgilUri_)) {
 }
 
 IdentityClientBase& VirgilHub::identity() {
