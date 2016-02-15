@@ -45,7 +45,6 @@
 
 using virgil::sdk::endpoints::PrivateKeysEndpointUri;
 
-
 TEST_CASE("std::string privateKeyStash() const", "class PrivateKeysEndpointUri") {
     REQUIRE(PrivateKeysEndpointUri::privateKeyStash() == "/v3/private-key");
 }

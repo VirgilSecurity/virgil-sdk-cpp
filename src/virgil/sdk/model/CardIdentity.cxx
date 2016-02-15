@@ -42,7 +42,7 @@ using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 
 CardIdentity::CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
-                         const std::string& value, const IdentityType& type)
+                           const std::string& value, const IdentityType& type)
         : id_(id), createdAt_(createdAt), confirmed_(confirmed), identity_(value, type) {
 }
 

@@ -45,21 +45,20 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
-        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
-        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
-        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
-        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
-        "L8A4+ii+zd";
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0]
-                + " <virgil_card_id>"
-                << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>"
+                  << "\n";
         return 1;
     }
 
@@ -69,10 +68,12 @@ int main(int argc, char **argv) {
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
-        std::cout << "Get a Virgil Card" << "\n";
+        std::cout << "Get a Virgil Card"
+                  << "\n";
         vsdk::model::VirgilCard virgilCard = virgilHub.cards().get(virgilCardId);
         std::string virgilCardStr = vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(virgilCard);
-        std::cout << "A Virgil Card:" << "\n";
+        std::cout << "A Virgil Card:"
+                  << "\n";
         std::cout << virgilCardStr << "\n";
 
     } catch (std::exception& exception) {

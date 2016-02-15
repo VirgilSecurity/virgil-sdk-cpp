@@ -49,24 +49,21 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
-        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
-        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
-        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
-        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
-        "L8A4+ii+zd";
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc < 5) {
-        std::cerr << std::string("USAGE: ") + argv[0]
-                + " <trusted_card_id>"
-                + " <trusted_card_hash>"
-                + " <owner_card_id>"
-                + " <path_private_key>"
-                << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <trusted_card_id>" + " <trusted_card_hash>" +
+                         " <owner_card_id>" + " <path_private_key>"
+                  << "\n";
         return 1;
     }
 
@@ -80,24 +77,24 @@ int main(int argc, char **argv) {
         virgilHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
-        std::cout << "Read private key..." << "\n";
+        std::cout << "Read private key..."
+                  << "\n";
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
-        }            vcrypto::VirgilByteArray privateKey;
+        }
+        vcrypto::VirgilByteArray privateKey;
         std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
-            vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
+                  std::back_inserter(privateKey));
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Trust a Virgil Card" << "\n";
-        vsdk::model::TrustCardResponse trustCardResponse = virgilHub.cards().trust(
-                trustedCardId,
-                trustedCardHash,
-                ownerCardId,
-                credentials
-        );
+        std::cout << "Trust a Virgil Card"
+                  << "\n";
+        vsdk::model::TrustCardResponse trustCardResponse =
+            virgilHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
 
-        std::string trustCardResponseStr = vsdk::io::Marshaller<vsdk::model::TrustCardResponse>::toJson<4>(trustCardResponse);
+        std::string trustCardResponseStr =
+            vsdk::io::Marshaller<vsdk::model::TrustCardResponse>::toJson<4>(trustCardResponse);
         std::cout << "TrustCardResponse:\n" << trustCardResponseStr << "\n";
 
     } catch (std::exception& exception) {

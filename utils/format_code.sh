@@ -50,10 +50,18 @@ function abspath() {
 
 SCRIPT_DIR=$(dirname "$(abspath "${BASH_SOURCE[0]}")")
 
-INC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../include)" -name "*.h")
-SRC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../src)" -name "*.cxx")
+SDK_INC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../include)" -name "*.h")
+SDK_SRC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../src)" -name "*.cxx")
 
-for f in ${INC_FILES} ${SRC_FILES}
+TESTS_INC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../tests)" -name "*.h")
+TESTS_SRC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../tests)" -name "*.cxx")
+
+EXAMPLES_INC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../examples)" -name "*.h")
+EXAMPLES_SRC_FILES=$(find "$(abspath ${SCRIPT_DIR}/../examples)" -name "*.cxx")
+
+for f in ${SDK_INC_FILES} ${SDK_SRC_FILES} \
+         ${TESTS_INC_FILES} ${TESTS_SRC_FILES} \
+        ${EXAMPLES_INC_FILES} ${EXAMPLES_SRC_FILES}
 do
     clang-format "$f" > "$f.formatted" && mv "$f.formatted" "$f"
 done

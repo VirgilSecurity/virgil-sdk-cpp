@@ -36,9 +36,5 @@
 
 #include "../catch.hpp"
 
-
 TEST_CASE("IdentityClient - FAILED", "class IdentityClient") {
-
-
-
 }

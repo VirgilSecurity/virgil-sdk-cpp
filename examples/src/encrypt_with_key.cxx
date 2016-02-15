@@ -52,26 +52,26 @@
 namespace vcrypto = virgil::crypto;
 namespace vsdk = virgil::sdk;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
-        "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
-        "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
-        "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
-        "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
-        "L8A4+ii+zd";
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0]
-                + " <user_email>"
-                << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>"
+                  << "\n";
         return 1;
     }
 
     try {
         std::string userEmail = argv[1];
 
-        std::cout << "Get recipient ("<< userEmail << ") information from the Virgil PKI service..." << "\n";
+        std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..."
+                  << "\n";
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
@@ -79,30 +79,33 @@ int main(int argc, char **argv) {
         std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(identity);
 
         vcrypto::VirgilStreamCipher cipher;
-        std::cout << "Add recipient..." << "\n";
+        std::cout << "Add recipient..."
+                  << "\n";
         vsdk::model::VirgilCard recipientCard = recipientCards.at(0);
-        cipher.addKeyRecipient(
-                virgil::crypto::str2bytes( recipientCard.getId() ),
-                recipientCard.getPublicKey().getKeyBytes()
-        );
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(recipientCard.getId()),
+                               recipientCard.getPublicKey().getKeyBytes());
 
-        std::cout << "Prepare input file: test.txt..." << "\n";
+        std::cout << "Prepare input file: test.txt..."
+                  << "\n";
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
         vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: test.txt.enc..." << "\n";
+        std::cout << "Prepare output file: test.txt.enc..."
+                  << "\n";
         std::ofstream outFile("test.txt.enc", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: test.txt.enc");
         }
         vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Encrypt and store results..." << "\n";
+        std::cout << "Encrypt and store results..."
+                  << "\n";
         cipher.encrypt(dataSource, dataSink, true);
-        std::cout << "Encrypted data with key is successfully stored in the output file..." << "\n";
+        std::cout << "Encrypted data with key is successfully stored in the output file..."
+                  << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

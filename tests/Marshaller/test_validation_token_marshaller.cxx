@@ -57,17 +57,16 @@ using virgil::sdk::model::IdentityType;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-
 TEST_CASE("ValidationToken -> Json ValidationToken - FAILED", "class Marshaller") {
     ValidationToken validationToken = virgil::test::getValidationToken();
     // ValidationToken -> Json
     std::string testJsonValidationToken = Marshaller<ValidationToken>::toJson<4>(validationToken);
-    REQUIRE( virgil::test::getJsonValidationToken().dump(4) == testJsonValidationToken );
+    REQUIRE(virgil::test::getJsonValidationToken().dump(4) == testJsonValidationToken);
 }
 
 TEST_CASE("Json ValidationToken -> ValidationToken - FAILED", "class Marshaller") {
     json jsonValidationToken = virgil::test::getJsonValidationToken();
     // Json -> ValidationToken
     ValidationToken testValidationToken = Marshaller<ValidationToken>::fromJson(jsonValidationToken.dump());
-    REQUIRE( virgil::test::getValidationToken() == testValidationToken );
+    REQUIRE(virgil::test::getValidationToken() == testValidationToken);
 }

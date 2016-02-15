@@ -49,8 +49,8 @@
 
 #include <json.hpp>
 
-
-namespace virgil { namespace test {
+namespace virgil {
+namespace test {
 
     nlohmann::json getJsonValidationToken();
     virgil::sdk::model::ValidationToken getValidationToken();
@@ -70,7 +70,7 @@ namespace virgil { namespace test {
 
     nlohmann::json getJsonPrivateKey();
     virgil::sdk::model::PrivateKey getPrivateKey();
-
-}}
+}
+}
 
 #endif /* HELPERS_H */

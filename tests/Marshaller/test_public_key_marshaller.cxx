@@ -58,13 +58,12 @@ using virgil::sdk::model::PublicKey;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-
 TEST_CASE("PublicKey -> Json PublicKey - FAILED", "class Marshaller") {
     PublicKey publicKey = virgil::test::getPublicKey();
     // PublicKey -> Json
     std::string testJsonPublicKey = Marshaller<PublicKey>::toJson<4>(publicKey);
 
-    REQUIRE( virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey );
+    REQUIRE(virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey);
 }
 
 TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
@@ -73,10 +72,10 @@ TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
     PublicKey testPublicKey = Marshaller<PublicKey>::fromJson(jsonPublicKey.dump());
 
     // Beutiful!!!
-    //std::cout << testPublicKey.getKey() << "\n\n";
+    // std::cout << testPublicKey.getKey() << "\n\n";
 
     // Real world (*
-    //std::cout << VirgilBase64::encode( testPublicKey.getKeyBytes() )<< "\n\n";
+    // std::cout << VirgilBase64::encode( testPublicKey.getKeyBytes() )<< "\n\n";
 
-    REQUIRE( virgil::test::getPublicKey() == testPublicKey );
+    REQUIRE(virgil::test::getPublicKey() == testPublicKey);
 }

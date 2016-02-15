@@ -45,7 +45,6 @@
 
 using virgil::sdk::endpoints::IdentityEndpointUri;
 
-
 TEST_CASE("std::string verify() const", "class IdentityEndpointUri") {
     REQUIRE(IdentityEndpointUri::verify() == "/v1/verify");
 }

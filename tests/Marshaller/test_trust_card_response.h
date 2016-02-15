@@ -55,17 +55,16 @@ using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-
 TEST_CASE("TrustCardResponse -> Json ValidationToken - FAILED", "class Marshaller") {
     TrustCardResponse trustCardResponse = virgil::test::getTrustCardResponse();
     // TrustCardResponse -> Json
     std::string testJsonTrustCardResponse = Marshaller<TrustCardResponse>::toJson<4>(trustCardResponse);
-    REQUIRE( virgil::test::getTrustCardResponse().dump(4)  == testJsonTrustCardResponse);
+    REQUIRE(virgil::test::getTrustCardResponse().dump(4) == testJsonTrustCardResponse);
 }
 
 TEST_CASE("Json TrustCardResponse -> TrustCardResponse - FAILED", "class Marshaller") {
     json jsonTrustCardResponse = virgil::test::getJsonTrustCardResponse();
     // Json -> TrustCardResponse
     TrustCardResponse testTrustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonTrustCardResponse.dump(4));
-    REQUIRE( virgil::test::getTrustCardResponse() == testTrustCardResponse);
+    REQUIRE(virgil::test::getTrustCardResponse() == testTrustCardResponse);
 }
