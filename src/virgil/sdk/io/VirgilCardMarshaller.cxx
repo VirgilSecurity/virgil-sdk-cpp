@@ -87,11 +87,10 @@ namespace sdk {
                         {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKeyBytes())}};
 
                     CardIdentity cardIdentity = virgilCard.getCardIdentity();
-                    Identity identity = cardIdentity.getIdentity();
                     jsonVirgilCard[JsonKey::identity] = {
                         {JsonKey::id, cardIdentity.getId()},
-                        {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
-                        {JsonKey::value, identity.getValue()},
+                        {JsonKey::type, virgil::sdk::model::toString(cardIdentity.getType())},
+                        {JsonKey::value, cardIdentity.getValue()},
                         {JsonKey::isConfirmed, cardIdentity.isConfirmed()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
@@ -113,22 +112,22 @@ namespace sdk {
                 try {
                     json jsonVirgilCard = json::parse(jsonString);
 
-                    bool cardConfirme = jsonVirgilCard[JsonKey::isConfirmed];
+                    bool cardConfirmed = jsonVirgilCard[JsonKey::isConfirmed];
                     std::string cardId = jsonVirgilCard[JsonKey::id];
                     std::string cardCreatedAt = jsonVirgilCard[JsonKey::createdAt];
                     std::string cardHash = jsonVirgilCard[JsonKey::hash];
 
                     json jsonCardIdentity = jsonVirgilCard[JsonKey::identity];
-                    bool identityExtConfirme = jsonCardIdentity[JsonKey::isConfirmed];
-                    std::string identityExtId = jsonCardIdentity[JsonKey::id];
-                    std::string identityExtCreatedAt = jsonCardIdentity[JsonKey::createdAt];
+                    bool identityConfirmed = jsonCardIdentity[JsonKey::isConfirmed];
+                    std::string identityId = jsonCardIdentity[JsonKey::id];
+                    std::string identityCreatedAt = jsonCardIdentity[JsonKey::createdAt];
 
-                    std::string value = jsonCardIdentity[JsonKey::value];
-                    std::string type = jsonCardIdentity[JsonKey::type];
-                    IdentityType identityType = fromString(type);
-                    Identity identity(value, identityType);
+                    std::string identityValue = jsonCardIdentity[JsonKey::value];
+                    std::string identityValueString = jsonCardIdentity[JsonKey::type];
+                    IdentityType identityType = fromString(identityValueString);
 
-                    CardIdentity cardIdentity(identityExtConfirme, identityExtId, identityExtCreatedAt, identity);
+                    CardIdentity cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
+                                              identityType);
 
                     json jsonCustomData = jsonVirgilCard[JsonKey::data];
                     std::map<std::string, std::string> customData;
@@ -147,7 +146,7 @@ namespace sdk {
 
                     PublicKey publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
-                    return VirgilCard(cardConfirme, cardId, cardCreatedAt, cardHash, cardIdentity, customData,
+                    return VirgilCard(cardConfirmed, cardId, cardCreatedAt, cardHash, cardIdentity, customData,
                                       publicKey);
 
                 } catch (std::exception& exception) {

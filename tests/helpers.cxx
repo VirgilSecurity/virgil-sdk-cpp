@@ -178,10 +178,10 @@ namespace virgil { namespace test {
             "2016-02-08T14:33:08+0000",
             kHash,
             CardIdentity(
-                true,
                 "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
                 "2016-02-08T14:33:08+0000",
-                Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email)
+                true,
+                "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email
             ),
             std::map<std::string, std::string>(),
             getPublicKey()
@@ -304,10 +304,10 @@ namespace virgil { namespace test {
             "2016-02-08T14:33:08+0000",
             kHash,
             CardIdentity(
-                true,
                 "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
                 "2016-02-08T14:33:08+0000",
-                Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email)
+                true,
+                "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email
             ),
             { { "google", "calendar" }, { "test", "draft1" } },
             getPublicKey()

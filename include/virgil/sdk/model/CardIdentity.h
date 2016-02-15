@@ -44,33 +44,73 @@
 namespace virgil {
 namespace sdk {
     namespace model {
+        /**
+         * @brief This class reresents extended version of class Identity
+         *
+         * @details This class contains addition information of identity,
+         *          that is used in conjuction with class @link VirgilCard @endlink.
+         */
         class CardIdentity {
         public:
+            /**
+             * @brief Creates not valid identity
+             */
             CardIdentity() = default;
-            CardIdentity(const bool confirmed, const std::string& id, const std::string& createdAt,
-                         const Identity& identity);
-
-            bool isConfirmed() const;
+            /**
+             * @brief Creates valid identity
+             *
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
+             * @param confirmed - true, if identity is confirmed by user
+             * @param value - identity value
+             * @param type - identity type
+             */
+            CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
+                         const std::string& value, const IdentityType& type);
+            /**
+             * @brief Return unique object identifier defined by service
+             */
             const std::string& getId() const;
+            /**
+             * @brief Return cretion date timestamp defined by service
+             */
             const std::string& getCreatedAt() const;
-            const Identity& getIdentity() const;
+            /**
+             * @brief Return true, if identity is confirmed by user, false - otherwise
+             */
+            bool isConfirmed() const;
+            /**
+             * @brief Return identity value
+             */
+            const std::string& getValue() const;
+            /**
+             * @brief Return identity type
+             */
+            const virgil::sdk::model::IdentityType& getType() const;
 
         private:
-            bool confirmed_ = false;
             std::string id_;
             std::string createdAt_;
+            bool confirmed_ = false;
             Identity identity_;
         };
 
+        /**
+         * @brief Compare identities for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
-            if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
-                left.getCreatedAt() == right.getCreatedAt() && left.getIdentity() == right.getIdentity()) {
-                return 1;
-            }
-
-            return 0;
+            return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.isConfirmed() == right.isConfirmed() && left.getType() == right.getType() &&
+                   left.getValue() == right.getValue();
         }
 
+        /**
+         * @brief Compare identities for inequality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator!=(const CardIdentity& left, const CardIdentity& right) {
             return !(left == right);
         }
