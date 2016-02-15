@@ -38,7 +38,7 @@
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace vsdk = virgil::sdk;
@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
     try {
         std::string userEmail = argv[1];
 
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
         std::cout << "Verify the Identity..." << "\n";
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);

@@ -38,7 +38,7 @@
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
     try {
         std::string virgilCardId = argv[1];
 
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
         std::cout << "Get a Virgil Card" << "\n";

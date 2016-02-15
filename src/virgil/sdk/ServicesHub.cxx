@@ -39,7 +39,7 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
@@ -48,7 +48,7 @@
 
 using virgil::crypto::VirgilByteArray;
 
-using virgil::sdk::VirgilHub;
+using virgil::sdk::ServicesHub;
 using virgil::sdk::client::IdentityClientBase;
 using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::PrivateKeysClientBase;
@@ -66,9 +66,9 @@ const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-
 
 namespace virgil {
 namespace sdk {
-    class VirgilHubClientImpl {
+    class ServicesHubImpl {
     public:
-        explicit VirgilHubClientImpl(const std::string& accessToken, const ServiceUri& baseServiceUri)
+        explicit ServicesHubImpl(const std::string& accessToken, const ServiceUri& baseServiceUri)
             : identityClient(accessToken, baseServiceUri.getIdentityService()),
               publicKeysClient(accessToken, baseServiceUri.getPublicKeyService()),
               virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService()),
@@ -84,28 +84,28 @@ namespace sdk {
 }
 }
 
-VirgilHub::VirgilHub(const std::string& accessToken, const ServiceUri& baseServiceUri)
+ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseServiceUri)
     : accessToken_(accessToken), virgilUri_(baseServiceUri),
-      impl_(std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken_, virgilUri_)) {
+      impl_(std::make_shared<virgil::sdk::ServicesHubImpl>(accessToken_, virgilUri_)) {
 }
 
-IdentityClientBase& VirgilHub::identity() {
+IdentityClientBase& ServicesHub::identity() {
     return impl_->identityClient;
 }
 
-PrivateKeysClientBase& VirgilHub::privateKeys() {
+PrivateKeysClientBase& ServicesHub::privateKeys() {
     return impl_->privateKeysClient;
 }
 
-PublicKeysClientBase& VirgilHub::publicKeys() {
+PublicKeysClientBase& ServicesHub::publicKeys() {
     return impl_->publicKeysClient;
 }
 
-VirgilCardsClientBase& VirgilHub::cards() {
+VirgilCardsClientBase& ServicesHub::cards() {
     return impl_->virgilCardsClient;
 }
 
-void VirgilHub::loadServicesCard() {
+void ServicesHub::loadServicesCard() {
     auto identityServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kIdentityServiceApplicationId);
     auto publicKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPublicKeyServiceApplicationId);
     auto privateKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPrivateKeyServiceApplicationId);

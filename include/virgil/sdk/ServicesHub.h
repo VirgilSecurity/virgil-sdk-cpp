@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_HUB_H
-#define VIRGIL_SDK_HUB_H
+#ifndef VIRGIL_SDK_SERVICES_HUB_H
+#define VIRGIL_SDK_SERVICES_HUB_H
 
 #include <memory>
 #include <string>
@@ -52,12 +52,12 @@ namespace sdk {
      * @name Forward declaration
      */
     //@{
-    class VirgilHubClientImpl;
+    class ServicesHubImpl;
     //@}
     /**
      * @brief Entry point for all Virgil Security Services
      */
-    class VirgilHub {
+    class ServicesHub {
     public:
         /**
          * @brief Configure hub
@@ -69,7 +69,7 @@ namespace sdk {
          * @note First you must create a free Virgil Security developer’s account by signing up.
          *       Once you have your account you can sign in and generate an access token for your application.
          */
-        explicit VirgilHub(const std::string& accessToken,
+        explicit ServicesHub(const std::string& accessToken,
                            const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
         /**
@@ -98,7 +98,7 @@ namespace sdk {
     private:
         std::string accessToken_;
         virgil::sdk::ServiceUri virgilUri_;
-        std::shared_ptr<VirgilHubClientImpl> impl_;
+        std::shared_ptr<ServicesHubImpl> impl_;
     };
 }
 }

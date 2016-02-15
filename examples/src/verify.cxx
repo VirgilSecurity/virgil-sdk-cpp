@@ -46,7 +46,7 @@
 #include <virgil/crypto/VirgilStreamSigner.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace vsdk = virgil::sdk;
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
                 std::back_inserter(sign));
 
         std::cout << "Get signer ("<< userEmail << ") public key from the Virgil PKI service..." << "\n";
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);

@@ -46,7 +46,7 @@
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace vsdk = virgil::sdk;
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
         cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Get recipient ("<< userEmail << ") information from the Virgil PKI service..." << "\n";
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);

@@ -41,7 +41,7 @@
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace vsdk = virgil::sdk;
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
         std::string ownerCardId = argv[2];
         std::string pathPrivateKey = argv[3];
 
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";

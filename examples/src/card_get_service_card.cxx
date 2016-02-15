@@ -39,7 +39,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include <virgil/sdk/VirgilHub.h>
+#include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
@@ -71,7 +71,7 @@ int main() {
                 VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE
         );
 
-        vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
         auto identityServiceVirgilCards = virgilHub.cards().getServiceCard(kIdentityServiceApplicationId);
         auto publicKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
         auto privateKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
