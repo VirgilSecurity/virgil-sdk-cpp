@@ -41,7 +41,7 @@
 #include <map>
 
 #include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/IdentityExtended.h>
+#include <virgil/sdk/model/CardIdentity.h>
 
 namespace virgil {
 namespace sdk {
@@ -53,14 +53,14 @@ namespace sdk {
         public:
             VirgilCard() = default;
             VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
-                       const std::string& hash, const virgil::sdk::model::IdentityExtended& identityExtended,
+                       const std::string& hash, const virgil::sdk::model::CardIdentity& cardIdentity,
                        const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey);
 
             bool getConfirme() const;
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
             const std::string& getHash() const;
-            const virgil::sdk::model::IdentityExtended& getIdentityExtended() const;
+            const virgil::sdk::model::CardIdentity& getCardIdentity() const;
             const std::map<std::string, std::string>& getData() const;
             const virgil::sdk::model::PublicKey& getPublicKey() const;
 
@@ -69,7 +69,7 @@ namespace sdk {
             std::string id_;
             std::string createdAt_;
             std::string hash_;
-            virgil::sdk::model::IdentityExtended identityExtended_;
+            virgil::sdk::model::CardIdentity cardIdentity_;
             std::map<std::string, std::string> data_;
             virgil::sdk::model::PublicKey publicKey_;
         };
@@ -77,7 +77,7 @@ namespace sdk {
         inline bool operator==(const VirgilCard& left, const VirgilCard& right) {
             if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
-                left.getIdentityExtended() == right.getIdentityExtended() && left.getData() == right.getData() &&
+                left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
                 left.getPublicKey() == right.getPublicKey()) {
                 return 1;
             }

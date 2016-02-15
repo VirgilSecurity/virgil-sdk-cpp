@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
-#define VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H
+#ifndef VIRGIL_SDK_MODEL_CARD_IDENTITY_H
+#define VIRGIL_SDK_MODEL_CARD_IDENTITY_H
 
 #include <string>
 
@@ -44,14 +44,11 @@
 namespace virgil {
 namespace sdk {
     namespace model {
-        /**
-         * @brief
-         */
-        class IdentityExtended {
+        class CardIdentity {
         public:
-            IdentityExtended() = default;
-            IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
-                             const Identity& identity);
+            CardIdentity() = default;
+            CardIdentity(const bool confirme, const std::string& id, const std::string& createdAt,
+                         const Identity& identity);
 
             bool getConfirme() const;
             const std::string& getId() const;
@@ -65,7 +62,7 @@ namespace sdk {
             Identity identity_;
         };
 
-        inline bool operator==(const IdentityExtended& left, const IdentityExtended& right) {
+        inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
             if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getIdentity() == right.getIdentity()) {
                 return 1;
@@ -74,11 +71,11 @@ namespace sdk {
             return 0;
         }
 
-        inline bool operator!=(const IdentityExtended& left, const IdentityExtended& right) {
+        inline bool operator!=(const CardIdentity& left, const CardIdentity& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H */
+#endif /* VIRGIL_SDK_MODEL_CARD_IDENTITY_H */

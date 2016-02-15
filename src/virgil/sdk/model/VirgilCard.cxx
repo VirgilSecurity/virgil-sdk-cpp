@@ -39,16 +39,16 @@
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::CardIdentity;
 
 VirgilCard::VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
-                       const std::string& hash, const IdentityExtended& identityExtended,
+                       const std::string& hash, const CardIdentity& cardIdentity,
                        const std::map<std::string, std::string>& data, const PublicKey& publicKey)
         : confirme_(confirme),
           id_(id),
           createdAt_(createdAt),
           hash_(hash),
-          identityExtended_(identityExtended),
+          cardIdentity_(cardIdentity),
           data_(data),
           publicKey_(publicKey) {
 }
@@ -69,8 +69,8 @@ const std::string& VirgilCard::getHash() const {
     return hash_;
 }
 
-const IdentityExtended& VirgilCard::getIdentityExtended() const {
-    return identityExtended_;
+const CardIdentity& VirgilCard::getCardIdentity() const {
+    return cardIdentity_;
 }
 
 const std::map<std::string, std::string>& VirgilCard::getData() const {

@@ -46,7 +46,7 @@
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/model/VirgilCard.h>
-#include <virgil/sdk/model/IdentityExtended.h>
+#include <virgil/sdk/model/CardIdentity.h>
 #include <virgil/sdk/model/PublicKey.h>
 #include <virgil/sdk/model/Identity.h>
 
@@ -57,7 +57,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
@@ -86,14 +86,14 @@ namespace sdk {
                         {JsonKey::createdAt, publicKey.getCreatedAt()},
                         {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKeyBytes())}};
 
-                    IdentityExtended identityExtended = virgilCard.getIdentityExtended();
-                    Identity identity = identityExtended.getIdentity();
+                    CardIdentity cardIdentity = virgilCard.getCardIdentity();
+                    Identity identity = cardIdentity.getIdentity();
                     jsonVirgilCard[JsonKey::identity] = {
-                        {JsonKey::id, identityExtended.getId()},
+                        {JsonKey::id, cardIdentity.getId()},
                         {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                         {JsonKey::value, identity.getValue()},
-                        {JsonKey::isConfirmed, identityExtended.getConfirme()},
-                        {JsonKey::createdAt, identityExtended.getCreatedAt()}};
+                        {JsonKey::isConfirmed, cardIdentity.getConfirme()},
+                        {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (virgilCard.getData().empty()) {
                         jsonVirgilCard[JsonKey::data] = nullptr;
@@ -118,18 +118,17 @@ namespace sdk {
                     std::string cardCreatedAt = jsonVirgilCard[JsonKey::createdAt];
                     std::string cardHash = jsonVirgilCard[JsonKey::hash];
 
-                    json jsonIdentityExtended = jsonVirgilCard[JsonKey::identity];
-                    bool identityExtConfirme = jsonIdentityExtended[JsonKey::isConfirmed];
-                    std::string identityExtId = jsonIdentityExtended[JsonKey::id];
-                    std::string identityExtCreatedAt = jsonIdentityExtended[JsonKey::createdAt];
+                    json jsonCardIdentity = jsonVirgilCard[JsonKey::identity];
+                    bool identityExtConfirme = jsonCardIdentity[JsonKey::isConfirmed];
+                    std::string identityExtId = jsonCardIdentity[JsonKey::id];
+                    std::string identityExtCreatedAt = jsonCardIdentity[JsonKey::createdAt];
 
-                    std::string value = jsonIdentityExtended[JsonKey::value];
-                    std::string type = jsonIdentityExtended[JsonKey::type];
+                    std::string value = jsonCardIdentity[JsonKey::value];
+                    std::string type = jsonCardIdentity[JsonKey::type];
                     IdentityType identityType = fromString(type);
                     Identity identity(value, identityType);
 
-                    IdentityExtended identityExtended(identityExtConfirme, identityExtId, identityExtCreatedAt,
-                                                      identity);
+                    CardIdentity cardIdentity(identityExtConfirme, identityExtId, identityExtCreatedAt, identity);
 
                     json jsonCustomData = jsonVirgilCard[JsonKey::data];
                     std::map<std::string, std::string> customData;
@@ -148,7 +147,7 @@ namespace sdk {
 
                     PublicKey publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
-                    return VirgilCard(cardConfirme, cardId, cardCreatedAt, cardHash, identityExtended, customData,
+                    return VirgilCard(cardConfirme, cardId, cardCreatedAt, cardHash, cardIdentity, customData,
                                       publicKey);
 
                 } catch (std::exception& exception) {

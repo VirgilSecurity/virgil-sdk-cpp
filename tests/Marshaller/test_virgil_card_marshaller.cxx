@@ -52,7 +52,7 @@ using json = nlohmann::json;
 
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;

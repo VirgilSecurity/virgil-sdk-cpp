@@ -34,29 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/IdentityExtended.h>
+#include <virgil/sdk/model/CardIdentity.h>
 #include <virgil/sdk/model/Identity.h>
 
-using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::Identity;
 
-IdentityExtended::IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
-                                   const Identity& identity)
+CardIdentity::CardIdentity(const bool confirme, const std::string& id, const std::string& createdAt,
+                           const Identity& identity)
         : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
 }
 
-bool IdentityExtended::getConfirme() const {
+bool CardIdentity::getConfirme() const {
     return confirme_;
 }
 
-const std::string& IdentityExtended::getId() const {
+const std::string& CardIdentity::getId() const {
     return id_;
 }
 
-const std::string& IdentityExtended::getCreatedAt() const {
+const std::string& CardIdentity::getCreatedAt() const {
     return createdAt_;
 }
 
-const Identity& IdentityExtended::getIdentity() const {
+const Identity& CardIdentity::getIdentity() const {
     return identity_;
 }

@@ -42,7 +42,7 @@
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include <virgil/sdk/model/IdentityExtended.h>
+#include <virgil/sdk/model/CardIdentity.h>
 
 using json = nlohmann::json;
 
@@ -55,7 +55,7 @@ using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::IdentityExtended;
+using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
 
@@ -177,7 +177,7 @@ namespace virgil { namespace test {
             "ea14f729-676f-47f1-8cc9-8adbf2a66a95",
             "2016-02-08T14:33:08+0000",
             kHash,
-            IdentityExtended(
+            CardIdentity(
                 true,
                 "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
                 "2016-02-08T14:33:08+0000",
@@ -303,7 +303,7 @@ namespace virgil { namespace test {
             "ea14f729-676f-47f1-8cc9-8adbf2a66a95",
             "2016-02-08T14:33:08+0000",
             kHash,
-            IdentityExtended(
+            CardIdentity(
                 true,
                 "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d",
                 "2016-02-08T14:33:08+0000",
