@@ -43,7 +43,7 @@
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
 #include <virgil/sdk/client/VerifyResponse.h>
-#include <virgil/sdk/endpoints //PublicKeysEndpointUri.h>
+#include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>

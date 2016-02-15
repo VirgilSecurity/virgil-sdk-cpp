@@ -47,13 +47,19 @@ std::string Version::asString() {
 }
 
 size_t Version::majorVersion() {
-    return @VIRGIL_SDK_VERSION_MAJOR @;
+    // clang-format off
+    return @VIRGIL_SDK_VERSION_MAJOR@;
+    // clang-format on
 }
 
 size_t Version::minorVersion() {
-    return @VIRGIL_SDK_VERSION_MINOR @;
+    // clang-format off
+    return @VIRGIL_SDK_VERSION_MINOR@;
+    // clang-format on
 }
 
 size_t Version::patchVersion() {
-    return @VIRGIL_SDK_VERSION_PATCH @;
+    // clang-format off
+    return @VIRGIL_SDK_VERSION_PATCH@;
+    // clang-format on
 }
