@@ -37,14 +37,13 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 # Define variables
-set (UUT_LIB_NAME virgil-sdk)
 set (TEST_RUNNER test_runner)
 
 file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
 
 # Configure test target
 add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})
-target_link_libraries (${TEST_RUNNER} ${UUT_LIB_NAME})
+target_link_libraries (${TEST_RUNNER} ${VIRGIL_SDK})
 
 # Run tests
 add_test (

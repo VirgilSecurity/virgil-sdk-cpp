@@ -38,8 +38,6 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 project (virgil-sdk-examples)
 
-set (VIRGIL_SDK virgil-sdk)
-
 file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
 
 foreach (DATA_FILE ${DATA_FILES})
@@ -51,19 +49,11 @@ foreach (DATA_FILE ${DATA_FILES})
     )
 endforeach (DATA_FILE)
 
-set (SRC_LIST "")
-aux_source_directory ("src" SRC_LIST)
-foreach (SRC ${SRC_LIST})
+aux_source_directory ("src" EXAMPLES_SRC_LIST)
+foreach (SRC ${EXAMPLES_SRC_LIST})
     get_filename_component (TARGET_NAME ${SRC} NAME_WE)
     add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME}
-        ${VIRGIL_SDK}
-        ${VIRGIL_CRYPTO_LIBRARIES}
-    )
-
-    add_dependencies (${TARGET_NAME}
-        ${VIRGIL_CRYPTO_DEPENDENCIES}
-    )
+    target_link_libraries (${TARGET_NAME} ${VIRGIL_SDK})
 
     install (TARGETS ${TARGET_NAME} DESTINATION ".")
 endforeach (SRC)
