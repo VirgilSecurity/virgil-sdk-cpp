@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
         std::string userEmail = argv[1];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
         std::cout << "Verify the Identity..." << "\n";
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         std::string actionId = virgilHub

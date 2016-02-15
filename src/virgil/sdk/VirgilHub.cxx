@@ -105,7 +105,7 @@ VirgilCardsClientBase& VirgilHub::cards() {
     return impl_->virgilCardsClient;
 }
 
-void VirgilHub::loadServicePublicKeys() {
+void VirgilHub::loadServicesCard() {
     auto identityServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kIdentityServiceApplicationId);
     auto publicKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPublicKeyServiceApplicationId);
     auto privateKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPrivateKeyServiceApplicationId);

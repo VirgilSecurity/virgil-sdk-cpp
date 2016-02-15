@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
         std::string virgilCardId = argv[1];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
 
         std::cout << "Get a Virgil Card" << "\n";
         vsdk::model::VirgilCard virgilCard = virgilHub.cards().get(virgilCardId);

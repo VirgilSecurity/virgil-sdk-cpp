@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
         std::string confirmationCode = argv[2];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
         vsdk::model::ValidationToken validationToken = virgilHub.identity().confirm(
                 actionId,
                 confirmationCode,

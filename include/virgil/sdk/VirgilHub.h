@@ -93,7 +93,7 @@ namespace sdk {
          *
          * @note Virgil Cards can be defined manually for each service
          */
-        void loadServicePublicKeys();
+        void loadServicesCard();
 
     private:
         std::string accessToken_;

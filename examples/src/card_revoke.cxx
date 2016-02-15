@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
         std::string token = argv[4];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         vsdk::model::ValidationToken validationToken(identity, token);

@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
         std::string pathPrivateKey = argv[3];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..." << "\n";

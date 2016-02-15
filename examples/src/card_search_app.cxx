@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 
     try {
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
 
         std::cout << "Search for Application Cards" << "\n";
 

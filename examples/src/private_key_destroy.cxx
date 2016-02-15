@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
         std::string pathPrivateKey = argv[3];
 
         vsdk::VirgilHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicePublicKeys();
+        virgilHub.loadServicesCard();
 
         std::cout << "Prepare input file: " << pathPublicKey << "\n";
         std::ifstream inFile(pathPublicKey, std::ios::in | std::ios::binary);
