@@ -84,7 +84,7 @@ namespace sdk {
                     jsonVirgilCard[JsonKey::publicKey] = {
                         {JsonKey::id, publicKey.getId()},
                         {JsonKey::createdAt, publicKey.getCreatedAt()},
-                        {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKeyBytes())}};
+                        {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
 
                     CardIdentity cardIdentity = virgilCard.getCardIdentity();
                     jsonVirgilCard[JsonKey::identity] = {

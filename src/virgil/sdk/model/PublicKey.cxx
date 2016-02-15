@@ -52,10 +52,6 @@ const std::string& PublicKey::getCreatedAt() const {
     return createdAt_;
 }
 
-const VirgilByteArray& PublicKey::getKeyBytes() const {
+const VirgilByteArray& PublicKey::getKey() const {
     return key_;
-}
-
-std::string PublicKey::getKey() const {
-    return virgil::crypto::bytes2str(key_);
 }

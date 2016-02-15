@@ -62,7 +62,7 @@ namespace sdk {
             template <int INDENT = -1> static std::string toJson(const PublicKey& publicKey) {
                 json jsonPublicKey = {{JsonKey::id, publicKey.getId()},
                                       {JsonKey::createdAt, publicKey.getCreatedAt()},
-                                      {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKeyBytes())}};
+                                      {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
                 return jsonPublicKey.dump(INDENT);
             }
 

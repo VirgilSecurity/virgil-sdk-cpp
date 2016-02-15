@@ -142,7 +142,7 @@ bool IdentityClient::isValid(const virgil::sdk::model::ValidationToken& validati
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, identityServiceCard_.getPublicKey().getKeyBytes());
+    bool verifed = virgil::sdk::client::verifyResponse(response, identityServiceCard_.getPublicKey().getKey());
 
     if (!verifed) {
         throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "

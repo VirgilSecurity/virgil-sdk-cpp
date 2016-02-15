@@ -82,8 +82,7 @@ int main(int argc, char** argv) {
         std::cout << "Add recipient..."
                   << "\n";
         vsdk::model::VirgilCard recipientCard = recipientCards.at(0);
-        cipher.addKeyRecipient(virgil::crypto::str2bytes(recipientCard.getId()),
-                               recipientCard.getPublicKey().getKeyBytes());
+        cipher.addKeyRecipient(virgil::crypto::str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
 
         std::cout << "Prepare input file: test.txt..."
                   << "\n";

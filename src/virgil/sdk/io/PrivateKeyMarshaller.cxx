@@ -61,7 +61,7 @@ namespace sdk {
         public:
             template <int INDENT = -1> static std::string toJson(const PrivateKey& privateKey) {
                 json jsonPrivateKey = {{JsonKey::virgilCardId, privateKey.getVirgilCardId()},
-                                       {JsonKey::privateKey, VirgilBase64::encode(privateKey.getKeyBytes())}};
+                                       {JsonKey::privateKey, VirgilBase64::encode(privateKey.getKey())}};
                 return jsonPrivateKey.dump(INDENT);
             }
 

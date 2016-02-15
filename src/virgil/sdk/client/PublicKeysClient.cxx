@@ -122,7 +122,7 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
 }
 
 void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeysServiceCard_.getPublicKey().getKeyBytes());
+    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeysServiceCard_.getPublicKey().getKey());
 
     if (!verifed) {
         throw std::runtime_error("PublicKeysClient: The response verification has failed. Signature doesn't match "

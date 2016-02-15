@@ -259,7 +259,7 @@ Request VirgilCardsClient::getAppCard(const std::string& applicationIdentity) {
 }
 
 void VirgilCardsClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeysServiceCard_.getPublicKey().getKeyBytes());
+    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeysServiceCard_.getPublicKey().getKey());
 
     if (!verifed) {
         throw std::runtime_error("VirgilCardsClient: The response verification has failed. Signature doesn't match "

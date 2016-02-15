@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
         vcrypto::VirgilStreamSigner signer;
         std::cout << "Verify data..."
                   << "\n";
-        bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKeyBytes());
+        bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKey());
         std::cout << "Data is " << (verified ? "" : "not ") << "verified!"
                   << "\n";
 

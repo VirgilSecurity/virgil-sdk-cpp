@@ -54,9 +54,7 @@ namespace sdk {
 
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
-            const virgil::crypto::VirgilByteArray& getKeyBytes() const;
-
-            std::string getKey() const;
+            const virgil::crypto::VirgilByteArray& getKey() const;
 
         private:
             std::string id_;
@@ -66,7 +64,7 @@ namespace sdk {
 
         inline bool operator==(const PublicKey& left, const PublicKey& right) {
             if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                left.getKeyBytes() == right.getKeyBytes()) {
+                left.getKey() == right.getKey()) {
                 return 1;
             }
             return 0;

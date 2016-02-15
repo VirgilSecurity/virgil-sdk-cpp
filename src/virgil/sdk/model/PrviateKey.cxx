@@ -52,7 +52,7 @@ const std::string& PrivateKey::getVirgilCardId() const {
     return virgilCardId_;
 }
 
-const VirgilByteArray& PrivateKey::getKeyBytes() const {
+const VirgilByteArray& PrivateKey::getKey() const {
     return key_;
 }
 

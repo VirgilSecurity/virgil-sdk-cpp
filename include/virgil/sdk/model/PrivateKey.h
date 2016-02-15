@@ -67,7 +67,7 @@ namespace sdk {
             /**
              * @brief Return private key
              */
-            const virgil::crypto::VirgilByteArray& getKeyBytes() const;
+            const virgil::crypto::VirgilByteArray& getKey() const;
 
             /**
              * @brief Perform security cleanup

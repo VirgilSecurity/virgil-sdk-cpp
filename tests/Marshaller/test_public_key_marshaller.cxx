@@ -75,7 +75,7 @@ TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
     // std::cout << testPublicKey.getKey() << "\n\n";
 
     // Real world (*
-    // std::cout << VirgilBase64::encode( testPublicKey.getKeyBytes() )<< "\n\n";
+    // std::cout << VirgilBase64::encode( testPublicKey.getKey() )<< "\n\n";
 
     REQUIRE(virgil::test::getPublicKey() == testPublicKey);
 }
