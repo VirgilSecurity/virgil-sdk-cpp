@@ -42,38 +42,38 @@
 
 #include <virgil/sdk/model/VirgilCard.h>
 
-
-namespace virgil { namespace sdk { namespace io {
-    /**
-     * @brief This class responsible for the data object marshalling.
-     *
-     * Supported classes:
-     */
-    template <typename T>
-    class Marshaller {
-    public:
+namespace virgil {
+namespace sdk {
+    namespace io {
         /**
-         * @brief Marshal given object to the Json representation.
+         * @brief This class responsible for the data object marshalling.
+         *
+         * Supported classes:
          */
-        template<int INDENT = -1>
-        static std::string toJson(const T& obj);
-        /**
-         * @brief Unmarshal Json representation to the associated object.
-         */
-        static T fromJson(const std::string& jsonString);
-    private:
-        /**
-         * @brief Forbid object creation.
-         */
-        Marshaller();
-    };
+        template <typename T> class Marshaller {
+        public:
+            /**
+             * @brief Marshal given object to the Json representation.
+             */
+            template <int INDENT = -1> static std::string toJson(const T& obj);
+            /**
+             * @brief Unmarshal Json representation to the associated object.
+             */
+            static T fromJson(const std::string& jsonString);
 
-    std::string toJsonVirgilCards(const std::vector<virgil::sdk::model::VirgilCard> virgilCards,
-            const int INDENT = -1);
+        private:
+            /**
+             * @brief Forbid object creation.
+             */
+            Marshaller();
+        };
 
-    std::vector<virgil::sdk::model::VirgilCard> fromJsonVirgilCards(const std::string& jsonStringVirgilCards);
+        std::string toJsonVirgilCards(const std::vector<virgil::sdk::model::VirgilCard> virgilCards,
+                                      const int INDENT = -1);
 
-
-}}}
+        std::vector<virgil::sdk::model::VirgilCard> fromJsonVirgilCards(const std::string& jsonStringVirgilCards);
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_MARSHALLER_H */

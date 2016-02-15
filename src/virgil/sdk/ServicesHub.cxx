@@ -69,10 +69,10 @@ namespace sdk {
     class ServicesHubImpl {
     public:
         explicit ServicesHubImpl(const std::string& accessToken, const ServiceUri& baseServiceUri)
-            : identityClient(accessToken, baseServiceUri.getIdentityService()),
-              publicKeysClient(accessToken, baseServiceUri.getPublicKeyService()),
-              virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService()),
-              privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService()) {
+                : identityClient(accessToken, baseServiceUri.getIdentityService()),
+                  publicKeysClient(accessToken, baseServiceUri.getPublicKeyService()),
+                  virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService()),
+                  privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService()) {
         }
 
     public:
@@ -85,8 +85,9 @@ namespace sdk {
 }
 
 ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseServiceUri)
-    : accessToken_(accessToken), virgilUri_(baseServiceUri),
-      impl_(std::make_shared<virgil::sdk::ServicesHubImpl>(accessToken_, virgilUri_)) {
+        : accessToken_(accessToken),
+          virgilUri_(baseServiceUri),
+          impl_(std::make_shared<virgil::sdk::ServicesHubImpl>(accessToken_, virgilUri_)) {
 }
 
 IdentityClientBase& ServicesHub::identity() {

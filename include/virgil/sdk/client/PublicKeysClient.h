@@ -40,34 +40,36 @@
 #include <virgil/sdk/client/PublicKeysClientBase.h>
 #include <virgil/sdk/http/Response.h>
 
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
+         */
+        class PublicKeysClient final : public PublicKeysClientBase {
+        public:
+            PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
-     */
-    class PublicKeysClient final : public PublicKeysClientBase {
-    public:
-        PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
+            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
 
-        virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
 
-        void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
+            virgil::sdk::model::PublicKey get(const std::string& publicKeyId) override;
 
+            void revoke(const std::string& publicKeyId,
+                        const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
+                        const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) override;
 
-        virgil::sdk::model::PublicKey get(const std::string& publicKeyId) override;
+        private:
+            std::string accessToken_;
+            std::string baseServiceUri_;
+            virgil::sdk::model::VirgilCard publicKeysServiceCard_;
 
-        void revoke(const std::string& publicKeyId,
-                const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
-                const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) override;
-
-    private:
-        std::string accessToken_;
-        std::string baseServiceUri_;
-        virgil::sdk::model::VirgilCard publicKeysServiceCard_;
-
-    private:
-        void verifyResponse(const virgil::sdk::http::Response& response);
-    };
-}}}
+        private:
+            void verifyResponse(const virgil::sdk::http::Response& response);
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PUBLIC_CLIENT_H */

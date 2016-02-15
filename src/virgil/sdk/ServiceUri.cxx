@@ -47,13 +47,16 @@ const std::string ServiceUri::kPrivateKeyServiceUri = "https://keys-private-stg.
 // const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
 
 ServiceUri::ServiceUri()
-    : identityService_(kIdentityServiceUri), publicKeyService_(kPublicKeyServiceUri),
-      privateKeyService_(kPrivateKeyServiceUri) {
+        : identityService_(kIdentityServiceUri),
+          publicKeyService_(kPublicKeyServiceUri),
+          privateKeyService_(kPrivateKeyServiceUri) {
 }
 
 ServiceUri::ServiceUri(const std::string& identityService, const std::string& publicKeyService,
-                     const std::string& privateKeyService)
-    : identityService_(identityService), publicKeyService_(publicKeyService), privateKeyService_(privateKeyService) {
+                       const std::string& privateKeyService)
+        : identityService_(identityService),
+          publicKeyService_(publicKeyService),
+          privateKeyService_(privateKeyService) {
 }
 
 std::string ServiceUri::getIdentityService() const {

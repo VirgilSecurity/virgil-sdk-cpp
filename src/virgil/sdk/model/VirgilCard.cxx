@@ -41,39 +41,42 @@ using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::IdentityExtended;
 
-
 VirgilCard::VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
-        const std::string& hash, const IdentityExtended& identityExtended, const std::map<std::string, std::string>& data,
-        const PublicKey& publicKey)
-         : confirme_(confirme), id_(id), createdAt_(createdAt), hash_(hash), identityExtended_(identityExtended),
-                data_(data), publicKey_(publicKey){
-
+                       const std::string& hash, const IdentityExtended& identityExtended,
+                       const std::map<std::string, std::string>& data, const PublicKey& publicKey)
+        : confirme_(confirme),
+          id_(id),
+          createdAt_(createdAt),
+          hash_(hash),
+          identityExtended_(identityExtended),
+          data_(data),
+          publicKey_(publicKey) {
 }
 
 bool VirgilCard::getConfirme() const {
     return confirme_;
 }
 
- const std::string& VirgilCard::getId() const {
+const std::string& VirgilCard::getId() const {
     return id_;
 }
 
- const std::string& VirgilCard::getCreatedAt() const {
+const std::string& VirgilCard::getCreatedAt() const {
     return createdAt_;
 }
 
- const std::string& VirgilCard::getHash() const {
+const std::string& VirgilCard::getHash() const {
     return hash_;
 }
 
- const IdentityExtended& VirgilCard::getIdentityExtended() const {
+const IdentityExtended& VirgilCard::getIdentityExtended() const {
     return identityExtended_;
 }
 
- const std::map<std::string, std::string>& VirgilCard::getData() const {
+const std::map<std::string, std::string>& VirgilCard::getData() const {
     return data_;
 }
 
- const PublicKey& VirgilCard::getPublicKey() const {
+const PublicKey& VirgilCard::getPublicKey() const {
     return publicKey_;
 }

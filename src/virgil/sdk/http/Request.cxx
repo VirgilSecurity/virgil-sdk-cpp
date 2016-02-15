@@ -47,60 +47,59 @@ static std::string normalize_base_address(const std::string& baseAddress) {
     return baseAddress;
 }
 
-Request& Request::baseAddress (const std::string& baseAddress) {
+Request& Request::baseAddress(const std::string& baseAddress) {
     baseAddress_ = normalize_base_address(baseAddress);
     return *this;
 }
 
-std::string Request::baseAddress () const {
+std::string Request::baseAddress() const {
     return baseAddress_;
 }
 
-Request& Request::body (const std::string& body) {
+Request& Request::body(const std::string& body) {
     body_ = body;
     return *this;
 }
 
-std::string Request::body () const {
+std::string Request::body() const {
     return body_;
 }
 
-Request& Request::contentType (const std::string& contentType) {
+Request& Request::contentType(const std::string& contentType) {
     contentType_ = contentType;
     return *this;
 }
 
-std::string Request::contentType () const {
+std::string Request::contentType() const {
     return contentType_;
 }
 
-Request& Request::endpoint (const std::string& endpoint) {
+Request& Request::endpoint(const std::string& endpoint) {
     endPoint_ = endpoint;
     return *this;
 }
 
-std::string Request::endpoint () const {
+std::string Request::endpoint() const {
     return endPoint_;
 }
 
-Request& Request::header (const Request::Header& header) {
+Request& Request::header(const Request::Header& header) {
     header_ = header;
     return *this;
 }
 
-Request::Header Request::header () const {
+Request::Header Request::header() const {
     return header_;
 }
 
-Request& Request::parameters (const Request::Parameters& parameters) {
+Request& Request::parameters(const Request::Parameters& parameters) {
     parameters_ = parameters;
     return *this;
 }
 
-Request::Parameters Request::parameters () const {
+Request::Parameters Request::parameters() const {
     return parameters_;
 }
-
 
 std::string Request::uri() const {
     std::ostringstream uri;
@@ -111,27 +110,27 @@ std::string Request::uri() const {
     return uri.str();
 }
 
-Request& Request::method (const Request::Method& method) {
+Request& Request::method(const Request::Method& method) {
     method_ = method;
     return *this;
 }
 
-Request::Method Request::method () const {
+Request::Method Request::method() const {
     return method_;
 }
 
-Request& Request::get () {
+Request& Request::get() {
     return method(Method::GET);
 }
 
-Request& Request::post () {
+Request& Request::post() {
     return method(Method::POST);
 }
 
-Request& Request::put () {
+Request& Request::put() {
     return method(Method::PUT);
 }
 
-Request& Request::del () {
+Request& Request::del() {
     return method(Method::DEL);
 }

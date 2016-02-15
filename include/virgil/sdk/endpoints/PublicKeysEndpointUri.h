@@ -39,65 +39,69 @@
 
 #include <string>
 
-namespace virgil { namespace sdk { namespace endpoints {
-    /**
-     * @brief This class provide URIs to the Virgil Public Key endpoints.
-     * @note All endpoints start with forward slash symbol "/" and contain version.
-     */
-    class PublicKeysEndpointUri {
-    public:
-        //@}
+namespace virgil {
+namespace sdk {
+    namespace endpoints {
         /**
-         * @name Public Key management.
+         * @brief This class provide URIs to the Virgil Public Key endpoints.
+         * @note All endpoints start with forward slash symbol "/" and contain version.
          */
-        //@{
-        /**
-         * @brief Returns the endpoint in charge of a public key by its UUID extraction.
-         * @param publicKeyId - public key UUID.
-         */
-        static std::string publicKeyGet(const std::string& publicKeyId);
-        /**
-         * @brief Returns the endpoint in charge of the Public Key revoke.
-         * @param publicKeyId - public key UUID.
-         */
-        static std::string publicKeyRevoke(const std::string& publicKeyId);
-        //@}
-        /**
-         * @name Virgil Card management.
-         */
-        //@{
-        /**
-         * @brief Returns the endpoint in charge of a Virgil Card creation.
-         */
-        static std::string virgilCardCreate();
+        class PublicKeysEndpointUri {
+        public:
+            //@}
+            /**
+             * @name Public Key management.
+             */
+            //@{
+            /**
+             * @brief Returns the endpoint in charge of a public key by its UUID extraction.
+             * @param publicKeyId - public key UUID.
+             */
+            static std::string publicKeyGet(const std::string& publicKeyId);
+            /**
+             * @brief Returns the endpoint in charge of the Public Key revoke.
+             * @param publicKeyId - public key UUID.
+             */
+            static std::string publicKeyRevoke(const std::string& publicKeyId);
+            //@}
+            /**
+             * @name Virgil Card management.
+             */
+            //@{
+            /**
+             * @brief Returns the endpoint in charge of a Virgil Card creation.
+             */
+            static std::string virgilCardCreate();
 
-        static std::string virgilCardGet(const std::string& virgilCardId);
+            static std::string virgilCardGet(const std::string& virgilCardId);
 
-        /**
-         * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
-         */
-        static std::string virgilCardSearch();
-        /**
-         * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern.
-         */
-        static std::string virgilCardSearchApp();
-        /**
-         * @brief Returns the endpoint in charge of the Virgil Card trust.
-         * @param virgilCardId - Virgil Card Id.
-         */
-        static std::string virgilCardTrust(const std::string& virgilCardId);
-        /**
-         * @brief Returns the endpoint in charge of the Virgil Card untrust.
-         * @param virgilCardId - Virgil Card Id.
-         */
-        static std::string virgilCardUntrust(const std::string& virgilCardId);
-        /**
-         * @brief Returns the endpoint in charge of the Virgil Card revoke.
-         * @param virgilCardId - Virgil Card Id.
-         */
-        static std::string virgilCardRevoke(const std::string& virgilCardId);
-        //@}
-    };
-}}}
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
+             */
+            static std::string virgilCardSearch();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern.
+             */
+            static std::string virgilCardSearchApp();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card trust.
+             * @param virgilCardId - Virgil Card Id.
+             */
+            static std::string virgilCardTrust(const std::string& virgilCardId);
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card untrust.
+             * @param virgilCardId - Virgil Card Id.
+             */
+            static std::string virgilCardUntrust(const std::string& virgilCardId);
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card revoke.
+             * @param virgilCardId - Virgil Card Id.
+             */
+            static std::string virgilCardRevoke(const std::string& virgilCardId);
+            //@}
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PUBLIC_ENDPOINT_URI_H */

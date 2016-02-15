@@ -40,35 +40,35 @@
 #include <virgil/sdk/client/PrivateKeysClientBase.h>
 #include <virgil/sdk/http/Response.h>
 
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
+         */
+        class PrivateKeysClient final : public PrivateKeysClientBase {
+        public:
+            PrivateKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
-     */
-    class PrivateKeysClient final : public PrivateKeysClientBase {
-    public:
-        PrivateKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
+            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
 
-        virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& privateKeysServiceCard) override;
 
-        void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& privateKeysServiceCard) override;
+            void stash(const std::string& virgilCardId, const Credentials& credentials) override;
 
+            virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
+                                               const virgil::sdk::model::ValidationToken& validationToken) override;
 
-        void stash(const std::string& virgilCardId, const Credentials& credentials) override;
+            void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
+                         const Credentials& credentials) override;
 
-        virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                const virgil::sdk::model::ValidationToken& validationToken) override;
-
-        void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
-                const Credentials& credentials) override;
-
-    private:
-        std::string accessToken_;
-        std::string baseServiceUri_;
-        virgil::sdk::model::VirgilCard privateKeysServiceCard_;
-
-    };
-
-}}}
+        private:
+            std::string accessToken_;
+            std::string baseServiceUri_;
+            virgil::sdk::model::VirgilCard privateKeysServiceCard_;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H */

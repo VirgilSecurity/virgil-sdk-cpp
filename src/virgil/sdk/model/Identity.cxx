@@ -40,7 +40,6 @@
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 
-
 std::string virgil::sdk::model::toString(const IdentityType& identityType) {
     if (identityType == IdentityType::Email) {
         return std::string("email");
@@ -62,7 +61,6 @@ IdentityType virgil::sdk::model::fromString(const std::string& identityType) {
 }
 
 Identity::Identity(const std::string& value, const IdentityType& type) : value_(value), type_(type) {
-
 }
 
 const std::string& Identity::getValue() const {

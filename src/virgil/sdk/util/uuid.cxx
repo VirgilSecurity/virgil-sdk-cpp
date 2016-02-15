@@ -41,7 +41,7 @@
 #include <cstdint>
 #include <stdio.h>
 
-std::string virgil::sdk::util::uuid () {
+std::string virgil::sdk::util::uuid() {
     auto seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(seed);
 
@@ -49,15 +49,14 @@ std::string virgil::sdk::util::uuid () {
     uint16_t time_mid = generator() & 0xffff;
     uint16_t time_high_and_version = (generator() & 0x0fff) | 0x4000;
     uint16_t clock_seq = (generator() & 0x3fff) | 0x8000;
-    uint8_t node [6];
+    uint8_t node[6];
     for (size_t i = 0; i < 6; ++i) {
         node[i] = generator() & 0xff;
     }
 
     char buffer[37] = {0x0};
-    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-        time_low, time_mid, time_high_and_version, clock_seq >> 8, clock_seq & 0xff,
-        node[0], node[1], node[2], node[3], node[4], node[5]);
+    sprintf(buffer, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", time_low, time_mid, time_high_and_version,
+            clock_seq >> 8, clock_seq & 0xff, node[0], node[1], node[2], node[3], node[4], node[5]);
 
     return std::string(buffer);
 }

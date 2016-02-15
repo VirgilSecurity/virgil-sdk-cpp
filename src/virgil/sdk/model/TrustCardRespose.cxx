@@ -38,30 +38,32 @@
 
 using virgil::sdk::model::TrustCardResponse;
 
-
 TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& createdAt,
-        const std::string& signerVirgilCardId, const std::string& signedVirgilCardId, const std::string& signedDigest)
-            : id_(id), createdAt_(createdAt), signerVirgilCardId_(signerVirgilCardId),
-                signedVirgilCardId_(signedVirgilCardId), signedDigest_(signedDigest) {
-
+                                     const std::string& signerVirgilCardId, const std::string& signedVirgilCardId,
+                                     const std::string& signedDigest)
+        : id_(id),
+          createdAt_(createdAt),
+          signerVirgilCardId_(signerVirgilCardId),
+          signedVirgilCardId_(signedVirgilCardId),
+          signedDigest_(signedDigest) {
 }
 
- const std::string& TrustCardResponse::getId() const {
+const std::string& TrustCardResponse::getId() const {
     return id_;
 }
 
- const std::string& TrustCardResponse::getCreatedAt() const {
+const std::string& TrustCardResponse::getCreatedAt() const {
     return createdAt_;
 }
 
- const std::string& TrustCardResponse::getSignerVirgilCardId() const {
+const std::string& TrustCardResponse::getSignerVirgilCardId() const {
     return signerVirgilCardId_;
 }
 
- const std::string& TrustCardResponse::getSignedVirgilCardId() const {
+const std::string& TrustCardResponse::getSignedVirgilCardId() const {
     return signedVirgilCardId_;
 }
 
- const std::string& TrustCardResponse::getSignedDigest() const {
+const std::string& TrustCardResponse::getSignedDigest() const {
     return signedDigest_;
 }

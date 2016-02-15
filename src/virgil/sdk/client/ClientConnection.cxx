@@ -76,10 +76,7 @@ using virgil::sdk::http::kHeaderField_SignVirgilCardId;
 using virgil::sdk::http::kHeaderField_Sign;
 using virgil::sdk::http::kHeaderField_AccessToken;
 
-
-ClientConnection::ClientConnection(const std::string& accessToken)
-        :  accessToken_(accessToken) {
-
+ClientConnection::ClientConnection(const std::string& accessToken) : accessToken_(accessToken) {
 }
 
 std::string ClientConnection::accessToken() const {
@@ -94,7 +91,7 @@ Response ClientConnection::send(const Request& request) {
 }
 
 Request ClientConnection::signRequest(const std::string& virgilCardId, const Credentials& credentials,
-        const Request& request) {
+                                      const Request& request) {
     Request requestWithoutVirgilCardId = signRequest(credentials, request);
     auto header = requestWithoutVirgilCardId.header();
     header[kHeaderField_SignVirgilCardId] = virgilCardId;
@@ -106,11 +103,8 @@ Request ClientConnection::signRequest(const Credentials& credentials, const Requ
     std::string requestText = uuid + request.body();
 
     VirgilSigner signer;
-    VirgilByteArray sign = signer.sign(
-            virgil::crypto::str2bytes(requestText),
-            credentials.privateKey(),
-            credentials.privateKeyPassword()
-    );
+    VirgilByteArray sign =
+        signer.sign(virgil::crypto::str2bytes(requestText), credentials.privateKey(), credentials.privateKeyPassword());
 
     auto headers = request.header();
     headers[kHeaderField_Id] = uuid;
@@ -120,11 +114,8 @@ Request ClientConnection::signRequest(const Credentials& credentials, const Requ
 
 std::string ClientConnection::signHash(const std::string& hash, const Credentials& credentials) {
     VirgilSigner signer;
-    VirgilByteArray signHash = signer.sign(
-            virgil::crypto::str2bytes(hash),
-            credentials.privateKey(),
-            credentials.privateKeyPassword()
-    );
+    VirgilByteArray signHash =
+        signer.sign(virgil::crypto::str2bytes(hash), credentials.privateKey(), credentials.privateKeyPassword());
 
     return VirgilBase64::encode(signHash);
 }
@@ -135,15 +126,10 @@ std::string ClientConnection::encryptJsonBody(const VirgilCard& privateKeysServi
     // );
 
     VirgilCipher cipher;
-    cipher.addKeyRecipient(
-            virgil::crypto::str2bytes(privateKeysServiceCard.getId()),
-            privateKeysServiceCard.getPublicKey().getKeyBytes()
-    );
+    cipher.addKeyRecipient(virgil::crypto::str2bytes(privateKeysServiceCard.getId()),
+                           privateKeysServiceCard.getPublicKey().getKeyBytes());
 
-    VirgilByteArray encryptedJsonBody = cipher.encrypt(
-        virgil::crypto::str2bytes(jsonBody),
-        true
-    );
+    VirgilByteArray encryptedJsonBody = cipher.encrypt(virgil::crypto::str2bytes(jsonBody), true);
     return VirgilBase64::encode(encryptedJsonBody);
 }
 

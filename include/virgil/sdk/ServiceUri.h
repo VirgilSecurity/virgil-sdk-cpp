@@ -83,7 +83,7 @@ namespace sdk {
          * @note Pass only base address of service without trailing slash, i.e. https://keys.virgilsecurity.com
          */
         ServiceUri(const std::string& identityService, const std::string& publicKeyService,
-                  const std::string& privateKeyService);
+                   const std::string& privateKeyService);
 
     public:
         /**

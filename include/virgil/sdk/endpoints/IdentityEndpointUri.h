@@ -39,34 +39,37 @@
 
 #include <string>
 
-
-namespace virgil { namespace sdk { namespace endpoints {
-    /**
-     * @brief This class provide URIs to the Identity endpoints.
-     * @note All endpoints start with forward slash symbol "/" and contain version.
-     */
-    class IdentityEndpointUri {
-    public:
-        //@}
+namespace virgil {
+namespace sdk {
+    namespace endpoints {
         /**
-         * @name Identity management.
+         * @brief This class provide URIs to the Identity endpoints.
+         * @note All endpoints start with forward slash symbol "/" and contain version.
          */
-        //@{
-        /**
-          * @brief Returns the endpoint in charge of initiates the process to verify the Identity.
-         */
-        static std::string verify();
-        /**
-          * @brief Returns the endpoint in charge of confirms the identity from the /verify step
-          * to obtain an identity confirmation token.
-         */
-        static std::string confirm();
-        /**
-          * @brief Returns the endpoint in charge of validates the passed token.
-         */
-        static std::string validate();
-        //@}
-    };
-}}}
+        class IdentityEndpointUri {
+        public:
+            //@}
+            /**
+             * @name Identity management.
+             */
+            //@{
+            /**
+              * @brief Returns the endpoint in charge of initiates the process to verify the Identity.
+             */
+            static std::string verify();
+            /**
+              * @brief Returns the endpoint in charge of confirms the identity from the /verify step
+              * to obtain an identity confirmation token.
+             */
+            static std::string confirm();
+            /**
+              * @brief Returns the endpoint in charge of validates the passed token.
+             */
+            static std::string validate();
+            //@}
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H */

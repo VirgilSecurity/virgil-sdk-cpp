@@ -42,122 +42,124 @@
 
 #include <virgil/sdk/Credentials.h>
 
-namespace virgil { namespace sdk { namespace http {
-    /**
-     * @brief This is base class for all HTTP requests.
-     */
-    class Request {
-    public:
+namespace virgil {
+namespace sdk {
+    namespace http {
         /**
-         * @name Types aliases
+         * @brief This is base class for all HTTP requests.
          */
-        //@{
-        using Header = std::map<std::string, std::string>;
-        using Parameters = std::map<std::string, std::string>;
-        //@}
-        /**
-         * @name Inner types
-         */
-        //@{
-        enum class Method {GET, POST, PUT, DEL};
-        //@}
-        /**
-         * @name Accessors
-         */
-        //@{
-        /**
-         * @brief Set base address URI.
-         */
-        Request& baseAddress(const std::string& baseAddress);
-        /**
-         * @brief Return base address URI.
-         */
-        std::string baseAddress() const;
-        /**
-         * @brief Set request body.
-         */
-        Request& body(const std::string& body);
-        /**
-         * @brief Return request body.
-         */
-        std::string body() const;
-        /**
-         * @brief Set request content type.
-         */
-        Request& contentType(const std::string& contentType);
-        /**
-         * @brief Return request content type.
-         */
-        std::string contentType() const;
-        /**
-         * @brief Set request endpoint.
-         */
-        Request& endpoint(const std::string& endpoint);
-        /**
-         * @brief Return request endpoint.
-         */
-        std::string endpoint() const;
-        /**
-         * @brief Set request header.
-         */
-        Request& header(const Header& header);
-        /**
-         * @brief Get request header.
-         */
-        Header header() const;
-        /**
-         * @brief Set request parameters.
-         */
-        Request& parameters(const Parameters& parameters);
-        /**
-         * @brief Get request parameters.
-         */
-        Parameters parameters() const;
-        /**
-         * @brief Return request URI.
-         */
-        std::string uri() const;
-        /**
-         * @brief Set request HTTP method.
-         */
-        Request& method(const Method& method);
-        /**
-         * @brief Get request HTTP method.
-         */
-        Method method() const;
-        /**
-         * @brief Short form of method Request::method(Method::GET)
-         */
-        Request& get();
-        /**
-         * @brief Short form of method Request::method(Method::POST)
-         */
-        Request& post();
-        /**
-         * @brief Short form of method Request::method(Method::PUT)
-         */
-        Request& put();
-        /**
-         * @brief Short form of method Request::method(Method::DELETE)
-         */
-        Request& del();
-        //@}
-    private:
-        std::string baseAddress_;
-        std::string body_;
-        std::string contentType_;
-        std::string endPoint_;
-        Header header_;
-        Parameters parameters_;
-        Method method_;
-    };
+        class Request {
+        public:
+            /**
+             * @name Types aliases
+             */
+            //@{
+            using Header = std::map<std::string, std::string>;
+            using Parameters = std::map<std::string, std::string>;
+            //@}
+            /**
+             * @name Inner types
+             */
+            //@{
+            enum class Method { GET, POST, PUT, DEL };
+            //@}
+            /**
+             * @name Accessors
+             */
+            //@{
+            /**
+             * @brief Set base address URI.
+             */
+            Request& baseAddress(const std::string& baseAddress);
+            /**
+             * @brief Return base address URI.
+             */
+            std::string baseAddress() const;
+            /**
+             * @brief Set request body.
+             */
+            Request& body(const std::string& body);
+            /**
+             * @brief Return request body.
+             */
+            std::string body() const;
+            /**
+             * @brief Set request content type.
+             */
+            Request& contentType(const std::string& contentType);
+            /**
+             * @brief Return request content type.
+             */
+            std::string contentType() const;
+            /**
+             * @brief Set request endpoint.
+             */
+            Request& endpoint(const std::string& endpoint);
+            /**
+             * @brief Return request endpoint.
+             */
+            std::string endpoint() const;
+            /**
+             * @brief Set request header.
+             */
+            Request& header(const Header& header);
+            /**
+             * @brief Get request header.
+             */
+            Header header() const;
+            /**
+             * @brief Set request parameters.
+             */
+            Request& parameters(const Parameters& parameters);
+            /**
+             * @brief Get request parameters.
+             */
+            Parameters parameters() const;
+            /**
+             * @brief Return request URI.
+             */
+            std::string uri() const;
+            /**
+             * @brief Set request HTTP method.
+             */
+            Request& method(const Method& method);
+            /**
+             * @brief Get request HTTP method.
+             */
+            Method method() const;
+            /**
+             * @brief Short form of method Request::method(Method::GET)
+             */
+            Request& get();
+            /**
+             * @brief Short form of method Request::method(Method::POST)
+             */
+            Request& post();
+            /**
+             * @brief Short form of method Request::method(Method::PUT)
+             */
+            Request& put();
+            /**
+             * @brief Short form of method Request::method(Method::DELETE)
+             */
+            Request& del();
+            //@}
+        private:
+            std::string baseAddress_;
+            std::string body_;
+            std::string contentType_;
+            std::string endPoint_;
+            Header header_;
+            Parameters parameters_;
+            Method method_;
+        };
 
+        Request signRequest(const std::string& virgilCardId, const virgil::sdk::Credentials& credentials,
+                            const virgil::sdk::http::Request& request);
 
-    Request signRequest( const std::string& virgilCardId, const virgil::sdk::Credentials& credentials,
-            const virgil::sdk::http::Request& request);
-
-    Request signRequest(const virgil::sdk::Credentials& credentials, const virgil::sdk::http::Request& request);
-
-}}}
+        Request signRequest(const virgil::sdk::Credentials& credentials, const virgil::sdk::http::Request& request);
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_HTTP_REQUEST_H */

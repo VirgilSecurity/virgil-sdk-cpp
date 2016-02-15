@@ -41,45 +41,44 @@
 
 #include <virgil/sdk/model/Identity.h>
 
+namespace virgil {
+namespace sdk {
+    namespace model {
+        /**
+         * @brief
+         */
+        class IdentityExtended {
+        public:
+            IdentityExtended() = default;
+            IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
+                             const Identity& identity);
 
-namespace virgil { namespace sdk { namespace model {
-    /**
-     * @brief
-     */
-    class IdentityExtended {
-    public:
-        IdentityExtended() = default;
-        IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
-                const Identity& identity);
+            bool getConfirme() const;
+            const std::string& getId() const;
+            const std::string& getCreatedAt() const;
+            const Identity& getIdentity() const;
 
-        bool getConfirme() const;
-        const std::string& getId() const;
-        const std::string& getCreatedAt() const;
-        const Identity& getIdentity() const;
+        private:
+            bool confirme_ = false;
+            std::string id_;
+            std::string createdAt_;
+            Identity identity_;
+        };
 
-    private:
-        bool confirme_ = false;
-        std::string id_;
-        std::string createdAt_;
-        Identity identity_;
-    };
-
-    inline bool operator==(const IdentityExtended& left, const IdentityExtended& right) {
-        if (left.getConfirme() == right.getConfirme()   &&
-            left.getId() == right.getId()               &&
-            left.getCreatedAt() == right.getCreatedAt() &&
-            left.getIdentity() == right.getIdentity()) {
+        inline bool operator==(const IdentityExtended& left, const IdentityExtended& right) {
+            if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
+                left.getCreatedAt() == right.getCreatedAt() && left.getIdentity() == right.getIdentity()) {
                 return 1;
+            }
+
+            return 0;
         }
 
-        return 0;
+        inline bool operator!=(const IdentityExtended& left, const IdentityExtended& right) {
+            return !(left == right);
+        }
     }
-
-    inline bool operator!=(const IdentityExtended& left, const IdentityExtended& right) {
-        return !(left == right);
-    }
-
-
-}}}
+}
+}
 
 #endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_IDENTITY_H */

@@ -39,31 +39,35 @@
 
 #include <string>
 
-namespace virgil { namespace sdk { namespace endpoints {
-    /**
-     * @brief This class provide URIs to the Virgil Private Key endpoints.
-     * @note All endpoints start with forward slash symbol "/" and contain version.
-     */
-    class PrivateKeysEndpointUri {
-    public:
-        //@}
+namespace virgil {
+namespace sdk {
+    namespace endpoints {
         /**
-         * @name Private Key management.
+         * @brief This class provide URIs to the Virgil Private Key endpoints.
+         * @note All endpoints start with forward slash symbol "/" and contain version.
          */
-        //@{
-        /**
-         * @brief Returns the endpoint in charge of the Private Key load.
-         */
-        static std::string privateKeyStash();
-        /**
-         * @brief Returns the endpoint in charge of the Private Key get.
-         */
-        static std::string privateKeyGet();
-        /**
-         * @brief Returns the endpoint in charge of the Private Key delete.
-         */
-        static std::string privateKeyDestroy();
-    };
-}}}
+        class PrivateKeysEndpointUri {
+        public:
+            //@}
+            /**
+             * @name Private Key management.
+             */
+            //@{
+            /**
+             * @brief Returns the endpoint in charge of the Private Key load.
+             */
+            static std::string privateKeyStash();
+            /**
+             * @brief Returns the endpoint in charge of the Private Key get.
+             */
+            static std::string privateKeyGet();
+            /**
+             * @brief Returns the endpoint in charge of the Private Key delete.
+             */
+            static std::string privateKeyDestroy();
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PRIVATE_KEYS_ENDPOINT_URI_H */

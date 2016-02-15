@@ -41,26 +41,29 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 
+namespace virgil {
+namespace sdk {
+    namespace model {
+        /**
+         * @brief Data object represent "Virgil Private Key" entity.
+         */
+        class PrivateKey {
+        public:
+            PrivateKey() = default;
+            PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);
+            ~PrivateKey() noexcept;
 
-namespace virgil { namespace sdk { namespace model {
-    /**
-     * @brief Data object represent "Virgil Private Key" entity.
-     */
-    class PrivateKey {
-    public:
-        PrivateKey() = default;
-        PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);
-        ~PrivateKey() noexcept;
+            const std::string& getVirgilCardId() const;
+            const virgil::crypto::VirgilByteArray& getKeyBytes() const;
 
-        const std::string& getVirgilCardId() const;
-        const virgil::crypto::VirgilByteArray& getKeyBytes() const;
+            void cleanup() noexcept;
 
-        void cleanup() noexcept;
-
-    private:
-        std::string virgilCardId_;
-        virgil::crypto::VirgilByteArray key_;
-    };
-}}}
+        private:
+            std::string virgilCardId_;
+            virgil::crypto::VirgilByteArray key_;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_MODEL_PRIVATE_KEY_H */

@@ -39,12 +39,15 @@
 
 #include <string>
 
-namespace virgil { namespace sdk { namespace util {
-    /**
-    * @brief Generate new UUID
-    */
-    std::string uuid();
-
-}}}
+namespace virgil {
+namespace sdk {
+    namespace util {
+        /**
+        * @brief Generate new UUID
+        */
+        std::string uuid();
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_UTIL_UUID_H */

@@ -40,10 +40,8 @@ using virgil::sdk::model::PrivateKey;
 
 using virgil::crypto::VirgilByteArray;
 
-
 PrivateKey::PrivateKey(const std::string& virgilCardId, const VirgilByteArray& key)
-     : virgilCardId_(virgilCardId), key_(key) {
-
+        : virgilCardId_(virgilCardId), key_(key) {
 }
 
 PrivateKey::~PrivateKey() noexcept {

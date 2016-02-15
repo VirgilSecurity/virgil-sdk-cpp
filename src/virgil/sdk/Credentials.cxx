@@ -44,7 +44,7 @@ using virgil::crypto::VirgilByteArray;
 using virgil::sdk::Credentials;
 
 Credentials::Credentials(const VirgilByteArray& privateKey, const virgil::crypto::VirgilByteArray& privateKeyPassword)
-    : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
+        : privateKey_(privateKey), privateKeyPassword_(privateKeyPassword) {
 }
 
 Credentials::~Credentials() noexcept {

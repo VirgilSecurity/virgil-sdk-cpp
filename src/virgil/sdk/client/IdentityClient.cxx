@@ -72,10 +72,8 @@ using virgil::sdk::model::VirgilCard;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-
 IdentityClient::IdentityClient(const std::string& accessToken, const std::string& baseServiceUri)
         : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
-
 }
 
 VirgilCard IdentityClient::getServiceVirgilCard() const {
@@ -86,19 +84,11 @@ void IdentityClient::setServiceVirgilCard(const VirgilCard& identityServiceCard)
     identityServiceCard_ = identityServiceCard;
 }
 
-
 std::string IdentityClient::verify(const Identity& identity) {
-    json payload = {
-        { JsonKey::type, identity.getTypeAsString() },
-        { JsonKey::value, identity.getValue() }
-    };
+    json payload = {{JsonKey::type, identity.getTypeAsString()}, {JsonKey::value, identity.getValue()}};
 
-    Request request = Request()
-            .post()
-            .baseAddress(baseServiceUri_)
-            .endpoint( IdentityEndpointUri::verify() )
-            .body( payload.dump() );
-
+    Request request =
+        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::verify()).body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
@@ -111,43 +101,30 @@ std::string IdentityClient::verify(const Identity& identity) {
 }
 
 ValidationToken IdentityClient::confirm(const std::string& actionId, const std::string& confirmationCode,
-        const int timeToLive, const int countToLive) {
-    json payload = {
-        { JsonKey::confirmationCode, confirmationCode },
-        { JsonKey::actionId, actionId },
-        { JsonKey::token, {
-            { JsonKey::timeToLive, timeToLive },
-            { JsonKey::countToLive, countToLive }
-        }}
-    };
+                                        const int timeToLive, const int countToLive) {
+    json payload = {{JsonKey::confirmationCode, confirmationCode},
+                    {JsonKey::actionId, actionId},
+                    {JsonKey::token, {{JsonKey::timeToLive, timeToLive}, {JsonKey::countToLive, countToLive}}}};
 
-    Request request = Request()
-            .post()
-            .baseAddress(baseServiceUri_)
-            .endpoint( IdentityEndpointUri::confirm() )
-            .body( payload.dump() );
+    Request request =
+        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::confirm()).body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
     this->verifyResponse(response);
 
-    ValidationToken validationToken = Marshaller<ValidationToken>::fromJson( response.body() );
+    ValidationToken validationToken = Marshaller<ValidationToken>::fromJson(response.body());
     return validationToken;
 }
 
 bool IdentityClient::isValid(const Identity& identity, const std::string& validationToken) {
-    json payload = {
-        { JsonKey::type, identity.getTypeAsString() },
-        { JsonKey::value, identity.getValue() },
-        { JsonKey::validationToken, validationToken }
-    };
+    json payload = {{JsonKey::type, identity.getTypeAsString()},
+                    {JsonKey::value, identity.getValue()},
+                    {JsonKey::validationToken, validationToken}};
 
-    Request request = Request()
-            .post()
-            .baseAddress(baseServiceUri_)
-            .endpoint( IdentityEndpointUri::validate() )
-            .body( payload.dump() );
+    Request request =
+        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::validate()).body(payload.dump());
 
     ClientConnection connection(accessToken_);
     Response response = connection.send(request);
@@ -160,17 +137,14 @@ bool IdentityClient::isValid(const Identity& identity, const std::string& valida
 }
 
 bool IdentityClient::isValid(const virgil::sdk::model::ValidationToken& validationToken) {
-    return bool( this->isValid(validationToken.getIdentity(), validationToken.getToken()) );
+    return bool(this->isValid(validationToken.getIdentity(), validationToken.getToken()));
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(
-            response,
-            identityServiceCard_.getPublicKey().getKeyBytes()
-    );
+    bool verifed = virgil::sdk::client::verifyResponse(response, identityServiceCard_.getPublicKey().getKeyBytes());
 
-    if ( ! verifed) {
+    if (!verifed) {
         throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "
-                "IdentityService public key.");
+                                 "IdentityService public key.");
     }
 }

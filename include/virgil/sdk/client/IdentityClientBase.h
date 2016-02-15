@@ -43,28 +43,31 @@
 #include <virgil/sdk/model/Identity.h>
 #include <virgil/sdk/model/VirgilCard.h>
 
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief Entrypoint for interacting with Identity Service PKI.
+         */
+        class IdentityClientBase {
+        public:
+            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
 
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief Entrypoint for interacting with Identity Service PKI.
-     */
-    class IdentityClientBase {
-    public:
-        virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& serviceCard) = 0;
 
-        virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& serviceCard) = 0;
+            virtual std::string verify(const virgil::sdk::model::Identity& identity) = 0;
 
-        virtual std::string verify(const virgil::sdk::model::Identity& identity) = 0;
+            virtual virgil::sdk::model::ValidationToken confirm(const std::string& actionId,
+                                                                const std::string& confirmationCode,
+                                                                const int timeToLive = 3600,
+                                                                const int countToLive = 1) = 0;
 
-        virtual virgil::sdk::model::ValidationToken confirm(const std::string& actionId,
-                const std::string& confirmationCode, const int timeToLive = 3600, const int countToLive = 1) = 0;
+            virtual bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validationToken) = 0;
 
-        virtual bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validationToken) = 0;
-
-        virtual bool isValid(const virgil::sdk::model::ValidationToken& validationToken) = 0;
-
-    };
-
-}}}
+            virtual bool isValid(const virgil::sdk::model::ValidationToken& validationToken) = 0;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_IDENTITY_CLIENT_BASE_H */

@@ -46,57 +46,60 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/model/VirgilCard.h>
 
-
-namespace virgil { namespace sdk { namespace client {
-
-    /**
-     * @brief Specific HTTP layer for Virgil Public Keys service.
-     */
-    class ClientConnection : public virgil::sdk::http::Connection {
-    public:
-        /**
-         * @brief Configure connection application specific token and with base address URI.
-         * @param appToken - application specific token.
-         * @param baseAddress - service API base address.
-         */
-        explicit ClientConnection(const std::string& accessToken);
-        /**
-         * @brief Return access token.
-         */
-        std::string accessToken() const;
-        /**
-         * @brief Send synchronous request.
-         * @param request - request to be send.
-         * @throw std::logic_error - if given parameters are inconsistent.
-         * @throw std::runtime_error - if error was occured when send request.
-         */
-        virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
-
-        virgil::sdk::http::Request signRequest(const std::string& virgilCardId,
-                const virgil::sdk::Credentials& credentials, const virgil::sdk::http::Request& request);
-
-        virgil::sdk::http::Request signRequest(const virgil::sdk::Credentials& credentials,
-                const virgil::sdk::http::Request& request);
-
-        std::string signHash(const std::string& hash, const Credentials& credentials);
-
-         std::string encryptJsonBody(const virgil::sdk::model::VirgilCard& privateKeysServiceCard, 
-                const std::string& jsonBody);
+namespace virgil {
+namespace sdk {
+    namespace client {
 
         /**
-         * @brief Check response for errors.
-         * @param response - HTTP response to check.
-         * @param action - service action that create given response.
-         * @throw Error - if HTTP response contains error description.
+         * @brief Specific HTTP layer for Virgil Public Keys service.
          */
-        virtual void checkResponseError(const virgil::sdk::http::Response& response,
-                virgil::sdk::Error::Action action);
-    private:
+        class ClientConnection : public virgil::sdk::http::Connection {
+        public:
+            /**
+             * @brief Configure connection application specific token and with base address URI.
+             * @param appToken - application specific token.
+             * @param baseAddress - service API base address.
+             */
+            explicit ClientConnection(const std::string& accessToken);
+            /**
+             * @brief Return access token.
+             */
+            std::string accessToken() const;
+            /**
+             * @brief Send synchronous request.
+             * @param request - request to be send.
+             * @throw std::logic_error - if given parameters are inconsistent.
+             * @throw std::runtime_error - if error was occured when send request.
+             */
+            virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
 
-    private:
-        std::string accessToken_;
-    };
-}}}
+            virgil::sdk::http::Request signRequest(const std::string& virgilCardId,
+                                                   const virgil::sdk::Credentials& credentials,
+                                                   const virgil::sdk::http::Request& request);
+
+            virgil::sdk::http::Request signRequest(const virgil::sdk::Credentials& credentials,
+                                                   const virgil::sdk::http::Request& request);
+
+            std::string signHash(const std::string& hash, const Credentials& credentials);
+
+            std::string encryptJsonBody(const virgil::sdk::model::VirgilCard& privateKeysServiceCard,
+                                        const std::string& jsonBody);
+
+            /**
+             * @brief Check response for errors.
+             * @param response - HTTP response to check.
+             * @param action - service action that create given response.
+             * @throw Error - if HTTP response contains error description.
+             */
+            virtual void checkResponseError(const virgil::sdk::http::Response& response,
+                                            virgil::sdk::Error::Action action);
+
+        private:
+        private:
+            std::string accessToken_;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_CLIENT_CONNECTION_H */
-

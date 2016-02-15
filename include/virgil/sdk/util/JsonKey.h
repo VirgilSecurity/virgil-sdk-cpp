@@ -39,45 +39,49 @@
 
 #include <string>
 
-namespace virgil { namespace sdk { namespace util {
-    /**
-     * @brief This class holds string constants of Json keys.
-     */
-    class JsonKey {
-    public:
-        static const std::string id;
-        static const std::string publicKey;
-        static const std::string privateKey;
-        static const std::string createdAt;
-        static const std::string virgilCards;
-        static const std::string virgilCardId;
-        static const std::string isConfirmed;
-        static const std::string hash;
-        static const std::string identity;
-        static const std::string identities;
-        static const std::string type;
-        static const std::string value;
-        static const std::string publicKeyId;
-        static const std::string data;
-        static const std::string signs;
-        static const std::string signerVirgilCardId;
-        static const std::string signedVirgilCardId;
-        static const std::string signedDigest;
-        static const std::string relations;
-        static const std::string includeUnconfirmed;
-        static const std::string error;
-        static const std::string errorCode;
-        static const std::string confirmationCode;
-        static const std::string actionId;
-        static const std::string token;
-        static const std::string timeToLive;
-        static const std::string countToLive;
-        static const std::string validationToken;
-        static const std::string responsePassword;
+namespace virgil {
+namespace sdk {
+    namespace util {
+        /**
+         * @brief This class holds string constants of Json keys.
+         */
+        class JsonKey {
+        public:
+            static const std::string id;
+            static const std::string publicKey;
+            static const std::string privateKey;
+            static const std::string createdAt;
+            static const std::string virgilCards;
+            static const std::string virgilCardId;
+            static const std::string isConfirmed;
+            static const std::string hash;
+            static const std::string identity;
+            static const std::string identities;
+            static const std::string type;
+            static const std::string value;
+            static const std::string publicKeyId;
+            static const std::string data;
+            static const std::string signs;
+            static const std::string signerVirgilCardId;
+            static const std::string signedVirgilCardId;
+            static const std::string signedDigest;
+            static const std::string relations;
+            static const std::string includeUnconfirmed;
+            static const std::string error;
+            static const std::string errorCode;
+            static const std::string confirmationCode;
+            static const std::string actionId;
+            static const std::string token;
+            static const std::string timeToLive;
+            static const std::string countToLive;
+            static const std::string validationToken;
+            static const std::string responsePassword;
 
-    private:
-        JsonKey();
-    };
-}}}
+        private:
+            JsonKey();
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_UTIL_JSON_KEY_H */

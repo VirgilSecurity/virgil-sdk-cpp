@@ -43,55 +43,53 @@
 #include <virgil/sdk/model/PublicKey.h>
 #include <virgil/sdk/model/IdentityExtended.h>
 
+namespace virgil {
+namespace sdk {
+    namespace model {
+        /**
+         * @brief Data object represent "Virgil Card" entity.
+         */
+        class VirgilCard {
+        public:
+            VirgilCard() = default;
+            VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
+                       const std::string& hash, const virgil::sdk::model::IdentityExtended& identityExtended,
+                       const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey);
 
-namespace virgil { namespace sdk { namespace model {
-    /**
-     * @brief Data object represent "Virgil Card" entity.
-     */
-    class VirgilCard {
-    public:
-        VirgilCard() = default;
-        VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt, const std::string& hash,
-                const virgil::sdk::model::IdentityExtended& identityExtended,
-                const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey
-        );
+            bool getConfirme() const;
+            const std::string& getId() const;
+            const std::string& getCreatedAt() const;
+            const std::string& getHash() const;
+            const virgil::sdk::model::IdentityExtended& getIdentityExtended() const;
+            const std::map<std::string, std::string>& getData() const;
+            const virgil::sdk::model::PublicKey& getPublicKey() const;
 
-        bool getConfirme() const;
-        const std::string& getId() const;
-        const std::string& getCreatedAt() const;
-        const std::string& getHash() const;
-        const virgil::sdk::model::IdentityExtended& getIdentityExtended() const;
-        const std::map<std::string, std::string>& getData() const;
-        const virgil::sdk::model::PublicKey& getPublicKey() const;
+        private:
+            bool confirme_ = false;
+            std::string id_;
+            std::string createdAt_;
+            std::string hash_;
+            virgil::sdk::model::IdentityExtended identityExtended_;
+            std::map<std::string, std::string> data_;
+            virgil::sdk::model::PublicKey publicKey_;
+        };
 
-    private:
-        bool confirme_ = false;
-        std::string id_;
-        std::string createdAt_;
-        std::string hash_;
-        virgil::sdk::model::IdentityExtended identityExtended_;
-        std::map<std::string, std::string> data_;
-        virgil::sdk::model::PublicKey publicKey_;
-    };
-
-    inline bool operator==(const VirgilCard& left, const VirgilCard& right) {
-        if (left.getConfirme() == right.getConfirme()                 &&
-            left.getId() == right.getId()                             &&
-            left.getCreatedAt() == right.getCreatedAt()               &&
-            left.getHash() == right.getHash()                         &&
-            left.getIdentityExtended() == right.getIdentityExtended() &&
-            left.getData() == right.getData()                         &&
-            left.getPublicKey() == right.getPublicKey()) {
+        inline bool operator==(const VirgilCard& left, const VirgilCard& right) {
+            if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
+                left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
+                left.getIdentityExtended() == right.getIdentityExtended() && left.getData() == right.getData() &&
+                left.getPublicKey() == right.getPublicKey()) {
                 return 1;
+            }
+
+            return 0;
         }
 
-        return 0;
+        inline bool operator!=(const VirgilCard& left, const VirgilCard& right) {
+            return !(left == right);
+        }
     }
-
-    inline bool operator!=(const VirgilCard& left, const VirgilCard& right) {
-        return !(left == right);
-    }
-
-}}}
+}
+}
 
 #endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_H */

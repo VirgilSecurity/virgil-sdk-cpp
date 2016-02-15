@@ -40,23 +40,25 @@
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
-namespace virgil { namespace sdk { namespace http {
+namespace virgil {
+namespace sdk {
+    namespace http {
 
-/**
- * @brief This class encapsulates access to the HTTP layer.
- */
-	class Connection {
-    public:
         /**
-         * @brief Send synchronous request.
-         * @param request - request to be send.
-         * @throw std::logic_error - if given parameters are inconsistent.
-         * @throw std::runtime_error - if error was occured when send request.
+         * @brief This class encapsulates access to the HTTP layer.
          */
-        virtual virgil::sdk::http::Response send(const virgil::sdk::http::Request& request);
-    };
-
-}}}
+        class Connection {
+        public:
+            /**
+             * @brief Send synchronous request.
+             * @param request - request to be send.
+             * @throw std::logic_error - if given parameters are inconsistent.
+             * @throw std::runtime_error - if error was occured when send request.
+             */
+            virtual virgil::sdk::http::Response send(const virgil::sdk::http::Request& request);
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_HTTP_CONNECTION_H */
-

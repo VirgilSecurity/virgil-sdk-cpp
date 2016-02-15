@@ -41,30 +41,30 @@
 
 using virgil::sdk::http::Response;
 
-Response& Response::body (const std::string& body) {
+Response& Response::body(const std::string& body) {
     body_ = body;
     return *this;
 }
 
-std::string Response::body () const {
+std::string Response::body() const {
     return body_;
 }
 
-Response& Response::contentType (const std::string& contentType) {
+Response& Response::contentType(const std::string& contentType) {
     contentType_ = contentType;
     return *this;
 }
 
-std::string Response::contentType () const {
+std::string Response::contentType() const {
     return contentType_;
 }
 
-Response& Response::header (const Response::Header& header) {
+Response& Response::header(const Response::Header& header) {
     header_ = header;
     return *this;
 }
 
-Response::Header Response::header () const {
+Response::Header Response::header() const {
     return header_;
 }
 
@@ -78,7 +78,7 @@ Response::StatusCode Response::statusCode() const {
 }
 
 Response& Response::statusCodeRaw(int code) {
-    std::set<int> availableCodes {200, 400, 401, 404, 405, 500, 501};
+    std::set<int> availableCodes{200, 400, 401, 404, 405, 500, 501};
     if (availableCodes.find(code) != availableCodes.end()) {
         statusCode_ = static_cast<Response::StatusCode>(code);
     } else {

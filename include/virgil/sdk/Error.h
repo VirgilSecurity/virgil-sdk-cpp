@@ -42,13 +42,14 @@
 
 #include <virgil/sdk/http/Response.h>
 
-namespace virgil { namespace sdk {
-     /**
-     * @brief Virgil Public Key service exception.
-     *
-     * This class defines the type of objects thrown as exceptions
-     *     to report errors that occurs during Virgil Keys Service communication.
-     */
+namespace virgil {
+namespace sdk {
+    /**
+    * @brief Virgil Public Key service exception.
+    *
+    * This class defines the type of objects thrown as exceptions
+    *     to report errors that occurs during Virgil Keys Service communication.
+    */
     class Error final : public std::runtime_error {
     public:
         /**
@@ -87,14 +88,16 @@ namespace virgil { namespace sdk {
          * @param errorCode - specific Virgil Public Key service error code.
          */
         Error(Error::Action action, virgil::sdk::http::Response::StatusCode statusCode,
-                unsigned int errorCode = kUndefinedErrorCode);
+              unsigned int errorCode = kUndefinedErrorCode);
+
     private:
         /**
          * @brief Create formatted error message.
          */
         std::string formatMessage(Error::Action action, virgil::sdk::http::Response::StatusCode statusCode,
-                unsigned int errorCode) noexcept;
+                                  unsigned int errorCode) noexcept;
     };
-}}
+}
+}
 
 #endif /* VIRGIL_SDK_ERROR_H */

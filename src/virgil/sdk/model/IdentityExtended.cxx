@@ -40,10 +40,9 @@
 using virgil::sdk::model::IdentityExtended;
 using virgil::sdk::model::Identity;
 
-
 IdentityExtended::IdentityExtended(const bool confirme, const std::string& id, const std::string& createdAt,
-    const Identity& identity) : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
-
+                                   const Identity& identity)
+        : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
 }
 
 bool IdentityExtended::getConfirme() const {

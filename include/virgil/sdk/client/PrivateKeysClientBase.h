@@ -44,27 +44,28 @@
 #include <virgil/sdk/model/PrivateKey.h>
 #include <virgil/sdk/model/VirgilCard.h>
 
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
+         */
+        class PrivateKeysClientBase {
+        public:
+            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
 
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
-     */
-    class PrivateKeysClientBase {
-    public:
-        virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
-        virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
+            virtual void stash(const std::string& virgilCardId, const Credentials& credentials) = 0;
 
-        virtual void stash(const std::string& virgilCardId, const Credentials& credentials) = 0;
+            virtual virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
+                                                       const virgil::sdk::model::ValidationToken& validationToken) = 0;
 
-        virtual virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                const virgil::sdk::model::ValidationToken& validationToken) = 0;
-
-        virtual void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
-                const Credentials& credentials) = 0;
-
-    };
-
-}}}
+            virtual void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
+                                 const Credentials& credentials) = 0;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PRIVATE_CLIENT_BASE_H */

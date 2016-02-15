@@ -41,18 +41,16 @@
 
 #include <virgil/sdk/http/Response.h>
 
-
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief
-     */
-    bool verifyResponse(const virgil::sdk::http::Response& response,
-            const virgil::crypto::VirgilByteArray& publicKey);
-
-}}}
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief
+         */
+        bool verifyResponse(const virgil::sdk::http::Response& response,
+                            const virgil::crypto::VirgilByteArray& publicKey);
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_VERIFY_RESPONSE_H */
-
-
-
-

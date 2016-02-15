@@ -35,9 +35,8 @@
  */
 
 #include <virgil/sdk/util/JsonKey.h>
- 
-using virgil::sdk::util::JsonKey;
 
+using virgil::sdk::util::JsonKey;
 
 const std::string JsonKey::id = "id";
 const std::string JsonKey::publicKey = "public_key";

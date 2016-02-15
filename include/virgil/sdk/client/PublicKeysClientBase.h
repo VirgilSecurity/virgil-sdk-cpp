@@ -45,25 +45,26 @@
 #include <virgil/sdk/model/VirgilCard.h>
 #include <virgil/sdk/model/PublicKey.h>
 
+namespace virgil {
+namespace sdk {
+    namespace client {
+        /**
+         * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
+         */
+        class PublicKeysClientBase {
+        public:
+            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
 
-namespace virgil { namespace sdk { namespace client {
-    /**
-     * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
-     */
-    class PublicKeysClientBase {
-    public:
-        virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
 
-        virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
+            virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
 
-
-        virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
-
-        virtual void revoke(const std::string& publicKeyId,
-                const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
-                const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) = 0;
-
-    };
-}}}
+            virtual void revoke(const std::string& publicKeyId,
+                                const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
+                                const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) = 0;
+        };
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_PUBLIC_CLIENT_BASE_H */

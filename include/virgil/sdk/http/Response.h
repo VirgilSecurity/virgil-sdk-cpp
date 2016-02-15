@@ -40,86 +40,91 @@
 #include <string>
 #include <map>
 
-namespace virgil { namespace sdk { namespace http {
-    /**
-     * @brief This is base class for all HTTP responses.
-     */
-    class Response {
-    public:
+namespace virgil {
+namespace sdk {
+    namespace http {
         /**
-         * @brief HTTP response codes.
+         * @brief This is base class for all HTTP responses.
          */
-        enum class StatusCode {
-            OK = 200,
-            REQUEST_ERROR = 400,
-            AUTHORIZATION_ERROR = 401,
-            ENTITY_NOT_FOUND = 404,
-            METHOD_NOT_ALLOWED = 405,
-            SERVER_ERROR = 500
+        class Response {
+        public:
+            /**
+             * @brief HTTP response codes.
+             */
+            enum class StatusCode {
+                OK = 200,
+                REQUEST_ERROR = 400,
+                AUTHORIZATION_ERROR = 401,
+                ENTITY_NOT_FOUND = 404,
+                METHOD_NOT_ALLOWED = 405,
+                SERVER_ERROR = 500
+            };
+            /**
+             * @name Types aliases
+             */
+            //@{
+            using Header = std::map<std::string, std::string>;
+            using Parameters = std::map<std::string, std::string>;
+            //@}
+            /**
+             * @name Accessors
+             */
+            //@{
+            /**
+             * @brief Set response body.
+             */
+            Response& body(const std::string& body);
+            /**
+             * @brief Return response body.
+             */
+            std::string body() const;
+            /**
+             * @brief Set response content type.
+             */
+            Response& contentType(const std::string& contentType);
+            /**
+             * @brief Return response content type.
+             */
+            std::string contentType() const;
+            /**
+             * @brief Set response header.
+             */
+            Response& header(const Header& header);
+            /**
+             * @brief Get response header.
+             */
+            Header header() const;
+            /**
+             * @brief Set response status code.
+             */
+            Response& statusCode(StatusCode statusCode);
+            /**
+             * @brief Return response status code.
+             */
+            StatusCode statusCode() const;
+            /**
+             * @brief Set response status code from integer value.
+             * @throw std::logic_error - if given code is not found in @link Response::StatusCode @endlink enum.
+             */
+            Response& statusCodeRaw(int code);
+            /**
+             * @brief Return response status code integer value.
+             */
+            int statusCodeRaw() const;
+            //@}
+            /**
+             * @brief Return true if response contains error status code.
+             */
+            bool fail() const;
+
+        private:
+            std::string body_;
+            std::string contentType_;
+            Header header_;
+            StatusCode statusCode_;
         };
-        /**
-         * @name Types aliases
-         */
-        //@{
-        using Header = std::map<std::string, std::string>;
-        using Parameters = std::map<std::string, std::string>;
-        //@}
-        /**
-         * @name Accessors
-         */
-        //@{
-        /**
-         * @brief Set response body.
-         */
-        Response& body(const std::string& body);
-        /**
-         * @brief Return response body.
-         */
-        std::string body() const;
-        /**
-         * @brief Set response content type.
-         */
-        Response& contentType(const std::string& contentType);
-        /**
-         * @brief Return response content type.
-         */
-        std::string contentType() const;
-        /**
-         * @brief Set response header.
-         */
-        Response& header(const Header& header);
-        /**
-         * @brief Get response header.
-         */
-        Header header() const;
-        /**
-         * @brief Set response status code.
-         */
-        Response& statusCode(StatusCode statusCode);
-        /**
-         * @brief Return response status code.
-         */
-        StatusCode statusCode() const;
-        /**
-         * @brief Set response status code from integer value.
-         * @throw std::logic_error - if given code is not found in @link Response::StatusCode @endlink enum.
-         */
-        Response& statusCodeRaw(int code);
-        /**
-         * @brief Return response status code integer value.
-         */
-        int statusCodeRaw() const;
-        //@}
-        /**
-         * @brief Return true if response contains error status code.
-         */
-        bool fail() const;
-    private:
-        std::string body_;
-        std::string contentType_;
-        Header header_;
-        StatusCode statusCode_;
-    };
-}}}
+    }
+}
+}
 
 #endif /* VIRGIL_SDK_HTTP_RESPONSE_H */

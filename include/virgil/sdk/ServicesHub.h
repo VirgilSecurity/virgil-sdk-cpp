@@ -70,7 +70,7 @@ namespace sdk {
          *       Once you have your account you can sign in and generate an access token for your application.
          */
         explicit ServicesHub(const std::string& accessToken,
-                           const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
+                             const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
         /**
          * @brief Return entrypoint for Virgil Identity Service

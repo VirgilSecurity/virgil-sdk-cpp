@@ -39,53 +39,49 @@
 
 #include <string>
 
+namespace virgil {
+namespace sdk {
+    namespace model {
+        /**
+         * @brief
+         */
+        enum class IdentityType { Email, Application, None };
 
-namespace virgil { namespace sdk { namespace model {
-    /**
-     * @brief
-     */
-    enum class IdentityType {
-        Email,
-        Application,
-        None
-    };
+        std::string toString(const IdentityType& identityType);
 
-    std::string toString(const IdentityType& identityType);
+        IdentityType fromString(const std::string& identityType);
 
-    IdentityType fromString(const std::string& identityType);
+        /**
+         * @brief
+         */
+        class Identity {
+        public:
+            Identity() = default;
+            Identity(const std::string& value, const virgil::sdk::model::IdentityType& type);
 
-    /**
-     * @brief
-     */
-    class Identity {
-    public:
-        Identity() = default;
-        Identity(const std::string& value, const virgil::sdk::model::IdentityType& type);
+            const std::string& getValue() const;
+            const virgil::sdk::model::IdentityType& getType() const;
 
-        const std::string& getValue() const;
-        const virgil::sdk::model::IdentityType& getType() const;
+            std::string getTypeAsString() const;
 
-        std::string getTypeAsString() const;
+        private:
+            std::string value_;
+            IdentityType type_ = IdentityType::None;
+        };
 
-    private:
-        std::string value_;
-        IdentityType type_ = IdentityType::None;
-    };
-
-
-    inline bool operator==(const Identity& left, const Identity& right) {
-        if (left.getValue() == right.getValue() &&
-            left.getType() == right.getType()) {
+        inline bool operator==(const Identity& left, const Identity& right) {
+            if (left.getValue() == right.getValue() && left.getType() == right.getType()) {
                 return 1;
+            }
+
+            return 0;
         }
 
-        return 0;
+        inline bool operator!=(const Identity& left, const Identity& right) {
+            return !(left == right);
+        }
     }
-
-    inline bool operator!=(const Identity& left, const Identity& right) {
-        return !(left == right);
-    }
-
-}}}
+}
+}
 
 #endif /* VIRGIL_SDK_MODEL_IDENTITY_H */

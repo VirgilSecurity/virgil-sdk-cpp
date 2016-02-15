@@ -40,10 +40,8 @@ using virgil::sdk::model::ValidationToken;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 
-
 ValidationToken::ValidationToken(const Identity& identity, const std::string& token)
-    : identity_(identity), token_(token) {
-
+        : identity_(identity), token_(token) {
 }
 
 const Identity& ValidationToken::getIdentity() const {

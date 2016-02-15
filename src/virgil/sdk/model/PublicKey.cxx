@@ -40,10 +40,8 @@ using virgil::crypto::VirgilByteArray;
 
 using virgil::sdk::model::PublicKey;
 
-
 PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
-     : id_(id), createdAt_(createdAt), key_(key) {
-
+        : id_(id), createdAt_(createdAt), key_(key) {
 }
 
 const std::string& PublicKey::getId() const {

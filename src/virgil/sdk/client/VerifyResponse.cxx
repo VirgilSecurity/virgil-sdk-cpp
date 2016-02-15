@@ -52,18 +52,14 @@ using virgil::sdk::http::Response;
 using virgil::sdk::http::kHeaderField_ResponseId;
 using virgil::sdk::http::kHeaderField_ResponseSign;
 
-
 bool virgil::sdk::client::verifyResponse(const Response& response, const VirgilByteArray& publicKey) {
     auto responseHeader = response.header();
     std::string responseData = responseHeader[kHeaderField_ResponseId] + response.body();
     std::string responseSign = responseHeader[kHeaderField_ResponseSign];
 
     VirgilSigner signer;
-    bool verifed = signer.verify(
-            virgil::crypto::str2bytes(responseData), 
-            VirgilBase64::decode(responseSign), 
-            publicKey
-    );
+    bool verifed =
+        signer.verify(virgil::crypto::str2bytes(responseData), VirgilBase64::decode(responseSign), publicKey);
 
     return verifed;
 }
