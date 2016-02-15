@@ -41,7 +41,7 @@ cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
 
 if [ "${PUBLISH_DOCS}" == "ON" ]; then
     # Generate the HTML documentation.
-    make doc-sdk
+    make doc
 fi
 
 if [ "${PUBLISH_COVERITY_SCAN}" == "ON" ] && [ "${TRAVIS_BRANCH}" == "coverity_scan" ] && [ "${CC}" == "gcc-4.8" ]; then
