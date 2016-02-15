@@ -38,10 +38,6 @@
 
 using virgil::sdk::VirgilUri;
 
-using virgil::sdk::endpoints::IdentityEndpointUri;
-using virgil::sdk::endpoints::PublicKeysEndpointUri;
-using virgil::sdk::endpoints::PrivateKeysEndpointUri;
-
 const std::string VirgilUri::kIdentityServiceUri = "https://identity-stg.virgilsecurity.com";
 const std::string VirgilUri::kPublicKeyServiceUri = "https://keys-stg.virgilsecurity.com";
 const std::string VirgilUri::kPrivateKeyServiceUri = "https://keys-private-stg.virgilsecurity.com";
@@ -50,20 +46,14 @@ const std::string VirgilUri::kPrivateKeyServiceUri = "https://keys-private-stg.v
 // const std::string VirgilUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
 // const std::string VirgilUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
 
-
 VirgilUri::VirgilUri()
-    : identityService_(kIdentityServiceUri),
-      publicKeyService_(kPublicKeyServiceUri),
+    : identityService_(kIdentityServiceUri), publicKeyService_(kPublicKeyServiceUri),
       privateKeyService_(kPrivateKeyServiceUri) {
-
 }
 
 VirgilUri::VirgilUri(const std::string& identityService, const std::string& publicKeyService,
-        const std::string& privateKeyService)
-    : identityService_(identityService),
-      publicKeyService_(publicKeyService),
-      privateKeyService_(privateKeyService) {
-
+                     const std::string& privateKeyService)
+    : identityService_(identityService), publicKeyService_(publicKeyService), privateKeyService_(privateKeyService) {
 }
 
 std::string VirgilUri::getIdentityService() const {
@@ -77,16 +67,3 @@ std::string VirgilUri::getPublicKeyService() const {
 std::string VirgilUri::getPrivateKeyService() const {
     return privateKeyService_;
 }
-
-void VirgilUri::setIdentityService(const std::string& uri) {
-    identityService_ = uri;
-}
-
-void VirgilUri::setPublicKeyService(const std::string& uri) {
-    publicKeyService_ = uri;
-}
-
-void VirgilUri::setPrivateKeyService(const std::string& uri) {
-    privateKeyService_ = uri;
-}
-

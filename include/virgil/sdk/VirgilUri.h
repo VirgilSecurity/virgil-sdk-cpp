@@ -43,35 +43,68 @@
 #include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
 
+namespace virgil {
+namespace sdk {
 
-namespace virgil { namespace sdk {
-
+    /**
+     * @brief This class provide base URIs for the Virgil Security services
+     */
     class VirgilUri {
     public:
-        VirgilUri();
-
-        VirgilUri(const std::string& identityService, const std::string& publicKeyService,
-                const std::string& privateKeyService);
-
+        /**
+         * @property kIdentityServiceUri
+         * @brief Default base address of the Virgil Identity Service
+         */
         static const std::string kIdentityServiceUri;
+        /**
+         * @property kPublicKeyServiceUri
+         * @brief Default base address of the Virgil Keys Service
+         */
         static const std::string kPublicKeyServiceUri;
+        /**
+         * @property kPrivateKeyServiceUri
+         * @brief Default base address of the Virgil Private Keys Service
+         */
         static const std::string kPrivateKeyServiceUri;
 
     public:
-        std::string getIdentityService() const;
-        std::string getPublicKeyService() const;
-        std::string getPrivateKeyService() const;
+        /**
+         * @brief Use default services URIs
+         */
+        VirgilUri();
 
-        void setIdentityService(const std::string& uri);
-        void setPublicKeyService(const std::string& uri);
-        void setPrivateKeyService(const std::string& uri);
+        /**
+         * @brief Use user defined services URIs
+         *
+         * @param identityService - base address of the Virgil Identity Service
+         * @param publicKeyService - base address of the Virgil Keys Service
+         * @param privateKeyService - base address of the Virgil Private Keys Service
+         *
+         * @note Pass only base address of service without trailing slash, i.e. https://keys.virgilsecurity.com
+         */
+        VirgilUri(const std::string& identityService, const std::string& publicKeyService,
+                  const std::string& privateKeyService);
+
+    public:
+        /**
+         * @brief Return base URI of the Virgil Identity Service
+         */
+        std::string getIdentityService() const;
+        /**
+         * @brief Return base URI of the Virgil Keys Service
+         */
+        std::string getPublicKeyService() const;
+        /**
+         * @brief Return base URI of the Virgil Private Keys Service
+         */
+        std::string getPrivateKeyService() const;
 
     private:
         std::string identityService_;
         std::string publicKeyService_;
         std::string privateKeyService_;
     };
-
-}}
+}
+}
 
 #endif /* VIRGIL_SDK_HTTP_URI_H */
