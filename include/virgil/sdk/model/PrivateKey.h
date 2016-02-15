@@ -85,8 +85,21 @@ namespace sdk {
             std::string virgilCardId_;
             virgil::crypto::VirgilByteArray key_;
         };
+
+        inline bool operator==(const PrivateKey& left, const PrivateKey& right) {
+            return left.getVirgilCardId() == right.getVirgilCardId() && left.getKey() == right.getKey();
+        }
+
+        inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {
+            return !(left == right);
+        }
+
     }
 }
+
+
+
+
 }
 
 #endif /* VIRGIL_SDK_MODEL_PRIVATE_KEY_H */
