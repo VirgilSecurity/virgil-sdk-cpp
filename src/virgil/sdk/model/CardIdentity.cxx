@@ -40,13 +40,13 @@
 using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::Identity;
 
-CardIdentity::CardIdentity(const bool confirme, const std::string& id, const std::string& createdAt,
+CardIdentity::CardIdentity(const bool confirmed, const std::string& id, const std::string& createdAt,
                            const Identity& identity)
-        : confirme_(confirme), id_(id), createdAt_(createdAt), identity_(identity) {
+        : confirmed_(confirmed), id_(id), createdAt_(createdAt), identity_(identity) {
 }
 
-bool CardIdentity::getConfirme() const {
-    return confirme_;
+bool CardIdentity::isConfirmed() const {
+    return confirmed_;
 }
 
 const std::string& CardIdentity::getId() const {

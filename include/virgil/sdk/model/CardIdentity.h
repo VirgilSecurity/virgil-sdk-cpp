@@ -47,23 +47,23 @@ namespace sdk {
         class CardIdentity {
         public:
             CardIdentity() = default;
-            CardIdentity(const bool confirme, const std::string& id, const std::string& createdAt,
+            CardIdentity(const bool confirmed, const std::string& id, const std::string& createdAt,
                          const Identity& identity);
 
-            bool getConfirme() const;
+            bool isConfirmed() const;
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
             const Identity& getIdentity() const;
 
         private:
-            bool confirme_ = false;
+            bool confirmed_ = false;
             std::string id_;
             std::string createdAt_;
             Identity identity_;
         };
 
         inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
-            if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
+            if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getIdentity() == right.getIdentity()) {
                 return 1;
             }

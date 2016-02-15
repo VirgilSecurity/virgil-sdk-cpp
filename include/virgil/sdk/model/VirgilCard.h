@@ -52,11 +52,11 @@ namespace sdk {
         class VirgilCard {
         public:
             VirgilCard() = default;
-            VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
+            VirgilCard(const bool confirmed, const std::string& id, const std::string& createdAt,
                        const std::string& hash, const virgil::sdk::model::CardIdentity& cardIdentity,
                        const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey);
 
-            bool getConfirme() const;
+            bool isConfirmed() const;
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
             const std::string& getHash() const;
@@ -65,7 +65,7 @@ namespace sdk {
             const virgil::sdk::model::PublicKey& getPublicKey() const;
 
         private:
-            bool confirme_ = false;
+            bool confirmed_ = false;
             std::string id_;
             std::string createdAt_;
             std::string hash_;
@@ -75,7 +75,7 @@ namespace sdk {
         };
 
         inline bool operator==(const VirgilCard& left, const VirgilCard& right) {
-            if (left.getConfirme() == right.getConfirme() && left.getId() == right.getId() &&
+            if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
                 left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
                 left.getPublicKey() == right.getPublicKey()) {

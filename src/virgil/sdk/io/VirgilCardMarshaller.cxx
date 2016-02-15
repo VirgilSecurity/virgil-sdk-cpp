@@ -76,7 +76,7 @@ namespace sdk {
                     json jsonVirgilCard = {
                         {JsonKey::id, virgilCard.getId()},
                         {JsonKey::createdAt, virgilCard.getCreatedAt()},
-                        {JsonKey::isConfirmed, virgilCard.getConfirme()},
+                        {JsonKey::isConfirmed, virgilCard.isConfirmed()},
                         {JsonKey::hash, virgilCard.getHash()},
                     };
 
@@ -92,7 +92,7 @@ namespace sdk {
                         {JsonKey::id, cardIdentity.getId()},
                         {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                         {JsonKey::value, identity.getValue()},
-                        {JsonKey::isConfirmed, cardIdentity.getConfirme()},
+                        {JsonKey::isConfirmed, cardIdentity.isConfirmed()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (virgilCard.getData().empty()) {

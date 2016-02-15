@@ -41,10 +41,10 @@ using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::model::CardIdentity;
 
-VirgilCard::VirgilCard(const bool confirme, const std::string& id, const std::string& createdAt,
+VirgilCard::VirgilCard(const bool confirmed, const std::string& id, const std::string& createdAt,
                        const std::string& hash, const CardIdentity& cardIdentity,
                        const std::map<std::string, std::string>& data, const PublicKey& publicKey)
-        : confirme_(confirme),
+        : confirmed_(confirmed),
           id_(id),
           createdAt_(createdAt),
           hash_(hash),
@@ -53,8 +53,8 @@ VirgilCard::VirgilCard(const bool confirme, const std::string& id, const std::st
           publicKey_(publicKey) {
 }
 
-bool VirgilCard::getConfirme() const {
-    return confirme_;
+bool VirgilCard::isConfirmed() const {
+    return confirmed_;
 }
 
 const std::string& VirgilCard::getId() const {
