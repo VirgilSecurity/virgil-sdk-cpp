@@ -45,18 +45,41 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief Data object represent "Virgil Private Key" entity.
+         * @brief Data object represent "Virgil Private Key" entity
          */
         class PrivateKey {
         public:
+            /**
+             * @brief Create epmpty private key
+             */
             PrivateKey() = default;
+            /**
+             * @brief Creates private key with associated Virgil Card identifier
+             *
+             * @param virgilCardId - unique virgil card identifier defined by service
+             * @param key - private kwy
+             */
             PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);
-            ~PrivateKey() noexcept;
-
+            /**
+             * @brief Return unique virgil card identifier
+             */
             const std::string& getVirgilCardId() const;
+            /**
+             * @brief Return private key
+             */
             const virgil::crypto::VirgilByteArray& getKeyBytes() const;
 
+            /**
+             * @brief Perform security cleanup
+             *
+             * @note This method should be called if private key is not needed anymore
+             */
             void cleanup() noexcept;
+
+            /**
+             * @brief Perform security cleanup on destruction
+             */
+            ~PrivateKey() noexcept;
 
         private:
             std::string virgilCardId_;
