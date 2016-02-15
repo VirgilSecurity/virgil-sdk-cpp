@@ -40,7 +40,7 @@
 #include <vector>
 
 #include <virgil/sdk/VirgilHub.h>
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
@@ -65,7 +65,7 @@ const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-
 
 int main() {
     try {
-        vsdk::VirgilUri virgilUri(
+        vsdk::ServiceUri virgilUri(
                 VIRGIL_IDENTITY_SERVICE_URI_BASE,
                 VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
                 VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE

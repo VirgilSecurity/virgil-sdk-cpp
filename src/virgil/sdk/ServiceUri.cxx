@@ -34,36 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 
-using virgil::sdk::VirgilUri;
+using virgil::sdk::ServiceUri;
 
-const std::string VirgilUri::kIdentityServiceUri = "https://identity-stg.virgilsecurity.com";
-const std::string VirgilUri::kPublicKeyServiceUri = "https://keys-stg.virgilsecurity.com";
-const std::string VirgilUri::kPrivateKeyServiceUri = "https://keys-private-stg.virgilsecurity.com";
+const std::string ServiceUri::kIdentityServiceUri = "https://identity-stg.virgilsecurity.com";
+const std::string ServiceUri::kPublicKeyServiceUri = "https://keys-stg.virgilsecurity.com";
+const std::string ServiceUri::kPrivateKeyServiceUri = "https://keys-private-stg.virgilsecurity.com";
 
-// const std::string VirgilUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
-// const std::string VirgilUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
-// const std::string VirgilUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
+// const std::string ServiceUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
+// const std::string ServiceUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
+// const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
 
-VirgilUri::VirgilUri()
+ServiceUri::ServiceUri()
     : identityService_(kIdentityServiceUri), publicKeyService_(kPublicKeyServiceUri),
       privateKeyService_(kPrivateKeyServiceUri) {
 }
 
-VirgilUri::VirgilUri(const std::string& identityService, const std::string& publicKeyService,
+ServiceUri::ServiceUri(const std::string& identityService, const std::string& publicKeyService,
                      const std::string& privateKeyService)
     : identityService_(identityService), publicKeyService_(publicKeyService), privateKeyService_(privateKeyService) {
 }
 
-std::string VirgilUri::getIdentityService() const {
+std::string ServiceUri::getIdentityService() const {
     return identityService_;
 }
 
-std::string VirgilUri::getPublicKeyService() const {
+std::string ServiceUri::getPublicKeyService() const {
     return publicKeyService_;
 }
 
-std::string VirgilUri::getPrivateKeyService() const {
+std::string ServiceUri::getPrivateKeyService() const {
     return privateKeyService_;
 }

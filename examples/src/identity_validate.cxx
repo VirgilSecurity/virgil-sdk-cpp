@@ -39,7 +39,7 @@
 #include <string>
 
 #include <virgil/sdk/VirgilHub.h>
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;

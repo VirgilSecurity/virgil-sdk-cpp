@@ -44,7 +44,7 @@
 #include <virgil/sdk/client/PrivateKeysClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
 #include <virgil/sdk/client/VirgilCardsClient.h>
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 
 using virgil::crypto::VirgilByteArray;
 
@@ -58,7 +58,7 @@ using virgil::sdk::client::PublicKeysClient;
 using virgil::sdk::client::VirgilCardsClientBase;
 using virgil::sdk::client::VirgilCardsClient;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::VirgilUri;
+using virgil::sdk::ServiceUri;
 
 
 const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
@@ -70,8 +70,8 @@ namespace virgil { namespace sdk {
     class VirgilHubClientImpl {
     public:
         explicit VirgilHubClientImpl(const std::string& accessToken,
-                const VirgilUri& baseServiceUri)
-            : 
+                const ServiceUri& baseServiceUri)
+            :
               identityClient(accessToken, baseServiceUri.getIdentityService() ),
               publicKeysClient(accessToken, baseServiceUri.getPublicKeyService() ),
               virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService() ),
@@ -88,8 +88,8 @@ namespace virgil { namespace sdk {
     };
 }}
 
-VirgilHub::VirgilHub(const std::string& accessToken, const VirgilUri& baseServiceUri)
-    : 
+VirgilHub::VirgilHub(const std::string& accessToken, const ServiceUri& baseServiceUri)
+    :
       accessToken_(accessToken),
       virgilUri_(baseServiceUri),
       impl_( std::make_shared<virgil::sdk::VirgilHubClientImpl>(accessToken_, virgilUri_) ) {

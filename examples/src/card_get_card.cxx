@@ -39,7 +39,7 @@
 #include <string>
 
 #include <virgil/sdk/VirgilHub.h>
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
@@ -57,7 +57,7 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] 
+        std::cerr << std::string("USAGE: ") + argv[0]
                 + " <virgil_card_id>"
                 << "\n";
         return 1;

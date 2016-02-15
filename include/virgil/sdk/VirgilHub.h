@@ -44,7 +44,7 @@
 #include <virgil/sdk/client/PrivateKeysClientBase.h>
 #include <virgil/sdk/client/PublicKeysClientBase.h>
 #include <virgil/sdk/client/VirgilCardsClientBase.h>
-#include <virgil/sdk/VirgilUri.h>
+#include <virgil/sdk/ServiceUri.h>
 
 
 namespace virgil { namespace sdk {
@@ -60,7 +60,7 @@ namespace virgil { namespace sdk {
     class VirgilHub {
     public:
         explicit VirgilHub(const std::string& accessToken,
-                const virgil::sdk::VirgilUri& baseServiceUri = virgil::sdk::VirgilUri());
+                const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
         virgil::sdk::client::IdentityClientBase& identity();
         virgil::sdk::client::PrivateKeysClientBase& privateKeys();
@@ -71,7 +71,7 @@ namespace virgil { namespace sdk {
 
     private:
         std::string accessToken_;
-        virgil::sdk::VirgilUri virgilUri_;
+        virgil::sdk::ServiceUri virgilUri_;
         std::shared_ptr<VirgilHubClientImpl> impl_;
     };
 

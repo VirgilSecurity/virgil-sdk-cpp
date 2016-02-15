@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_HTTP_URI_H
-#define VIRGIL_SDK_HTTP_URI_H
+#ifndef VIRGIL_SDK_SERVICE_URI_H
+#define VIRGIL_SDK_SERVICE_URI_H
 
 #include <string>
 
@@ -49,7 +49,7 @@ namespace sdk {
     /**
      * @brief This class provide base URIs for the Virgil Security services
      */
-    class VirgilUri {
+    class ServiceUri {
     public:
         /**
          * @property kIdentityServiceUri
@@ -71,7 +71,7 @@ namespace sdk {
         /**
          * @brief Use default services URIs
          */
-        VirgilUri();
+        ServiceUri();
 
         /**
          * @brief Use user defined services URIs
@@ -82,7 +82,7 @@ namespace sdk {
          *
          * @note Pass only base address of service without trailing slash, i.e. https://keys.virgilsecurity.com
          */
-        VirgilUri(const std::string& identityService, const std::string& publicKeyService,
+        ServiceUri(const std::string& identityService, const std::string& publicKeyService,
                   const std::string& privateKeyService);
 
     public:
@@ -107,4 +107,4 @@ namespace sdk {
 }
 }
 
-#endif /* VIRGIL_SDK_HTTP_URI_H */
+#endif /* VIRGIL_SDK_SERVICE_URI_H */
