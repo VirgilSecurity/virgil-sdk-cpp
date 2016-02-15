@@ -79,7 +79,7 @@ namespace sdk {
             /**
              * @brief Perform security cleanup on destruction
              */
-            ~PrivateKey() noexcept;
+            virtual ~PrivateKey() noexcept;
 
         private:
             std::string virgilCardId_;
