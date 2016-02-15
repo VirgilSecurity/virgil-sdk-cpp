@@ -40,36 +40,36 @@
 #include <cstddef>
 #include <string>
 
-namespace virgil { namespace sdk {
-
+namespace virgil {
+namespace sdk {
     /**
-     * @brief Provides information about Virgil Keys SDK version.
+     * @brief Provides information about Virgil Keys SDK version
      */
     class Version {
     public:
         /**
-         * Return version number in the format MMNNPP (Major, Minor, Patch).
+         * Return version number in the format MMNNPP (Major, Minor, Patch)
          *
          */
         static size_t asNumber();
         /**
-         * Return the version number as string.
+         * Return the version number as string
          */
         static std::string asString();
         /**
-         * Return the major version number.
+         * Return the major version number
          */
         static size_t majorVersion();
         /**
-         * Return the minor version number.
+         * Return the minor version number
          */
-        static size_t  minorVersion();
+        static size_t minorVersion();
         /**
-         * Return the minor version number.
+         * Return the minor version number
          */
         static size_t patchVersion();
     };
-
-}}
+}
+}
 
 #endif /* VIRGIL_SDK_VERSION_H */
