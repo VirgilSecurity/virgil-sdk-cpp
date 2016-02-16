@@ -45,15 +45,33 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief Data object represent "Virgil Public Key" entity.
+         * @brief Data object represent "Virgil Public Key" entity
          */
         class PublicKey {
         public:
+            /**
+             * @brief Create empty object
+             */
             PublicKey() = default;
+            /**
+             * @brief Create public key with additional info
+             *
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
+             * @param key - public key
+             */
             PublicKey(const std::string& id, const std::string& createdAt, const virgil::crypto::VirgilByteArray& key);
-
+            /**
+             * @brief Return unique object identifier
+             */
             const std::string& getId() const;
+            /**
+             * @brief Return cretion date timestamp
+             */
             const std::string& getCreatedAt() const;
+            /**
+             * @brief Return public key
+             */
             const virgil::crypto::VirgilByteArray& getKey() const;
 
         private:
@@ -62,14 +80,21 @@ namespace sdk {
             virgil::crypto::VirgilByteArray key_;
         };
 
+        /**
+         * @brief Compare identities for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const PublicKey& left, const PublicKey& right) {
-            if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                left.getKey() == right.getKey()) {
-                return 1;
-            }
-            return 0;
+            return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.getKey() == right.getKey();
         }
 
+        /**
+         * @brief Compare identities for inequality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator!=(const PublicKey& left, const PublicKey& right) {
             return !(left == right);
         }
