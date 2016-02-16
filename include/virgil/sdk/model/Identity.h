@@ -71,7 +71,7 @@ namespace sdk {
             /**
              * @brief Creates identity with given values
              *
-             * @param value - identity identifier, i.e. support@virgilsecurity.com
+             * @param value - identity value, i.e. support@virgilsecurity.com
              * @param type - identity type, i.e. IdentityType::Email
              *
              * @note
