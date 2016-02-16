@@ -82,11 +82,7 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            if (left.getIdentity() == right.getIdentity() && left.getToken() == right.getToken()) {
-                return 1;
-            }
-
-            return 0;
+            return left.getIdentity() == right.getIdentity() && left.getToken() == right.getToken();
         }
 
         /**
