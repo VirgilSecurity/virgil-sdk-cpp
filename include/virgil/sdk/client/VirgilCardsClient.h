@@ -55,7 +55,7 @@ namespace sdk {
 
             void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
 
-            virgil::sdk::model::VirgilCard create(const virgil::sdk::model::ValidationToken& validationToken,
+            virgil::sdk::model::VirgilCard create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                                                   const virgil::crypto::VirgilByteArray& publicKey,
                                                   const virgil::sdk::Credentials& credentials) override;
 
@@ -76,7 +76,7 @@ namespace sdk {
 
             std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) override;
 
-            void revoke(const std::string& ownerCardId, const virgil::sdk::model::ValidationToken& validationToken,
+            void revoke(const std::string& ownerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials) override;
 
             std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,

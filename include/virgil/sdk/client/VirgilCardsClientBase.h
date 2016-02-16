@@ -43,7 +43,7 @@
 
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/VirgilCard.h>
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/TrustCardResponse.h>
 
 namespace virgil {
@@ -61,9 +61,9 @@ namespace sdk {
             //
             virtual std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) = 0;
 
-            virtual virgil::sdk::model::VirgilCard create(const virgil::sdk::model::ValidationToken& validationToken,
-                                                          const virgil::crypto::VirgilByteArray& publicKey,
-                                                          const virgil::sdk::Credentials& credentials) = 0;
+            virtual virgil::sdk::model::VirgilCard
+            create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
+                   const virgil::crypto::VirgilByteArray& publicKey, const virgil::sdk::Credentials& credentials) = 0;
 
             virtual virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
                                                                 const std::string& trustedCardHash,
@@ -86,7 +86,7 @@ namespace sdk {
             virtual virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) = 0;
 
             virtual void revoke(const std::string& ownerCardId,
-                                const virgil::sdk::model::ValidationToken& validationToken,
+                                const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                                 const virgil::sdk::Credentials& credentials) = 0;
         };
     }

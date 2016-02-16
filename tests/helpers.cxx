@@ -51,7 +51,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::PrivateKey;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::VirgilCard;
@@ -110,14 +110,14 @@ const std::string kPrivateKey = "LS0tLS1CRUdJTiBFTkNSWVBURUQgUFJJVkFU"
 namespace virgil {
 namespace test {
 
-    json getJsonValidationToken() {
+    json getJsonValidatedIdentity() {
         return json({{JsonKey::type, "email"},
                      {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"},
-                     {JsonKey::validationToken, kToken}});
+                     {JsonKey::validatedIdentity, kToken}});
     }
 
-    ValidationToken getValidationToken() {
-        return ValidationToken(Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email), kToken);
+    ValidatedIdentity getValidatedIdentity() {
+        return ValidatedIdentity(Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email), kToken);
     }
 
     json getJsonPublicKey() {

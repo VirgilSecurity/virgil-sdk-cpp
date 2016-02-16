@@ -36,7 +36,7 @@
 
 /**
  * @file test_validation_token_marshaller.cxx
- * @brief Convert json <-> ValidationToken.
+ * @brief Convert json <-> ValidatedIdentity.
  */
 
 #include "../catch.hpp"
@@ -45,28 +45,28 @@
 
 #include <json.hpp>
 
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 using json = nlohmann::json;
 
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-TEST_CASE("ValidationToken -> Json ValidationToken - FAILED", "class Marshaller") {
-    ValidationToken validationToken = virgil::test::getValidationToken();
-    // ValidationToken -> Json
-    std::string testJsonValidationToken = Marshaller<ValidationToken>::toJson<4>(validationToken);
-    REQUIRE(virgil::test::getJsonValidationToken().dump(4) == testJsonValidationToken);
+TEST_CASE("ValidatedIdentity -> Json ValidatedIdentity - FAILED", "class Marshaller") {
+    ValidatedIdentity validatedIdentity = virgil::test::getValidatedIdentity();
+    // ValidatedIdentity -> Json
+    std::string testJsonValidatedIdentity = Marshaller<ValidatedIdentity>::toJson<4>(validatedIdentity);
+    REQUIRE(virgil::test::getJsonValidatedIdentity().dump(4) == testJsonValidatedIdentity);
 }
 
-TEST_CASE("Json ValidationToken -> ValidationToken - FAILED", "class Marshaller") {
-    json jsonValidationToken = virgil::test::getJsonValidationToken();
-    // Json -> ValidationToken
-    ValidationToken testValidationToken = Marshaller<ValidationToken>::fromJson(jsonValidationToken.dump());
-    REQUIRE(virgil::test::getValidationToken() == testValidationToken);
+TEST_CASE("Json ValidatedIdentity -> ValidatedIdentity - FAILED", "class Marshaller") {
+    json jsonValidatedIdentity = virgil::test::getJsonValidatedIdentity();
+    // Json -> ValidatedIdentity
+    ValidatedIdentity testValidatedIdentity = Marshaller<ValidatedIdentity>::fromJson(jsonValidatedIdentity.dump());
+    REQUIRE(virgil::test::getValidatedIdentity() == testValidatedIdentity);
 }

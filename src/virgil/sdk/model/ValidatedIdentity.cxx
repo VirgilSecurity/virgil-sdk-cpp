@@ -34,20 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 
-ValidationToken::ValidationToken(const Identity& identity, const std::string& token)
+ValidatedIdentity::ValidatedIdentity(const Identity& identity, const std::string& token)
         : identity_(identity), token_(token) {
 }
 
-const Identity& ValidationToken::getIdentity() const {
+const Identity& ValidatedIdentity::getIdentity() const {
     return identity_;
 }
 
-const std::string& ValidationToken::getToken() const {
+const std::string& ValidatedIdentity::getToken() const {
     return token_;
 }

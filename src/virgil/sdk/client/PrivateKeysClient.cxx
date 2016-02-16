@@ -68,7 +68,7 @@ using virgil::sdk::endpoints::PrivateKeysEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::PrivateKey;
@@ -108,8 +108,8 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_STASH);
 }
 
-PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const ValidationToken& validationToken) {
-    Identity identity = validationToken.getIdentity();
+PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const ValidatedIdentity& validatedIdentity) {
+    Identity identity = validatedIdentity.getIdentity();
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
     while (responsePassword.size() > 31) {
@@ -119,7 +119,7 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Validat
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                       {JsonKey::value, identity.getValue()},
-                      {JsonKey::validationToken, validationToken.getToken()}}},
+                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},
                     {JsonKey::virgilCardId, virgilCardId}};
 

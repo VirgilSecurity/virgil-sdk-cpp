@@ -68,16 +68,17 @@ int main(int argc, char** argv) {
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::ValidationToken validationToken(identity, token);
+        vsdk::model::ValidatedIdentity validatedIdentity(identity, token);
 
-        bool validateToken = virgilHub.identity().isValid(validationToken);
-        std::string validationTokenStr = vsdk::io::Marshaller<vsdk::model::ValidationToken>::toJson<4>(validationToken);
+        bool validateToken = virgilHub.identity().isValid(validatedIdentity);
+        std::string validatedIdentityStr =
+            vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
         if (validateToken) {
             std::cout << "Validation Token is valid!\n";
-            std::cout << validationTokenStr << "\n";
+            std::cout << validatedIdentityStr << "\n";
         } else {
             std::cout << "Validation Token is NOT valid!\n";
-            std::cout << validationTokenStr << "\n";
+            std::cout << validatedIdentityStr << "\n";
         }
 
     } catch (std::exception& exception) {

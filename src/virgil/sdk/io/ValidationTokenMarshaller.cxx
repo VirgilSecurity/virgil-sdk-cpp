@@ -38,14 +38,14 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::fromString;
@@ -57,27 +57,27 @@ namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<ValidationToken> specialization.
+         * @brief Marshaller<ValidatedIdentity> specialization.
          */
-        template <> class Marshaller<ValidationToken> {
+        template <> class Marshaller<ValidatedIdentity> {
         public:
-            template <int INDENT = -1> static std::string toJson(const ValidationToken& validationToken) {
-                json jsonValidationToken = {{JsonKey::type, toString(validationToken.getIdentity().getType())},
-                                            {JsonKey::value, validationToken.getIdentity().getValue()},
-                                            {JsonKey::validationToken, validationToken.getToken()}};
+            template <int INDENT = -1> static std::string toJson(const ValidatedIdentity& validatedIdentity) {
+                json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
+                                              {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                                              {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
 
-                return jsonValidationToken.dump(INDENT);
+                return jsonValidatedIdentity.dump(INDENT);
             }
 
-            static ValidationToken fromJson(const std::string& jsonString) {
+            static ValidatedIdentity fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
 
                 IdentityType identityType = fromString(typeJson[JsonKey::type]);
                 std::string value = typeJson[JsonKey::value];
-                std::string validationToken = typeJson[JsonKey::validationToken];
+                std::string validatedIdentity = typeJson[JsonKey::validatedIdentity];
                 Identity identity(value, identityType);
 
-                return ValidationToken(identity, validationToken);
+                return ValidatedIdentity(identity, validatedIdentity);
             }
 
         private:
@@ -88,8 +88,8 @@ namespace sdk {
 }
 
 void marshaller_validation_token_init() {
-    virgil::sdk::io::Marshaller<ValidationToken>::toJson(ValidationToken());
-    virgil::sdk::io::Marshaller<ValidationToken>::toJson<2>(ValidationToken());
-    virgil::sdk::io::Marshaller<ValidationToken>::toJson<4>(ValidationToken());
-    virgil::sdk::io::Marshaller<ValidationToken>::fromJson(std::string());
+    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson(ValidatedIdentity());
+    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<2>(ValidatedIdentity());
+    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<4>(ValidatedIdentity());
+    virgil::sdk::io::Marshaller<ValidatedIdentity>::fromJson(std::string());
 }

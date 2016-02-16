@@ -64,7 +64,7 @@ using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::toString;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
@@ -95,23 +95,23 @@ PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
     return publicKey;
 }
 
-void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidationToken> validationTokens,
+void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,
                               const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
-    for (const auto& validationToken : validationTokens) {
-        json jsonValidationToken = {{JsonKey::type, toString(validationToken.getIdentity().getType())},
-                                    {JsonKey::value, validationToken.getIdentity().getValue()},
-                                    {JsonKey::validationToken, validationToken.getToken()}};
-        jsonArray.push_back(jsonValidationToken);
+    for (const auto& validatedIdentity : validatedIdentitys) {
+        json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
+                                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
+        jsonArray.push_back(jsonValidatedIdentity);
     }
-    json jsonValidationTokens;
-    jsonValidationTokens[JsonKey::identities] = jsonArray;
+    json jsonValidatedIdentitys;
+    jsonValidatedIdentitys[JsonKey::identities] = jsonArray;
 
     Request request = Request()
                           .del()
                           .baseAddress(baseServiceUri_)
                           .endpoint(PublicKeysEndpointUri::publicKeyRevoke(publicKeyId))
-                          .body(jsonValidationTokens.dump());
+                          .body(jsonValidatedIdentitys.dump());
 
     ClientConnection connection(accessToken_);
     Request signRequest = connection.signRequest(virgilCardId, credentials, request);

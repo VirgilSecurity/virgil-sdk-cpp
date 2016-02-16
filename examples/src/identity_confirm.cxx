@@ -66,11 +66,12 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
-        vsdk::model::ValidationToken validationToken =
+        vsdk::model::ValidatedIdentity validatedIdentity =
             virgilHub.identity().confirm(actionId, confirmationCode, 3600, 100);
 
-        std::string validationTokenStr = vsdk::io::Marshaller<vsdk::model::ValidationToken>::toJson<4>(validationToken);
-        std::cout << "ValidationToken:\n" << validationTokenStr << "\n";
+        std::string validatedIdentityStr =
+            vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
+        std::cout << "ValidatedIdentity:\n" << validatedIdentityStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

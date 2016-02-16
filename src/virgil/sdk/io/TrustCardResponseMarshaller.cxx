@@ -49,7 +49,7 @@ namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<ValidationToken> specialization.
+         * @brief Marshaller<ValidatedIdentity> specialization.
          */
         template <> class Marshaller<TrustCardResponse> {
         public:

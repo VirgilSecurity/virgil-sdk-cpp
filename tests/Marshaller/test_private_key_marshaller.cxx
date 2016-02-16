@@ -57,7 +57,7 @@ TEST_CASE("PrivateKey -> Json PrivateKey - FAILED", "class Marshaller") {
 
     // PrivateKey -> Json
     std::string testJsonPrivateKey = Marshaller<PrivateKey>::toJson<4>(privateKey);
-    REQUIRE( trueJsonPrivateKey.dump(4) == testJsonPrivateKey );
+    REQUIRE(trueJsonPrivateKey.dump(4) == testJsonPrivateKey);
 }
 
 TEST_CASE("Json PrivateKey -> PrivateKey - FAILED", "class Marshaller") {
@@ -66,5 +66,5 @@ TEST_CASE("Json PrivateKey -> PrivateKey - FAILED", "class Marshaller") {
     // Json -> PrivateKey
     PrivateKey testPrivateKey = Marshaller<PrivateKey>::fromJson(jsonPrivateKey.dump(4));
     PrivateKey truePrivateKey = virgil::test::getPrivateKey();
-    REQUIRE( truePrivateKey == testPrivateKey );
+    REQUIRE(truePrivateKey == testPrivateKey);
 }

@@ -57,7 +57,7 @@ namespace sdk {
             void stash(const std::string& virgilCardId, const Credentials& credentials) override;
 
             virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                                               const virgil::sdk::model::ValidationToken& validationToken) override;
+                                               const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
 
             void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
                          const Credentials& credentials) override;

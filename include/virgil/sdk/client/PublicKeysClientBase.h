@@ -41,7 +41,7 @@
 #include <vector>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/VirgilCard.h>
 #include <virgil/sdk/model/PublicKey.h>
 
@@ -60,7 +60,7 @@ namespace sdk {
             virtual virgil::sdk::model::PublicKey get(const std::string& publicKeyId) = 0;
 
             virtual void revoke(const std::string& publicKeyId,
-                                const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
+                                const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
                                 const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) = 0;
         };
     }

@@ -47,10 +47,10 @@ namespace sdk {
         /**
          * @brief
          */
-        class ValidationToken {
+        class ValidatedIdentity {
         public:
-            ValidationToken() = default;
-            ValidationToken(const virgil::sdk::model::Identity& identity, const std::string& token);
+            ValidatedIdentity() = default;
+            ValidatedIdentity(const virgil::sdk::model::Identity& identity, const std::string& token);
 
             const virgil::sdk::model::Identity& getIdentity() const;
             const std::string& getToken() const;
@@ -60,7 +60,7 @@ namespace sdk {
             std::string token_;
         };
 
-        inline bool operator==(const ValidationToken& left, const ValidationToken& right) {
+        inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             if (left.getIdentity() == right.getIdentity() && left.getToken() == right.getToken()) {
                 return 1;
             }
@@ -68,7 +68,7 @@ namespace sdk {
             return 0;
         }
 
-        inline bool operator!=(const ValidationToken& left, const ValidationToken& right) {
+        inline bool operator!=(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             return !(left == right);
         }
     }

@@ -57,14 +57,14 @@ namespace sdk {
 
             std::string verify(const virgil::sdk::model::Identity& identity) override;
 
-            virgil::sdk::model::ValidationToken confirm(const std::string& actionId,
-                                                        const std::string& confirmationCode,
-                                                        const int timeToLive = 3600,
-                                                        const int countToLive = 1) override;
+            virgil::sdk::model::ValidatedIdentity confirm(const std::string& actionId,
+                                                          const std::string& confirmationCode,
+                                                          const int timeToLive = 3600,
+                                                          const int countToLive = 1) override;
 
-            bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validationToken) override;
+            bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validatedIdentity) override;
 
-            bool isValid(const virgil::sdk::model::ValidationToken& validationToken) override;
+            bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
 
         private:
             std::string accessToken_;

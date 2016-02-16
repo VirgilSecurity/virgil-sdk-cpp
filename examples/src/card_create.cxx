@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::ValidationToken validationToken(identity, token);
+        vsdk::model::ValidatedIdentity validatedIdentity(identity, token);
 
         std::cout << "Prepare public key file: " << pathPublicKey << "\n";
         std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Create a Virgil Card"
                   << "\n";
-        vsdk::model::VirgilCard virgilCard = virgilHub.cards().create(validationToken, publicKey, credentials);
+        vsdk::model::VirgilCard virgilCard = virgilHub.cards().create(validatedIdentity, publicKey, credentials);
         std::string virgilCardStr = vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(virgilCard);
 
         std::cout << "Virgil Card:\n";

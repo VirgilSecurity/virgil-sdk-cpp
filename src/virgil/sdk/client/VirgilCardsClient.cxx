@@ -65,7 +65,7 @@ using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::model::VirgilCard;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::model::toString;
@@ -84,13 +84,13 @@ void VirgilCardsClient::setServiceVirgilCard(const VirgilCard& publicKeysService
     publicKeysServiceCard_ = publicKeysServiceCard;
 }
 
-VirgilCard VirgilCardsClient::create(const ValidationToken& validationToken, const VirgilByteArray& publicKey,
+VirgilCard VirgilCardsClient::create(const ValidatedIdentity& validatedIdentity, const VirgilByteArray& publicKey,
                                      const Credentials& credentials) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
-                     {{JsonKey::type, toString(validationToken.getIdentity().getType())},
-                      {JsonKey::value, validationToken.getIdentity().getValue()},
-                      {JsonKey::validationToken, validationToken.getToken()}}}};
+                     {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
+                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
 
     Request request = Request()
                           .post()
@@ -225,12 +225,12 @@ VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
     return virgilCard;
 }
 
-void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidationToken& validationToken,
+void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidatedIdentity& validatedIdentity,
                                const Credentials& credentials) {
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, toString(validationToken.getIdentity().getType())},
-                      {JsonKey::value, validationToken.getIdentity().getValue()},
-                      {JsonKey::validationToken, validationToken.getToken()}}}};
+                     {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
+                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
 
     Request request = Request()
                           .del()

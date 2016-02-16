@@ -64,5 +64,5 @@ const std::string JsonKey::actionId = "action_id";
 const std::string JsonKey::token = "token";
 const std::string JsonKey::timeToLive = "time_to_live";
 const std::string JsonKey::countToLive = "count_to_live";
-const std::string JsonKey::validationToken = "validation_token";
+const std::string JsonKey::validatedIdentity = "validation_token";
 const std::string JsonKey::responsePassword = "response_password";

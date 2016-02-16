@@ -57,7 +57,7 @@ namespace sdk {
             virgil::sdk::model::PublicKey get(const std::string& publicKeyId) override;
 
             void revoke(const std::string& publicKeyId,
-                        const std::vector<virgil::sdk::model::ValidationToken> validationTokens,
+                        const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
                         const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) override;
 
         private:

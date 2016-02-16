@@ -93,13 +93,8 @@ namespace sdk {
         inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {
             return !(left == right);
         }
-
     }
 }
-
-
-
-
 }
 
 #endif /* VIRGIL_SDK_MODEL_PRIVATE_KEY_H */

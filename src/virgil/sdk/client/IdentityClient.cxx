@@ -66,7 +66,7 @@ using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::ValidationToken;
+using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::VirgilCard;
 using virgil::sdk::util::JsonKey;
@@ -101,8 +101,8 @@ std::string IdentityClient::verify(const Identity& identity) {
     return actionId;
 }
 
-ValidationToken IdentityClient::confirm(const std::string& actionId, const std::string& confirmationCode,
-                                        const int timeToLive, const int countToLive) {
+ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std::string& confirmationCode,
+                                          const int timeToLive, const int countToLive) {
     json payload = {{JsonKey::confirmationCode, confirmationCode},
                     {JsonKey::actionId, actionId},
                     {JsonKey::token, {{JsonKey::timeToLive, timeToLive}, {JsonKey::countToLive, countToLive}}}};
@@ -115,14 +115,14 @@ ValidationToken IdentityClient::confirm(const std::string& actionId, const std::
     connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
     this->verifyResponse(response);
 
-    ValidationToken validationToken = Marshaller<ValidationToken>::fromJson(response.body());
-    return validationToken;
+    ValidatedIdentity validatedIdentity = Marshaller<ValidatedIdentity>::fromJson(response.body());
+    return validatedIdentity;
 }
 
-bool IdentityClient::isValid(const Identity& identity, const std::string& validationToken) {
+bool IdentityClient::isValid(const Identity& identity, const std::string& validatedIdentity) {
     json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                     {JsonKey::value, identity.getValue()},
-                    {JsonKey::validationToken, validationToken}};
+                    {JsonKey::validatedIdentity, validatedIdentity}};
 
     Request request =
         Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::validate()).body(payload.dump());
@@ -137,8 +137,8 @@ bool IdentityClient::isValid(const Identity& identity, const std::string& valida
     return true;
 }
 
-bool IdentityClient::isValid(const virgil::sdk::model::ValidationToken& validationToken) {
-    return bool(this->isValid(validationToken.getIdentity(), validationToken.getToken()));
+bool IdentityClient::isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) {
+    return bool(this->isValid(validatedIdentity.getIdentity(), validatedIdentity.getToken()));
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {

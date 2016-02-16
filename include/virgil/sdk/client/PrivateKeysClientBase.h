@@ -40,7 +40,7 @@
 #include <virgil/crypto/VirgilByteArray.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/model/ValidationToken.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/PrivateKey.h>
 #include <virgil/sdk/model/VirgilCard.h>
 
@@ -58,8 +58,8 @@ namespace sdk {
 
             virtual void stash(const std::string& virgilCardId, const Credentials& credentials) = 0;
 
-            virtual virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
-                                                       const virgil::sdk::model::ValidationToken& validationToken) = 0;
+            virtual virgil::sdk::model::PrivateKey
+            get(const std::string& virgilCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity) = 0;
 
             virtual void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
                                  const Credentials& credentials) = 0;
