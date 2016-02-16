@@ -57,31 +57,29 @@ TEST_CASE("std::string publicKeyRevoke(const std::string& publicKeyId) const", "
     REQUIRE(PublicKeysEndpointUri::publicKeyRevoke(publicKeyId) == "/v3/public-key/" + publicKeyId);
 }
 
-TEST_CASE("std::string virgilCardCreate() const", "class PublicKeysEndpointUri") {
-    REQUIRE(PublicKeysEndpointUri::virgilCardCreate() == "/v3/virgil-card");
+TEST_CASE("std::string cardCreate() const", "class PublicKeysEndpointUri") {
+    REQUIRE(PublicKeysEndpointUri::cardCreate() == "/v3/virgil-card");
 }
 
-TEST_CASE("std::string virgilCardSearch() const", "class PublicKeysEndpointUri") {
-    REQUIRE(PublicKeysEndpointUri::virgilCardSearch() == "/v3/virgil-card/actions/search");
+TEST_CASE("std::string cardSearch() const", "class PublicKeysEndpointUri") {
+    REQUIRE(PublicKeysEndpointUri::cardSearch() == "/v3/virgil-card/actions/search");
 }
 
-TEST_CASE("std::string virgilCardSearchApp() const", "class PublicKeysEndpointUri") {
-    REQUIRE(PublicKeysEndpointUri::virgilCardSearchApp() == "/v3/virgil-card/actions/search/app");
+TEST_CASE("std::string cardSearchApp() const", "class PublicKeysEndpointUri") {
+    REQUIRE(PublicKeysEndpointUri::cardSearchApp() == "/v3/virgil-card/actions/search/app");
 }
 
-TEST_CASE("std::string virgilCardTrust(const std::string& virgilCardId) const", "class PublicKeysEndpointUri") {
-    std::string virgilCardId = "123";
-    REQUIRE(PublicKeysEndpointUri::virgilCardTrust(virgilCardId) ==
-            "/v3/virgil-card/" + virgilCardId + "/actions/sign");
+TEST_CASE("std::string cardTrust(const std::string& cardId) const", "class PublicKeysEndpointUri") {
+    std::string cardId = "123";
+    REQUIRE(PublicKeysEndpointUri::cardTrust(cardId) == "/v3/virgil-card/" + cardId + "/actions/sign");
 }
 
-TEST_CASE("std::string virgilCardUntrust(const std::string& virgilCardId) const", "class PublicKeysEndpointUri") {
-    std::string virgilCardId = "123";
-    REQUIRE(PublicKeysEndpointUri::virgilCardUntrust(virgilCardId) ==
-            "/v3/virgil-card/" + virgilCardId + "/actions/unsign");
+TEST_CASE("std::string cardUntrust(const std::string& cardId) const", "class PublicKeysEndpointUri") {
+    std::string cardId = "123";
+    REQUIRE(PublicKeysEndpointUri::cardUntrust(cardId) == "/v3/virgil-card/" + cardId + "/actions/unsign");
 }
 
-TEST_CASE("std::string virgilCardRevoke(const std::string& virgilCardId) const", "class PublicKeysEndpointUri") {
-    std::string virgilCardId = "123";
-    REQUIRE(PublicKeysEndpointUri::virgilCardRevoke(virgilCardId) == "/v3/virgil-card/" + virgilCardId);
+TEST_CASE("std::string cardRevoke(const std::string& cardId) const", "class PublicKeysEndpointUri") {
+    std::string cardId = "123";
+    REQUIRE(PublicKeysEndpointUri::cardRevoke(cardId) == "/v3/virgil-card/" + cardId);
 }

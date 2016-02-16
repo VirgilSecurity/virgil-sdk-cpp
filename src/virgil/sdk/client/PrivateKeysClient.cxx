@@ -72,7 +72,7 @@ using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::PrivateKey;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -80,17 +80,16 @@ PrivateKeysClient::PrivateKeysClient(const std::string& accessToken, const std::
         : accessToken_(accessToken), baseServiceUri_(baseUri) {
 }
 
-VirgilCard PrivateKeysClient::getServiceVirgilCard() const {
+Card PrivateKeysClient::getServiceCard() const {
     return privateKeysServiceCard_;
 }
 
-void PrivateKeysClient::setServiceVirgilCard(const VirgilCard& privateKeysServiceCard) {
+void PrivateKeysClient::setServiceCard(const Card& privateKeysServiceCard) {
     privateKeysServiceCard_ = privateKeysServiceCard;
 }
 
-void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials& credentials) {
-    json payload = {{JsonKey::privateKey, VirgilBase64::encode(credentials.privateKey())},
-                    {JsonKey::virgilCardId, virgilCardId}};
+void PrivateKeysClient::stash(const std::string& cardId, const Credentials& credentials) {
+    json payload = {{JsonKey::privateKey, VirgilBase64::encode(credentials.privateKey())}, {JsonKey::cardId, cardId}};
 
     Request request = Request()
                           .post()
@@ -99,7 +98,7 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials
                           .body(payload.dump());
 
     ClientConnection connection(accessToken_);
-    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
+    Request signRequest = connection.signRequest(cardId, credentials, request);
 
     std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, payload.dump());
 
@@ -108,7 +107,7 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_STASH);
 }
 
-PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const ValidatedIdentity& validatedIdentity) {
+PrivateKey PrivateKeysClient::get(const std::string& cardId, const ValidatedIdentity& validatedIdentity) {
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
     while (responsePassword.size() > 31) {
@@ -120,7 +119,7 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Validat
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},
-                    {JsonKey::virgilCardId, virgilCardId}};
+                    {JsonKey::cardId, cardId}};
 
     ClientConnection connection(accessToken_);
     std::string encryptedRequestJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, payload.dump());
@@ -143,9 +142,9 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Validat
     return privateKey;
 }
 
-void PrivateKeysClient::destroy(const std::string& virgilCardId, const VirgilByteArray& publicKey,
+void PrivateKeysClient::destroy(const std::string& cardId, const VirgilByteArray& publicKey,
                                 const Credentials& credentials) {
-    json payload = {{JsonKey::virgilCardId, virgilCardId}};
+    json payload = {{JsonKey::cardId, cardId}};
 
     Request request = Request()
                           .post()
@@ -154,7 +153,7 @@ void PrivateKeysClient::destroy(const std::string& virgilCardId, const VirgilByt
                           .body(payload.dump());
 
     ClientConnection connection(accessToken_);
-    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
+    Request signRequest = connection.signRequest(cardId, credentials, request);
     std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, signRequest.body());
     signRequest.body(encryptJsonBody);
 

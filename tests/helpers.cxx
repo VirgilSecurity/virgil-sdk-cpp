@@ -54,7 +54,7 @@ using virgil::sdk::model::PrivateKey;
 using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::model::CardIdentity;
 using virgil::sdk::model::TrustCardResponse;
 using virgil::sdk::util::JsonKey;
@@ -131,7 +131,7 @@ namespace test {
                          VirgilBase64::decode(kPublicKeyBase64));
     }
 
-    json getJsonVirgilCard() {
+    json getJsonCard() {
         return json({{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                      {JsonKey::data, {}},
                      {JsonKey::hash, kHash},
@@ -150,18 +150,18 @@ namespace test {
                        {JsonKey::publicKey, kPublicKeyBase64}}}});
     }
 
-    VirgilCard getVirgilCard() {
-        return VirgilCard(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                          CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                                       "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                          std::map<std::string, std::string>(), getPublicKey());
+    Card getCard() {
+        return Card(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+                    CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                                 "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                    std::map<std::string, std::string>(), getPublicKey());
     }
 
-    json getJsonResponseVirgilCards() {
+    json getJsonResponseCards() {
         return json({{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                      {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
                      {JsonKey::publicKey, kPublicKeyBase64},
-                     {JsonKey::virgilCards,
+                     {JsonKey::cards,
                       {{{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::data, {}},
                         {JsonKey::hash, kHash},
@@ -196,7 +196,7 @@ namespace test {
                           {JsonKey::publicKey, kPublicKeyBase64}}}}}}});
     }
 
-    json getJsonVirgilCards() {
+    json getJsonCards() {
         return json({{{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                       {JsonKey::data, {}},
                       {JsonKey::hash, kHash},
@@ -231,24 +231,24 @@ namespace test {
                         {JsonKey::publicKey, kPublicKeyBase64}}}}});
     }
 
-    std::vector<VirgilCard> getVirgilCards() {
-        std::vector<VirgilCard> virgilCards;
-        virgilCards.push_back(getVirgilCard());
+    std::vector<Card> getCards() {
+        std::vector<Card> cards;
+        cards.push_back(getCard());
 
-        VirgilCard virgilCard(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                              CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                                           "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                              {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey());
+        Card card(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+                  CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                               "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                  {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey());
 
-        virgilCards.push_back(virgilCard);
-        return virgilCards;
+        cards.push_back(card);
+        return cards;
     }
 
     json getJsonTrustCardResponse() {
         return json({{JsonKey::id, "9e0bb253-879b-4fbd-a504-829faae7e958"},
                      {JsonKey::createdAt, "2015-12-22T07:03:42+0000"},
-                     {JsonKey::signerVirgilCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c"},
-                     {JsonKey::signedVirgilCardId, "9ab9d4a4-0440-499f-bdc6-f99c83f900dd"},
+                     {JsonKey::signerCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c"},
+                     {JsonKey::signedCardId, "9ab9d4a4-0440-499f-bdc6-f99c83f900dd"},
                      {JsonKey::signedDigest, kSignedDigest}});
     }
 
@@ -259,8 +259,7 @@ namespace test {
     }
 
     json getJsonPrivateKey() {
-        return json(
-            {{JsonKey::privateKey, kPrivateKey}, {JsonKey::virgilCardId, "cd4a35f7-6b15-4be4-b1d6-dea44a7af6df"}});
+        return json({{JsonKey::privateKey, kPrivateKey}, {JsonKey::cardId, "cd4a35f7-6b15-4be4-b1d6-dea44a7af6df"}});
     }
 
     PrivateKey getPrivateKey() {

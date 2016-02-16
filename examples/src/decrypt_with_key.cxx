@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     }
 
     try {
-        std::string virgilCardId = argv[1];
+        std::string cardId = argv[1];
         std::string pathPrivateKey = argv[2];
 
         std::cout << "Prepare input file: test.txt.enc..."
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
         vcrypto::VirgilStreamCipher cipher;
         std::cout << "Decrypt with key..."
                   << "\n";
-        cipher.decryptWithKey(dataSource, dataSink, vcrypto::str2bytes(virgilCardId), privateKey,
+        cipher.decryptWithKey(dataSource, dataSink, vcrypto::str2bytes(cardId), privateKey,
                               vcrypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Decrypted data is successfully stored in the output file..."

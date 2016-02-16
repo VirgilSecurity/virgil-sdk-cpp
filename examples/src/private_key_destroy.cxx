@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     }
 
     try {
-        std::string virgilCardId = argv[1];
+        std::string cardId = argv[1];
         std::string pathPublicKey = argv[2];
         std::string pathPrivateKey = argv[3];
 
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Destroy a Private Key"
                   << "\n";
-        virgilHub.privateKeys().destroy(virgilCardId, publicKey, credentials);
+        virgilHub.privateKeys().destroy(cardId, publicKey, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

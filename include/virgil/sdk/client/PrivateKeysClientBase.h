@@ -42,7 +42,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/PrivateKey.h>
-#include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/Card.h>
 
 namespace virgil {
 namespace sdk {
@@ -52,16 +52,16 @@ namespace sdk {
          */
         class PrivateKeysClientBase {
         public:
-            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual virgil::sdk::model::Card getServiceCard() const = 0;
 
-            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
+            virtual void setServiceCard(const virgil::sdk::model::Card& card) = 0;
 
-            virtual void stash(const std::string& virgilCardId, const Credentials& credentials) = 0;
+            virtual void stash(const std::string& cardId, const Credentials& credentials) = 0;
 
             virtual virgil::sdk::model::PrivateKey
-            get(const std::string& virgilCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity) = 0;
+            get(const std::string& cardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity) = 0;
 
-            virtual void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
+            virtual void destroy(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
                                  const Credentials& credentials) = 0;
         };
     }

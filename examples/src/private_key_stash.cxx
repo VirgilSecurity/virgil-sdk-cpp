@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
     }
 
     try {
-        std::string virgilCardId = argv[1];
+        std::string cardId = argv[1];
         std::string pathPrivateKey = argv[2];
 
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Stash a Private Key"
                   << "\n";
-        virgilHub.privateKeys().stash(virgilCardId, credentials);
+        virgilHub.privateKeys().stash(cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

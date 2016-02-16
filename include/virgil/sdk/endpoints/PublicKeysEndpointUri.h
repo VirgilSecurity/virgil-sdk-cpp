@@ -71,33 +71,33 @@ namespace sdk {
             /**
              * @brief Returns the endpoint in charge of a Virgil Card creation.
              */
-            static std::string virgilCardCreate();
+            static std::string cardCreate();
 
-            static std::string virgilCardGet(const std::string& virgilCardId);
+            static std::string cardGet(const std::string& cardId);
 
             /**
              * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
              */
-            static std::string virgilCardSearch();
+            static std::string cardSearch();
             /**
              * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern.
              */
-            static std::string virgilCardSearchApp();
+            static std::string cardSearchApp();
             /**
              * @brief Returns the endpoint in charge of the Virgil Card trust.
-             * @param virgilCardId - Virgil Card Id.
+             * @param cardId - Virgil Card Id.
              */
-            static std::string virgilCardTrust(const std::string& virgilCardId);
+            static std::string cardTrust(const std::string& cardId);
             /**
              * @brief Returns the endpoint in charge of the Virgil Card untrust.
-             * @param virgilCardId - Virgil Card Id.
+             * @param cardId - Virgil Card Id.
              */
-            static std::string virgilCardUntrust(const std::string& virgilCardId);
+            static std::string cardUntrust(const std::string& cardId);
             /**
              * @brief Returns the endpoint in charge of the Virgil Card revoke.
-             * @param virgilCardId - Virgil Card Id.
+             * @param cardId - Virgil Card Id.
              */
-            static std::string virgilCardRevoke(const std::string& virgilCardId);
+            static std::string cardRevoke(const std::string& cardId);
             //@}
         };
     }

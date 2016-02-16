@@ -34,15 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_VIRGIL_CARDS_CLIENT_BASE_H
-#define VIRGIL_SDK_VIRGIL_CARDS_CLIENT_BASE_H
+#ifndef VIRGIL_SDK_CARDS_CLIENT_BASE_H
+#define VIRGIL_SDK_CARDS_CLIENT_BASE_H
 
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/Card.h>
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/TrustCardResponse.h>
 
@@ -52,18 +52,18 @@ namespace sdk {
         /**
          * @brief
          */
-        class VirgilCardsClientBase {
+        class CardsClientBase {
         public:
-            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual virgil::sdk::model::Card getServiceCard() const = 0;
 
-            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& virgilCard) = 0;
+            virtual void setServiceCard(const virgil::sdk::model::Card& card) = 0;
 
             //
-            virtual std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) = 0;
+            virtual std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity) = 0;
 
-            virtual virgil::sdk::model::VirgilCard
-            create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
-                   const virgil::crypto::VirgilByteArray& publicKey, const virgil::sdk::Credentials& credentials) = 0;
+            virtual virgil::sdk::model::Card create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
+                                                    const virgil::crypto::VirgilByteArray& publicKey,
+                                                    const virgil::sdk::Credentials& credentials) = 0;
 
             virtual virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
                                                                 const std::string& trustedCardHash,
@@ -73,17 +73,17 @@ namespace sdk {
             virtual void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                                  const Credentials& credentials) = 0;
 
-            virtual std::vector<virgil::sdk::model::VirgilCard>
+            virtual std::vector<virgil::sdk::model::Card>
             search(const virgil::sdk::model::Identity& identity,
                    const std::vector<std::string>& relations = std::vector<std::string>(),
                    const bool includeUnconfirmed = true) = 0;
 
-            virtual std::vector<virgil::sdk::model::VirgilCard> searchApp(const std::string& applicationIdentity) = 0;
+            virtual std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity) = 0;
 
-            virtual std::vector<virgil::sdk::model::VirgilCard>
-            get(const std::string& publicKeyId, const std::string& virgilCardId, const Credentials& credentials) = 0;
+            virtual std::vector<virgil::sdk::model::Card> get(const std::string& publicKeyId, const std::string& cardId,
+                                                              const Credentials& credentials) = 0;
 
-            virtual virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) = 0;
+            virtual virgil::sdk::model::Card get(const std::string& cardId) = 0;
 
             virtual void revoke(const std::string& ownerCardId,
                                 const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
@@ -93,4 +93,4 @@ namespace sdk {
 }
 }
 
-#endif /* VIRGIL_SDK_VIRGIL_CARDS_CLIENT_BASE_H */
+#endif /* VIRGIL_SDK_CARDS_CLIENT_BASE_H */

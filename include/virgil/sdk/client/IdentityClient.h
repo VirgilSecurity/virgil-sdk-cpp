@@ -51,9 +51,9 @@ namespace sdk {
         public:
             IdentityClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            virgil::sdk::model::Card getServiceCard() const override;
 
-            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& identityServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& identityServiceCard) override;
 
             std::string verify(const virgil::sdk::model::Identity& identity) override;
 
@@ -67,7 +67,7 @@ namespace sdk {
         private:
             std::string accessToken_;
             std::string baseServiceUri_;
-            virgil::sdk::model::VirgilCard identityServiceCard_;
+            virgil::sdk::model::Card identityServiceCard_;
 
         private:
             void verifyResponse(const virgil::sdk::http::Response& response);

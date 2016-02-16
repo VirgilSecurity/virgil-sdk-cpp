@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_VIRGIL_CARDS_CLIENT_H
-#define VIRGIL_SDK_VIRGIL_CARDS_CLIENT_H
+#ifndef VIRGIL_SDK_CARDS_CLIENT_H
+#define VIRGIL_SDK_CARDS_CLIENT_H
 
-#include <virgil/sdk/client/VirgilCardsClientBase.h>
+#include <virgil/sdk/client/CardsClientBase.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/http/Request.h>
 
@@ -47,17 +47,17 @@ namespace sdk {
         /**
          * @brief
          */
-        class VirgilCardsClient final : public VirgilCardsClientBase {
+        class CardsClient final : public CardsClientBase {
         public:
-            VirgilCardsClient(const std::string& accessToken, const std::string& baseServiceUri);
+            CardsClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            virgil::sdk::model::Card getServiceCard() const override;
 
-            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& publicKeysServiceCard) override;
 
-            virgil::sdk::model::VirgilCard create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
-                                                  const virgil::crypto::VirgilByteArray& publicKey,
-                                                  const virgil::sdk::Credentials& credentials) override;
+            virgil::sdk::model::Card create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
+                                            const virgil::crypto::VirgilByteArray& publicKey,
+                                            const virgil::sdk::Credentials& credentials) override;
 
             virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
                                                         const std::string& trustedCardHash,
@@ -67,28 +67,27 @@ namespace sdk {
             void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                          const virgil::sdk::Credentials& credentials) override;
 
-            std::vector<virgil::sdk::model::VirgilCard>
+            std::vector<virgil::sdk::model::Card>
             search(const virgil::sdk::model::Identity& identity,
                    const std::vector<std::string>& relations = std::vector<std::string>(),
                    const bool includeUnconfirmed = true) override;
 
-            std::vector<virgil::sdk::model::VirgilCard> searchApp(const std::string& applicationIdentity) override;
+            std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity) override;
 
-            std::vector<virgil::sdk::model::VirgilCard> getServiceCard(const std::string& serviceIdentity) override;
+            std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity) override;
 
             void revoke(const std::string& ownerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials) override;
 
-            std::vector<virgil::sdk::model::VirgilCard> get(const std::string& publicKeyId,
-                                                            const std::string& virgilCardId,
-                                                            const Credentials& credentials) override;
+            std::vector<virgil::sdk::model::Card> get(const std::string& publicKeyId, const std::string& cardId,
+                                                      const Credentials& credentials) override;
 
-            virgil::sdk::model::VirgilCard get(const std::string& virgilCardId) override;
+            virgil::sdk::model::Card get(const std::string& cardId) override;
 
         private:
             std::string accessToken_;
             std::string baseServiceUri_;
-            virgil::sdk::model::VirgilCard publicKeysServiceCard_;
+            virgil::sdk::model::Card publicKeysServiceCard_;
 
         private:
             virgil::sdk::http::Request getAppCard(const std::string& applicationIdentity);
@@ -98,4 +97,4 @@ namespace sdk {
 }
 }
 
-#endif /* VIRGIL_SDK_VIRGIL_CARDS_CLIENT_H */
+#endif /* VIRGIL_SDK_CARDS_CLIENT_H */

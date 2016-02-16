@@ -44,7 +44,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/IdentityClient.h>
-#include <virgil/sdk/client/VirgilCardsClient.h>
+#include <virgil/sdk/client/CardsClient.h>
 #include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/IdentityEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
@@ -60,7 +60,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Error;
 using virgil::sdk::client::IdentityClient;
-using virgil::sdk::client::VirgilCardsClient;
+using virgil::sdk::client::CardsClient;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
@@ -68,7 +68,7 @@ using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -76,11 +76,11 @@ IdentityClient::IdentityClient(const std::string& accessToken, const std::string
         : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
 }
 
-VirgilCard IdentityClient::getServiceVirgilCard() const {
+Card IdentityClient::getServiceCard() const {
     return identityServiceCard_;
 }
 
-void IdentityClient::setServiceVirgilCard(const VirgilCard& identityServiceCard) {
+void IdentityClient::setServiceCard(const Card& identityServiceCard) {
     identityServiceCard_ = identityServiceCard;
 }
 

@@ -41,7 +41,7 @@
 
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/Identity.h>
-#include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/Card.h>
 
 namespace virgil {
 namespace sdk {
@@ -51,9 +51,9 @@ namespace sdk {
          */
         class IdentityClientBase {
         public:
-            virtual virgil::sdk::model::VirgilCard getServiceVirgilCard() const = 0;
+            virtual virgil::sdk::model::Card getServiceCard() const = 0;
 
-            virtual void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& serviceCard) = 0;
+            virtual void setServiceCard(const virgil::sdk::model::Card& serviceCard) = 0;
 
             virtual std::string verify(const virgil::sdk::model::Identity& identity) = 0;
 

@@ -35,15 +35,14 @@
  */
 
 #include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/Card.h>
 
 using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::model::CardIdentity;
 
-VirgilCard::VirgilCard(const bool confirmed, const std::string& id, const std::string& createdAt,
-                       const std::string& hash, const CardIdentity& cardIdentity,
-                       const std::map<std::string, std::string>& data, const PublicKey& publicKey)
+Card::Card(const bool confirmed, const std::string& id, const std::string& createdAt, const std::string& hash,
+           const CardIdentity& cardIdentity, const std::map<std::string, std::string>& data, const PublicKey& publicKey)
         : confirmed_(confirmed),
           id_(id),
           createdAt_(createdAt),
@@ -53,30 +52,30 @@ VirgilCard::VirgilCard(const bool confirmed, const std::string& id, const std::s
           publicKey_(publicKey) {
 }
 
-bool VirgilCard::isConfirmed() const {
+bool Card::isConfirmed() const {
     return confirmed_;
 }
 
-const std::string& VirgilCard::getId() const {
+const std::string& Card::getId() const {
     return id_;
 }
 
-const std::string& VirgilCard::getCreatedAt() const {
+const std::string& Card::getCreatedAt() const {
     return createdAt_;
 }
 
-const std::string& VirgilCard::getHash() const {
+const std::string& Card::getHash() const {
     return hash_;
 }
 
-const CardIdentity& VirgilCard::getCardIdentity() const {
+const CardIdentity& Card::getCardIdentity() const {
     return cardIdentity_;
 }
 
-const std::map<std::string, std::string>& VirgilCard::getData() const {
+const std::map<std::string, std::string>& Card::getData() const {
     return data_;
 }
 
-const PublicKey& VirgilCard::getPublicKey() const {
+const PublicKey& Card::getPublicKey() const {
     return publicKey_;
 }

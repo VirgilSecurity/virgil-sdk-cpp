@@ -43,7 +43,7 @@
 #include <virgil/sdk/client/IdentityClientBase.h>
 #include <virgil/sdk/client/PrivateKeysClientBase.h>
 #include <virgil/sdk/client/PublicKeysClientBase.h>
-#include <virgil/sdk/client/VirgilCardsClientBase.h>
+#include <virgil/sdk/client/CardsClientBase.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace virgil {
@@ -79,7 +79,7 @@ namespace sdk {
         /**
          * @brief Return entrypoint for Virgil Cards Service
          */
-        virgil::sdk::client::VirgilCardsClientBase& cards();
+        virgil::sdk::client::CardsClientBase& cards();
         /**
          * @brief Return entrypoint for Virgil Public Keys Service
          */

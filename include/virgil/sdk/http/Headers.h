@@ -42,7 +42,7 @@ namespace sdk {
     namespace http {
 
         constexpr char kHeaderField_Id[] = "X-VIRGIL-REQUEST-ID";
-        constexpr char kHeaderField_SignVirgilCardId[] = "X-VIRGIL-REQUEST-SIGN-VIRGIL-CARD-ID";
+        constexpr char kHeaderField_SignCardId[] = "X-VIRGIL-REQUEST-SIGN-VIRGIL-CARD-ID";
         constexpr char kHeaderField_Sign[] = "X-VIRGIL-REQUEST-SIGN";
         constexpr char kHeaderField_AccessToken[] = "X-VIRGIL-ACCESS-TOKEN";
         constexpr char kHeaderField_ResponseId[] = "X-VIRGIL-RESPONSE-ID";

@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 
     try {
         std::string publicKeyId = argv[1];
-        std::string virgilCardId = argv[2];
+        std::string cardId = argv[2];
         std::string pathPrivateKey = argv[3];
 
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
@@ -88,12 +88,11 @@ int main(int argc, char** argv) {
 
         std::cout << "Get Virgil Cards"
                   << "\n";
-        std::vector<vsdk::model::VirgilCard> virgilCards =
-            virgilHub.cards().get(publicKeyId, virgilCardId, credentials);
-        std::string virgilCardsStr = vsdk::io::toJsonVirgilCards(virgilCards, 4);
+        std::vector<vsdk::model::Card> cards = virgilHub.cards().get(publicKeyId, cardId, credentials);
+        std::string cardsStr = vsdk::io::toJsonCards(cards, 4);
         std::cout << "Virgil Cards:"
                   << "\n";
-        std::cout << virgilCardsStr << "\n";
+        std::cout << cardsStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

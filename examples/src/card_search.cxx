@@ -71,9 +71,9 @@ int main(int argc, char** argv) {
 
         std::cout << "Search for Cards"
                   << "\n";
-        std::vector<vsdk::model::VirgilCard> foundCards = virgilHub.cards().search(identity);
+        std::vector<vsdk::model::Card> foundCards = virgilHub.cards().search(identity);
 
-        std::string foundCardsStr = vsdk::io::toJsonVirgilCards(foundCards, 4);
+        std::string foundCardsStr = vsdk::io::toJsonCards(foundCards, 4);
         std::cout << foundCardsStr << "\n";
 
     } catch (std::exception& exception) {

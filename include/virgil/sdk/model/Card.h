@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_VIRGIL_CARD_H
-#define VIRGIL_SDK_MODEL_VIRGIL_CARD_H
+#ifndef VIRGIL_SDK_MODEL_CARD_H
+#define VIRGIL_SDK_MODEL_CARD_H
 
 #include <string>
 #include <map>
@@ -49,12 +49,12 @@ namespace sdk {
         /**
          * @brief Data object represent "Virgil Card" entity.
          */
-        class VirgilCard {
+        class Card {
         public:
-            VirgilCard() = default;
-            VirgilCard(const bool confirmed, const std::string& id, const std::string& createdAt,
-                       const std::string& hash, const virgil::sdk::model::CardIdentity& cardIdentity,
-                       const std::map<std::string, std::string>& data, const virgil::sdk::model::PublicKey& publicKey);
+            Card() = default;
+            Card(const bool confirmed, const std::string& id, const std::string& createdAt, const std::string& hash,
+                 const virgil::sdk::model::CardIdentity& cardIdentity, const std::map<std::string, std::string>& data,
+                 const virgil::sdk::model::PublicKey& publicKey);
 
             bool isConfirmed() const;
             const std::string& getId() const;
@@ -74,7 +74,7 @@ namespace sdk {
             virgil::sdk::model::PublicKey publicKey_;
         };
 
-        inline bool operator==(const VirgilCard& left, const VirgilCard& right) {
+        inline bool operator==(const Card& left, const Card& right) {
             if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
                 left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
@@ -85,11 +85,11 @@ namespace sdk {
             return 0;
         }
 
-        inline bool operator!=(const VirgilCard& left, const VirgilCard& right) {
+        inline bool operator!=(const Card& left, const Card& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_VIRGIL_CARD_H */
+#endif /* VIRGIL_SDK_MODEL_CARD_H */

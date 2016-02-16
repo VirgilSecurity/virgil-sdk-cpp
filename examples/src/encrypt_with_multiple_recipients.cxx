@@ -85,11 +85,11 @@ int main(int argc, char** argv) {
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(identity);
+        std::vector<vsdk::model::Card> recipientCards = virgilHub.cards().search(identity);
 
         std::cout << "Add recipient with key..."
                   << "\n";
-        vsdk::model::VirgilCard recipientCard = recipientCards.at(0);
+        vsdk::model::Card recipientCard = recipientCards.at(0);
         cipher.addKeyRecipient(vcrypto::str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
 
         std::cout << "Prepare input file: test.txt..."

@@ -56,14 +56,14 @@ namespace sdk {
             /**
              * @brief Creates private key with associated Virgil Card identifier
              *
-             * @param virgilCardId - unique virgil card identifier defined by service
+             * @param cardId - unique virgil card identifier defined by service
              * @param key - private kwy
              */
-            PrivateKey(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& key);
+            PrivateKey(const std::string& cardId, const virgil::crypto::VirgilByteArray& key);
             /**
              * @brief Return unique virgil card identifier
              */
-            const std::string& getVirgilCardId() const;
+            const std::string& getCardId() const;
             /**
              * @brief Return private key
              */
@@ -82,12 +82,12 @@ namespace sdk {
             virtual ~PrivateKey() noexcept;
 
         private:
-            std::string virgilCardId_;
+            std::string cardId_;
             virgil::crypto::VirgilByteArray key_;
         };
 
         inline bool operator==(const PrivateKey& left, const PrivateKey& right) {
-            return left.getVirgilCardId() == right.getVirgilCardId() && left.getKey() == right.getKey();
+            return left.getCardId() == right.getCardId() && left.getKey() == right.getKey();
         }
 
         inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {

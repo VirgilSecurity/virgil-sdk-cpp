@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
         virgilHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        std::vector<vsdk::model::VirgilCard> recipientCards = virgilHub.cards().search(identity);
+        std::vector<vsdk::model::Card> recipientCards = virgilHub.cards().search(identity);
         vsdk::model::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
 
         vcrypto::VirgilStreamSigner signer;

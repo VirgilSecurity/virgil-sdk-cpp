@@ -63,7 +63,7 @@ using virgil::sdk::endpoints::PublicKeysEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::toString;
 using virgil::sdk::io::Marshaller;
@@ -74,11 +74,11 @@ PublicKeysClient::PublicKeysClient(const std::string& accessToken, const std::st
         : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
 }
 
-VirgilCard PublicKeysClient::getServiceVirgilCard() const {
+Card PublicKeysClient::getServiceCard() const {
     return publicKeysServiceCard_;
 }
 
-void PublicKeysClient::setServiceVirgilCard(const VirgilCard& publicKeysServiceCard) {
+void PublicKeysClient::setServiceCard(const Card& publicKeysServiceCard) {
     publicKeysServiceCard_ = publicKeysServiceCard;
 }
 
@@ -96,7 +96,7 @@ PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
 }
 
 void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,
-                              const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
+                              const std::string& cardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& validatedIdentity : validatedIdentitys) {
         json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
@@ -114,7 +114,7 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
                           .body(jsonValidatedIdentitys.dump());
 
     ClientConnection connection(accessToken_);
-    Request signRequest = connection.signRequest(virgilCardId, credentials, request);
+    Request signRequest = connection.signRequest(cardId, credentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_REVOKE);

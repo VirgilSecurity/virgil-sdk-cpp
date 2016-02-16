@@ -48,7 +48,7 @@ namespace sdk {
          * @brief This class reresents extended version of class Identity
          *
          * @details This class contains addition information of identity,
-         *          that is used in conjuction with class @link VirgilCard @endlink.
+         *          that is used in conjuction with class @link Card @endlink.
          */
         class CardIdentity : public Identity {
         public:

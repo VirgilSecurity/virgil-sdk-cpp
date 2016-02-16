@@ -44,7 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/http/Connection.h>
 #include <virgil/sdk/Error.h>
-#include <virgil/sdk/model/VirgilCard.h>
+#include <virgil/sdk/model/Card.h>
 
 namespace virgil {
 namespace sdk {
@@ -73,7 +73,7 @@ namespace sdk {
              */
             virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
 
-            virgil::sdk::http::Request signRequest(const std::string& virgilCardId,
+            virgil::sdk::http::Request signRequest(const std::string& cardId,
                                                    const virgil::sdk::Credentials& credentials,
                                                    const virgil::sdk::http::Request& request);
 
@@ -82,7 +82,7 @@ namespace sdk {
 
             std::string signHash(const std::string& hash, const Credentials& credentials);
 
-            std::string encryptJsonBody(const virgil::sdk::model::VirgilCard& privateKeysServiceCard,
+            std::string encryptJsonBody(const virgil::sdk::model::Card& privateKeysServiceCard,
                                         const std::string& jsonBody);
 
             /**

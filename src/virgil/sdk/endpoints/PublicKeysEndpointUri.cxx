@@ -46,30 +46,30 @@ std::string PublicKeysEndpointUri::publicKeyRevoke(const std::string& publicKeyI
     return "/v3/public-key/" + publicKeyId;
 }
 
-std::string PublicKeysEndpointUri::virgilCardCreate() {
+std::string PublicKeysEndpointUri::cardCreate() {
     return "/v3/virgil-card";
 }
 
-std::string PublicKeysEndpointUri::virgilCardGet(const std::string& virgilCardId) {
-    return "/v3/virgil-card/" + virgilCardId;
+std::string PublicKeysEndpointUri::cardGet(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId;
 }
 
-std::string PublicKeysEndpointUri::virgilCardSearch() {
+std::string PublicKeysEndpointUri::cardSearch() {
     return "/v3/virgil-card/actions/search";
 }
 
-std::string PublicKeysEndpointUri::virgilCardSearchApp() {
+std::string PublicKeysEndpointUri::cardSearchApp() {
     return "/v3/virgil-card/actions/search/app";
 }
 
-std::string PublicKeysEndpointUri::virgilCardTrust(const std::string& virgilCardId) {
-    return "/v3/virgil-card/" + virgilCardId + "/actions/sign";
+std::string PublicKeysEndpointUri::cardTrust(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId + "/actions/sign";
 }
 
-std::string PublicKeysEndpointUri::virgilCardUntrust(const std::string& virgilCardId) {
-    return "/v3/virgil-card/" + virgilCardId + "/actions/unsign";
+std::string PublicKeysEndpointUri::cardUntrust(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId + "/actions/unsign";
 }
 
-std::string PublicKeysEndpointUri::virgilCardRevoke(const std::string& virgilCardId) {
-    return "/v3/virgil-card/" + virgilCardId;
+std::string PublicKeysEndpointUri::cardRevoke(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId;
 }

@@ -43,7 +43,7 @@
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
-#include <virgil/sdk/client/VirgilCardsClient.h>
+#include <virgil/sdk/client/CardsClient.h>
 #include <virgil/sdk/ServiceUri.h>
 
 using virgil::crypto::VirgilByteArray;
@@ -55,9 +55,9 @@ using virgil::sdk::client::PrivateKeysClientBase;
 using virgil::sdk::client::PrivateKeysClient;
 using virgil::sdk::client::PublicKeysClientBase;
 using virgil::sdk::client::PublicKeysClient;
-using virgil::sdk::client::VirgilCardsClientBase;
-using virgil::sdk::client::VirgilCardsClient;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::client::CardsClientBase;
+using virgil::sdk::client::CardsClient;
+using virgil::sdk::model::Card;
 using virgil::sdk::ServiceUri;
 
 const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
@@ -71,14 +71,14 @@ namespace sdk {
         explicit ServicesHubImpl(const std::string& accessToken, const ServiceUri& baseServiceUri)
                 : identityClient(accessToken, baseServiceUri.getIdentityService()),
                   publicKeysClient(accessToken, baseServiceUri.getPublicKeyService()),
-                  virgilCardsClient(accessToken, baseServiceUri.getPublicKeyService()),
+                  cardsClient(accessToken, baseServiceUri.getPublicKeyService()),
                   privateKeysClient(accessToken, baseServiceUri.getPrivateKeyService()) {
         }
 
     public:
         IdentityClient identityClient;
         PublicKeysClient publicKeysClient;
-        VirgilCardsClient virgilCardsClient;
+        CardsClient cardsClient;
         PrivateKeysClient privateKeysClient;
     };
 }
@@ -102,21 +102,21 @@ PublicKeysClientBase& ServicesHub::publicKeys() {
     return impl_->publicKeysClient;
 }
 
-VirgilCardsClientBase& ServicesHub::cards() {
-    return impl_->virgilCardsClient;
+CardsClientBase& ServicesHub::cards() {
+    return impl_->cardsClient;
 }
 
 void ServicesHub::loadServicesCard() {
-    auto identityServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kIdentityServiceApplicationId);
-    auto publicKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPublicKeyServiceApplicationId);
-    auto privateKeysServiceVirgilCards = impl_->virgilCardsClient.getServiceCard(kPrivateKeyServiceApplicationId);
+    auto identityServiceCards = impl_->cardsClient.getServiceCard(kIdentityServiceApplicationId);
+    auto publicKeysServiceCards = impl_->cardsClient.getServiceCard(kPublicKeyServiceApplicationId);
+    auto privateKeysServiceCards = impl_->cardsClient.getServiceCard(kPrivateKeyServiceApplicationId);
 
-    auto identityServiceVirgilCard = identityServiceVirgilCards.at(0);
-    auto publicKeysServiceVirgilCard = publicKeysServiceVirgilCards.at(0);
-    auto privateKeysServiceVirgilCard = privateKeysServiceVirgilCards.at(0);
+    auto identityServiceCard = identityServiceCards.at(0);
+    auto publicKeysServiceCard = publicKeysServiceCards.at(0);
+    auto privateKeysServiceCard = privateKeysServiceCards.at(0);
 
-    impl_->identityClient.setServiceVirgilCard(identityServiceVirgilCard);
-    impl_->publicKeysClient.setServiceVirgilCard(publicKeysServiceVirgilCard);
-    impl_->virgilCardsClient.setServiceVirgilCard(publicKeysServiceVirgilCard);
-    impl_->privateKeysClient.setServiceVirgilCard(privateKeysServiceVirgilCard);
+    impl_->identityClient.setServiceCard(identityServiceCard);
+    impl_->publicKeysClient.setServiceCard(publicKeysServiceCard);
+    impl_->cardsClient.setServiceCard(publicKeysServiceCard);
+    impl_->privateKeysClient.setServiceCard(privateKeysServiceCard);
 }

@@ -68,30 +68,30 @@ int main() {
                                    VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
 
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceVirgilCards = virgilHub.cards().getServiceCard(kIdentityServiceApplicationId);
-        auto publicKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
-        auto privateKeysServiceVirgilCards = virgilHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
+        auto identityServiceCards = virgilHub.cards().getServiceCard(kIdentityServiceApplicationId);
+        auto publicKeysServiceCards = virgilHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
+        auto privateKeysServiceCards = virgilHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
 
-        vsdk::model::VirgilCard identityServiceVirgilCard = identityServiceVirgilCards.at(0);
-        vsdk::model::VirgilCard publicKeysServiceVirgilCard = publicKeysServiceVirgilCards.at(0);
-        vsdk::model::VirgilCard privateKeysServiceVirgilCard = privateKeysServiceVirgilCards.at(0);
+        vsdk::model::Card identityServiceCard = identityServiceCards.at(0);
+        vsdk::model::Card publicKeysServiceCard = publicKeysServiceCards.at(0);
+        vsdk::model::Card privateKeysServiceCard = privateKeysServiceCards.at(0);
 
-        std::cout << "\n\nIdentity Service VirgilCard:"
+        std::cout << "\n\nIdentity Service Card:"
                   << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(identityServiceVirgilCard) << "\n\n\n";
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(identityServiceCard) << "\n\n\n";
 
-        std::cout << "Public Keys Service VirgilCard:"
+        std::cout << "Public Keys Service Card:"
                   << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(publicKeysServiceVirgilCard) << "\n\n\n";
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(publicKeysServiceCard) << "\n\n\n";
 
-        std::cout << "Private Keys Service VirgilCard:"
+        std::cout << "Private Keys Service Card:"
                   << "\n";
-        std::cout << vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(privateKeysServiceVirgilCard) << "\n\n\n";
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << "\n\n\n";
 
-        virgilHub.identity().setServiceVirgilCard(identityServiceVirgilCard);
-        virgilHub.publicKeys().setServiceVirgilCard(publicKeysServiceVirgilCard);
-        virgilHub.cards().setServiceVirgilCard(publicKeysServiceVirgilCard);
-        virgilHub.privateKeys().setServiceVirgilCard(privateKeysServiceVirgilCard);
+        virgilHub.identity().setServiceCard(identityServiceCard);
+        virgilHub.publicKeys().setServiceCard(publicKeysServiceCard);
+        virgilHub.cards().setServiceCard(publicKeysServiceCard);
+        virgilHub.privateKeys().setServiceCard(privateKeysServiceCard);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

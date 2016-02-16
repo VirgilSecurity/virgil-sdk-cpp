@@ -39,12 +39,12 @@
 using virgil::sdk::model::TrustCardResponse;
 
 TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& createdAt,
-                                     const std::string& signerVirgilCardId, const std::string& signedVirgilCardId,
+                                     const std::string& signerCardId, const std::string& signedCardId,
                                      const std::string& signedDigest)
         : id_(id),
           createdAt_(createdAt),
-          signerVirgilCardId_(signerVirgilCardId),
-          signedVirgilCardId_(signedVirgilCardId),
+          signerCardId_(signerCardId),
+          signedCardId_(signedCardId),
           signedDigest_(signedDigest) {
 }
 
@@ -56,12 +56,12 @@ const std::string& TrustCardResponse::getCreatedAt() const {
     return createdAt_;
 }
 
-const std::string& TrustCardResponse::getSignerVirgilCardId() const {
-    return signerVirgilCardId_;
+const std::string& TrustCardResponse::getSignerCardId() const {
+    return signerCardId_;
 }
 
-const std::string& TrustCardResponse::getSignedVirgilCardId() const {
-    return signedVirgilCardId_;
+const std::string& TrustCardResponse::getSignedCardId() const {
+    return signedCardId_;
 }
 
 const std::string& TrustCardResponse::getSignedDigest() const {

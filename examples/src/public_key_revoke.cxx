@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
     try {
         std::string userEmail = argv[1];
         std::string publicKeyId = argv[2];
-        std::string virgilCardId = argv[3];
+        std::string cardId = argv[3];
         std::string pathPrivateKey = argv[4];
         std::string token = argv[5];
 
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Revoke the Public Key"
                   << "\n";
-        virgilHub.publicKeys().revoke(publicKeyId, {validatedIdentity}, virgilCardId, credentials);
+        virgilHub.publicKeys().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

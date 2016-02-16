@@ -68,11 +68,11 @@ using virgil::sdk::client::ClientConnection;
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
-using virgil::sdk::model::VirgilCard;
+using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 
 using virgil::sdk::http::kHeaderField_Id;
-using virgil::sdk::http::kHeaderField_SignVirgilCardId;
+using virgil::sdk::http::kHeaderField_SignCardId;
 using virgil::sdk::http::kHeaderField_Sign;
 using virgil::sdk::http::kHeaderField_AccessToken;
 
@@ -90,12 +90,12 @@ Response ClientConnection::send(const Request& request) {
     return Connection::send(Request(request).header(header).contentType("application/json"));
 }
 
-Request ClientConnection::signRequest(const std::string& virgilCardId, const Credentials& credentials,
+Request ClientConnection::signRequest(const std::string& cardId, const Credentials& credentials,
                                       const Request& request) {
-    Request requestWithoutVirgilCardId = signRequest(credentials, request);
-    auto header = requestWithoutVirgilCardId.header();
-    header[kHeaderField_SignVirgilCardId] = virgilCardId;
-    return Request(requestWithoutVirgilCardId).header(header);
+    Request requestWithoutCardId = signRequest(credentials, request);
+    auto header = requestWithoutCardId.header();
+    header[kHeaderField_SignCardId] = cardId;
+    return Request(requestWithoutCardId).header(header);
 }
 
 Request ClientConnection::signRequest(const Credentials& credentials, const Request& request) {
@@ -120,7 +120,7 @@ std::string ClientConnection::signHash(const std::string& hash, const Credential
     return VirgilBase64::encode(signHash);
 }
 
-std::string ClientConnection::encryptJsonBody(const VirgilCard& privateKeysServiceCard, const std::string& jsonBody) {
+std::string ClientConnection::encryptJsonBody(const Card& privateKeysServiceCard, const std::string& jsonBody) {
     // VirgilByteArray publicKey = VirgilBase64::decode(
     //     privateKeysServiceCard.getPublicKey().getKey()
     // );

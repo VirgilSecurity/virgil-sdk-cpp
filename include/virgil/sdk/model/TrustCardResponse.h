@@ -48,28 +48,27 @@ namespace sdk {
         class TrustCardResponse {
         public:
             TrustCardResponse() = default;
-            TrustCardResponse(const std::string& id, const std::string& createdAt,
-                              const std::string& signerVirgilCardId, const std::string& signedVirgilCardId,
-                              const std::string& signedDigest);
+            TrustCardResponse(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
+                              const std::string& signedCardId, const std::string& signedDigest);
 
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
-            const std::string& getSignerVirgilCardId() const;
-            const std::string& getSignedVirgilCardId() const;
+            const std::string& getSignerCardId() const;
+            const std::string& getSignedCardId() const;
             const std::string& getSignedDigest() const;
 
         private:
             std::string id_;
             std::string createdAt_;
-            std::string signerVirgilCardId_;
-            std::string signedVirgilCardId_;
+            std::string signerCardId_;
+            std::string signedCardId_;
             std::string signedDigest_;
         };
 
         inline bool operator==(const TrustCardResponse& left, const TrustCardResponse& right) {
             if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                left.getSignerVirgilCardId() == right.getSignerVirgilCardId() &&
-                left.getSignedVirgilCardId() == right.getSignedVirgilCardId() &&
+                left.getSignerCardId() == right.getSignerCardId() &&
+                left.getSignedCardId() == right.getSignedCardId() &&
                 left.getSignedDigest() == right.getSignedDigest()) {
                 return 1;
             }

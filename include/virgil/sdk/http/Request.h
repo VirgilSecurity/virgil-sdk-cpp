@@ -154,7 +154,7 @@ namespace sdk {
             Method method_;
         };
 
-        Request signRequest(const std::string& virgilCardId, const virgil::sdk::Credentials& credentials,
+        Request signRequest(const std::string& cardId, const virgil::sdk::Credentials& credentials,
                             const virgil::sdk::http::Request& request);
 
         Request signRequest(const virgil::sdk::Credentials& credentials, const virgil::sdk::http::Request& request);

@@ -73,9 +73,9 @@ int main(int argc, char** argv) {
 
         std::string appName = "com.virgilsecurity.";
         appName += argv[1];
-        std::vector<vsdk::model::VirgilCard> allAppCards = virgilHub.cards().searchApp(appName);
-        std::string jsonAllAppVirgilCards = virgil::sdk::io::toJsonVirgilCards(allAppCards, 4);
-        std::cout << jsonAllAppVirgilCards << "\n";
+        std::vector<vsdk::model::Card> allAppCards = virgilHub.cards().searchApp(appName);
+        std::string jsonAllAppCards = virgil::sdk::io::toJsonCards(allAppCards, 4);
+        std::cout << jsonAllAppCards << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

@@ -50,20 +50,20 @@ namespace sdk {
         public:
             PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            virgil::sdk::model::Card getServiceCard() const override;
 
-            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& publicKeysServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& publicKeysServiceCard) override;
 
             virgil::sdk::model::PublicKey get(const std::string& publicKeyId) override;
 
             void revoke(const std::string& publicKeyId,
                         const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
-                        const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) override;
+                        const std::string& cardId, const virgil::sdk::Credentials& credentials) override;
 
         private:
             std::string accessToken_;
             std::string baseServiceUri_;
-            virgil::sdk::model::VirgilCard publicKeysServiceCard_;
+            virgil::sdk::model::Card publicKeysServiceCard_;
 
         private:
             void verifyResponse(const virgil::sdk::http::Response& response);

@@ -57,8 +57,8 @@ namespace sdk {
                 json jsonTrustCardResponse = {
                     {JsonKey::id, trustCardResponse.getId()},
                     {JsonKey::createdAt, trustCardResponse.getCreatedAt()},
-                    {JsonKey::signerVirgilCardId, trustCardResponse.getSignedVirgilCardId()},
-                    {JsonKey::signedVirgilCardId, trustCardResponse.getSignedVirgilCardId()},
+                    {JsonKey::signerCardId, trustCardResponse.getSignedCardId()},
+                    {JsonKey::signedCardId, trustCardResponse.getSignedCardId()},
                     {JsonKey::signedDigest, trustCardResponse.getSignedDigest()},
                 };
 
@@ -70,11 +70,11 @@ namespace sdk {
 
                 std::string id = typeJson[JsonKey::id];
                 std::string createdAt = typeJson[JsonKey::createdAt];
-                std::string signerVirgilCardId = typeJson[JsonKey::signerVirgilCardId];
-                std::string signedVirgilCardId = typeJson[JsonKey::signedVirgilCardId];
+                std::string signerCardId = typeJson[JsonKey::signerCardId];
+                std::string signedCardId = typeJson[JsonKey::signedCardId];
                 std::string signedDigest = typeJson[JsonKey::signedDigest];
 
-                return TrustCardResponse(id, createdAt, signerVirgilCardId, signedVirgilCardId, signedDigest);
+                return TrustCardResponse(id, createdAt, signerCardId, signedCardId, signedDigest);
             }
 
         private:

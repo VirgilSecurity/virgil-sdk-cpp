@@ -50,22 +50,22 @@ namespace sdk {
         public:
             PrivateKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::VirgilCard getServiceVirgilCard() const override;
+            virgil::sdk::model::Card getServiceCard() const override;
 
-            void setServiceVirgilCard(const virgil::sdk::model::VirgilCard& privateKeysServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& privateKeysServiceCard) override;
 
-            void stash(const std::string& virgilCardId, const Credentials& credentials) override;
+            void stash(const std::string& cardId, const Credentials& credentials) override;
 
-            virgil::sdk::model::PrivateKey get(const std::string& virgilCardId,
+            virgil::sdk::model::PrivateKey get(const std::string& cardId,
                                                const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
 
-            void destroy(const std::string& virgilCardId, const virgil::crypto::VirgilByteArray& publicKey,
+            void destroy(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
                          const Credentials& credentials) override;
 
         private:
             std::string accessToken_;
             std::string baseServiceUri_;
-            virgil::sdk::model::VirgilCard privateKeysServiceCard_;
+            virgil::sdk::model::Card privateKeysServiceCard_;
         };
     }
 }

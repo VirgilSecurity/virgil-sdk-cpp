@@ -60,17 +60,17 @@ namespace sdk {
         template <> class Marshaller<PrivateKey> {
         public:
             template <int INDENT = -1> static std::string toJson(const PrivateKey& privateKey) {
-                json jsonPrivateKey = {{JsonKey::virgilCardId, privateKey.getVirgilCardId()},
+                json jsonPrivateKey = {{JsonKey::cardId, privateKey.getCardId()},
                                        {JsonKey::privateKey, VirgilBase64::encode(privateKey.getKey())}};
                 return jsonPrivateKey.dump(INDENT);
             }
 
             static PrivateKey fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
-                std::string virgilCardId = typeJson[JsonKey::virgilCardId];
+                std::string cardId = typeJson[JsonKey::cardId];
                 std::string privateKey = typeJson[JsonKey::privateKey];
 
-                return PrivateKey(virgilCardId, VirgilBase64::decode(privateKey));
+                return PrivateKey(cardId, VirgilBase64::decode(privateKey));
             }
 
         private:

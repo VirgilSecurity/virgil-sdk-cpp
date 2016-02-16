@@ -51,8 +51,8 @@ namespace sdk {
             static const std::string publicKey;
             static const std::string privateKey;
             static const std::string createdAt;
-            static const std::string virgilCards;
-            static const std::string virgilCardId;
+            static const std::string cards;
+            static const std::string cardId;
             static const std::string isConfirmed;
             static const std::string hash;
             static const std::string identity;
@@ -62,8 +62,8 @@ namespace sdk {
             static const std::string publicKeyId;
             static const std::string data;
             static const std::string signs;
-            static const std::string signerVirgilCardId;
-            static const std::string signedVirgilCardId;
+            static const std::string signerCardId;
+            static const std::string signedCardId;
             static const std::string signedDigest;
             static const std::string relations;
             static const std::string includeUnconfirmed;

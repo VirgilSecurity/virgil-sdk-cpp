@@ -103,11 +103,11 @@ int main(int argc, char** argv) {
 
         std::cout << "Create a Virgil Card"
                   << "\n";
-        vsdk::model::VirgilCard virgilCard = virgilHub.cards().create(validatedIdentity, publicKey, credentials);
-        std::string virgilCardStr = vsdk::io::Marshaller<vsdk::model::VirgilCard>::toJson<4>(virgilCard);
+        vsdk::model::Card card = virgilHub.cards().create(validatedIdentity, publicKey, credentials);
+        std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
 
         std::cout << "Virgil Card:\n";
-        std::cout << virgilCardStr << "\n";
+        std::cout << cardStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";
