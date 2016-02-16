@@ -122,7 +122,7 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
 bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
     json payload = {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
                     {JsonKey::value, validatedIdentity.getValue()},
-                    {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
+                    {JsonKey::validationToken, validatedIdentity.getToken()}};
 
     Request request =
         Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::validate()).body(payload.dump());

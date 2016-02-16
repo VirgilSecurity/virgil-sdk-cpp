@@ -64,7 +64,7 @@ namespace sdk {
             template <int INDENT = -1> static std::string toJson(const ValidatedIdentity& validatedIdentity) {
                 json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
                                               {JsonKey::value, validatedIdentity.getValue()},
-                                              {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
+                                              {JsonKey::validationToken, validatedIdentity.getToken()}};
 
                 return jsonValidatedIdentity.dump(INDENT);
             }
@@ -74,7 +74,7 @@ namespace sdk {
 
                 IdentityType identityType = fromString(typeJson[JsonKey::type]);
                 std::string value = typeJson[JsonKey::value];
-                std::string token = typeJson[JsonKey::validatedIdentity];
+                std::string token = typeJson[JsonKey::validationToken];
 
                 return ValidatedIdentity(token, value, identityType);
             }

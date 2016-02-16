@@ -118,7 +118,7 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Validat
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
-                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}},
+                      {JsonKey::validationToken, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},
                     {JsonKey::virgilCardId, virgilCardId}};
 

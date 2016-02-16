@@ -113,7 +113,7 @@ namespace test {
     json getJsonValidatedIdentity() {
         return json({{JsonKey::type, "email"},
                      {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"},
-                     {JsonKey::validatedIdentity, kToken}});
+                     {JsonKey::validationToken, kToken}});
     }
 
     ValidatedIdentity getValidatedIdentity() {

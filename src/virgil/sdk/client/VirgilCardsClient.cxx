@@ -90,7 +90,7 @@ VirgilCard VirgilCardsClient::create(const ValidatedIdentity& validatedIdentity,
                     {JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
-                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
+                      {JsonKey::validationToken, validatedIdentity.getToken()}}}};
 
     Request request = Request()
                           .post()
@@ -230,7 +230,7 @@ void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidatedId
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
-                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
+                      {JsonKey::validationToken, validatedIdentity.getToken()}}}};
 
     Request request = Request()
                           .del()

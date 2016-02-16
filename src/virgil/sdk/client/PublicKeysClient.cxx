@@ -101,7 +101,7 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
     for (const auto& validatedIdentity : validatedIdentitys) {
         json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
                                       {JsonKey::value, validatedIdentity.getValue()},
-                                      {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
+                                      {JsonKey::validationToken, validatedIdentity.getToken()}};
         jsonArray.push_back(jsonValidatedIdentity);
     }
     json jsonValidatedIdentitys;

@@ -74,7 +74,7 @@ namespace sdk {
             static const std::string token;
             static const std::string timeToLive;
             static const std::string countToLive;
-            static const std::string validatedIdentity;
+            static const std::string validationToken;
             static const std::string responsePassword;
 
         private:
