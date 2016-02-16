@@ -119,10 +119,10 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
     return validatedIdentity;
 }
 
-bool IdentityClient::isValid(const Identity& identity, const std::string& validatedIdentity) {
-    json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
-                    {JsonKey::value, identity.getValue()},
-                    {JsonKey::validatedIdentity, validatedIdentity}};
+bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
+    json payload = {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
+                    {JsonKey::value, validatedIdentity.getValue()},
+                    {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
 
     Request request =
         Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::validate()).body(payload.dump());
@@ -135,10 +135,6 @@ bool IdentityClient::isValid(const Identity& identity, const std::string& valida
     this->verifyResponse(response);
 
     return true;
-}
-
-bool IdentityClient::isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) {
-    return bool(this->isValid(validatedIdentity.getIdentity(), validatedIdentity.getToken()));
 }
 
 void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {

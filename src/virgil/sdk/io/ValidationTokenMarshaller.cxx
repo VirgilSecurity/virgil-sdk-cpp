@@ -62,8 +62,8 @@ namespace sdk {
         template <> class Marshaller<ValidatedIdentity> {
         public:
             template <int INDENT = -1> static std::string toJson(const ValidatedIdentity& validatedIdentity) {
-                json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
-                                              {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
+                                              {JsonKey::value, validatedIdentity.getValue()},
                                               {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
 
                 return jsonValidatedIdentity.dump(INDENT);
@@ -74,10 +74,9 @@ namespace sdk {
 
                 IdentityType identityType = fromString(typeJson[JsonKey::type]);
                 std::string value = typeJson[JsonKey::value];
-                std::string validatedIdentity = typeJson[JsonKey::validatedIdentity];
-                Identity identity(value, identityType);
+                std::string token = typeJson[JsonKey::validatedIdentity];
 
-                return ValidatedIdentity(identity, validatedIdentity);
+                return ValidatedIdentity(token, value, identityType);
             }
 
         private:

@@ -88,8 +88,8 @@ VirgilCard VirgilCardsClient::create(const ValidatedIdentity& validatedIdentity,
                                      const Credentials& credentials) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
-                     {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
-                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                      {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
 
     Request request = Request()
@@ -228,8 +228,8 @@ VirgilCard VirgilCardsClient::get(const std::string& virgilCardId) {
 void VirgilCardsClient::revoke(const std::string& ownerCardId, const ValidatedIdentity& validatedIdentity,
                                const Credentials& credentials) {
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
-                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                      {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validatedIdentity, validatedIdentity.getToken()}}}};
 
     Request request = Request()

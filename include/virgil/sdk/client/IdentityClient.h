@@ -62,8 +62,6 @@ namespace sdk {
                                                           const int timeToLive = 3600,
                                                           const int countToLive = 1) override;
 
-            bool isValid(const virgil::sdk::model::Identity& identity, const std::string& validatedIdentity) override;
-
             bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
 
         private:

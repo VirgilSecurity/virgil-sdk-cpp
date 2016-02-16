@@ -58,22 +58,29 @@ namespace sdk {
             /**
              * @brief Create identity with valid token
              *
-             * @param identity - underlying identity
              * @param token - validation token
+             * @param value - identity value, i.e. support@virgilsecurity.com
+             * @param type - identity type, i.e. IdentityType::Email
              */
-            ValidatedIdentity(const virgil::sdk::model::Identity& identity, const std::string& token);
-            /**
-             * @brief Return underlying identity
-             */
-            const virgil::sdk::model::Identity& getIdentity() const;
+            ValidatedIdentity(const std::string& token, const std::string& value,
+                              const IdentityType& type = IdentityType::None);
             /**
              * @brief Return token that validate underlying identity
              */
             const std::string& getToken() const;
+            /**
+             * @brief Return identity value
+             */
+            const std::string& getValue() const;
+            /**
+             * @brief Return identity type
+             */
+            const virgil::sdk::model::IdentityType& getType() const;
 
         private:
-            virgil::sdk::model::Identity identity_;
             std::string token_;
+            std::string value_;
+            IdentityType type_ = IdentityType::None;
         };
 
         /**
@@ -82,7 +89,8 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            return left.getIdentity() == right.getIdentity() && left.getToken() == right.getToken();
+            return left.getType() == right.getType() && left.getValue() == right.getValue() &&
+                   left.getToken() == right.getToken();
         }
 
         /**

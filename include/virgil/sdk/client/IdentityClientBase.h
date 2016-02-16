@@ -62,9 +62,6 @@ namespace sdk {
                                                                   const int timeToLive = 3600,
                                                                   const int countToLive = 1) = 0;
 
-            virtual bool isValid(const virgil::sdk::model::Identity& identity,
-                                 const std::string& validatedIdentity) = 0;
-
             virtual bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) = 0;
         };
     }

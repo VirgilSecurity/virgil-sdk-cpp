@@ -76,8 +76,7 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
-        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::ValidatedIdentity validatedIdentity(identity, token);
+        vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..."

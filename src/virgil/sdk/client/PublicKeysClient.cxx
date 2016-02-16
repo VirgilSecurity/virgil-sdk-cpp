@@ -99,8 +99,8 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
                               const std::string& virgilCardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& validatedIdentity : validatedIdentitys) {
-        json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getIdentity().getType())},
-                                      {JsonKey::value, validatedIdentity.getIdentity().getValue()},
+        json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
+                                      {JsonKey::value, validatedIdentity.getValue()},
                                       {JsonKey::validatedIdentity, validatedIdentity.getToken()}};
         jsonArray.push_back(jsonValidatedIdentity);
     }

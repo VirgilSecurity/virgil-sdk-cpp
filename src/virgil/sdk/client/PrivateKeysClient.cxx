@@ -109,7 +109,6 @@ void PrivateKeysClient::stash(const std::string& virgilCardId, const Credentials
 }
 
 PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const ValidatedIdentity& validatedIdentity) {
-    Identity identity = validatedIdentity.getIdentity();
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
     while (responsePassword.size() > 31) {
@@ -117,8 +116,8 @@ PrivateKey PrivateKeysClient::get(const std::string& virgilCardId, const Validat
     }
 
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
-                      {JsonKey::value, identity.getValue()},
+                     {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
+                      {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validatedIdentity, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},
                     {JsonKey::virgilCardId, virgilCardId}};

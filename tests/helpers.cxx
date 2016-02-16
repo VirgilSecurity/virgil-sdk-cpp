@@ -117,7 +117,7 @@ namespace test {
     }
 
     ValidatedIdentity getValidatedIdentity() {
-        return ValidatedIdentity(Identity("alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email), kToken);
+        return ValidatedIdentity(kToken, "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email);
     }
 
     json getJsonPublicKey() {

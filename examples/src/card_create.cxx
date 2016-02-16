@@ -75,8 +75,7 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
         virgilHub.loadServicesCard();
 
-        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        vsdk::model::ValidatedIdentity validatedIdentity(identity, token);
+        vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Prepare public key file: " << pathPublicKey << "\n";
         std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
