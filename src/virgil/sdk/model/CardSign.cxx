@@ -34,13 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/model/CardSign.h>
 
-using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::CardSign;
 
-TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& createdAt,
-                                     const std::string& signerCardId, const std::string& signedCardId,
-                                     const std::string& signedDigest)
+CardSign::CardSign(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
+                   const std::string& signedCardId, const std::string& signedDigest)
         : id_(id),
           createdAt_(createdAt),
           signerCardId_(signerCardId),
@@ -48,22 +47,22 @@ TrustCardResponse::TrustCardResponse(const std::string& id, const std::string& c
           signedDigest_(signedDigest) {
 }
 
-const std::string& TrustCardResponse::getId() const {
+const std::string& CardSign::getId() const {
     return id_;
 }
 
-const std::string& TrustCardResponse::getCreatedAt() const {
+const std::string& CardSign::getCreatedAt() const {
     return createdAt_;
 }
 
-const std::string& TrustCardResponse::getSignerCardId() const {
+const std::string& CardSign::getSignerCardId() const {
     return signerCardId_;
 }
 
-const std::string& TrustCardResponse::getSignedCardId() const {
+const std::string& CardSign::getSignedCardId() const {
     return signedCardId_;
 }
 
-const std::string& TrustCardResponse::getSignedDigest() const {
+const std::string& CardSign::getSignedDigest() const {
     return signedDigest_;
 }

@@ -38,12 +38,12 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/model/CardSign.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::CardSign;
 
 namespace virgil {
 namespace sdk {
@@ -51,21 +51,21 @@ namespace sdk {
         /**
          * @brief Marshaller<ValidatedIdentity> specialization.
          */
-        template <> class Marshaller<TrustCardResponse> {
+        template <> class Marshaller<CardSign> {
         public:
-            template <int INDENT = -1> static std::string toJson(const TrustCardResponse& trustCardResponse) {
-                json jsonTrustCardResponse = {
-                    {JsonKey::id, trustCardResponse.getId()},
-                    {JsonKey::createdAt, trustCardResponse.getCreatedAt()},
-                    {JsonKey::signerCardId, trustCardResponse.getSignedCardId()},
-                    {JsonKey::signedCardId, trustCardResponse.getSignedCardId()},
-                    {JsonKey::signedDigest, trustCardResponse.getSignedDigest()},
+            template <int INDENT = -1> static std::string toJson(const CardSign& cardSign) {
+                json jsonCardSign = {
+                    {JsonKey::id, cardSign.getId()},
+                    {JsonKey::createdAt, cardSign.getCreatedAt()},
+                    {JsonKey::signerCardId, cardSign.getSignedCardId()},
+                    {JsonKey::signedCardId, cardSign.getSignedCardId()},
+                    {JsonKey::signedDigest, cardSign.getSignedDigest()},
                 };
 
-                return jsonTrustCardResponse.dump(INDENT);
+                return jsonCardSign.dump(INDENT);
             }
 
-            static TrustCardResponse fromJson(const std::string& jsonString) {
+            static CardSign fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
 
                 std::string id = typeJson[JsonKey::id];
@@ -74,7 +74,7 @@ namespace sdk {
                 std::string signedCardId = typeJson[JsonKey::signedCardId];
                 std::string signedDigest = typeJson[JsonKey::signedDigest];
 
-                return TrustCardResponse(id, createdAt, signerCardId, signedCardId, signedDigest);
+                return CardSign(id, createdAt, signerCardId, signedCardId, signedDigest);
             }
 
         private:
@@ -85,8 +85,8 @@ namespace sdk {
 }
 
 void marshaller_trust_card_response_init() {
-    virgil::sdk::io::Marshaller<TrustCardResponse>::toJson(TrustCardResponse());
-    virgil::sdk::io::Marshaller<TrustCardResponse>::toJson<2>(TrustCardResponse());
-    virgil::sdk::io::Marshaller<TrustCardResponse>::toJson<4>(TrustCardResponse());
-    virgil::sdk::io::Marshaller<TrustCardResponse>::fromJson(std::string());
+    virgil::sdk::io::Marshaller<CardSign>::toJson(CardSign());
+    virgil::sdk::io::Marshaller<CardSign>::toJson<2>(CardSign());
+    virgil::sdk::io::Marshaller<CardSign>::toJson<4>(CardSign());
+    virgil::sdk::io::Marshaller<CardSign>::fromJson(std::string());
 }

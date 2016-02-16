@@ -43,7 +43,7 @@
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
-#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/model/CardSign.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
@@ -90,12 +90,11 @@ int main(int argc, char** argv) {
 
         std::cout << "Trust a Virgil Card"
                   << "\n";
-        vsdk::model::TrustCardResponse trustCardResponse =
+        vsdk::model::CardSign cardSign =
             servicesHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
 
-        std::string trustCardResponseStr =
-            vsdk::io::Marshaller<vsdk::model::TrustCardResponse>::toJson<4>(trustCardResponse);
-        std::cout << "TrustCardResponse:\n" << trustCardResponseStr << "\n";
+        std::string cardSignStr = vsdk::io::Marshaller<vsdk::model::CardSign>::toJson<4>(cardSign);
+        std::cout << "CardSign:\n" << cardSignStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

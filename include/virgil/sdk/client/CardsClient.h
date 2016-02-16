@@ -59,10 +59,8 @@ namespace sdk {
                                             const virgil::crypto::VirgilByteArray& publicKey,
                                             const virgil::sdk::Credentials& credentials) override;
 
-            virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
-                                                        const std::string& trustedCardHash,
-                                                        const std::string& ownerCardId,
-                                                        const Credentials& credentials) override;
+            virgil::sdk::model::CardSign trust(const std::string& trustedCardId, const std::string& trustedCardHash,
+                                               const std::string& ownerCardId, const Credentials& credentials) override;
 
             void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                          const virgil::sdk::Credentials& credentials) override;

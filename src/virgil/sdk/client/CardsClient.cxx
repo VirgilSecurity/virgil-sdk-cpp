@@ -67,7 +67,7 @@ using virgil::sdk::io::Marshaller;
 using virgil::sdk::model::Card;
 using virgil::sdk::model::ValidatedIdentity;
 using virgil::sdk::model::Identity;
-using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::CardSign;
 using virgil::sdk::model::toString;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
@@ -109,8 +109,8 @@ Card CardsClient::create(const ValidatedIdentity& validatedIdentity, const Virgi
     return card;
 }
 
-TrustCardResponse CardsClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
-                                     const std::string& ownerCardId, const Credentials& credentials) {
+CardSign CardsClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
+                            const std::string& ownerCardId, const Credentials& credentials) {
 
     ClientConnection connection(accessToken_);
     json payload = {{JsonKey::signedCardId, trustedCardId},
@@ -128,8 +128,8 @@ TrustCardResponse CardsClient::trust(const std::string& trustedCardId, const std
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_TRUST);
     this->verifyResponse(response);
 
-    TrustCardResponse trustCardResponse = Marshaller<TrustCardResponse>::fromJson(response.body());
-    return trustCardResponse;
+    CardSign cardSign = Marshaller<CardSign>::fromJson(response.body());
+    return cardSign;
 }
 
 void CardsClient::untrust(const std::string& trustedCardId, const std::string& ownerCardId,

@@ -36,14 +36,14 @@
 
 /**
  * @file test_identity_token_marshaller.cxx
- * @brief Convert json <-> TrustCardResponse.
+ * @brief Convert json <-> CardSign.
  */
 
 #include "../catch.hpp"
 
 #include <json.hpp>
 
-#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/model/CardSign.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/io/Marshaller.h>
 
@@ -51,20 +51,20 @@
 
 using json = nlohmann::json;
 
-using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::CardSign;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-TEST_CASE("TrustCardResponse -> Json ValidatedIdentity - FAILED", "class Marshaller") {
-    TrustCardResponse trustCardResponse = virgil::test::getTrustCardResponse();
-    // TrustCardResponse -> Json
-    std::string testJsonTrustCardResponse = Marshaller<TrustCardResponse>::toJson<4>(trustCardResponse);
-    REQUIRE(virgil::test::getTrustCardResponse().dump(4) == testJsonTrustCardResponse);
+TEST_CASE("CardSign -> Json ValidatedIdentity - FAILED", "class Marshaller") {
+    CardSign cardSign = virgil::test::getCardSign();
+    // CardSign -> Json
+    std::string testJsonCardSign = Marshaller<CardSign>::toJson<4>(cardSign);
+    REQUIRE(virgil::test::getCardSign().dump(4) == testJsonCardSign);
 }
 
-TEST_CASE("Json TrustCardResponse -> TrustCardResponse - FAILED", "class Marshaller") {
-    json jsonTrustCardResponse = virgil::test::getJsonTrustCardResponse();
-    // Json -> TrustCardResponse
-    TrustCardResponse testTrustCardResponse = Marshaller<TrustCardResponse>::fromJson(jsonTrustCardResponse.dump(4));
-    REQUIRE(virgil::test::getTrustCardResponse() == testTrustCardResponse);
+TEST_CASE("Json CardSign -> CardSign - FAILED", "class Marshaller") {
+    json jsonCardSign = virgil::test::getJsonCardSign();
+    // Json -> CardSign
+    CardSign testCardSign = Marshaller<CardSign>::fromJson(jsonCardSign.dump(4));
+    REQUIRE(virgil::test::getCardSign() == testCardSign);
 }

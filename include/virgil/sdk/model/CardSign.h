@@ -45,11 +45,11 @@ namespace sdk {
         /**
          * @brief
          */
-        class TrustCardResponse {
+        class CardSign {
         public:
-            TrustCardResponse() = default;
-            TrustCardResponse(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
-                              const std::string& signedCardId, const std::string& signedDigest);
+            CardSign() = default;
+            CardSign(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
+                     const std::string& signedCardId, const std::string& signedDigest);
 
             const std::string& getId() const;
             const std::string& getCreatedAt() const;
@@ -65,7 +65,7 @@ namespace sdk {
             std::string signedDigest_;
         };
 
-        inline bool operator==(const TrustCardResponse& left, const TrustCardResponse& right) {
+        inline bool operator==(const CardSign& left, const CardSign& right) {
             if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
                 left.getSignerCardId() == right.getSignerCardId() &&
                 left.getSignedCardId() == right.getSignedCardId() &&
@@ -75,7 +75,7 @@ namespace sdk {
             return 0;
         }
 
-        inline bool operator!=(const TrustCardResponse& left, const TrustCardResponse& right) {
+        inline bool operator!=(const CardSign& left, const CardSign& right) {
             return !(left == right);
         }
     }

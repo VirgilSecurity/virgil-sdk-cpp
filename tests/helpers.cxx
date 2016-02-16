@@ -56,7 +56,7 @@ using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 using virgil::sdk::model::Card;
 using virgil::sdk::model::CardIdentity;
-using virgil::sdk::model::TrustCardResponse;
+using virgil::sdk::model::CardSign;
 using virgil::sdk::util::JsonKey;
 
 const std::string kToken = "MIIB5wIBADCCAeAGCSqGSIb3DQEHA6CCAd"
@@ -244,7 +244,7 @@ namespace test {
         return cards;
     }
 
-    json getJsonTrustCardResponse() {
+    json getJsonCardSign() {
         return json({{JsonKey::id, "9e0bb253-879b-4fbd-a504-829faae7e958"},
                      {JsonKey::createdAt, "2015-12-22T07:03:42+0000"},
                      {JsonKey::signerCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c"},
@@ -252,10 +252,9 @@ namespace test {
                      {JsonKey::signedDigest, kSignedDigest}});
     }
 
-    TrustCardResponse getTrustCardResponse() {
-        return TrustCardResponse("9e0bb253-879b-4fbd-a504-829faae7e958", "2015-12-22T07:03:42+0000",
-                                 "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c", "9ab9d4a4-0440-499f-bdc6-f99c83f900dd",
-                                 kSignedDigest);
+    CardSign getCardSign() {
+        return CardSign("9e0bb253-879b-4fbd-a504-829faae7e958", "2015-12-22T07:03:42+0000",
+                        "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c", "9ab9d4a4-0440-499f-bdc6-f99c83f900dd", kSignedDigest);
     }
 
     json getJsonPrivateKey() {

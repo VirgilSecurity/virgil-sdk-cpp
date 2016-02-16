@@ -44,7 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/Card.h>
 #include <virgil/sdk/model/ValidatedIdentity.h>
-#include <virgil/sdk/model/TrustCardResponse.h>
+#include <virgil/sdk/model/CardSign.h>
 
 namespace virgil {
 namespace sdk {
@@ -65,10 +65,10 @@ namespace sdk {
                                                     const virgil::crypto::VirgilByteArray& publicKey,
                                                     const virgil::sdk::Credentials& credentials) = 0;
 
-            virtual virgil::sdk::model::TrustCardResponse trust(const std::string& trustedCardId,
-                                                                const std::string& trustedCardHash,
-                                                                const std::string& ownerCardId,
-                                                                const Credentials& credentials) = 0;
+            virtual virgil::sdk::model::CardSign trust(const std::string& trustedCardId,
+                                                       const std::string& trustedCardHash,
+                                                       const std::string& ownerCardId,
+                                                       const Credentials& credentials) = 0;
 
             virtual void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
                                  const Credentials& credentials) = 0;
