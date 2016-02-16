@@ -62,8 +62,7 @@ namespace sdk {
              * @param value - identity value, i.e. support@virgilsecurity.com
              * @param type - identity type, i.e. IdentityType::Email
              */
-            ValidatedIdentity(const std::string& token, const std::string& value,
-                              const IdentityType& type = IdentityType::None);
+            ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type);
             /**
              * @brief Return token that validate underlying identity
              */

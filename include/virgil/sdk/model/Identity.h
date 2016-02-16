@@ -78,7 +78,7 @@ namespace sdk {
              *     If type is omitted, then server try to gess type of the identity according
              *     to the value format
              */
-            Identity(const std::string& value, const IdentityType& type = IdentityType::None);
+            Identity(const std::string& value, const IdentityType& type);
             /**
              * @brief Return identity value
              */
