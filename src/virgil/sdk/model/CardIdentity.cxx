@@ -43,7 +43,7 @@ using virgil::sdk::model::IdentityType;
 
 CardIdentity::CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
                            const std::string& value, const IdentityType& type)
-        : id_(id), createdAt_(createdAt), confirmed_(confirmed), identity_(value, type) {
+        : Identity(value, type), id_(id), createdAt_(createdAt), confirmed_(confirmed) {
 }
 
 bool CardIdentity::isConfirmed() const {
@@ -56,12 +56,4 @@ const std::string& CardIdentity::getId() const {
 
 const std::string& CardIdentity::getCreatedAt() const {
     return createdAt_;
-}
-
-const std::string& CardIdentity::getValue() const {
-    return identity_.getValue();
-}
-
-const IdentityType& CardIdentity::getType() const {
-    return identity_.getType();
 }

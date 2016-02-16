@@ -49,7 +49,7 @@ namespace sdk {
          *
          * @details Validated identity tells that user validate identity and receive related token
          */
-        class ValidatedIdentity {
+        class ValidatedIdentity : public Identity {
         public:
             /**
              * @brief Create empty non valid identity
@@ -68,19 +68,9 @@ namespace sdk {
              * @brief Return token that validate underlying identity
              */
             const std::string& getToken() const;
-            /**
-             * @brief Return identity value
-             */
-            const std::string& getValue() const;
-            /**
-             * @brief Return identity type
-             */
-            const virgil::sdk::model::IdentityType& getType() const;
 
         private:
             std::string token_;
-            std::string value_;
-            IdentityType type_ = IdentityType::None;
         };
 
         /**
@@ -89,7 +79,7 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            return left.getType() == right.getType() && left.getValue() == right.getValue() &&
+            return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
                    left.getToken() == right.getToken();
         }
 

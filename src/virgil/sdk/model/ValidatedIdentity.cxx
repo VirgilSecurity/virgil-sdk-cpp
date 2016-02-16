@@ -41,17 +41,9 @@ using virgil::sdk::model::Identity;
 using virgil::sdk::model::IdentityType;
 
 ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type)
-        : token_(token), value_(value), type_(type) {
+        : Identity(value, type), token_(token) {
 }
 
 const std::string& ValidatedIdentity::getToken() const {
     return token_;
-}
-
-const std::string& ValidatedIdentity::getValue() const {
-    return value_;
-}
-
-const IdentityType& ValidatedIdentity::getType() const {
-    return type_;
 }

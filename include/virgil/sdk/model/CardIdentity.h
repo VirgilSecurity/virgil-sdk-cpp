@@ -50,7 +50,7 @@ namespace sdk {
          * @details This class contains addition information of identity,
          *          that is used in conjuction with class @link VirgilCard @endlink.
          */
-        class CardIdentity {
+        class CardIdentity : public Identity {
         public:
             /**
              * @brief Creates not valid identity
@@ -66,7 +66,7 @@ namespace sdk {
              * @param type - identity type
              */
             CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
-                         const std::string& value, const IdentityType& type);
+                         const std::string& value, const IdentityType& type = virgil::sdk::model::IdentityType::None);
             /**
              * @brief Return unique object identifier defined by service
              */
@@ -79,20 +79,11 @@ namespace sdk {
              * @brief Return true, if identity is confirmed by user, false - otherwise
              */
             bool isConfirmed() const;
-            /**
-             * @brief Return identity value
-             */
-            const std::string& getValue() const;
-            /**
-             * @brief Return identity type
-             */
-            const virgil::sdk::model::IdentityType& getType() const;
 
         private:
             std::string id_;
             std::string createdAt_;
             bool confirmed_ = false;
-            Identity identity_;
         };
 
         /**
@@ -101,9 +92,9 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
-            return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                   left.isConfirmed() == right.isConfirmed() && left.getType() == right.getType() &&
-                   left.getValue() == right.getValue();
+            return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
+                   left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.isConfirmed() == right.isConfirmed();
         }
 
         /**
