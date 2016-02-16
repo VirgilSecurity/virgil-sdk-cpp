@@ -45,14 +45,30 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief
+         * @brief This class represents validated identity
+         *
+         * @details Validated identity tells that user validate identity and receive related token
          */
         class ValidatedIdentity {
         public:
+            /**
+             * @brief Create empty non valid identity
+             */
             ValidatedIdentity() = default;
+            /**
+             * @brief Create identity with valid token
+             *
+             * @param identity - underlying identity
+             * @param token - validation token
+             */
             ValidatedIdentity(const virgil::sdk::model::Identity& identity, const std::string& token);
-
+            /**
+             * @brief Return underlying identity
+             */
             const virgil::sdk::model::Identity& getIdentity() const;
+            /**
+             * @brief Return token that validate underlying identity
+             */
             const std::string& getToken() const;
 
         private:
@@ -60,6 +76,11 @@ namespace sdk {
             std::string token_;
         };
 
+        /**
+         * @brief Compare identities for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             if (left.getIdentity() == right.getIdentity() && left.getToken() == right.getToken()) {
                 return 1;
@@ -68,6 +89,11 @@ namespace sdk {
             return 0;
         }
 
+        /**
+         * @brief Compare identities for inequality
+         *
+         * @return true if given objects are inequal, false - otherwise
+         */
         inline bool operator!=(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             return !(left == right);
         }
