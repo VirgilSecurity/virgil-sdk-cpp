@@ -105,7 +105,7 @@ namespace sdk {
         /**
          * @brief Compare identities for inequality
          *
-         * @return true if given objects are equal, false - otherwise
+         * @return true if given objects are inequal, false - otherwise
          */
         inline bool operator!=(const Identity& left, const Identity& right) {
             return !(left == right);
