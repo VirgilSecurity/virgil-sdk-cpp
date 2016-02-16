@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
         std::string pathPrivateKey = argv[3];
         std::string token = argv[4];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Revoke a Virgil Card"
                   << "\n";
-        virgilHub.cards().revoke(ownerCardId, validatedIdentity, credentials);
+        servicesHub.cards().revoke(ownerCardId, validatedIdentity, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

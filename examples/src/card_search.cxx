@@ -64,14 +64,14 @@ int main(int argc, char** argv) {
     try {
         std::string userEmail = argv[1];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Search for Cards"
                   << "\n";
-        std::vector<vsdk::model::Card> foundCards = virgilHub.cards().search(identity);
+        std::vector<vsdk::model::Card> foundCards = servicesHub.cards().search(identity);
 
         std::string foundCardsStr = vsdk::io::toJsonCards(foundCards, 4);
         std::cout << foundCardsStr << "\n";

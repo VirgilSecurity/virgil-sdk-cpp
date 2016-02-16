@@ -70,8 +70,8 @@ int main(int argc, char** argv) {
         std::string cardId = argv[2];
         std::string pathPrivateKey = argv[3];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..."
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Get Virgil Cards"
                   << "\n";
-        std::vector<vsdk::model::Card> cards = virgilHub.cards().get(publicKeyId, cardId, credentials);
+        std::vector<vsdk::model::Card> cards = servicesHub.cards().get(publicKeyId, cardId, credentials);
         std::string cardsStr = vsdk::io::toJsonCards(cards, 4);
         std::cout << "Virgil Cards:"
                   << "\n";

@@ -64,10 +64,10 @@ int main(int argc, char** argv) {
         std::string actionId = argv[1];
         std::string confirmationCode = argv[2];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
         vsdk::model::ValidatedIdentity validatedIdentity =
-            virgilHub.identity().confirm(actionId, confirmationCode, 3600, 100);
+            servicesHub.identity().confirm(actionId, confirmationCode, 3600, 100);
 
         std::string validatedIdentityStr =
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);

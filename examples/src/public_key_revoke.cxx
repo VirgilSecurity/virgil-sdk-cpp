@@ -73,8 +73,8 @@ int main(int argc, char** argv) {
         std::string pathPrivateKey = argv[4];
         std::string token = argv[5];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Revoke the Public Key"
                   << "\n";
-        virgilHub.publicKeys().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
+        servicesHub.publicKeys().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

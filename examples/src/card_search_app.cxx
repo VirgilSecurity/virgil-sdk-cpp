@@ -65,15 +65,15 @@ int main(int argc, char** argv) {
     }
 
     try {
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Search for Application Cards"
                   << "\n";
 
         std::string appName = "com.virgilsecurity.";
         appName += argv[1];
-        std::vector<vsdk::model::Card> allAppCards = virgilHub.cards().searchApp(appName);
+        std::vector<vsdk::model::Card> allAppCards = servicesHub.cards().searchApp(appName);
         std::string jsonAllAppCards = virgil::sdk::io::toJsonCards(allAppCards, 4);
         std::cout << jsonAllAppCards << "\n";
 

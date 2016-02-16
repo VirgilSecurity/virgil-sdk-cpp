@@ -69,8 +69,8 @@ int main(int argc, char** argv) {
         std::string cardId = argv[1];
         std::string pathPrivateKey = argv[2];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..."
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Stash a Private Key"
                   << "\n";
-        virgilHub.privateKeys().stash(cardId, credentials);
+        servicesHub.privateKeys().stash(cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

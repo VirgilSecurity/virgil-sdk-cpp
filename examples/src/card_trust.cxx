@@ -73,8 +73,8 @@ int main(int argc, char** argv) {
         std::string ownerCardId = argv[3];
         std::string pathPrivateKey = argv[4];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..."
@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
         std::cout << "Trust a Virgil Card"
                   << "\n";
         vsdk::model::TrustCardResponse trustCardResponse =
-            virgilHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
+            servicesHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
 
         std::string trustCardResponseStr =
             vsdk::io::Marshaller<vsdk::model::TrustCardResponse>::toJson<4>(trustCardResponse);

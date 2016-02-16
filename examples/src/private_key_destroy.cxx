@@ -70,8 +70,8 @@ int main(int argc, char** argv) {
         std::string pathPublicKey = argv[2];
         std::string pathPrivateKey = argv[3];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Prepare input file: " << pathPublicKey << "\n";
         std::ifstream inFile(pathPublicKey, std::ios::in | std::ios::binary);
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Destroy a Private Key"
                   << "\n";
-        virgilHub.privateKeys().destroy(cardId, publicKey, credentials);
+        servicesHub.privateKeys().destroy(cardId, publicKey, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

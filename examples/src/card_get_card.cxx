@@ -65,12 +65,12 @@ int main(int argc, char** argv) {
     try {
         std::string cardId = argv[1];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Get a Virgil Card"
                   << "\n";
-        vsdk::model::Card card = virgilHub.cards().get(cardId);
+        vsdk::model::Card card = servicesHub.cards().get(cardId);
         std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
         std::cout << "A Virgil Card:"
                   << "\n";

@@ -64,12 +64,12 @@ int main(int argc, char** argv) {
         std::string userEmail = argv[1];
         std::string token = argv[2];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
-        bool validateToken = virgilHub.identity().isValid(validatedIdentity);
+        bool validateToken = servicesHub.identity().isValid(validatedIdentity);
         std::string validatedIdentityStr =
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
         if (validateToken) {

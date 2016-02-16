@@ -70,8 +70,8 @@ int main(int argc, char** argv) {
         std::string ownerCardId = argv[2];
         std::string pathPrivateKey = argv[3];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
         std::cout << "Read private key..."
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Untrust a Virgil Card"
                   << "\n";
-        virgilHub.cards().untrust(trustedCardId, ownerCardId, credentials);
+        servicesHub.cards().untrust(trustedCardId, ownerCardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

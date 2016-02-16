@@ -65,14 +65,14 @@ int main(int argc, char** argv) {
         std::string cardId = argv[2];
         std::string token = argv[3];
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Get a Private Key"
                   << "\n";
-        vsdk::model::PrivateKey privateKey = virgilHub.privateKeys().get(cardId, validatedIdentity);
+        vsdk::model::PrivateKey privateKey = servicesHub.privateKeys().get(cardId, validatedIdentity);
         std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson<4>(privateKey);
 
         std::cout << "Private Key:"

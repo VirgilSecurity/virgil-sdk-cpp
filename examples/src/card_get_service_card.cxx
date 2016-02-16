@@ -67,10 +67,10 @@ int main() {
         vsdk::ServiceUri virgilUri(VIRGIL_IDENTITY_SERVICE_URI_BASE, VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
                                    VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
 
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceCards = virgilHub.cards().getServiceCard(kIdentityServiceApplicationId);
-        auto publicKeysServiceCards = virgilHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
-        auto privateKeysServiceCards = virgilHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN, virgilUri);
+        auto identityServiceCards = servicesHub.cards().getServiceCard(kIdentityServiceApplicationId);
+        auto publicKeysServiceCards = servicesHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
+        auto privateKeysServiceCards = servicesHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
 
         vsdk::model::Card identityServiceCard = identityServiceCards.at(0);
         vsdk::model::Card publicKeysServiceCard = publicKeysServiceCards.at(0);
@@ -88,10 +88,10 @@ int main() {
                   << "\n";
         std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << "\n\n\n";
 
-        virgilHub.identity().setServiceCard(identityServiceCard);
-        virgilHub.publicKeys().setServiceCard(publicKeysServiceCard);
-        virgilHub.cards().setServiceCard(publicKeysServiceCard);
-        virgilHub.privateKeys().setServiceCard(privateKeysServiceCard);
+        servicesHub.identity().setServiceCard(identityServiceCard);
+        servicesHub.publicKeys().setServiceCard(publicKeysServiceCard);
+        servicesHub.cards().setServiceCard(publicKeysServiceCard);
+        servicesHub.privateKeys().setServiceCard(privateKeysServiceCard);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

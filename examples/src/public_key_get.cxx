@@ -63,14 +63,14 @@ int main(int argc, char** argv) {
     }
 
     try {
-        vsdk::ServicesHub virgilHub(VIRGIL_ACCESS_TOKEN);
-        virgilHub.loadServicesCard();
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        servicesHub.loadServicesCard();
 
         std::string publicKeyId = argv[1];
 
         std::cout << "Get a Public Key"
                   << "\n";
-        vsdk::model::PublicKey publicKey = virgilHub.publicKeys().get(publicKeyId);
+        vsdk::model::PublicKey publicKey = servicesHub.publicKeys().get(publicKeyId);
         std::string publicKeyStr = vsdk::io::Marshaller<vsdk::model::PublicKey>::toJson<4>(publicKey);
         std::cout << "Public Key:"
                   << "\n";
