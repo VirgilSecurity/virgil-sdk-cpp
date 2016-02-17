@@ -40,10 +40,10 @@
 #include <memory>
 #include <string>
 
-#include <virgil/sdk/client/IdentityClientBase.h>
-#include <virgil/sdk/client/PrivateKeysClientBase.h>
-#include <virgil/sdk/client/PublicKeysClientBase.h>
-#include <virgil/sdk/client/CardsClientBase.h>
+#include <virgil/sdk/client/IdentityClient.h>
+#include <virgil/sdk/client/PrivateKeysClient.h>
+#include <virgil/sdk/client/PublicKeysClient.h>
+#include <virgil/sdk/client/CardsClient.h>
 #include <virgil/sdk/ServiceUri.h>
 
 namespace virgil {
@@ -75,19 +75,19 @@ namespace sdk {
         /**
          * @brief Return entrypoint for Virgil Identity Service
          */
-        virgil::sdk::client::IdentityClientBase& identity();
+        virgil::sdk::client::IdentityClient& identity();
         /**
          * @brief Return entrypoint for Virgil Cards Service
          */
-        virgil::sdk::client::CardsClientBase& cards();
+        virgil::sdk::client::CardsClient& cards();
         /**
          * @brief Return entrypoint for Virgil Public Keys Service
          */
-        virgil::sdk::client::PublicKeysClientBase& publicKeys();
+        virgil::sdk::client::PublicKeysClient& publicKeys();
         /**
          * @brief Return entrypoint for Virgil Private Keys Service
          */
-        virgil::sdk::client::PrivateKeysClientBase& privateKeys();
+        virgil::sdk::client::PrivateKeysClient& privateKeys();
         /**
          * @brief Load Virgil Card for all services from the default locations
          *

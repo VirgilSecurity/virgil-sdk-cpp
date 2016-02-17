@@ -37,7 +37,12 @@
 #ifndef VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
 #define VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
 
-#include <virgil/sdk/client/PrivateKeysClientBase.h>
+#include <virgil/crypto/VirgilByteArray.h>
+
+#include <virgil/sdk/Credentials.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
+#include <virgil/sdk/model/PrivateKey.h>
+#include <virgil/sdk/model/Card.h>
 #include <virgil/sdk/http/Response.h>
 
 namespace virgil {
@@ -46,21 +51,21 @@ namespace sdk {
         /**
          * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
          */
-        class PrivateKeysClient final : public PrivateKeysClientBase {
+        class PrivateKeysClient {
         public:
             PrivateKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::Card getServiceCard() const override;
+            virgil::sdk::model::Card getServiceCard() const;
 
-            void setServiceCard(const virgil::sdk::model::Card& privateKeysServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& privateKeysServiceCard);
 
-            void stash(const std::string& cardId, const Credentials& credentials) override;
+            void stash(const std::string& cardId, const Credentials& credentials);
 
             virgil::sdk::model::PrivateKey get(const std::string& cardId,
-                                               const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
+                                               const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
 
             void destroy(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
-                         const Credentials& credentials) override;
+                         const Credentials& credentials);
 
         private:
             std::string accessToken_;

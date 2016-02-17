@@ -37,7 +37,9 @@
 #ifndef VIRGIL_SDK_IDENTITY_CLIENT_H
 #define VIRGIL_SDK_IDENTITY_CLIENT_H
 
-#include <virgil/sdk/client/IdentityClientBase.h>
+#include <virgil/sdk/model/ValidatedIdentity.h>
+#include <virgil/sdk/model/Identity.h>
+#include <virgil/sdk/model/Card.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
@@ -47,22 +49,21 @@ namespace sdk {
         /**
          * @brief Entrypoint for interacting with Identity Service PKI.
          */
-        class IdentityClient final : public IdentityClientBase {
+        class IdentityClient {
         public:
             IdentityClient(const std::string& accessToken, const std::string& baseServiceUri);
 
-            virgil::sdk::model::Card getServiceCard() const override;
+            virgil::sdk::model::Card getServiceCard() const;
 
-            void setServiceCard(const virgil::sdk::model::Card& identityServiceCard) override;
+            void setServiceCard(const virgil::sdk::model::Card& identityServiceCard);
 
-            std::string verify(const virgil::sdk::model::Identity& identity) override;
+            std::string verify(const virgil::sdk::model::Identity& identity);
 
             virgil::sdk::model::ValidatedIdentity confirm(const std::string& actionId,
                                                           const std::string& confirmationCode,
-                                                          const int timeToLive = 3600,
-                                                          const int countToLive = 1) override;
+                                                          const int timeToLive = 3600, const int countToLive = 1);
 
-            bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity) override;
+            bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
 
         private:
             std::string accessToken_;

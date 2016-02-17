@@ -49,13 +49,9 @@
 using virgil::crypto::VirgilByteArray;
 
 using virgil::sdk::ServicesHub;
-using virgil::sdk::client::IdentityClientBase;
 using virgil::sdk::client::IdentityClient;
-using virgil::sdk::client::PrivateKeysClientBase;
 using virgil::sdk::client::PrivateKeysClient;
-using virgil::sdk::client::PublicKeysClientBase;
 using virgil::sdk::client::PublicKeysClient;
-using virgil::sdk::client::CardsClientBase;
 using virgil::sdk::client::CardsClient;
 using virgil::sdk::model::Card;
 using virgil::sdk::ServiceUri;
@@ -90,19 +86,19 @@ ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseS
           impl_(std::make_shared<virgil::sdk::ServicesHubImpl>(accessToken_, virgilUri_)) {
 }
 
-IdentityClientBase& ServicesHub::identity() {
+IdentityClient& ServicesHub::identity() {
     return impl_->identityClient;
 }
 
-PrivateKeysClientBase& ServicesHub::privateKeys() {
+PrivateKeysClient& ServicesHub::privateKeys() {
     return impl_->privateKeysClient;
 }
 
-PublicKeysClientBase& ServicesHub::publicKeys() {
+PublicKeysClient& ServicesHub::publicKeys() {
     return impl_->publicKeysClient;
 }
 
-CardsClientBase& ServicesHub::cards() {
+CardsClient& ServicesHub::cards() {
     return impl_->cardsClient;
 }
 
