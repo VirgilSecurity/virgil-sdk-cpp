@@ -68,9 +68,9 @@ namespace sdk {
             Marshaller();
         };
 
-        std::string toJsonCards(const std::vector<virgil::sdk::model::Card> cards, const int INDENT = -1);
+        std::string cardsToJson(const std::vector<virgil::sdk::model::Card> cards, const int INDENT = -1);
 
-        std::vector<virgil::sdk::model::Card> fromJsonCards(const std::string& jsonStringCards);
+        std::vector<virgil::sdk::model::Card> cardsFromJson(const std::string& jsonStringCards);
     }
 }
 }

@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
                   << "\n";
         std::vector<vsdk::model::Card> foundCards = servicesHub.cards().search(identity);
 
-        std::string foundCardsStr = vsdk::io::toJsonCards(foundCards, 4);
+        std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << "\n";
 
     } catch (std::exception& exception) {

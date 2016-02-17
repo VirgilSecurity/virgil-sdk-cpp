@@ -155,7 +155,7 @@ namespace sdk {
             Marshaller(){};
         };
 
-        std::string toJsonCards(const std::vector<virgil::sdk::model::Card> cards, const int INDENT) {
+        std::string cardsToJson(const std::vector<virgil::sdk::model::Card> cards, const int INDENT) {
             try {
                 json jsonCards = json::array();
                 for (const auto& card : cards) {
@@ -166,11 +166,11 @@ namespace sdk {
 
                 return jsonCards.dump(INDENT);
             } catch (std::exception& exception) {
-                throw std::logic_error(std::string("toJsonCards : ") + exception.what());
+                throw std::logic_error(std::string("cardsToJson : ") + exception.what());
             }
         }
 
-        std::vector<Card> fromJsonCards(const std::string& jsonStringCards) {
+        std::vector<Card> cardsFromJson(const std::string& jsonStringCards) {
             try {
                 json jsonResponseCards = json::parse(jsonStringCards);
                 json jsonCards = jsonResponseCards;
@@ -186,7 +186,7 @@ namespace sdk {
                 return cards;
 
             } catch (std::exception& exception) {
-                throw std::logic_error(std::string("fromJsonCards: ") + exception.what());
+                throw std::logic_error(std::string("cardsFromJson: ") + exception.what());
             }
         }
     }

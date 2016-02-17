@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         std::cout << "Get Virgil Cards"
                   << "\n";
         std::vector<vsdk::model::Card> cards = servicesHub.cards().get(publicKeyId, cardId, credentials);
-        std::string cardsStr = vsdk::io::toJsonCards(cards, 4);
+        std::string cardsStr = vsdk::io::cardsToJson(cards, 4);
         std::cout << "Virgil Cards:"
                   << "\n";
         std::cout << cardsStr << "\n";

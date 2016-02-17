@@ -169,7 +169,7 @@ std::vector<Card> CardsClient::search(const Identity& identity, const std::vecto
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH);
     this->verifyResponse(response);
 
-    std::vector<Card> cards = virgil::sdk::io::fromJsonCards(response.body());
+    std::vector<Card> cards = virgil::sdk::io::cardsFromJson(response.body());
     return cards;
 }
 
@@ -180,7 +180,7 @@ std::vector<Card> CardsClient::searchApp(const std::string& applicationIdentity)
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
     this->verifyResponse(response);
 
-    std::vector<Card> cards = virgil::sdk::io::fromJsonCards(response.body());
+    std::vector<Card> cards = virgil::sdk::io::cardsFromJson(response.body());
 
     return cards;
 }
@@ -191,7 +191,7 @@ std::vector<Card> CardsClient::getServiceCard(const std::string& serviceIdentity
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SERVICE_GET);
 
-    std::vector<Card> cards = virgil::sdk::io::fromJsonCards(response.body());
+    std::vector<Card> cards = virgil::sdk::io::cardsFromJson(response.body());
     return cards;
 }
 
@@ -208,7 +208,7 @@ std::vector<Card> CardsClient::get(const std::string& publicKeyId, const std::st
     this->verifyResponse(response);
 
     json jsonResponseCards = json::parse(response.body());
-    std::vector<Card> cards = virgil::sdk::io::fromJsonCards(jsonResponseCards.dump());
+    std::vector<Card> cards = virgil::sdk::io::cardsFromJson(jsonResponseCards.dump());
     return cards;
 }
 
