@@ -39,10 +39,6 @@
 
 #include <string>
 
-#include <virgil/sdk/endpoints/IdentityEndpointUri.h>
-#include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
-#include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
-
 namespace virgil {
 namespace sdk {
 
