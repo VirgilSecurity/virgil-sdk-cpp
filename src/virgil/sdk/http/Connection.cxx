@@ -53,7 +53,6 @@ using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 
-
 Response Connection::send(const Request& request) {
     // Make Request
     HttpRequest httpRequest;
