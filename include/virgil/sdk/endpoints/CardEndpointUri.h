@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PRIVATE_KEYS_ENDPOINT_URI_H
-#define VIRGIL_SDK_PRIVATE_KEYS_ENDPOINT_URI_H
+#ifndef VIRGIL_SDK_CARD_ENDPOINT_URI_H
+#define VIRGIL_SDK_CARD_ENDPOINT_URI_H
 
 #include <string>
 
@@ -43,31 +43,51 @@ namespace virgil {
 namespace sdk {
     namespace endpoints {
         /**
-         * @brief This class provide URIs to the Virgil Private Key endpoints.
-         * @note All endpoints start with forward slash symbol "/" and contain version.
+         * @brief This class provide URIs to the Virgil Card endpoints
+         * @note All endpoints start with forward slash symbol "/" and contain version
          */
-        class PrivateKeysEndpointUri {
+        class CardEndpointUri {
         public:
-            //@}
             /**
-             * @name Private Key management.
+             * @brief Returns the endpoint in charge of a Virgil Card creation
              */
-            //@{
+            static std::string create();
             /**
-             * @brief Returns the endpoint in charge of the Private Key load.
+             * @brief Returns the endpoint in charge of a Virgil Card grab
              */
-            static std::string privateKeyStash();
+            static std::string get(const std::string& cardId);
             /**
-             * @brief Returns the endpoint in charge of the Private Key get.
+             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters
              */
-            static std::string privateKeyGet();
+            static std::string search();
             /**
-             * @brief Returns the endpoint in charge of the Private Key delete.
+             * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern
              */
-            static std::string privateKeyDestroy();
+            static std::string searchApp();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card sign
+             * @param cardId - Virgil Card identifier
+             */
+            static std::string sign(const std::string& cardId);
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card unsign
+             * @param cardId - Virgil Card identifier
+             */
+            static std::string unsign(const std::string& cardId);
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card revoke
+             * @param cardId - Virgil Card identifier
+             */
+            static std::string revoke(const std::string& cardId);
+
+        private:
+            /**
+             * @brief Deny object creation
+             */
+            CardEndpointUri();
         };
     }
 }
 }
 
-#endif /* VIRGIL_SDK_PRIVATE_KEYS_ENDPOINT_URI_H */
+#endif /* VIRGIL_SDK_CARD_ENDPOINT_URI_H */

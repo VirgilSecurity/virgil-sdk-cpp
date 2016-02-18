@@ -34,18 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/PrivateKeyEndpointUri.h>
+#ifndef VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H
+#define VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H
 
-using virgil::sdk::endpoints::PrivateKeyEndpointUri;
+#include <string>
 
-std::string PrivateKeyEndpointUri::add() {
-    return "/v3/private-key";
+namespace virgil {
+namespace sdk {
+    namespace endpoints {
+        /**
+         * @brief This class provide URIs to the Virgil Public Key endpoints
+         * @note All endpoints start with forward slash symbol "/" and contain version
+         */
+        class PublicKeyEndpointUri {
+        public:
+            /**
+             * @brief Returns the endpoint in charge of a public key by its identifier grab
+             * @param publicKeyId - public key identifier
+             */
+            static std::string get(const std::string& publicKeyId);
+            /**
+             * @brief Returns the endpoint in charge of the Public Key revoke
+             * @param publicKeyId - public key identifier
+             */
+            static std::string revoke(const std::string& publicKeyId);
+
+        private:
+            /**
+             * @brief Deny object creation
+             */
+            PublicKeyEndpointUri();
+        };
+    }
+}
 }
 
-std::string PrivateKeyEndpointUri::get() {
-    return "/v3/private-key/actions/grab";
-}
-
-std::string PrivateKeyEndpointUri::del() {
-    return "/v3/private-key/actions/delete";
-}
+#endif /* VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H */

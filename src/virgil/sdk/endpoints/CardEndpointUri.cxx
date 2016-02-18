@@ -34,18 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/PrivateKeyEndpointUri.h>
+#include <virgil/sdk/endpoints/CardEndpointUri.h>
 
-using virgil::sdk::endpoints::PrivateKeyEndpointUri;
+using virgil::sdk::endpoints::CardEndpointUri;
 
-std::string PrivateKeyEndpointUri::add() {
-    return "/v3/private-key";
+std::string CardEndpointUri::create() {
+    return "/v3/virgil-card";
 }
 
-std::string PrivateKeyEndpointUri::get() {
-    return "/v3/private-key/actions/grab";
+std::string CardEndpointUri::get(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId;
 }
 
-std::string PrivateKeyEndpointUri::del() {
-    return "/v3/private-key/actions/delete";
+std::string CardEndpointUri::search() {
+    return "/v3/virgil-card/actions/search";
+}
+
+std::string CardEndpointUri::searchApp() {
+    return "/v3/virgil-card/actions/search/app";
+}
+
+std::string CardEndpointUri::sign(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId + "/actions/sign";
+}
+
+std::string CardEndpointUri::unsign(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId + "/actions/unsign";
+}
+
+std::string CardEndpointUri::revoke(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId;
 }

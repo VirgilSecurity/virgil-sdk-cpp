@@ -34,42 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
+#include <virgil/sdk/endpoints/PublicKeyEndpointUri.h>
 
-using virgil::sdk::endpoints::PublicKeysEndpointUri;
+using virgil::sdk::endpoints::PublicKeyEndpointUri;
 
-std::string PublicKeysEndpointUri::publicKeyGet(const std::string& publicKeyId) {
+std::string PublicKeyEndpointUri::get(const std::string& publicKeyId) {
     return "/v3/public-key/" + publicKeyId;
 }
 
-std::string PublicKeysEndpointUri::publicKeyRevoke(const std::string& publicKeyId) {
+std::string PublicKeyEndpointUri::revoke(const std::string& publicKeyId) {
     return "/v3/public-key/" + publicKeyId;
-}
-
-std::string PublicKeysEndpointUri::cardCreate() {
-    return "/v3/virgil-card";
-}
-
-std::string PublicKeysEndpointUri::cardGet(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId;
-}
-
-std::string PublicKeysEndpointUri::cardSearch() {
-    return "/v3/virgil-card/actions/search";
-}
-
-std::string PublicKeysEndpointUri::cardSearchApp() {
-    return "/v3/virgil-card/actions/search/app";
-}
-
-std::string PublicKeysEndpointUri::cardSign(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId + "/actions/sign";
-}
-
-std::string PublicKeysEndpointUri::cardUnsign(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId + "/actions/unsign";
-}
-
-std::string PublicKeysEndpointUri::cardRevoke(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId;
 }

@@ -42,7 +42,8 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/CardClient.h>
-#include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
+#include <virgil/sdk/endpoints/CardEndpointUri.h>
+#include <virgil/sdk/endpoints/PublicKeyEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -59,7 +60,8 @@ using virgil::sdk::Error;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::client::Client;
 using virgil::sdk::client::CardClient;
-using virgil::sdk::endpoints::PublicKeysEndpointUri;
+using virgil::sdk::endpoints::CardEndpointUri;
+using virgil::sdk::endpoints::PublicKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
@@ -95,7 +97,7 @@ Card CardClient::create(const ValidatedIdentity& validatedIdentity, const Virgil
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardCreate())
+                          .endpoint(CardEndpointUri::create())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
@@ -119,7 +121,7 @@ CardSign CardClient::sign(const std::string& toBeSignedCardId, const std::string
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardSign(signerCardId))
+                          .endpoint(CardEndpointUri::sign(signerCardId))
                           .body(payload.dump());
 
     Request signRequest = connection.signRequest(signerCardId, signerCredentials, request);
@@ -140,7 +142,7 @@ void CardClient::unsign(const std::string& signedCardId, const std::string& sign
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardUnsign(signOwnerCardId))
+                          .endpoint(CardEndpointUri::unsign(signOwnerCardId))
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
@@ -162,7 +164,7 @@ std::vector<Card> CardClient::search(const Identity& identity, const std::vector
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardSearch())
+                          .endpoint(CardEndpointUri::search())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
@@ -179,7 +181,7 @@ std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity, 
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardSearchApp())
+                          .endpoint(CardEndpointUri::searchApp())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
@@ -195,8 +197,7 @@ std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity, 
 }
 
 Card CardClient::get(const std::string& cardId) {
-    Request request =
-        Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeysEndpointUri::cardGet(cardId));
+    Request request = Request().get().baseAddress(this->getBaseServiceUri()).endpoint(CardEndpointUri::get(cardId));
 
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
@@ -209,10 +210,8 @@ Card CardClient::get(const std::string& cardId) {
 
 std::vector<Card> CardClient::get(const std::string& publicKeyId, const std::string& cardId,
                                   const Credentials& credentials) {
-    Request request = Request()
-                          .get()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
+    Request request =
+        Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeyEndpointUri::get(publicKeyId));
 
     ClientConnection connection(this->getAccessToken());
     Request signRequest = connection.signRequest(cardId, credentials, request);
@@ -236,7 +235,7 @@ void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity
     Request request = Request()
                           .del()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardRevoke(signerCardId))
+                          .endpoint(CardEndpointUri::revoke(signerCardId))
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());

@@ -42,7 +42,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PublicKeyClient.h>
-#include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
+#include <virgil/sdk/endpoints/PublicKeyEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -58,7 +58,7 @@ using virgil::sdk::Credentials;
 using virgil::sdk::Error;
 using virgil::sdk::client::PublicKeyClient;
 using virgil::sdk::client::ClientConnection;
-using virgil::sdk::endpoints::PublicKeysEndpointUri;
+using virgil::sdk::endpoints::PublicKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
@@ -70,10 +70,8 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
 PublicKey PublicKeyClient::get(const std::string& publicKeyId) {
-    Request request = Request()
-                          .get()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
+    Request request =
+        Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeyEndpointUri::get(publicKeyId));
 
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
@@ -97,7 +95,7 @@ void PublicKeyClient::revoke(const std::string& publicKeyId, const std::vector<V
     Request request = Request()
                           .del()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::publicKeyRevoke(publicKeyId))
+                          .endpoint(PublicKeyEndpointUri::revoke(publicKeyId))
                           .body(jsonValidatedIdentitys.dump());
 
     ClientConnection connection(this->getAccessToken());

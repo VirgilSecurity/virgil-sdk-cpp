@@ -45,7 +45,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PrivateKeyClient.h>
-#include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
+#include <virgil/sdk/endpoints/PrivateKeyEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -63,7 +63,7 @@ using virgil::sdk::Credentials;
 using virgil::sdk::Error;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::client::PrivateKeyClient;
-using virgil::sdk::endpoints::PrivateKeysEndpointUri;
+using virgil::sdk::endpoints::PrivateKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
@@ -81,7 +81,7 @@ void PrivateKeyClient::stash(const std::string& cardId, const Credentials& crede
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PrivateKeysEndpointUri::privateKeyStash())
+                          .endpoint(PrivateKeyEndpointUri::add())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
@@ -114,7 +114,7 @@ PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdent
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PrivateKeysEndpointUri::privateKeyGet())
+                          .endpoint(PrivateKeyEndpointUri::get())
                           .body(encryptedRequestJsonBody);
 
     Response response = connection.send(request);
@@ -134,7 +134,7 @@ void PrivateKeyClient::destroy(const std::string& cardId, const VirgilByteArray&
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PrivateKeysEndpointUri::privateKeyDestroy())
+                          .endpoint(PrivateKeyEndpointUri::del())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
