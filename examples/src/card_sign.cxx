@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Trust a Virgil Card" << std::endl;
+        std::cout << "Sign a Virgil Card" << std::endl;
         vsdk::model::CardSign cardSign =
             servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId, credentials);
 

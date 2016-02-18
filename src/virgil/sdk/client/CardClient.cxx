@@ -119,7 +119,7 @@ CardSign CardClient::sign(const std::string& toBeSignedCardId, const std::string
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardTrust(signerCardId))
+                          .endpoint(PublicKeysEndpointUri::cardSign(signerCardId))
                           .body(payload.dump());
 
     Request signRequest = connection.signRequest(signerCardId, signerCredentials, request);

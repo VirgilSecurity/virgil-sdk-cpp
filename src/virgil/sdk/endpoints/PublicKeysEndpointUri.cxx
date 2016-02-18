@@ -62,7 +62,7 @@ std::string PublicKeysEndpointUri::cardSearchApp() {
     return "/v3/virgil-card/actions/search/app";
 }
 
-std::string PublicKeysEndpointUri::cardTrust(const std::string& cardId) {
+std::string PublicKeysEndpointUri::cardSign(const std::string& cardId) {
     return "/v3/virgil-card/" + cardId + "/actions/sign";
 }
 

@@ -87,7 +87,7 @@ namespace sdk {
              * @brief Returns the endpoint in charge of the Virgil Card sign.
              * @param cardId - Virgil Card Id.
              */
-            static std::string cardTrust(const std::string& cardId);
+            static std::string cardSign(const std::string& cardId);
             /**
              * @brief Returns the endpoint in charge of the Virgil Card unsign.
              * @param cardId - Virgil Card Id.
