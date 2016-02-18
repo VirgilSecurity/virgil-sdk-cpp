@@ -41,7 +41,7 @@
 
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
-#include <virgil/sdk/client/CardsClient.h>
+#include <virgil/sdk/client/CardClient.h>
 #include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -58,7 +58,7 @@ using virgil::sdk::Credentials;
 using virgil::sdk::Error;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::client::Client;
-using virgil::sdk::client::CardsClient;
+using virgil::sdk::client::CardClient;
 using virgil::sdk::endpoints::PublicKeysEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
@@ -73,19 +73,19 @@ using virgil::sdk::util::uuid;
 
 const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 
-CardsClient::CardsClient(const std::string& accessToken, const std::string& baseServiceUri)
+CardClient::CardClient(const std::string& accessToken, const std::string& baseServiceUri)
         : Client(accessToken, baseServiceUri, [this]() -> Card {
               auto cards = this->getServiceCard(kKeyServiceAppId);
               if (!cards.empty()) {
                   return cards.front();
               } else {
-                  throw std::runtime_error("CardsClient: Service Card not found on Virgil Keys Service.");
+                  throw std::runtime_error("CardClient: Service Card not found on Virgil Keys Service.");
               }
           }) {
 }
 
-Card CardsClient::create(const ValidatedIdentity& validatedIdentity, const VirgilByteArray& publicKey,
-                         const Credentials& credentials) {
+Card CardClient::create(const ValidatedIdentity& validatedIdentity, const VirgilByteArray& publicKey,
+                        const Credentials& credentials) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
@@ -109,8 +109,8 @@ Card CardsClient::create(const ValidatedIdentity& validatedIdentity, const Virgi
     return card;
 }
 
-CardSign CardsClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
-                            const std::string& ownerCardId, const Credentials& credentials) {
+CardSign CardClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
+                           const std::string& ownerCardId, const Credentials& credentials) {
 
     ClientConnection connection(this->getAccessToken());
     json payload = {{JsonKey::signedCardId, trustedCardId},
@@ -132,8 +132,8 @@ CardSign CardsClient::trust(const std::string& trustedCardId, const std::string&
     return cardSign;
 }
 
-void CardsClient::untrust(const std::string& trustedCardId, const std::string& ownerCardId,
-                          const Credentials& credentials) {
+void CardClient::untrust(const std::string& trustedCardId, const std::string& ownerCardId,
+                         const Credentials& credentials) {
     json payload = {{JsonKey::signedCardId, trustedCardId}};
 
     Request request = Request()
@@ -150,8 +150,8 @@ void CardsClient::untrust(const std::string& trustedCardId, const std::string& o
     this->verifyResponse(response);
 }
 
-std::vector<Card> CardsClient::search(const Identity& identity, const std::vector<std::string>& relations,
-                                      const bool includeUnconfirmed) {
+std::vector<Card> CardClient::search(const Identity& identity, const std::vector<std::string>& relations,
+                                     const bool includeUnconfirmed) {
     json jsonRelations(relations);
     json payload = {{JsonKey::value, identity.getValue()},
                     {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
@@ -173,7 +173,7 @@ std::vector<Card> CardsClient::search(const Identity& identity, const std::vecto
     return cards;
 }
 
-std::vector<Card> CardsClient::searchApp(const std::string& applicationIdentity) {
+std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity) {
     Request request = this->getAppCard(applicationIdentity);
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
@@ -185,7 +185,7 @@ std::vector<Card> CardsClient::searchApp(const std::string& applicationIdentity)
     return cards;
 }
 
-std::vector<Card> CardsClient::getServiceCard(const std::string& serviceIdentity) const {
+std::vector<Card> CardClient::getServiceCard(const std::string& serviceIdentity) const {
     Request request = this->getAppCard(serviceIdentity);
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
@@ -193,8 +193,8 @@ std::vector<Card> CardsClient::getServiceCard(const std::string& serviceIdentity
     return virgil::sdk::io::cardsFromJson(response.body());
 }
 
-std::vector<Card> CardsClient::get(const std::string& publicKeyId, const std::string& cardId,
-                                   const Credentials& credentials) {
+std::vector<Card> CardClient::get(const std::string& publicKeyId, const std::string& cardId,
+                                  const Credentials& credentials) {
     Request request = Request()
                           .get()
                           .baseAddress(this->getBaseServiceUri())
@@ -212,7 +212,7 @@ std::vector<Card> CardsClient::get(const std::string& publicKeyId, const std::st
     return cards;
 }
 
-Card CardsClient::get(const std::string& cardId) {
+Card CardClient::get(const std::string& cardId) {
     Request request =
         Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeysEndpointUri::cardGet(cardId));
 
@@ -225,8 +225,8 @@ Card CardsClient::get(const std::string& cardId) {
     return card;
 }
 
-void CardsClient::revoke(const std::string& ownerCardId, const ValidatedIdentity& validatedIdentity,
-                         const Credentials& credentials) {
+void CardClient::revoke(const std::string& ownerCardId, const ValidatedIdentity& validatedIdentity,
+                        const Credentials& credentials) {
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
@@ -246,7 +246,7 @@ void CardsClient::revoke(const std::string& ownerCardId, const ValidatedIdentity
     this->verifyResponse(response);
 }
 
-Request CardsClient::getAppCard(const std::string& applicationIdentity) const {
+Request CardClient::getAppCard(const std::string& applicationIdentity) const {
     json payload = {{JsonKey::value, applicationIdentity}};
 
     return Request()

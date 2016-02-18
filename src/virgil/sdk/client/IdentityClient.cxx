@@ -44,7 +44,7 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/IdentityClient.h>
-#include <virgil/sdk/client/CardsClient.h>
+#include <virgil/sdk/client/CardClient.h>
 #include <virgil/sdk/endpoints/IdentityEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -59,7 +59,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Error;
 using virgil::sdk::client::IdentityClient;
-using virgil::sdk::client::CardsClient;
+using virgil::sdk::client::CardClient;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;

@@ -45,7 +45,7 @@
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
-#include <virgil/sdk/client/CardsClient.h>
+#include <virgil/sdk/client/CardClient.h>
 
 namespace virgil {
 namespace sdk {
@@ -95,7 +95,7 @@ namespace sdk {
         /**
          * @brief Return entrypoint for Virgil Cards Service
          */
-        virgil::sdk::client::CardsClient& cards();
+        virgil::sdk::client::CardClient& cards();
         /**
          * @brief Return entrypoint for Virgil Public Keys Service
          */

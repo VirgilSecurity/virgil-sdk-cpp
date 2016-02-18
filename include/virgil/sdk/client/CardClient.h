@@ -54,11 +54,11 @@ namespace sdk {
         /**
          * @brief
          */
-        class CardsClient : public Client {
+        class CardClient : public Client {
         public:
             using Client::Client;
 
-            CardsClient(const std::string& accessToken, const std::string& baseServiceUri);
+            CardClient(const std::string& accessToken, const std::string& baseServiceUri);
 
             virgil::sdk::model::Card create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                                             const virgil::crypto::VirgilByteArray& publicKey,

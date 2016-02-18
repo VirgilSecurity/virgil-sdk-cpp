@@ -13,7 +13,7 @@ namespace sdk {
         /**
          * @brief Return Virgil Card of Virgil Keys Service
          *
-         * @note This card is used for two clients: PublicKeysKlient and CardsClient
+         * @note This card is used for two clients: PublicKeysKlient and CardClient
          */
         virtual virgil::sdk::model::Card getKeysServiceCard() const = 0;
         /**
