@@ -59,7 +59,7 @@ TEST_CASE("CardSign -> Json ValidatedIdentity - FAILED", "class Marshaller") {
     CardSign cardSign = virgil::test::getCardSign();
     // CardSign -> Json
     std::string testJsonCardSign = Marshaller<CardSign>::toJson<4>(cardSign);
-    REQUIRE(virgil::test::getCardSign().dump(4) == testJsonCardSign);
+    REQUIRE(virgil::test::getJsonCardSign().dump(4) == testJsonCardSign);
 }
 
 TEST_CASE("Json CardSign -> CardSign - FAILED", "class Marshaller") {
