@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PUBLIC_CLIENT_H
-#define VIRGIL_SDK_PUBLIC_CLIENT_H
+#ifndef VIRGIL_SDK_PUBLIC_KEY_CLIENT_H
+#define VIRGIL_SDK_PUBLIC_KEY_CLIENT_H
 
 #include <virgil/sdk/client/Client.h>
 
@@ -51,7 +51,7 @@ namespace sdk {
         /**
          * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
          */
-        class PublicKeysClient : public Client {
+        class PublicKeyClient : public Client {
         public:
             using Client::Client;
 
@@ -65,4 +65,4 @@ namespace sdk {
 }
 }
 
-#endif /* VIRGIL_SDK_PUBLIC_CLIENT_H */
+#endif /* VIRGIL_SDK_PUBLIC_KEY_CLIENT_H */

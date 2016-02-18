@@ -41,7 +41,7 @@
 
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
-#include <virgil/sdk/client/PublicKeysClient.h>
+#include <virgil/sdk/client/PublicKeyClient.h>
 #include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -56,7 +56,7 @@ using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Credentials;
 using virgil::sdk::Error;
-using virgil::sdk::client::PublicKeysClient;
+using virgil::sdk::client::PublicKeyClient;
 using virgil::sdk::client::ClientConnection;
 using virgil::sdk::endpoints::PublicKeysEndpointUri;
 using virgil::sdk::http::Request;
@@ -69,7 +69,7 @@ using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
+PublicKey PublicKeyClient::get(const std::string& publicKeyId) {
     Request request = Request()
                           .get()
                           .baseAddress(this->getBaseServiceUri())
@@ -82,7 +82,7 @@ PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
     return Marshaller<PublicKey>::fromJson(response.body());
 }
 
-void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,
+void PublicKeyClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,
                               const std::string& cardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& validatedIdentity : validatedIdentitys) {

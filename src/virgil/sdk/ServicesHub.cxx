@@ -42,7 +42,7 @@
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeyClient.h>
-#include <virgil/sdk/client/PublicKeysClient.h>
+#include <virgil/sdk/client/PublicKeyClient.h>
 #include <virgil/sdk/client/CardClient.h>
 #include <virgil/sdk/ServiceUri.h>
 
@@ -53,7 +53,7 @@ using virgil::sdk::ServiceUri;
 using virgil::sdk::model::Card;
 using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::PrivateKeyClient;
-using virgil::sdk::client::PublicKeysClient;
+using virgil::sdk::client::PublicKeyClient;
 using virgil::sdk::client::CardClient;
 
 const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
@@ -66,7 +66,7 @@ namespace sdk {
     public:
         std::shared_ptr<CardClient> cardClient;
         std::shared_ptr<IdentityClient> identityClient;
-        std::shared_ptr<PublicKeysClient> publicKeysClient;
+        std::shared_ptr<PublicKeyClient> publicKeyClient;
         std::shared_ptr<PrivateKeyClient> privateKeyClient;
     };
 }
@@ -90,8 +90,8 @@ ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseS
         std::make_shared<IdentityClient>(accessToken, baseServiceUri.getIdentityService(), [this]() -> Card {
             return getServiceCard(*impl_->cardClient, kIdentityServiceAppId);
         });
-    impl_->publicKeysClient =
-        std::make_shared<PublicKeysClient>(accessToken, baseServiceUri.getPublicKeyService(), [this]() -> Card {
+    impl_->publicKeyClient =
+        std::make_shared<PublicKeyClient>(accessToken, baseServiceUri.getPublicKeyService(), [this]() -> Card {
             return getServiceCard(*impl_->cardClient, kKeyServiceAppId);
         });
     impl_->privateKeyClient =
@@ -107,7 +107,7 @@ ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::Serv
     impl_->identityClient =
         std::make_shared<IdentityClient>(accessToken, baseServiceUri.getIdentityService(),
                                          [&]() -> Card { return serviceCards.getIdentityServiceCard(); });
-    impl_->publicKeysClient = std::make_shared<PublicKeysClient>(
+    impl_->publicKeyClient = std::make_shared<PublicKeyClient>(
         accessToken, baseServiceUri.getPublicKeyService(), [&]() -> Card { return serviceCards.getKeysServiceCard(); });
     impl_->privateKeyClient =
         std::make_shared<PrivateKeyClient>(accessToken, baseServiceUri.getPrivateKeyService(),
@@ -122,8 +122,8 @@ PrivateKeyClient& ServicesHub::privateKeys() {
     return *(impl_->privateKeyClient);
 }
 
-PublicKeysClient& ServicesHub::publicKeys() {
-    return *(impl_->publicKeysClient);
+PublicKeyClient& ServicesHub::publicKeys() {
+    return *(impl_->publicKeyClient);
 }
 
 CardClient& ServicesHub::cards() {
