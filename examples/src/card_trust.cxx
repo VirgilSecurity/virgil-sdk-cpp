@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
     if (argc < 5) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <trusted_card_id>" + " <trusted_card_hash>" +
                          " <owner_card_id>" + " <path_private_key>"
-                  << "\n";
+                  << std::endl;
         return 1;
     }
 
@@ -75,9 +75,8 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
-        std::cout << "Read private key..."
-                  << "\n";
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
@@ -87,16 +86,15 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Trust a Virgil Card"
-                  << "\n";
+        std::cout << "Trust a Virgil Card" << std::endl;
         vsdk::model::CardSign cardSign =
             servicesHub.card().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
 
         std::string cardSignStr = vsdk::io::Marshaller<vsdk::model::CardSign>::toJson<4>(cardSign);
-        std::cout << "CardSign:\n" << cardSignStr << "\n";
+        std::cout << "CardSign:\n" << cardSignStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

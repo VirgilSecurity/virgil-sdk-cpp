@@ -62,24 +62,21 @@ const std::string VIRGIL_ACCESS_TOKEN =
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>"
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
         return 1;
     }
 
     try {
         std::string userEmail = argv[1];
 
-        std::cout << "Prepare input file: test.txt..."
-                  << "\n";
+        std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
         vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Read virgil sign..."
-                  << "\n";
+        std::cout << "Read virgil sign..." << std::endl;
         std::ifstream signFile("test.txt.sign", std::ios::in | std::ios::binary);
         if (!signFile) {
             throw std::runtime_error("can not read sign: test.txt.sign");
@@ -87,8 +84,7 @@ int main(int argc, char** argv) {
         vcrypto::VirgilByteArray sign;
         std::copy(std::istreambuf_iterator<char>(signFile), std::istreambuf_iterator<char>(), std::back_inserter(sign));
 
-        std::cout << "Get signer (" << userEmail << ") public key from the Virgil PKI service..."
-                  << "\n";
+        std::cout << "Get signer (" << userEmail << ") public key from the Virgil PKI service..." << std::endl;
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
@@ -96,14 +92,12 @@ int main(int argc, char** argv) {
         vsdk::model::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
 
         vcrypto::VirgilStreamSigner signer;
-        std::cout << "Verify data..."
-                  << "\n";
+        std::cout << "Verify data..." << std::endl;
         bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKey());
-        std::cout << "Data is " << (verified ? "" : "not ") << "verified!"
-                  << "\n";
+        std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

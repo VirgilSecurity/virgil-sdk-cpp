@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
     if (argc < 5) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <path_public_key>" + " <path_private_key>" +
                          " <validation_token>"
-                  << "\n";
+                  << std::endl;
         return 1;
     }
 
@@ -76,20 +76,18 @@ int main(int argc, char** argv) {
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
-        std::cout << "Prepare public key file: " << pathPublicKey << "\n";
+        std::cout << "Prepare public key file: " << pathPublicKey << std::endl;
         std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
         if (!inPublicKeyFile) {
             throw std::runtime_error("can not read file: " + pathPublicKey);
         }
-        std::cout << "Read public key..."
-                  << "\n";
+        std::cout << "Read public key..." << std::endl;
         vcrypto::VirgilByteArray publicKey;
         std::copy(std::istreambuf_iterator<char>(inPublicKeyFile), std::istreambuf_iterator<char>(),
                   std::back_inserter(publicKey));
 
-        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
-        std::cout << "Read private key..."
-                  << "\n";
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
@@ -100,16 +98,15 @@ int main(int argc, char** argv) {
 
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Create a Virgil Card"
-                  << "\n";
+        std::cout << "Create a Virgil Card" << std::endl;
         vsdk::model::Card card = servicesHub.card().create(validatedIdentity, publicKey, credentials);
         std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
 
         std::cout << "Virgil Card:\n";
-        std::cout << cardStr << "\n";
+        std::cout << cardStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

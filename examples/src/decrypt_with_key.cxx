@@ -56,8 +56,7 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" + " <path_private_key>"
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" + " <path_private_key>" << std::endl;
         return 1;
     }
 
@@ -65,25 +64,22 @@ int main(int argc, char** argv) {
         std::string cardId = argv[1];
         std::string pathPrivateKey = argv[2];
 
-        std::cout << "Prepare input file: test.txt.enc..."
-                  << "\n";
+        std::cout << "Prepare input file: test.txt.enc..." << std::endl;
         std::ifstream inFile("test.txt.enc", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt.enc");
         }
         vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: decrypted_test.txt..."
-                  << "\n";
+        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
         std::ofstream outFile("decrypted_test.txt", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: decrypted_test.txt");
         }
         vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Prepare private key file: " << pathPrivateKey << "\n";
-        std::cout << "Read private key..."
-                  << "\n";
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
         std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
         if (!inPrivateKeyFile) {
             throw std::runtime_error("can not read private key: " + pathPrivateKey);
@@ -93,16 +89,14 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
 
         vcrypto::VirgilStreamCipher cipher;
-        std::cout << "Decrypt with key..."
-                  << "\n";
+        std::cout << "Decrypt with key..." << std::endl;
         cipher.decryptWithKey(dataSource, dataSink, vcrypto::str2bytes(cardId), privateKey,
                               vcrypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Decrypted data is successfully stored in the output file..."
-                  << "\n";
+        std::cout << "Decrypted data is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

@@ -64,8 +64,7 @@ const std::string PASSWORD = "123456789";
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>"
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
         return 1;
     }
 
@@ -74,47 +73,40 @@ int main(int argc, char** argv) {
 
         vcrypto::VirgilStreamCipher cipher;
 
-        std::cout << "Add recipient pass..."
-                  << "\n";
+        std::cout << "Add recipient pass..." << std::endl;
         vcrypto::VirgilByteArray recipientPwd = vcrypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
-        std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..."
-                  << "\n";
+        std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..." << std::endl;
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         std::vector<vsdk::model::Card> recipientCards = servicesHub.card().search(identity);
 
-        std::cout << "Add recipient with key..."
-                  << "\n";
+        std::cout << "Add recipient with key..." << std::endl;
         vsdk::model::Card recipientCard = recipientCards.at(0);
         cipher.addKeyRecipient(vcrypto::str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
 
-        std::cout << "Prepare input file: test.txt..."
-                  << "\n";
+        std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
         vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: test.txt.encpk..."
-                  << "\n";
+        std::cout << "Prepare output file: test.txt.encpk..." << std::endl;
         std::ofstream outFile("test.txt.encpk", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: test.txt.enc");
         }
         vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
-        std::cout << "Encrypt and store results..."
-                  << "\n";
+        std::cout << "Encrypt and store results..." << std::endl;
         cipher.encrypt(dataSource, dataSink, true);
-        std::cout << "Encrypted data with key is successfully stored in the output file..."
-                  << "\n";
+        std::cout << "Encrypted data with key is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

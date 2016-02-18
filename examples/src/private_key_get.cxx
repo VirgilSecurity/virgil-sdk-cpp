@@ -56,7 +56,7 @@ const std::string VIRGIL_ACCESS_TOKEN =
 int main(int argc, char** argv) {
     if (argc < 4) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <virgil_card_id> " + " <validation_token>"
-                  << "\n";
+                  << std::endl;
         return 1;
     }
 
@@ -69,17 +69,15 @@ int main(int argc, char** argv) {
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
-        std::cout << "Get a Private Key"
-                  << "\n";
+        std::cout << "Get a Private Key" << std::endl;
         vsdk::model::PrivateKey privateKey = servicesHub.privateKey().get(cardId, validatedIdentity);
         std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson<4>(privateKey);
 
-        std::cout << "Private Key:"
-                  << "\n";
-        std::cout << privateKeyStr << "\n";
+        std::cout << "Private Key:" << std::endl;
+        std::cout << privateKeyStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

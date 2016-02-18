@@ -57,8 +57,7 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>"
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" << std::endl;
         return 1;
     }
 
@@ -67,16 +66,14 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Get a Virgil Card"
-                  << "\n";
+        std::cout << "Get a Virgil Card" << std::endl;
         vsdk::model::Card card = servicesHub.card().get(cardId);
         std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
-        std::cout << "A Virgil Card:"
-                  << "\n";
-        std::cout << cardStr << "\n";
+        std::cout << "A Virgil Card:" << std::endl;
+        std::cout << cardStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

@@ -56,8 +56,7 @@ const std::string VIRGIL_ACCESS_TOKEN =
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>"
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
         return 1;
     }
 
@@ -68,15 +67,14 @@ int main(int argc, char** argv) {
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
-        std::cout << "Search for Cards"
-                  << "\n";
+        std::cout << "Search for Cards" << std::endl;
         std::vector<vsdk::model::Card> foundCards = servicesHub.card().search(identity);
 
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
-        std::cout << foundCardsStr << "\n";
+        std::cout << foundCardsStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

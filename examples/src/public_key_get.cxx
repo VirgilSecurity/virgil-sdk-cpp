@@ -57,8 +57,7 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> "
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> " << std::endl;
         return 1;
     }
 
@@ -67,16 +66,14 @@ int main(int argc, char** argv) {
 
         std::string publicKeyId = argv[1];
 
-        std::cout << "Get a Public Key"
-                  << "\n";
+        std::cout << "Get a Public Key" << std::endl;
         vsdk::model::PublicKey publicKey = servicesHub.publicKey().get(publicKeyId);
         std::string publicKeyStr = vsdk::io::Marshaller<vsdk::model::PublicKey>::toJson<4>(publicKey);
-        std::cout << "Public Key:"
-                  << "\n";
-        std::cout << publicKeyStr << "\n";
+        std::cout << "Public Key:" << std::endl;
+        std::cout << publicKeyStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

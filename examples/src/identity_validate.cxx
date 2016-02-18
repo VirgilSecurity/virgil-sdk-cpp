@@ -55,8 +55,7 @@ const std::string VIRGIL_ACCESS_TOKEN =
 
 int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email> " + " <validation_token> "
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email> " + " <validation_token> " << std::endl;
         return 1;
     }
 
@@ -73,14 +72,14 @@ int main(int argc, char** argv) {
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
         if (validateToken) {
             std::cout << "Validation Token is valid!\n";
-            std::cout << validatedIdentityStr << "\n";
+            std::cout << validatedIdentityStr << std::endl;
         } else {
             std::cout << "Validation Token is NOT valid!\n";
-            std::cout << validatedIdentityStr << "\n";
+            std::cout << validatedIdentityStr << std::endl;
         }
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

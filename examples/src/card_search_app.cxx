@@ -59,25 +59,23 @@ const std::string VIRGIL_ACCESS_TOKEN =
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <application_name> "
-                  << "\n";
+        std::cerr << std::string("USAGE: ") + argv[0] + " <application_name> " << std::endl;
         return 1;
     }
 
     try {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Search for Application Cards"
-                  << "\n";
+        std::cout << "Search for Application Cards" << std::endl;
 
         std::string appName = "com.virgilsecurity.";
         appName += argv[1];
         std::vector<vsdk::model::Card> allAppCards = servicesHub.card().searchApp(appName);
         std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
-        std::cout << jsonAllAppCards << "\n";
+        std::cout << jsonAllAppCards << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << exception.what() << "\n";
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 
