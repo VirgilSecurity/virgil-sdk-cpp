@@ -76,9 +76,8 @@ namespace sdk {
                    const std::vector<std::string>& relations = std::vector<std::string>(),
                    const bool includeUnconfirmed = true);
 
-            std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity);
-
-            std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity) const;
+            std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity,
+                                                            bool skipVerification = false) const;
 
             void revoke(const std::string& signerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials);

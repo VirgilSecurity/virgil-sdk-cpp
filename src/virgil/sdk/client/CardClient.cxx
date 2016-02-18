@@ -75,7 +75,7 @@ const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 
 CardClient::CardClient(const std::string& accessToken, const std::string& baseServiceUri)
         : Client(accessToken, baseServiceUri, [this]() -> Card {
-              auto cards = this->getServiceCard(kKeyServiceAppId);
+              auto cards = this->searchApp(kKeyServiceAppId, true);
               if (!cards.empty()) {
                   return cards.front();
               } else {
@@ -174,7 +174,7 @@ std::vector<Card> CardClient::search(const Identity& identity, const std::vector
     return cards;
 }
 
-std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity) {
+std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity, bool skipVerification) const {
     json payload = {{JsonKey::value, applicationIdentity}};
     Request request = Request()
                           .post()
@@ -185,24 +185,26 @@ std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity) 
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
-    this->verifyResponse(response);
+    if (!skipVerification) {
+        this->verifyResponse(response);
+    }
 
     std::vector<Card> cards = virgil::sdk::io::cardsFromJson(response.body());
 
     return cards;
 }
 
-std::vector<Card> CardClient::getServiceCard(const std::string& serviceIdentity) const {
-    json payload = {{JsonKey::value, serviceIdentity}};
-    Request request = Request()
-                          .post()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardSearchApp())
-                          .body(payload.dump());
+Card CardClient::get(const std::string& cardId) {
+    Request request =
+        Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeysEndpointUri::cardGet(cardId));
+
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SERVICE_GET);
-    return virgil::sdk::io::cardsFromJson(response.body());
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_GET);
+    this->verifyResponse(response);
+
+    Card card = Marshaller<Card>::fromJson(response.body());
+    return card;
 }
 
 std::vector<Card> CardClient::get(const std::string& publicKeyId, const std::string& cardId,
@@ -222,19 +224,6 @@ std::vector<Card> CardClient::get(const std::string& publicKeyId, const std::str
     json jsonResponseCards = json::parse(response.body());
     std::vector<Card> cards = virgil::sdk::io::cardsFromJson(jsonResponseCards.dump());
     return cards;
-}
-
-Card CardClient::get(const std::string& cardId) {
-    Request request =
-        Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeysEndpointUri::cardGet(cardId));
-
-    ClientConnection connection(this->getAccessToken());
-    Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_GET);
-    this->verifyResponse(response);
-
-    Card card = Marshaller<Card>::fromJson(response.body());
-    return card;
 }
 
 void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity& validatedIdentity,
