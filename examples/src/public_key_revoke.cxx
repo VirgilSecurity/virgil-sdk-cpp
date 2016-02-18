@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Revoke the Public Key"
                   << "\n";
-        servicesHub.publicKeys().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
+        servicesHub.publicKey().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

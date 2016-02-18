@@ -95,15 +95,15 @@ namespace sdk {
         /**
          * @brief Return entrypoint for Virgil Cards Service
          */
-        virgil::sdk::client::CardClient& cards();
+        virgil::sdk::client::CardClient& card();
         /**
          * @brief Return entrypoint for Virgil Public Keys Service
          */
-        virgil::sdk::client::PublicKeyClient& publicKeys();
+        virgil::sdk::client::PublicKeyClient& publicKey();
         /**
          * @brief Return entrypoint for Virgil Private Keys Service
          */
-        virgil::sdk::client::PrivateKeyClient& privateKeys();
+        virgil::sdk::client::PrivateKeyClient& privateKey();
 
     private:
         std::shared_ptr<ServicesHubImpl> impl_;

@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Untrust a Virgil Card"
                   << "\n";
-        servicesHub.cards().untrust(trustedCardId, ownerCardId, credentials);
+        servicesHub.card().untrust(trustedCardId, ownerCardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

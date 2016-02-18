@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Create a Virgil Card"
                   << "\n";
-        vsdk::model::Card card = servicesHub.cards().create(validatedIdentity, publicKey, credentials);
+        vsdk::model::Card card = servicesHub.card().create(validatedIdentity, publicKey, credentials);
         std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
 
         std::cout << "Virgil Card:\n";

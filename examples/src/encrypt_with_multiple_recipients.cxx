@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        std::vector<vsdk::model::Card> recipientCards = servicesHub.cards().search(identity);
+        std::vector<vsdk::model::Card> recipientCards = servicesHub.card().search(identity);
 
         std::cout << "Add recipient with key..."
                   << "\n";

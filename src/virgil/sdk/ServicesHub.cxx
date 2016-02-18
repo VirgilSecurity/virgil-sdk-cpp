@@ -114,18 +114,18 @@ ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::Serv
                                            [&]() -> Card { return serviceCards.getPrivateKeysServiceCard(); });
 }
 
+CardClient& ServicesHub::card() {
+    return *(impl_->cardClient);
+}
+
 IdentityClient& ServicesHub::identity() {
     return *(impl_->identityClient);
 }
 
-PrivateKeyClient& ServicesHub::privateKeys() {
+PrivateKeyClient& ServicesHub::privateKey() {
     return *(impl_->privateKeyClient);
 }
 
-PublicKeyClient& ServicesHub::publicKeys() {
+PublicKeyClient& ServicesHub::publicKey() {
     return *(impl_->publicKeyClient);
-}
-
-CardClient& ServicesHub::cards() {
-    return *(impl_->cardClient);
 }

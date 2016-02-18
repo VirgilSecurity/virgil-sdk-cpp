@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Revoke a Virgil Card"
                   << "\n";
-        servicesHub.cards().revoke(ownerCardId, validatedIdentity, credentials);
+        servicesHub.card().revoke(ownerCardId, validatedIdentity, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

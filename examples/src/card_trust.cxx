@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
         std::cout << "Trust a Virgil Card"
                   << "\n";
         vsdk::model::CardSign cardSign =
-            servicesHub.cards().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
+            servicesHub.card().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
 
         std::string cardSignStr = vsdk::io::Marshaller<vsdk::model::CardSign>::toJson<4>(cardSign);
         std::cout << "CardSign:\n" << cardSignStr << "\n";

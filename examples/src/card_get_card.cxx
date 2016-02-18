@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Get a Virgil Card"
                   << "\n";
-        vsdk::model::Card card = servicesHub.cards().get(cardId);
+        vsdk::model::Card card = servicesHub.card().get(cardId);
         std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
         std::cout << "A Virgil Card:"
                   << "\n";

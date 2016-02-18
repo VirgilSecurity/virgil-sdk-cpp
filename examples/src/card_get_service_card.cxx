@@ -68,9 +68,9 @@ int main() {
                                    VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceCards = servicesHub.cards().getServiceCard(kIdentityServiceApplicationId);
-        auto publicKeysServiceCards = servicesHub.cards().getServiceCard(kPublicKeyServiceApplicationId);
-        auto privateKeysServiceCards = servicesHub.cards().getServiceCard(kPrivateKeyServiceApplicationId);
+        auto identityServiceCards = servicesHub.card().getServiceCard(kIdentityServiceApplicationId);
+        auto publicKeysServiceCards = servicesHub.card().getServiceCard(kPublicKeyServiceApplicationId);
+        auto privateKeysServiceCards = servicesHub.card().getServiceCard(kPrivateKeyServiceApplicationId);
 
         vsdk::model::Card identityServiceCard = identityServiceCards.at(0);
         vsdk::model::Card publicKeysServiceCard = publicKeysServiceCards.at(0);

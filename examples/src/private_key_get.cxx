@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Get a Private Key"
                   << "\n";
-        vsdk::model::PrivateKey privateKey = servicesHub.privateKeys().get(cardId, validatedIdentity);
+        vsdk::model::PrivateKey privateKey = servicesHub.privateKey().get(cardId, validatedIdentity);
         std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson<4>(privateKey);
 
         std::cout << "Private Key:"

@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Search for Cards"
                   << "\n";
-        std::vector<vsdk::model::Card> foundCards = servicesHub.cards().search(identity);
+        std::vector<vsdk::model::Card> foundCards = servicesHub.card().search(identity);
 
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << "\n";

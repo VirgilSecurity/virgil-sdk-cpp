@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Destroy a Private Key"
                   << "\n";
-        servicesHub.privateKeys().destroy(cardId, publicKey, credentials);
+        servicesHub.privateKey().destroy(cardId, publicKey, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";

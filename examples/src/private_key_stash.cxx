@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Stash a Private Key"
                   << "\n";
-        servicesHub.privateKeys().stash(cardId, credentials);
+        servicesHub.privateKey().stash(cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";
