@@ -79,7 +79,7 @@ namespace sdk {
             std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity,
                                                             bool skipVerification = false) const;
 
-            void revoke(const std::string& signerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
+            void revoke(const std::string& cardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials);
 
             std::vector<virgil::sdk::model::Card> get(const std::string& publicKeyId, const std::string& cardId,
