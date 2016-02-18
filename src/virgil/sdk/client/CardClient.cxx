@@ -175,7 +175,13 @@ std::vector<Card> CardClient::search(const Identity& identity, const std::vector
 }
 
 std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity) {
-    Request request = this->getAppCard(applicationIdentity);
+    json payload = {{JsonKey::value, applicationIdentity}};
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(PublicKeysEndpointUri::cardSearchApp())
+                          .body(payload.dump());
+
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
@@ -187,7 +193,12 @@ std::vector<Card> CardClient::searchApp(const std::string& applicationIdentity) 
 }
 
 std::vector<Card> CardClient::getServiceCard(const std::string& serviceIdentity) const {
-    Request request = this->getAppCard(serviceIdentity);
+    json payload = {{JsonKey::value, serviceIdentity}};
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(PublicKeysEndpointUri::cardSearchApp())
+                          .body(payload.dump());
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SERVICE_GET);
@@ -245,14 +256,4 @@ void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_REVOKE);
     this->verifyResponse(response);
-}
-
-Request CardClient::getAppCard(const std::string& applicationIdentity) const {
-    json payload = {{JsonKey::value, applicationIdentity}};
-
-    return Request()
-        .post()
-        .baseAddress(this->getBaseServiceUri())
-        .endpoint(PublicKeysEndpointUri::cardSearchApp())
-        .body(payload.dump());
 }

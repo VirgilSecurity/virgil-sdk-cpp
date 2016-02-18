@@ -87,9 +87,6 @@ namespace sdk {
                                                       const Credentials& credentials);
 
             virgil::sdk::model::Card get(const std::string& cardId);
-
-        private:
-            virgil::sdk::http::Request getAppCard(const std::string& applicationIdentity) const;
         };
     }
 }
