@@ -40,11 +40,12 @@
 #include <memory>
 #include <string>
 
+#include <virgil/sdk/ServiceUri.h>
+#include <virgil/sdk/ServiceCards.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
 #include <virgil/sdk/client/CardsClient.h>
-#include <virgil/sdk/ServiceUri.h>
 
 namespace virgil {
 namespace sdk {
@@ -60,7 +61,7 @@ namespace sdk {
     class ServicesHub {
     public:
         /**
-         * @brief Configure hub
+         * @brief Configure services hub with lazy loaded Virgil Services Cards
          *
          * @param accessToken - provides an authenticated secure access to the Keys Service
          *                      and is passed with each API call @see
@@ -70,6 +71,21 @@ namespace sdk {
          *       Once you have your account you can sign in and generate an access token for your application.
          */
         explicit ServicesHub(const std::string& accessToken,
+                             const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
+        /**
+         * @brief Configure services hub with known Virgil Services Cards
+         *
+         * @detail This constructor can be used if Virgil Cards of Virgil Services stored locally.
+         *
+         * @param accessToken - provides an authenticated secure access to the Keys Service
+         *                      and is passed with each API call @see
+         * @param serviceUri - collection of Virgil Services URIs
+         * @param serviceCards - Virgil Cards provider for Virgil Services
+         *
+         * @note First you must create a free Virgil Security developer’s account by signing up.
+         *       Once you have your account you can sign in and generate an access token for your application.
+         */
+        explicit ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCards& serviceCards,
                              const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
         /**
@@ -88,16 +104,8 @@ namespace sdk {
          * @brief Return entrypoint for Virgil Private Keys Service
          */
         virgil::sdk::client::PrivateKeysClient& privateKeys();
-        /**
-         * @brief Load Virgil Card for all services from the default locations
-         *
-         * @note Virgil Cards can be defined manually for each service
-         */
-        void loadServicesCard();
 
     private:
-        std::string accessToken_;
-        virgil::sdk::ServiceUri virgilUri_;
         std::shared_ptr<ServicesHubImpl> impl_;
     };
 }

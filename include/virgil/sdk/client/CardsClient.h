@@ -43,6 +43,7 @@
 #include <virgil/sdk/model/Card.h>
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/CardSign.h>
+#include <virgil/sdk/client/Client.h>
 
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/http/Request.h>
@@ -53,13 +54,11 @@ namespace sdk {
         /**
          * @brief
          */
-        class CardsClient {
+        class CardsClient : public Client {
         public:
+            using Client::Client;
+
             CardsClient(const std::string& accessToken, const std::string& baseServiceUri);
-
-            virgil::sdk::model::Card getServiceCard() const;
-
-            void setServiceCard(const virgil::sdk::model::Card& publicKeysServiceCard);
 
             virgil::sdk::model::Card create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                                             const virgil::crypto::VirgilByteArray& publicKey,
@@ -78,7 +77,7 @@ namespace sdk {
 
             std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity);
 
-            std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity);
+            std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity) const;
 
             void revoke(const std::string& ownerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials);
@@ -89,13 +88,7 @@ namespace sdk {
             virgil::sdk::model::Card get(const std::string& cardId);
 
         private:
-            std::string accessToken_;
-            std::string baseServiceUri_;
-            virgil::sdk::model::Card publicKeysServiceCard_;
-
-        private:
-            virgil::sdk::http::Request getAppCard(const std::string& applicationIdentity);
-            void verifyResponse(const virgil::sdk::http::Response& response);
+            virgil::sdk::http::Request getAppCard(const std::string& applicationIdentity) const;
         };
     }
 }

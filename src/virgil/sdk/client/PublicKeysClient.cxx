@@ -42,7 +42,6 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
-#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/PublicKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -70,29 +69,17 @@ using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-PublicKeysClient::PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri)
-        : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
-}
-
-Card PublicKeysClient::getServiceCard() const {
-    return publicKeysServiceCard_;
-}
-
-void PublicKeysClient::setServiceCard(const Card& publicKeysServiceCard) {
-    publicKeysServiceCard_ = publicKeysServiceCard;
-}
-
 PublicKey PublicKeysClient::get(const std::string& publicKeyId) {
-    Request request =
-        Request().get().baseAddress(baseServiceUri_).endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
+    Request request = Request()
+                          .get()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(PublicKeysEndpointUri::publicKeyGet(publicKeyId));
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_UNSIGN);
     this->verifyResponse(response);
-
-    PublicKey publicKey = Marshaller<PublicKey>::fromJson(response.body());
-    return publicKey;
+    return Marshaller<PublicKey>::fromJson(response.body());
 }
 
 void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,
@@ -109,23 +96,14 @@ void PublicKeysClient::revoke(const std::string& publicKeyId, const std::vector<
 
     Request request = Request()
                           .del()
-                          .baseAddress(baseServiceUri_)
+                          .baseAddress(this->getBaseServiceUri())
                           .endpoint(PublicKeysEndpointUri::publicKeyRevoke(publicKeyId))
                           .body(jsonValidatedIdentitys.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Request signRequest = connection.signRequest(cardId, credentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_REVOKE);
     this->verifyResponse(response);
-}
-
-void PublicKeysClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, publicKeysServiceCard_.getPublicKey().getKey());
-
-    if (!verifed) {
-        throw std::runtime_error("PublicKeysClient: The response verification has failed. Signature doesn't match "
-                                 "PublicKeyService public key.");
-    }
 }

@@ -65,7 +65,6 @@ int main(int argc, char** argv) {
         std::string userEmail = argv[1];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-        servicesHub.loadServicesCard();
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 

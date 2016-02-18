@@ -45,7 +45,6 @@
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/PrivateKeysClient.h>
-#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -76,31 +75,19 @@ using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-PrivateKeysClient::PrivateKeysClient(const std::string& accessToken, const std::string& baseUri)
-        : accessToken_(accessToken), baseServiceUri_(baseUri) {
-}
-
-Card PrivateKeysClient::getServiceCard() const {
-    return privateKeysServiceCard_;
-}
-
-void PrivateKeysClient::setServiceCard(const Card& privateKeysServiceCard) {
-    privateKeysServiceCard_ = privateKeysServiceCard;
-}
-
 void PrivateKeysClient::stash(const std::string& cardId, const Credentials& credentials) {
     json payload = {{JsonKey::privateKey, VirgilBase64::encode(credentials.privateKey())}, {JsonKey::cardId, cardId}};
 
     Request request = Request()
                           .post()
-                          .baseAddress(baseServiceUri_)
+                          .baseAddress(this->getBaseServiceUri())
                           .endpoint(PrivateKeysEndpointUri::privateKeyStash())
                           .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Request signRequest = connection.signRequest(cardId, credentials, request);
 
-    std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, payload.dump());
+    std::string encryptJsonBody = connection.encryptJsonBody(this->getServiceCard(), payload.dump());
 
     signRequest.body(encryptJsonBody);
     Response response = connection.send(signRequest);
@@ -121,12 +108,12 @@ PrivateKey PrivateKeysClient::get(const std::string& cardId, const ValidatedIden
                     {JsonKey::responsePassword, responsePassword},
                     {JsonKey::cardId, cardId}};
 
-    ClientConnection connection(accessToken_);
-    std::string encryptedRequestJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, payload.dump());
+    ClientConnection connection(this->getAccessToken());
+    std::string encryptedRequestJsonBody = connection.encryptJsonBody(this->getServiceCard(), payload.dump());
 
     Request request = Request()
                           .post()
-                          .baseAddress(baseServiceUri_)
+                          .baseAddress(this->getBaseServiceUri())
                           .endpoint(PrivateKeysEndpointUri::privateKeyGet())
                           .body(encryptedRequestJsonBody);
 
@@ -137,9 +124,7 @@ PrivateKey PrivateKeysClient::get(const std::string& cardId, const ValidatedIden
     VirgilByteArray decryptResponseBody =
         cipher.decryptWithPassword(VirgilBase64::decode(response.body()), virgil::crypto::str2bytes(responsePassword));
 
-    PrivateKey privateKey = Marshaller<PrivateKey>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
-
-    return privateKey;
+    return Marshaller<PrivateKey>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
 }
 
 void PrivateKeysClient::destroy(const std::string& cardId, const VirgilByteArray& publicKey,
@@ -148,13 +133,13 @@ void PrivateKeysClient::destroy(const std::string& cardId, const VirgilByteArray
 
     Request request = Request()
                           .post()
-                          .baseAddress(baseServiceUri_)
+                          .baseAddress(this->getBaseServiceUri())
                           .endpoint(PrivateKeysEndpointUri::privateKeyDestroy())
                           .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Request signRequest = connection.signRequest(cardId, credentials, request);
-    std::string encryptJsonBody = connection.encryptJsonBody(privateKeysServiceCard_, signRequest.body());
+    std::string encryptJsonBody = connection.encryptJsonBody(this->getServiceCard(), signRequest.body());
     signRequest.body(encryptJsonBody);
 
     Response response = connection.send(signRequest);

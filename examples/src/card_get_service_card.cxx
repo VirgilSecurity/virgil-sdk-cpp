@@ -88,11 +88,6 @@ int main() {
                   << "\n";
         std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << "\n\n\n";
 
-        servicesHub.identity().setServiceCard(identityServiceCard);
-        servicesHub.publicKeys().setServiceCard(publicKeysServiceCard);
-        servicesHub.cards().setServiceCard(publicKeysServiceCard);
-        servicesHub.privateKeys().setServiceCard(privateKeysServiceCard);
-
     } catch (std::exception& exception) {
         std::cerr << exception.what() << "\n";
         return 1;

@@ -37,6 +37,8 @@
 #ifndef VIRGIL_SDK_PUBLIC_CLIENT_H
 #define VIRGIL_SDK_PUBLIC_CLIENT_H
 
+#include <virgil/sdk/client/Client.h>
+
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/Card.h>
@@ -49,27 +51,15 @@ namespace sdk {
         /**
          * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
          */
-        class PublicKeysClient {
+        class PublicKeysClient : public Client {
         public:
-            PublicKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
-
-            virgil::sdk::model::Card getServiceCard() const;
-
-            void setServiceCard(const virgil::sdk::model::Card& publicKeysServiceCard);
+            using Client::Client;
 
             virgil::sdk::model::PublicKey get(const std::string& publicKeyId);
 
             void revoke(const std::string& publicKeyId,
                         const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
                         const std::string& cardId, const virgil::sdk::Credentials& credentials);
-
-        private:
-            std::string accessToken_;
-            std::string baseServiceUri_;
-            virgil::sdk::model::Card publicKeysServiceCard_;
-
-        private:
-            void verifyResponse(const virgil::sdk::http::Response& response);
         };
     }
 }

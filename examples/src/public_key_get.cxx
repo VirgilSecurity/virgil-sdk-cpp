@@ -64,7 +64,6 @@ int main(int argc, char** argv) {
 
     try {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-        servicesHub.loadServicesCard();
 
         std::string publicKeyId = argv[1];
 

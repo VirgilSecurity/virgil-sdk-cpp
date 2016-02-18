@@ -45,7 +45,6 @@
 #include <virgil/sdk/client/ClientConnection.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/CardsClient.h>
-#include <virgil/sdk/client/VerifyResponse.h>
 #include <virgil/sdk/endpoints/IdentityEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -72,26 +71,17 @@ using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-IdentityClient::IdentityClient(const std::string& accessToken, const std::string& baseServiceUri)
-        : accessToken_(accessToken), baseServiceUri_(baseServiceUri) {
-}
-
-Card IdentityClient::getServiceCard() const {
-    return identityServiceCard_;
-}
-
-void IdentityClient::setServiceCard(const Card& identityServiceCard) {
-    identityServiceCard_ = identityServiceCard;
-}
-
 std::string IdentityClient::verify(const Identity& identity) {
     json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
                     {JsonKey::value, identity.getValue()}};
 
-    Request request =
-        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::verify()).body(payload.dump());
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(IdentityEndpointUri::verify())
+                          .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::IDENTITY_VERIFY);
     this->verifyResponse(response);
@@ -107,10 +97,13 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
                     {JsonKey::actionId, actionId},
                     {JsonKey::token, {{JsonKey::timeToLive, timeToLive}, {JsonKey::countToLive, countToLive}}}};
 
-    Request request =
-        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::confirm()).body(payload.dump());
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(IdentityEndpointUri::confirm())
+                          .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::IDENTITY_CONFIRM);
     this->verifyResponse(response);
@@ -124,10 +117,13 @@ bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
                     {JsonKey::value, validatedIdentity.getValue()},
                     {JsonKey::validationToken, validatedIdentity.getToken()}};
 
-    Request request =
-        Request().post().baseAddress(baseServiceUri_).endpoint(IdentityEndpointUri::validate()).body(payload.dump());
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(IdentityEndpointUri::validate())
+                          .body(payload.dump());
 
-    ClientConnection connection(accessToken_);
+    ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
 
     // if false throwing exeption
@@ -135,13 +131,4 @@ bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
     this->verifyResponse(response);
 
     return true;
-}
-
-void IdentityClient::verifyResponse(const virgil::sdk::http::Response& response) {
-    bool verifed = virgil::sdk::client::verifyResponse(response, identityServiceCard_.getPublicKey().getKey());
-
-    if (!verifed) {
-        throw std::runtime_error("IdentityClient: The response verification has failed. Signature doesn't match "
-                                 "IdentityService public key.");
-    }
 }

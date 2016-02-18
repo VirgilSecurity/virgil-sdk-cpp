@@ -71,7 +71,6 @@ int main(int argc, char** argv) {
         std::string pathPrivateKey = argv[3];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-        servicesHub.loadServicesCard();
 
         std::cout << "Prepare input file: " << pathPublicKey << "\n";
         std::ifstream inFile(pathPublicKey, std::ios::in | std::ios::binary);

@@ -37,6 +37,8 @@
 #ifndef VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
 #define VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
 
+#include <virgil/sdk/client/Client.h>
+
 #include <virgil/crypto/VirgilByteArray.h>
 
 #include <virgil/sdk/Credentials.h>
@@ -51,13 +53,9 @@ namespace sdk {
         /**
          * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
          */
-        class PrivateKeysClient {
+        class PrivateKeysClient : public Client {
         public:
-            PrivateKeysClient(const std::string& accessToken, const std::string& baseServiceUri);
-
-            virgil::sdk::model::Card getServiceCard() const;
-
-            void setServiceCard(const virgil::sdk::model::Card& privateKeysServiceCard);
+            using Client::Client;
 
             void stash(const std::string& cardId, const Credentials& credentials);
 
@@ -66,11 +64,6 @@ namespace sdk {
 
             void destroy(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
                          const Credentials& credentials);
-
-        private:
-            std::string accessToken_;
-            std::string baseServiceUri_;
-            virgil::sdk::model::Card privateKeysServiceCard_;
         };
     }
 }

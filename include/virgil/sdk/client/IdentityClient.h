@@ -37,6 +37,8 @@
 #ifndef VIRGIL_SDK_IDENTITY_CLIENT_H
 #define VIRGIL_SDK_IDENTITY_CLIENT_H
 
+#include <virgil/sdk/client/Client.h>
+
 #include <virgil/sdk/model/ValidatedIdentity.h>
 #include <virgil/sdk/model/Identity.h>
 #include <virgil/sdk/model/Card.h>
@@ -49,13 +51,9 @@ namespace sdk {
         /**
          * @brief Entrypoint for interacting with Identity Service PKI.
          */
-        class IdentityClient {
+        class IdentityClient : public Client {
         public:
-            IdentityClient(const std::string& accessToken, const std::string& baseServiceUri);
-
-            virgil::sdk::model::Card getServiceCard() const;
-
-            void setServiceCard(const virgil::sdk::model::Card& identityServiceCard);
+            using Client::Client;
 
             std::string verify(const virgil::sdk::model::Identity& identity);
 
@@ -64,14 +62,6 @@ namespace sdk {
                                                           const int timeToLive = 3600, const int countToLive = 1);
 
             bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
-
-        private:
-            std::string accessToken_;
-            std::string baseServiceUri_;
-            virgil::sdk::model::Card identityServiceCard_;
-
-        private:
-            void verifyResponse(const virgil::sdk::http::Response& response);
         };
     }
 }
