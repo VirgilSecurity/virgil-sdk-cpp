@@ -52,40 +52,105 @@ namespace virgil {
 namespace sdk {
     namespace client {
         /**
-         * @brief
+         * @brief Provide access to the Virgil Keys Service endpoints,
+         *        that perform managing of the Virgil Card entity
          */
         class CardClient : public Client {
         public:
             using Client::Client;
-
+            /**
+             * @brief Create client with ability to load self Virgil Card by request
+             * @see Client::Client()
+             */
             CardClient(const std::string& accessToken, const std::string& baseServiceUri);
-
+            /**
+             * @brief Create validated Virgil Card entity
+             *
+             * @param validatedIdentity - identity that was validated by user thru Virgil Identity Service
+             * @param publicKey - Public Key that was generated locally
+             * @param credentials - Private Key + Private Key password
+             * @return Created Virgil Card
+             */
             virgil::sdk::model::Card create(const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                                             const virgil::crypto::VirgilByteArray& publicKey,
                                             const virgil::sdk::Credentials& credentials);
-
+            /**
+             * @brief Sign another Virgil Card
+             *
+             * @details Signs another Virgil Card addressed in the request
+             *          to share the information for the signed Virgil Card
+             *
+             * @param toBeSignedCardId - identifier of the Virgil Card that will be signed
+             * @param toBeSignedCardHash - hash of the Virgil Card that will be signed
+             * @param signerCardId - identifier of the signer's Virgil Card
+             * @param signerCredentials - signer's Private Key that is connected to the signer's Virgil Card
+             * @return Virgil Card Sign
+             */
             virgil::sdk::model::CardSign sign(const std::string& toBeSignedCardId,
                                               const std::string& toBeSignedCardHash, const std::string& signerCardId,
                                               const Credentials& signerCredentials);
-
+            /**
+             * @brief Remove sign from another Virgil Card
+             *
+             * @details Discard chages made during @link sign() @endlink step.
+             *
+             * @param signedCardId - identifier of the Virgil Card that was signed
+             * @param signOwnerCardId - identifier of the Virgil Card that was used for sign
+             * @param signOwnerCredentials - signer's Private Key that is connected to the Virgil Card,
+             *                               that was used for sign
+             */
             void unsign(const std::string& signedCardId, const std::string& signOwnerCardId,
                         const virgil::sdk::Credentials& signOwnerCredentials);
-
+            /**
+             * @brief Performs the search of Virgil Cards
+             *
+             * @param identity - identity to be serached
+             * @param relations - the list of Virgil Cards identifiers to perform the search within,
+             *                    another word use this parameter to filter returned cards by signers
+             * @param includeUnconfirmed - specifies whether an unconfirmed Virgil Cards should be returned
+             * @return Found Virgil Cards
+             */
             std::vector<virgil::sdk::model::Card>
             search(const virgil::sdk::model::Identity& identity,
                    const std::vector<std::string>& relations = std::vector<std::string>(),
                    const bool includeUnconfirmed = true);
-
+            /**
+             * @brief Performs the global search fot the applications' Virgil Cards
+             *
+             * @param applicationIdentity - application identity value, i.e. "com.virgilsecurity.keys",
+             *                              or "com.virgilsecurity.*" to retreive Virgil Cards,
+             *                              associated with some organization
+             * @param skipVerification - skip verification of the service response;
+             * @return Found Virgil Cards associated with application identity
+             */
             std::vector<virgil::sdk::model::Card> searchApp(const std::string& applicationIdentity,
                                                             bool skipVerification = false) const;
-
+            /**
+             * @brief Revoke Virgil Card and all associated data
+             *
+             * @param cardId - Virgil Card Identifier
+             * @param validatedIdentity - entity that is validated via Virgil Identity Service,
+             *                            and associted with given cardId
+             * @param credentials - Private Key that associted with given cardId
+             */
             void revoke(const std::string& cardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials);
-
+            /**
+             * @brief Return card associated with given identifier
+             *
+             * @param cardId - Virgil Card identifier
+             */
+            virgil::sdk::model::Card get(const std::string& cardId);
+            /**
+             * @brief Return Virgil Cards associated with given Public Key identifier
+             *
+             * @param publicKeyId - Public Key identifier
+             * @param cardId - one of the Virgil Card identifier associated with given Public Key identifier
+             * @param credentials - Private Key that associted with given cardId
+             * @return Virgil Cards associated with given publicKeyId
+             */
             std::vector<virgil::sdk::model::Card> get(const std::string& publicKeyId, const std::string& cardId,
                                                       const Credentials& credentials);
-
-            virgil::sdk::model::Card get(const std::string& cardId);
         };
     }
 }
