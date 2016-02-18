@@ -101,7 +101,7 @@ namespace sdk {
              *
              * @throw std::runtime_exception if given response verification failed
              */
-            virtual void verifyResponse(const virgil::sdk::http::Response& response);
+            virtual void verifyResponse(const virgil::sdk::http::Response& response) const;
 
         private:
             std::string accessToken_;

@@ -41,7 +41,7 @@ Card Client::getServiceCard() const {
     return *serviceCard_;
 }
 
-void Client::verifyResponse(const Response& response) {
+void Client::verifyResponse(const Response& response) const {
     auto responseHeader = response.header();
     auto responseData = responseHeader[http::kHeaderField_ResponseId] + response.body();
     auto responseSign = responseHeader[http::kHeaderField_ResponseSign];
