@@ -57,7 +57,7 @@ namespace sdk {
                 json jsonCardSign = {
                     {JsonKey::id, cardSign.getId()},
                     {JsonKey::createdAt, cardSign.getCreatedAt()},
-                    {JsonKey::signerCardId, cardSign.getSignedCardId()},
+                    {JsonKey::signerCardId, cardSign.getSignerCardId()},
                     {JsonKey::signedCardId, cardSign.getSignedCardId()},
                     {JsonKey::signedDigest, cardSign.getSignedDigest()},
                 };
