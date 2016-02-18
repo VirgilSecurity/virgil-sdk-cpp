@@ -84,7 +84,7 @@ namespace sdk {
 }
 }
 
-void marshaller_trust_card_response_init() {
+void marshaller_sign_card_response_init() {
     virgil::sdk::io::Marshaller<CardSign>::toJson(CardSign());
     virgil::sdk::io::Marshaller<CardSign>::toJson<2>(CardSign());
     virgil::sdk::io::Marshaller<CardSign>::toJson<4>(CardSign());

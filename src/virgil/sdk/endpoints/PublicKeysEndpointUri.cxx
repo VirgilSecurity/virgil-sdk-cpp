@@ -66,7 +66,7 @@ std::string PublicKeysEndpointUri::cardTrust(const std::string& cardId) {
     return "/v3/virgil-card/" + cardId + "/actions/sign";
 }
 
-std::string PublicKeysEndpointUri::cardUntrust(const std::string& cardId) {
+std::string PublicKeysEndpointUri::cardUnsign(const std::string& cardId) {
     return "/v3/virgil-card/" + cardId + "/actions/unsign";
 }
 

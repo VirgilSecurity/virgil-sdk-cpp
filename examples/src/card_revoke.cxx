@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 
     try {
         std::string userEmail = argv[1];
-        std::string ownerCardId = argv[2];
+        std::string signerCardId = argv[2];
         std::string pathPrivateKey = argv[3];
         std::string token = argv[4];
 
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Revoke a Virgil Card" << std::endl;
-        servicesHub.card().revoke(ownerCardId, validatedIdentity, credentials);
+        servicesHub.card().revoke(signerCardId, validatedIdentity, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

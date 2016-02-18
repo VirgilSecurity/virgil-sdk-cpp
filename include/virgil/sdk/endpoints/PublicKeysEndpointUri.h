@@ -84,15 +84,15 @@ namespace sdk {
              */
             static std::string cardSearchApp();
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card trust.
+             * @brief Returns the endpoint in charge of the Virgil Card sign.
              * @param cardId - Virgil Card Id.
              */
             static std::string cardTrust(const std::string& cardId);
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card untrust.
+             * @brief Returns the endpoint in charge of the Virgil Card unsign.
              * @param cardId - Virgil Card Id.
              */
-            static std::string cardUntrust(const std::string& cardId);
+            static std::string cardUnsign(const std::string& cardId);
             /**
              * @brief Returns the endpoint in charge of the Virgil Card revoke.
              * @param cardId - Virgil Card Id.

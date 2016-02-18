@@ -64,11 +64,12 @@ namespace sdk {
                                             const virgil::crypto::VirgilByteArray& publicKey,
                                             const virgil::sdk::Credentials& credentials);
 
-            virgil::sdk::model::CardSign trust(const std::string& trustedCardId, const std::string& trustedCardHash,
-                                               const std::string& ownerCardId, const Credentials& credentials);
+            virgil::sdk::model::CardSign sign(const std::string& toBeSignedCardId,
+                                              const std::string& toBeSignedCardHash, const std::string& signerCardId,
+                                              const Credentials& signerCredentials);
 
-            void untrust(const std::string& trustedCardId, const std::string& ownerCardId,
-                         const virgil::sdk::Credentials& credentials);
+            void unsign(const std::string& signedCardId, const std::string& signOwnerCardId,
+                        const virgil::sdk::Credentials& signOwnerCredentials);
 
             std::vector<virgil::sdk::model::Card>
             search(const virgil::sdk::model::Identity& identity,
@@ -79,7 +80,7 @@ namespace sdk {
 
             std::vector<virgil::sdk::model::Card> getServiceCard(const std::string& serviceIdentity) const;
 
-            void revoke(const std::string& ownerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
+            void revoke(const std::string& signerCardId, const virgil::sdk::model::ValidatedIdentity& validatedIdentity,
                         const virgil::sdk::Credentials& credentials);
 
             std::vector<virgil::sdk::model::Card> get(const std::string& publicKeyId, const std::string& cardId,

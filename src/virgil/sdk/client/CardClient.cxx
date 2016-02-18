@@ -109,20 +109,20 @@ Card CardClient::create(const ValidatedIdentity& validatedIdentity, const Virgil
     return card;
 }
 
-CardSign CardClient::trust(const std::string& trustedCardId, const std::string& trustedCardHash,
-                           const std::string& ownerCardId, const Credentials& credentials) {
+CardSign CardClient::sign(const std::string& toBeSignedCardId, const std::string& toBeSignedCardHash,
+                          const std::string& signerCardId, const Credentials& signerCredentials) {
 
     ClientConnection connection(this->getAccessToken());
-    json payload = {{JsonKey::signedCardId, trustedCardId},
-                    {JsonKey::signedDigest, connection.signHash(trustedCardHash, credentials)}};
+    json payload = {{JsonKey::signedCardId, toBeSignedCardId},
+                    {JsonKey::signedDigest, connection.signHash(toBeSignedCardHash, signerCredentials)}};
 
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardTrust(ownerCardId))
+                          .endpoint(PublicKeysEndpointUri::cardTrust(signerCardId))
                           .body(payload.dump());
 
-    Request signRequest = connection.signRequest(ownerCardId, credentials, request);
+    Request signRequest = connection.signRequest(signerCardId, signerCredentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_TRUST);
@@ -132,18 +132,19 @@ CardSign CardClient::trust(const std::string& trustedCardId, const std::string& 
     return cardSign;
 }
 
-void CardClient::untrust(const std::string& trustedCardId, const std::string& ownerCardId,
-                         const Credentials& credentials) {
-    json payload = {{JsonKey::signedCardId, trustedCardId}};
+void CardClient::unsign(const std::string& signedCardId, const std::string& signOwnerCardId,
+                        const virgil::sdk::Credentials& signOwnerCredentials) {
+
+    json payload = {{JsonKey::signedCardId, signedCardId}};
 
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardUntrust(ownerCardId))
+                          .endpoint(PublicKeysEndpointUri::cardUnsign(signOwnerCardId))
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
-    Request signRequest = connection.signRequest(ownerCardId, credentials, request);
+    Request signRequest = connection.signRequest(signOwnerCardId, signOwnerCredentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_UTRUST);
@@ -225,7 +226,7 @@ Card CardClient::get(const std::string& cardId) {
     return card;
 }
 
-void CardClient::revoke(const std::string& ownerCardId, const ValidatedIdentity& validatedIdentity,
+void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity& validatedIdentity,
                         const Credentials& credentials) {
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
@@ -235,11 +236,11 @@ void CardClient::revoke(const std::string& ownerCardId, const ValidatedIdentity&
     Request request = Request()
                           .del()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(PublicKeysEndpointUri::cardRevoke(ownerCardId))
+                          .endpoint(PublicKeysEndpointUri::cardRevoke(signerCardId))
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
-    Request signRequest = connection.signRequest(ownerCardId, credentials, request);
+    Request signRequest = connection.signRequest(signerCardId, credentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_REVOKE);

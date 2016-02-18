@@ -43,8 +43,6 @@
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/ServiceUri.h>
-#include <virgil/sdk/model/CardSign.h>
-#include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -60,18 +58,17 @@ const std::string VIRGIL_ACCESS_TOKEN =
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
-    if (argc < 5) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <trusted_card_id>" + " <trusted_card_hash>" +
-                         " <owner_card_id>" + " <path_private_key>"
+    if (argc < 4) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <unsigned_card_id>" + " <owner_card_id>" +
+                         " <path_private_key>"
                   << std::endl;
         return 1;
     }
 
     try {
-        std::string trustedCardId = argv[1];
-        std::string trustedCardHash = argv[2];
-        std::string ownerCardId = argv[3];
-        std::string pathPrivateKey = argv[4];
+        std::string signedCardId = argv[1];
+        std::string signerCardId = argv[2];
+        std::string pathPrivateKey = argv[3];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
@@ -86,12 +83,8 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Trust a Virgil Card" << std::endl;
-        vsdk::model::CardSign cardSign =
-            servicesHub.card().trust(trustedCardId, trustedCardHash, ownerCardId, credentials);
-
-        std::string cardSignStr = vsdk::io::Marshaller<vsdk::model::CardSign>::toJson<4>(cardSign);
-        std::cout << "CardSign:\n" << cardSignStr << std::endl;
+        std::cout << "Unsign a Virgil Card" << std::endl;
+        servicesHub.card().unsign(signedCardId, signerCardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
