@@ -43,7 +43,7 @@
 #include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/ServiceCards.h>
 #include <virgil/sdk/client/IdentityClient.h>
-#include <virgil/sdk/client/PrivateKeysClient.h>
+#include <virgil/sdk/client/PrivateKeyClient.h>
 #include <virgil/sdk/client/PublicKeysClient.h>
 #include <virgil/sdk/client/CardClient.h>
 
@@ -103,7 +103,7 @@ namespace sdk {
         /**
          * @brief Return entrypoint for Virgil Private Keys Service
          */
-        virgil::sdk::client::PrivateKeysClient& privateKeys();
+        virgil::sdk::client::PrivateKeyClient& privateKeys();
 
     private:
         std::shared_ptr<ServicesHubImpl> impl_;

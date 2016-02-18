@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
-#define VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H
+#ifndef VIRGIL_SDK_PRIVATE_KEY_CLIENT_H
+#define VIRGIL_SDK_PRIVATE_KEY_CLIENT_H
 
 #include <virgil/sdk/client/Client.h>
 
@@ -53,7 +53,7 @@ namespace sdk {
         /**
          * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
          */
-        class PrivateKeysClient : public Client {
+        class PrivateKeyClient : public Client {
         public:
             using Client::Client;
 
@@ -69,4 +69,4 @@ namespace sdk {
 }
 }
 
-#endif /* VIRGIL_SDK_PRIVATE_KEYS_CLIENT_H */
+#endif /* VIRGIL_SDK_PRIVATE_KEY_CLIENT_H */

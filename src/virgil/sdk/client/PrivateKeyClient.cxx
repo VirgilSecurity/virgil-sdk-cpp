@@ -44,7 +44,7 @@
 
 #include <virgil/sdk/Error.h>
 #include <virgil/sdk/client/ClientConnection.h>
-#include <virgil/sdk/client/PrivateKeysClient.h>
+#include <virgil/sdk/client/PrivateKeyClient.h>
 #include <virgil/sdk/endpoints/PrivateKeysEndpointUri.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
@@ -62,7 +62,7 @@ using virgil::crypto::foundation::VirgilBase64;
 using virgil::sdk::Credentials;
 using virgil::sdk::Error;
 using virgil::sdk::client::ClientConnection;
-using virgil::sdk::client::PrivateKeysClient;
+using virgil::sdk::client::PrivateKeyClient;
 using virgil::sdk::endpoints::PrivateKeysEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
@@ -75,7 +75,7 @@ using virgil::sdk::model::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-void PrivateKeysClient::stash(const std::string& cardId, const Credentials& credentials) {
+void PrivateKeyClient::stash(const std::string& cardId, const Credentials& credentials) {
     json payload = {{JsonKey::privateKey, VirgilBase64::encode(credentials.privateKey())}, {JsonKey::cardId, cardId}};
 
     Request request = Request()
@@ -94,7 +94,7 @@ void PrivateKeysClient::stash(const std::string& cardId, const Credentials& cred
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_STASH);
 }
 
-PrivateKey PrivateKeysClient::get(const std::string& cardId, const ValidatedIdentity& validatedIdentity) {
+PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdentity& validatedIdentity) {
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
     while (responsePassword.size() > 31) {
@@ -127,8 +127,8 @@ PrivateKey PrivateKeysClient::get(const std::string& cardId, const ValidatedIden
     return Marshaller<PrivateKey>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
 }
 
-void PrivateKeysClient::destroy(const std::string& cardId, const VirgilByteArray& publicKey,
-                                const Credentials& credentials) {
+void PrivateKeyClient::destroy(const std::string& cardId, const VirgilByteArray& publicKey,
+                               const Credentials& credentials) {
     json payload = {{JsonKey::cardId, cardId}};
 
     Request request = Request()
