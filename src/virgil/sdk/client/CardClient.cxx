@@ -127,7 +127,7 @@ CardSign CardClient::sign(const std::string& toBeSignedCardId, const std::string
     Request signRequest = connection.signRequest(signerCardId, signerCredentials, request);
 
     Response response = connection.send(signRequest);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_TRUST);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SIGN);
     this->verifyResponse(response);
 
     CardSign cardSign = Marshaller<CardSign>::fromJson(response.body());
@@ -149,7 +149,7 @@ void CardClient::unsign(const std::string& signedCardId, const std::string& sign
     Request signRequest = connection.signRequest(signOwnerCardId, signOwnerCredentials, request);
 
     Response response = connection.send(signRequest);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_UTRUST);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_UNSIGN);
     this->verifyResponse(response);
 }
 

@@ -66,8 +66,8 @@ namespace sdk {
 
             VIRGIL_CARD_CREATE,
             VIRGIL_CARD_GET,
-            VIRGIL_CARD_TRUST,
-            VIRGIL_CARD_UTRUST,
+            VIRGIL_CARD_SIGN,
+            VIRGIL_CARD_UNSIGN,
             VIRGIL_CARD_SEARCH,
             VIRGIL_CARD_SEARCH_APP,
             VIRGIL_CARD_SERVICE_GET,

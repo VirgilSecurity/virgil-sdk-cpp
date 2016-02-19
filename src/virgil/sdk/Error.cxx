@@ -56,8 +56,8 @@ static std::string actionStr(Error::Action action) {
 
         {Error::Action::VIRGIL_CARD_CREATE, "create a Virgil Card."},
         {Error::Action::VIRGIL_CARD_GET, "get a Virgil Card."},
-        {Error::Action::VIRGIL_CARD_TRUST, "sign the Virgil Card."},
-        {Error::Action::VIRGIL_CARD_UTRUST, "unsign the Virgil Card."},
+        {Error::Action::VIRGIL_CARD_SIGN, "sign the Virgil Card."},
+        {Error::Action::VIRGIL_CARD_UNSIGN, "unsign the Virgil Card."},
         {Error::Action::VIRGIL_CARD_SEARCH, "search a Virgil Card."},
         {Error::Action::VIRGIL_CARD_SEARCH_APP, "search an Application Virgil Card."},
         {Error::Action::VIRGIL_CARD_SERVICE_GET, "get a Service Virgil Card."},
