@@ -85,11 +85,19 @@ namespace sdk {
             std::string cardId_;
             virgil::crypto::VirgilByteArray key_;
         };
-
+        /**
+         * @brief Compare Private Keys for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const PrivateKey& left, const PrivateKey& right) {
             return left.getCardId() == right.getCardId() && left.getKey() == right.getKey();
         }
-
+        /**
+         * @brief Compare Private Keys for inequality
+         *
+         * @return true if given objects are inequal, false - otherwise
+         */
         inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {
             return !(left == right);
         }
