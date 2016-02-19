@@ -45,53 +45,53 @@
 namespace virgil {
 namespace sdk {
     /**
-    * @brief Virgil Public Key service exception.
+    * @brief Virgil Public Key service exception
     *
     * This class defines the type of objects thrown as exceptions
-    *     to report errors that occurs during Virgil Keys Service communication.
+    *     to report errors that occurs during Virgil Keys Service communication
     */
     class Error final : public std::runtime_error {
     public:
         /**
-         * @brief Define constant for undefined error code.
+         * @brief Define constant for undefined error code
          */
         static const unsigned int kUndefinedErrorCode = 0;
         /**
-         * @brief Defines which action trigger an error.
+         * @brief Defines which action trigger an error
          */
         enum class Action {
-            PUBLIC_KEY_GET_SIGN,
-            PUBLIC_KEY_GET_UNSIGN,
-            PUBLIC_KEY_REVOKE,
+            PUBLIC_KEY_GET_SIGN,   ///< GET  /public-key/{public-key-id} (signed)
+            PUBLIC_KEY_GET_UNSIGN, ///< GET /public-key/{public-key-id} (unsigned)
+            PUBLIC_KEY_REVOKE,     ///< DELETE /public-key{public-key-id} (unsigned)
 
-            VIRGIL_CARD_CREATE,
-            VIRGIL_CARD_GET,
-            VIRGIL_CARD_SIGN,
-            VIRGIL_CARD_UNSIGN,
-            VIRGIL_CARD_SEARCH,
-            VIRGIL_CARD_SEARCH_APP,
-            VIRGIL_CARD_REVOKE,
+            VIRGIL_CARD_CREATE,     ///< POST /virgil-card
+            VIRGIL_CARD_GET,        ///< GET /virgil-card/{virgil-card-id}
+            VIRGIL_CARD_SIGN,       ///< POST /virgil-card/{virgil-card-id}/actions/sign
+            VIRGIL_CARD_UNSIGN,     ///< POST /virgil-card/{virgil-card-id}/actions/unsign
+            VIRGIL_CARD_SEARCH,     ///< POST /virgil-card/actions/search
+            VIRGIL_CARD_SEARCH_APP, ///< POST /virgil-card/actions/search/app
+            VIRGIL_CARD_REVOKE,     ///< DELETE /virgil-card/{virgil-card-id}
 
-            PRIVATE_KEY_ADD,
-            PRIVATE_KEY_GET,
-            PRIVATE_KEY_DEL,
+            PRIVATE_KEY_ADD, ///< POST /private-key
+            PRIVATE_KEY_GET, ///< POST /private-key/actions/grab
+            PRIVATE_KEY_DEL, ///< POST /private-key/actions/delete
 
-            IDENTITY_VERIFY,
-            IDENTITY_CONFIRM,
-            IDENTITY_VALIDATE
+            IDENTITY_VERIFY,  ///< POST /verify
+            IDENTITY_CONFIRM, ///< POST /confirm
+            IDENTITY_VALIDATE ///< POST /validate
         };
         /**
-         * @brief Initialize exception.
-         * @param action - defines which action trigger an error.
-         * @param statusCode - HTTP response status code.
-         * @param errorCode - specific Virgil Public Key service error code.
+         * @brief Initialize exception
+         * @param action - defines which action trigger an error
+         * @param statusCode - HTTP response status code
+         * @param errorCode - specific Virgil Public Key service error code
          */
         Error(Error::Action action, virgil::sdk::http::Response::StatusCode statusCode,
               unsigned int errorCode = kUndefinedErrorCode);
 
     private:
         /**
-         * @brief Create formatted error message.
+         * @brief Create formatted error message
          */
         std::string formatMessage(Error::Action action, virgil::sdk::http::Response::StatusCode statusCode,
                                   unsigned int errorCode) noexcept;
