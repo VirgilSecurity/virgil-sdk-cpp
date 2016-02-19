@@ -44,37 +44,155 @@ namespace sdk {
     namespace util {
         /**
          * @brief This class holds string constants of Json keys.
+         *
+         * @note This class belongs to the **private** API
          */
         class JsonKey {
         public:
+            /**
+             * @property id
+             * @brief Json Key that points object's identifier
+             */
             static const std::string id;
+            /**
+             * @property publicKey
+             * @brief Json Key that points Public Key object
+             */
             static const std::string publicKey;
+            /**
+             * @property privateKey
+             * @brief Json Key that points Private Key object
+             */
             static const std::string privateKey;
+            /**
+             * @property createdAt
+             * @brief Json Key that points timestamp string value
+             */
             static const std::string createdAt;
+            /**
+             * @property cards
+             * @brief Json Key that points collection of Virgil Cards objects
+             */
             static const std::string cards;
+            /**
+             * @property cardId
+             * @brief Json Key that points Virgil Card's identifier
+             */
             static const std::string cardId;
+            /**
+             * @property isConfirmed
+             * @brief Json Key that points boolean property which tells whether entity is confirmed, or not
+             */
             static const std::string isConfirmed;
+            /**
+             * @property hash
+             * @brief Json Key that points Virgil Card's hash
+             */
             static const std::string hash;
+            /**
+             * @property identity
+             * @brief Json Key that points Virgil Identity object
+             */
             static const std::string identity;
+            /**
+             * @property identities
+             * @brief Json Key that points collection of Virgil Identity objects
+             */
             static const std::string identities;
+            /**
+             * @property type
+             * @brief Json Key that points enumeration which represents Virgil Identity type
+             */
             static const std::string type;
+            /**
+             * @property value
+             * @brief Json Key that points string which represents Virgil Identity value
+             */
             static const std::string value;
+            /**
+             * @property publicKeyId
+             * @brief Json Key that points
+             */
             static const std::string publicKeyId;
+            /**
+             * @property data
+             * @brief Json Key that points Virgil Card's custom data object
+             */
             static const std::string data;
+            /**
+             * @property signs
+             * @brief Json Key that points collection of Virgil Signs objects
+             */
             static const std::string signs;
+            /**
+             * @property signerCardId
+             * @brief Json Key that points signer's Virgil Card identifier
+             */
             static const std::string signerCardId;
+            /**
+             * @property signedCardId
+             * @brief Json Key that points signed Virgil Card identifier
+             */
             static const std::string signedCardId;
+            /**
+             * @property signedDigest
+             * @brief Json Key that points signed digest
+             */
             static const std::string signedDigest;
+            /**
+             * @property relations
+             * @brief Json Key that points collection of Virgil Card identifiers
+             */
             static const std::string relations;
+            /**
+             * @property includeUnconfirmed
+             * @brief Json Key that points boolean value which tell to include unconfirmed Virgil Cards, or not
+             */
             static const std::string includeUnconfirmed;
+            /**
+             * @property error
+             * @brief Json Key that points Error object
+             */
             static const std::string error;
+            /**
+             * @property errorCode
+             * @brief Json Key that points points Error code
+             */
             static const std::string errorCode;
+            /**
+             * @property confirmationCode
+             * @brief Json Key that points identity confirmation code string
+             */
             static const std::string confirmationCode;
+            /**
+             * @property actionId
+             * @brief Json Key that points action identifier string
+             */
             static const std::string actionId;
+            /**
+             * @property token
+             * @brief Json Key that points token
+             */
             static const std::string token;
+            /**
+             * @property timeToLive
+             * @brief Json Key that points validation token time to live in seconds
+             */
             static const std::string timeToLive;
+            /**
+             * @property countToLive
+             * @brief Json Key that points validation token count to live in usage count
+             */
             static const std::string countToLive;
+            /**
+             * @property validationToken
+             * @brief Json Key that points validation token string
+             */
             static const std::string validationToken;
+            /**
+             * @property responsePassword
+             * @brief Json Key that points password which is used to encrypt a response from the Private Keys Service
+             */
             static const std::string responsePassword;
 
         private:
