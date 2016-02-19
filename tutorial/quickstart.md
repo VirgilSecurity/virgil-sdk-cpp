@@ -138,11 +138,11 @@ Run one of the following commands in the project's root folder.
 
     * Unix:
 
-            mkdir build && cd build && cmake -DVIRGIL_EXAMPLES=ON .. && make -j4
+            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && make -j4
 
     * Windows:
 
-            mkdir build && cd build && cmake -DVIRGIL_EXAMPLES=ON .. && nmake
+            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && nmake
 
 
 ## See Also
