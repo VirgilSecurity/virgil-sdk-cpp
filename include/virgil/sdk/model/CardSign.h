@@ -43,18 +43,44 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief
+         * @brief This class contains detailed information about Signed Card
          */
         class CardSign {
         public:
+            /**
+             * @brief Create empty non valid object
+             */
             CardSign() = default;
+            /**
+             * @brief Create Card Sign with all related information
+             *
+             * @param id - Virgil Card Sign identifier
+             * @param createdAt - creation timestamp
+             * @param signerCardId - identifier of the Virgil Card that was used to sign
+             * @param signedCardId - identifier of the Virgil Card that was signed
+             * @param signedDigest - signed digest that can be verified within crypto algorithm
+             */
             CardSign(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
                      const std::string& signedCardId, const std::string& signedDigest);
-
+            /**
+             * @brief Return Virgil Card Sign identifier
+             */
             const std::string& getId() const;
+            /**
+             * @brief Return creation timestamp
+             */
             const std::string& getCreatedAt() const;
+            /**
+             * @brief Return identifier of the Virgil Card that was used to sign
+             */
             const std::string& getSignerCardId() const;
+            /**
+             * @brief Return identifier of the Virgil Card that was signed
+             */
             const std::string& getSignedCardId() const;
+            /**
+             * @brief Return signed digest that can be verified within crypto algorithm
+             */
             const std::string& getSignedDigest() const;
 
         private:
@@ -64,7 +90,11 @@ namespace sdk {
             std::string signedCardId_;
             std::string signedDigest_;
         };
-
+        /**
+         * @brief Compare Virgil Card's Sign for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const CardSign& left, const CardSign& right) {
             if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
                 left.getSignerCardId() == right.getSignerCardId() &&
@@ -74,7 +104,11 @@ namespace sdk {
             }
             return 0;
         }
-
+       /**
+         * @brief Compare Virgil Card's Sign for inequality
+         *
+         * @return true if given objects are inequal, false - otherwise
+         */
         inline bool operator!=(const CardSign& left, const CardSign& right) {
             return !(left == right);
         }
