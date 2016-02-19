@@ -50,6 +50,9 @@
 namespace virgil {
 namespace sdk {
     namespace client {
+        /**
+         * @brief This class encapsulates common state and error check for all clients
+         */
         class Client {
         public:
             /**
@@ -75,8 +78,8 @@ namespace sdk {
             /**
              * @brief Return access token
              *
-             * @detail Return authenticated secure access token to the Virgil Keys Service.
-             *         It MUST be passed to each API call.
+             * Return authenticated secure access token to the Virgil Keys Service.
+             * It MUST be passed to each API call.
              */
             virtual std::string getAccessToken() const;
             /**
@@ -97,7 +100,6 @@ namespace sdk {
              * @brief Perform crypto verification of the given response
              *
              * @param response - response to be verified
-             * @param publicKey - public key of service that sends response
              *
              * @throw std::runtime_exception if given response verification failed
              */
