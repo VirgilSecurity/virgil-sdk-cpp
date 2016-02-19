@@ -47,7 +47,6 @@
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/ServiceUri.h>
 
 namespace vcrypto = virgil::crypto;
 namespace vsdk = virgil::sdk;

@@ -42,7 +42,6 @@
 #include <string>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/model/CardSign.h>
 #include <virgil/sdk/io/Marshaller.h>
 

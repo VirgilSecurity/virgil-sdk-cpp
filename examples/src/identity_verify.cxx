@@ -39,7 +39,6 @@
 #include <string>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/ServiceUri.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
