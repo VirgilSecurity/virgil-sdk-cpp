@@ -54,14 +54,14 @@ const std::string PASSWORD = "123456789";
 
 int main() {
     try {
-        std::cout << "Prepare input file: test.txt.encp..." << std::endl;
+        //std::cout << "Prepare input file: test.txt.encp..." << std::endl;
         std::ifstream inFile("test.txt.encp", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt.enc");
         }
         vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
-        std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
+        //std::cout << "Prepare output file: decrypted_test.txt..." << std::endl;
         std::ofstream outFile("decrypted_testp.txt", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: decrypted_testp.txt");
@@ -69,9 +69,9 @@ int main() {
         vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
         vcrypto::VirgilStreamCipher cipher;
-        std::cout << "Decrypt with pass..." << std::endl;
+        //std::cout << "Decrypt with pass..." << std::endl;
         cipher.decryptWithPassword(dataSource, dataSink, vcrypto::str2bytes(PASSWORD));
-        std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
+        //std::cout << "Decrypted data with pass is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
