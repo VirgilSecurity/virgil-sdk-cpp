@@ -45,6 +45,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 # Configurable variables
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 
 # Define library name
 set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
@@ -98,7 +99,12 @@ target_link_libraries (${VIRGIL_SDK} ${VIRGIL_CRYPTO_LIBRARIES} ${REST_LIBRARIES
 # Install
 install (TARGETS ${VIRGIL_SDK} DESTINATION lib)
 install (FILES ${REST_LIBRARY} DESTINATION lib)
-install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
+install (DIRECTORY "include/" DESTINATION "include"
+     PATTERN "util" EXCLUDE
+     PATTERN "endpoints" EXCLUDE
+     PATTERN "ClientConnection.h" EXCLUDE
+     PATTERN "Headers.h" EXCLUDE
+)
 
 # Add unit tests
 if (ENABLE_TESTING)
@@ -128,6 +134,18 @@ else ()
 endif (DOT_PROGRAM)
 
 if (DOXYGEN_FOUND)
+    if (DOXYGEN_EXCLUDE_PRIVATE)
+        set (DOXYGEN_EXCLUDE
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/util/*"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/endpoints/*"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/http/Headers.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/client/ClientConnection.h"
+        )
+        string (REPLACE ";" " " DOXYGEN_EXCLUDE "${DOXYGEN_EXCLUDE}")
+        set (DOXYGEN_EXTRACT_PRIVATE "NO")
+    else ()
+        set (DOXYGEN_EXTRACT_PRIVATE "YES")
+    endif (DOXYGEN_EXCLUDE_PRIVATE)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target ("doc"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
