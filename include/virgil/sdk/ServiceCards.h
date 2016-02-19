@@ -15,15 +15,15 @@ namespace sdk {
          *
          * @note This card is used for two clients: PublicKeysKlient and CardClient
          */
-        virtual virgil::sdk::model::Card getKeysServiceCard() const = 0;
+        virtual virgil::sdk::model::Card loadKeyServiceCard() const = 0;
         /**
          * @brief Return Virgil Card of Virgil PrivateKeys Service
          */
-        virtual virgil::sdk::model::Card getPrivateKeysServiceCard() const = 0;
+        virtual virgil::sdk::model::Card loadPrivateKeyServiceCard() const = 0;
         /**
          * @brief Return Virgil Card of Virgil Identity Service
          */
-        virtual virgil::sdk::model::Card getIdentityServiceCard() const = 0;
+        virtual virgil::sdk::model::Card loadIdentityServiceCard() const = 0;
         /**
          * @brief Empty destructor
          */
