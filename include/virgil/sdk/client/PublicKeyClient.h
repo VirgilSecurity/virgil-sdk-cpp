@@ -49,7 +49,7 @@ namespace virgil {
 namespace sdk {
     namespace client {
         /**
-         * @brief Endpoint "/public-key" to the Virgil Keys Service
+         * @brief Provide access to the Virgil Keys Service endpoints, that perform managing of the Public Key entity
          *
          * Public Key entity is an entity that is implicitly created by using POST /virgil-card endpoint.
          * A Public Key entity contains the associated Virgil Cards entities, that are available via signed version
