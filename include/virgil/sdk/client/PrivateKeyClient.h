@@ -51,17 +51,45 @@ namespace virgil {
 namespace sdk {
     namespace client {
         /**
-         * @brief Entrypoint for interacting with Virgil Private Keys Service PKI.
+         * @brief Entrypoint for interacting with Virgil Private Keys Service
+         *
+         * General statements:
+         *
+         * 1. Make sure that you have registered and confirmed your account for the Public Keys Service.
+         * 2. Make sure that you have a public/private key pair and you have already uploaded the public key
+         *        to the Public Keys Service.
+         * 3. Make sure that you have your private key on local machine.
+         * 4. Make sure that you have registered an application at
+         *        [Virgil Security, Inc](https://developer.virgilsecurity.com/account/signup).
          */
         class PrivateKeyClient : public Client {
         public:
             using Client::Client;
-
+            /**
+             * @brief Load Private Key into the Private Keys Service storage
+             *
+             * @param cardId - Virgil Card identifier that associated to the given Private Key
+             * @param credentials - Private Key to be uploaded
+             */
             void add(const std::string& cardId, const Credentials& credentials);
-
+            /**
+             * @brief Get an existing private key
+             *
+             * @param cardId - Virgil Card identifier that associated requested Private Key
+             * @param validatedIdentity - validated identity that connected with Virgil Card
+             *                            which associated with a requested Private Key
+             *
+             * @return Requested Private Key
+             * @see virgil::sdk::client::IdentityService - to get validated identity
+             */
             virgil::sdk::model::PrivateKey get(const std::string& cardId,
                                                const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
-
+            /**
+             * @brief Delete a Private Key
+             *
+             * @param cardId -  Virgil Card identifier that associated deleted Private Key
+             * @param credentials - Private Key to be deleted
+             */
             void del(const std::string& cardId, const Credentials& credentials);
         };
     }
