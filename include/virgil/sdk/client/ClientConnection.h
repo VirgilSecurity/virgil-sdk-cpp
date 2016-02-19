@@ -49,47 +49,94 @@
 namespace virgil {
 namespace sdk {
     namespace client {
-
         /**
-         * @brief Specific HTTP layer for Virgil Public Keys service.
+         * @brief Specific HTTP layer used for default clients
+         *
+         * @note This class belongs to the **private** API
          */
         class ClientConnection : public virgil::sdk::http::Connection {
         public:
             /**
-             * @brief Configure connection application specific token and with base address URI.
-             * @param appToken - application specific token.
-             * @param baseAddress - service API base address.
+             * @brief Configure connection application specific token and with base address URI
+             *
+             * @param accessToken - application specific token
              */
             explicit ClientConnection(const std::string& accessToken);
             /**
-             * @brief Return access token.
+             * @brief Return access token
              */
             std::string accessToken() const;
             /**
-             * @brief Send synchronous request.
-             * @param request - request to be send.
-             * @throw std::logic_error - if given parameters are inconsistent.
-             * @throw std::runtime_error - if error was occured when send request.
+             * @brief Send synchronous request
+             *
+             * @param request - request to be send
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
              */
             virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
-
+            /**
+             * @brief Sign given request and add signer's Virgil Card identifier to the header
+             *
+             * @param cardId - signer's Virgil Card identifier
+             * @param credentials - Private Key that used for sign
+             * @param request - request to be signed
+             *
+             * @return Signed Request
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
+             */
             virgil::sdk::http::Request signRequest(const std::string& cardId,
                                                    const virgil::sdk::Credentials& credentials,
                                                    const virgil::sdk::http::Request& request);
-
+            /**
+             * @brief Sign given request
+             *
+             * @param credentials - Private Kkey that used for sign
+             * @param request - request to be signed
+             *
+             * @return Signed Request
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
+             */
             virgil::sdk::http::Request signRequest(const virgil::sdk::Credentials& credentials,
                                                    const virgil::sdk::http::Request& request);
-
+            /**
+             * @brief Sign given hash
+             *
+             * @param hash - hash to be signed, ie Virgil Card's hash
+             * @param credentials - Private Kkey that used for sign
+             *
+             * @return Base64 encoded sign
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
+             */
             std::string signHash(const std::string& hash, const Credentials& credentials);
-
+            /**
+             * @brief Encrypt json for recipient identified by given VirgilCard
+             *
+             * @note Used by PrivateKeyService
+             *
+             * @param privateKeysServiceCard [description]
+             * @param jsonBody [description]
+             *
+             * @return Base64 encoded sign
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
+             */
             std::string encryptJsonBody(const virgil::sdk::model::Card& privateKeysServiceCard,
                                         const std::string& jsonBody);
-
             /**
-             * @brief Check response for errors.
-             * @param response - HTTP response to check.
-             * @param action - service action that create given response.
-             * @throw Error - if HTTP response contains error description.
+             * @brief Check response for errors
+             *
+             * @param response - HTTP response to check
+             * @param action - service action that create given response
+             *
+             * @throw Error - if HTTP response contains error description
              */
             virtual void checkResponseError(const virgil::sdk::http::Response& response,
                                             virgil::sdk::Error::Action action);
