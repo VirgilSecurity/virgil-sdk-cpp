@@ -61,7 +61,7 @@ SFMQ8705Y2W1uTexqw==
 Generate keys with specific type
 
 ``` {.cpp}
-VirgilKeyPair keyPair(VirgilKeyPair::Type_EC_SECP256K1, password);
+VirgilKeyPair keyPair(VirgilKeyPair::Type_EC_SECP256K1);
 ```
 
 In table below you can see all types.
