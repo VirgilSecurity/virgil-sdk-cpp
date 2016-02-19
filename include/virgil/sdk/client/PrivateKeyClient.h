@@ -62,8 +62,7 @@ namespace sdk {
             virgil::sdk::model::PrivateKey get(const std::string& cardId,
                                                const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
 
-            void del(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
-                     const Credentials& credentials);
+            void del(const std::string& cardId, const Credentials& credentials);
         };
     }
 }

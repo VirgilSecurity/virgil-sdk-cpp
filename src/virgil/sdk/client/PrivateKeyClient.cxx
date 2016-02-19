@@ -127,8 +127,7 @@ PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdent
     return Marshaller<PrivateKey>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
 }
 
-void PrivateKeyClient::del(const std::string& cardId, const VirgilByteArray& publicKey,
-                           const Credentials& credentials) {
+void PrivateKeyClient::del(const std::string& cardId, const Credentials& credentials) {
     json payload = {{JsonKey::cardId, cardId}};
 
     Request request = Request()

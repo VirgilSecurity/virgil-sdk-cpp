@@ -75,10 +75,6 @@ int main(int argc, char** argv) {
         if (!inFile) {
             throw std::runtime_error("can not read file: public.key");
         }
-        std::cout << "Read public key..." << std::endl;
-        vcrypto::VirgilByteArray publicKey;
-        std::copy(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(),
-                  std::back_inserter(publicKey));
 
         std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;
@@ -92,7 +88,7 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Delete a Private Key" << std::endl;
-        servicesHub.privateKey().del(cardId, publicKey, credentials);
+        servicesHub.privateKey().del(cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
