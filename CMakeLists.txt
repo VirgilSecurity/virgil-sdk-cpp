@@ -46,7 +46,9 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES ON CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable include Examples to install target")
+
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
+mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 # Define library name
 set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
