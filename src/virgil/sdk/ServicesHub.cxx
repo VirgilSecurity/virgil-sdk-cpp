@@ -100,7 +100,7 @@ ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseS
         });
 }
 
-ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCards& serviceCards,
+ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCardLoader& serviceCards,
                          const virgil::sdk::ServiceUri& baseServiceUri) {
     impl_->cardClient = std::make_shared<CardClient>(accessToken, baseServiceUri.getPublicKeyService(),
                                                      [&]() -> Card { return serviceCards.loadKeyServiceCard(); });

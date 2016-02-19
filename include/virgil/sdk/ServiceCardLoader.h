@@ -1,5 +1,5 @@
-#ifndef VIRGIL_SDK_SERVICE_CARDS_H
-#define VIRGIL_SDK_SERVICE_CARDS_H
+#ifndef VIRGIL_SDK_SERVICE_CARD_LOADER_H
+#define VIRGIL_SDK_SERVICE_CARD_LOADER_H
 
 #include <virgil/sdk/model/Card.h>
 
@@ -8,7 +8,7 @@ namespace sdk {
     /**
      * @brief This class specify interface which provide Virgil Services Cards
      */
-    class ServiceCards {
+    class ServiceCardLoader {
     public:
         /**
          * @brief Return Virgil Card of Virgil Keys Service
@@ -28,10 +28,10 @@ namespace sdk {
          * @brief Empty destructor
          */
         // clang-format off
-    virtual ~ServiceCards() noexcept {}
+    virtual ~ServiceCardLoader() noexcept {}
         // clang-format on
     };
 } // sdk
 } // virgil
 
-#endif /* VIRGIL_SDK_SERVICE_CARDS_H */
+#endif /* VIRGIL_SDK_SERVICE_CARD_LOADER_H */
