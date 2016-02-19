@@ -49,14 +49,36 @@ namespace virgil {
 namespace sdk {
     namespace client {
         /**
-         * @brief Endpoint "/public-key" to the Virgil Public Keys Service (API).
+         * @brief Provide access to the Virgil Keys Service endpoints, that perform managing of the Public Key entity
+         *
+         * Public Key entity is an entity that is implicitly created by using POST /virgil-card endpoint.
+         * A Public Key entity contains the associated Virgil Cards entities, that are available via signed version
+         *      of the GET /public-key/{public-key-id} endpoint.
+         *
+         * @see virgil::sdk::client::CardClient::create()
+         * @see virgil::sdk::client::CardClient::get()
          */
         class PublicKeyClient : public Client {
         public:
             using Client::Client;
-
+            /**
+             * @brief Returns Public Key by it's identifier
+             *
+             * @param publicKeyId - Public Key identifier
+             * @return Pubic Key
+             */
             virgil::sdk::model::PublicKey get(const std::string& publicKeyId);
-
+            /**
+             * @brief Revoke a Public Key
+             *
+             * To revoke the Public Key it's mandatory to pass validation tokens obtained on Virgil Identity service,
+             *     for all confirmed Virgil Cards for this Public Key.
+             *
+             * @param publicKeyId - Public Key identifier to be revoked
+             * @param validatedIdentitys - list of validated identities that was associated with given Public Key
+             * @param cardId - one of the Virgil Cards identifier that associated with given Public Key
+             * @param credentials - Private Key associated with given Virgil Card
+             */
             void revoke(const std::string& publicKeyId,
                         const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
                         const std::string& cardId, const virgil::sdk::Credentials& credentials);

@@ -100,18 +100,18 @@ ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseS
         });
 }
 
-ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCards& serviceCards,
+ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCardLoader& serviceCards,
                          const virgil::sdk::ServiceUri& baseServiceUri) {
     impl_->cardClient = std::make_shared<CardClient>(accessToken, baseServiceUri.getPublicKeyService(),
-                                                     [&]() -> Card { return serviceCards.getKeysServiceCard(); });
+                                                     [&]() -> Card { return serviceCards.loadKeyServiceCard(); });
     impl_->identityClient =
         std::make_shared<IdentityClient>(accessToken, baseServiceUri.getIdentityService(),
-                                         [&]() -> Card { return serviceCards.getIdentityServiceCard(); });
+                                         [&]() -> Card { return serviceCards.loadIdentityServiceCard(); });
     impl_->publicKeyClient = std::make_shared<PublicKeyClient>(
-        accessToken, baseServiceUri.getPublicKeyService(), [&]() -> Card { return serviceCards.getKeysServiceCard(); });
+        accessToken, baseServiceUri.getPublicKeyService(), [&]() -> Card { return serviceCards.loadKeyServiceCard(); });
     impl_->privateKeyClient =
         std::make_shared<PrivateKeyClient>(accessToken, baseServiceUri.getPrivateKeyService(),
-                                           [&]() -> Card { return serviceCards.getPrivateKeysServiceCard(); });
+                                           [&]() -> Card { return serviceCards.loadPrivateKeyServiceCard(); });
 }
 
 CardClient& ServicesHub::card() {

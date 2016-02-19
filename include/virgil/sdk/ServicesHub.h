@@ -41,7 +41,7 @@
 #include <string>
 
 #include <virgil/sdk/ServiceUri.h>
-#include <virgil/sdk/ServiceCards.h>
+#include <virgil/sdk/ServiceCardLoader.h>
 #include <virgil/sdk/client/IdentityClient.h>
 #include <virgil/sdk/client/PrivateKeyClient.h>
 #include <virgil/sdk/client/PublicKeyClient.h>
@@ -65,7 +65,7 @@ namespace sdk {
          *
          * @param accessToken - provides an authenticated secure access to the Keys Service
          *                      and is passed with each API call @see
-         * @param serviceUri - collection of Virgil Services URIs
+         * @param baseServiceUri - collection of Virgil Services URIs
          *
          * @note First you must create a free Virgil Security developer’s account by signing up.
          *       Once you have your account you can sign in and generate an access token for your application.
@@ -75,17 +75,17 @@ namespace sdk {
         /**
          * @brief Configure services hub with known Virgil Services Cards
          *
-         * @detail This constructor can be used if Virgil Cards of Virgil Services stored locally.
+         * This constructor can be used if Virgil Cards of Virgil Services stored locally.
          *
          * @param accessToken - provides an authenticated secure access to the Keys Service
          *                      and is passed with each API call @see
-         * @param serviceUri - collection of Virgil Services URIs
+         * @param baseServiceUri - collection of Virgil Services URIs
          * @param serviceCards - Virgil Cards provider for Virgil Services
          *
          * @note First you must create a free Virgil Security developer’s account by signing up.
          *       Once you have your account you can sign in and generate an access token for your application.
          */
-        explicit ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCards& serviceCards,
+        explicit ServicesHub(const std::string& accessToken, const virgil::sdk::ServiceCardLoader& serviceCards,
                              const virgil::sdk::ServiceUri& baseServiceUri = virgil::sdk::ServiceUri());
 
         /**

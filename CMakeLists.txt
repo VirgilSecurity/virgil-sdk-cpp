@@ -43,8 +43,16 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
-set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
-set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
+set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
+set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
+
+set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
+set (INSTALL_EXT_INCLUDES OFF CACHE BOOL "Enable installation of SDK dependency library headers")
+mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_INCLUDES)
+
+set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
+mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 # Define library name
 set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
@@ -97,8 +105,22 @@ target_link_libraries (${VIRGIL_SDK} ${VIRGIL_CRYPTO_LIBRARIES} ${REST_LIBRARIES
 
 # Install
 install (TARGETS ${VIRGIL_SDK} DESTINATION lib)
-install (FILES ${REST_LIBRARY} DESTINATION lib)
-install (DIRECTORY "include/" DESTINATION "include" PATTERN "util" EXCLUDE)
+if (INSTALL_EXT_LIBS)
+    install (FILES ${REST_LIBRARY} DESTINATION lib)
+    install (FILES ${VIRGIL_CRYPTO_LIBRARIES} DESTINATION lib)
+    if (INSTALL_EXT_INCLUDES)
+        install (DIRECTORY "${JSON_INCLUDE_DIRS}/" DESTINATION "include")
+        install (DIRECTORY "${REST_INCLUDE_DIRS}/" DESTINATION "include")
+        install (DIRECTORY "${VIRGIL_CRYPTO_INCLUDE_DIRS}/" DESTINATION "include")
+    endif (INSTALL_EXT_INCLUDES)
+endif (INSTALL_EXT_LIBS)
+
+install (DIRECTORY "include/" DESTINATION "include"
+     PATTERN "util" EXCLUDE
+     PATTERN "endpoints" EXCLUDE
+     PATTERN "ClientConnection.h" EXCLUDE
+     PATTERN "Headers.h" EXCLUDE
+)
 
 # Add unit tests
 if (ENABLE_TESTING)
@@ -110,12 +132,12 @@ else (ENABLE_TESTING)
 endif (ENABLE_TESTING)
 
 # Add examples
-if (VIRGIL_EXAMPLES)
+if (ENABLE_EXAMPLES)
     add_subdirectory (examples)
     message (STATUS "Examples status: ENABLED")
-else (VIRGIL_EXAMPLES)
+else (ENABLE_EXAMPLES)
     message (STATUS "Examples status: DISABLED")
-endif (VIRGIL_EXAMPLES)
+endif (ENABLE_EXAMPLES)
 
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
@@ -128,6 +150,18 @@ else ()
 endif (DOT_PROGRAM)
 
 if (DOXYGEN_FOUND)
+    if (DOXYGEN_EXCLUDE_PRIVATE)
+        set (DOXYGEN_EXCLUDE
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/util/*"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/endpoints/*"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/http/Headers.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/client/ClientConnection.h"
+        )
+        string (REPLACE ";" " " DOXYGEN_EXCLUDE "${DOXYGEN_EXCLUDE}")
+        set (DOXYGEN_EXTRACT_PRIVATE "NO")
+    else ()
+        set (DOXYGEN_EXTRACT_PRIVATE "YES")
+    endif (DOXYGEN_EXCLUDE_PRIVATE)
     configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
     add_custom_target ("doc"
         ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile

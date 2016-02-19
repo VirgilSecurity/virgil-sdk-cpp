@@ -112,7 +112,7 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
     return validatedIdentity;
 }
 
-bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
+bool IdentityClient::validate(const ValidatedIdentity& validatedIdentity) {
     json payload = {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
                     {JsonKey::value, validatedIdentity.getValue()},
                     {JsonKey::validationToken, validatedIdentity.getToken()}};
@@ -127,7 +127,7 @@ bool IdentityClient::isValid(const ValidatedIdentity& validatedIdentity) {
     Response response = connection.send(request);
 
     // if false throwing exeption
-    connection.checkResponseError(response, Error::Action::IDENTITY_IS_VALID);
+    connection.checkResponseError(response, Error::Action::IDENTITY_VALIDATE);
     this->verifyResponse(response);
 
     return true;
