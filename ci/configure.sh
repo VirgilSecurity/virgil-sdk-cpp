@@ -51,9 +51,7 @@ cd "${BUILD_DIR_NAME}"
 export PATH=$HOME/cmake/bin:$PATH
 cmake --version
 
-if [ "${PUBLISH_DOCS}" == "ON" ]; then
-    export PATH=$HOME/doxygen/bin:$PATH
-    doxygen --version
-fi
+export PATH=$HOME/doxygen/bin:$PATH
+doxygen --version
 
 cmake ${CMAKE_ARGS} ..

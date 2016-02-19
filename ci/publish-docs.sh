@@ -37,7 +37,7 @@
 
 set -ev
 
-if [ "${PUBLISH_DOCS}" != "ON" ] || [ "${TRAVIS_BRANCH}" != "${DOC_BRANCH}" ] || [ "${CC}" != "clang" ]; then exit; fi
+if [ "${TRAVIS_BRANCH}" != "${DOC_BRANCH}" ] || [ "${CC}" != "clang" ]; then exit; fi
 
 # Settings
 REPO_PATH=git@github.com:VirgilSecurity/virgil-sdk-cpp.git
