@@ -144,7 +144,7 @@ namespace sdk {
 
                     PublicKey publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
-                    return Card(cardConfirmed, cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey);
+                    return Card(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey, cardConfirmed);
 
                 } catch (std::exception& exception) {
                     throw std::logic_error(std::string("virgil-sdk:\n Marshaller<Card>::fromJson ") + exception.what());

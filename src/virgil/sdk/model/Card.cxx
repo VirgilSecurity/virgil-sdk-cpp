@@ -41,15 +41,16 @@ using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::Card;
 using virgil::sdk::model::CardIdentity;
 
-Card::Card(const bool confirmed, const std::string& id, const std::string& createdAt, const std::string& hash,
-           const CardIdentity& cardIdentity, const std::map<std::string, std::string>& data, const PublicKey& publicKey)
-        : confirmed_(confirmed),
-          id_(id),
+Card::Card(const std::string& id, const std::string& createdAt, const std::string& hash,
+           const CardIdentity& cardIdentity, const std::map<std::string, std::string>& data, const PublicKey& publicKey,
+           const bool confirmed)
+        : id_(id),
           createdAt_(createdAt),
           hash_(hash),
           cardIdentity_(cardIdentity),
           data_(data),
-          publicKey_(publicKey) {
+          publicKey_(publicKey),
+          confirmed_(confirmed) {
 }
 
 bool Card::isConfirmed() const {

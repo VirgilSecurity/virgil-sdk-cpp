@@ -151,10 +151,10 @@ namespace test {
     }
 
     Card getCard() {
-        return Card(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+        return Card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
                     CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
                                  "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                    std::map<std::string, std::string>(), getPublicKey());
+                    std::map<std::string, std::string>(), getPublicKey(), true);
     }
 
     json getJsonResponseCards() {
@@ -235,10 +235,10 @@ namespace test {
         std::vector<Card> cards;
         cards.push_back(getCard());
 
-        Card card(true, "ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+        Card card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
                   CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
                                "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                  {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey());
+                  {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), true);
 
         cards.push_back(card);
         return cards;

@@ -58,21 +58,17 @@ namespace sdk {
             /**
              * @brief Create Virgil Card with all associated data
              *
-             * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
              * @param id - Virgil Card identifier
              * @param createdAt - creation timestamp
              * @param hash - compressed information about Virgil Card, this value can be used for signing
              * @param cardIdentity - identity associated with Virgil Card
              * @param data - custom data
              * @param publicKey - Public Key connected to the Virgil Card
+             * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
              */
-            Card(const bool confirmed, const std::string& id, const std::string& createdAt, const std::string& hash,
+            Card(const std::string& id, const std::string& createdAt, const std::string& hash,
                  const virgil::sdk::model::CardIdentity& cardIdentity, const std::map<std::string, std::string>& data,
-                 const virgil::sdk::model::PublicKey& publicKey);
-            /**
-             * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
-             */
-            bool isConfirmed() const;
+                 const virgil::sdk::model::PublicKey& publicKey, const bool confirmed);
             /**
              * @brief Return Virgil Card identifier
              */
@@ -98,15 +94,19 @@ namespace sdk {
              * @brief Return Public Key connected to the Virgil Card
              */
             const virgil::sdk::model::PublicKey& getPublicKey() const;
+            /**
+             * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
+             */
+            bool isConfirmed() const;
 
         private:
-            bool confirmed_ = false;
             std::string id_;
             std::string createdAt_;
             std::string hash_;
             virgil::sdk::model::CardIdentity cardIdentity_;
             std::map<std::string, std::string> data_;
             virgil::sdk::model::PublicKey publicKey_;
+            bool confirmed_ = false;
         };
         /**
          * @brief Compare Virgil Cards for equality
