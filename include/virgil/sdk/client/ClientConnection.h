@@ -140,6 +140,7 @@ namespace sdk {
              */
             virtual void checkResponseError(const virgil::sdk::http::Response& response,
                                             virgil::sdk::Error::Action action);
+
         private:
             std::string accessToken_;
         };
