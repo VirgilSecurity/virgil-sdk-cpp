@@ -47,6 +47,10 @@ set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES ON CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable include Examples to install target")
 
+set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
+set (INSTALL_EXT_INCLUDES OFF CACHE BOOL "Enable installation of SDK dependency library headers")
+mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_INCLUDES)
+
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
@@ -101,7 +105,16 @@ target_link_libraries (${VIRGIL_SDK} ${VIRGIL_CRYPTO_LIBRARIES} ${REST_LIBRARIES
 
 # Install
 install (TARGETS ${VIRGIL_SDK} DESTINATION lib)
-install (FILES ${REST_LIBRARY} DESTINATION lib)
+if (INSTALL_EXT_LIBS)
+    install (FILES ${REST_LIBRARY} DESTINATION lib)
+    install (FILES ${VIRGIL_CRYPTO_LIBRARIES} DESTINATION lib)
+    if (INSTALL_EXT_INCLUDES)
+        install (DIRECTORY "${JSON_INCLUDE_DIRS}/" DESTINATION "include")
+        install (DIRECTORY "${REST_INCLUDE_DIRS}/" DESTINATION "include")
+        install (DIRECTORY "${VIRGIL_CRYPTO_INCLUDE_DIRS}/" DESTINATION "include")
+    endif (INSTALL_EXT_INCLUDES)
+endif (INSTALL_EXT_LIBS)
+
 install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "util" EXCLUDE
      PATTERN "endpoints" EXCLUDE
