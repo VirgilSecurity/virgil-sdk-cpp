@@ -47,21 +47,56 @@ namespace virgil {
 namespace sdk {
     namespace model {
         /**
-         * @brief Data object represent "Virgil Card" entity.
+         * @brief Data object represent "Virgil Card" entity
          */
         class Card {
         public:
+            /**
+             * @brief Create empty non valid Virgil Card
+             */
             Card() = default;
+            /**
+             * @brief Create Virgil Card with all associated data
+             *
+             * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
+             * @param id - Virgil Card identifier
+             * @param createdAt - creation timestamp
+             * @param hash - compressed information about Virgil Card, this value can be used for signing
+             * @param cardIdentity - identity associated with Virgil Card
+             * @param data - custom data
+             * @param publicKey - Public Key connected to the Virgil Card
+             */
             Card(const bool confirmed, const std::string& id, const std::string& createdAt, const std::string& hash,
                  const virgil::sdk::model::CardIdentity& cardIdentity, const std::map<std::string, std::string>& data,
                  const virgil::sdk::model::PublicKey& publicKey);
-
+            /**
+             * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
+             */
             bool isConfirmed() const;
+            /**
+             * @brief Return Virgil Card identifier
+             */
             const std::string& getId() const;
+            /**
+             * @brief Return creation timestamp
+             */
             const std::string& getCreatedAt() const;
+            /**
+             * @brief Return compressed information about Virgil Card
+             * @note This value can be used for signing
+             */
             const std::string& getHash() const;
+            /**
+             * @brief Return identity associated with Virgil Card
+             */
             const virgil::sdk::model::CardIdentity& getCardIdentity() const;
+            /**
+             * @brief Return user's custom data associated with Virgil Card
+             */
             const std::map<std::string, std::string>& getData() const;
+            /**
+             * @brief Return Public Key connected to the Virgil Card
+             */
             const virgil::sdk::model::PublicKey& getPublicKey() const;
 
         private:
@@ -73,7 +108,11 @@ namespace sdk {
             std::map<std::string, std::string> data_;
             virgil::sdk::model::PublicKey publicKey_;
         };
-
+        /**
+         * @brief Compare Virgil Cards for equality
+         *
+         * @return true if given objects are equal, false - otherwise
+         */
         inline bool operator==(const Card& left, const Card& right) {
             if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
                 left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
@@ -84,7 +123,11 @@ namespace sdk {
 
             return 0;
         }
-
+        /**
+         * @brief Compare Virgil Cards for inequality
+         *
+         * @return true if given objects are inequal, false - otherwise
+         */
         inline bool operator!=(const Card& left, const Card& right) {
             return !(left == right);
         }
