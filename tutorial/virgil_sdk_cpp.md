@@ -3,7 +3,7 @@
 - [Introduction](#introduction)
 - [Obtaining an Access Token](#obtaining-an-access-token)
 - [Identity Check](#identity-check)
-  - [Identity Verification](#Identity-verification)
+  - [Identity Verification](#identity-verification)
   - [Confirm and Get an Validated Identity](#confirm-and-get-an-validated-identity)
 - [Cards and Public Keys](#cards-and-public-keys)
   - [Publish a Card](#publish-a-virgil-card)
@@ -51,7 +51,7 @@ std::string actionId = servicesHub.identity().verify(identity);
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/identity_verify.cxx)
 
 
-#### Confirm and Get an Identity Token
+#### Confirm and Get a Validated Identity
 
 Confirm the identity and get a temporary token.
 
