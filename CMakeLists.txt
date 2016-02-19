@@ -44,7 +44,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
-set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+set (ENABLE_EXAMPLES ON CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable include Examples to install target")
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 
@@ -117,12 +117,12 @@ else (ENABLE_TESTING)
 endif (ENABLE_TESTING)
 
 # Add examples
-if (VIRGIL_EXAMPLES)
+if (ENABLE_EXAMPLES)
     add_subdirectory (examples)
     message (STATUS "Examples status: ENABLED")
-else (VIRGIL_EXAMPLES)
+else (ENABLE_EXAMPLES)
     message (STATUS "Examples status: DISABLED")
-endif (VIRGIL_EXAMPLES)
+endif (ENABLE_EXAMPLES)
 
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
