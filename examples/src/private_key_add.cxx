@@ -81,8 +81,8 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Stash a Private Key" << std::endl;
-        servicesHub.privateKey().stash(cardId, credentials);
+        std::cout << "Add a Private Key" << std::endl;
+        servicesHub.privateKey().add(cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

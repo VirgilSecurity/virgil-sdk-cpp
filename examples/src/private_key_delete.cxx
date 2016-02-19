@@ -92,8 +92,8 @@ int main(int argc, char** argv) {
                   std::back_inserter(privateKey));
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        std::cout << "Destroy a Private Key" << std::endl;
-        servicesHub.privateKey().destroy(cardId, publicKey, credentials);
+        std::cout << "Delete a Private Key" << std::endl;
+        servicesHub.privateKey().del(cardId, publicKey, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

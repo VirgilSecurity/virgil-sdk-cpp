@@ -73,9 +73,9 @@ namespace sdk {
             VIRGIL_CARD_SERVICE_GET,
             VIRGIL_CARD_REVOKE,
 
-            PRIVATE_KEY_STASH,
+            PRIVATE_KEY_ADD,
             PRIVATE_KEY_GET,
-            PRIVATE_KEY_DESTROY,
+            PRIVATE_KEY_DEL,
 
             IDENTITY_VERIFY,
             IDENTITY_CONFIRM,

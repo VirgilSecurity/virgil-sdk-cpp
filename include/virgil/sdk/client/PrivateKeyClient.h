@@ -57,13 +57,13 @@ namespace sdk {
         public:
             using Client::Client;
 
-            void stash(const std::string& cardId, const Credentials& credentials);
+            void add(const std::string& cardId, const Credentials& credentials);
 
             virgil::sdk::model::PrivateKey get(const std::string& cardId,
                                                const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
 
-            void destroy(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
-                         const Credentials& credentials);
+            void del(const std::string& cardId, const virgil::crypto::VirgilByteArray& publicKey,
+                     const Credentials& credentials);
         };
     }
 }
