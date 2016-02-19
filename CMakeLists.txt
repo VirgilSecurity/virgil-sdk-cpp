@@ -43,8 +43,8 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
-set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
-set (ENABLE_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
+set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 
 set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
