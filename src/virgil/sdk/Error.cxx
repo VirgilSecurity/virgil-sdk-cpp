@@ -60,7 +60,6 @@ static std::string actionStr(Error::Action action) {
         {Error::Action::VIRGIL_CARD_UNSIGN, "unsign the Virgil Card."},
         {Error::Action::VIRGIL_CARD_SEARCH, "search a Virgil Card."},
         {Error::Action::VIRGIL_CARD_SEARCH_APP, "search an Application Virgil Card."},
-        {Error::Action::VIRGIL_CARD_SERVICE_GET, "get a Service Virgil Card."},
         {Error::Action::VIRGIL_CARD_REVOKE, "revoke a Virgil Card."},
 
         {Error::Action::PRIVATE_KEY_ADD, "load a Private Key into the Private"
@@ -69,7 +68,7 @@ static std::string actionStr(Error::Action action) {
         {Error::Action::PRIVATE_KEY_DEL, "delete a Private Key."},
         {Error::Action::IDENTITY_VERIFY, "verify the Identity."},
         {Error::Action::IDENTITY_CONFIRM, "confirms the Identity."},
-        {Error::Action::IDENTITY_IS_VALID, "validates the passed token."}};
+        {Error::Action::IDENTITY_VALIDATE, "validates the passed token."}};
     auto message = code2str.find(action);
     return "Failed action: " + (message != code2str.end() ? message->second : "unknown.");
 }

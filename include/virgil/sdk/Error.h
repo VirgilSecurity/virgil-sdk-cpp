@@ -70,7 +70,6 @@ namespace sdk {
             VIRGIL_CARD_UNSIGN,
             VIRGIL_CARD_SEARCH,
             VIRGIL_CARD_SEARCH_APP,
-            VIRGIL_CARD_SERVICE_GET,
             VIRGIL_CARD_REVOKE,
 
             PRIVATE_KEY_ADD,
@@ -79,7 +78,7 @@ namespace sdk {
 
             IDENTITY_VERIFY,
             IDENTITY_CONFIRM,
-            IDENTITY_IS_VALID
+            IDENTITY_VALIDATE
         };
         /**
          * @brief Initialize exception.

@@ -127,7 +127,7 @@ bool IdentityClient::validate(const ValidatedIdentity& validatedIdentity) {
     Response response = connection.send(request);
 
     // if false throwing exeption
-    connection.checkResponseError(response, Error::Action::IDENTITY_IS_VALID);
+    connection.checkResponseError(response, Error::Action::IDENTITY_VALIDATE);
     this->verifyResponse(response);
 
     return true;
