@@ -45,6 +45,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 # Configurable variables
 set (ENABLE_TESTING ON CACHE BOOL "Enable unit tests")
 set (VIRGIL_EXAMPLES ON CACHE BOOL "Enable build of Examples")
+set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable include Examples to install target")
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 
 # Define library name
