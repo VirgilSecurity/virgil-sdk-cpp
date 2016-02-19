@@ -58,7 +58,7 @@ namespace sdk {
          *         the confirmation code sent to the email and identity id from the previous step
          *   - Identity service returns the token within class @link virgil::sdk::model::ValidatedIdentity @endlink,
          *         that can be used to prove that the user is the identity holder
-         *   - To verify that the user is identity holder invoke the @link isValid() @endlink method
+         *   - To verify that the user is identity holder invoke the @link validate() @endlink method
          *         with the token from the previous step
          */
         class IdentityClient : public Client {
@@ -92,7 +92,7 @@ namespace sdk {
              * @param validatedIdentity - identity and token to be validated
              * @return true if given token is valid, false - otherwise
              */
-            bool isValid(const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
+            bool validate(const virgil::sdk::model::ValidatedIdentity& validatedIdentity);
         };
     }
 }

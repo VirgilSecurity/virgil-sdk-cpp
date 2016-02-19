@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 
         vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
-        bool validateToken = servicesHub.identity().isValid(validatedIdentity);
+        bool validateToken = servicesHub.identity().validate(validatedIdentity);
         std::string validatedIdentityStr =
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
         if (validateToken) {
