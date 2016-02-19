@@ -114,14 +114,10 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const Card& left, const Card& right) {
-            if (left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
-                left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
-                left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
-                left.getPublicKey() == right.getPublicKey()) {
-                return 1;
-            }
-
-            return 0;
+            return left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
+                   left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
+                   left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
+                   left.getPublicKey() == right.getPublicKey();
         }
         /**
          * @brief Compare Virgil Cards for inequality
