@@ -96,15 +96,12 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const CardSign& left, const CardSign& right) {
-            if (left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                left.getSignerCardId() == right.getSignerCardId() &&
-                left.getSignedCardId() == right.getSignedCardId() &&
-                left.getSignedDigest() == right.getSignedDigest()) {
-                return 1;
-            }
-            return 0;
+            return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.getSignerCardId() == right.getSignerCardId() &&
+                   left.getSignedCardId() == right.getSignedCardId() &&
+                   left.getSignedDigest() == right.getSignedDigest();
         }
-       /**
+        /**
          * @brief Compare Virgil Card's Sign for inequality
          *
          * @return true if given objects are inequal, false - otherwise
