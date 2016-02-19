@@ -119,29 +119,20 @@ VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage, recipi
 );
 ```
 
+
 ## Build
 
 Run one of the following commands in the project's root folder.
-
-  * Build Public Keys SDK
-
-    * Unix:
-
-            mkdir build && cd build && cmake -DVIRGIL_SDK_KEYS=ON .. && make -j4
-
-    * Windows:
-
-            mkdir build && cd build && cmake -DVIRGIL_SDK_KEYS=ON .. && nmake
-
-  * Build Private Keys SDK
+  * Build SDK
 
     * Unix:
 
-            mkdir build && cd build && cmake -DVIRGIL_SDK_PRIVATE_KEYS=ON .. && make -j4
+            mkdir build && cd build && cmake .. && make -j4
 
     * Windows:
 
-            mkdir build && cd build && cmake -DVIRGIL_SDK_PRIVATE_KEYS=ON .. && nmake
+            mkdir build && cd build && cmake .. && nmake
+
 
   * Build Examples
 
