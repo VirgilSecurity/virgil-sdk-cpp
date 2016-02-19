@@ -91,7 +91,8 @@ cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 VirgilByteArray encryptedMessage = cipher.encrypt(str2bytes(message), true);
 
 VirgilSigner signer;
-VirgilByteArray signedEncryptedMessage = signer.sign(encryptedMessage, senderPrivateKey, senderPrivateKeyPassword);
+VirgilByteArray signedEncryptedMessage = signer.sign(encryptedMessage, senderPrivateKey,
+        senderPrivateKeyPassword);
 ```
 
 ## Step 3. Get sender's Public Key
@@ -113,10 +114,8 @@ if (!verified) {
     throw std::runtime_error("Signature is not valid.");
 }
 
-VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage,
-    recipientCard.getId(),
-    recipientPrivateKey,
-    recipientPrivateKeyPassword
+VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage, recipientCard.getId(),
+        recipientPrivateKey, recipientPrivateKeyPassword
 );
 ```
 
