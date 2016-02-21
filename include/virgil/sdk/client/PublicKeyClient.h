@@ -69,7 +69,7 @@ namespace sdk {
              */
             virgil::sdk::model::PublicKey get(const std::string& publicKeyId);
             /**
-             * @brief Revoke a Public Key
+             * @brief Revoke all Cards with confirmed Identity connected by the single public key.
              *
              * To revoke the Public Key it's mandatory to pass validation tokens obtained on Virgil Identity service,
              *     for all confirmed Virgil Cards for this Public Key.
@@ -81,6 +81,17 @@ namespace sdk {
              */
             void revoke(const std::string& publicKeyId,
                         const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
+                        const std::string& cardId, const virgil::sdk::Credentials& credentials);
+            /**
+             * @brief Revoke all the Cards with unconfirmed Identity connected by the single public key.
+             *
+             * @param publicKeyId - Public Key identifier to be revoked
+             * @param identitys - list of not validated identities that was associated with given Public Key
+             * @param cardId - one of the Virgil Cards identifier that associated with given Public Key
+             * @param credentials - Private Key associated with given Virgil Card
+             */
+            void revokeNotValid(const std::string& publicKeyId,
+                        const std::vector<virgil::sdk::model::Identity> identitys,
                         const std::string& cardId, const virgil::sdk::Credentials& credentials);
         };
     }
