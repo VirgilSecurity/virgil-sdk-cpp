@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
         std::string privateKeyStr = vsdk::io::Marshaller<vsdk::model::PrivateKey>::toJson<4>(privateKey);
 
         std::cout << "Private Key:" << std::endl;
-        std::cout << privateKeyStr << std::endl;
+        std::cout << privateKeyStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

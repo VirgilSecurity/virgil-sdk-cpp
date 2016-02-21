@@ -90,7 +90,8 @@ int main(int argc, char** argv) {
             servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId, credentials);
 
         std::string cardSignStr = vsdk::io::Marshaller<vsdk::model::CardSign>::toJson<4>(cardSign);
-        std::cout << "CardSign:\n" << cardSignStr << std::endl;
+        std::cout << "CardSign:\n";
+        std::cout << cardSignStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

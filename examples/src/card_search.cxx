@@ -54,20 +54,34 @@ const std::string VIRGIL_ACCESS_TOKEN =
     "L8A4+ii+zd";
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
+    if (argc < 4) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
+                << std::endl;
         return 1;
     }
 
     try {
         std::string userEmail = argv[1];
+        std::string relation = argv[2];
+        std::string includeUnconfirmedStr = argv[3];
+
+        bool includeUnconfirmed = true;
+        if (includeUnconfirmedStr == "0") {
+            includeUnconfirmed = false;
+        }
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
         std::cout << "Search for Cards" << std::endl;
-        std::vector<vsdk::model::Card> foundCards = servicesHub.card().search(identity);
+
+        std::vector<vsdk::model::Card> foundCards;
+        if (relation.empty()) {
+            foundCards = servicesHub.card().search(identity, std::vector<std::string>(), includeUnconfirmed);
+        } else {
+            foundCards = servicesHub.card().search(identity, {relation}, includeUnconfirmed);
+        }
 
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << std::endl;

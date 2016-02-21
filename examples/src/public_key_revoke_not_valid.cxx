@@ -43,7 +43,6 @@
 #include <vector>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -56,22 +55,40 @@ const std::string VIRGIL_ACCESS_TOKEN =
     "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
     "L8A4+ii+zd";
 
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <application_name> " << std::endl;
+    if (argc < 5) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <public_key_id> " + " <card_id> " +
+                         " <path_private_key>"
+                  << std::endl;
         return 1;
     }
 
     try {
+        std::string userEmail = argv[1];
+        std::string publicKeyId = argv[2];
+        std::string cardId = argv[3];
+        std::string pathPrivateKey = argv[4];
+
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Search for Application Cards" << std::endl;
+        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
-        std::string appName = "com.virgilsecurity.";
-        appName += argv[1];
-        std::vector<vsdk::model::Card> allAppCards = servicesHub.card().searchApp(appName);
-        std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
-        std::cout << jsonAllAppCards << "\n";
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }
+        vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(privateKey));
+
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
+
+        std::cout << "Revoke the Public Key" << std::endl;
+        servicesHub.publicKey().revokeNotValid(publicKeyId, {identity}, cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

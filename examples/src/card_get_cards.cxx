@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
         std::vector<vsdk::model::Card> cards = servicesHub.card().get(publicKeyId, cardId, credentials);
         std::string cardsStr = vsdk::io::cardsToJson(cards, 4);
         std::cout << "Virgil Cards:" << std::endl;
-        std::cout << cardsStr << std::endl;
+        std::cout << cardsStr << "\n";
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

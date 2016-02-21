@@ -58,7 +58,7 @@ const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
     if (argc < 5) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <owner_card_id>" + " <path_private_key>" +
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <card_id>" + " <path_private_key>" +
                          " <validation_token>"
                   << std::endl;
         return 1;
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 
     try {
         std::string userEmail = argv[1];
-        std::string signerCardId = argv[2];
+        std::string cardId = argv[2];
         std::string pathPrivateKey = argv[3];
         std::string token = argv[4];
 
@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Revoke a Virgil Card" << std::endl;
-        servicesHub.card().revoke(signerCardId, validatedIdentity, credentials);
+        servicesHub.card().revoke(cardId, validatedIdentity, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

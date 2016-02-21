@@ -34,8 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-
 #include <json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -296,7 +294,7 @@ Card CardClient::create(const virgil::sdk::Credentials& credentials, const std::
                         const std::map<std::string, std::string>& toBeSignedCards) {
     json jsonPayload = json::parse(payload);
     ClientConnection connection(this->getAccessToken());
-    if (!toBeSignedCards.empty()) {
+    if ( ! toBeSignedCards.empty() ) {
         json signs = json::array();
         for(const auto& toBeSignedCard : toBeSignedCards) {
             std::string signedHash = connection.signHash(toBeSignedCard.second, credentials);
@@ -306,8 +304,6 @@ Card CardClient::create(const virgil::sdk::Credentials& credentials, const std::
         }
         jsonPayload[JsonKey::signs] = signs;
     }
-
-    std::cout << jsonPayload << "\n";
 
     Request request = Request()
                           .post()
