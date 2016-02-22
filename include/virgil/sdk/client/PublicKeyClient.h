@@ -91,8 +91,8 @@ namespace sdk {
              * @param credentials - Private Key associated with given Virgil Card
              */
             void revokeNotValid(const std::string& publicKeyId,
-                        const std::vector<virgil::sdk::model::Identity> identitys,
-                        const std::string& cardId, const virgil::sdk::Credentials& credentials);
+                                const std::vector<virgil::sdk::model::Identity> identitys, const std::string& cardId,
+                                const virgil::sdk::Credentials& credentials);
         };
     }
 }
