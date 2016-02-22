@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
         vsdk::model::PublicKey publicKey = servicesHub.publicKey().get(publicKeyId);
         std::string publicKeyStr = vsdk::io::Marshaller<vsdk::model::PublicKey>::toJson<4>(publicKey);
         std::cout << "Public Key:" << std::endl;
-        std::cout << publicKeyStr << "\n";
+        std::cout << publicKeyStr << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
         appName += argv[1];
         std::vector<vsdk::model::Card> allAppCards = servicesHub.card().searchApp(appName);
         std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
-        std::cout << jsonAllAppCards << "\n";
+        std::cout << jsonAllAppCards << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

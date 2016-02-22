@@ -75,14 +75,14 @@ int main() {
         vsdk::model::Card publicKeysServiceCard = publicKeysServiceCards.at(0);
         vsdk::model::Card privateKeysServiceCard = privateKeysServiceCards.at(0);
 
-        std::cout << "\n\nIdentity Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(identityServiceCard) << "\n\n\n";
+        std::cout << "Identity Service Card:" << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(identityServiceCard) << std::endl;
 
         std::cout << "Public Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(publicKeysServiceCard) << "\n\n\n";
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(publicKeysServiceCard) << std::endl;
 
         std::cout << "Private Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << "\n\n\n";
+        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

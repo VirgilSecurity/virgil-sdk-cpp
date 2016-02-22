@@ -56,7 +56,7 @@ const std::string VIRGIL_ACCESS_TOKEN =
 int main(int argc, char** argv) {
     if (argc < 4) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
-                << std::endl;
+                  << std::endl;
         return 1;
     }
 
