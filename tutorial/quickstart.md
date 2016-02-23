@@ -6,7 +6,7 @@
     - [Initialization](#initialization)
     - [Step 1. Create and Publish the Keys](#step-1-create-and-publish-the-keys)
     - [Step 2. Encrypt and Sign](#step-2-encrypt-and-sign)
-    - [Step 3. Get sender's Public Key](#step-3-get-senders-public-key)
+    - [Step 3. Get Sender's Card](#step-3-get-senders-card)
     - [Step 4. Verify and Decrypt](#step-4-verify-and-decrypt)
 - [Build](#build)
 - [See also](#see-also)
@@ -14,7 +14,9 @@
 ## Introduction
 
 This guide will help you get started using the Crypto Library and Virgil Keys Services for the most popular platforms and languages.
-This branch focuses on the C++ library implementation and covers it's usage.
+This branch focuses on the C++ library implementation and covers its usage.
+
+Let's go through an encrypted message exchange steps as one of the possible [use cases](#use-case) of Virgil Security Services. ![Use case mail](https://raw.githubusercontent.com/VirgilSecurity/virgil/master/images/Email-diagram-short.jpg)
 
 
 ## Obtaining an Access Token
@@ -26,16 +28,16 @@ The access token provides authenticated secure access to Virgil Keys Services an
 Use this token to initialize the SDK client [here](#initialization).
 
 ## Use Case
-**Secure data at transport**: users need to exchange important data (text, audio, video, etc.) without any risks.
+**Secure any data end to end**: users need to securely exchange information (text messages, files, audio, video etc) while enabling both in transit and at rest protection.
 
-- Sender and recipient create Virgil accounts with a pair of asymmetric keys:
+- Application generates public and private key pairs using Virgil Crypto library and use Virgil Keys service to enable secure end to end communications:
     - public key on Virgil Public Keys Service;
     - private key on Virgil Private Keys Service or locally.
-- Sender encrypts the data using Virgil Crypto Library and the recipient’s public key.
-- Sender signs the encrypted data with his private key using Virgil Crypto Library.
-- Sender securely transfers the encrypted data, his digital signature and UDID to the recipient without any risk to be revealed.
-- Recipient verifies that the signature of transferred data is valid using the signature and sender’s public key in Virgil Crypto Library.
-- Recipient decrypts the data with his private key using Virgil Crypto Library.
+- Sender’s information is encrypted in Virgil Crypto Library with the recipient’s public key.
+- Sender’s encrypted information is signed with his private key in Virgil Crypto Library.
+- Application securely transfers the encrypted data, sender’s digital signature and UDID to the recipient without any risk to be revealed.
+- Application on the recipient’s side verifies that the signature of transferred data is valid using the signature and sender’s public key in Virgil Crypto Library.
+- Received information is decrypted with the recipient’s private key using Virgil Crypto Library.
 - Decrypted data is provided to the recipient.
 
 ## Initialization
@@ -45,7 +47,7 @@ ServicesHub servicesHub(%ACCESS_TOKEN%);
 ```
 
 ## Step 1. Create and Publish the Keys
-First we are generating the keys and publishing them to the Public Keys Service where they are available in an open access for other users (e.g. recipient) to verify and encrypt the data for the key owner.
+First a mail exchange application is generating the keys and publishing them to the Public Keys Service where they are available in an open access for other users (e.g. recipient) to verify and encrypt the data for the key owner.
 
 The following code example creates a new public/private key pair.
 
@@ -57,7 +59,7 @@ VirgilByteArray senderPublicKey = newKeyPair.publicKey();
 VirgilByteArray senderPrivateKey = newKeyPair.privateKey();
 ```
 
-We are verifying whether the user really owns the provided email address and getting a temporary token for public key registration on the Public Keys Service.
+The app is verifying whether the user really owns the provided email address and getting a temporary token for public key registration on the Public Keys Service.
 
 ``` {.cpp}
 Identity identity(%SENDER_EMAIL%, IdentityType::Email);
@@ -68,15 +70,16 @@ ValidatedIdentity validatedIdentity =
         servicesHub.identity().confirm(actionId, "%CONFIRMATION_CODE%);
 ```
 
-We are registering a Virgil Card which includes a public key and an email address identifier. The card will be used for the public key identification and searching for it in the Public Keys Service.
+The app is registering a Virgil Card which includes a public key and an email address identifier. The card will be used for the public key identification and searching for it in the Public Keys Service.
 
 ``` {.cpp}
 Credentials credentials(senderPrivateKey, senderPrivateKeyPassword);
-Card senderCard = servicesHub.card().create(validatedIdentity, senderPublicKey, credentials);
+Card senderCard = 
+	servicesHub.card().create(validatedIdentity, senderPublicKey, credentials);
 ```
 
 ## Step 2. Encrypt and Sign
-We are searching for the recipient's public key on the Public Keys Service to encrypt a message for him. And we are signing the encrypted message with our private key so that the recipient can make sure the message had been sent from the declared sender.
+The app is searching for the recipient’s public key on the Public Keys Service to encrypt a message for him. The app is signing the encrypted message with sender’s private key so that the recipient can make sure the message had been sent from the declared sender.
 
 ``` {.cpp}
 auto message = "Encrypt me, Please!!!";
@@ -91,11 +94,11 @@ cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 VirgilByteArray encryptedMessage = cipher.encrypt(str2bytes(message), true);
 
 VirgilSigner signer;
-VirgilByteArray signedEncryptedMessage = signer.sign(encryptedMessage, senderPrivateKey,
-        senderPrivateKeyPassword);
+VirgilByteArray signedEncryptedMessage = 
+	signer.sign(encryptedMessage, senderPrivateKey, senderPrivateKeyPassword);
 ```
 
-## Step 3. Get sender's Public Key
+## Step 3. Get Sender's Card
 In order to decrypt the received data the app on recipient’s side needs to get sender’s Virgil Card from the Public Keys Service.
 
 ``` {.cpp}
@@ -114,8 +117,10 @@ if (!verified) {
     throw std::runtime_error("Signature is not valid.");
 }
 
-VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage, recipientCard.getId(),
-        recipientPrivateKey, recipientPrivateKeyPassword
+VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage, 
+	recipientCard.getId(),
+	recipientPrivateKey, 
+	recipientPrivateKeyPassword
 );
 ```
 
