@@ -4,7 +4,7 @@
 - [Obtaining an Access Token](#obtaining-an-access-token)
 - [Identity Check](#identity-check)
   - [Identity Verification](#identity-verification)
-  - [Confirm and Get an Validated Identity](#confirm-and-get-an-validated-identity)
+  - [Confirm and Get a Validated Identity](#confirm-and-get-a-validated-identity)
 - [Cards and Public Keys](#cards-and-public-keys)
   - [Publish a Card](#publish-a-virgil-card)
   - [Search for Cards](#search-for-cards)
@@ -22,11 +22,11 @@
 
 ## Introduction
 
-This tutorial explains how to use the Identity, Public Keys, Private Keys Service with SDK library in C++ applications.
+This tutorial explains how to use the Identity, Virgil Public Keys, Virgil Private Keys Services with SDK library in C++ applications.
 
 ## Obtaining an Access Token
 
-First you must create a free Virgil Security developer's account by signing up [here](https://virgilsecurity.com/account/signup). Once you have your account you can [sign in](https://virgilsecurity.com/account/signin) and generate an access token for your application.
+First you must create a free Virgil Security developer's account by signing up [here](https://developer.virgilsecurity.com/account/signup). Once you have your account you can [sign in](https://developer.virgilsecurity.com/account/signin) and generate an access token for your application.
 
 The access token provides an authenticated secure access to the Public Keys Service and is passed with each API call. The access token also allows the API to associate your app’s requests with your Virgil Security developer's account.
 
@@ -75,7 +75,8 @@ An identity token which can be received [here](#identity-check) is used during t
 VirgilByteArray privateKeyPassword = str2bytes("PRIVATE_KEY_PASS")
 VirgilKeyPair keyPair(privateKeyPassword);
 Credentials credentials(keyPair.privateKey(), privateKeyPassword);
-Card myCard = servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
+Card myCard = 
+  servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_create.cxx)
 
@@ -108,7 +109,8 @@ Any Virgil Card user can act as a certification center within the Virgil Securit
 The example below demonstrates how to certify a user's Virgil Card by signing its hash attribute.
 
 ``` {.cpp}
-Credentials signerCredentials(signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
+Credentials signerCredentials
+		(signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
 CardSign cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
         signerCredentials);
 ```
