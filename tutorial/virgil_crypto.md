@@ -64,11 +64,11 @@ Generate keys with specific type
 VirgilKeyPair keyPair(VirgilKeyPair::Type_EC_SECP256K1);
 ```
 
-In table below you can see all types.
+In the table below you can see all types.
 
 | Key Type          | Description                    |
 |-------------------|--------------------------------|
-| Type_Default      | recommended most safe type     |
+| Type_Default      | recommended safest type        |
 | Type_RSA_256      | RSA 1024 bit (not recommended) |
 | Type_RSA_512      | RSA 1024 bit (not recommended) |
 | Type_RSA_1024     | RSA 1024 bit (not recommended) |
@@ -115,7 +115,8 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 Encrypt the text with a public key:
 
 ``` {.cpp}
-cipher.addKeyRecipient(str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
+cipher.addKeyRecipient(str2bytes(recipientCard.getId()), 
+		recipientCard.getPublicKey().getKey());
 cipher.encrypt(dataSource, dataSink, true);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/encrypt_with_key.cxx)
@@ -124,7 +125,8 @@ And of course you can mix these types as well, see how it works in the example b
 
 ``` {.cpp}
 cipher.addPasswordRecipient(recipientPwd);
-cipher.addKeyRecipient(str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
+cipher.addKeyRecipient(str2bytes(recipientCard.getId()), 
+		recipientCard.getPublicKey().getKey());
 cipher.encrypt(dataSource, dataSink, true);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/encrypt_with_multiple_recipients.cxx)
@@ -137,7 +139,8 @@ The following example applies a digital signature to a public key identifier.
 
 ``` {.cpp}
 VirgilStreamSigner streamSigner;
-VirgilByteArray streamSign = streamSigner.sign(dataSource, privateKey, privateKeyPassword);
+VirgilByteArray streamSign = streamSigner.sign(dataSource, privateKey, 
+		privateKeyPassword);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/sign.cxx)
 
@@ -168,8 +171,8 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 The following example illustrates decryption of the encrypted data with a recipient's private key.
 
 ``` {.cpp}
-cipher.decryptWithKey(dataSource, dataSink, str2bytes(recipientCard.getId()), privateKey,
-        privateKeyPassword);
+cipher.decryptWithKey(dataSource, dataSink, str2bytes(recipientCard.getId()),
+		 privateKey, privateKeyPassword);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/decrypt_with_key.cxx)
 
