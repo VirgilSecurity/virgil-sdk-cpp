@@ -43,16 +43,47 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
+## Features
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
-
+## Installation directories
 set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
 set (INSTALL_EXT_INCLUDES OFF CACHE BOOL "Enable installation of SDK dependency library headers")
 mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_INCLUDES)
-
+## Doxygen
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
+## Environment
+set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
+if (ENABLE_STAGING_ENV)
+    set (VIRGIL_IDENTITY_SERVICE_URI "https://identity-stg.virgilsecurity.com"
+            CACHE STRING "Base URI to the Virgil Identity service")
+
+    set (VIRGIL_KEYS_SERVICE_URI "https://keys-stg.virgilsecurity.com"
+            CACHE STRING  "Base URI to Virgil Keys service")
+
+    set (VIRGIL_PRIVATE_KEYS_SERVICE_URI "https://keys-private-stg.virgilsecurity.com"
+        CACHE STRING "Base URI to Virgil Private Keys service")
+endif ()
+mark_as_advanced (
+    ENABLE_STAGING_ENV
+    VIRGIL_IDENTITY_SERVICE_URI
+    VIRGIL_KEYS_SERVICE_URI
+    VIRGIL_PRIVATE_KEYS_SERVICE_URI
+)
+
+if (VIRGIL_IDENTITY_SERVICE_URI)
+    add_definitions (-DVIRGIL_IDENTITY_SERVICE_URI="${VIRGIL_IDENTITY_SERVICE_URI}")
+endif ()
+
+if (VIRGIL_KEYS_SERVICE_URI)
+    add_definitions (-DVIRGIL_KEYS_SERVICE_URI="${VIRGIL_KEYS_SERVICE_URI}")
+endif ()
+
+if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
+    add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
+endif ()
 
 # Define library name
 set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})

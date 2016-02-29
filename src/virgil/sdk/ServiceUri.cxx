@@ -38,13 +38,23 @@
 
 using virgil::sdk::ServiceUri;
 
-const std::string ServiceUri::kIdentityServiceUri = "https://identity-stg.virgilsecurity.com";
-const std::string ServiceUri::kPublicKeyServiceUri = "https://keys-stg.virgilsecurity.com";
-const std::string ServiceUri::kPrivateKeyServiceUri = "https://keys-private-stg.virgilsecurity.com";
+#if defined(VIRGIL_IDENTITY_SERVICE_URI)
+const std::string ServiceUri::kIdentityServiceUri = VIRGIL_IDENTITY_SERVICE_URI;
+#else
+const std::string ServiceUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
+#endif
 
-// const std::string ServiceUri::kIdentityServiceUri = "https://identity.virgilsecurity.com";
-// const std::string ServiceUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
-// const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
+#if defined(VIRGIL_KEYS_SERVICE_URI)
+const std::string ServiceUri::kPublicKeyServiceUri = VIRGIL_KEYS_SERVICE_URI;
+#else
+const std::string ServiceUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
+#endif
+
+#if defined(VIRGIL_PRIVATE_KEYS_SERVICE_URI)
+const std::string ServiceUri::kPrivateKeyServiceUri = VIRGIL_PRIVATE_KEYS_SERVICE_URI;
+#else
+const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
+#endif
 
 ServiceUri::ServiceUri()
         : identityService_(kIdentityServiceUri),
