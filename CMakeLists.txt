@@ -142,7 +142,7 @@ endif (ENABLE_EXAMPLES)
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 
-find_program(dot DOT_PROGRAM)
+find_program(DOT_PROGRAM NAMES dot)
 if (DOT_PROGRAM)
     set (DOT_FOUND "YES")
 else ()
