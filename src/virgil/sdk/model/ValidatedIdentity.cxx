@@ -44,6 +44,6 @@ ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string
         : Identity(value, type), token_(token) {
 }
 
-const std::string& ValidatedIdentity::getToken() const {
+const std::string ValidatedIdentity::getToken() const {
     return token_;
 }

@@ -63,10 +63,10 @@ IdentityType virgil::sdk::model::fromString(const std::string& identityType) {
 Identity::Identity(const std::string& value, const IdentityType& type) : value_(value), type_(type) {
 }
 
-const std::string& Identity::getValue() const {
+const std::string Identity::getValue() const {
     return value_;
 }
 
-const IdentityType& Identity::getType() const {
+const IdentityType Identity::getType() const {
     return type_;
 }

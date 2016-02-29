@@ -47,7 +47,7 @@ PrivateKey::~PrivateKey() noexcept {
     cleanup();
 }
 
-const std::string& PrivateKey::getCardId() const {
+const std::string PrivateKey::getCardId() const {
     return cardId_;
 }
 

@@ -57,26 +57,26 @@ bool Card::isConfirmed() const {
     return confirmed_;
 }
 
-const std::string& Card::getId() const {
+const std::string Card::getId() const {
     return id_;
 }
 
-const std::string& Card::getCreatedAt() const {
+const std::string Card::getCreatedAt() const {
     return createdAt_;
 }
 
-const std::string& Card::getHash() const {
+const std::string Card::getHash() const {
     return hash_;
 }
 
-const CardIdentity& Card::getCardIdentity() const {
+const CardIdentity Card::getCardIdentity() const {
     return cardIdentity_;
 }
 
-const std::map<std::string, std::string>& Card::getData() const {
+const std::map<std::string, std::string> Card::getData() const {
     return data_;
 }
 
-const PublicKey& Card::getPublicKey() const {
+const PublicKey Card::getPublicKey() const {
     return publicKey_;
 }

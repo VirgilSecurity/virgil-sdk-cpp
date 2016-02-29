@@ -65,23 +65,23 @@ namespace sdk {
             /**
              * @brief Return Virgil Card Sign identifier
              */
-            const std::string& getId() const;
+            const std::string getId() const;
             /**
              * @brief Return creation timestamp
              */
-            const std::string& getCreatedAt() const;
+            const std::string getCreatedAt() const;
             /**
              * @brief Return identifier of the Virgil Card that was used to sign
              */
-            const std::string& getSignerCardId() const;
+            const std::string getSignerCardId() const;
             /**
              * @brief Return identifier of the Virgil Card that was signed
              */
-            const std::string& getSignedCardId() const;
+            const std::string getSignedCardId() const;
             /**
              * @brief Return signed digest that can be verified within crypto algorithm
              */
-            const std::string& getSignedDigest() const;
+            const std::string getSignedDigest() const;
 
         private:
             std::string id_;

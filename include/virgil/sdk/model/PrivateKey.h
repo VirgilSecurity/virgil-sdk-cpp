@@ -63,9 +63,11 @@ namespace sdk {
             /**
              * @brief Return unique virgil card identifier
              */
-            const std::string& getCardId() const;
+            const std::string getCardId() const;
             /**
              * @brief Return private key
+             *
+             * @note Keep return by refernce for security reasons.
              */
             const virgil::crypto::VirgilByteArray& getKey() const;
 

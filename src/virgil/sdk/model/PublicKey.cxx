@@ -44,14 +44,14 @@ PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const 
         : id_(id), createdAt_(createdAt), key_(key) {
 }
 
-const std::string& PublicKey::getId() const {
+const std::string PublicKey::getId() const {
     return id_;
 }
 
-const std::string& PublicKey::getCreatedAt() const {
+const std::string PublicKey::getCreatedAt() const {
     return createdAt_;
 }
 
-const VirgilByteArray& PublicKey::getKey() const {
+const VirgilByteArray PublicKey::getKey() const {
     return key_;
 }

@@ -82,11 +82,11 @@ namespace sdk {
             /**
              * @brief Return identity value
              */
-            const std::string& getValue() const;
+            const std::string getValue() const;
             /**
              * @brief Return identity type
              */
-            const virgil::sdk::model::IdentityType& getType() const;
+            const virgil::sdk::model::IdentityType getType() const;
 
         private:
             std::string value_;

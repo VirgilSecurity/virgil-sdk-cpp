@@ -64,15 +64,15 @@ namespace sdk {
             /**
              * @brief Return unique object identifier
              */
-            const std::string& getId() const;
+            const std::string getId() const;
             /**
              * @brief Return cretion date timestamp
              */
-            const std::string& getCreatedAt() const;
+            const std::string getCreatedAt() const;
             /**
              * @brief Return public key
              */
-            const virgil::crypto::VirgilByteArray& getKey() const;
+            const virgil::crypto::VirgilByteArray getKey() const;
 
         private:
             std::string id_;

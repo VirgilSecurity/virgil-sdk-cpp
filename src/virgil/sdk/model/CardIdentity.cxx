@@ -50,10 +50,10 @@ bool CardIdentity::isConfirmed() const {
     return confirmed_;
 }
 
-const std::string& CardIdentity::getId() const {
+const std::string CardIdentity::getId() const {
     return id_;
 }
 
-const std::string& CardIdentity::getCreatedAt() const {
+const std::string CardIdentity::getCreatedAt() const {
     return createdAt_;
 }

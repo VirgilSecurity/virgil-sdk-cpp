@@ -72,28 +72,28 @@ namespace sdk {
             /**
              * @brief Return Virgil Card identifier
              */
-            const std::string& getId() const;
+            const std::string getId() const;
             /**
              * @brief Return creation timestamp
              */
-            const std::string& getCreatedAt() const;
+            const std::string getCreatedAt() const;
             /**
              * @brief Return compressed information about Virgil Card
              * @note This value can be used for signing
              */
-            const std::string& getHash() const;
+            const std::string getHash() const;
             /**
              * @brief Return identity associated with Virgil Card
              */
-            const virgil::sdk::model::CardIdentity& getCardIdentity() const;
+            const virgil::sdk::model::CardIdentity getCardIdentity() const;
             /**
              * @brief Return user's custom data associated with Virgil Card
              */
-            const std::map<std::string, std::string>& getData() const;
+            const std::map<std::string, std::string> getData() const;
             /**
              * @brief Return Public Key connected to the Virgil Card
              */
-            const virgil::sdk::model::PublicKey& getPublicKey() const;
+            const virgil::sdk::model::PublicKey getPublicKey() const;
             /**
              * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
              */

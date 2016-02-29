@@ -70,11 +70,11 @@ namespace sdk {
             /**
              * @brief Return unique object identifier defined by service
              */
-            const std::string& getId() const;
+            const std::string getId() const;
             /**
              * @brief Return cretion date timestamp defined by service
              */
-            const std::string& getCreatedAt() const;
+            const std::string getCreatedAt() const;
             /**
              * @brief Return true, if identity is confirmed by user, false - otherwise
              */

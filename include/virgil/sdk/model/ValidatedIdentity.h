@@ -66,7 +66,7 @@ namespace sdk {
             /**
              * @brief Return token that validate underlying identity
              */
-            const std::string& getToken() const;
+            const std::string getToken() const;
 
         private:
             std::string token_;
