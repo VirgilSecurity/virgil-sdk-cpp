@@ -62,20 +62,20 @@ if (NOT TARGET project_rest)
     )
 endif ()
 
-# Define output
-ExternalProject_Get_Property (project_rest INSTALL_DIR)
-
-set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
-set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
-set (REST_LIBRARIES "${REST_LIBRARY}" "${CURL_LIBRARIES}")
-
-# Workaround of http://public.kitware.com/Bug/view.php?id=14495
-file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
-
 if (NOT TARGET rest)
+    # Define output
+    ExternalProject_Get_Property (project_rest INSTALL_DIR)
+
+    set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
+    set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
+    set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
+    set (REST_LIBRARIES "${REST_LIBRARY}")
+
+    # Workaround of http://public.kitware.com/Bug/view.php?id=14495
+    file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
+
     # Make target
-    add_library (rest STATIC IMPORTED)
+    add_library (rest STATIC IMPORTED GLOBAL)
     set_target_properties (rest PROPERTIES
         IMPORTED_LOCATION ${REST_LIBRARY}
         INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}

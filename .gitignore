@@ -1,5 +1,6 @@
 #####
 *build*/
+*install*/
 origin_lib/
 examples_bin/
 

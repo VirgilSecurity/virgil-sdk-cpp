@@ -38,7 +38,7 @@
 set -ev
 
 # Configure CMake arguments
-CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=install -D${BUILD_MODULE_NAME}=ON -DENABLE_TESTING=ON"
+CMAKE_ARGS="-DCMAKE_INSTALL_PREFIX=install -DENABLE_TESTING=ON -DENABLE_EXAMPLES=ON"
 
 # Run CMake
 cd "${TRAVIS_BUILD_DIR}"
@@ -51,9 +51,7 @@ cd "${BUILD_DIR_NAME}"
 export PATH=$HOME/cmake/bin:$PATH
 cmake --version
 
-if [ "${PUBLISH_DOCS}" == "ON" ]; then
-    export PATH=$HOME/doxygen/bin:$PATH
-    doxygen --version
-fi
+export PATH=$HOME/doxygen/bin:$PATH
+doxygen --version
 
 cmake ${CMAKE_ARGS} ..

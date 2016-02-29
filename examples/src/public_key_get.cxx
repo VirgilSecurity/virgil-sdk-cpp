@@ -38,36 +38,41 @@
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/io/Marshaller.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/ServicesHub.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::io::Marshaller;
-using virgil::sdk::keys::model::PublicKey;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <public-key-id> " << std::endl;
-        return 0;
+        std::cerr << std::string("USAGE: ") + argv[0] + " <public_key_id> " << std::endl;
+        return 1;
     }
+
     try {
-        const std::string kPublicKeyId = argv[1];
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Get user ("<< kPublicKeyId << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().get(kPublicKeyId);
+        std::string publicKeyId = argv[1];
 
-        std::cout << "Store virgil public key without User Data to the stdout..." << std::endl;
-        std::string publicKeyData = Marshaller<PublicKey>::toJson(publicKey);
-        std::cout << publicKeyData << std::endl;
+        std::cout << "Get a Public Key" << std::endl;
+        vsdk::models::PublicKeyModel publicKey = servicesHub.publicKey().get(publicKeyId);
+        std::string publicKeyStr = vsdk::io::Marshaller<vsdk::models::PublicKeyModel>::toJson<4>(publicKey);
+        std::cout << "Public Key:" << std::endl;
+        std::cout << publicKeyStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

@@ -40,25 +40,21 @@
 #include <string>
 
 #include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamCipher;
-using virgil::crypto::stream::VirgilStreamDataSource;
-using virgil::crypto::stream::VirgilStreamDataSink;
+namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string PASSWORD = "qwerty";
+const std::string PASSWORD = "123456789";
 
 int main() {
     try {
-        VirgilStreamCipher cipher;
+        vcrypto::VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;
-        VirgilByteArray recipientPwd = virgil::crypto::str2bytes(PASSWORD);
+        vcrypto::VirgilByteArray recipientPwd = vcrypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
         std::cout << "Prepare input file: test.txt..." << std::endl;
@@ -66,21 +62,21 @@ int main() {
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Prepare output file: test.txt.encp..." << std::endl;
         std::ofstream outFile("test.txt.encp", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: test.txt.enc");
         }
-        VirgilStreamDataSink dataSink(outFile);
+        vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
         std::cout << "Encrypt and store results..." << std::endl;
         cipher.encrypt(dataSource, dataSink, true);
         std::cout << "Encrypted data with pass is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

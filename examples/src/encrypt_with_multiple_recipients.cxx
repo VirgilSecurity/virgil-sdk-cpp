@@ -38,64 +38,74 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilStreamCipher.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/ServicesHub.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamCipher;
-using virgil::crypto::stream::VirgilStreamDataSource;
-using virgil::crypto::stream::VirgilStreamDataSink;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::model::PublicKey;
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-const std::string PASSWORD = "qwerty";
+const std::string PASSWORD = "123456789";
 
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
+        return 1;
+    }
 
-int main() {
     try {
-        VirgilStreamCipher cipher;
+        std::string userEmail = argv[1];
 
-        std::cout << "Get recipient ("<< USER_EMAIL << ") information from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(USER_EMAIL);
+        vcrypto::VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;
-        VirgilByteArray recipientPwd = virgil::crypto::str2bytes(PASSWORD);
+        vcrypto::VirgilByteArray recipientPwd = vcrypto::str2bytes(PASSWORD);
         cipher.addPasswordRecipient(recipientPwd);
 
+        std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..." << std::endl;
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+
+        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
+        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity, true);
+
         std::cout << "Add recipient with key..." << std::endl;
-        cipher.addKeyRecipient(virgil::crypto::str2bytes(publicKey.publicKeyId()), publicKey.key());
+        vsdk::models::CardModel recipientCard = recipientCards.at(0);
+        cipher.addKeyRecipient(vcrypto::str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
 
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Prepare output file: test.txt.encpk..." << std::endl;
         std::ofstream outFile("test.txt.encpk", std::ios::out | std::ios::binary);
         if (!outFile) {
             throw std::runtime_error("can not write file: test.txt.enc");
         }
-        VirgilStreamDataSink dataSink(outFile);
+        vcrypto::stream::VirgilStreamDataSink dataSink(outFile);
 
         std::cout << "Encrypt and store results..." << std::endl;
         cipher.encrypt(dataSource, dataSink, true);
         std::cout << "Encrypted data with key is successfully stored in the output file..." << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 
