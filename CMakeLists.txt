@@ -169,3 +169,14 @@ if (DOXYGEN_FOUND)
         COMMENT "Generating API documentation with Doxygen" VERBATIM
     )
 endif (DOXYGEN_FOUND)
+
+# Add a target to format code with clang-format
+if (UNIX)
+    find_program(CLANG_FORMAT NAMES "clang-format")
+    if (CLANG_FORMAT)
+        add_custom_target ("format"
+            "${CMAKE_SOURCE_DIR}/utils/format_code.sh"
+            COMMENT "Format code" VERBATIM
+        )
+    endif (CLANG_FORMAT)
+endif (UNIX)
