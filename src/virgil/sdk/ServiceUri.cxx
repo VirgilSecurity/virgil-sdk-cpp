@@ -45,9 +45,9 @@ const std::string ServiceUri::kIdentityServiceUri = "https://identity.virgilsecu
 #endif
 
 #if defined(VIRGIL_KEYS_SERVICE_URI)
-const std::string ServiceUri::kPublicKeyServiceUri = VIRGIL_KEYS_SERVICE_URI;
+const std::string ServiceUri::kKeysServiceUri = VIRGIL_KEYS_SERVICE_URI;
 #else
-const std::string ServiceUri::kPublicKeyServiceUri = "https://keys.virgilsecurity.com";
+const std::string ServiceUri::kKeysServiceUri = "https://keys.virgilsecurity.com";
 #endif
 
 #if defined(VIRGIL_PRIVATE_KEYS_SERVICE_URI)
@@ -58,14 +58,14 @@ const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virg
 
 ServiceUri::ServiceUri()
         : identityService_(kIdentityServiceUri),
-          publicKeyService_(kPublicKeyServiceUri),
+          keysService_(kKeysServiceUri),
           privateKeyService_(kPrivateKeyServiceUri) {
 }
 
-ServiceUri::ServiceUri(const std::string& identityService, const std::string& publicKeyService,
+ServiceUri::ServiceUri(const std::string& identityService, const std::string& keysService,
                        const std::string& privateKeyService)
         : identityService_(identityService),
-          publicKeyService_(publicKeyService),
+          keysService_(keysService),
           privateKeyService_(privateKeyService) {
 }
 
@@ -74,7 +74,7 @@ std::string ServiceUri::getIdentityService() const {
 }
 
 std::string ServiceUri::getPublicKeyService() const {
-    return publicKeyService_;
+    return keysService_;
 }
 
 std::string ServiceUri::getPrivateKeyService() const {
