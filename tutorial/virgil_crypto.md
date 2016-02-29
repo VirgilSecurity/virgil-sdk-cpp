@@ -61,7 +61,7 @@ SFMQ8705Y2W1uTexqw==
 Generate keys with specific type
 
 ``` {.cpp}
-VirgilKeyPair keyPair(VirgilKeyPair::Type_EC_SECP256K1);
+VirgilKeyPair keyPair = VirgilKeyPair::generate(VirgilKeyPair::Type_EC_SECP256K1);
 ```
 
 In the table below you can see all types.
@@ -115,7 +115,7 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 Encrypt the text with a public key:
 
 ``` {.cpp}
-cipher.addKeyRecipient(str2bytes(recipientCard.getId()), 
+cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 		recipientCard.getPublicKey().getKey());
 cipher.encrypt(dataSource, dataSink, true);
 ```
@@ -125,7 +125,7 @@ And of course you can mix these types as well, see how it works in the example b
 
 ``` {.cpp}
 cipher.addPasswordRecipient(recipientPwd);
-cipher.addKeyRecipient(str2bytes(recipientCard.getId()), 
+cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 		recipientCard.getPublicKey().getKey());
 cipher.encrypt(dataSource, dataSink, true);
 ```
@@ -139,7 +139,7 @@ The following example applies a digital signature to a public key identifier.
 
 ``` {.cpp}
 VirgilStreamSigner streamSigner;
-VirgilByteArray streamSign = streamSigner.sign(dataSource, privateKey, 
+VirgilByteArray streamSign = streamSigner.sign(dataSource, privateKey,
 		privateKeyPassword);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/sign.cxx)
