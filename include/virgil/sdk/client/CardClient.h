@@ -153,15 +153,14 @@ namespace sdk {
              * @brief Performs the search of Virgil Cards
              *
              * @param identity - identity to be searched
+             * @param includeUnconfirmed - specifies whether an unconfirmed Virgil Cards should be returned
              * @param relations - the list of Virgil Cards identifiers to perform the search within,
              *                    another word use this parameter to filter returned cards by signers
-             * @param includeUnconfirmed - specifies whether an unconfirmed Virgil Cards should be returned
              * @return Found Virgil Cards
              */
             std::vector<virgil::sdk::models::CardModel>
-            search(const virgil::sdk::dto::Identity& identity,
-                   const std::vector<std::string>& relations = std::vector<std::string>(),
-                   const bool includeUnconfirmed = true);
+            search(const virgil::sdk::dto::Identity& identity, const bool includeUnconfirmed,
+                   const std::vector<std::string>& relations = std::vector<std::string>());
             /**
              * @brief Performs the global search fot the applications' Virgil Cards
              *

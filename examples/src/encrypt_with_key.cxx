@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
-        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity);
+        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity, true);
 
         vcrypto::VirgilStreamCipher cipher;
         std::cout << "Add recipient..." << std::endl;

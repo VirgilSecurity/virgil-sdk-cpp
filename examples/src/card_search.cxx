@@ -78,9 +78,9 @@ int main(int argc, char** argv) {
 
         std::vector<vsdk::models::CardModel> foundCards;
         if (relation.empty()) {
-            foundCards = servicesHub.card().search(identity, std::vector<std::string>(), includeUnconfirmed);
+            foundCards = servicesHub.card().search(identity, includeUnconfirmed);
         } else {
-            foundCards = servicesHub.card().search(identity, {relation}, includeUnconfirmed);
+            foundCards = servicesHub.card().search(identity, includeUnconfirmed, {relation});
         }
 
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);

@@ -175,8 +175,8 @@ void CardClient::unsign(const std::string& signedCardId, const std::string& sign
     this->verifyResponse(response);
 }
 
-std::vector<CardModel> CardClient::search(const Identity& identity, const std::vector<std::string>& relations,
-                                          const bool includeUnconfirmed) {
+std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnconfirmed,
+                                          const std::vector<std::string>& relations) {
     json jsonRelations(relations);
     json payload = {{JsonKey::value, identity.getValue()},
                     {JsonKey::type, virgil::sdk::models::toString(identity.getType())},
