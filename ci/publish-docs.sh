@@ -52,14 +52,14 @@ mkdir -p ${HTML_PATH_DST}
 git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH_DST}
 
 # Define SDK versions
-VIRGIL_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/virgil.sdk/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
-VIRGIL_SDK_HTML_PATH_DST="${HTML_PATH_DST}/sdk/${VIRGIL_SDK_VERSION}"
+VIRGIL_SDK_VERSION=`cat ${TRAVIS_BUILD_DIR}/VERSION | awk -F"." '{ printf "v%d.%d",$1,$2 }'`
+VIRGIL_SDK_HTML_PATH_DST="${HTML_PATH_DST}/${VIRGIL_SDK_VERSION}"
 
 # Prepare destination folders
 rm -fr "${VIRGIL_SDK_HTML_PATH_DST}" && mkdir -p "${VIRGIL_SDK_HTML_PATH_DST}"
 
 # Copy new documentation
-cp -af "${TRAVIS_BUILD_DIR}/virgil.sdk/docs/html/." "${VIRGIL_SDK_HTML_PATH_DST}"
+cp -af "${TRAVIS_BUILD_DIR}/docs/html/." "${VIRGIL_SDK_HTML_PATH_DST}"
 
 # Fix source file names
 function fix_html_source_file_names {
@@ -98,9 +98,14 @@ cat >"${HTML_PATH_DST}/index.html" <<EOL
 EOL
 
 for dir in `get_dir_names "${VIRGIL_SDK_HTML_PATH_DST}/.." "v*"`; do
-    echo "<li><p><a href=\"sdk/${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
+    echo "<li><p><a href=\"${dir}/index.html\">${dir}</a></p></li>" >> "${HTML_PATH_DST}/index.html"
 done
 
+cat >>"${HTML_PATH_DST}/index.html" <<EOL
+        </ul>
+   </body>
+</html>
+EOL
 
 # Create and commit the documentation repo.
 cd ${HTML_PATH_DST}

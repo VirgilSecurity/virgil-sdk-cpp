@@ -151,7 +151,7 @@ namespace sdk {
             std::string endPoint_;
             Header header_;
             Parameters parameters_;
-            Method method_;
+            Method method_ = Method::GET;
         };
     }
 }

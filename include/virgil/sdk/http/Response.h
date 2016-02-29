@@ -121,7 +121,7 @@ namespace sdk {
             std::string body_;
             std::string contentType_;
             Header header_;
-            StatusCode statusCode_;
+            StatusCode statusCode_ = StatusCode::REQUEST_ERROR;
         };
     }
 }
