@@ -46,7 +46,7 @@ namespace sdk {
          * @brief This class reresents extended version of class Identity
          *
          * @details This class contains addition information of identity,
-         *          that is used in conjuction with class @link Card @endlink.
+         *          that is used in conjuction with class @link CardModel @endlink.
          */
         class IdentityModel {
         public:

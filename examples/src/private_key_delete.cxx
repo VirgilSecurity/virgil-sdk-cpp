@@ -65,16 +65,9 @@ int main(int argc, char** argv) {
 
     try {
         std::string cardId = argv[1];
-        std::string pathPublicKey = argv[2];
-        std::string pathPrivateKey = argv[3];
+        std::string pathPrivateKey = argv[2];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        std::cout << "Prepare input file: " << pathPublicKey << std::endl;
-        std::ifstream inFile(pathPublicKey, std::ios::in | std::ios::binary);
-        if (!inFile) {
-            throw std::runtime_error("can not read file: public.key");
-        }
 
         std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;
