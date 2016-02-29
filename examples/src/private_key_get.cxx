@@ -34,73 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <algorithm>
-#include <fstream>
 #include <iostream>
-#include <iterator>
 #include <stdexcept>
 #include <string>
 
-#include <virgil/sdk/keys/io/Marshaller.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/ServicesHub.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/PrivateKey.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::keys::io::Marshaller;
-using virgil::sdk::keys::model::PublicKey;
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
-using virgil::sdk::privatekeys::model::PrivateKey;
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::UserData;
+int main(int argc, char** argv) {
+    if (argc < 4) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <virgil_card_id> " + " <validation_token>"
+                  << std::endl;
+        return 1;
+    }
 
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-const std::string CONTAINER_PASSWORD = "123456789";
-
-
-int main() {
     try {
-        UserData userData = UserData::email(USER_EMAIL);
+        std::string userEmail = argv[1];
+        std::string cardId = argv[2];
+        std::string token = argv[3];
 
-        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Authenticate session..." << std::endl;
-        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
+        vsdk::dto::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::models::IdentityModel::Type::Email);
 
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile) {
-            throw std::runtime_error("can not read virgil public key: virgil_public.key");
-        }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
+        std::cout << "Get a Private Key" << std::endl;
+        vsdk::models::PrivateKeyModel privateKey = servicesHub.privateKey().get(cardId, validatedIdentity);
+        std::string privateKeyStr = vsdk::io::Marshaller<vsdk::models::PrivateKeyModel>::toJson<4>(privateKey);
 
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
-
-        std::cout << "Call the Private Key service to get a Private Key instance." << std::endl;
-        PrivateKey privateKey = privateKeysClient.privateKey().get(publicKey.publicKeyId(), CONTAINER_PASSWORD);
-
-        std::cout << "Private Key instance successfully fetched from the Private Keys service." << std::endl;
-        std::cout << "Public key id: " << privateKey.publicKeyId() << std::endl;
-        std::cout << "Private key: " << std::endl;
-        std::vector<unsigned char> key = privateKey.key();
-        std::copy(key.begin(), key.end(), std::ostreambuf_iterator<char>(std::cout));
-
-        std::cout << "Prepare output file: private.key..." << std::endl;
-        std::ofstream outFile("private.key", std::ios::out | std::ios::binary);
-        if (!outFile) {
-            throw std::runtime_error("can not write file: virgil_public.key");
-        }
-        std::cout << "Store virgil private key to the output file..." << std::endl;
-        std::copy(key.begin(), key.end(), std::ostreambuf_iterator<char>(outFile));
+        std::cout << "Private Key:" << std::endl;
+        std::cout << privateKeyStr << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

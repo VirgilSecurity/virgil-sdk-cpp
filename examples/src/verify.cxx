@@ -35,6 +35,7 @@
  */
 
 #include <algorithm>
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -45,51 +46,57 @@
 #include <virgil/crypto/VirgilStreamSigner.h>
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 
-#include <virgil/sdk/keys/client/KeysClient.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
+#include <virgil/sdk/ServicesHub.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamSigner;
-using virgil::crypto::stream::VirgilStreamDataSource;
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-using virgil::sdk::keys::client::KeysClient;
-using virgil::sdk::keys::model::PublicKey;
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
-const std::string VIRGIL_PKI_URL_BASE = "https://keys.virgilsecurity.com/";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string SIGNER_EMAIL = "cpp.virgilsecurity@mailinator.com";
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
+        return 1;
+    }
 
-
-int main() {
     try {
+        std::string userEmail = argv[1];
+
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
         std::cout << "Read virgil sign..." << std::endl;
         std::ifstream signFile("test.txt.sign", std::ios::in | std::ios::binary);
         if (!signFile) {
             throw std::runtime_error("can not read sign: test.txt.sign");
         }
-        VirgilByteArray sign;
-        std::copy(std::istreambuf_iterator<char>(signFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(sign));
+        vcrypto::VirgilByteArray sign;
+        std::copy(std::istreambuf_iterator<char>(signFile), std::istreambuf_iterator<char>(), std::back_inserter(sign));
 
-        std::cout << "Get signer ("<< SIGNER_EMAIL << ") public key from the Virgil PKI service..." << std::endl;
-        KeysClient keysClient(VIRGIL_APP_TOKEN, VIRGIL_PKI_URL_BASE);
-        PublicKey publicKey = keysClient.publicKey().grab(SIGNER_EMAIL);
+        std::cout << "Get signer (" << userEmail << ") public key from the Virgil PKI service..." << std::endl;
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        VirgilStreamSigner signer;
+        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
+        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity, true);
+        vsdk::models::PublicKeyModel recipientPublicKey = recipientCards.at(0).getPublicKey();
 
+        vcrypto::VirgilStreamSigner signer;
         std::cout << "Verify data..." << std::endl;
-        bool verified = signer.verify(dataSource, sign, publicKey.key());
+        bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKey());
         std::cout << "Data is " << (verified ? "" : "not ") << "verified!" << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 

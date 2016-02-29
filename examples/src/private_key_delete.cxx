@@ -41,69 +41,50 @@
 #include <stdexcept>
 #include <string>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/sdk/ServicesHub.h>
+#include <virgil/sdk/io/Marshaller.h>
 
-#include <virgil/sdk/keys/io/Marshaller.h>
-#include <virgil/sdk/keys/model/PublicKey.h>
+namespace vsdk = virgil::sdk;
+namespace vcrypto = virgil::crypto;
 
-#include <virgil/sdk/privatekeys/client/CredentialsExt.h>
-#include <virgil/sdk/privatekeys/client/PrivateKeysClient.h>
-#include <virgil/sdk/privatekeys/model/UserData.h>
+const std::string VIRGIL_ACCESS_TOKEN =
+    "eyJpZCI6IjFkNzgzNTA1LTk1NGMtNDJhZC1hZThjLWQyOGFiYmN"
+    "hMGM1NyIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwNGYyY2Y2NS1iZDY2LTQ3N2EtOGFiZi1hMDAyYWY4Yj"
+    "dmZWYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGZMA0GCWCGSAFlAwQCAgUABIGHMIGE"
+    "AkAV1PHR3JaDsZBCl+6r/N5R5dATW9tcS4c44SwNeTQkHfEAlNboLpBBAwUtGhQbadRd4N4gxgm31sajEOJ"
+    "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
+    "L8A4+ii+zd";
 
-using virgil::crypto::VirgilByteArray;
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-using virgil::sdk::keys::io::Marshaller;
-using virgil::sdk::keys::model::PublicKey;
+int main(int argc, char** argv) {
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" + " <path_private_key>" << std::endl;
+        return 1;
+    }
 
-using virgil::sdk::privatekeys::client::CredentialsExt;
-using virgil::sdk::privatekeys::client::PrivateKeysClient;
-using virgil::sdk::privatekeys::model::ContainerType;
-using virgil::sdk::privatekeys::model::UserData;
-
-const std::string VIRGIL_PK_URL_BASE = "https://keys-private.virgilsecurity.com";
-const std::string VIRGIL_APP_TOKEN = "ce7f9d8597a9bf047cb6cd349c83ef5c";
-const std::string USER_EMAIL = "cpp.virgilsecurity@mailinator.com";
-const std::string CONTAINER_PASSWORD = "123456789";
-
-
-int main() {
     try {
-        UserData userData = UserData::email(USER_EMAIL);
+        std::string cardId = argv[1];
+        std::string pathPrivateKey = argv[2];
 
-        std::cout << "Create Private Keys Service HTTP Client." << std::endl;
-        PrivateKeysClient privateKeysClient(VIRGIL_APP_TOKEN, VIRGIL_PK_URL_BASE);
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        std::cout << "Authenticate session..." << std::endl;
-        privateKeysClient.authenticate(userData, CONTAINER_PASSWORD);
-
-        std::cout << "Read virgil public key..." << std::endl;
-        std::ifstream publicKeyFile("virgil_public.key", std::ios::in | std::ios::binary);
-        if (!publicKeyFile) {
-            throw std::runtime_error("can not read virgil public key: virgil_public.key");
-        }
-        std::string publicKeyData;
-        std::copy(std::istreambuf_iterator<char>(publicKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(publicKeyData));
-
-        PublicKey publicKey = Marshaller<PublicKey>::fromJson(publicKeyData);
-
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;
-        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!privateKeyFile) {
-            throw std::runtime_error("can not read private key: private.key");
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
         }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
+        vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(privateKey));
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
-        CredentialsExt credentialsExt(publicKey.publicKeyId(), privateKey);
-
-        std::cout << "Call Private Key service to delete Private Key instance." << std::endl;
-        privateKeysClient.privateKey().del(credentialsExt);
-        std::cout << "The Private Key instance was successfully deleted from the Private Keys service." << std::endl;
+        std::cout << "Delete a Private Key" << std::endl;
+        servicesHub.privateKey().del(cardId, credentials);
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 
