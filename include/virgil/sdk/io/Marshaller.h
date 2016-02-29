@@ -40,7 +40,7 @@
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/model/Card.h>
+#include <virgil/sdk/models/Card.h>
 
 namespace virgil {
 namespace sdk {
@@ -68,9 +68,9 @@ namespace sdk {
             Marshaller();
         };
 
-        std::string cardsToJson(const std::vector<virgil::sdk::model::Card> cards, const int INDENT = -1);
+        std::string cardsToJson(const std::vector<virgil::sdk::models::Card> cards, const int INDENT = -1);
 
-        std::vector<virgil::sdk::model::Card> cardsFromJson(const std::string& jsonStringCards);
+        std::vector<virgil::sdk::models::Card> cardsFromJson(const std::string& jsonStringCards);
     }
 }
 }

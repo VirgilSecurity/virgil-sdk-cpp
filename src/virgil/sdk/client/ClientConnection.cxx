@@ -68,7 +68,7 @@ using virgil::sdk::client::ClientConnection;
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
-using virgil::sdk::model::Card;
+using virgil::sdk::models::Card;
 using virgil::sdk::util::JsonKey;
 
 using virgil::sdk::http::kHeaderField_Id;

@@ -40,9 +40,9 @@
 #include <virgil/sdk/client/Client.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/model/ValidatedIdentity.h>
-#include <virgil/sdk/model/Card.h>
-#include <virgil/sdk/model/PublicKey.h>
+#include <virgil/sdk/models/ValidatedIdentity.h>
+#include <virgil/sdk/models/Card.h>
+#include <virgil/sdk/models/PublicKey.h>
 #include <virgil/sdk/http/Response.h>
 
 namespace virgil {
@@ -67,7 +67,7 @@ namespace sdk {
              * @param publicKeyId - Public Key identifier
              * @return Pubic Key
              */
-            virgil::sdk::model::PublicKey get(const std::string& publicKeyId);
+            virgil::sdk::models::PublicKey get(const std::string& publicKeyId);
             /**
              * @brief Revoke all Cards with confirmed Identity connected by the single public key.
              *
@@ -80,7 +80,7 @@ namespace sdk {
              * @param credentials - Private Key associated with given Virgil Card
              */
             void revoke(const std::string& publicKeyId,
-                        const std::vector<virgil::sdk::model::ValidatedIdentity> validatedIdentitys,
+                        const std::vector<virgil::sdk::models::ValidatedIdentity> validatedIdentitys,
                         const std::string& cardId, const virgil::sdk::Credentials& credentials);
             /**
              * @brief Revoke all the Cards with unconfirmed Identity connected by the single public key.
@@ -91,7 +91,7 @@ namespace sdk {
              * @param credentials - Private Key associated with given Virgil Card
              */
             void revokeNotValid(const std::string& publicKeyId,
-                                const std::vector<virgil::sdk::model::Identity> identitys, const std::string& cardId,
+                                const std::vector<virgil::sdk::models::Identity> identitys, const std::string& cardId,
                                 const virgil::sdk::Credentials& credentials);
         };
     }

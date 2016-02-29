@@ -42,21 +42,21 @@
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include <virgil/sdk/model/CardIdentity.h>
+#include <virgil/sdk/models/CardIdentity.h>
 
 using json = nlohmann::json;
 
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::PrivateKey;
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::Card;
-using virgil::sdk::model::CardIdentity;
-using virgil::sdk::model::CardSign;
+using virgil::sdk::models::PublicKey;
+using virgil::sdk::models::PrivateKey;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
+using virgil::sdk::models::Card;
+using virgil::sdk::models::CardIdentity;
+using virgil::sdk::models::CardSign;
 using virgil::sdk::util::JsonKey;
 
 const std::string kToken = "MIIB5wIBADCCAeAGCSqGSIb3DQEHA6CCAd"

@@ -34,83 +34,72 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_CARD_SIGN_H
-#define VIRGIL_SDK_MODEL_CARD_SIGN_H
+#ifndef VIRGIL_SDK_MODEL_PUBLIC_KEY_H
+#define VIRGIL_SDK_MODEL_PUBLIC_KEY_H
 
 #include <string>
 
+#include <virgil/crypto/VirgilByteArray.h>
+
 namespace virgil {
 namespace sdk {
-    namespace model {
+    namespace models {
         /**
-         * @brief This class contains detailed information about Signed Card
+         * @brief Data object represent "Virgil Public Key" entity
          */
-        class CardSign {
+        class PublicKey {
         public:
             /**
-             * @brief Create empty non valid object
+             * @brief Create empty object
              */
-            CardSign() = default;
+            PublicKey() = default;
             /**
-             * @brief Create Card Sign with all related information
+             * @brief Create public key with additional info
              *
-             * @param id - Virgil Card Sign identifier
-             * @param createdAt - creation timestamp
-             * @param signerCardId - identifier of the Virgil Card that was used to sign
-             * @param signedCardId - identifier of the Virgil Card that was signed
-             * @param signedDigest - signed digest that can be verified within crypto algorithm
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
+             * @param key - public key
              */
-            CardSign(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
-                     const std::string& signedCardId, const std::string& signedDigest);
+            PublicKey(const std::string& id, const std::string& createdAt, const virgil::crypto::VirgilByteArray& key);
             /**
-             * @brief Return Virgil Card Sign identifier
+             * @brief Return unique object identifier
              */
             const std::string getId() const;
             /**
-             * @brief Return creation timestamp
+             * @brief Return cretion date timestamp
              */
             const std::string getCreatedAt() const;
             /**
-             * @brief Return identifier of the Virgil Card that was used to sign
+             * @brief Return public key
              */
-            const std::string getSignerCardId() const;
-            /**
-             * @brief Return identifier of the Virgil Card that was signed
-             */
-            const std::string getSignedCardId() const;
-            /**
-             * @brief Return signed digest that can be verified within crypto algorithm
-             */
-            const std::string getSignedDigest() const;
+            const virgil::crypto::VirgilByteArray getKey() const;
 
         private:
             std::string id_;
             std::string createdAt_;
-            std::string signerCardId_;
-            std::string signedCardId_;
-            std::string signedDigest_;
+            virgil::crypto::VirgilByteArray key_;
         };
+
         /**
-         * @brief Compare Virgil Card's Sign for equality
+         * @brief Compare identities for equality
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const CardSign& left, const CardSign& right) {
+        inline bool operator==(const PublicKey& left, const PublicKey& right) {
             return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                   left.getSignerCardId() == right.getSignerCardId() &&
-                   left.getSignedCardId() == right.getSignedCardId() &&
-                   left.getSignedDigest() == right.getSignedDigest();
+                   left.getKey() == right.getKey();
         }
+
         /**
-         * @brief Compare Virgil Card's Sign for inequality
+         * @brief Compare identities for inequality
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const CardSign& left, const CardSign& right) {
+        inline bool operator!=(const PublicKey& left, const PublicKey& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_CARD_SIGN_H */
+#endif /* VIRGIL_SDK_MODEL_PUBLIC_KEY_H */

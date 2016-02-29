@@ -50,10 +50,10 @@
 
 using json = nlohmann::json;
 
-using virgil::sdk::model::Card;
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::CardIdentity;
-using virgil::sdk::model::Identity;
+using virgil::sdk::models::Card;
+using virgil::sdk::models::PublicKey;
+using virgil::sdk::models::CardIdentity;
+using virgil::sdk::models::Identity;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 

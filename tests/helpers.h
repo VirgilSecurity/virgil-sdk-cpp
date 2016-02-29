@@ -40,11 +40,11 @@
 #include <string>
 #include <vector>
 
-#include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/PrivateKey.h>
-#include <virgil/sdk/model/ValidatedIdentity.h>
-#include <virgil/sdk/model/Card.h>
-#include <virgil/sdk/model/CardSign.h>
+#include <virgil/sdk/models/PublicKey.h>
+#include <virgil/sdk/models/PrivateKey.h>
+#include <virgil/sdk/models/ValidatedIdentity.h>
+#include <virgil/sdk/models/Card.h>
+#include <virgil/sdk/models/CardSign.h>
 #include <virgil/sdk/util/JsonKey.h>
 
 #include <json.hpp>
@@ -53,23 +53,23 @@ namespace virgil {
 namespace test {
 
     nlohmann::json getJsonValidatedIdentity();
-    virgil::sdk::model::ValidatedIdentity getValidatedIdentity();
+    virgil::sdk::models::ValidatedIdentity getValidatedIdentity();
 
     nlohmann::json getJsonPublicKey();
-    virgil::sdk::model::PublicKey getPublicKey();
+    virgil::sdk::models::PublicKey getPublicKey();
 
     nlohmann::json getJsonCard();
-    virgil::sdk::model::Card getCard();
+    virgil::sdk::models::Card getCard();
 
     nlohmann::json getJsonResponseCards();
     nlohmann::json getJsonCards();
-    std::vector<virgil::sdk::model::Card> getCards();
+    std::vector<virgil::sdk::models::Card> getCards();
 
     nlohmann::json getJsonCardSign();
-    virgil::sdk::model::CardSign getCardSign();
+    virgil::sdk::models::CardSign getCardSign();
 
     nlohmann::json getJsonPrivateKey();
-    virgil::sdk::model::PrivateKey getPrivateKey();
+    virgil::sdk::models::PrivateKey getPrivateKey();
 }
 }
 

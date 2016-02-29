@@ -54,7 +54,7 @@ using json = nlohmann::json;
 
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::model::PublicKey;
+using virgil::sdk::models::PublicKey;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 

@@ -34,29 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/PrivateKey.h>
+#include <virgil/sdk/models/CardIdentity.h>
+#include <virgil/sdk/models/Identity.h>
 
-using virgil::sdk::model::PrivateKey;
+using virgil::sdk::models::CardIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
 
-using virgil::crypto::VirgilByteArray;
-
-PrivateKey::PrivateKey(const std::string& cardId, const VirgilByteArray& key) : cardId_(cardId), key_(key) {
+CardIdentity::CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
+                           const std::string& value, const IdentityType& type)
+        : Identity(value, type), id_(id), createdAt_(createdAt), confirmed_(confirmed) {
 }
 
-PrivateKey::~PrivateKey() noexcept {
-    cleanup();
+bool CardIdentity::isConfirmed() const {
+    return confirmed_;
 }
 
-const std::string PrivateKey::getCardId() const {
-    return cardId_;
+const std::string CardIdentity::getId() const {
+    return id_;
 }
 
-const VirgilByteArray& PrivateKey::getKey() const {
-    return key_;
-}
-
-void PrivateKey::cleanup() noexcept {
-    if (!key_.empty()) {
-        virgil::crypto::bytes_zeroize(key_);
-    }
+const std::string CardIdentity::getCreatedAt() const {
+    return createdAt_;
 }

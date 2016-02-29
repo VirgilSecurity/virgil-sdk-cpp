@@ -41,7 +41,7 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/PublicKey.h>
+#include <virgil/sdk/models/PublicKey.h>
 
 using json = nlohmann::json;
 
@@ -49,7 +49,7 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::PublicKey;
+using virgil::sdk::models::PublicKey;
 
 namespace virgil {
 namespace sdk {

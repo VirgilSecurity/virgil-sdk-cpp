@@ -34,39 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <virgil/sdk/model/Identity.h>
+#include <virgil/sdk/models/PrivateKey.h>
 
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
+using virgil::sdk::models::PrivateKey;
 
-std::string virgil::sdk::model::toString(const IdentityType& identityType) {
-    if (identityType == IdentityType::Email) {
-        return std::string("email");
-    } else if (identityType == IdentityType::Application) {
-        return std::string("application");
-    } else {
-        return std::string();
+using virgil::crypto::VirgilByteArray;
+
+PrivateKey::PrivateKey(const std::string& cardId, const VirgilByteArray& key) : cardId_(cardId), key_(key) {
+}
+
+PrivateKey::~PrivateKey() noexcept {
+    cleanup();
+}
+
+const std::string PrivateKey::getCardId() const {
+    return cardId_;
+}
+
+const VirgilByteArray& PrivateKey::getKey() const {
+    return key_;
+}
+
+void PrivateKey::cleanup() noexcept {
+    if (!key_.empty()) {
+        virgil::crypto::bytes_zeroize(key_);
     }
-}
-
-IdentityType virgil::sdk::model::fromString(const std::string& identityType) {
-    if (identityType == "email") {
-        return IdentityType::Email;
-    } else if (identityType == "application") {
-        return IdentityType::Application;
-    } else {
-        return IdentityType::None;
-    }
-}
-
-Identity::Identity(const std::string& value, const IdentityType& type) : value_(value), type_(type) {
-}
-
-const std::string Identity::getValue() const {
-    return value_;
-}
-
-const IdentityType Identity::getType() const {
-    return type_;
 }

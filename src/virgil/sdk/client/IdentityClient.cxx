@@ -65,14 +65,14 @@ using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::Card;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
 std::string IdentityClient::verify(const Identity& identity) {
-    json payload = {{JsonKey::type, virgil::sdk::model::toString(identity.getType())},
+    json payload = {{JsonKey::type, virgil::sdk::models::toString(identity.getType())},
                     {JsonKey::value, identity.getValue()}};
 
     Request request = Request()
@@ -113,7 +113,7 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
 }
 
 bool IdentityClient::validate(const ValidatedIdentity& validatedIdentity) {
-    json payload = {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
+    json payload = {{JsonKey::type, virgil::sdk::models::toString(validatedIdentity.getType())},
                     {JsonKey::value, validatedIdentity.getValue()},
                     {JsonKey::validationToken, validatedIdentity.getToken()}};
 

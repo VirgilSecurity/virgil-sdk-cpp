@@ -44,7 +44,7 @@
 #include <virgil/crypto/VirgilByteArray.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/model/Card.h>
+#include <virgil/sdk/models/Card.h>
 #include <virgil/sdk/http/Response.h>
 
 namespace virgil {
@@ -58,7 +58,7 @@ namespace sdk {
             /**
              * @brief Callback function to perform load of the Virgil Service Card
              */
-            typedef std::function<virgil::sdk::model::Card()> CardProviderFunc;
+            typedef std::function<virgil::sdk::models::Card()> CardProviderFunc;
 
         public:
             /**
@@ -93,7 +93,7 @@ namespace sdk {
              * @return Virgil Card that is registered on the Virgil Keys Service for underlying service
              * @throw std::runtime_error, if lasy load fails
              */
-            virtual virgil::sdk::model::Card getServiceCard() const;
+            virtual virgil::sdk::models::Card getServiceCard() const;
 
         protected:
             /**
@@ -109,7 +109,7 @@ namespace sdk {
             std::string accessToken_;
             std::string baseServiceUri_;
             CardProviderFunc cardProviderFunc_;
-            mutable std::shared_ptr<virgil::sdk::model::Card> serviceCard_;
+            mutable std::shared_ptr<virgil::sdk::models::Card> serviceCard_;
         };
     }
 }

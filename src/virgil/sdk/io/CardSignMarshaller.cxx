@@ -38,12 +38,12 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/CardSign.h>
+#include <virgil/sdk/models/CardSign.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::CardSign;
+using virgil::sdk::models::CardSign;
 
 namespace virgil {
 namespace sdk {

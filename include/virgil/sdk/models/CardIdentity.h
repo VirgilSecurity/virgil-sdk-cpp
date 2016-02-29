@@ -34,77 +34,79 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_PRIVATE_KEY_H
-#define VIRGIL_SDK_MODEL_PRIVATE_KEY_H
+#ifndef VIRGIL_SDK_MODEL_CARD_IDENTITY_H
+#define VIRGIL_SDK_MODEL_CARD_IDENTITY_H
 
 #include <string>
 
-#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/sdk/models/Identity.h>
 
 namespace virgil {
 namespace sdk {
-    namespace model {
+    namespace models {
         /**
-         * @brief Data object represent "Virgil Private Key" entity
+         * @brief This class reresents extended version of class Identity
+         *
+         * @details This class contains addition information of identity,
+         *          that is used in conjuction with class @link Card @endlink.
          */
-        class PrivateKey {
+        class CardIdentity : public Identity {
         public:
             /**
-             * @brief Create epmpty private key
+             * @brief Creates not valid identity
              */
-            PrivateKey() = default;
+            CardIdentity() = default;
             /**
-             * @brief Creates private key with associated Virgil Card identifier
+             * @brief Creates valid identity
              *
-             * @param cardId - unique virgil card identifier defined by service
-             * @param key - private kwy
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
+             * @param confirmed - true, if identity is confirmed by user
+             * @param value - identity value
+             * @param type - identity type
              */
-            PrivateKey(const std::string& cardId, const virgil::crypto::VirgilByteArray& key);
+            CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
+                         const std::string& value, const IdentityType& type = virgil::sdk::models::IdentityType::None);
             /**
-             * @brief Return unique virgil card identifier
+             * @brief Return unique object identifier defined by service
              */
-            const std::string getCardId() const;
+            const std::string getId() const;
             /**
-             * @brief Return private key
-             *
-             * @note Keep return by refernce for security reasons.
+             * @brief Return cretion date timestamp defined by service
              */
-            const virgil::crypto::VirgilByteArray& getKey() const;
-
+            const std::string getCreatedAt() const;
             /**
-             * @brief Perform security cleanup
-             *
-             * @note This method should be called if private key is not needed anymore
+             * @brief Return true, if identity is confirmed by user, false - otherwise
              */
-            void cleanup() noexcept;
-
-            /**
-             * @brief Perform security cleanup on destruction
-             */
-            virtual ~PrivateKey() noexcept;
+            bool isConfirmed() const;
 
         private:
-            std::string cardId_;
-            virgil::crypto::VirgilByteArray key_;
+            std::string id_;
+            std::string createdAt_;
+            bool confirmed_ = false;
         };
+
         /**
-         * @brief Compare Private Keys for equality
+         * @brief Compare identities for equality
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const PrivateKey& left, const PrivateKey& right) {
-            return left.getCardId() == right.getCardId() && left.getKey() == right.getKey();
+        inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
+            return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
+                   left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.isConfirmed() == right.isConfirmed();
         }
+
         /**
-         * @brief Compare Private Keys for inequality
+         * @brief Compare identities for inequality
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {
+        inline bool operator!=(const CardIdentity& left, const CardIdentity& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_PRIVATE_KEY_H */
+#endif /* VIRGIL_SDK_MODEL_CARD_IDENTITY_H */

@@ -47,7 +47,7 @@
 
 using json = nlohmann::json;
 
-using virgil::sdk::model::PrivateKey;
+using virgil::sdk::models::PrivateKey;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 

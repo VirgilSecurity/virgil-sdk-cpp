@@ -44,7 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/http/Connection.h>
 #include <virgil/sdk/Error.h>
-#include <virgil/sdk/model/Card.h>
+#include <virgil/sdk/models/Card.h>
 
 namespace virgil {
 namespace sdk {
@@ -128,7 +128,7 @@ namespace sdk {
              * @throw std::logic_error - if given parameters are inconsistent
              * @throw std::runtime_error - if error was occured when send request
              */
-            std::string encryptJsonBody(const virgil::sdk::model::Card& privateKeysServiceCard,
+            std::string encryptJsonBody(const virgil::sdk::models::Card& privateKeysServiceCard,
                                         const std::string& jsonBody);
             /**
              * @brief Check response for errors

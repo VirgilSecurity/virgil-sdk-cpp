@@ -45,15 +45,15 @@
 
 #include <json.hpp>
 
-#include <virgil/sdk/model/ValidatedIdentity.h>
+#include <virgil/sdk/models/ValidatedIdentity.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 using json = nlohmann::json;
 
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 

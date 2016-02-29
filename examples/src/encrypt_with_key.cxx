@@ -71,12 +71,12 @@ int main(int argc, char** argv) {
         std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..." << std::endl;
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
-        std::vector<vsdk::model::Card> recipientCards = servicesHub.card().search(identity);
+        vsdk::models::Identity identity(userEmail, vsdk::models::IdentityType::Email);
+        std::vector<vsdk::models::Card> recipientCards = servicesHub.card().search(identity);
 
         vcrypto::VirgilStreamCipher cipher;
         std::cout << "Add recipient..." << std::endl;
-        vsdk::model::Card recipientCard = recipientCards.at(0);
+        vsdk::models::Card recipientCard = recipientCards.at(0);
         cipher.addKeyRecipient(virgil::crypto::str2bytes(recipientCard.getId()), recipientCard.getPublicKey().getKey());
 
         std::cout << "Prepare input file: test.txt..." << std::endl;

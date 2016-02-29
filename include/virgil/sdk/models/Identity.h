@@ -34,42 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_IDENTITY_TOKEN_H
-#define VIRGIL_SDK_MODEL_IDENTITY_TOKEN_H
+#ifndef VIRGIL_SDK_MODEL_IDENTITY_H
+#define VIRGIL_SDK_MODEL_IDENTITY_H
 
 #include <string>
 
-#include <virgil/sdk/model/Identity.h>
-
 namespace virgil {
 namespace sdk {
-    namespace model {
+    namespace models {
         /**
-         * @brief This class represents validated identity
-         *
-         * @details Validated identity tells that user validate identity and receive related token
+         * @brief Enumerate possible identity types
          */
-        class ValidatedIdentity : public Identity {
+        enum class IdentityType {
+            Email,       // Identity is email
+            Application, // Identity is application
+            None         // Identity is undefined
+        };
+        /**
+         * @brief Return string representation of the identity type
+         */
+        std::string toString(const virgil::sdk::models::IdentityType& identityType);
+        /**
+         * @brief Use string representation to construct identity type
+         */
+        virgil::sdk::models::IdentityType fromString(const std::string& identityType);
+
+        /**
+         * @brief Represents unique identifer, i.e. email, application, etc
+         */
+        class Identity {
         public:
             /**
-             * @brief Create empty non valid identity
+             * @brief Creates empty not valid identity
              */
-            ValidatedIdentity() = default;
+            Identity() = default;
             /**
-             * @brief Create identity with valid token
+             * @brief Creates identity with given values
              *
-             * @param token - validation token
              * @param value - identity value, i.e. support@virgilsecurity.com
              * @param type - identity type, i.e. IdentityType::Email
+             *
+             * @note
+             *     If type is omitted, then server try to gess type of the identity according
+             *     to the value format
              */
-            ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type);
+            Identity(const std::string& value, const virgil::sdk::models::IdentityType& type);
             /**
-             * @brief Return token that validate underlying identity
+             * @brief Return identity value
              */
-            const std::string getToken() const;
+            const std::string getValue() const;
+            /**
+             * @brief Return identity type
+             */
+            const virgil::sdk::models::IdentityType getType() const;
 
         private:
-            std::string token_;
+            std::string value_;
+            IdentityType type_ = IdentityType::None;
         };
 
         /**
@@ -77,9 +98,8 @@ namespace sdk {
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
-                   left.getToken() == right.getToken();
+        inline bool operator==(const Identity& left, const Identity& right) {
+            return left.getType() == right.getType() && left.getValue() == right.getValue();
         }
 
         /**
@@ -87,11 +107,11 @@ namespace sdk {
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const ValidatedIdentity& left, const ValidatedIdentity& right) {
+        inline bool operator!=(const Identity& left, const Identity& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_IDENTITY_TOKEN_H */
+#endif /* VIRGIL_SDK_MODEL_IDENTITY_H */

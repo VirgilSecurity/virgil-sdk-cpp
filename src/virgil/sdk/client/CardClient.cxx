@@ -64,11 +64,11 @@ using virgil::sdk::endpoints::PublicKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::Card;
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::CardSign;
-using virgil::sdk::model::toString;
+using virgil::sdk::models::Card;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::CardSign;
+using virgil::sdk::models::toString;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -179,7 +179,7 @@ std::vector<Card> CardClient::search(const Identity& identity, const std::vector
                                      const bool includeUnconfirmed) {
     json jsonRelations(relations);
     json payload = {{JsonKey::value, identity.getValue()},
-                    {JsonKey::type, virgil::sdk::model::toString(identity.getType())},
+                    {JsonKey::type, virgil::sdk::models::toString(identity.getType())},
                     {JsonKey::relations, jsonRelations},
                     {JsonKey::includeUnconfirmed, includeUnconfirmed}};
 

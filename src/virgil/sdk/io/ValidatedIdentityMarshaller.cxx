@@ -38,18 +38,18 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/ValidatedIdentity.h>
+#include <virgil/sdk/models/ValidatedIdentity.h>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::fromString;
-using virgil::sdk::model::toString;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::IdentityType;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::fromString;
+using virgil::sdk::models::toString;
 
 using virgil::crypto::foundation::VirgilBase64;
 

@@ -72,11 +72,11 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
+        vsdk::models::Identity identity(userEmail, vsdk::models::IdentityType::Email);
 
         std::cout << "Search for Cards" << std::endl;
 
-        std::vector<vsdk::model::Card> foundCards;
+        std::vector<vsdk::models::Card> foundCards;
         if (relation.empty()) {
             foundCards = servicesHub.card().search(identity, std::vector<std::string>(), includeUnconfirmed);
         } else {

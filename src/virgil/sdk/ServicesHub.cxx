@@ -50,7 +50,7 @@ using virgil::crypto::VirgilByteArray;
 
 using virgil::sdk::ServicesHub;
 using virgil::sdk::ServiceUri;
-using virgil::sdk::model::Card;
+using virgil::sdk::models::Card;
 using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::PrivateKeyClient;
 using virgil::sdk::client::PublicKeyClient;

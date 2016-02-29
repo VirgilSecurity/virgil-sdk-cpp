@@ -34,24 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/PublicKey.h>
+#include <iostream>
+#include <virgil/sdk/models/Identity.h>
 
-using virgil::crypto::VirgilByteArray;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
 
-using virgil::sdk::model::PublicKey;
-
-PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
-        : id_(id), createdAt_(createdAt), key_(key) {
+std::string virgil::sdk::models::toString(const IdentityType& identityType) {
+    if (identityType == IdentityType::Email) {
+        return std::string("email");
+    } else if (identityType == IdentityType::Application) {
+        return std::string("application");
+    } else {
+        return std::string();
+    }
 }
 
-const std::string PublicKey::getId() const {
-    return id_;
+IdentityType virgil::sdk::models::fromString(const std::string& identityType) {
+    if (identityType == "email") {
+        return IdentityType::Email;
+    } else if (identityType == "application") {
+        return IdentityType::Application;
+    } else {
+        return IdentityType::None;
+    }
 }
 
-const std::string PublicKey::getCreatedAt() const {
-    return createdAt_;
+Identity::Identity(const std::string& value, const IdentityType& type) : value_(value), type_(type) {
 }
 
-const VirgilByteArray PublicKey::getKey() const {
-    return key_;
+const std::string Identity::getValue() const {
+    return value_;
+}
+
+const IdentityType Identity::getType() const {
+    return type_;
 }

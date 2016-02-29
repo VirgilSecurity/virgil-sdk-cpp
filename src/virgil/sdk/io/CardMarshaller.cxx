@@ -45,10 +45,10 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/model/Card.h>
-#include <virgil/sdk/model/CardIdentity.h>
-#include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/Identity.h>
+#include <virgil/sdk/models/Card.h>
+#include <virgil/sdk/models/CardIdentity.h>
+#include <virgil/sdk/models/PublicKey.h>
+#include <virgil/sdk/models/Identity.h>
 
 using json = nlohmann::json;
 
@@ -56,12 +56,12 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::model::Card;
-using virgil::sdk::model::CardIdentity;
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::fromString;
+using virgil::sdk::models::Card;
+using virgil::sdk::models::CardIdentity;
+using virgil::sdk::models::PublicKey;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
+using virgil::sdk::models::fromString;
 
 namespace virgil {
 namespace sdk {
@@ -88,7 +88,7 @@ namespace sdk {
                     CardIdentity cardIdentity = card.getCardIdentity();
                     jsonCard[JsonKey::identity] = {
                         {JsonKey::id, cardIdentity.getId()},
-                        {JsonKey::type, virgil::sdk::model::toString(cardIdentity.getType())},
+                        {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
                         {JsonKey::value, cardIdentity.getValue()},
                         {JsonKey::isConfirmed, cardIdentity.isConfirmed()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
@@ -155,7 +155,7 @@ namespace sdk {
             Marshaller(){};
         };
 
-        std::string cardsToJson(const std::vector<virgil::sdk::model::Card> cards, const int INDENT) {
+        std::string cardsToJson(const std::vector<virgil::sdk::models::Card> cards, const int INDENT) {
             try {
                 json jsonCards = json::array();
                 for (const auto& card : cards) {

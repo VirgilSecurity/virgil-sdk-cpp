@@ -34,49 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/PublicKey.h>
-#include <virgil/sdk/model/Card.h>
+#include <virgil/sdk/models/PublicKey.h>
 
-using virgil::sdk::model::PublicKey;
-using virgil::sdk::model::Card;
-using virgil::sdk::model::CardIdentity;
+using virgil::crypto::VirgilByteArray;
 
-Card::Card(const std::string& id, const std::string& createdAt, const std::string& hash,
-           const CardIdentity& cardIdentity, const std::map<std::string, std::string>& data, const PublicKey& publicKey,
-           const bool confirmed)
-        : id_(id),
-          createdAt_(createdAt),
-          hash_(hash),
-          cardIdentity_(cardIdentity),
-          data_(data),
-          publicKey_(publicKey),
-          confirmed_(confirmed) {
+using virgil::sdk::models::PublicKey;
+
+PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
+        : id_(id), createdAt_(createdAt), key_(key) {
 }
 
-bool Card::isConfirmed() const {
-    return confirmed_;
-}
-
-const std::string Card::getId() const {
+const std::string PublicKey::getId() const {
     return id_;
 }
 
-const std::string Card::getCreatedAt() const {
+const std::string PublicKey::getCreatedAt() const {
     return createdAt_;
 }
 
-const std::string Card::getHash() const {
-    return hash_;
-}
-
-const CardIdentity Card::getCardIdentity() const {
-    return cardIdentity_;
-}
-
-const std::map<std::string, std::string> Card::getData() const {
-    return data_;
-}
-
-const PublicKey Card::getPublicKey() const {
-    return publicKey_;
+const VirgilByteArray PublicKey::getKey() const {
+    return key_;
 }

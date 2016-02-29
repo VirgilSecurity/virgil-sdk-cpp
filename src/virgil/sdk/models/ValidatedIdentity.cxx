@@ -34,35 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/model/CardSign.h>
+#include <virgil/sdk/models/ValidatedIdentity.h>
 
-using virgil::sdk::model::CardSign;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
 
-CardSign::CardSign(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
-                   const std::string& signedCardId, const std::string& signedDigest)
-        : id_(id),
-          createdAt_(createdAt),
-          signerCardId_(signerCardId),
-          signedCardId_(signedCardId),
-          signedDigest_(signedDigest) {
+ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type)
+        : Identity(value, type), token_(token) {
 }
 
-const std::string CardSign::getId() const {
-    return id_;
-}
-
-const std::string CardSign::getCreatedAt() const {
-    return createdAt_;
-}
-
-const std::string CardSign::getSignerCardId() const {
-    return signerCardId_;
-}
-
-const std::string CardSign::getSignedCardId() const {
-    return signedCardId_;
-}
-
-const std::string CardSign::getSignedDigest() const {
-    return signedDigest_;
+const std::string ValidatedIdentity::getToken() const {
+    return token_;
 }

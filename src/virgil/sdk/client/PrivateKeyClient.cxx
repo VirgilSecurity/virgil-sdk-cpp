@@ -49,7 +49,7 @@
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>
-#include <virgil/sdk/model/Identity.h>
+#include <virgil/sdk/models/Identity.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/uuid.h>
 
@@ -67,11 +67,11 @@ using virgil::sdk::endpoints::PrivateKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::model::ValidatedIdentity;
-using virgil::sdk::model::Identity;
-using virgil::sdk::model::IdentityType;
-using virgil::sdk::model::PrivateKey;
-using virgil::sdk::model::Card;
+using virgil::sdk::models::ValidatedIdentity;
+using virgil::sdk::models::Identity;
+using virgil::sdk::models::IdentityType;
+using virgil::sdk::models::PrivateKey;
+using virgil::sdk::models::Card;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -102,7 +102,7 @@ PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdent
     }
 
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, virgil::sdk::model::toString(validatedIdentity.getType())},
+                     {{JsonKey::type, virgil::sdk::models::toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},
