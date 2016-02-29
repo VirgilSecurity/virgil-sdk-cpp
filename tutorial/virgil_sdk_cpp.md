@@ -45,7 +45,7 @@ All the Virgil Security services are strongly interconnected with the Identity S
 Initialize the identity verification process.
 
 ``` {.cpp}
-Identity identity(%YOUR_EMAIL%, IdentityType::Email);
+Identity identity(%YOUR_EMAIL%, IdentityModel::Type::Email);
 std::string actionId = servicesHub.identity().verify(identity);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/identity_verify.cxx)
@@ -86,7 +86,7 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 Search for the Virgil Card by provided parameters.
 
 ``` {.cpp}
-Identity identity(%USER_EMAIL%, IdentityType::Email);
+Identity identity(%USER_EMAIL%, IdentityModel::Type::Email);
 std::vector<CardModel> foundCards = servicesHub.card().search(identity);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_search.cxx)

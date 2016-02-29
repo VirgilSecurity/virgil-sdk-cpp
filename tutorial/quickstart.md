@@ -62,7 +62,7 @@ VirgilByteArray senderPrivateKey = newKeyPair.privateKey();
 The app is verifying whether the user really owns the provided email address and getting a temporary token for public key registration on the Public Keys Service.
 
 ``` {.cpp}
-Identity identity(%SENDER_EMAIL%, IdentityType::Email);
+Identity identity(%SENDER_EMAIL%, IdentityModel::Type::Email);
 std::string actionId = servicesHub.identity().verify(identity);
 
 // use confirmation code sent to your email box.
@@ -84,7 +84,7 @@ The app is searching for the recipient’s public key on the Public Keys Service
 ``` {.cpp}
 auto message = "Encrypt me, Please!!!";
 
-Identity identity(%RECIPIENT_EMAIL%, IdentityType::Email);
+Identity identity(%RECIPIENT_EMAIL%, IdentityModel::Type::Email);
 std::vector<CardModel> recipientCards = servicesHub.card().search(identity);
 Card recipientCard = recipientCards.at(0);
 
@@ -102,7 +102,7 @@ VirgilByteArray signedEncryptedMessage =
 In order to decrypt the received data the app on recipient’s side needs to get sender’s Virgil Card from the Public Keys Service.
 
 ``` {.cpp}
-Identity identity(%SENDER_EMAIL%, IdentityType::Email);
+Identity identity(%SENDER_EMAIL%, IdentityModel::Type::Email);
 std::vector<CardModel> senderCards = servicesHub.card().search(identity);
 Card senderCard = senderCards.at(0);
 ```

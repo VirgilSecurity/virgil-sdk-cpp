@@ -43,29 +43,22 @@ namespace virgil {
 namespace sdk {
     namespace models {
         /**
-         * @brief Enumerate possible identity types
-         */
-        enum class IdentityType {
-            Email,       // Identity is email
-            Application, // Identity is application
-            None         // Identity is undefined
-        };
-        /**
-         * @brief Return string representation of the identity type
-         */
-        std::string toString(const virgil::sdk::models::IdentityType& identityType);
-        /**
-         * @brief Use string representation to construct identity type
-         */
-        virgil::sdk::models::IdentityType fromString(const std::string& identityType);
-
-        /**
          * @brief This class reresents extended version of class Identity
          *
          * @details This class contains addition information of identity,
          *          that is used in conjuction with class @link Card @endlink.
          */
         class IdentityModel {
+        public:
+            /**
+             * @brief Enumerate possible identity types
+             */
+            enum class Type {
+                Email,       // Identity is email
+                Application, // Identity is application
+                None         // Identity is undefined
+            };
+
         public:
             /**
              * @brief Creates not valid identity
@@ -80,8 +73,9 @@ namespace sdk {
              * @param value - identity value
              * @param type - identity type
              */
-            IdentityModel(const std::string& id, const std::string& createdAt, const bool confirmed,
-                          const std::string& value, const IdentityType& type = virgil::sdk::models::IdentityType::None);
+            IdentityModel(
+                const std::string& id, const std::string& createdAt, const bool confirmed, const std::string& value,
+                const virgil::sdk::models::IdentityModel::Type& type = virgil::sdk::models::IdentityModel::Type::None);
             /**
              * @brief Return unique object identifier defined by service
              */
@@ -101,15 +95,23 @@ namespace sdk {
             /**
              * @brief Return identity type
              */
-            const virgil::sdk::models::IdentityType getType() const;
+            const virgil::sdk::models::IdentityModel::Type getType() const;
 
         private:
             std::string id_;
             std::string createdAt_;
             bool confirmed_ = false;
             std::string value_;
-            IdentityType type_ = IdentityType::None;
+            IdentityModel::Type type_ = IdentityModel::Type::None;
         };
+        /**
+         * @brief Return string representation of the identity type
+         */
+        std::string toString(const virgil::sdk::models::IdentityModel::Type& identityType);
+        /**
+         * @brief Use string representation to construct identity type
+         */
+        virgil::sdk::models::IdentityModel::Type fromString(const std::string& identityType);
 
         /**
          * @brief Compare identities for equality

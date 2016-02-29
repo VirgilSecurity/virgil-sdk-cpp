@@ -38,9 +38,10 @@
 
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityType;
+using virgil::sdk::models::IdentityModel;
 
-ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type)
+ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string& value,
+                                     const IdentityModel::Type& type)
         : Identity(value, type), token_(token) {
 }
 

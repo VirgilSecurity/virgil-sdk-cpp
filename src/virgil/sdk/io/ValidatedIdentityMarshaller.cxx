@@ -46,10 +46,10 @@ using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::dto::ValidatedIdentity;
-using virgil::sdk::models::IdentityType;
 using virgil::sdk::dto::Identity;
 using virgil::sdk::models::fromString;
 using virgil::sdk::models::toString;
+using virgil::sdk::models::IdentityModel;
 
 using virgil::crypto::foundation::VirgilBase64;
 
@@ -72,7 +72,7 @@ namespace sdk {
             static ValidatedIdentity fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
 
-                IdentityType identityType = fromString(typeJson[JsonKey::type]);
+                IdentityModel::Type identityType = fromString(typeJson[JsonKey::type]);
                 std::string value = typeJson[JsonKey::value];
                 std::string token = typeJson[JsonKey::validationToken];
 

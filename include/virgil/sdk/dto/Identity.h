@@ -57,13 +57,13 @@ namespace sdk {
              * @brief Creates identity with given values
              *
              * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. IdentityType::Email
+             * @param type - identity type, i.e. IdentityModel::Type::Email
              *
              * @note
              *     If type is omitted, then server try to gess type of the identity according
              *     to the value format
              */
-            Identity(const std::string& value, const virgil::sdk::models::IdentityType& type);
+            Identity(const std::string& value, const virgil::sdk::models::IdentityModel::Type& type);
             /**
              * @brief Return identity value
              */
@@ -71,11 +71,11 @@ namespace sdk {
             /**
              * @brief Return identity type
              */
-            const virgil::sdk::models::IdentityType getType() const;
+            const virgil::sdk::models::IdentityModel::Type getType() const;
 
         private:
             std::string value_;
-            virgil::sdk::models::IdentityType type_ = virgil::sdk::models::IdentityType::None;
+            virgil::sdk::models::IdentityModel::Type type_ = virgil::sdk::models::IdentityModel::Type::None;
         };
 
         /**

@@ -39,10 +39,9 @@
 
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityType;
 
 IdentityModel::IdentityModel(const std::string& id, const std::string& createdAt, const bool confirmed,
-                             const std::string& value, const IdentityType& type)
+                             const std::string& value, const IdentityModel::Type& type)
         : id_(id), createdAt_(createdAt), confirmed_(confirmed), value_(value), type_(type) {
 }
 
@@ -62,26 +61,26 @@ const std::string IdentityModel::getValue() const {
     return value_;
 }
 
-const IdentityType IdentityModel::getType() const {
+const IdentityModel::Type IdentityModel::getType() const {
     return type_;
 }
 
-std::string virgil::sdk::models::toString(const IdentityType& identityType) {
-    if (identityType == IdentityType::Email) {
+std::string virgil::sdk::models::toString(const IdentityModel::Type& identityType) {
+    if (identityType == IdentityModel::Type::Email) {
         return std::string("email");
-    } else if (identityType == IdentityType::Application) {
+    } else if (identityType == IdentityModel::Type::Application) {
         return std::string("application");
     } else {
         return std::string();
     }
 }
 
-IdentityType virgil::sdk::models::fromString(const std::string& identityType) {
+IdentityModel::Type virgil::sdk::models::fromString(const std::string& identityType) {
     if (identityType == "email") {
-        return IdentityType::Email;
+        return IdentityModel::Type::Email;
     } else if (identityType == "application") {
-        return IdentityType::Application;
+        return IdentityModel::Type::Application;
     } else {
-        return IdentityType::None;
+        return IdentityModel::Type::None;
     }
 }

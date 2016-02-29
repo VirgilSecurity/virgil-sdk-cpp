@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityType::Email);
+        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
 
         std::cout << "Prepare public key file: " << pathPublicKey << std::endl;
         std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);

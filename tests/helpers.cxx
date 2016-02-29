@@ -53,7 +53,6 @@ using virgil::sdk::models::PublicKeyModel;
 using virgil::sdk::models::PrivateKeyModel;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityType;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::models::SignModel;
@@ -117,7 +116,7 @@ namespace test {
     }
 
     ValidatedIdentity getValidatedIdentity() {
-        return ValidatedIdentity(kToken, "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email);
+        return ValidatedIdentity(kToken, "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email);
     }
 
     json getJsonPublicKey() {
@@ -153,7 +152,7 @@ namespace test {
     CardModel getCard() {
         return CardModel("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
                          IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                                       "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                                       "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
                          std::map<std::string, std::string>(), getPublicKey(), true);
     }
 
@@ -237,7 +236,7 @@ namespace test {
 
         CardModel card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
                        IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                                     "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                                     "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
                        {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), true);
 
         cards.push_back(card);

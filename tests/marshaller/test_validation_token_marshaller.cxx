@@ -53,7 +53,6 @@ using json = nlohmann::json;
 
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityType;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 

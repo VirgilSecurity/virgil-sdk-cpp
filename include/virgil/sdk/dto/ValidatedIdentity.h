@@ -60,10 +60,10 @@ namespace sdk {
              *
              * @param token - validation token
              * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. IdentityType::Email
+             * @param type - identity type, i.e. IdentityModel::Type::Email
              */
             ValidatedIdentity(const std::string& token, const std::string& value,
-                              const virgil::sdk::models::IdentityType& type);
+                              const virgil::sdk::models::IdentityModel::Type& type);
             /**
              * @brief Return token that validate underlying identity
              */

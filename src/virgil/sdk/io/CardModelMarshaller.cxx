@@ -60,7 +60,6 @@ using virgil::sdk::dto::Identity;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::models::PublicKeyModel;
-using virgil::sdk::models::IdentityType;
 using virgil::sdk::models::fromString;
 
 namespace virgil {
@@ -123,7 +122,7 @@ namespace sdk {
 
                     std::string identityValue = jsonCardIdentity[JsonKey::value];
                     std::string identityValueString = jsonCardIdentity[JsonKey::type];
-                    IdentityType identityType = fromString(identityValueString);
+                    IdentityModel::Type identityType = fromString(identityValueString);
 
                     IdentityModel cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
                                                identityType);

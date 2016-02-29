@@ -69,7 +69,6 @@ using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityType;
 using virgil::sdk::models::PrivateKeyModel;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::util::JsonKey;
