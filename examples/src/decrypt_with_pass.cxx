@@ -44,7 +44,7 @@
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 #include <virgil/crypto/stream/VirgilStreamDataSink.h>
 
-#include <virgil/sdk/models/PublicKey.h>
+#include <virgil/sdk/models/PublicKeyModel.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;

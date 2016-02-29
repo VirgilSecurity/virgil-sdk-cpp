@@ -34,24 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/models/PublicKey.h>
+#include <virgil/sdk/models/IdentityModel.h>
+#include <virgil/sdk/dto/Identity.h>
 
-using virgil::crypto::VirgilByteArray;
+using virgil::sdk::models::IdentityModel;
+using virgil::sdk::dto::Identity;
+using virgil::sdk::models::IdentityType;
 
-using virgil::sdk::models::PublicKey;
-
-PublicKey::PublicKey(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
-        : id_(id), createdAt_(createdAt), key_(key) {
+IdentityModel::IdentityModel(const std::string& id, const std::string& createdAt, const bool confirmed,
+                             const std::string& value, const IdentityType& type)
+        : id_(id), createdAt_(createdAt), confirmed_(confirmed), value_(value), type_(type) {
 }
 
-const std::string PublicKey::getId() const {
+bool IdentityModel::isConfirmed() const {
+    return confirmed_;
+}
+
+const std::string IdentityModel::getId() const {
     return id_;
 }
 
-const std::string PublicKey::getCreatedAt() const {
+const std::string IdentityModel::getCreatedAt() const {
     return createdAt_;
 }
 
-const VirgilByteArray PublicKey::getKey() const {
-    return key_;
+const std::string IdentityModel::getValue() const {
+    return value_;
+}
+
+const IdentityType IdentityModel::getType() const {
+    return type_;
+}
+
+std::string virgil::sdk::models::toString(const IdentityType& identityType) {
+    if (identityType == IdentityType::Email) {
+        return std::string("email");
+    } else if (identityType == IdentityType::Application) {
+        return std::string("application");
+    } else {
+        return std::string();
+    }
+}
+
+IdentityType virgil::sdk::models::fromString(const std::string& identityType) {
+    if (identityType == "email") {
+        return IdentityType::Email;
+    } else if (identityType == "application") {
+        return IdentityType::Application;
+    } else {
+        return IdentityType::None;
+    }
 }

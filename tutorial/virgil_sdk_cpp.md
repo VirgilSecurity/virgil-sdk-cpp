@@ -75,7 +75,7 @@ An identity token which can be received [here](#identity-check) is used during t
 VirgilByteArray privateKeyPassword = str2bytes("PRIVATE_KEY_PASS")
 VirgilKeyPair keyPair(privateKeyPassword);
 Credentials credentials(keyPair.privateKey(), privateKeyPassword);
-Card myCard = 
+Card myCard =
   servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_create.cxx)
@@ -87,7 +87,7 @@ Search for the Virgil Card by provided parameters.
 
 ``` {.cpp}
 Identity identity(%USER_EMAIL%, IdentityType::Email);
-std::vector<Card> foundCards = servicesHub.card().search(identity);
+std::vector<CardModel> foundCards = servicesHub.card().search(identity);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_search.cxx)
 
@@ -97,7 +97,7 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 Search for the Virgil Cards by a defined pattern. The example below returns a list of applications for Virgil Security company.
 
 ``` {.cpp}
-std::vector<Card> allAppCards = servicesHub.card().searchApp("com.virgil.*");
+std::vector<CardModel> allAppCards = servicesHub.card().searchApp("com.virgil.*");
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_search_app.cxx)
 
@@ -111,7 +111,7 @@ The example below demonstrates how to certify a user's Virgil Card by signing it
 ``` {.cpp}
 Credentials signerCredentials
 		(signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
-CardSign cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
+SignModel cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
         signerCredentials);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_sign.cxx)
@@ -142,7 +142,7 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 Gets a public key from the Public Keys Service by the specified ID.
 
 ``` {.cpp}
-PublicKey publicKey = servicesHub.publicKey().get(publicKeyId);
+PublicKeyModel publicKey = servicesHub.publicKey().get(publicKeyId);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/public_key_get.cxx)
 

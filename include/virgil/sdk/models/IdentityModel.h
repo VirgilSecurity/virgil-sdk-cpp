@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_IDENTITY_H
-#define VIRGIL_SDK_MODEL_IDENTITY_H
+#ifndef VIRGIL_SDK_MODELS_IDENTITY_MODEL_H
+#define VIRGIL_SDK_MODELS_IDENTITY_MODEL_H
 
 #include <string>
 
@@ -60,25 +60,40 @@ namespace sdk {
         virgil::sdk::models::IdentityType fromString(const std::string& identityType);
 
         /**
-         * @brief Represents unique identifer, i.e. email, application, etc
+         * @brief This class reresents extended version of class Identity
+         *
+         * @details This class contains addition information of identity,
+         *          that is used in conjuction with class @link Card @endlink.
          */
-        class Identity {
+        class IdentityModel {
         public:
             /**
-             * @brief Creates empty not valid identity
+             * @brief Creates not valid identity
              */
-            Identity() = default;
+            IdentityModel() = default;
             /**
-             * @brief Creates identity with given values
+             * @brief Creates valid identity
              *
-             * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. IdentityType::Email
-             *
-             * @note
-             *     If type is omitted, then server try to gess type of the identity according
-             *     to the value format
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
+             * @param confirmed - true, if identity is confirmed by user
+             * @param value - identity value
+             * @param type - identity type
              */
-            Identity(const std::string& value, const virgil::sdk::models::IdentityType& type);
+            IdentityModel(const std::string& id, const std::string& createdAt, const bool confirmed,
+                          const std::string& value, const IdentityType& type = virgil::sdk::models::IdentityType::None);
+            /**
+             * @brief Return unique object identifier defined by service
+             */
+            const std::string getId() const;
+            /**
+             * @brief Return cretion date timestamp defined by service
+             */
+            const std::string getCreatedAt() const;
+            /**
+             * @brief Return true, if identity is confirmed by user, false - otherwise
+             */
+            bool isConfirmed() const;
             /**
              * @brief Return identity value
              */
@@ -89,6 +104,9 @@ namespace sdk {
             const virgil::sdk::models::IdentityType getType() const;
 
         private:
+            std::string id_;
+            std::string createdAt_;
+            bool confirmed_ = false;
             std::string value_;
             IdentityType type_ = IdentityType::None;
         };
@@ -98,8 +116,10 @@ namespace sdk {
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const Identity& left, const Identity& right) {
-            return left.getType() == right.getType() && left.getValue() == right.getValue();
+        inline bool operator==(const IdentityModel& left, const IdentityModel& right) {
+            return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
+                   left.isConfirmed() == right.isConfirmed() && left.getValue() == right.getValue() &&
+                   left.getType() == right.getType();
         }
 
         /**
@@ -107,11 +127,11 @@ namespace sdk {
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const Identity& left, const Identity& right) {
+        inline bool operator!=(const IdentityModel& left, const IdentityModel& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_IDENTITY_H */
+#endif /* VIRGIL_SDK_MODELS_IDENTITY_MODEL_H */

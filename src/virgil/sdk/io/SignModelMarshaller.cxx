@@ -36,42 +36,45 @@
 
 #include <json.hpp>
 
-#include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/foundation/VirgilBase64.h>
-
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/models/PublicKey.h>
+#include <virgil/sdk/models/SignModel.h>
 
 using json = nlohmann::json;
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::foundation::VirgilBase64;
-
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::models::PublicKey;
+using virgil::sdk::models::SignModel;
 
 namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<PublicKey> specialization.
+         * @brief Marshaller<ValidatedIdentity> specialization.
          */
-        template <> class Marshaller<PublicKey> {
+        template <> class Marshaller<SignModel> {
         public:
-            template <int INDENT = -1> static std::string toJson(const PublicKey& publicKey) {
-                json jsonPublicKey = {{JsonKey::id, publicKey.getId()},
-                                      {JsonKey::createdAt, publicKey.getCreatedAt()},
-                                      {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
-                return jsonPublicKey.dump(INDENT);
+            template <int INDENT = -1> static std::string toJson(const SignModel& cardSign) {
+                json jsonSignModel = {
+                    {JsonKey::id, cardSign.getId()},
+                    {JsonKey::createdAt, cardSign.getCreatedAt()},
+                    {JsonKey::signerCardId, cardSign.getSignerCardId()},
+                    {JsonKey::signedCardId, cardSign.getSignedCardId()},
+                    {JsonKey::signedDigest, cardSign.getSignedDigest()},
+                };
+
+                return jsonSignModel.dump(INDENT);
             }
 
-            static PublicKey fromJson(const std::string& jsonString) {
-                json jsonPublicKey = json::parse(jsonString);
-                std::string id = jsonPublicKey[JsonKey::id];
-                std::string createdAt = jsonPublicKey[JsonKey::createdAt];
-                std::string publicKey = jsonPublicKey[JsonKey::publicKey];
-                return PublicKey(id, createdAt, VirgilBase64::decode(publicKey));
+            static SignModel fromJson(const std::string& jsonString) {
+                json typeJson = json::parse(jsonString);
+
+                std::string id = typeJson[JsonKey::id];
+                std::string createdAt = typeJson[JsonKey::createdAt];
+                std::string signerCardId = typeJson[JsonKey::signerCardId];
+                std::string signedCardId = typeJson[JsonKey::signedCardId];
+                std::string signedDigest = typeJson[JsonKey::signedDigest];
+
+                return SignModel(id, createdAt, signerCardId, signedCardId, signedDigest);
             }
 
         private:
@@ -81,9 +84,9 @@ namespace sdk {
 }
 }
 
-void marshaller_public_key_init() {
-    virgil::sdk::io::Marshaller<PublicKey>::toJson(PublicKey());
-    virgil::sdk::io::Marshaller<PublicKey>::toJson<2>(PublicKey());
-    virgil::sdk::io::Marshaller<PublicKey>::toJson<4>(PublicKey());
-    virgil::sdk::io::Marshaller<PublicKey>::fromJson(std::string());
+void marshaller_sign_card_response_init() {
+    virgil::sdk::io::Marshaller<SignModel>::toJson(SignModel());
+    virgil::sdk::io::Marshaller<SignModel>::toJson<2>(SignModel());
+    virgil::sdk::io::Marshaller<SignModel>::toJson<4>(SignModel());
+    virgil::sdk::io::Marshaller<SignModel>::fromJson(std::string());
 }

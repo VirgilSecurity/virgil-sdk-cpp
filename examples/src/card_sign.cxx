@@ -42,7 +42,7 @@
 #include <string>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/models/CardSign.h>
+#include <virgil/sdk/models/SignModel.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
@@ -86,11 +86,11 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Sign a Virgil Card" << std::endl;
-        vsdk::models::CardSign cardSign =
+        vsdk::models::SignModel cardSign =
             servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId, credentials);
 
-        std::string cardSignStr = vsdk::io::Marshaller<vsdk::models::CardSign>::toJson<4>(cardSign);
-        std::cout << "CardSign " << std::endl;
+        std::string cardSignStr = vsdk::io::Marshaller<vsdk::models::SignModel>::toJson<4>(cardSign);
+        std::cout << "SignModel " << std::endl;
         std::cout << cardSignStr << std::endl;
 
     } catch (std::exception& exception) {

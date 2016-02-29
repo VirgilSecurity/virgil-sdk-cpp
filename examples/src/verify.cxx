@@ -86,9 +86,9 @@ int main(int argc, char** argv) {
         std::cout << "Get signer (" << userEmail << ") public key from the Virgil PKI service..." << std::endl;
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::models::Identity identity(userEmail, vsdk::models::IdentityType::Email);
-        std::vector<vsdk::models::Card> recipientCards = servicesHub.card().search(identity);
-        vsdk::models::PublicKey recipientPublicKey = recipientCards.at(0).getPublicKey();
+        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityType::Email);
+        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity);
+        vsdk::models::PublicKeyModel recipientPublicKey = recipientCards.at(0).getPublicKey();
 
         vcrypto::VirgilStreamSigner signer;
         std::cout << "Verify data..." << std::endl;

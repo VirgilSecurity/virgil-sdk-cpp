@@ -47,24 +47,24 @@
 
 using json = nlohmann::json;
 
-using virgil::sdk::models::PrivateKey;
+using virgil::sdk::models::PrivateKeyModel;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-TEST_CASE("PrivateKey -> Json PrivateKey - FAILED", "class Marshaller") {
-    PrivateKey privateKey = virgil::test::getPrivateKey();
+TEST_CASE("PrivateKey -> Json PrivateKeyModel - FAILED", "class Marshaller") {
+    PrivateKeyModel privateKey = virgil::test::getPrivateKey();
     json trueJsonPrivateKey = virgil::test::getJsonPrivateKey();
 
-    // PrivateKey -> Json
-    std::string testJsonPrivateKey = Marshaller<PrivateKey>::toJson<4>(privateKey);
+    // PrivateKeyModel -> Json
+    std::string testJsonPrivateKey = Marshaller<PrivateKeyModel>::toJson<4>(privateKey);
     REQUIRE(trueJsonPrivateKey.dump(4) == testJsonPrivateKey);
 }
 
-TEST_CASE("Json PrivateKey -> PrivateKey - FAILED", "class Marshaller") {
+TEST_CASE("Json PrivateKeyModel -> PrivateKeyModel - FAILED", "class Marshaller") {
     json jsonPrivateKey = virgil::test::getJsonPrivateKey();
 
     // Json -> PrivateKey
-    PrivateKey testPrivateKey = Marshaller<PrivateKey>::fromJson(jsonPrivateKey.dump(4));
-    PrivateKey truePrivateKey = virgil::test::getPrivateKey();
+    PrivateKeyModel testPrivateKey = Marshaller<PrivateKeyModel>::fromJson(jsonPrivateKey.dump(4));
+    PrivateKeyModel truePrivateKey = virgil::test::getPrivateKey();
     REQUIRE(truePrivateKey == testPrivateKey);
 }

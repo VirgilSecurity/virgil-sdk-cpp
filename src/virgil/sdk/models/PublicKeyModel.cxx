@@ -34,16 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/models/ValidatedIdentity.h>
+#include <virgil/sdk/models/PublicKeyModel.h>
 
-using virgil::sdk::models::ValidatedIdentity;
-using virgil::sdk::models::Identity;
-using virgil::sdk::models::IdentityType;
+using virgil::crypto::VirgilByteArray;
+using virgil::sdk::models::PublicKeyModel;
 
-ValidatedIdentity::ValidatedIdentity(const std::string& token, const std::string& value, const IdentityType& type)
-        : Identity(value, type), token_(token) {
+PublicKeyModel::PublicKeyModel(const std::string& id, const std::string& createdAt, const VirgilByteArray& key)
+        : id_(id), createdAt_(createdAt), key_(key) {
 }
 
-const std::string ValidatedIdentity::getToken() const {
-    return token_;
+const std::string PublicKeyModel::getId() const {
+    return id_;
+}
+
+const std::string PublicKeyModel::getCreatedAt() const {
+    return createdAt_;
+}
+
+const VirgilByteArray PublicKeyModel::getKey() const {
+    return key_;
 }

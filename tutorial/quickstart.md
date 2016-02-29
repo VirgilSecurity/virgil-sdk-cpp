@@ -74,7 +74,7 @@ The app is registering a Virgil Card which includes a public key and an email ad
 
 ``` {.cpp}
 Credentials credentials(senderPrivateKey, senderPrivateKeyPassword);
-Card senderCard = 
+Card senderCard =
 	servicesHub.card().create(validatedIdentity, senderPublicKey, credentials);
 ```
 
@@ -85,7 +85,7 @@ The app is searching for the recipient’s public key on the Public Keys Service
 auto message = "Encrypt me, Please!!!";
 
 Identity identity(%RECIPIENT_EMAIL%, IdentityType::Email);
-std::vector<Card> recipientCards = servicesHub.card().search(identity);
+std::vector<CardModel> recipientCards = servicesHub.card().search(identity);
 Card recipientCard = recipientCards.at(0);
 
 VirgilCipher cipher;
@@ -94,7 +94,7 @@ cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 VirgilByteArray encryptedMessage = cipher.encrypt(str2bytes(message), true);
 
 VirgilSigner signer;
-VirgilByteArray signedEncryptedMessage = 
+VirgilByteArray signedEncryptedMessage =
 	signer.sign(encryptedMessage, senderPrivateKey, senderPrivateKeyPassword);
 ```
 
@@ -103,7 +103,7 @@ In order to decrypt the received data the app on recipient’s side needs to get
 
 ``` {.cpp}
 Identity identity(%SENDER_EMAIL%, IdentityType::Email);
-std::vector<Card> senderCards = servicesHub.card().search(identity);
+std::vector<CardModel> senderCards = servicesHub.card().search(identity);
 Card senderCard = senderCards.at(0);
 ```
 
@@ -117,9 +117,9 @@ if (!verified) {
     throw std::runtime_error("Signature is not valid.");
 }
 
-VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage, 
+VirgilByteArray originalMessage = cipher.decryptWithKey(encryptedMessage,
 	recipientCard.getId(),
-	recipientPrivateKey, 
+	recipientPrivateKey,
 	recipientPrivateKeyPassword
 );
 ```

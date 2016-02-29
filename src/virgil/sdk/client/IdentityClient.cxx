@@ -65,9 +65,9 @@ using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::models::ValidatedIdentity;
-using virgil::sdk::models::Identity;
-using virgil::sdk::models::Card;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::Identity;
+using virgil::sdk::models::CardModel;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 

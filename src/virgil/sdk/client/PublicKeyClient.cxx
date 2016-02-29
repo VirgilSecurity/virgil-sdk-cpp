@@ -61,16 +61,16 @@ using virgil::sdk::client::ClientConnection;
 using virgil::sdk::endpoints::PublicKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
-using virgil::sdk::models::PublicKey;
-using virgil::sdk::models::Card;
-using virgil::sdk::models::ValidatedIdentity;
-using virgil::sdk::models::Identity;
+using virgil::sdk::models::PublicKeyModel;
+using virgil::sdk::models::CardModel;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::Identity;
 using virgil::sdk::models::toString;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-PublicKey PublicKeyClient::get(const std::string& publicKeyId) {
+PublicKeyModel PublicKeyClient::get(const std::string& publicKeyId) {
     Request request =
         Request().get().baseAddress(this->getBaseServiceUri()).endpoint(PublicKeyEndpointUri::get(publicKeyId));
 
@@ -78,7 +78,7 @@ PublicKey PublicKeyClient::get(const std::string& publicKeyId) {
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::PUBLIC_KEY_GET_UNSIGN);
     this->verifyResponse(response);
-    return Marshaller<PublicKey>::fromJson(response.body());
+    return Marshaller<PublicKeyModel>::fromJson(response.body());
 }
 
 void PublicKeyClient::revoke(const std::string& publicKeyId, const std::vector<ValidatedIdentity> validatedIdentitys,

@@ -5,7 +5,7 @@
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/models/Card.h>
+#include <virgil/sdk/models/CardModel.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/http/Headers.h>
 
@@ -15,7 +15,7 @@ using virgil::crypto::VirgilSigner;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::Credentials;
-using virgil::sdk::models::Card;
+using virgil::sdk::models::CardModel;
 using virgil::sdk::client::Client;
 using virgil::sdk::http::Response;
 
@@ -34,9 +34,9 @@ std::string Client::getBaseServiceUri() const {
     return baseServiceUri_;
 }
 
-Card Client::getServiceCard() const {
+CardModel Client::getServiceCard() const {
     if (!serviceCard_) {
-        serviceCard_ = std::make_shared<Card>(cardProviderFunc_());
+        serviceCard_ = std::make_shared<CardModel>(cardProviderFunc_());
     }
     return *serviceCard_;
 }

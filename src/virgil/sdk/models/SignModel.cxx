@@ -34,29 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/models/PrivateKey.h>
+#include <virgil/sdk/models/SignModel.h>
 
-using virgil::sdk::models::PrivateKey;
+using virgil::sdk::models::SignModel;
 
-using virgil::crypto::VirgilByteArray;
-
-PrivateKey::PrivateKey(const std::string& cardId, const VirgilByteArray& key) : cardId_(cardId), key_(key) {
+SignModel::SignModel(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
+                     const std::string& signedCardId, const std::string& signedDigest)
+        : id_(id),
+          createdAt_(createdAt),
+          signerCardId_(signerCardId),
+          signedCardId_(signedCardId),
+          signedDigest_(signedDigest) {
 }
 
-PrivateKey::~PrivateKey() noexcept {
-    cleanup();
+const std::string SignModel::getId() const {
+    return id_;
 }
 
-const std::string PrivateKey::getCardId() const {
-    return cardId_;
+const std::string SignModel::getCreatedAt() const {
+    return createdAt_;
 }
 
-const VirgilByteArray& PrivateKey::getKey() const {
-    return key_;
+const std::string SignModel::getSignerCardId() const {
+    return signerCardId_;
 }
 
-void PrivateKey::cleanup() noexcept {
-    if (!key_.empty()) {
-        virgil::crypto::bytes_zeroize(key_);
-    }
+const std::string SignModel::getSignedCardId() const {
+    return signedCardId_;
+}
+
+const std::string SignModel::getSignedDigest() const {
+    return signedDigest_;
 }

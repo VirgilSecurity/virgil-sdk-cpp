@@ -71,18 +71,18 @@ int main() {
         auto publicKeysServiceCards = servicesHub.card().searchApp(kPublicKeyServiceApplicationId, true);
         auto privateKeysServiceCards = servicesHub.card().searchApp(kPrivateKeyServiceApplicationId, true);
 
-        vsdk::models::Card identityServiceCard = identityServiceCards.at(0);
-        vsdk::models::Card publicKeysServiceCard = publicKeysServiceCards.at(0);
-        vsdk::models::Card privateKeysServiceCard = privateKeysServiceCards.at(0);
+        vsdk::models::CardModel identityServiceCard = identityServiceCards.at(0);
+        vsdk::models::CardModel publicKeysServiceCard = publicKeysServiceCards.at(0);
+        vsdk::models::CardModel privateKeysServiceCard = privateKeysServiceCards.at(0);
 
         std::cout << "Identity Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::models::Card>::toJson<4>(identityServiceCard) << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(identityServiceCard) << std::endl;
 
         std::cout << "Public Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::models::Card>::toJson<4>(publicKeysServiceCard) << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(publicKeysServiceCard) << std::endl;
 
         std::cout << "Private Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::models::Card>::toJson<4>(privateKeysServiceCard) << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(privateKeysServiceCard) << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

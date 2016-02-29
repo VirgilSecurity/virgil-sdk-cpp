@@ -84,7 +84,7 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Get Virgil Cards" << std::endl;
-        std::vector<vsdk::models::Card> cards = servicesHub.card().get(publicKeyId, cardId, credentials);
+        std::vector<vsdk::models::CardModel> cards = servicesHub.card().get(publicKeyId, cardId, credentials);
         std::string cardsStr = vsdk::io::cardsToJson(cards, 4);
         std::cout << "Virgil Cards:" << std::endl;
         std::cout << cardsStr << std::endl;

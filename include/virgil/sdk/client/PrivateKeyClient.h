@@ -42,9 +42,9 @@
 #include <virgil/crypto/VirgilByteArray.h>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/models/ValidatedIdentity.h>
-#include <virgil/sdk/models/PrivateKey.h>
-#include <virgil/sdk/models/Card.h>
+#include <virgil/sdk/dto/ValidatedIdentity.h>
+#include <virgil/sdk/models/PrivateKeyModel.h>
+#include <virgil/sdk/models/CardModel.h>
 #include <virgil/sdk/http/Response.h>
 
 namespace virgil {
@@ -82,8 +82,8 @@ namespace sdk {
              * @return Requested Private Key
              * @see virgil::sdk::client::IdentityService - to get validated identity
              */
-            virgil::sdk::models::PrivateKey get(const std::string& cardId,
-                                                const virgil::sdk::models::ValidatedIdentity& validatedIdentity);
+            virgil::sdk::models::PrivateKeyModel get(const std::string& cardId,
+                                                     const virgil::sdk::dto::ValidatedIdentity& validatedIdentity);
             /**
              * @brief Delete a Private Key
              *

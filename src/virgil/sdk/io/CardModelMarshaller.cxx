@@ -45,10 +45,10 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/models/Card.h>
-#include <virgil/sdk/models/CardIdentity.h>
-#include <virgil/sdk/models/PublicKey.h>
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/dto/Identity.h>
+#include <virgil/sdk/models/CardModel.h>
+#include <virgil/sdk/models/IdentityModel.h>
+#include <virgil/sdk/models/PublicKeyModel.h>
 
 using json = nlohmann::json;
 
@@ -56,10 +56,10 @@ using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::models::Card;
-using virgil::sdk::models::CardIdentity;
-using virgil::sdk::models::PublicKey;
-using virgil::sdk::models::Identity;
+using virgil::sdk::dto::Identity;
+using virgil::sdk::models::CardModel;
+using virgil::sdk::models::IdentityModel;
+using virgil::sdk::models::PublicKeyModel;
 using virgil::sdk::models::IdentityType;
 using virgil::sdk::models::fromString;
 
@@ -67,11 +67,11 @@ namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<Card> specialization.
+         * @brief Marshaller<CardModel> specialization.
          */
-        template <> class Marshaller<Card> {
+        template <> class Marshaller<CardModel> {
         public:
-            template <int INDENT = -1> static std::string toJson(const Card& card) {
+            template <int INDENT = -1> static std::string toJson(const CardModel& card) {
                 try {
                     json jsonCard = {
                         {JsonKey::id, card.getId()},
@@ -80,12 +80,12 @@ namespace sdk {
                         {JsonKey::hash, card.getHash()},
                     };
 
-                    PublicKey publicKey = card.getPublicKey();
+                    PublicKeyModel publicKey = card.getPublicKey();
                     jsonCard[JsonKey::publicKey] = {{JsonKey::id, publicKey.getId()},
                                                     {JsonKey::createdAt, publicKey.getCreatedAt()},
                                                     {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
 
-                    CardIdentity cardIdentity = card.getCardIdentity();
+                    IdentityModel cardIdentity = card.getCardIdentity();
                     jsonCard[JsonKey::identity] = {
                         {JsonKey::id, cardIdentity.getId()},
                         {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
@@ -102,11 +102,12 @@ namespace sdk {
                     return jsonCard.dump(INDENT);
 
                 } catch (std::exception& exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n Marshaller<Card>::toJson ") + exception.what());
+                    throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CardModel>::toJson ") +
+                                           exception.what());
                 }
             }
 
-            static Card fromJson(const std::string& jsonString) {
+            static CardModel fromJson(const std::string& jsonString) {
                 try {
                     json jsonCard = json::parse(jsonString);
 
@@ -124,8 +125,8 @@ namespace sdk {
                     std::string identityValueString = jsonCardIdentity[JsonKey::type];
                     IdentityType identityType = fromString(identityValueString);
 
-                    CardIdentity cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
-                                              identityType);
+                    IdentityModel cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
+                                               identityType);
 
                     json jsonCustomData = jsonCard[JsonKey::data];
                     std::map<std::string, std::string> customData;
@@ -142,12 +143,14 @@ namespace sdk {
                     std::string pubKeyCreatedAt = jsonPublicKey[JsonKey::createdAt];
                     VirgilByteArray publicKeyBytes = VirgilBase64::decode(jsonPublicKey[JsonKey::publicKey]);
 
-                    PublicKey publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
+                    PublicKeyModel publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
-                    return Card(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey, cardConfirmed);
+                    return CardModel(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey,
+                                     cardConfirmed);
 
                 } catch (std::exception& exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n Marshaller<Card>::fromJson ") + exception.what());
+                    throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CardModel>::fromJson ") +
+                                           exception.what());
                 }
             }
 
@@ -155,11 +158,11 @@ namespace sdk {
             Marshaller(){};
         };
 
-        std::string cardsToJson(const std::vector<virgil::sdk::models::Card> cards, const int INDENT) {
+        std::string cardsToJson(const std::vector<virgil::sdk::models::CardModel> cards, const int INDENT) {
             try {
                 json jsonCards = json::array();
                 for (const auto& card : cards) {
-                    std::string jsonCardStr = Marshaller<Card>::toJson(card);
+                    std::string jsonCardStr = Marshaller<CardModel>::toJson(card);
                     json jsonCard = json::parse(jsonCardStr);
                     jsonCards.push_back(jsonCard);
                 }
@@ -170,16 +173,16 @@ namespace sdk {
             }
         }
 
-        std::vector<Card> cardsFromJson(const std::string& jsonStringCards) {
+        std::vector<CardModel> cardsFromJson(const std::string& jsonStringCards) {
             try {
                 json jsonResponseCards = json::parse(jsonStringCards);
                 json jsonCards = jsonResponseCards;
                 if (jsonResponseCards.find(JsonKey::cards) != jsonResponseCards.end()) {
                     jsonCards = jsonResponseCards[JsonKey::cards];
                 }
-                std::vector<Card> cards;
+                std::vector<CardModel> cards;
                 for (const auto& jsonCard : jsonCards) {
-                    Card card = Marshaller<Card>::fromJson(jsonCard.dump());
+                    CardModel card = Marshaller<CardModel>::fromJson(jsonCard.dump());
                     cards.push_back(card);
                 }
 
@@ -194,8 +197,8 @@ namespace sdk {
 }
 
 void marshaller_virgil_card_init() {
-    virgil::sdk::io::Marshaller<Card>::toJson(Card());
-    virgil::sdk::io::Marshaller<Card>::toJson<2>(Card());
-    virgil::sdk::io::Marshaller<Card>::toJson<4>(Card());
-    virgil::sdk::io::Marshaller<Card>::fromJson(std::string());
+    virgil::sdk::io::Marshaller<CardModel>::toJson(CardModel());
+    virgil::sdk::io::Marshaller<CardModel>::toJson<2>(CardModel());
+    virgil::sdk::io::Marshaller<CardModel>::toJson<4>(CardModel());
+    virgil::sdk::io::Marshaller<CardModel>::fromJson(std::string());
 }

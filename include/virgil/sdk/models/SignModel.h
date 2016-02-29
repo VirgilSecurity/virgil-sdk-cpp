@@ -34,72 +34,83 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_PUBLIC_KEY_H
-#define VIRGIL_SDK_MODEL_PUBLIC_KEY_H
+#ifndef VIRGIL_SDK_MODELS_SIGN_MODEL_H
+#define VIRGIL_SDK_MODELS_SIGN_MODEL_H
 
 #include <string>
-
-#include <virgil/crypto/VirgilByteArray.h>
 
 namespace virgil {
 namespace sdk {
     namespace models {
         /**
-         * @brief Data object represent "Virgil Public Key" entity
+         * @brief This class contains detailed information about Signed Card
          */
-        class PublicKey {
+        class SignModel {
         public:
             /**
-             * @brief Create empty object
+             * @brief Create empty non valid object
              */
-            PublicKey() = default;
+            SignModel() = default;
             /**
-             * @brief Create public key with additional info
+             * @brief Create Card Sign with all related information
              *
-             * @param id - unique object identifier defined by service
-             * @param createdAt - cretion date timestamp defined by service
-             * @param key - public key
+             * @param id - Virgil Card Sign identifier
+             * @param createdAt - creation timestamp
+             * @param signerCardId - identifier of the Virgil Card that was used to sign
+             * @param signedCardId - identifier of the Virgil Card that was signed
+             * @param signedDigest - signed digest that can be verified within crypto algorithm
              */
-            PublicKey(const std::string& id, const std::string& createdAt, const virgil::crypto::VirgilByteArray& key);
+            SignModel(const std::string& id, const std::string& createdAt, const std::string& signerCardId,
+                      const std::string& signedCardId, const std::string& signedDigest);
             /**
-             * @brief Return unique object identifier
+             * @brief Return Virgil Card Sign identifier
              */
             const std::string getId() const;
             /**
-             * @brief Return cretion date timestamp
+             * @brief Return creation timestamp
              */
             const std::string getCreatedAt() const;
             /**
-             * @brief Return public key
+             * @brief Return identifier of the Virgil Card that was used to sign
              */
-            const virgil::crypto::VirgilByteArray getKey() const;
+            const std::string getSignerCardId() const;
+            /**
+             * @brief Return identifier of the Virgil Card that was signed
+             */
+            const std::string getSignedCardId() const;
+            /**
+             * @brief Return signed digest that can be verified within crypto algorithm
+             */
+            const std::string getSignedDigest() const;
 
         private:
             std::string id_;
             std::string createdAt_;
-            virgil::crypto::VirgilByteArray key_;
+            std::string signerCardId_;
+            std::string signedCardId_;
+            std::string signedDigest_;
         };
-
         /**
-         * @brief Compare identities for equality
+         * @brief Compare Virgil Card's Sign for equality
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const PublicKey& left, const PublicKey& right) {
+        inline bool operator==(const SignModel& left, const SignModel& right) {
             return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                   left.getKey() == right.getKey();
+                   left.getSignerCardId() == right.getSignerCardId() &&
+                   left.getSignedCardId() == right.getSignedCardId() &&
+                   left.getSignedDigest() == right.getSignedDigest();
         }
-
         /**
-         * @brief Compare identities for inequality
+         * @brief Compare Virgil Card's Sign for inequality
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const PublicKey& left, const PublicKey& right) {
+        inline bool operator!=(const SignModel& left, const SignModel& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_PUBLIC_KEY_H */
+#endif /* VIRGIL_SDK_MODELS_SIGN_MODEL_H */

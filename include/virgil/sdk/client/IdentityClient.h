@@ -39,8 +39,8 @@
 
 #include <virgil/sdk/client/Client.h>
 
-#include <virgil/sdk/models/ValidatedIdentity.h>
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/dto/ValidatedIdentity.h>
+#include <virgil/sdk/dto/Identity.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
@@ -56,7 +56,7 @@ namespace sdk {
          *   - Identity service generates a confirmation code and sends it to the specified email
          *   - Confirm email by invoke method @link confirm() @endlink with
          *         the confirmation code sent to the email and identity id from the previous step
-         *   - Identity service returns the token within class @link virgil::sdk::models::ValidatedIdentity @endlink,
+         *   - Identity service returns the token within class @link virgil::sdk::dto::ValidatedIdentity @endlink,
          *         that can be used to prove that the user is the identity holder
          *   - To verify that the user is identity holder invoke the @link validate() @endlink method
          *         with the token from the previous step
@@ -69,7 +69,7 @@ namespace sdk {
              * @param identity - user's identity, that is sent to verification
              * @return Unique identifier of the initiated verification action
              */
-            std::string verify(const virgil::sdk::models::Identity& identity);
+            std::string verify(const virgil::sdk::dto::Identity& identity);
             /**
              * @brief [brief description]
              * @details [long description]
@@ -83,16 +83,16 @@ namespace sdk {
              *                      default value is 1 which means that the token can be used at most one time
              * @return Identity with validation token inside
              */
-            virgil::sdk::models::ValidatedIdentity confirm(const std::string& actionId,
-                                                           const std::string& confirmationCode,
-                                                           const int timeToLive = 3600, const int countToLive = 1);
+            virgil::sdk::dto::ValidatedIdentity confirm(const std::string& actionId,
+                                                        const std::string& confirmationCode,
+                                                        const int timeToLive = 3600, const int countToLive = 1);
             /**
              * @brief Validate given token
              *
              * @param validatedIdentity - identity and token to be validated
              * @return true if given token is valid, false - otherwise
              */
-            bool validate(const virgil::sdk::models::ValidatedIdentity& validatedIdentity);
+            bool validate(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity);
         };
     }
 }

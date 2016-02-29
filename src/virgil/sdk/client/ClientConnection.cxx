@@ -68,7 +68,7 @@ using virgil::sdk::client::ClientConnection;
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
-using virgil::sdk::models::Card;
+using virgil::sdk::models::CardModel;
 using virgil::sdk::util::JsonKey;
 
 using virgil::sdk::http::kHeaderField_Id;
@@ -120,7 +120,7 @@ std::string ClientConnection::signHash(const std::string& hash, const Credential
     return VirgilBase64::encode(signHash);
 }
 
-std::string ClientConnection::encryptJsonBody(const Card& privateKeysServiceCard, const std::string& jsonBody) {
+std::string ClientConnection::encryptJsonBody(const CardModel& privateKeysServiceCard, const std::string& jsonBody) {
     VirgilCipher cipher;
     cipher.addKeyRecipient(virgil::crypto::str2bytes(privateKeysServiceCard.getId()),
                            privateKeysServiceCard.getPublicKey().getKey());

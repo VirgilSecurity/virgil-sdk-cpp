@@ -42,21 +42,21 @@
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include <virgil/sdk/models/CardIdentity.h>
+#include <virgil/sdk/models/IdentityModel.h>
 
 using json = nlohmann::json;
 
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::models::PublicKey;
-using virgil::sdk::models::PrivateKey;
-using virgil::sdk::models::ValidatedIdentity;
-using virgil::sdk::models::Identity;
+using virgil::sdk::models::PublicKeyModel;
+using virgil::sdk::models::PrivateKeyModel;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::Identity;
 using virgil::sdk::models::IdentityType;
-using virgil::sdk::models::Card;
-using virgil::sdk::models::CardIdentity;
-using virgil::sdk::models::CardSign;
+using virgil::sdk::models::CardModel;
+using virgil::sdk::models::IdentityModel;
+using virgil::sdk::models::SignModel;
 using virgil::sdk::util::JsonKey;
 
 const std::string kToken = "MIIB5wIBADCCAeAGCSqGSIb3DQEHA6CCAd"
@@ -126,9 +126,9 @@ namespace test {
                      {JsonKey::publicKey, kPublicKeyBase64}});
     }
 
-    PublicKey getPublicKey() {
-        return PublicKey("ce8abd8c-2ff3-4226-b793-26051aebbda7", "2016-02-08T14:33:08+0000",
-                         VirgilBase64::decode(kPublicKeyBase64));
+    PublicKeyModel getPublicKey() {
+        return PublicKeyModel("ce8abd8c-2ff3-4226-b793-26051aebbda7", "2016-02-08T14:33:08+0000",
+                              VirgilBase64::decode(kPublicKeyBase64));
     }
 
     json getJsonCard() {
@@ -150,11 +150,11 @@ namespace test {
                        {JsonKey::publicKey, kPublicKeyBase64}}}});
     }
 
-    Card getCard() {
-        return Card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                    CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                                 "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                    std::map<std::string, std::string>(), getPublicKey(), true);
+    CardModel getCard() {
+        return CardModel("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+                         IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                                       "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                         std::map<std::string, std::string>(), getPublicKey(), true);
     }
 
     json getJsonResponseCards() {
@@ -231,20 +231,20 @@ namespace test {
                         {JsonKey::publicKey, kPublicKeyBase64}}}}});
     }
 
-    std::vector<Card> getCards() {
-        std::vector<Card> cards;
+    std::vector<CardModel> getCards() {
+        std::vector<CardModel> cards;
         cards.push_back(getCard());
 
-        Card card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                  CardIdentity("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
-                               "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
-                  {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), true);
+        CardModel card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
+                       IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                                     "alice.cpp.virgilsecurity@mailinator.com", IdentityType::Email),
+                       {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), true);
 
         cards.push_back(card);
         return cards;
     }
 
-    json getJsonCardSign() {
+    json getJsonSignModel() {
         return json({{JsonKey::id, "9e0bb253-879b-4fbd-a504-829faae7e958"},
                      {JsonKey::createdAt, "2015-12-22T07:03:42+0000"},
                      {JsonKey::signerCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c"},
@@ -252,17 +252,17 @@ namespace test {
                      {JsonKey::signedDigest, kSignedDigest}});
     }
 
-    CardSign getCardSign() {
-        return CardSign("9e0bb253-879b-4fbd-a504-829faae7e958", "2015-12-22T07:03:42+0000",
-                        "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c", "9ab9d4a4-0440-499f-bdc6-f99c83f900dd", kSignedDigest);
+    SignModel getSignModel() {
+        return SignModel("9e0bb253-879b-4fbd-a504-829faae7e958", "2015-12-22T07:03:42+0000",
+                         "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c", "9ab9d4a4-0440-499f-bdc6-f99c83f900dd", kSignedDigest);
     }
 
     json getJsonPrivateKey() {
         return json({{JsonKey::privateKey, kPrivateKey}, {JsonKey::cardId, "cd4a35f7-6b15-4be4-b1d6-dea44a7af6df"}});
     }
 
-    PrivateKey getPrivateKey() {
-        return PrivateKey("cd4a35f7-6b15-4be4-b1d6-dea44a7af6df", VirgilBase64::decode(kPrivateKey));
+    PrivateKeyModel getPrivateKey() {
+        return PrivateKeyModel("cd4a35f7-6b15-4be4-b1d6-dea44a7af6df", VirgilBase64::decode(kPrivateKey));
     }
 }
 }

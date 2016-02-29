@@ -49,7 +49,7 @@
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/io/Marshaller.h>
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/dto/Identity.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/uuid.h>
 
@@ -67,11 +67,11 @@ using virgil::sdk::endpoints::PrivateKeyEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::models::ValidatedIdentity;
-using virgil::sdk::models::Identity;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::Identity;
 using virgil::sdk::models::IdentityType;
-using virgil::sdk::models::PrivateKey;
-using virgil::sdk::models::Card;
+using virgil::sdk::models::PrivateKeyModel;
+using virgil::sdk::models::CardModel;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -94,7 +94,7 @@ void PrivateKeyClient::add(const std::string& cardId, const Credentials& credent
     connection.checkResponseError(response, Error::Action::PRIVATE_KEY_ADD);
 }
 
-PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdentity& validatedIdentity) {
+PrivateKeyModel PrivateKeyClient::get(const std::string& cardId, const ValidatedIdentity& validatedIdentity) {
     // Password to encrypt server response. Up to 31 characters
     std::string responsePassword = uuid();
     while (responsePassword.size() > 31) {
@@ -124,7 +124,7 @@ PrivateKey PrivateKeyClient::get(const std::string& cardId, const ValidatedIdent
     VirgilByteArray decryptResponseBody =
         cipher.decryptWithPassword(VirgilBase64::decode(response.body()), virgil::crypto::str2bytes(responsePassword));
 
-    return Marshaller<PrivateKey>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
+    return Marshaller<PrivateKeyModel>::fromJson(virgil::crypto::bytes2str(decryptResponseBody));
 }
 
 void PrivateKeyClient::del(const std::string& cardId, const Credentials& credentials) {

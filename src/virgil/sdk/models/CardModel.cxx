@@ -34,39 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/models/CardModel.h>
 
-using virgil::sdk::models::Identity;
-using virgil::sdk::models::IdentityType;
+#include <virgil/sdk/models/IdentityModel.h>
+#include <virgil/sdk/models/PublicKeyModel.h>
 
-std::string virgil::sdk::models::toString(const IdentityType& identityType) {
-    if (identityType == IdentityType::Email) {
-        return std::string("email");
-    } else if (identityType == IdentityType::Application) {
-        return std::string("application");
-    } else {
-        return std::string();
-    }
+using virgil::sdk::models::CardModel;
+using virgil::sdk::models::IdentityModel;
+using virgil::sdk::models::PublicKeyModel;
+
+CardModel::CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
+                     const IdentityModel& cardIdentity, const std::map<std::string, std::string>& data,
+                     const PublicKeyModel& publicKey, const bool confirmed)
+        : id_(id),
+          createdAt_(createdAt),
+          hash_(hash),
+          cardIdentity_(cardIdentity),
+          data_(data),
+          publicKey_(publicKey),
+          confirmed_(confirmed) {
 }
 
-IdentityType virgil::sdk::models::fromString(const std::string& identityType) {
-    if (identityType == "email") {
-        return IdentityType::Email;
-    } else if (identityType == "application") {
-        return IdentityType::Application;
-    } else {
-        return IdentityType::None;
-    }
+bool CardModel::isConfirmed() const {
+    return confirmed_;
 }
 
-Identity::Identity(const std::string& value, const IdentityType& type) : value_(value), type_(type) {
+const std::string CardModel::getId() const {
+    return id_;
 }
 
-const std::string Identity::getValue() const {
-    return value_;
+const std::string CardModel::getCreatedAt() const {
+    return createdAt_;
 }
 
-const IdentityType Identity::getType() const {
-    return type_;
+const std::string CardModel::getHash() const {
+    return hash_;
+}
+
+const IdentityModel CardModel::getCardIdentity() const {
+    return cardIdentity_;
+}
+
+const std::map<std::string, std::string> CardModel::getData() const {
+    return data_;
+}
+
+const PublicKeyModel CardModel::getPublicKey() const {
+    return publicKey_;
 }

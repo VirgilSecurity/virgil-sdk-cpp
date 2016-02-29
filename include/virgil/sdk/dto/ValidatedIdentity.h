@@ -34,56 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_CARD_IDENTITY_H
-#define VIRGIL_SDK_MODEL_CARD_IDENTITY_H
+#ifndef VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H
+#define VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H
 
 #include <string>
 
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/dto/Identity.h>
 
 namespace virgil {
 namespace sdk {
-    namespace models {
+    namespace dto {
         /**
-         * @brief This class reresents extended version of class Identity
+         * @brief This class represents validated identity
          *
-         * @details This class contains addition information of identity,
-         *          that is used in conjuction with class @link Card @endlink.
+         * @details Validated identity tells that user validate identity and receive related token
          */
-        class CardIdentity : public Identity {
+        class ValidatedIdentity : public Identity {
         public:
             /**
-             * @brief Creates not valid identity
+             * @brief Create empty non valid identity
              */
-            CardIdentity() = default;
+            ValidatedIdentity() = default;
             /**
-             * @brief Creates valid identity
+             * @brief Create identity with valid token
              *
-             * @param id - unique object identifier defined by service
-             * @param createdAt - cretion date timestamp defined by service
-             * @param confirmed - true, if identity is confirmed by user
-             * @param value - identity value
-             * @param type - identity type
+             * @param token - validation token
+             * @param value - identity value, i.e. support@virgilsecurity.com
+             * @param type - identity type, i.e. IdentityType::Email
              */
-            CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
-                         const std::string& value, const IdentityType& type = virgil::sdk::models::IdentityType::None);
+            ValidatedIdentity(const std::string& token, const std::string& value,
+                              const virgil::sdk::models::IdentityType& type);
             /**
-             * @brief Return unique object identifier defined by service
+             * @brief Return token that validate underlying identity
              */
-            const std::string getId() const;
-            /**
-             * @brief Return cretion date timestamp defined by service
-             */
-            const std::string getCreatedAt() const;
-            /**
-             * @brief Return true, if identity is confirmed by user, false - otherwise
-             */
-            bool isConfirmed() const;
+            const std::string getToken() const;
 
         private:
-            std::string id_;
-            std::string createdAt_;
-            bool confirmed_ = false;
+            std::string token_;
         };
 
         /**
@@ -91,10 +78,9 @@ namespace sdk {
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const CardIdentity& left, const CardIdentity& right) {
+        inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
-                   left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                   left.isConfirmed() == right.isConfirmed();
+                   left.getToken() == right.getToken();
         }
 
         /**
@@ -102,11 +88,11 @@ namespace sdk {
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const CardIdentity& left, const CardIdentity& right) {
+        inline bool operator!=(const ValidatedIdentity& left, const ValidatedIdentity& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_CARD_IDENTITY_H */
+#endif /* VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H */

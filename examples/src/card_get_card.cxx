@@ -66,8 +66,8 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         std::cout << "Get a Virgil Card" << std::endl;
-        vsdk::models::Card card = servicesHub.card().get(cardId);
-        std::string cardStr = vsdk::io::Marshaller<vsdk::models::Card>::toJson<4>(card);
+        vsdk::models::CardModel card = servicesHub.card().get(cardId);
+        std::string cardStr = vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(card);
         std::cout << "A Virgil Card:" << std::endl;
         std::cout << cardStr << std::endl;
 

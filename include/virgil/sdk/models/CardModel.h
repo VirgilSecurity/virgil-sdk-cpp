@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_CARD_H
-#define VIRGIL_SDK_MODEL_CARD_H
+#ifndef VIRGIL_SDK_MODELS_CARD_MODEL_H
+#define VIRGIL_SDK_MODELS_CARD_MODEL_H
 
 #include <string>
 #include <map>
 
-#include <virgil/sdk/models/PublicKey.h>
-#include <virgil/sdk/models/CardIdentity.h>
+#include <virgil/sdk/models/IdentityModel.h>
+#include <virgil/sdk/models/PublicKeyModel.h>
 
 namespace virgil {
 namespace sdk {
@@ -49,12 +49,12 @@ namespace sdk {
         /**
          * @brief Data object represent "Virgil Card" entity
          */
-        class Card {
+        class CardModel {
         public:
             /**
              * @brief Create empty non valid Virgil Card
              */
-            Card() = default;
+            CardModel() = default;
             /**
              * @brief Create Virgil Card with all associated data
              *
@@ -66,9 +66,10 @@ namespace sdk {
              * @param publicKey - Public Key connected to the Virgil Card
              * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
              */
-            Card(const std::string& id, const std::string& createdAt, const std::string& hash,
-                 const virgil::sdk::models::CardIdentity& cardIdentity, const std::map<std::string, std::string>& data,
-                 const virgil::sdk::models::PublicKey& publicKey, const bool confirmed);
+            CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
+                      const virgil::sdk::models::IdentityModel& cardIdentity,
+                      const std::map<std::string, std::string>& data,
+                      const virgil::sdk::models::PublicKeyModel& publicKey, const bool confirmed);
             /**
              * @brief Return Virgil Card identifier
              */
@@ -85,7 +86,7 @@ namespace sdk {
             /**
              * @brief Return identity associated with Virgil Card
              */
-            const virgil::sdk::models::CardIdentity getCardIdentity() const;
+            const virgil::sdk::models::IdentityModel getCardIdentity() const;
             /**
              * @brief Return user's custom data associated with Virgil Card
              */
@@ -93,7 +94,7 @@ namespace sdk {
             /**
              * @brief Return Public Key connected to the Virgil Card
              */
-            const virgil::sdk::models::PublicKey getPublicKey() const;
+            const virgil::sdk::models::PublicKeyModel getPublicKey() const;
             /**
              * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
              */
@@ -103,9 +104,9 @@ namespace sdk {
             std::string id_;
             std::string createdAt_;
             std::string hash_;
-            virgil::sdk::models::CardIdentity cardIdentity_;
+            virgil::sdk::models::IdentityModel cardIdentity_;
             std::map<std::string, std::string> data_;
-            virgil::sdk::models::PublicKey publicKey_;
+            virgil::sdk::models::PublicKeyModel publicKey_;
             bool confirmed_ = false;
         };
         /**
@@ -113,7 +114,7 @@ namespace sdk {
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const Card& left, const Card& right) {
+        inline bool operator==(const CardModel& left, const CardModel& right) {
             return left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
                    left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
                    left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
@@ -124,11 +125,11 @@ namespace sdk {
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const Card& left, const Card& right) {
+        inline bool operator!=(const CardModel& left, const CardModel& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_CARD_H */
+#endif /* VIRGIL_SDK_MODELS_CARD_MODEL_H */

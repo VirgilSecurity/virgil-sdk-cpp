@@ -34,8 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODEL_PRIVATE_KEY_H
-#define VIRGIL_SDK_MODEL_PRIVATE_KEY_H
+#ifndef VIRGIL_SDK_MODELS_PRIVATE_KEY_MODEL_H
+#define VIRGIL_SDK_MODELS_PRIVATE_KEY_MODEL_H
 
 #include <string>
 
@@ -47,19 +47,19 @@ namespace sdk {
         /**
          * @brief Data object represent "Virgil Private Key" entity
          */
-        class PrivateKey {
+        class PrivateKeyModel {
         public:
             /**
              * @brief Create epmpty private key
              */
-            PrivateKey() = default;
+            PrivateKeyModel() = default;
             /**
              * @brief Creates private key with associated Virgil Card identifier
              *
              * @param cardId - unique virgil card identifier defined by service
              * @param key - private kwy
              */
-            PrivateKey(const std::string& cardId, const virgil::crypto::VirgilByteArray& key);
+            PrivateKeyModel(const std::string& cardId, const virgil::crypto::VirgilByteArray& key);
             /**
              * @brief Return unique virgil card identifier
              */
@@ -81,7 +81,7 @@ namespace sdk {
             /**
              * @brief Perform security cleanup on destruction
              */
-            virtual ~PrivateKey() noexcept;
+            virtual ~PrivateKeyModel() noexcept;
 
         private:
             std::string cardId_;
@@ -92,7 +92,7 @@ namespace sdk {
          *
          * @return true if given objects are equal, false - otherwise
          */
-        inline bool operator==(const PrivateKey& left, const PrivateKey& right) {
+        inline bool operator==(const PrivateKeyModel& left, const PrivateKeyModel& right) {
             return left.getCardId() == right.getCardId() && left.getKey() == right.getKey();
         }
         /**
@@ -100,11 +100,11 @@ namespace sdk {
          *
          * @return true if given objects are inequal, false - otherwise
          */
-        inline bool operator!=(const PrivateKey& left, const PrivateKey& right) {
+        inline bool operator!=(const PrivateKeyModel& left, const PrivateKeyModel& right) {
             return !(left == right);
         }
     }
 }
 }
 
-#endif /* VIRGIL_SDK_MODEL_PRIVATE_KEY_H */
+#endif /* VIRGIL_SDK_MODELS_PRIVATE_KEY_MODEL_H */

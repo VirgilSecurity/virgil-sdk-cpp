@@ -38,7 +38,7 @@
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/models/PrivateKey.h>
+#include <virgil/sdk/models/PrivateKeyModel.h>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -46,7 +46,7 @@
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
-using virgil::sdk::models::PrivateKey;
+using virgil::sdk::models::PrivateKeyModel;
 
 using virgil::crypto::VirgilByteArray;
 using virgil::crypto::foundation::VirgilBase64;
@@ -55,22 +55,22 @@ namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<PrivateKey> specialization.
+         * @brief Marshaller<PrivateKeyModel> specialization.
          */
-        template <> class Marshaller<PrivateKey> {
+        template <> class Marshaller<PrivateKeyModel> {
         public:
-            template <int INDENT = -1> static std::string toJson(const PrivateKey& privateKey) {
+            template <int INDENT = -1> static std::string toJson(const PrivateKeyModel& privateKey) {
                 json jsonPrivateKey = {{JsonKey::cardId, privateKey.getCardId()},
                                        {JsonKey::privateKey, VirgilBase64::encode(privateKey.getKey())}};
                 return jsonPrivateKey.dump(INDENT);
             }
 
-            static PrivateKey fromJson(const std::string& jsonString) {
+            static PrivateKeyModel fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
                 std::string cardId = typeJson[JsonKey::cardId];
                 std::string privateKey = typeJson[JsonKey::privateKey];
 
-                return PrivateKey(cardId, VirgilBase64::decode(privateKey));
+                return PrivateKeyModel(cardId, VirgilBase64::decode(privateKey));
             }
 
         private:
@@ -81,8 +81,8 @@ namespace sdk {
 }
 
 void marshaller_private_key_init() {
-    virgil::sdk::io::Marshaller<PrivateKey>::toJson(PrivateKey());
-    virgil::sdk::io::Marshaller<PrivateKey>::toJson<2>(PrivateKey());
-    virgil::sdk::io::Marshaller<PrivateKey>::toJson<4>(PrivateKey());
-    virgil::sdk::io::Marshaller<PrivateKey>::fromJson(std::string());
+    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson(PrivateKeyModel());
+    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<2>(PrivateKeyModel());
+    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<4>(PrivateKeyModel());
+    virgil::sdk::io::Marshaller<PrivateKeyModel>::fromJson(std::string());
 }

@@ -54,22 +54,22 @@ using json = nlohmann::json;
 
 using virgil::crypto::foundation::VirgilBase64;
 
-using virgil::sdk::models::PublicKey;
+using virgil::sdk::models::PublicKeyModel;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-TEST_CASE("PublicKey -> Json PublicKey - FAILED", "class Marshaller") {
-    PublicKey publicKey = virgil::test::getPublicKey();
-    // PublicKey -> Json
-    std::string testJsonPublicKey = Marshaller<PublicKey>::toJson<4>(publicKey);
+TEST_CASE("PublicKey -> Json PublicKeyModel - FAILED", "class Marshaller") {
+    PublicKeyModel publicKey = virgil::test::getPublicKey();
+    // PublicKeyModel -> Json
+    std::string testJsonPublicKey = Marshaller<PublicKeyModel>::toJson<4>(publicKey);
 
     REQUIRE(virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey);
 }
 
-TEST_CASE("Json PublicKey -> PublicKey - FAILED", "class Marshaller") {
+TEST_CASE("Json PublicKeyModel -> PublicKeyModel - FAILED", "class Marshaller") {
     json jsonPublicKey = virgil::test::getJsonPublicKey();
     // Json -> PublicKey
-    PublicKey testPublicKey = Marshaller<PublicKey>::fromJson(jsonPublicKey.dump());
+    PublicKeyModel testPublicKey = Marshaller<PublicKeyModel>::fromJson(jsonPublicKey.dump());
 
     // Beutiful!!!
     // std::cout << testPublicKey.getKey() << "\n\n";

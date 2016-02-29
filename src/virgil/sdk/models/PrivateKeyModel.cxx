@@ -34,26 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/models/CardIdentity.h>
-#include <virgil/sdk/models/Identity.h>
+#include <virgil/sdk/models/PrivateKeyModel.h>
 
-using virgil::sdk::models::CardIdentity;
-using virgil::sdk::models::Identity;
-using virgil::sdk::models::IdentityType;
+using virgil::crypto::VirgilByteArray;
+using virgil::sdk::models::PrivateKeyModel;
 
-CardIdentity::CardIdentity(const std::string& id, const std::string& createdAt, const bool confirmed,
-                           const std::string& value, const IdentityType& type)
-        : Identity(value, type), id_(id), createdAt_(createdAt), confirmed_(confirmed) {
+PrivateKeyModel::PrivateKeyModel(const std::string& cardId, const VirgilByteArray& key) : cardId_(cardId), key_(key) {
 }
 
-bool CardIdentity::isConfirmed() const {
-    return confirmed_;
+PrivateKeyModel::~PrivateKeyModel() noexcept {
+    cleanup();
 }
 
-const std::string CardIdentity::getId() const {
-    return id_;
+const std::string PrivateKeyModel::getCardId() const {
+    return cardId_;
 }
 
-const std::string CardIdentity::getCreatedAt() const {
-    return createdAt_;
+const VirgilByteArray& PrivateKeyModel::getKey() const {
+    return key_;
+}
+
+void PrivateKeyModel::cleanup() noexcept {
+    if (!key_.empty()) {
+        virgil::crypto::bytes_zeroize(key_);
+    }
 }
