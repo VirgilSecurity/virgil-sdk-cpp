@@ -34,10 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -53,38 +55,62 @@ const std::string VIRGIL_ACCESS_TOKEN =
     "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
     "L8A4+ii+zd";
 
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
+    if (argc < 6) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <path_public_key>" + " <path_private_key>" +
+                         " < toBeSignedCardId> + < toBeSignedCardHash>"
                   << std::endl;
         return 1;
     }
 
     try {
         std::string userEmail = argv[1];
-        std::string relation = argv[2];
-        std::string includeUnconfirmedStr = argv[3];
-
-        bool includeUnconfirmed = true;
-        if (includeUnconfirmedStr == "0") {
-            includeUnconfirmed = false;
-        }
+        std::string pathPublicKey = argv[2];
+        std::string pathPrivateKey = argv[3];
+        std::string toBeSignedCardId = argv[4];
+        std::string toBeSignedCardHash = argv[5];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
 
-        std::cout << "Search for Cards" << std::endl;
+        std::cout << "Prepare public key file: " << pathPublicKey << std::endl;
+        std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
+        if (!inPublicKeyFile) {
+            throw std::runtime_error("can not read file: " + pathPublicKey);
+        }
+        std::cout << "Read public key..." << std::endl;
+        vcrypto::VirgilByteArray publicKey;
+        std::copy(std::istreambuf_iterator<char>(inPublicKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(publicKey));
 
-        std::vector<vsdk::model::Card> foundCards;
-        if (relation.empty()) {
-            foundCards = servicesHub.card().search(identity, std::vector<std::string>(), includeUnconfirmed);
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }
+        vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(privateKey));
+
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
+
+        std::cout << "Create a Virgil Card" << std::endl;
+        vsdk::model::Card card;
+        if (toBeSignedCardId.size() > 0 && toBeSignedCardHash.size() > 0) {
+            card = servicesHub.card().create(identity, publicKey, credentials, {{"key", "value"}},
+                                             {{toBeSignedCardId, toBeSignedCardHash}});
         } else {
-            foundCards = servicesHub.card().search(identity, {relation}, includeUnconfirmed);
+            card = servicesHub.card().create(identity, publicKey, credentials, {{"key", "value"}});
         }
 
-        std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
-        std::cout << foundCardsStr << std::endl;
+        std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
+
+        std::cout << "Virgil Card:" << std::endl;
+        std::cout << cardStr << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

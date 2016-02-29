@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -87,28 +86,51 @@ CardClient::CardClient(const std::string& accessToken, const std::string& baseSe
 }
 
 Card CardClient::create(const ValidatedIdentity& validatedIdentity, const VirgilByteArray& publicKey,
-                        const Credentials& credentials) {
+                        const Credentials& credentials, const std::map<std::string, std::string>& customData,
+                        const std::map<std::string, std::string>& toBeSignedCards) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}}};
+    json jsonCustomData(customData);
+    payload[JsonKey::data] = jsonCustomData;
+    return this->create(credentials, payload.dump(), toBeSignedCards);
+}
 
-    Request request = Request()
-                          .post()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(CardEndpointUri::create())
-                          .body(payload.dump());
+Card CardClient::create(const ValidatedIdentity& validatedIdentity, const std::string& publicKeyId,
+                        const Credentials& credentials, const std::map<std::string, std::string>& customData,
+                        const std::map<std::string, std::string>& toBeSignedCards) {
+    json payload = {{JsonKey::publicKeyId, publicKeyId},
+                    {JsonKey::identity,
+                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                      {JsonKey::value, validatedIdentity.getValue()},
+                      {JsonKey::validationToken, validatedIdentity.getToken()}}}};
+    json jsonCustomData(customData);
+    payload[JsonKey::data] = jsonCustomData;
+    return this->create(credentials, payload.dump(), toBeSignedCards);
+}
 
-    ClientConnection connection(this->getAccessToken());
-    Request signRequest = connection.signRequest(credentials, request);
+Card CardClient::create(const Identity& identity, const VirgilByteArray& publicKey, const Credentials& credentials,
+                        const std::map<std::string, std::string>& customData,
+                        const std::map<std::string, std::string>& toBeSignedCards) {
+    json payload = {
+        {JsonKey::publicKey, VirgilBase64::encode(publicKey)},
+        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+    json jsonCustomData(customData);
+    payload[JsonKey::data] = jsonCustomData;
+    return this->create(credentials, payload.dump(), toBeSignedCards);
+}
 
-    Response response = connection.send(signRequest);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_CREATE);
-    this->verifyResponse(response);
-
-    Card card = Marshaller<Card>::fromJson(response.body());
-    return card;
+Card CardClient::create(const Identity& identity, const std::string& publicKeyId, const Credentials& credentials,
+                        const std::map<std::string, std::string>& customData,
+                        const std::map<std::string, std::string>& toBeSignedCards) {
+    json payload = {
+        {JsonKey::publicKeyId, publicKeyId},
+        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+    json jsonCustomData(customData);
+    payload[JsonKey::data] = jsonCustomData;
+    return this->create(credentials, payload.dump(), toBeSignedCards);
 }
 
 CardSign CardClient::sign(const std::string& toBeSignedCardId, const std::string& toBeSignedCardHash,
@@ -225,7 +247,7 @@ std::vector<Card> CardClient::get(const std::string& publicKeyId, const std::str
     return cards;
 }
 
-void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity& validatedIdentity,
+void CardClient::revoke(const std::string& cardId, const ValidatedIdentity& validatedIdentity,
                         const Credentials& credentials) {
     json payload = {{JsonKey::identity,
                      {{JsonKey::type, toString(validatedIdentity.getType())},
@@ -235,13 +257,61 @@ void CardClient::revoke(const std::string& signerCardId, const ValidatedIdentity
     Request request = Request()
                           .del()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(CardEndpointUri::revoke(signerCardId))
+                          .endpoint(CardEndpointUri::revoke(cardId))
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
-    Request signRequest = connection.signRequest(signerCardId, credentials, request);
+    Request signRequest = connection.signRequest(cardId, credentials, request);
 
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CARD_REVOKE);
     this->verifyResponse(response);
+}
+
+void CardClient::revoke(const std::string& cardId, const Identity& identity, const Credentials& credentials) {
+    json payload = {
+        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+
+    Request request = Request()
+                          .del()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(CardEndpointUri::revoke(cardId))
+                          .body(payload.dump());
+
+    ClientConnection connection(this->getAccessToken());
+    Request signRequest = connection.signRequest(cardId, credentials, request);
+
+    Response response = connection.send(signRequest);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_REVOKE);
+    this->verifyResponse(response);
+}
+
+Card CardClient::create(const virgil::sdk::Credentials& credentials, const std::string& payload,
+                        const std::map<std::string, std::string>& toBeSignedCards) {
+    json jsonPayload = json::parse(payload);
+    ClientConnection connection(this->getAccessToken());
+    if (!toBeSignedCards.empty()) {
+        json signs = json::array();
+        for (const auto& toBeSignedCard : toBeSignedCards) {
+            std::string signedHash = connection.signHash(toBeSignedCard.second, credentials);
+            json sign = {{JsonKey::signedCardId, toBeSignedCard.first}, {JsonKey::signedDigest, signedHash}};
+            signs.push_back(sign);
+        }
+        jsonPayload[JsonKey::signs] = signs;
+    }
+
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(CardEndpointUri::create())
+                          .body(jsonPayload.dump());
+
+    Request signRequest = connection.signRequest(credentials, request);
+
+    Response response = connection.send(signRequest);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_CREATE);
+    this->verifyResponse(response);
+
+    Card card = Marshaller<Card>::fromJson(response.body());
+    return card;
 }

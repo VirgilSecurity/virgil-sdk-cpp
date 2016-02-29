@@ -70,10 +70,10 @@ int main(int argc, char** argv) {
         std::string validatedIdentityStr =
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
         if (validateToken) {
-            std::cout << "Validation Token is valid!\n";
+            std::cout << "Validation Token is valid!" << std::endl;
             std::cout << validatedIdentityStr << std::endl;
         } else {
-            std::cout << "Validation Token is NOT valid!\n";
+            std::cout << "Validation Token is NOT valid!" << std::endl;
             std::cout << validatedIdentityStr << std::endl;
         }
 

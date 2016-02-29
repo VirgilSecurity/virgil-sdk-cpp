@@ -64,6 +64,7 @@ using virgil::sdk::http::Response;
 using virgil::sdk::model::PublicKey;
 using virgil::sdk::model::Card;
 using virgil::sdk::model::ValidatedIdentity;
+using virgil::sdk::model::Identity;
 using virgil::sdk::model::toString;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
@@ -97,6 +98,30 @@ void PublicKeyClient::revoke(const std::string& publicKeyId, const std::vector<V
                           .baseAddress(this->getBaseServiceUri())
                           .endpoint(PublicKeyEndpointUri::revoke(publicKeyId))
                           .body(jsonValidatedIdentitys.dump());
+
+    ClientConnection connection(this->getAccessToken());
+    Request signRequest = connection.signRequest(cardId, credentials, request);
+
+    Response response = connection.send(signRequest);
+    connection.checkResponseError(response, Error::Action::PUBLIC_KEY_REVOKE);
+    this->verifyResponse(response);
+}
+
+void PublicKeyClient::revokeNotValid(const std::string& publicKeyId, const std::vector<Identity> identitys,
+                                     const std::string& cardId, const virgil::sdk::Credentials& credentials) {
+    json jsonArray = json::array();
+    for (const auto& identity : identitys) {
+        json jsonIdentity = {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}};
+        jsonArray.push_back(jsonIdentity);
+    }
+    json jsonIdentitys;
+    jsonIdentitys[JsonKey::identities] = jsonArray;
+
+    Request request = Request()
+                          .del()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(PublicKeyEndpointUri::revoke(publicKeyId))
+                          .body(jsonIdentitys.dump());
 
     ClientConnection connection(this->getAccessToken());
     Request signRequest = connection.signRequest(cardId, credentials, request);

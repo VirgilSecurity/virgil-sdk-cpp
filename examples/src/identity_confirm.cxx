@@ -69,7 +69,8 @@ int main(int argc, char** argv) {
 
         std::string validatedIdentityStr =
             vsdk::io::Marshaller<vsdk::model::ValidatedIdentity>::toJson<4>(validatedIdentity);
-        std::cout << "ValidatedIdentity:\n" << validatedIdentityStr << std::endl;
+        std::cout << "ValidatedIdentity " << std::endl;
+        std::cout << validatedIdentityStr << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

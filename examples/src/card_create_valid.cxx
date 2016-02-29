@@ -34,10 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
-#include <string>
+#include <iterator>
 #include <stdexcept>
-#include <vector>
+#include <string>
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -53,36 +55,54 @@ const std::string VIRGIL_ACCESS_TOKEN =
     "IYiGIAkADCz+MncOO74UVEEot5NEaCtvWT7fIW9WaF6JdH47Z7kTp0gAnq67cPbS0NDUyovAqILjmOmg1zA"
     "L8A4+ii+zd";
 
-const std::string VIRGIL_IDENTITY_SERVICE_URI_BASE = "https://identity-stg.virgilsecurity.com";
-const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
-const std::string VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE = "https://private-stg.virgilsecurity.com";
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
-const std::string kPublicKeyServiceApplicationId = "com.virgilsecurity.keys";
-const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-keys";
+int main(int argc, char** argv) {
+    if (argc < 5) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <path_public_key>" + " <path_private_key>" +
+                         " <validation_token>"
+                  << std::endl;
+        return 1;
+    }
 
-int main() {
     try {
-        vsdk::ServiceUri virgilUri(VIRGIL_IDENTITY_SERVICE_URI_BASE, VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
-                                   VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
+        std::string userEmail = argv[1];
+        std::string pathPublicKey = argv[2];
+        std::string pathPrivateKey = argv[3];
+        std::string token = argv[4];
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceCards = servicesHub.card().searchApp(kIdentityServiceApplicationId, true);
-        auto publicKeysServiceCards = servicesHub.card().searchApp(kPublicKeyServiceApplicationId, true);
-        auto privateKeysServiceCards = servicesHub.card().searchApp(kPrivateKeyServiceApplicationId, true);
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::model::Card identityServiceCard = identityServiceCards.at(0);
-        vsdk::model::Card publicKeysServiceCard = publicKeysServiceCards.at(0);
-        vsdk::model::Card privateKeysServiceCard = privateKeysServiceCards.at(0);
+        vsdk::model::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::model::IdentityType::Email);
 
-        std::cout << "Identity Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(identityServiceCard) << std::endl;
+        std::cout << "Prepare public key file: " << pathPublicKey << std::endl;
+        std::ifstream inPublicKeyFile(pathPublicKey, std::ios::in | std::ios::binary);
+        if (!inPublicKeyFile) {
+            throw std::runtime_error("can not read file: " + pathPublicKey);
+        }
+        std::cout << "Read public key..." << std::endl;
+        vcrypto::VirgilByteArray publicKey;
+        std::copy(std::istreambuf_iterator<char>(inPublicKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(publicKey));
 
-        std::cout << "Public Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(publicKeysServiceCard) << std::endl;
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
+        std::cout << "Read private key..." << std::endl;
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
+        }
+        vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(privateKey));
 
-        std::cout << "Private Keys Service Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(privateKeysServiceCard) << std::endl;
+        vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
+
+        std::cout << "Create a Virgil Card" << std::endl;
+        vsdk::model::Card card = servicesHub.card().create(validatedIdentity, publicKey, credentials);
+        std::string cardStr = vsdk::io::Marshaller<vsdk::model::Card>::toJson<4>(card);
+
+        std::cout << "Virgil Card:" << std::endl;
+        std::cout << cardStr << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

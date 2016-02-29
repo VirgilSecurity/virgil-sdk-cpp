@@ -66,7 +66,8 @@ int main(int argc, char** argv) {
         vsdk::model::Identity identity(userEmail, vsdk::model::IdentityType::Email);
         std::string actionId = servicesHub.identity().verify(identity);
 
-        std::cout << "action_id:\n" << actionId << std::endl;
+        std::cout << "action_id " << std::endl;
+        std::cout << actionId << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
