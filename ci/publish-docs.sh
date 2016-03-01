@@ -68,7 +68,11 @@ function fix_html_source_file_names {
         old_name=$f
         new_name=${f/${f:0:1}/}
         mv $old_name $new_name
-        sed -i"" "s/$old_name/$new_name/g" *.html
+        if [ "$(uname -s)" == "Darwin" ]; then
+            sed -i "" -e "s/[[:<:]]$old_name[[:>:]]/$new_name/g" *.html
+        else
+            sed -i"" "s/\b$old_name\b/$new_name/g" *.html
+        fi
     done
     cd -
 }
