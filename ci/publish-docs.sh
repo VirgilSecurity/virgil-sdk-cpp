@@ -94,10 +94,10 @@ cat >"${HTML_PATH_DST}/index.html" <<EOL
 <html>
    <head>
         <meta charset="utf-8">
-        <title>Virgil SDK Documentation</title>
+        <title>Virgil Security C++ SDK API</title>
    </head>
    <body>
-        Virgil SDK
+        Virgil Security C++ SDK
         <ul>
 EOL
 
