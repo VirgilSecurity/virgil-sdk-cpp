@@ -57,7 +57,7 @@ endif (CMAKE_PREFIX_PATH)
 if (NOT TARGET virgil_crypto_project)
     ExternalProject_Add (virgil_crypto_project
         GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-crypto.git"
-        GIT_TAG "v1.2.2"
+        GIT_TAG "v1.3.0"
         PREFIX "${CMAKE_BINARY_DIR}/ext/virgil-crypto"
         CMAKE_ARGS ${CMAKE_ARGS}
     )
@@ -68,7 +68,7 @@ if (NOT TARGET virgil_crypto)
     ExternalProject_Get_Property (virgil_crypto_project INSTALL_DIR)
 
     set (VIRGIL_CRYPTO_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}virgil_crypto${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set (MBEDTLS_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}mbedtls${CMAKE_STATIC_LIBRARY_SUFFIX})
+    set (MBEDTLS_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}mbedcrypto${CMAKE_STATIC_LIBRARY_SUFFIX})
     set (VIRGIL_CRYPTO_INCLUDE_DIRS "${INSTALL_DIR}/include")
     set (VIRGIL_CRYPTO_LIBRARIES
             "${INSTALL_DIR}/lib/${VIRGIL_CRYPTO_LIBRARY_NAME};${INSTALL_DIR}/lib/${MBEDTLS_LIBRARY_NAME}")
