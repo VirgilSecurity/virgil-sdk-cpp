@@ -1,0 +1,18 @@
+Virgil Security C++ SDK ChangeLog (Sorted per date)
+
+# Version 3.0.0 released 2016-03-15
+
+## Changes
+
+  * Use virgil-crypto lib 1.3.1.
+
+
+# Version 3.0.0-RC1 released 2016-02-29
+
+## Changes
+
+  * Merge all SDKs to one.
+  * Add Virgil Identity Service API version 1.
+  * Add Virgil Keys Service API version 3.
+  * Add Virgil Private Keys Service API version 3.
+

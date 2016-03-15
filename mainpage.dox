@@ -1,0 +1,8 @@
+/**
+ * \mainpage Virgil Security C++ SDK
+ *
+ * The Virgil Security C++ SDK offers set of methods that provide access to the next services:
+ *     * [Virgil Keys Service](https://github.com/VirgilSecurity/virgil/wiki/Virgil-Keys-API)
+ *     * [Virgil Private Keys Service](https://github.com/VirgilSecurity/virgil/wiki/Virgil-Private-Keys-API)
+ *     * [Virgil Identity Service](https://github.com/VirgilSecurity/virgil/wiki/Identity-Service)
+ */

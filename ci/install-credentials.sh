@@ -37,9 +37,7 @@
 
 set -ev
 
-if [ "${PUBLISH_DOCS}" == "ON" ]; then
-    openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv \
-        -in "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa.enc" -out "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" -d
-    chmod 0600 "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa"
-    cp "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" "$HOME/.ssh/id_rsa"
-fi
+openssl aes-256-cbc -K $encrypted_ec00f2668e2b_key -iv $encrypted_ec00f2668e2b_iv \
+    -in "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa.enc" -out "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" -d
+chmod 0600 "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa"
+cp "${TRAVIS_BUILD_DIR}/ci/travis_ci_rsa" "$HOME/.ssh/id_rsa"

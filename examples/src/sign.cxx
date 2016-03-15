@@ -43,35 +43,45 @@
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilStreamSigner.h>
+#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
+
 #include <virgil/crypto/stream/VirgilStreamDataSource.h>
 
-using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilStreamSigner;
-using virgil::crypto::stream::VirgilStreamDataSource;
+namespace vcrypto = virgil::crypto;
 
+const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <path_private_key>" << std::endl;
+    }
+
     try {
+        std::string pathPrivateKey = argv[1];
+
         std::cout << "Prepare input file: test.txt..." << std::endl;
         std::ifstream inFile("test.txt", std::ios::in | std::ios::binary);
         if (!inFile) {
             throw std::runtime_error("can not read file: test.txt");
         }
-        VirgilStreamDataSource dataSource(inFile);
+        vcrypto::stream::VirgilStreamDataSource dataSource(inFile);
 
+        std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;
-        std::ifstream privateKeyFile("private.key", std::ios::in | std::ios::binary);
-        if (!privateKeyFile) {
-            throw std::runtime_error("can not read private key: private.key");
+        std::ifstream inPrivateKeyFile(pathPrivateKey, std::ios::in | std::ios::binary);
+        if (!inPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathPrivateKey);
         }
-        VirgilByteArray privateKey;
-        std::copy(std::istreambuf_iterator<char>(privateKeyFile), std::istreambuf_iterator<char>(),
-                std::back_inserter(privateKey));
+        vcrypto::VirgilByteArray privateKey;
+        std::copy(std::istreambuf_iterator<char>(inPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(privateKey));
 
-        VirgilStreamSigner signer;
+        vcrypto::VirgilStreamSigner streamSigner;
 
         std::cout << "Sign data..." << std::endl;
-        VirgilByteArray sign = signer.sign(dataSource, privateKey);
+        vcrypto::VirgilByteArray streamSign =
+            streamSigner.sign(dataSource, privateKey, vcrypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Prepare output file: test.txt.sign..." << std::endl;
         std::ofstream outFile("test.txt.sign", std::ios::out | std::ios::binary);
@@ -80,12 +90,11 @@ int main() {
         }
 
         std::cout << "Save sign..." << std::endl;
-        std::copy(sign.begin(), sign.end(), std::ostreambuf_iterator<char>(outFile));
-
+        std::copy(streamSign.begin(), streamSign.end(), std::ostreambuf_iterator<char>(outFile));
         std::cout << "Sign is successfully stored in the output file." << std::endl;
 
     } catch (std::exception& exception) {
-        std::cerr << "Error: " << exception.what() << std::endl;
+        std::cerr << exception.what() << std::endl;
         return 1;
     }
 
