@@ -1,5 +1,12 @@
 Virgil Security C++ SDK ChangeLog (Sorted per date)
 
+# Version 3.0.1 released 2016-03-21
+
+## Changes
+
+  * Use virgil-crypto lib 1.3.2.
+
+
 # Version 3.0.0 released 2016-03-15
 
 ## Changes
