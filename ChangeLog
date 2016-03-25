@@ -1,5 +1,13 @@
 Virgil Security C++ SDK ChangeLog (Sorted per date)
 
+# Version 3.0.2 released 2016-03-25
+
+## Changes
+
+  * Fix bug: wrong default base address of the Virgil Private Keys Service
+
+
+
 # Version 3.0.1 released 2016-03-21
 
 ## Changes
