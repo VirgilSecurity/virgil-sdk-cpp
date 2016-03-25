@@ -53,7 +53,7 @@ const std::string ServiceUri::kKeysServiceUri = "https://keys.virgilsecurity.com
 #if defined(VIRGIL_PRIVATE_KEYS_SERVICE_URI)
 const std::string ServiceUri::kPrivateKeyServiceUri = VIRGIL_PRIVATE_KEYS_SERVICE_URI;
 #else
-const std::string ServiceUri::kPrivateKeyServiceUri = "https://private-keys.virgilsecurity.com";
+const std::string ServiceUri::kPrivateKeyServiceUri = "https://keys-private.virgilsecurity.com";
 #endif
 
 ServiceUri::ServiceUri()
