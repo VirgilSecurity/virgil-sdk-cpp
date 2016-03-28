@@ -70,10 +70,6 @@ void vipm::SimpleChat::onMessageSend(const std::string& message) {
 }
 
 void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::string& message) {
-    if (sender == currentMember_.getIdentity()) {
-        return;
-    }
-
     vipm::models::EncryptedMessageModel encryptedModel = vipm::models::fromJson(message);
     if (encryptedModel.isEmpty()) {
         return;
@@ -94,6 +90,7 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
         signer.verify(encryptedModel.getMessage(), encryptedModel.getSignature(), senderCard.getPublicKey().getKey());
     if (!isValid) {
         std::cout << "The message signature is not valid." << std::endl;
+        std::cout << std::endl;
         return;
     }
 
