@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2015 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
@@ -33,19 +34,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+# Dependecy to https://github.com/anuragsoni/restless
+
+# Define CMake variables
 set (CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-    -DLIB_LOW_LEVEL_API:BOOL=ON
-    -DLIB_FILE_IO:BOOL=ON
-    -DENABLE_TESTING:BOOL=OFF
-)
-
-list (APPEND CMAKE_ARGS
-    -DCMAKE_CXX_COMPILER:STRING=${CMAKE_CXX_COMPILER}
     -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
-    -DCMAKE_CXX_FLAGS_RELEASE:STRING=${CMAKE_CXX_FLAGS_RELEASE}
-    -DCMAKE_CXX_FLAGS_DEBUG:STRING=${CMAKE_CXX_FLAGS_DEBUG}
 )
 
 if (CMAKE_PREFIX_PATH)
@@ -54,31 +49,36 @@ if (CMAKE_PREFIX_PATH)
     )
 endif (CMAKE_PREFIX_PATH)
 
-if (NOT TARGET virgil_crypto_project)
-    ExternalProject_Add (virgil_crypto_project
-        GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-crypto.git"
-        GIT_TAG "v1.3.4"
-        PREFIX "${CMAKE_BINARY_DIR}/ext/virgil-crypto"
+
+if (NOT TARGET project_rest)
+    # Configure external project
+    ExternalProject_Add (project_rest
+        GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
+        GIT_TAG "http-del-with-body"
+        GIT_SUBMODULES "ext/curl"
+        PREFIX "${CMAKE_BINARY_DIR}/ext/rest"
+        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest"
         CMAKE_ARGS ${CMAKE_ARGS}
     )
 endif ()
 
-if (NOT TARGET virgil_crypto)
-    # Payload targets and output variables
-    ExternalProject_Get_Property (virgil_crypto_project INSTALL_DIR)
+if (NOT TARGET rest)
+    # Define output
+    ExternalProject_Get_Property (project_rest INSTALL_DIR)
 
-    set (VIRGIL_CRYPTO_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}virgil_crypto${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set (MBEDTLS_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}mbedcrypto${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set (VIRGIL_CRYPTO_INCLUDE_DIRS "${INSTALL_DIR}/include")
-    set (VIRGIL_CRYPTO_LIBRARIES
-            "${INSTALL_DIR}/lib/${VIRGIL_CRYPTO_LIBRARY_NAME};${INSTALL_DIR}/lib/${MBEDTLS_LIBRARY_NAME}")
+    set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
+    set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
+    set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
+    set (REST_LIBRARIES "${REST_LIBRARY}")
 
     # Workaround of http://public.kitware.com/Bug/view.php?id=14495
-    file (MAKE_DIRECTORY ${VIRGIL_CRYPTO_INCLUDE_DIRS})
+    file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
 
-    add_library (virgil_crypto STATIC IMPORTED GLOBAL)
-    set_property (TARGET virgil_crypto PROPERTY IMPORTED_LOCATION ${VIRGIL_LIBRARY})
-    set_property (TARGET virgil_crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${VIRGIL_CRYPTO_INCLUDE_DIRS})
-    set_property (TARGET virgil_crypto PROPERTY INTERFACE_LINK_LIBRARIES "${INSTALL_DIR}/lib/${MBEDTLS_LIBRARY_NAME}")
-    add_dependencies (virgil_crypto virgil_crypto_project)
+    # Make target
+    add_library (rest STATIC IMPORTED GLOBAL)
+    set_target_properties (rest PROPERTIES
+        IMPORTED_LOCATION ${REST_LIBRARY}
+        INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
+    )
+    add_dependencies (rest project_rest)
 endif ()

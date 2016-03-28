@@ -92,7 +92,7 @@ In the table below you can see all types.
 | Type_EC_SECP224K1 | 224-bits "Koblitz" curve       |
 | Type_EC_SECP256K1 | 256-bits "Koblitz" curve       |
 
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/keygen.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/keygen.cxx)
 
 ## Encrypt Data
 
@@ -110,7 +110,7 @@ VirgilByteArray recipientPwd = str2bytes("strong password");
 cipher.addPasswordRecipient(recipientPwd);
 cipher.encrypt(dataSource, dataSink, true);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/encrypt_with_pass.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/encrypt_with_pass.cxx)
 
 Encrypt the text with a public key:
 
@@ -119,7 +119,7 @@ cipher.addKeyRecipient(str2bytes(recipientCard.getId()),
 		recipientCard.getPublicKey().getKey());
 cipher.encrypt(dataSource, dataSink, true);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/encrypt_with_key.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/encrypt_with_key.cxx)
 
 And of course you can mix these types as well, see how it works in the example below:
 
@@ -142,7 +142,7 @@ VirgilStreamSigner streamSigner;
 VirgilByteArray streamSign = streamSigner.sign(dataSource, privateKey,
 		privateKeyPassword);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/sign.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/sign.cxx)
 
 ## Verify Data
 
@@ -157,7 +157,7 @@ The following example verifies a digital signature which was signed by the sende
 ``` {.cpp}
 bool verified = signer.verify(dataSource, sign, recipientPublicKey.getKey());
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/verify.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/verify.cxx)
 
 ## Decrypt Data
 
@@ -166,7 +166,7 @@ Use a password to decrypt the data.
 ``` {.cpp}
 cipher.decryptWithPassword(dataSource, dataSink, recipientPwd);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/decrypt_with_pass.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/decrypt_with_pass.cxx)
 
 The following example illustrates decryption of the encrypted data with a recipient's private key.
 
@@ -174,10 +174,10 @@ The following example illustrates decryption of the encrypted data with a recipi
 cipher.decryptWithKey(dataSource, dataSink, str2bytes(recipientCard.getId()),
 		 privateKey, privateKeyPassword);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/decrypt_with_key.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/decrypt_with_key.cxx)
 
 
 ## See Also
 
-* [Quickstart](quickstart.md)
-* [Tutorial SDK](virgil_sdk_cpp.md)
+* [Quickstart](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/quickstart.md)
+* [Tutorial SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/virgil_sdk_cpp.md)
