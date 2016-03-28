@@ -103,7 +103,7 @@ The app is registering a Virgil Card which includes a public key and an email ad
 ``` {.cpp}
 Credentials credentials(keyPair.privateKey());
 Card card =
-    servicesHub.card().create(validatedIdentity, keyPair.public.key(), credentials);
+    servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
 ```
 
 ### Step 2. Encrypt and Sign
