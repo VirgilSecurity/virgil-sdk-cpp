@@ -1,8 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <set>
-#include <chrono>
-#include <thread>
 
 #include <json.hpp>
 
@@ -74,9 +71,6 @@ std::vector<std::string> vipm::Channel::getMembers() const {
 }
 
 void vipm::Channel::watch() {
-    // while (true) {
-    // std::this_thread::sleep_for(std::chrono::seconds(2));
-
     HttpRequest httpRequest;
     httpRequest.header({{"X-IDENTITY-TOKEN", identityToken_}}).content("application/json", "");
 

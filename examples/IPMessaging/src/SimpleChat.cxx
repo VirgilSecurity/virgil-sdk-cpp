@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <fstream>
 
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/VirgilSigner.h>
@@ -15,6 +16,11 @@
 namespace vcrypto = virgil::crypto;
 namespace vsdk = virgil::sdk;
 namespace vipm = virgil::IPMessaging;
+
+vipm::SimpleChat::~SimpleChat() {
+    std::ofstream logging("log-file.txt");
+    logging << logFile_;
+}
 
 void vipm::SimpleChat::launch() {
     std::cout << std::endl;
@@ -39,7 +45,7 @@ void vipm::SimpleChat::startMessaging() {
 
     bool keepWorking = true;
     while (keepWorking) {
-        std::cout << currentMember_.getIdentity() << "; " << std::endl;
+        std::cout << currentMember_.getIdentity() << "; ";
         std::cout << "Enter message:" << std::endl;
         std::string message;
         std::cin >> std::ws;
@@ -84,12 +90,13 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
 
     auto senderCard = foundCards.at(0);
 
-    std::cout << sender << ":" << std::endl;
+    std::cout << sender << " -> ";
     vcrypto::VirgilSigner signer;
     bool isValid =
         signer.verify(encryptedModel.getMessage(), encryptedModel.getSignature(), senderCard.getPublicKey().getKey());
     if (!isValid) {
         std::cout << "The message signature is not valid." << std::endl;
+        logFile_ += sender + " .The message signature is not valid.";
         std::cout << std::endl;
         return;
     }
@@ -104,7 +111,8 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
         std::cout << std::endl;
 
     } catch (std::exception& exception) {
-        std::cout << std::string("Can't decrypt message. Error: ") + exception.what() << std::endl;
+        std::cout << std::string("Can't decrypt message.") << std::endl;
+        logFile_ += std::string("Can't decrypt message. Error: ") + exception.what() + "\n";
         std::cout << std::endl;
     }
 }

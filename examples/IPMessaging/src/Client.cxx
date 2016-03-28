@@ -28,10 +28,5 @@ vipm::Channel vipm::Client::joinChannel(const std::string& channelName) {
 
     vipm::Channel channel(channelName, identityToken);
 
-    // std::cout << "Join channel. watch()..." << std::endl;
-
-    // std::thread thr(&vipm::Channel::watch, channel);
-    // thr.detach();
-
     return channel;
 }

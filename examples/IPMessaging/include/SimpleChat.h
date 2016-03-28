@@ -19,6 +19,7 @@ namespace IPMessaging {
     class SimpleChat {
     public:
         SimpleChat() = default;
+        ~SimpleChat();
 
         void launch();
         void onMessageRecived(const std::string& sender, const std::string& message);
@@ -35,6 +36,7 @@ namespace IPMessaging {
         virgil::IPMessaging::Client client_;
         virgil::IPMessaging::ChatMember currentMember_;
         virgil::IPMessaging::Channel channel_;
+        std::string logFile_;
     };
 }
 }
