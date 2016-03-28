@@ -11,10 +11,10 @@
     - [Step 3. Send a Message](#step-3-send-a-message)
     - [Step 4. Receive a Message](#step-4-receive-a-message)
     - [Step 5. Verify and Decrypt](#step-5-verify-and-decrypt)
-
 - [Build](#build)
 - [Source Code](#source-code)
 - [See also](#see-also)
+
 
 ## Introduction
 
@@ -37,6 +37,7 @@ Use this token to initialize the SDK client [here](#step-0-initialization).
 
 ### Install
 Following dependencies are used for work with IPMessaging:
+
 1. [virgil-sdk-cpp](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/master)
 1. [virgil-crypto](https://github.com/VirgilSecurity/virgil-crypto)
 1. [nlohmann/json](https://github.com/nlohmann/json)
