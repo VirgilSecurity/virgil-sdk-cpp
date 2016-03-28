@@ -41,7 +41,7 @@ Following dependencies are used for work with IPMessaging:
 1. [virgil-sdk-cpp](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/master)
 1. [virgil-crypto](https://github.com/VirgilSecurity/virgil-crypto)
 1. [nlohmann/json](https://github.com/nlohmann/json)
-1. [rest](https://github.com/VirgilSecurity/restless)
+1. [restless](https://github.com/VirgilSecurity/restless)
 
 They are automatically downloaded by [CMake](https://cmake.org/), [ExternalProject](https://cmake.org/cmake/help/v3.2/module/ExternalProject.html?highlight=externalproject_add#command:externalproject_add) command.
 Scripts can be viewed [here](../examples/IPMessaging/cmake).
@@ -120,7 +120,7 @@ vcrypto::VirgilByteArray signature = signer.sign(encryptedMessage, currentMember
 
 
 ### Step 3. Send a Message
-The app merges the message text and the signature into one [structure](../examples/IPMessaging/include/models/EncryptedMessageModel.h) then serializes it to json string and sends the message to the channel using a simple IP messaging client.
+The app merges the message text and the signature into one [structure](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/IPMessaging/include/models/EncryptedMessageModel.h) then serializes it to json string and sends the message to the channel using a simple IP messaging client.
 
 > We will be using our custom IP Messaging Server in our examples, you may need to adjust the code for your favorite IP Messaging Server.
 
