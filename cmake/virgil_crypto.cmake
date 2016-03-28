@@ -57,7 +57,7 @@ endif (CMAKE_PREFIX_PATH)
 if (NOT TARGET virgil_crypto_project)
     ExternalProject_Add (virgil_crypto_project
         GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-crypto.git"
-        GIT_TAG "v1.3.2"
+        GIT_TAG "v1.3.4"
         PREFIX "${CMAKE_BINARY_DIR}/ext/virgil-crypto"
         CMAKE_ARGS ${CMAKE_ARGS}
     )
