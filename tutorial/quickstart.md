@@ -3,7 +3,7 @@
 - [Introduction](#introduction)
 - [Prerequisites](#prerequisites)
     - [Obtaining an Access Token](#obtaining-an-access-token)
-    - [Build](#build)
+    - [Install](#install)
 - [Use case](#use-case)
     - [Step 0. Initialization](#step-0-initialization)
     - [Step 1. Generate and Publish the Keys](#step-1-generate-and-publish-the-keys)
@@ -11,6 +11,8 @@
     - [Step 3. Send a Message](#step-3-send-a-message)
     - [Step 4. Receive a Message](#step-4-receive-a-message)
     - [Step 5. Verify and Decrypt](#step-5-verify-and-decrypt)
+
+- [Build](#build)
 - [Source Code](#source-code)
 - [See also](#see-also)
 
@@ -18,7 +20,7 @@
 
 In this guide we will get you up and running quickly with a simple IP messaging chat application you can build as you learn more about Virgil Crypto Library and Virgil Keys Services. Sounds like a plan? Then let's get cracking!
 
-On the diagram below you can see a full picture of how these things interact with each other. ![Use case mail](IPMessaging.jpg)
+On the diagram below you can see a full picture of how these things interact with each other. ![Use case mail](https://raw.githubusercontent.com/VirgilSecurity/virgil/master/images/IPMessaging.jpg)
 
 ## Prerequisites
 
@@ -33,29 +35,17 @@ The access token provides authenticated secure access to Virgil Keys Services an
 
 Use this token to initialize the SDK client [here](#step-0-initialization).
 
-### Build
+### Install
+Following dependencies are used for work with IPMessaging:
+1. [virgil-sdk-cpp](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/master)
+1. [virgil-crypto](https://github.com/VirgilSecurity/virgil-crypto)
+1. [nlohmann/json](https://github.com/nlohmann/json)
+1. [rest](https://github.com/VirgilSecurity/restless)
 
-Run one of the following commands in the project's root folder.
-  * Build SDK
+They are automatically downloaded by [CMake](https://cmake.org/), [ExternalProject](https://cmake.org/cmake/help/v3.2/module/ExternalProject.html?highlight=externalproject_add#command:externalproject_add) command.
+Scripts can be viewed [here](../examples/IPMessaging/cmake).
+Move to this step to [build](#build) an application.
 
-    * Unix:
-
-            mkdir build && cd build && cmake .. && make -j4
-
-    * Windows:
-
-            mkdir build && cd build && cmake .. && nmake
-
-
-  * Build Examples
-
-    * Unix:
-
-            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && make -j4
-
-    * Windows:
-
-            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && nmake
 
 ## Use Case
 **Secure any data end to end**: users need to securely exchange information (text messages, files, audio, video etc) while enabling both in transit and at rest protection.
@@ -174,6 +164,31 @@ vcrypto::VirgilByteArray decryptedMessage =
     cipher.decryptWithKey(encryptedModel.getMessage(), currentMember_.getCardId(),
                           currentMember_.getPrivateKey(), vcrypto::VirgilByteArray());
 ```
+
+
+## Build
+
+Run one of the following commands in the project's root folder.
+  * Build SDK
+
+    * Unix:
+
+            mkdir build && cd build && cmake .. && make -j4
+
+    * Windows:
+
+            mkdir build && cd build && cmake .. && nmake
+
+
+  * Build Examples
+
+    * Unix:
+
+            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && make -j4
+
+    * Windows:
+
+            mkdir build && cd build && cmake -DENABLE_EXAMPLES=ON .. && nmake
 
 ## Source Code
 
