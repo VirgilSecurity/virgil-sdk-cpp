@@ -193,10 +193,10 @@ Run one of the following commands in the project's root folder.
 
 ## Source Code
 
-* [Use Case Example](../examples/IPMessaging)
+* [Use Case Example](https://github.com/VirgilSecurity/virgil-sdk-cpp/tree/master/examples/IPMessaging)
 * [IP-Messaging Simple Server](https://github.com/VirgilSecurity/virgil-sdk-javascript/tree/master/examples/ip-messaging/server)
 
 ## See Also
 
-* [Tutorial Crypto Library](virgil_crypto.md)
-* [Tutorial SDK](virgil_sdk_cpp.md)
+* [Tutorial Crypto Library](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/virgil_crypto.md)
+* [Tutorial SDK](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/virgil_sdk_cpp.md)
