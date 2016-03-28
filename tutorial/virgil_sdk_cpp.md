@@ -48,7 +48,8 @@ Initialize the identity verification process.
 Identity identity(%YOUR_EMAIL%, IdentityModel::Type::Email);
 std::string actionId = servicesHub.identity().verify(identity);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/identity_verify.cxx)
+
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/identity_verify.cxx)
 
 
 #### Confirm and Get a Validated Identity
@@ -60,7 +61,7 @@ Confirm the identity and get a temporary token.
 ValidatedIdentity validatedIdentity =
         servicesHub.identity().confirm(actionId, "%CONFIRMATION_CODE%);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/identity_confirm.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/identity_confirm.cxx)
 
 
 ## Cards and Public Keys
@@ -78,7 +79,7 @@ Credentials credentials(keyPair.privateKey(), privateKeyPassword);
 Card myCard =
   servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_create.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_create.cxx)
 
 
 #### Search for Cards
@@ -89,7 +90,7 @@ Search for the Virgil Card by provided parameters.
 Identity identity(%USER_EMAIL%, IdentityModel::Type::Email);
 std::vector<CardModel> foundCards = servicesHub.card().search(identity);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_search.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_search.cxx)
 
 
 #### Search for Application Cards
@@ -99,7 +100,7 @@ Search for the Virgil Cards by a defined pattern. The example below returns a li
 ``` {.cpp}
 std::vector<CardModel> allAppCards = servicesHub.card().searchApp("com.virgil.*");
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_search_app.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_search_app.cxx)
 
 
 #### Sign a Virgil Card
@@ -114,7 +115,7 @@ Credentials signerCredentials
 SignModel cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
         signerCredentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_sign.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_sign.cxx)
 
 
 #### Unsign a Virgil Card
@@ -124,7 +125,7 @@ Naturally it is possible to stop signing the Virgil Card owner as in all relatio
 ``` {.cpp}
 servicesHub.card().unsign(signedCardId, signerCardId, signerCredentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_unsign.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_unsign.cxx)
 
 
 #### Revoke a Virgil Card
@@ -134,7 +135,7 @@ This operation is used to delete the Virgil Card from the search and mark it as 
 ``` {.cpp}
 servicesHub.card().revoke(ownerCardId, ownerValidatedIdentity, ownerCredentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/card_revoke.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_revoke.cxx)
 
 
 #### Get a Public Key
@@ -144,7 +145,7 @@ Gets a public key from the Public Keys Service by the specified ID.
 ``` {.cpp}
 PublicKeyModel publicKey = servicesHub.publicKey().get(publicKeyId);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/public_key_get.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/public_key_get.cxx)
 
 
 ## Private Keys
@@ -166,7 +167,7 @@ The Private Keys Service stores private keys the original way as they were trans
 ``` {.cpp}
 servicesHub.privateKey().add(cardId, credentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/private_key_add.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/private_key_add.cxx)
 
 
 #### Get a Private Key
@@ -176,7 +177,7 @@ To get a private key you need to pass a prior verification of the Virgil Card wh
 ``` {.cpp}
 PrivateKey privateKey = servicesHub.privateKey().get(cardId, validatedIdentity);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/private_key_get.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/private_key_get.cxx)
 
 
 #### Delete a Private Key
@@ -186,7 +187,7 @@ This operation deletes the private key from the service without a possibility to
 ``` {.cpp}
 servicesHub.privateKey().del(cardId, credentials);
 ```
-See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/v3/examples/src/private_key_delete.cxx)
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/private_key_delete.cxx)
 
 
 ## Build
@@ -216,6 +217,6 @@ Run one of the following commands in the project's root folder.
 
 ## See Also
 
-* [Quickstart](quickstart.md)
+* [Quickstart](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/quickstart.md)
 * [Reference API for SDK](http://virgilsecurity.github.io/virgil-sdk-cpp/)
 
