@@ -58,21 +58,18 @@ Response Connection::send(const Request& request) {
     HttpRequest httpRequest;
     httpRequest.header(request.header()).content(request.contentType(), request.body());
 
-    std::string uri = request.uri();
-    uri.erase(uri.find("?"));
-
     switch (request.method()) {
         case Request::Method::GET:
-            httpRequest.get(uri);
+            httpRequest.get(request.uri());
             break;
         case Request::Method::POST:
-            httpRequest.post(uri);
+            httpRequest.post(request.uri());
             break;
         case Request::Method::PUT:
-            httpRequest.put(uri);
+            httpRequest.put(request.uri());
             break;
         case Request::Method::DEL:
-            httpRequest.del(uri);
+            httpRequest.del(request.uri());
             break;
         default:
             throw std::logic_error("Unknown HTTP method.");

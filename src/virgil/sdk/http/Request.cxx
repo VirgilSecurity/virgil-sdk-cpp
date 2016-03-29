@@ -102,6 +102,10 @@ Request::Parameters Request::parameters() const {
 }
 
 std::string Request::uri() const {
+    if (parameters_.empty()) {
+        return baseAddress() + endpoint();
+    }
+
     std::ostringstream uri;
     uri << baseAddress() << endpoint() << "?";
     for (auto param : parameters()) {
