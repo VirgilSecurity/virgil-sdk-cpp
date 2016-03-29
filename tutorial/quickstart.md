@@ -25,7 +25,7 @@ On the diagram below you can see a full picture of how these things interact wit
 ## Prerequisites
 
 1. To begin with, you'll need a Virgil Access Token, which you can obtain by passing a few steps described [here](#obtaining-an-access-token).
-2. You will also need to [intall](#install).
+2. You will also need to [intall the dependencies](#install).
 
 ### Obtaining an Access Token
 
