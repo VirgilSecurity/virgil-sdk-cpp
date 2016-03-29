@@ -81,7 +81,7 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
         return;
     }
 
-    bool includeUnconfirmed = false;
+    bool includeUnconfirmed = true;
     vsdk::dto::Identity senderIdentity(sender, vsdk::models::IdentityModel::Type::Email);
     auto foundCards = servicesHub_.card().search(senderIdentity, includeUnconfirmed);
     if (foundCards.empty()) {
@@ -122,14 +122,13 @@ vipm::ChatMember vipm::SimpleChat::autorize(const std::string& emailAddress) {
 
     bool includeUnconfirmed = true;
     std::vector<vsdk::models::CardModel> foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
-
     if (foundCards.empty()) {
         return registerUser(emailAddress);
     }
 
     std::string actionId = servicesHub_.identity().verify(identity);
     std::cout << "The email with confirmation code has been sent to your"
-                 "email address. Please check it!"
+                 " email address. Please check it!"
               << std::endl;
     std::cout << "Enter code:" << std::endl;
     std::string confirmationCode;
@@ -151,9 +150,8 @@ vipm::ChatMember vipm::SimpleChat::registerUser(const std::string& email) {
     // public key and an email address identifier. The card will
     // be used for the public key identification and searching
     // for it in the Public Keys Service.
-    vsdk::Credentials credentials(newKeyPair.privateKey());
-
     vsdk::dto::Identity identity(email, vsdk::models::IdentityModel::Type::Email);
+    vsdk::Credentials credentials(newKeyPair.privateKey());
     vsdk::models::CardModel card = servicesHub_.card().create(identity, newKeyPair.publicKey(), credentials);
 
     // Private key can be added to Virgil Security storage if you want to
