@@ -30,7 +30,7 @@ First you must create a free Virgil Security developer's account by signing up [
 
 The access token provides an authenticated secure access to the Public Keys Service and is passed with each API call. The access token also allows the API to associate your app’s requests with your Virgil Security developer's account.
 
-Simply add your access token to the client constuctor.
+Simply add your access token to the client constructor.
 
 ``` {.cpp}
 ServicesHub servicesHub(%ACCESS_TOKEN%);
@@ -59,7 +59,7 @@ Confirm the Identity and get a temporary token.
 ``` {.cpp}
 // use confirmation code sent to your email box.
 ValidatedIdentity validatedIdentity =
-        servicesHub.identity().confirm(actionId, "%CONFIRMATION_CODE%);
+        servicesHub.identity().confirm(actionId, %CONFIRMATION_CODE%);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/identity_confirm.cxx)
 
@@ -132,7 +132,7 @@ The example below demonstrates how to certify a user's Virgil Card by signing it
 
 ``` {.cpp}
 Credentials signerCredentials
-		(signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
+        (signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
 SignModel cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
         signerCredentials);
 ```
@@ -183,7 +183,7 @@ Private key can be added for storage only in case you have already registered a 
 
 Use the public key identifier on the Public Keys Service to save the private keys.
 
-The Private Keys Service stores private keys the original way as they were transferred. That's why we strongly recommend to trasfer the keys which were generated with a password.
+The Private Keys Service stores private keys the original way as they were transferred. That's why we strongly recommend transferring the keys which were generated with a password.
 
 ``` {.cpp}
 servicesHub.privateKey().add(cardId, credentials);
@@ -240,4 +240,3 @@ Run one of the following commands in the project's root folder.
 
 * [Quickstart](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/quickstart.md)
 * [Reference API for SDK](http://virgilsecurity.github.io/virgil-sdk-cpp/)
-
