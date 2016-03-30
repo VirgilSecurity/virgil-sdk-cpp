@@ -12,7 +12,7 @@
     - [Step 4. Receive a Message](#step-4-receive-a-message)
     - [Step 5. Verify and Decrypt](#step-5-verify-and-decrypt)
 - [Build](#build)
-- [Source Code](#source-code)
+- [Source code](#source-code)
 - [See also](#see-also)
 
 
@@ -25,7 +25,7 @@ On the diagram below you can see a full picture of how these things interact wit
 ## Prerequisites
 
 1. To begin with, you'll need a Virgil Access Token, which you can obtain by passing a few steps described [here](#obtaining-an-access-token).
-2. You will also need to [build](#build).
+2. You will also need to [install the dependencies](#install).
 
 ### Obtaining an Access Token
 
@@ -78,23 +78,14 @@ The following code example generates a new public/private key pair.
 VirgilKeyPair keyPair;
 ```
 
-The app is verifying whether the user really owns the provided email address and getting a temporary token for a public key registration on the Public Keys Service.
+The app is registering a Virgil Card which includes a public key and an email address identifier. The Card will be used for the public key identification and searching for it in the Public Keys Service. You can create a Virgil Card with or without identity verification, see both examples [here...](virgil_sdk_cpp.md#publish-a-virgil-card)
 
 ``` {.cpp}
-Identity identity("chat-member@virgilsecurity.com", IdentityModel::Type::Email);
-std::string actionId = servicesHub.identity().verify(identity);
-
-// use confirmation code sent to your email
-ValidatedIdentity validatedIdentity =
-        servicesHub.identity().confirm(actionId, "%CONFIRMATION_CODE%);
-```
-
-The app is registering a Virgil Card which includes a public key and an email address identifier. The card will be used for the public key identification and searching for it in the Public Keys Service.
-
-``` {.cpp}
+std::string senderEmailAddress = "sender@virgilsecurity.com";
+Identity identity(senderEmailAddress, IdentityModel::Type::Email);
 Credentials credentials(keyPair.privateKey());
-Card card =
-    servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
+CardModel card;
+card = servicesHub.card().create(identity, keyPair.publicKey(), credentials);
 ```
 
 ### Step 2. Encrypt and Sign
@@ -125,7 +116,7 @@ The app merges the message text and the signature into one [structure](https://g
 > We will be using our custom IP Messaging Server in our examples, you may need to adjust the code for your favorite IP Messaging Server.
 
 ``` {.cpp}
-vipm::models::EncryptedMessageModel encryptedModel(encryptedMessage, signature);
+EncryptedMessageModel encryptedModel(encryptedMessage, signature);
 std::string encryptedModelJson = vipm::models::toJson(encryptedModel);
 
 channel_.sendMessage(encryptedModelJson);

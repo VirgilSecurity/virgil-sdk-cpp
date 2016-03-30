@@ -81,7 +81,7 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
         return;
     }
 
-    bool includeUnconfirmed = false;
+    bool includeUnconfirmed = true;
     vsdk::dto::Identity senderIdentity(sender, vsdk::models::IdentityModel::Type::Email);
     auto foundCards = servicesHub_.card().search(senderIdentity, includeUnconfirmed);
     if (foundCards.empty()) {
@@ -119,9 +119,16 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
 
 vipm::ChatMember vipm::SimpleChat::autorize(const std::string& emailAddress) {
     vsdk::dto::Identity identity(emailAddress, vsdk::models::IdentityModel::Type::Email);
+
+    bool includeUnconfirmed = true;
+    std::vector<vsdk::models::CardModel> foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
+    if (foundCards.empty()) {
+        return registerUser(emailAddress);
+    }
+
     std::string actionId = servicesHub_.identity().verify(identity);
     std::cout << "The email with confirmation code has been sent to your"
-                 "email address. Please check it!"
+                 " email address. Please check it!"
               << std::endl;
     std::cout << "Enter code:" << std::endl;
     std::string confirmationCode;
@@ -129,20 +136,13 @@ vipm::ChatMember vipm::SimpleChat::autorize(const std::string& emailAddress) {
 
     vsdk::dto::ValidatedIdentity validatedIdentity = servicesHub_.identity().confirm(actionId, confirmationCode);
 
-    bool includeUnconfirmed = false;
-    std::vector<vsdk::models::CardModel> foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
-
-    if (foundCards.empty()) {
-        return registerUser(validatedIdentity);
-    }
-
     vsdk::models::CardModel card = foundCards.at(0);
     vsdk::models::PrivateKeyModel privateKeyModel = servicesHub_.privateKey().get(card.getId(), validatedIdentity);
 
     return vipm::ChatMember(card, privateKeyModel.getKey());
 }
 
-vipm::ChatMember vipm::SimpleChat::registerUser(const vsdk::dto::ValidatedIdentity& validatedIdentity) {
+vipm::ChatMember vipm::SimpleChat::registerUser(const std::string& email) {
     // generate a new public/private key pair.
     vcrypto::VirgilKeyPair newKeyPair;
 
@@ -150,9 +150,9 @@ vipm::ChatMember vipm::SimpleChat::registerUser(const vsdk::dto::ValidatedIdenti
     // public key and an email address identifier. The card will
     // be used for the public key identification and searching
     // for it in the Public Keys Service.
+    vsdk::dto::Identity identity(email, vsdk::models::IdentityModel::Type::Email);
     vsdk::Credentials credentials(newKeyPair.privateKey());
-
-    vsdk::models::CardModel card = servicesHub_.card().create(validatedIdentity, newKeyPair.publicKey(), credentials);
+    vsdk::models::CardModel card = servicesHub_.card().create(identity, newKeyPair.publicKey(), credentials);
 
     // Private key can be added to Virgil Security storage if you want to
     // easily synchronise yout private key between devices.
@@ -166,7 +166,7 @@ MapCardIdPublicKey vipm::SimpleChat::getChannelRecipients() {
     std::vector<vsdk::models::CardModel> recipientsCards;
     for (const auto& channelMember : channelMembers) {
         vsdk::dto::Identity identity(channelMember, vsdk::models::IdentityModel::Type::Email);
-        bool includeUnconfirmed = false;
+        bool includeUnconfirmed = true;
         auto foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
         recipientsCards.insert(std::end(recipientsCards), std::begin(foundCards), std::end(foundCards));
     }

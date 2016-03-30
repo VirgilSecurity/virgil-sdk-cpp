@@ -1,5 +1,15 @@
 Virgil Security C++ SDK ChangeLog (Sorted per date)
 
+# Version 3.0.4 released 2016-03-30
+
+## Changes
+
+  * Use virgil-crypto lib 1.3.4
+  * Fix bug in http::Request - when parameters_ empty added '?'
+  * Add IPMessaging in examples
+  * Update docs with new template
+
+
 # Version 3.0.2 released 2016-03-25
 
 ## Changes

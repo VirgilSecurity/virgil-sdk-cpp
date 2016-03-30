@@ -30,7 +30,7 @@ First you must create a free Virgil Security developer's account by signing up [
 
 The access token provides an authenticated secure access to the Public Keys Service and is passed with each API call. The access token also allows the API to associate your app’s requests with your Virgil Security developer's account.
 
-Simply add your access token to the client constuctor.
+Simply add your access token to the client constructor.
 
 ``` {.cpp}
 ServicesHub servicesHub(%ACCESS_TOKEN%);
@@ -38,11 +38,11 @@ ServicesHub servicesHub(%ACCESS_TOKEN%);
 
 ## Identity Check
 
-All the Virgil Security services are strongly interconnected with the Identity Service. It determines the ownership of the identity being checked using particular mechanisms and as a result it generates a temporary token to be used for the operations which require an identity verification.
+All the Virgil Security services are strongly interconnected with the Identity Service. It determines the ownership of the Identity being checked using particular mechanisms and as a result it generates a temporary token to be used for the operations which require an Identity verification.
 
-#### Identity Verification
+#### Request Verification
 
-Initialize the identity verification process.
+Initialize the Identity verification process.
 
 ``` {.cpp}
 Identity identity(%YOUR_EMAIL%, IdentityModel::Type::Email);
@@ -54,32 +54,43 @@ See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp
 
 #### Confirm and Get a Validated Identity
 
-Confirm the identity and get a temporary token.
+Confirm the Identity and get a temporary token.
 
 ``` {.cpp}
 // use confirmation code sent to your email box.
 ValidatedIdentity validatedIdentity =
-        servicesHub.identity().confirm(actionId, "%CONFIRMATION_CODE%);
+        servicesHub.identity().confirm(actionId, %CONFIRMATION_CODE%);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/identity_confirm.cxx)
-
 
 ## Cards and Public Keys
 
 A Virgil Card is the main entity of the Public Keys Service, it includes the information about the user and his public key. The Virgil Card identifies the user by one of his available types, such as an email, a phone number, etc.
 
+The Virgil Card might be created with a confirmed or unconfirmed Identity. The difference is whether Virgil Services take part in [the Identity verfification](#identity-check). With confirmed Cards you can be sure that the account with a particular email has been verified and the email owner is really the Identity owner. Be careful using unconfirmed Cards because they could have been created by any user.
+
 #### Publish a Virgil Card
 
-An identity token which can be received [here](#identity-check) is used during the registration.
+An Identity token which can be received [here](#identity-check) is used during the confirmation.
+
 
 ``` {.cpp}
-VirgilByteArray privateKeyPassword = str2bytes("PRIVATE_KEY_PASS")
-VirgilKeyPair keyPair(privateKeyPassword);
-Credentials credentials(keyPair.privateKey(), privateKeyPassword);
+Credentials credentials(privateKey, str2bytes(PRIVATE_KEY_PASSWORD));
 Card myCard =
   servicesHub.card().create(validatedIdentity, keyPair.publicKey(), credentials);
 ```
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_create.cxx)
+
+Creating a Card without an Identity verification. Pay attention that you will have to set an additional attribute to include the Cards with unconfirmed Identities into your search, see an [example](#search-for-cards).
+
+``` {.cpp}
+Identity identity(%YOUR_EMAIL%, IdentityModel::Type::Email);
+Credentials credentials(privateKey, str2bytes(PRIVATE_KEY_PASSWORD));
+Card myCard =
+  servicesHub.card().create(identity, publicKey, credentials);
+```
+See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_create_not_valid.cxx)
+
 
 
 #### Search for Cards
@@ -88,8 +99,18 @@ Search for the Virgil Card by provided parameters.
 
 ``` {.cpp}
 Identity identity(%USER_EMAIL%, IdentityModel::Type::Email);
-std::vector<CardModel> foundCards = servicesHub.card().search(identity);
+bool includeUnconfirmed = false;
+std::vector<CardModel> foundCards = servicesHub.card().search(identity, includeUnconfirmed);
 ```
+
+Search for the Virgil Cards including the cards with unconfirmed Identities.
+
+``` {.cpp}
+Identity identity(%USER_EMAIL%, IdentityModel::Type::Email);
+bool includeUnconfirmed = true;
+std::vector<CardModel> foundCards = servicesHub.card().search(identity, includeUnconfirmed);
+```
+
 See a working example [here...](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/examples/src/card_search.cxx)
 
 
@@ -111,7 +132,7 @@ The example below demonstrates how to certify a user's Virgil Card by signing it
 
 ``` {.cpp}
 Credentials signerCredentials
-		(signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
+        (signerPrivateKey, str2bytes(SIGNER_PRIVATE_KEY_PASSWORD));
 SignModel cardSign = servicesHub.card().sign(toBeSignedCardId, toBeSignedCardHash, signerCardId,
         signerCredentials);
 ```
@@ -162,7 +183,7 @@ Private key can be added for storage only in case you have already registered a 
 
 Use the public key identifier on the Public Keys Service to save the private keys.
 
-The Private Keys Service stores private keys the original way as they were transferred. That's why we strongly recommend to trasfer the keys which were generated with a password.
+The Private Keys Service stores private keys the original way as they were transferred. That's why we strongly recommend transferring the keys which were generated with a password.
 
 ``` {.cpp}
 servicesHub.privateKey().add(cardId, credentials);
@@ -219,4 +240,3 @@ Run one of the following commands in the project's root folder.
 
 * [Quickstart](https://github.com/VirgilSecurity/virgil-sdk-cpp/blob/master/tutorial/quickstart.md)
 * [Reference API for SDK](http://virgilsecurity.github.io/virgil-sdk-cpp/)
-
