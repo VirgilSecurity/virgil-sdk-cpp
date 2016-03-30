@@ -12,7 +12,7 @@
     - [Step 4. Receive a Message](#step-4-receive-a-message)
     - [Step 5. Verify and Decrypt](#step-5-verify-and-decrypt)
 - [Build](#build)
-- [Source Code](#source-code)
+- [Source code](#source-code)
 - [See also](#see-also)
 
 
@@ -78,7 +78,7 @@ The following code example generates a new public/private key pair.
 VirgilKeyPair keyPair;
 ```
 
-The app is registering a Virgil Card which includes a public key and an email address identifier. The Card will be used for the public key identification and searching for it in the Public Keys Service. You can create a Virgil Card with or without identity verification, see both examples [here...]()
+The app is registering a Virgil Card which includes a public key and an email address identifier. The Card will be used for the public key identification and searching for it in the Public Keys Service. You can create a Virgil Card with or without identity verification, see both examples [here...](virgil_sdk_cpp.md#publish-a-virgil-card)
 
 ``` {.cpp}
 std::string senderEmailAddress = "sender@virgilsecurity.com";
