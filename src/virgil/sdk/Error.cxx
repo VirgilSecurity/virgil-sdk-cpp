@@ -136,6 +136,7 @@ static std::string errorCodeStr(unsigned int errorCode) {
         {30303, "Virgil Card's data parameters must be strings."},
         {30304, "Virgil Card's data parameters must be an array of strings."},
         {30305, "Virgil Card custom data entry value length validation failed."},
+        {30306, "Virgil Card cannot sign itself."},
         {30400, "Sign object not found for id specified."},
         {30402, "The signed digest value is invalid."},
         {30403, "Sign Signed digest must be base64 encoded string."},

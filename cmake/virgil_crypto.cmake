@@ -57,7 +57,7 @@ endif (CMAKE_PREFIX_PATH)
 if (NOT TARGET virgil_crypto_project)
     ExternalProject_Add (virgil_crypto_project
         GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-crypto.git"
-        GIT_TAG "v1.3.4"
+        GIT_TAG "v1.4.0-rc1"
         PREFIX "${CMAKE_BINARY_DIR}/ext/virgil-crypto"
         CMAKE_ARGS ${CMAKE_ARGS}
     )
@@ -69,9 +69,15 @@ if (NOT TARGET virgil_crypto)
 
     set (VIRGIL_CRYPTO_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}virgil_crypto${CMAKE_STATIC_LIBRARY_SUFFIX})
     set (MBEDTLS_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}mbedcrypto${CMAKE_STATIC_LIBRARY_SUFFIX})
+    set (ED25519_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}ed25519${CMAKE_STATIC_LIBRARY_SUFFIX})
     set (VIRGIL_CRYPTO_INCLUDE_DIRS "${INSTALL_DIR}/include")
+
+    set (VIRGIL_CRYPTO_LIB_DIR "${INSTALL_DIR}/lib/${VIRGIL_CRYPTO_LIBRARY_NAME}")
+    set (MBEDTLS_LIB_DIR "${INSTALL_DIR}/lib/${MBEDTLS_LIBRARY_NAME}")
+    set (ED25519_LIB_DIR "${INSTALL_DIR}/lib/${ED25519_LIBRARY_NAME}")
+
     set (VIRGIL_CRYPTO_LIBRARIES
-            "${INSTALL_DIR}/lib/${VIRGIL_CRYPTO_LIBRARY_NAME};${INSTALL_DIR}/lib/${MBEDTLS_LIBRARY_NAME}")
+            "${VIRGIL_CRYPTO_LIB_DIR};${MBEDTLS_LIB_DIR};${ED25519_LIB_DIR};")
 
     # Workaround of http://public.kitware.com/Bug/view.php?id=14495
     file (MAKE_DIRECTORY ${VIRGIL_CRYPTO_INCLUDE_DIRS})
