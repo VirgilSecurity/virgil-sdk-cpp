@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include "dto/Message.h"
 

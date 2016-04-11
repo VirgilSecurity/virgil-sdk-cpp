@@ -41,7 +41,7 @@
 
 #include "../catch.hpp"
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/sdk/models/SignModel.h>
 #include <virgil/sdk/util/JsonKey.h>

@@ -48,9 +48,9 @@ set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 ## Installation directories
-set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
-set (INSTALL_EXT_INCLUDES OFF CACHE BOOL "Enable installation of SDK dependency library headers")
-mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_INCLUDES)
+set (INSTALL_EXT_LIBS ON CACHE BOOL "Enable installation of SDK dependency libraries")
+set (INSTALL_EXT_HEADERS OFF CACHE BOOL "Enable installation of SDK dependency library headers")
+mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_HEADERS)
 ## Doxygen
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
@@ -97,7 +97,7 @@ set (VIRGIL_SDK_VERSION
 )
 message (STATUS "Virgil SDK version: " ${VIRGIL_SDK_VERSION})
 
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ext" ${CMAKE_MODULE_PATH})
 
 # Add self includes
 include_directories ("include")
@@ -139,12 +139,13 @@ install (TARGETS ${VIRGIL_SDK} DESTINATION lib)
 if (INSTALL_EXT_LIBS)
     install (FILES ${REST_LIBRARY} DESTINATION lib)
     install (FILES ${VIRGIL_CRYPTO_LIBRARIES} DESTINATION lib)
-    if (INSTALL_EXT_INCLUDES)
-        install (DIRECTORY "${JSON_INCLUDE_DIRS}/" DESTINATION "include")
-        install (DIRECTORY "${REST_INCLUDE_DIRS}/" DESTINATION "include")
-        install (DIRECTORY "${VIRGIL_CRYPTO_INCLUDE_DIRS}/" DESTINATION "include")
-    endif (INSTALL_EXT_INCLUDES)
 endif (INSTALL_EXT_LIBS)
+
+if (INSTALL_EXT_HEADERS)
+    install (DIRECTORY "${JSON_INCLUDE_DIRS}/" DESTINATION "include")
+    install (DIRECTORY "${REST_INCLUDE_DIRS}/" DESTINATION "include")
+    install (DIRECTORY "${VIRGIL_CRYPTO_INCLUDE_DIRS}/" DESTINATION "include")
+endif (INSTALL_EXT_HEADERS)
 
 install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "util" EXCLUDE

@@ -39,6 +39,8 @@ set (CMAKE_ARGS
     -DLIB_LOW_LEVEL_API:BOOL=ON
     -DLIB_FILE_IO:BOOL=ON
     -DENABLE_TESTING:BOOL=OFF
+    -DINSTALL_EXT_LIBS:BOOL=${INSTALL_EXT_LIBS}
+    -DINSTALL_EXT_HEADERS:BOOL=${INSTALL_EXT_HEADERS}
 )
 
 list (APPEND CMAKE_ARGS
@@ -57,7 +59,7 @@ endif (CMAKE_PREFIX_PATH)
 if (NOT TARGET virgil_crypto_project)
     ExternalProject_Add (virgil_crypto_project
         GIT_REPOSITORY "https://github.com/VirgilSecurity/virgil-crypto.git"
-        GIT_TAG "v1.4.0-rc1"
+        GIT_TAG "release"
         PREFIX "${CMAKE_BINARY_DIR}/ext/virgil-crypto"
         CMAKE_ARGS ${CMAKE_ARGS}
     )

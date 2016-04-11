@@ -47,7 +47,7 @@
 #include <virgil/sdk/models/SignModel.h>
 #include <virgil/sdk/util/JsonKey.h>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 namespace virgil {
 namespace test {

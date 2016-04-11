@@ -45,14 +45,19 @@ if (NOT TARGET project_json)
         SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/json/src/project_json"
         CMAKE_COMMAND ""
         BUILD_COMMAND ""
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND}
+            ARGS
+                -DSRC_DIR:PATH=${CMAKE_BINARY_DIR}/ext/json/src/project_json/src
+                -DDST_DIR:PATH=${CMAKE_BINARY_DIR}/ext/json/include/nlohman
+                -DGLOBBING_EXPRESSION:STRING=*.hpp
+                -P "${CMAKE_SOURCE_DIR}/cmake/utils/copy_all_files.cmake"
         TEST_COMMAND ""
     )
 endif ()
 
 if (NOT TARGET json)
     # Configure output
-    set (JSON_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/json/src/project_json/src")
+    set (JSON_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/json/include")
 
     # Workaround of http://public.kitware.com/Bug/view.php?id=14495
     file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})

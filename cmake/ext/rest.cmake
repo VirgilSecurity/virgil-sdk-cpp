@@ -67,12 +67,22 @@ if (NOT TARGET rest)
     ExternalProject_Get_Property (project_rest INSTALL_DIR)
 
     set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
+    set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/include")
     set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
     set (REST_LIBRARIES "${REST_LIBRARY}")
 
     # Workaround of http://public.kitware.com/Bug/view.php?id=14495
     file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
+
+    add_custom_target (project_rest_copy_includes
+        COMMAND ${CMAKE_COMMAND}
+            ARGS
+                -DSRC_DIR:PATH=${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include
+                -DDST_DIR:PATH=${CMAKE_BINARY_DIR}/ext/rest/include/restless
+                -DGLOBBING_EXPRESSION:STRING=*.hpp
+                -P "${CMAKE_SOURCE_DIR}/cmake/utils/copy_all_files.cmake"
+        DEPENDS project_rest
+    )
 
     # Make target
     add_library (rest STATIC IMPORTED GLOBAL)
@@ -80,5 +90,5 @@ if (NOT TARGET rest)
         IMPORTED_LOCATION ${REST_LIBRARY}
         INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
     )
-    add_dependencies (rest project_rest)
+    add_dependencies (rest project_rest project_rest_copy_includes)
 endif ()

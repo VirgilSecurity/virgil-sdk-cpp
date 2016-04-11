@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
-#include <restless.hpp>
+#include <restless/restless.hpp>
 
 #include "Channel.h"
 #include "Constants.h"
