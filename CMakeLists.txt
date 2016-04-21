@@ -102,11 +102,11 @@ set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 # Add self includes
 include_directories ("include")
 
+# Add ext header only lib
+include_directories ("ext")
+
 # Add external dependencies
 include (ExternalProject)
-
-include (json)
-include_directories (${JSON_INCLUDE_DIRS})
 
 include (rest)
 include_directories (${REST_INCLUDE_DIRS})
@@ -131,7 +131,7 @@ file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
 add_library (${VIRGIL_SDK} STATIC ${SRC_LIST})
-add_dependencies(${VIRGIL_SDK} json virgil_crypto rest)
+add_dependencies(${VIRGIL_SDK} virgil_crypto rest)
 target_link_libraries (${VIRGIL_SDK} ${VIRGIL_CRYPTO_LIBRARIES} ${REST_LIBRARIES} ${CURL_LIBRARIES})
 
 # Install
