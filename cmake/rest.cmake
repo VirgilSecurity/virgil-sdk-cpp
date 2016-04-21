@@ -37,7 +37,7 @@
 # Dependecy to https://github.com/anuragsoni/restless
 
 # Define CMake variables
-set (CMAKE_ARGS
+list (APPEND CMAKE_ARGS
     -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
