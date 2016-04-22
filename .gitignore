@@ -3,6 +3,7 @@
 *install*/
 origin_lib/
 examples_bin/
+.depends_cache/
 
 #####
 # OS X temporary files that should never be committed

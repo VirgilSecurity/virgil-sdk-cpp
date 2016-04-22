@@ -34,38 +34,29 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Dependecy to https://github.com/nlohmann/json
+cmake_minimum_required (VERSION @CMAKE_VERSION@ FATAL_ERROR)
 
-# Configure external project
-if (NOT TARGET project_json)
-    ExternalProject_Add (project_json
-        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-        GIT_TAG "v1.1.0"
-        PREFIX "${CMAKE_BINARY_DIR}/ext/json"
-        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/json/src/project_json"
-        CMAKE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ${CMAKE_COMMAND}
-            ARGS
-                -DSRC_DIR:PATH=${CMAKE_BINARY_DIR}/ext/json/src/project_json/src
-                -DDST_DIR:PATH=${CMAKE_BINARY_DIR}/ext/json/include/nlohman
-                -DGLOBBING_EXPRESSION:STRING=*.hpp
-                -P "${CMAKE_SOURCE_DIR}/cmake/utils/copy_all_files.cmake"
-        TEST_COMMAND ""
-    )
-endif ()
+project ("@VIRGIL_DEPENDS_PACKAGE_NAME@-depends")
 
-if (NOT TARGET json)
-    # Configure output
-    set (JSON_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/json/include")
+include (ExternalProject)
 
-    # Workaround of http://public.kitware.com/Bug/view.php?id=14495
-    file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})
+# Configure additional CMake parameters
+file (WRITE "@VIRGIL_DEPENDS_ARGS_FILE@"
+    "set (ENABLE_FILE_IO ON CACHE INTERNAL \"\")\n"
+    "set (ENABLE_TESTING OFF CACHE INTERNAL \"\")\n"
+    "set (LIB_LOW_LEVEL_API ON CACHE INTERNAL \"\")\n"
+    "set (LIB_FILE_IO ON CACHE INTERNAL \"\")\n"
+    "set (INSTALL_EXT_LIBS @INSTALL_EXT_LIBS@ CACHE INTERNAL \"\")\n"
+    "set (INSTALL_EXT_HEADERS @INSTALL_EXT_HEADERS@ CACHE INTERNAL \"\")\n"
+)
 
-    # Make target
-    add_library (json STATIC IMPORTED GLOBAL)
-    set_target_properties (json PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES ${JSON_INCLUDE_DIRS}
-    )
-    add_dependencies (json project_json)
-endif ()
+ExternalProject_Add (${PROJECT_NAME}
+    DOWNLOAD_DIR "@VIRGIL_DEPENDS_CACHE_DIR@/@VIRGIL_DEPENDS_PACKAGE_NAME@"
+    URL "https://github.com/VirgilSecurity/virgil-crypto/archive/05dfdff19a31ad1a51f67ef32d07320ebbb19ea8.tar.gz"
+    URL_HASH SHA1=10305c77301ca8c16a6ea5df89c56829dbc35c71
+    PREFIX "@VIRGIL_DEPENDS_BUILD_DIR@"
+    CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
+)
+
+add_custom_target ("${PROJECT_NAME}-build" ALL COMMENT "Build package ${PROJECT_NAME}")
+add_dependencies ("${PROJECT_NAME}-build" ${PROJECT_NAME})
