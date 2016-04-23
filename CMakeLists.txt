@@ -108,7 +108,10 @@ set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_
 # Add self includes
 include_directories ("include")
 
-# Add external dependencies
+# Add system external dependencies
+find_package (CURL REQUIRED)
+
+# Add in-house external dependencies
 include (virgil_depends)
 
 virgil_depends (
@@ -131,8 +134,6 @@ virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
 virgil_find_package (RapidJSON) # Installed as virgil_crypto dependency, so found version will be appropriate
-
-find_package (CURL REQUIRED)
 
 include_directories (${CURL_INCLUDE_DIRS})
 include_directories (${NLOHMAN_JSON_INCLUDE_DIRS})
