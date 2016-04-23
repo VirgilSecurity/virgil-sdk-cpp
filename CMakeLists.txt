@@ -36,7 +36,7 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil_sdk CXX)
+project (virgil_sdk VERSION 3.0.5 LANGUAGES CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
@@ -57,6 +57,9 @@ set (INSTALL_BIN_DIR_NAME bin CACHE STRING "Installation directory name for exec
 set (INSTALL_EXT_LIBS ON CACHE BOOL "Enable installation of SDK dependency libraries")
 set (INSTALL_EXT_HEADERS OFF CACHE BOOL "Enable installation of SDK dependency library headers")
 mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_HEADERS)
+
+# Build shared library if defined
+set (BUILD_SHARED_LIBS OFF CACHE BOOL "Force to create shared libraries")
 
 ## Doxygen
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
@@ -97,13 +100,7 @@ endif ()
 set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
 
 # Set library version
-set (VIRGIL_SDK_VERSION_MAJOR 3)
-set (VIRGIL_SDK_VERSION_MINOR 0)
-set (VIRGIL_SDK_VERSION_PATCH 5)
-set (VIRGIL_SDK_VERSION
-    ${VIRGIL_SDK_VERSION_MAJOR}.${VIRGIL_SDK_VERSION_MINOR}.${VIRGIL_SDK_VERSION_PATCH}
-)
-message (STATUS "Virgil SDK version: " ${VIRGIL_SDK_VERSION})
+message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ext" ${CMAKE_MODULE_PATH})
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_PATH})
@@ -153,8 +150,19 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
-add_library (${VIRGIL_SDK} STATIC ${SRC_LIST})
+add_library (${VIRGIL_SDK} ${SRC_LIST})
 target_link_libraries (${VIRGIL_SDK} virgil::security::virgil_crypto asoni::restless ${CURL_LIBRARIES})
+set_target_properties (${PROJECT_NAME} PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    INTERFACE_POSITION_INDEPENDENT_CODE ON
+    DEBUG_POSTFIX "_d"
+)
+
+if (BUILD_SHARED_LIBS)
+    set_target_properties (${VIRGIL_SDK} PROPERTIES
+        VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+    )
+endif ()
 
 # Install
 install (TARGETS ${VIRGIL_SDK}

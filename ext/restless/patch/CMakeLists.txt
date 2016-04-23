@@ -41,7 +41,7 @@
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 # Redefine project name to be equal to the target name
-project (${RESTLESS_LIBRARIES} VERSION 0.3.0)
+project (${RESTLESS_LIBRARIES} VERSION 0.3.0 LANGUAGES CXX)
 
 # Define install directoies names
 set (INSTALL_LIB_DIR_NAME "lib" CACHE STRING "Name of the directory where libraries will be installed")
@@ -50,6 +50,9 @@ set (INSTALL_CFG_DIR_NAME
     "${INSTALL_LIB_DIR_NAME}/cmake/${PROJECT_NAME}" CACHE STRING
     "Path to the CMake configuration files be installed"
 )
+
+# Build shared library if defined
+set (BUILD_SHARED_LIBS OFF CACHE BOOL "Force to create shared libraries")
 
 # Build target
 aux_source_directory ("${CMAKE_CURRENT_SOURCE_DIR}" SRC_FILES)
@@ -60,6 +63,11 @@ target_include_directories (${RESTLESS_LIBRARIES}
     PRIVATE "$<BUILD_INTERFACE:${CURL_INCLUDE_DIRS}>"
 )
 target_link_libraries(${RESTLESS_LIBRARIES} ${CURL_LIBRARIES})
+if (BUILD_SHARED_LIBS)
+    set_target_properties (${RESTLESS_LIBRARIES} PROPERTIES
+        VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+    )
+endif ()
 
 # Define configuration paths
 set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
