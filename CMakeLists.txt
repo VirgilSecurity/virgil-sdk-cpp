@@ -52,6 +52,10 @@ set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
 set (INSTALL_LIB_DIR_NAME lib CACHE STRING "Installation directory name for libraries")
 set (INSTALL_BIN_DIR_NAME bin CACHE STRING "Installation directory name for executables")
+set (INSTALL_CFG_DIR_NAME
+    "${INSTALL_LIB_DIR_NAME}/cmake/${PROJECT_NAME}" CACHE STRING
+    "Path to the CMake configuration files be installed"
+)
 
 ## Installation options
 set (INSTALL_EXT_LIBS ON CACHE BOOL "Enable installation of SDK dependency libraries")
@@ -102,7 +106,6 @@ set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
 
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ext" ${CMAKE_MODULE_PATH})
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_PATH})
 
 # Add self includes
@@ -165,13 +168,42 @@ if (BUILD_SHARED_LIBS)
     )
 endif ()
 
-# Install
-install (TARGETS ${VIRGIL_SDK}
-    ARCHIVE DESTINATION "${INSTALL_LIB_DIR_NAME}"
-    LIBRARY DESTINATION "${INSTALL_LIB_DIR_NAME}"
-    RUNTIME DESTINATION "${INSTALL_BIN_DIR_NAME}"
+# Define names for configuration files
+set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set (version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
+set (project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
+set (targets_export_name "${PROJECT_NAME}-targets")
+set (namespace "virgil::security::")
+
+# Create configuration files
+include (CMakePackageConfigHelpers)
+
+# Write Version Config
+write_basic_package_version_file (
+    "${version_config}" COMPATIBILITY SameMajorVersion
 )
 
+# Write Project Config
+configure_package_config_file (
+    "cmake/config/config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)
+
+# Install targets
+install (TARGETS ${PROJECT_NAME}
+    EXPORT "${targets_export_name}"
+    LIBRARY DESTINATION "${INSTALL_LIB_DIR_NAME}"
+    ARCHIVE DESTINATION "${INSTALL_LIB_DIR_NAME}"
+    RUNTIME DESTINATION "${INSTALL_BIN_DIR_NAME}"
+    INCLUDES DESTINATION "${INSTALL_INC_DIR_NAME}"
+)
+
+if (INSTALL_EXT_LIBS)
+    install (DIRECTORY "${VIRGIL_DEPENDS_PREFIX}/lib/" DESTINATION "${INSTALL_LIB_DIR_NAME}")
+endif (INSTALL_EXT_LIBS)
+
+# Install headers
 install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "util" EXCLUDE
      PATTERN "endpoints" EXCLUDE
@@ -179,13 +211,21 @@ install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "Headers.h" EXCLUDE
 )
 
-if (INSTALL_EXT_LIBS)
-    install (DIRECTORY "${VIRGIL_DEPENDS_PREFIX}/lib/" DESTINATION "${INSTALL_LIB_DIR_NAME}")
-endif (INSTALL_EXT_LIBS)
-
 if (INSTALL_EXT_HEADERS)
-    install (DIRECTORY  "${VIRGIL_DEPENDS_PREFIX}/include/" DESTINATION "${INSTALL_INC_DIR_NAME}")
+    install (DIRECTORY "${VIRGIL_DEPENDS_PREFIX}/include/" DESTINATION "${INSTALL_INC_DIR_NAME}")
 endif ()
+
+# Install configurations
+install (
+    FILES "${project_config}" "${version_config}"
+    DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)
+
+install (
+    EXPORT "${targets_export_name}"
+    NAMESPACE "${namespace}"
+    DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)
 
 # Add unit tests
 if (ENABLE_TESTING)
