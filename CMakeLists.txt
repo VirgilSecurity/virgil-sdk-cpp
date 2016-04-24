@@ -100,16 +100,10 @@ if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
     add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
 endif ()
 
-# Define library name
-set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
-
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_PATH})
-
-# Add self includes
-include_directories ("include")
 
 # Add system external dependencies
 find_package (CURL REQUIRED)
@@ -154,8 +148,11 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
-add_library (${VIRGIL_SDK} ${SRC_LIST})
-target_link_libraries (${VIRGIL_SDK} virgil::security::virgil_crypto asoni::restless ${CURL_LIBRARIES})
+add_library (${PROJECT_NAME} ${SRC_LIST})
+target_include_directories (${PROJECT_NAME}
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+)
+target_link_libraries (${PROJECT_NAME} virgil::security::virgil_crypto asoni::restless ${CURL_LIBRARIES})
 set_target_properties (${PROJECT_NAME} PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     INTERFACE_POSITION_INDEPENDENT_CODE ON
@@ -163,7 +160,7 @@ set_target_properties (${PROJECT_NAME} PROPERTIES
 )
 
 if (BUILD_SHARED_LIBS)
-    set_target_properties (${VIRGIL_SDK} PROPERTIES
+    set_target_properties (${PROJECT_NAME} PROPERTIES
         VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
     )
 endif ()
