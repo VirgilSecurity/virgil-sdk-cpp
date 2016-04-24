@@ -48,6 +48,9 @@ set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 
+## Crosscompiling
+set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
+
 ## Installation directories
 set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
 set (INSTALL_LIB_DIR_NAME lib CACHE STRING "Installation directory name for libraries")
@@ -153,6 +156,7 @@ target_include_directories (${PROJECT_NAME}
     PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
 )
 target_link_libraries (${PROJECT_NAME} virgil::security::virgil_crypto asoni::restless ${CURL_LIBRARIES})
+target_compile_definitions (${PROJECT_NAME} PUBLIC "UCLIBC=$<BOOL:${UCLIBC}>")
 set_target_properties (${PROJECT_NAME} PROPERTIES
     POSITION_INDEPENDENT_CODE ON
     INTERFACE_POSITION_INDEPENDENT_CODE ON

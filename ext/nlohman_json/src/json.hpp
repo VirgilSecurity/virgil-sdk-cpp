@@ -80,6 +80,38 @@ Class @ref nlohmann::basic_json is a good entry point for the documentation.
     using ssize_t = SSIZE_T;
 #endif
 
+#if UCLIBC
+/*!
+@brief Implemented standard methods that uClibc++ not implemented yet
+*/
+namespace std
+{
+  string to_string(std::size_t val) {
+      stringstream val_stream;
+      val_stream << val;
+      return val_stream.str();
+  }
+  unsigned long strtoul(const char * str, char ** str_end) {
+      stringstream val_stream(string(str, (size_t)(*str_end - str)));
+      unsigned long val;
+      val_stream >> val;
+      return val;
+  }
+  float strtof(const char * str, char ** str_end) {
+      stringstream val_stream(string(str, (size_t)(*str_end - str)));
+      float val;
+      val_stream >> val;
+      return val;
+  }
+  long double strtold(const char * str, char ** str_end) {
+      stringstream val_stream(string(str, (size_t)(*str_end - str)));
+      long double val;
+      val_stream >> val;
+      return val;
+  }
+}
+#endif // UCLIBC
+
 /*!
 @brief namespace for Niels Lohmann
 @see https://github.com/nlohmann
@@ -499,7 +531,7 @@ class basic_json
 
     #### Default behavior
 
-    - The restrictions about leading zeros is not enforced in C++. Instead,
+    - The ions about leading zeros is not enforced in C++. Instead,
       leading zeros in integer literals lead to an interpretation as octal
       number. Internally, the value will be stored as decimal number. For
       instance, the C++ integer literal `010` will be serialized to `8`. During
@@ -567,7 +599,7 @@ class basic_json
 
     #### Default behavior
 
-    - The restrictions about leading zeros is not enforced in C++. Instead,
+    - The ions about leading zeros is not enforced in C++. Instead,
       leading zeros in floating-point literals will be ignored. Internally, the
       value will be stored as decimal number. For instance, the C++
       floating-point literal `01.2` will be serialized to `1.2`. During
