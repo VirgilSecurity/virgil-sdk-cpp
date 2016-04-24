@@ -49,7 +49,7 @@ namespace virgil {
 namespace sdk {
     namespace io {
         /**
-         * @brief Marshaller<ValidatedIdentity> specialization.
+         * @brief Marshaller<SignModel> specialization.
          */
         template <> class Marshaller<SignModel> {
         public:
@@ -65,7 +65,7 @@ namespace sdk {
                 return jsonSignModel.dump(INDENT);
             }
 
-            static SignModel fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static SignModel fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
 
                 std::string id = typeJson[JsonKey::id];
@@ -84,9 +84,17 @@ namespace sdk {
 }
 }
 
-void marshaller_sign_card_response_init() {
-    virgil::sdk::io::Marshaller<SignModel>::toJson(SignModel());
-    virgil::sdk::io::Marshaller<SignModel>::toJson<2>(SignModel());
-    virgil::sdk::io::Marshaller<SignModel>::toJson<4>(SignModel());
-    virgil::sdk::io::Marshaller<SignModel>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<SignModel>::toJson(const SignModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<SignModel>::toJson<2>(const SignModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<SignModel>::toJson<4>(const SignModel&);
+
+template SignModel
+virgil::sdk::io::Marshaller<SignModel>::fromJson(const std::string&);

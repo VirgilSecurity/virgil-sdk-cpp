@@ -65,7 +65,7 @@ namespace sdk {
                 return jsonPrivateKey.dump(INDENT);
             }
 
-            static PrivateKeyModel fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static PrivateKeyModel fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
                 std::string cardId = typeJson[JsonKey::cardId];
                 std::string privateKey = typeJson[JsonKey::privateKey];
@@ -80,9 +80,17 @@ namespace sdk {
 }
 }
 
-void marshaller_private_key_init() {
-    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson(PrivateKeyModel());
-    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<2>(PrivateKeyModel());
-    virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<4>(PrivateKeyModel());
-    virgil::sdk::io::Marshaller<PrivateKeyModel>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson(const PrivateKeyModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<2>(const PrivateKeyModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<PrivateKeyModel>::toJson<4>(const PrivateKeyModel&);
+
+template PrivateKeyModel
+virgil::sdk::io::Marshaller<PrivateKeyModel>::fromJson(const std::string&);

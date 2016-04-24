@@ -66,7 +66,7 @@ namespace sdk {
                 return jsonPublicKey.dump(INDENT);
             }
 
-            static PublicKeyModel fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static PublicKeyModel fromJson(const std::string& jsonString) {
                 json jsonPublicKey = json::parse(jsonString);
                 std::string id = jsonPublicKey[JsonKey::id];
                 std::string createdAt = jsonPublicKey[JsonKey::createdAt];
@@ -81,9 +81,17 @@ namespace sdk {
 }
 }
 
-void marshaller_public_key_init() {
-    virgil::sdk::io::Marshaller<PublicKeyModel>::toJson(PublicKeyModel());
-    virgil::sdk::io::Marshaller<PublicKeyModel>::toJson<2>(PublicKeyModel());
-    virgil::sdk::io::Marshaller<PublicKeyModel>::toJson<4>(PublicKeyModel());
-    virgil::sdk::io::Marshaller<PublicKeyModel>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<PublicKeyModel>::toJson(const PublicKeyModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<PublicKeyModel>::toJson<2>(const PublicKeyModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<PublicKeyModel>::toJson<4>(const PublicKeyModel&);
+
+template PublicKeyModel
+virgil::sdk::io::Marshaller<PublicKeyModel>::fromJson(const std::string&);
