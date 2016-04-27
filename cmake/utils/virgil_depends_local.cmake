@@ -141,6 +141,7 @@ function (virgil_depends_create_cache_file cache_path)
     # Pass SHARED
     virgil_depends_write_cache_var ("${cache_path}" "BUILD_SHARED_LIBS")
     # Pass RPATH settings
+    virgil_depends_write_cache_var ("${cache_path}" "CMAKE_MACOSX_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_INSTALL_NAME_DIR")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_INSTALL_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_SKIP_BUILD_RPATH")
