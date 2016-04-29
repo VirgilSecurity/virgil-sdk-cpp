@@ -57,9 +57,9 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
-    if (argc < 6) {
+    if (argc < 7) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <public_key_id> " + " <virgil_card_id> " +
-                         " <path_private_key>" + " <validation_token>"
+                         " <path_private_key>" + " <validation_token_1>" + " <validation_token_2>"
                   << std::endl;
         return 1;
     }
@@ -69,11 +69,13 @@ int main(int argc, char** argv) {
         std::string publicKeyId = argv[2];
         std::string cardId = argv[3];
         std::string pathPrivateKey = argv[4];
-        std::string token = argv[5];
+        std::string token1 = argv[5];
+        std::string token2 = argv[6];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::dto::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::ValidatedIdentity validatedIdentity1(token1, userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::ValidatedIdentity validatedIdentity2(token2, userEmail, vsdk::models::IdentityModel::Type::Email);
 
         std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;
@@ -88,7 +90,7 @@ int main(int argc, char** argv) {
         vsdk::Credentials credentials(privateKey, virgil::crypto::str2bytes(PRIVATE_KEY_PASSWORD));
 
         std::cout << "Revoke the Public Key" << std::endl;
-        servicesHub.publicKey().revoke(publicKeyId, {validatedIdentity}, cardId, credentials);
+        servicesHub.publicKey().revoke(publicKeyId, {validatedIdentity1, validatedIdentity2}, cardId, credentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
