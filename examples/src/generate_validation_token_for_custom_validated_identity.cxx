@@ -34,13 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <iterator>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/io/Marshaller.h>
+#include <virgil/sdk/util/ValidationTokenGenerator.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -52,38 +54,38 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA
                                         "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
                                         "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
 
+const std::string APPLICATION_PASSWORD = "IDn)k\\0vT}CXM3V";
+
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <obfuscator_identity>" + " <path_app_private_key>"
                   << std::endl;
         return 1;
     }
 
     try {
-        std::string userEmail = argv[1];
-        std::string relation = argv[2];
-        std::string includeUnconfirmedStr = argv[3];
+        std::string obfuscatorIdentityValue = argv[1];
+        std::string pathAppPrivateKey = argv[2];
 
-        bool includeUnconfirmed = true;
-        if (includeUnconfirmedStr == "0") {
-            includeUnconfirmed = false;
+        std::cout << "Prepare application private key file: " << pathAppPrivateKey << std::endl;
+        std::cout << "Read application private key..." << std::endl;
+        std::ifstream inAppPrivateKeyFile(pathAppPrivateKey, std::ios::in | std::ios::binary);
+        if (!inAppPrivateKeyFile) {
+            throw std::runtime_error("can not read private key: " + pathAppPrivateKey);
         }
+        vcrypto::VirgilByteArray appPrivateKeyByteArray;
+        std::copy(std::istreambuf_iterator<char>(inAppPrivateKeyFile), std::istreambuf_iterator<char>(),
+                  std::back_inserter(appPrivateKeyByteArray));
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::Credentials appCredentials(appPrivateKeyByteArray, virgil::crypto::str2bytes(APPLICATION_PASSWORD));
+        vsdk::models::IdentityModel::Type identityType = vsdk::models::IdentityModel::Type::Custom;
 
-        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
+        std::cout << "Generatin a validation token " << std::endl;
+        std::string validationToken =
+            vsdk::util::ValidationTokenGenerator::generate(obfuscatorIdentityValue, identityType, appCredentials);
 
-        std::cout << "Search for Cards" << std::endl;
-
-        std::vector<vsdk::models::CardModel> foundCards;
-        if (relation.empty()) {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed);
-        } else {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed, {relation});
-        }
-
-        std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
-        std::cout << foundCardsStr << std::endl;
+        std::cout << "The validation token generated " << std::endl;
+        std::cout << validationToken << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;

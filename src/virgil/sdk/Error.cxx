@@ -130,6 +130,7 @@ static std::string errorCodeStr(unsigned int errorCode) {
         {30202, "Email value specified for the email identity is invalid."},
         {30203, "Cannot create unconfirmed application identity."},
         {30204, "Application value specified for the application identity is invalid."},
+        {30205, "Custom identity validation failed."},
         {30300, "Signed Virgil Card not found by UUID provided."},
         {30301, "Virgil Card's signs list contains an item with invalid signed_id value."},
         {30302, "Virgil Card's one of sined digests is invalid."},
@@ -147,6 +148,9 @@ static std::string errorCodeStr(unsigned int errorCode) {
         {31030, "Identity validation token is invalid."},
         {31040, "Virgil Card revokation parameters do not match Virgil Card's identity."},
         {31050, "Virgil Identity service error."},
+        {31051, "Custom identity's validation token is incorrect."},
+        {31052, "Custom identity's unique id was used alreaady."},
+        {31053, "Custom identity's validation token is malformed."},
         {31060, "Identities parameter is invalid."},
         {31070, "Identity validation failed."},
 
