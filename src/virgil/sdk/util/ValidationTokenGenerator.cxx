@@ -34,46 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <stdexcept>
-#include <string>
+#include <virgil/crypto/VirgilByteArray.h>
+#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/io/Marshaller.h>
+#include <virgil/sdk/util/ValidationTokenGenerator.h>
+#include <virgil/sdk/util/uuid.h>
 
-namespace vsdk = virgil::sdk;
-namespace vcrypto = virgil::crypto;
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::VirgilSigner;
+using virgil::crypto::foundation::VirgilBase64;
+using virgil::crypto::str2bytes;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
+using virgil::sdk::Credentials;
+using virgil::sdk::models::IdentityModel;
+using virgil::sdk::models::toString;
+using virgil::sdk::util::ValidationTokenGenerator;
+using virgil::sdk::util::uuid;
 
-const std::string PRIVATE_KEY_PASSWORD = "qwerty";
+std::string ValidationTokenGenerator::generate(const std::string& identityValue,
+                                               const IdentityModel::Type& identityType,
+                                               const Credentials& credentials) {
+    std::string id = uuid();
+    std::string toBeSignedData = id + toString(identityType) + identityValue;
 
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" << std::endl;
-        return 1;
-    }
+    VirgilSigner signer;
+    VirgilByteArray signature =
+        signer.sign(str2bytes(toBeSignedData), credentials.privateKey(), credentials.privateKeyPassword());
 
-    try {
-        std::string cardId = argv[1];
-
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        std::cout << "Get a Virgil Card" << std::endl;
-        vsdk::models::CardModel card = servicesHub.card().get(cardId);
-        std::string cardStr = vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(card);
-        std::cout << "A Virgil Card:" << std::endl;
-        std::cout << cardStr << std::endl;
-
-    } catch (std::exception& exception) {
-        std::cerr << exception.what() << std::endl;
-        return 1;
-    }
-
-    return 0;
+    std::string validationToken = id + std::string(".") + VirgilBase64::encode(signature);
+    return VirgilBase64::encode(str2bytes(validationToken));
 }

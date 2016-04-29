@@ -70,7 +70,9 @@ std::string virgil::sdk::models::toString(const IdentityModel::Type& identityTyp
         return std::string("email");
     } else if (identityType == IdentityModel::Type::Application) {
         return std::string("application");
-    } else {
+    } else if (identityType == IdentityModel::Type::Custom)
+        return std::string("custom");
+    else {
         return std::string();
     }
 }
@@ -80,7 +82,9 @@ IdentityModel::Type virgil::sdk::models::fromString(const std::string& identityT
         return IdentityModel::Type::Email;
     } else if (identityType == "application") {
         return IdentityModel::Type::Application;
-    } else {
+    } else if (identityType == "custom")
+        return IdentityModel::Type::Custom;
+    else {
         return IdentityModel::Type::None;
     }
 }

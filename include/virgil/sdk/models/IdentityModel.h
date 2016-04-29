@@ -54,9 +54,10 @@ namespace sdk {
              * @brief Enumerate possible identity types
              */
             enum class Type {
+                None,        // Identity is undefined
                 Email,       // Identity is email
                 Application, // Identity is application
-                None         // Identity is undefined
+                Custom       // Identity is custom
             };
 
         public:

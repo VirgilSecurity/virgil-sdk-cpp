@@ -34,46 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <stdexcept>
+#ifndef VIRGIL_SDK_UTIL_OBFUSCATOR_H
+#define VIRGIL_SDK_UTIL_OBFUSCATOR_H
+
 #include <string>
 
-#include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/io/Marshaller.h>
+#include <virgil/crypto/foundation/VirgilPBKDF.h>
 
-namespace vsdk = virgil::sdk;
-namespace vcrypto = virgil::crypto;
-
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
-const std::string PRIVATE_KEY_PASSWORD = "qwerty";
-
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <virgil_card_id>" << std::endl;
-        return 1;
+namespace virgil {
+namespace sdk {
+    namespace util {
+        /**
+         * @brief Derives the obfuscated data from incoming parameters using PBKDF function.
+         */
+        class Obfuscator {
+        public:
+            /**
+             * @brief Provides a helper methods to generate validation token based on application's private key.
+             *
+             * @param value - the string value to be hashed
+             * @param salt - the hash salt
+             * @param algorithm - the hash algorithm
+             * @param iterations - the count of iterations
+             * @return the hash salt
+             */
+            static std::string
+            process(const std::string& value, const std::string& salt,
+                   const virgil::crypto::foundation::VirgilPBKDF::Hash& algorithm =
+                       virgil::crypto::foundation::VirgilPBKDF::Hash::Hash_SHA384,
+                   const unsigned int iterations = virgil::crypto::foundation::VirgilPBKDF::kIterationCount_Default);
+        };
     }
-
-    try {
-        std::string cardId = argv[1];
-
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        std::cout << "Get a Virgil Card" << std::endl;
-        vsdk::models::CardModel card = servicesHub.card().get(cardId);
-        std::string cardStr = vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(card);
-        std::cout << "A Virgil Card:" << std::endl;
-        std::cout << cardStr << std::endl;
-
-    } catch (std::exception& exception) {
-        std::cerr << exception.what() << std::endl;
-        return 1;
-    }
-
-    return 0;
 }
+}
+
+#endif /* VIRGIL_SDK_UTIL_OBFUSCATOR_H */
