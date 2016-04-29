@@ -1,5 +1,17 @@
 Virgil Security C++ SDK ChangeLog (Sorted per date)
 
+# Version 3.1.0 released 2016-04-29
+
+## Features
+
+  * Add custom identities functionality
+
+## Changes
+
+  * Use virgil-crypto lib 1.5.0
+
+
+
 # Version 3.0.6 released 2016-04-18
 
 ## Changes
