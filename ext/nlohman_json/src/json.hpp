@@ -86,24 +86,24 @@ Class @ref nlohmann::basic_json is a good entry point for the documentation.
 */
 namespace std
 {
-  string to_string(std::size_t val) {
+  static string to_string(std::size_t val) {
       stringstream val_stream;
       val_stream << val;
       return val_stream.str();
   }
-  unsigned long strtoul(const char * str, char ** str_end) {
+  static unsigned long strtoul(const char * str, char ** str_end) {
       stringstream val_stream(string(str, (size_t)(*str_end - str)));
       unsigned long val;
       val_stream >> val;
       return val;
   }
-  float strtof(const char * str, char ** str_end) {
+  static float strtof(const char * str, char ** str_end) {
       stringstream val_stream(string(str, (size_t)(*str_end - str)));
       float val;
       val_stream >> val;
       return val;
   }
-  long double strtold(const char * str, char ** str_end) {
+  static long double strtold(const char * str, char ** str_end) {
       stringstream val_stream(string(str, (size_t)(*str_end - str)));
       long double val;
       val_stream >> val;
