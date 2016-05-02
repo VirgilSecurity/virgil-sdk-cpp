@@ -53,15 +53,14 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA
                                         "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
 
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <includeUnconfirmed>"
                   << std::endl;
         return 1;
     }
 
     try {
         std::string userEmail = argv[1];
-        std::string relation = argv[2];
         std::string includeUnconfirmedStr = argv[3];
 
         bool includeUnconfirmed = true;
@@ -70,18 +69,10 @@ int main(int argc, char** argv) {
         }
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
         vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
-
         std::cout << "Search for Cards" << std::endl;
-
         std::vector<vsdk::models::CardModel> foundCards;
-        if (relation.empty()) {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed);
-        } else {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed, {relation});
-        }
-
+        foundCards = servicesHub.card().search(identity, includeUnconfirmed);
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << std::endl;
 

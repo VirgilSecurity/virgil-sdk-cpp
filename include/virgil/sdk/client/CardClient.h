@@ -123,8 +123,7 @@ namespace sdk {
              * @return Found Virgil Cards
              */
             std::vector<virgil::sdk::models::CardModel>
-            search(const virgil::sdk::dto::Identity& identity, const bool includeUnconfirmed,
-                   const std::vector<std::string>& relations = std::vector<std::string>());
+            search(const virgil::sdk::dto::Identity& identity, const bool includeUnconfirmed);
             /**
              * @brief Performs the global search fot the applications' Virgil Cards
              *

@@ -128,12 +128,9 @@ CardModel CardClient::create(const Identity& identity, const std::string& public
     return this->create(credentials, payload.dump());
 }
 
-std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnconfirmed,
-                                          const std::vector<std::string>& relations) {
-    json jsonRelations(relations);
+std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnconfirmed) {
     json payload = {{JsonKey::value, identity.getValue()},
                     {JsonKey::type, virgil::sdk::models::toString(identity.getType())},
-                    {JsonKey::relations, jsonRelations},
                     {JsonKey::includeUnconfirmed, includeUnconfirmed}};
 
     Request request = Request()

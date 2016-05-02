@@ -52,7 +52,6 @@ const std::string JsonKey::type = "type";
 const std::string JsonKey::value = "value";
 const std::string JsonKey::publicKeyId = "public_key_id";
 const std::string JsonKey::data = "data";
-const std::string JsonKey::relations = "relations";
 const std::string JsonKey::includeUnconfirmed = "include_unconfirmed";
 const std::string JsonKey::errorCode = "code";
 const std::string JsonKey::confirmationCode = "confirmation_code";

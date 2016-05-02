@@ -120,11 +120,6 @@ namespace sdk {
              */
             static const std::string data;
             /**
-             * @property relations
-             * @brief Json Key that points collection of Virgil Card identifiers
-             */
-            static const std::string relations;
-            /**
              * @property includeUnconfirmed
              * @brief Json Key that points boolean value which tell to include unconfirmed Virgil Cards, or not
              */
