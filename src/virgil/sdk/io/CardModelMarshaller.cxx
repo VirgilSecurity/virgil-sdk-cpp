@@ -75,7 +75,7 @@ namespace sdk {
                     json jsonCard = {
                         {JsonKey::id, card.getId()},
                         {JsonKey::createdAt, card.getCreatedAt()},
-                        {JsonKey::isConfirmed, card.isConfirmed()},
+                        {JsonKey::authorizedBy, card.authorizedBy()},
                         {JsonKey::hash, card.getHash()},
                     };
 
@@ -89,7 +89,7 @@ namespace sdk {
                         {JsonKey::id, cardIdentity.getId()},
                         {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
                         {JsonKey::value, cardIdentity.getValue()},
-                        {JsonKey::isConfirmed, cardIdentity.isConfirmed()},
+                        {JsonKey::authorizedBy, cardIdentity.authorizedBy()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (card.getData().empty()) {
@@ -110,13 +110,13 @@ namespace sdk {
                 try {
                     json jsonCard = json::parse(jsonString);
 
-                    bool cardConfirmed = jsonCard[JsonKey::isConfirmed];
+                    bool cardConfirmed = jsonCard[JsonKey::authorizedBy];
                     std::string cardId = jsonCard[JsonKey::id];
                     std::string cardCreatedAt = jsonCard[JsonKey::createdAt];
                     std::string cardHash = jsonCard[JsonKey::hash];
 
                     json jsonCardIdentity = jsonCard[JsonKey::identity];
-                    bool identityConfirmed = jsonCardIdentity[JsonKey::isConfirmed];
+                    bool identityConfirmed = jsonCardIdentity[JsonKey::authorizedBy];
                     std::string identityId = jsonCardIdentity[JsonKey::id];
                     std::string identityCreatedAt = jsonCardIdentity[JsonKey::createdAt];
 

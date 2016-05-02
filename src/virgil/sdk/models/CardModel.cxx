@@ -55,7 +55,7 @@ CardModel::CardModel(const std::string& id, const std::string& createdAt, const 
           confirmed_(confirmed) {
 }
 
-bool CardModel::isConfirmed() const {
+bool CardModel::authorizedBy() const {
     return confirmed_;
 }
 

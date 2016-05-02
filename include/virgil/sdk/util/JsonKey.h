@@ -80,10 +80,10 @@ namespace sdk {
              */
             static const std::string cardId;
             /**
-             * @property isConfirmed
+             * @property authorizedBy
              * @brief Json Key that points boolean property which tells whether entity is confirmed, or not
              */
-            static const std::string isConfirmed;
+            static const std::string authorizedBy;
             /**
              * @property hash
              * @brief Json Key that points Virgil Card's hash

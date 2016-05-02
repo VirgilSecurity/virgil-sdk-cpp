@@ -40,13 +40,13 @@
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::dto::Identity;
 
-IdentityModel::IdentityModel(const std::string& id, const std::string& createdAt, const bool confirmed,
+IdentityModel::IdentityModel(const std::string& id, const std::string& createdAt, const bool authorizedBy,
                              const std::string& value, const IdentityModel::Type& type)
-        : id_(id), createdAt_(createdAt), confirmed_(confirmed), value_(value), type_(type) {
+        : id_(id), createdAt_(createdAt), authorizedBy_(authorizedBy), value_(value), type_(type) {
 }
 
-bool IdentityModel::isConfirmed() const {
-    return confirmed_;
+bool IdentityModel::authorizedBy() const {
+    return authorizedBy_;
 }
 
 const std::string IdentityModel::getId() const {

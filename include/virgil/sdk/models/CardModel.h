@@ -98,7 +98,7 @@ namespace sdk {
             /**
              * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
              */
-            bool isConfirmed() const;
+            bool authorizedBy() const;
 
         private:
             std::string id_;
@@ -115,7 +115,7 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const CardModel& left, const CardModel& right) {
-            return left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
+            return left.authorizedBy() == right.authorizedBy() && left.getId() == right.getId() &&
                    left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
                    left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
                    left.getPublicKey() == right.getPublicKey();
