@@ -40,7 +40,6 @@
 #include <string>
 
 #include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/models/IdentityModel.h>
 
 namespace virgil {
 namespace sdk {
@@ -59,7 +58,7 @@ namespace sdk {
              * @return validation token
              */
             static std::string generate(const std::string& identityValue,
-                                        const virgil::sdk::models::IdentityModel::Type& identityType,
+                                        const std::string& identityType,
                                         const virgil::sdk::Credentials& credentials);
         };
     }

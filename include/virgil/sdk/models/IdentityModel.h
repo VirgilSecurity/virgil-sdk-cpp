@@ -56,8 +56,7 @@ namespace sdk {
             enum class Type {
                 None,        // Identity is undefined
                 Email,       // Identity is email
-                Application, // Identity is application
-                Custom       // Identity is custom
+                Application // Identity is application
             };
 
         public:

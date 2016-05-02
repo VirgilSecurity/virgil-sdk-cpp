@@ -47,16 +47,14 @@ using virgil::crypto::foundation::VirgilBase64;
 using virgil::crypto::str2bytes;
 
 using virgil::sdk::Credentials;
-using virgil::sdk::models::IdentityModel;
-using virgil::sdk::models::toString;
 using virgil::sdk::util::ValidationTokenGenerator;
 using virgil::sdk::util::uuid;
 
 std::string ValidationTokenGenerator::generate(const std::string& identityValue,
-                                               const IdentityModel::Type& identityType,
+                                               const std::string& identityType,
                                                const Credentials& credentials) {
     std::string id = uuid();
-    std::string toBeSignedData = id + toString(identityType) + identityValue;
+    std::string toBeSignedData = id + identityType + identityValue;
 
     VirgilSigner signer;
     VirgilByteArray signature =

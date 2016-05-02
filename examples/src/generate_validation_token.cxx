@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
                   std::back_inserter(appPrivateKeyByteArray));
 
         vsdk::Credentials appCredentials(appPrivateKeyByteArray, virgil::crypto::str2bytes(APPLICATION_PASSWORD));
-        vsdk::models::IdentityModel::Type identityType = vsdk::models::IdentityModel::Type::Custom;
+        std::string identityType = "username";
 
         std::cout << "Generatin a validation token " << std::endl;
         std::string validationToken =
