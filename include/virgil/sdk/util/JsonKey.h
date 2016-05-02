@@ -120,26 +120,6 @@ namespace sdk {
              */
             static const std::string data;
             /**
-             * @property signs
-             * @brief Json Key that points collection of Virgil Signs objects
-             */
-            static const std::string signs;
-            /**
-             * @property signerCardId
-             * @brief Json Key that points signer's Virgil Card identifier
-             */
-            static const std::string signerCardId;
-            /**
-             * @property signedCardId
-             * @brief Json Key that points signed Virgil Card identifier
-             */
-            static const std::string signedCardId;
-            /**
-             * @property signedDigest
-             * @brief Json Key that points signed digest
-             */
-            static const std::string signedDigest;
-            /**
              * @property relations
              * @brief Json Key that points collection of Virgil Card identifiers
              */

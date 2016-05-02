@@ -44,7 +44,6 @@
 #include <virgil/sdk/models/PrivateKeyModel.h>
 #include <virgil/sdk/dto/ValidatedIdentity.h>
 #include <virgil/sdk/models/CardModel.h>
-#include <virgil/sdk/models/SignModel.h>
 #include <virgil/sdk/util/JsonKey.h>
 
 #include <json.hpp>
@@ -64,9 +63,6 @@ namespace test {
     nlohmann::json getJsonResponseCards();
     nlohmann::json getJsonCards();
     std::vector<virgil::sdk::models::CardModel> getCards();
-
-    nlohmann::json getJsonSignModel();
-    virgil::sdk::models::SignModel getSignModel();
 
     nlohmann::json getJsonPrivateKey();
     virgil::sdk::models::PrivateKeyModel getPrivateKey();

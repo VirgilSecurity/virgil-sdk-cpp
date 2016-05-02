@@ -57,9 +57,8 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
-    if (argc < 6) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <path_public_key>" + " <path_private_key>" +
-                         " < toBeSignedCardId> + < toBeSignedCardHash>"
+    if (argc < 4) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <path_public_key>" + " <path_private_key>"
                   << std::endl;
         return 1;
     }
@@ -68,8 +67,6 @@ int main(int argc, char** argv) {
         std::string userEmail = argv[1];
         std::string pathPublicKey = argv[2];
         std::string pathPrivateKey = argv[3];
-        std::string toBeSignedCardId = argv[4];
-        std::string toBeSignedCardHash = argv[5];
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
@@ -99,13 +96,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Create a Virgil Card" << std::endl;
         vsdk::models::CardModel card;
-        if (toBeSignedCardId.size() > 0 && toBeSignedCardHash.size() > 0) {
-            card = servicesHub.card().create(identity, publicKey, credentials, {{"key", "value"}},
-                                             {{toBeSignedCardId, toBeSignedCardHash}});
-        } else {
-            card = servicesHub.card().create(identity, publicKey, credentials, {{"key", "value"}});
-        }
-
+        card = servicesHub.card().create(identity, publicKey, credentials, {{"key", "value"}});
         std::string cardStr = vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(card);
 
         std::cout << "Virgil Card:" << std::endl;

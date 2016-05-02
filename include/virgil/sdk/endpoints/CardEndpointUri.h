@@ -65,16 +65,6 @@ namespace sdk {
              */
             static std::string searchApp();
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card sign
-             * @param cardId - Virgil Card identifier
-             */
-            static std::string sign(const std::string& cardId);
-            /**
-             * @brief Returns the endpoint in charge of the Virgil Card unsign
-             * @param cardId - Virgil Card identifier
-             */
-            static std::string unsign(const std::string& cardId);
-            /**
              * @brief Returns the endpoint in charge of the Virgil Card revoke
              * @param cardId - Virgil Card identifier
              */

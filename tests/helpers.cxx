@@ -55,7 +55,6 @@ using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::models::IdentityModel;
-using virgil::sdk::models::SignModel;
 using virgil::sdk::util::JsonKey;
 
 const std::string kToken = "MIIB5wIBADCCAeAGCSqGSIb3DQEHA6CCAd"
@@ -241,19 +240,6 @@ namespace test {
 
         cards.push_back(card);
         return cards;
-    }
-
-    json getJsonSignModel() {
-        return json({{JsonKey::id, "9e0bb253-879b-4fbd-a504-829faae7e958"},
-                     {JsonKey::createdAt, "2015-12-22T07:03:42+0000"},
-                     {JsonKey::signerCardId, "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c"},
-                     {JsonKey::signedCardId, "9ab9d4a4-0440-499f-bdc6-f99c83f900dd"},
-                     {JsonKey::signedDigest, kSignedDigest}});
-    }
-
-    SignModel getSignModel() {
-        return SignModel("9e0bb253-879b-4fbd-a504-829faae7e958", "2015-12-22T07:03:42+0000",
-                         "84a66d5b-a6c7-45e9-b87b-06d5ac53ed2c", "9ab9d4a4-0440-499f-bdc6-f99c83f900dd", kSignedDigest);
     }
 
     json getJsonPrivateKey() {

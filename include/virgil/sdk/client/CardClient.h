@@ -44,7 +44,6 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/models/CardModel.h>
 #include <virgil/sdk/dto/ValidatedIdentity.h>
-#include <virgil/sdk/models/SignModel.h>
 #include <virgil/sdk/client/Client.h>
 
 namespace virgil {
@@ -69,14 +68,12 @@ namespace sdk {
              * @param publicKey - Public Key that was generated locally
              * @param credentials - Private Key + Private Key password
              * @param customData - the custom data
-             * @param toBeSignedCards - the map<cardId, cardHash> of hashes of card that need to sign
              * @return Created Virgil Card
              */
             virgil::sdk::models::CardModel
             create(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity,
                    const virgil::crypto::VirgilByteArray& publicKey, const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>(),
-                   const std::map<std::string, std::string>& toBeSignedCards = std::map<std::string, std::string>());
+                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
             /**
              * @brief Create validated Virgil Card entity attached to known public key
              *
@@ -84,14 +81,12 @@ namespace sdk {
              * @param publicKeyId - Public Key identifier
              * @param credentials - Private Key + Private Key password
              * @param customData - the custom data
-             * @param toBeSignedCards - the map<cardId, cardHash> of hashes of card that need to sign
              * @return Created Virgil Card
              */
             virgil::sdk::models::CardModel
             create(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity, const std::string& publicKeyId,
                    const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>(),
-                   const std::map<std::string, std::string>& toBeSignedCards = std::map<std::string, std::string>());
+                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
             /**
              * @brief Creates not validated Virgil Card entity
              *
@@ -99,14 +94,12 @@ namespace sdk {
              * @param publicKey - Public Key that was generated locally
              * @param credentials - Private Key + Private Key password
              * @param customData - the custom data
-             * @param toBeSignedCards - the map<cardId, cardHash> of hashes of card that need to sign.
              * @return Created Virgil Card
              */
             virgil::sdk::models::CardModel
             create(const virgil::sdk::dto::Identity& identity, const virgil::crypto::VirgilByteArray& publicKey,
                    const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>(),
-                   const std::map<std::string, std::string>& toBeSignedCards = std::map<std::string, std::string>());
+                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
             /**
              * @brief Creates not validated Virgil Card entity attached to known public key
              *
@@ -114,41 +107,12 @@ namespace sdk {
              * @param publicKeyId - Public Key that was generated locally
              * @param credentials - Private Key + Private Key password
              * @param customData - the custom data
-             * @param toBeSignedCards - the map<cardId, cardHash> of hashes of card that need to sign
              * @return Created Virgil Card
              */
             virgil::sdk::models::CardModel
             create(const virgil::sdk::dto::Identity& identity, const std::string& publicKeyId,
                    const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>(),
-                   const std::map<std::string, std::string>& toBeSignedCards = std::map<std::string, std::string>());
-            /**
-             * @brief Sign another Virgil Card
-             *
-             * @details Signs another Virgil Card addressed in the request
-             *          to share the information for the signed Virgil Card
-             *
-             * @param toBeSignedCardId - identifier of the Virgil Card that will be signed
-             * @param toBeSignedCardHash - hash of the Virgil Card that will be signed
-             * @param signerCardId - identifier of the signer's Virgil Card
-             * @param signerCredentials - signer's Private Key that is connected to the signer's Virgil Card
-             * @return Virgil Card Sign
-             */
-            virgil::sdk::models::SignModel sign(const std::string& toBeSignedCardId,
-                                                const std::string& toBeSignedCardHash, const std::string& signerCardId,
-                                                const Credentials& signerCredentials);
-            /**
-             * @brief Remove sign from another Virgil Card
-             *
-             * @details Discard chages made during @link sign() @endlink step.
-             *
-             * @param signedCardId - identifier of the Virgil Card that was signed
-             * @param signOwnerCardId - identifier of the Virgil Card that was used for sign
-             * @param signOwnerCredentials - signer's Private Key that is connected to the Virgil Card,
-             *                               that was used for sign
-             */
-            void unsign(const std::string& signedCardId, const std::string& signOwnerCardId,
-                        const virgil::sdk::Credentials& signOwnerCredentials);
+                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
             /**
              * @brief Performs the search of Virgil Cards
              *
@@ -214,12 +178,10 @@ namespace sdk {
              *
              * @param credentials - Private Key + Private Key password
              * @param jsonPayload - json body
-             * @param toBeSignedCards - the map of hashes of card that need to sign
              * @return Created Virgil Card
              */
             virgil::sdk::models::CardModel create(const virgil::sdk::Credentials& credentials,
-                                                  const std::string& payload,
-                                                  const std::map<std::string, std::string>& toBeSignedCards);
+                                                  const std::string& payload);
         };
     }
 }

@@ -54,14 +54,6 @@ std::string CardEndpointUri::searchApp() {
     return "/v3/virgil-card/actions/search/app";
 }
 
-std::string CardEndpointUri::sign(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId + "/actions/sign";
-}
-
-std::string CardEndpointUri::unsign(const std::string& cardId) {
-    return "/v3/virgil-card/" + cardId + "/actions/unsign";
-}
-
 std::string CardEndpointUri::revoke(const std::string& cardId) {
     return "/v3/virgil-card/" + cardId;
 }
