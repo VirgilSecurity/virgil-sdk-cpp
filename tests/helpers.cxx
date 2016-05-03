@@ -134,14 +134,14 @@ namespace test {
                      {JsonKey::data, {}},
                      {JsonKey::hash, kHash},
                      {JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95"},
+                     {JsonKey::authorizedBy, "com.mycompany.myapp"},
 
                      {JsonKey::identity,
                       {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                        {JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d"},
-                       {JsonKey::authorizedBy, true},
                        {JsonKey::type, "email"},
                        {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"}}},
-                     {JsonKey::authorizedBy, true},
+
                      {JsonKey::publicKey,
                       {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                        {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
@@ -150,9 +150,9 @@ namespace test {
 
     CardModel getCard() {
         return CardModel("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                         IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                         IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000",
                                        "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
-                         std::map<std::string, std::string>(), getPublicKey(), true);
+                         std::map<std::string, std::string>(), getPublicKey(), "com.mycompany.myapp");
     }
 
     json getJsonResponseCards() {
@@ -164,30 +164,29 @@ namespace test {
                         {JsonKey::data, {}},
                         {JsonKey::hash, kHash},
                         {JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95"},
+                        {JsonKey::authorizedBy, "com.mycompany.myapp"},
 
                         {JsonKey::identity,
                          {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                           {JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d"},
-                          {JsonKey::authorizedBy, true},
                           {JsonKey::type, "email"},
                           {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"}}},
-                        {JsonKey::authorizedBy, true},
                         {JsonKey::publicKey,
                          {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                           {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
                           {JsonKey::publicKey, kPublicKeyBase64}}}},
+
                        {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::data, {{"google", "calendar"}, {"test", "draft1"}}},
                         {JsonKey::hash, kHash},
                         {JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95"},
+                        {JsonKey::authorizedBy, "com.mycompany.myapp"},
 
                         {JsonKey::identity,
                          {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                           {JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d"},
-                          {JsonKey::authorizedBy, true},
                           {JsonKey::type, "email"},
                           {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"}}},
-                        {JsonKey::authorizedBy, true},
                         {JsonKey::publicKey,
                          {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                           {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
@@ -199,30 +198,29 @@ namespace test {
                       {JsonKey::data, {}},
                       {JsonKey::hash, kHash},
                       {JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95"},
+                      {JsonKey::authorizedBy, "com.mycompany.myapp"},
 
                       {JsonKey::identity,
                        {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d"},
-                        {JsonKey::authorizedBy, true},
                         {JsonKey::type, "email"},
                         {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"}}},
-                      {JsonKey::authorizedBy, true},
                       {JsonKey::publicKey,
                        {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
                         {JsonKey::publicKey, kPublicKeyBase64}}}},
+
                      {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                       {JsonKey::data, {{"google", "calendar"}, {"test", "draft1"}}},
                       {JsonKey::hash, kHash},
                       {JsonKey::id, "ea14f729-676f-47f1-8cc9-8adbf2a66a95"},
+                      {JsonKey::authorizedBy, "com.mycompany.myapp"},
 
                       {JsonKey::identity,
                        {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::id, "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d"},
-                        {JsonKey::authorizedBy, true},
                         {JsonKey::type, "email"},
                         {JsonKey::value, "alice.cpp.virgilsecurity@mailinator.com"}}},
-                      {JsonKey::authorizedBy, true},
                       {JsonKey::publicKey,
                        {{JsonKey::createdAt, "2016-02-08T14:33:08+0000"},
                         {JsonKey::id, "ce8abd8c-2ff3-4226-b793-26051aebbda7"},
@@ -234,9 +232,9 @@ namespace test {
         cards.push_back(getCard());
 
         CardModel card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                       IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000", true,
+                       IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000",
                                      "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
-                       {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), true);
+                       {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), "com.mycompany.myapp");
 
         cards.push_back(card);
         return cards;
