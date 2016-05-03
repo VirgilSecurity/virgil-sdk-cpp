@@ -120,10 +120,10 @@ namespace sdk {
              */
             static const std::string data;
             /**
-             * @property includeUnconfirmed
+             * @property includeUnauthorized
              * @brief Json Key that points boolean value which tell to include unconfirmed Virgil Cards, or not
              */
-            static const std::string includeUnconfirmed;
+            static const std::string includeUnauthorized;
             /**
              * @property error
              * @brief Json Key that points Error object
