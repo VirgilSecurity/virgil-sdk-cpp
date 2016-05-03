@@ -74,7 +74,7 @@ namespace sdk {
              * @param type - identity type
              */
             IdentityModel(
-                const std::string& id, const std::string& createdAt, const bool authorizedBy, const std::string& value,
+                const std::string& id, const std::string& createdAt, const std::string& value,
                 const virgil::sdk::models::IdentityModel::Type& type = virgil::sdk::models::IdentityModel::Type::None);
             /**
              * @brief Return unique object identifier defined by service
@@ -84,10 +84,6 @@ namespace sdk {
              * @brief Return cretion date timestamp defined by service
              */
             const std::string getCreatedAt() const;
-            /**
-             * @brief Return true, if identity is confirmed by user, false - otherwise
-             */
-            bool authorizedBy() const;
             /**
              * @brief Return identity value
              */
@@ -100,7 +96,6 @@ namespace sdk {
         private:
             std::string id_;
             std::string createdAt_;
-            bool authorizedBy_ = false;
             std::string value_;
             IdentityModel::Type type_ = IdentityModel::Type::None;
         };
@@ -120,8 +115,7 @@ namespace sdk {
          */
         inline bool operator==(const IdentityModel& left, const IdentityModel& right) {
             return left.getId() == right.getId() && left.getCreatedAt() == right.getCreatedAt() &&
-                   left.authorizedBy() == right.authorizedBy() && left.getValue() == right.getValue() &&
-                   left.getType() == right.getType();
+                   left.getValue() == right.getValue() && left.getType() == right.getType();
         }
 
         /**
