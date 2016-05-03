@@ -66,10 +66,9 @@ namespace sdk {
 
             VIRGIL_CARD_CREATE,     ///< POST /virgil-card
             VIRGIL_CARD_GET,        ///< GET /virgil-card/{virgil-card-id}
-            VIRGIL_CARD_SIGN,       ///< POST /virgil-card/{virgil-card-id}/actions/sign
-            VIRGIL_CARD_UNSIGN,     ///< POST /virgil-card/{virgil-card-id}/actions/unsign
             VIRGIL_CARD_SEARCH,     ///< POST /virgil-card/actions/search
-            VIRGIL_CARD_SEARCH_APP, ///< POST /virgil-card/actions/search/app
+            VIRGIL_CARD_SEARCH_GLOBAL, ///< POST /virgil-card/actions/search/app
+            VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL, ///< POST /virgil-card/actions/search/email
             VIRGIL_CARD_REVOKE,     ///< DELETE /virgil-card/{virgil-card-id}
 
             PRIVATE_KEY_ADD, ///< POST /private-key
