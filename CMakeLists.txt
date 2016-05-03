@@ -147,7 +147,6 @@ if (INSTALL_EXT_LIBS)
 endif (INSTALL_EXT_LIBS)
 
 install (DIRECTORY "include/" DESTINATION "include"
-     PATTERN "util" EXCLUDE
      PATTERN "endpoints" EXCLUDE
      PATTERN "ClientConnection.h" EXCLUDE
      PATTERN "Headers.h" EXCLUDE
