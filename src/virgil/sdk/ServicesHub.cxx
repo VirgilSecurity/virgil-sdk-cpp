@@ -73,7 +73,7 @@ namespace sdk {
 }
 
 static CardModel getServiceCard(const CardClient& cardClient, const std::string& serviceApplicationId) {
-    auto cards = cardClient.searchApp(serviceApplicationId, true);
+    auto cards = cardClient.searchGlobal(serviceApplicationId, true);
     if (!cards.empty()) {
         return cards.front();
     } else {

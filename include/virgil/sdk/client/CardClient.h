@@ -114,16 +114,14 @@ namespace sdk {
                    const virgil::sdk::Credentials& credentials,
                    const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
             /**
-             * @brief Performs the search of Virgil Cards
+             * @brief Performs the search of a private application's Virgil Cards
              *
              * @param identity - identity to be searched
-             * @param includeUnconfirmed - specifies whether an unconfirmed Virgil Cards should be returned
-             * @param relations - the list of Virgil Cards identifiers to perform the search within,
-             *                    another word use this parameter to filter returned cards by signers
+             * @param includeUnauthorized - specifies whether an unconfirmed Virgil Cards should be returned
              * @return Found Virgil Cards
              */
-            std::vector<virgil::sdk::models::CardModel>
-            search(const virgil::sdk::dto::Identity& identity, const bool includeUnconfirmed);
+            std::vector<virgil::sdk::models::CardModel> search(const virgil::sdk::dto::Identity& identity,
+                                                               const bool includeUnauthorized);
             /**
              * @brief Performs the global search fot the applications' Virgil Cards
              *
@@ -133,8 +131,15 @@ namespace sdk {
              * @param skipVerification - skip verification of the service response;
              * @return Found Virgil Cards associated with application identity
              */
-            std::vector<virgil::sdk::models::CardModel> searchApp(const std::string& applicationIdentity,
-                                                                  bool skipVerification = false) const;
+            std::vector<virgil::sdk::models::CardModel> searchGlobal(const std::string& applicationIdentity,
+                                                                     bool skipVerification = false) const;
+            /**
+             * @brief Performs the global search for the emails' Virgil Cards
+             *
+             * @param email - email to be searched
+             * @return Found Virgil Cards
+             */
+            std::vector<virgil::sdk::models::CardModel> searchGlobalbyEmail(const std::string& email);
             /**
              * @brief Revoke validated the Virgil Card and all associated data
              *

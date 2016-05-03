@@ -75,7 +75,7 @@ const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 
 CardClient::CardClient(const std::string& accessToken, const std::string& baseServiceUri)
         : Client(accessToken, baseServiceUri, [this]() -> CardModel {
-              auto cards = this->searchApp(kKeyServiceAppId, true);
+              auto cards = this->searchGlobal(kKeyServiceAppId, true);
               if (!cards.empty()) {
                   return cards.front();
               } else {
@@ -128,10 +128,10 @@ CardModel CardClient::create(const Identity& identity, const std::string& public
     return this->create(credentials, payload.dump());
 }
 
-std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnconfirmed) {
+std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnauthorized) {
     json payload = {{JsonKey::value, identity.getValue()},
                     {JsonKey::type, virgil::sdk::models::toString(identity.getType())},
-                    {JsonKey::includeUnconfirmed, includeUnconfirmed}};
+                    {JsonKey::includeUnauthorized, includeUnauthorized}};
 
     Request request = Request()
                           .post()
@@ -148,23 +148,38 @@ std::vector<CardModel> CardClient::search(const Identity& identity, const bool i
     return cards;
 }
 
-std::vector<CardModel> CardClient::searchApp(const std::string& applicationIdentity, bool skipVerification) const {
+std::vector<CardModel> CardClient::searchGlobal(const std::string& applicationIdentity, bool skipVerification) const {
     json payload = {{JsonKey::value, applicationIdentity}};
     Request request = Request()
                           .post()
                           .baseAddress(this->getBaseServiceUri())
-                          .endpoint(CardEndpointUri::searchApp())
+                          .endpoint(CardEndpointUri::searchGlobal())
                           .body(payload.dump());
 
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_APP);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_GLOBAL);
     if (!skipVerification) {
         this->verifyResponse(response);
     }
 
     std::vector<CardModel> cards = virgil::sdk::io::cardsFromJson(response.body());
+    return cards;
+}
 
+std::vector<virgil::sdk::models::CardModel> CardClient::searchGlobalbyEmail(const std::string& email) {
+    json payload = {{JsonKey::value, email}};
+    Request request = Request()
+                          .post()
+                          .baseAddress(this->getBaseServiceUri())
+                          .endpoint(CardEndpointUri::searchGlobalbyEmail())
+                          .body(payload.dump());
+
+    ClientConnection connection(this->getAccessToken());
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL);
+
+    std::vector<CardModel> cards = virgil::sdk::io::cardsFromJson(response.body());
     return cards;
 }
 
