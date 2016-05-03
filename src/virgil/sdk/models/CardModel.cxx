@@ -45,18 +45,18 @@ using virgil::sdk::models::PublicKeyModel;
 
 CardModel::CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
                      const IdentityModel& cardIdentity, const std::map<std::string, std::string>& data,
-                     const PublicKeyModel& publicKey, const bool confirmed)
+                     const PublicKeyModel& publicKey, const std::string& authorizedBy)
         : id_(id),
           createdAt_(createdAt),
           hash_(hash),
           cardIdentity_(cardIdentity),
           data_(data),
           publicKey_(publicKey),
-          confirmed_(confirmed) {
+          authorizedBy_(authorizedBy) {
 }
 
-bool CardModel::authorizedBy() const {
-    return confirmed_;
+std::string CardModel::authorizedBy() const {
+    return authorizedBy_;
 }
 
 const std::string CardModel::getId() const {

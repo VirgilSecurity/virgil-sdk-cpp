@@ -64,12 +64,11 @@ namespace sdk {
              * @param cardIdentity - identity associated with Virgil Card
              * @param data - custom data
              * @param publicKey - Public Key connected to the Virgil Card
-             * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
              */
             CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
                       const virgil::sdk::models::IdentityModel& cardIdentity,
                       const std::map<std::string, std::string>& data,
-                      const virgil::sdk::models::PublicKeyModel& publicKey, const bool confirmed);
+                      const virgil::sdk::models::PublicKeyModel& publicKey, const std::string& authorizedBy);
             /**
              * @brief Return Virgil Card identifier
              */
@@ -98,7 +97,7 @@ namespace sdk {
             /**
              * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
              */
-            bool authorizedBy() const;
+            std::string authorizedBy() const;
 
         private:
             std::string id_;
@@ -107,7 +106,7 @@ namespace sdk {
             virgil::sdk::models::IdentityModel cardIdentity_;
             std::map<std::string, std::string> data_;
             virgil::sdk::models::PublicKeyModel publicKey_;
-            bool confirmed_ = false;
+            std::string authorizedBy_;
         };
         /**
          * @brief Compare Virgil Cards for equality

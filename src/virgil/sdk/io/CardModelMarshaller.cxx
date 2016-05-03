@@ -89,7 +89,6 @@ namespace sdk {
                         {JsonKey::id, cardIdentity.getId()},
                         {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
                         {JsonKey::value, cardIdentity.getValue()},
-                        {JsonKey::authorizedBy, cardIdentity.authorizedBy()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (card.getData().empty()) {
@@ -110,13 +109,15 @@ namespace sdk {
                 try {
                     json jsonCard = json::parse(jsonString);
 
-                    bool cardConfirmed = jsonCard[JsonKey::authorizedBy];
                     std::string cardId = jsonCard[JsonKey::id];
                     std::string cardCreatedAt = jsonCard[JsonKey::createdAt];
                     std::string cardHash = jsonCard[JsonKey::hash];
+                    std::string cardAuthorizedBy;
+                    if (jsonCard[JsonKey::authorizedBy] != nullptr) {
+                        cardAuthorizedBy = jsonCard[JsonKey::authorizedBy];
+                    }
 
                     json jsonCardIdentity = jsonCard[JsonKey::identity];
-                    bool identityConfirmed = jsonCardIdentity[JsonKey::authorizedBy];
                     std::string identityId = jsonCardIdentity[JsonKey::id];
                     std::string identityCreatedAt = jsonCardIdentity[JsonKey::createdAt];
 
@@ -124,7 +125,7 @@ namespace sdk {
                     std::string identityValueString = jsonCardIdentity[JsonKey::type];
                     IdentityModel::Type identityType = fromString(identityValueString);
 
-                    IdentityModel cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
+                    IdentityModel cardIdentity(identityId, identityCreatedAt, identityValue,
                                                identityType);
 
                     json jsonCustomData = jsonCard[JsonKey::data];
@@ -145,7 +146,7 @@ namespace sdk {
                     PublicKeyModel publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
                     return CardModel(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey,
-                                     cardConfirmed);
+                                     cardAuthorizedBy);
 
                 } catch (std::exception& exception) {
                     throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CardModel>::fromJson ") +
