@@ -50,8 +50,12 @@ std::string CardEndpointUri::search() {
     return "/v3/virgil-card/actions/search";
 }
 
-std::string CardEndpointUri::searchApp() {
+std::string CardEndpointUri::searchGlobal() {
     return "/v3/virgil-card/actions/search/app";
+}
+
+std::string CardEndpointUri::searchGlobalbyEmail() {
+  return "/v3/virgil-card/actions/search/email";
 }
 
 std::string CardEndpointUri::revoke(const std::string& cardId) {
