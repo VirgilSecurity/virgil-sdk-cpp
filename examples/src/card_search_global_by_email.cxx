@@ -40,9 +40,10 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/util/ValidationTokenGenerator.h>
+#include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -54,38 +55,19 @@ const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA
                                         "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
                                         "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
 
-const std::string APPLICATION_PASSWORD = "IDn)k\\0vT}CXM3V";
-
 int main(int argc, char** argv) {
-    if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <obfuscator_identity>" + " <path_app_private_key>"
-                  << std::endl;
+    if (argc < 2) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <email> " << std::endl;
         return 1;
     }
 
     try {
-        std::string obfuscatorIdentityValue = argv[1];
-        std::string pathAppPrivateKey = argv[2];
-
-        std::cout << "Prepare application private key file: " << pathAppPrivateKey << std::endl;
-        std::cout << "Read application private key..." << std::endl;
-        std::ifstream inAppPrivateKeyFile(pathAppPrivateKey, std::ios::in | std::ios::binary);
-        if (!inAppPrivateKeyFile) {
-            throw std::runtime_error("can not read private key: " + pathAppPrivateKey);
-        }
-        vcrypto::VirgilByteArray appPrivateKeyByteArray;
-        std::copy(std::istreambuf_iterator<char>(inAppPrivateKeyFile), std::istreambuf_iterator<char>(),
-                  std::back_inserter(appPrivateKeyByteArray));
-
-        vsdk::Credentials appCredentials(appPrivateKeyByteArray, virgil::crypto::str2bytes(APPLICATION_PASSWORD));
-        std::string identityType = "email";
-
-        std::cout << "Generatin a validation token " << std::endl;
-        std::string validationToken =
-            vsdk::util::ValidationTokenGenerator::generate(obfuscatorIdentityValue, identityType, appCredentials);
-
-        std::cout << "The validation token generated " << std::endl;
-        std::cout << validationToken << std::endl;
+        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        std::cout << "Search for Application Cards" << std::endl;
+        std::string email = argv[1];
+        std::vector<vsdk::models::CardModel> allAppCards = servicesHub.card().searchGlobalbyEmail(email);
+        std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
+        std::cout << jsonAllAppCards << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
