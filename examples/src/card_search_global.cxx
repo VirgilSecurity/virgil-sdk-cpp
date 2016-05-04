@@ -68,7 +68,8 @@ int main(int argc, char** argv) {
 
         std::string appName = "com.virgilsecurity.";
         appName += argv[1];
-        std::vector<vsdk::models::CardModel> allAppCards = servicesHub.card().searchGlobal(appName);
+        std::vector<vsdk::models::CardModel> allAppCards =
+            servicesHub.card().searchGlobal(appName, vsdk::dto::IdentityType::Application);
         std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
         std::cout << jsonAllAppCards << std::endl;
 

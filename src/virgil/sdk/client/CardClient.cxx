@@ -66,6 +66,7 @@ using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::IdentityType;
 using virgil::sdk::dto::Identity;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
@@ -74,7 +75,7 @@ const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 
 CardClient::CardClient(const std::string& accessToken, const std::string& baseServiceUri)
         : Client(accessToken, baseServiceUri, [this]() -> CardModel {
-              auto cards = this->searchGlobal(kKeyServiceAppId, true);
+              auto cards = this->searchGlobal(kKeyServiceAppId, IdentityType::Application, true);
               if (!cards.empty()) {
                   return cards.front();
               } else {
@@ -109,9 +110,8 @@ CardModel CardClient::create(const ValidatedIdentity& validatedIdentity, const s
 
 CardModel CardClient::create(const Identity& identity, const VirgilByteArray& publicKey, const Credentials& credentials,
                              const std::map<std::string, std::string>& customData) {
-    json payload = {
-        {JsonKey::publicKey, VirgilBase64::encode(publicKey)},
-        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
+    json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
+                    {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
     json jsonCustomData(customData);
     payload[JsonKey::data] = jsonCustomData;
     return this->create(credentials, payload.dump());
@@ -119,18 +119,17 @@ CardModel CardClient::create(const Identity& identity, const VirgilByteArray& pu
 
 CardModel CardClient::create(const Identity& identity, const std::string& publicKeyId, const Credentials& credentials,
                              const std::map<std::string, std::string>& customData) {
-    json payload = {
-        {JsonKey::publicKeyId, publicKeyId},
-        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
+    json payload = {{JsonKey::publicKeyId, publicKeyId},
+                    {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
     json jsonCustomData(customData);
     payload[JsonKey::data] = jsonCustomData;
     return this->create(credentials, payload.dump());
 }
 
-std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnauthorized) {
-    json payload = {{JsonKey::value, identity.getValue()},
-                    {JsonKey::type, identity.getType()},
-                    {JsonKey::includeUnauthorized, includeUnauthorized}};
+std::vector<CardModel> CardClient::search(const std::string& identityValue, const std::string& identityType,
+                                          const bool includeUnauthorized) {
+    json payload = {
+        {JsonKey::value, identityValue}, {JsonKey::type, identityType}, {JsonKey::includeUnauthorized, includeUnauthorized}};
 
     Request request = Request()
                           .post()
@@ -147,36 +146,28 @@ std::vector<CardModel> CardClient::search(const Identity& identity, const bool i
     return cards;
 }
 
-std::vector<CardModel> CardClient::searchGlobal(const std::string& applicationIdentity, bool skipVerification) const {
-    json payload = {{JsonKey::value, applicationIdentity}};
-    Request request = Request()
-                          .post()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(CardEndpointUri::searchGlobal())
-                          .body(payload.dump());
+std::vector<CardModel> CardClient::searchGlobal(const std::string& identityValue, const IdentityType& identityType,
+                                                bool skipVerification) const {
+    json payload = {{JsonKey::value, identityValue}};
+    Request request = Request().post().baseAddress(this->getBaseServiceUri()).body(payload.dump());
+    if (identityType == IdentityType::Application) {
+        request.endpoint(CardEndpointUri::searchGlobal());
+    } else {
+      // identityType == IdentityType::Email
+        request.endpoint(CardEndpointUri::searchGlobalbyEmail());
+    }
 
     ClientConnection connection(this->getAccessToken());
     Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_GLOBAL);
+
+    Error::Action action = identityType == IdentityType::Application
+                               ? Error::Action::VIRGIL_CARD_SEARCH_GLOBAL
+                               : Error::Action::VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL;
+    connection.checkResponseError(response, action);
+
     if (!skipVerification) {
         this->verifyResponse(response);
     }
-
-    std::vector<CardModel> cards = virgil::sdk::io::cardsFromJson(response.body());
-    return cards;
-}
-
-std::vector<virgil::sdk::models::CardModel> CardClient::searchGlobalbyEmail(const std::string& email) {
-    json payload = {{JsonKey::value, email}};
-    Request request = Request()
-                          .post()
-                          .baseAddress(this->getBaseServiceUri())
-                          .endpoint(CardEndpointUri::searchGlobalbyEmail())
-                          .body(payload.dump());
-
-    ClientConnection connection(this->getAccessToken());
-    Response response = connection.send(request);
-    connection.checkResponseError(response, Error::Action::VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL);
 
     std::vector<CardModel> cards = virgil::sdk::io::cardsFromJson(response.body());
     return cards;
@@ -233,8 +224,7 @@ void CardClient::revoke(const std::string& cardId, const ValidatedIdentity& vali
 }
 
 void CardClient::revoke(const std::string& cardId, const Identity& identity, const Credentials& credentials) {
-    json payload = {
-        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
+    json payload = {{JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
 
     Request request = Request()
                           .del()

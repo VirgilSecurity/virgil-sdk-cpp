@@ -34,6 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_DTO_IDENTITY_TYPE_H
+#define VIRGIL_SDK_DTO_IDENTITY_TYPE_H
+
 #include <string>
 
 namespace virgil {
@@ -60,3 +63,5 @@ namespace sdk {
     }
 }
 }
+
+#endif /* VIRGIL_SDK_DTO_IDENTITY_TYPE_H */

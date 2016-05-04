@@ -65,7 +65,8 @@ int main(int argc, char** argv) {
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
         std::cout << "Search for Application Cards" << std::endl;
         std::string email = argv[1];
-        std::vector<vsdk::models::CardModel> allAppCards = servicesHub.card().searchGlobalbyEmail(email);
+        std::vector<vsdk::models::CardModel> allAppCards =
+            servicesHub.card().searchGlobal(email, vsdk::dto::IdentityType::Email);
         std::string jsonAllAppCards = virgil::sdk::io::cardsToJson(allAppCards, 4);
         std::cout << jsonAllAppCards << std::endl;
 

@@ -45,6 +45,7 @@
 #include <virgil/sdk/client/PublicKeyClient.h>
 #include <virgil/sdk/client/CardClient.h>
 #include <virgil/sdk/ServiceUri.h>
+#include <virgil/sdk/dto/IdentityType.h>
 
 using virgil::crypto::VirgilByteArray;
 
@@ -55,6 +56,7 @@ using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::PrivateKeyClient;
 using virgil::sdk::client::PublicKeyClient;
 using virgil::sdk::client::CardClient;
+using virgil::sdk::dto::IdentityType;
 
 const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 const std::string kIdentityServiceAppId = "com.virgilsecurity.identity";
@@ -73,7 +75,7 @@ namespace sdk {
 }
 
 static CardModel getServiceCard(const CardClient& cardClient, const std::string& serviceApplicationId) {
-    auto cards = cardClient.searchGlobal(serviceApplicationId, true);
+    auto cards = cardClient.searchGlobal(serviceApplicationId, IdentityType::Application, true);
     if (!cards.empty()) {
         return cards.front();
     } else {

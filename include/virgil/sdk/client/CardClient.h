@@ -44,6 +44,7 @@
 #include <virgil/sdk/Credentials.h>
 #include <virgil/sdk/models/CardModel.h>
 #include <virgil/sdk/dto/ValidatedIdentity.h>
+#include <virgil/sdk/dto/IdentityType.h>
 #include <virgil/sdk/client/Client.h>
 
 namespace virgil {
@@ -113,33 +114,28 @@ namespace sdk {
             create(const virgil::sdk::dto::Identity& identity, const std::string& publicKeyId,
                    const virgil::sdk::Credentials& credentials,
                    const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
+
             /**
              * @brief Performs the search of a private application's Virgil Cards
              *
-             * @param identity - identity to be searched
+             * @param identityValue - identity to be searched
              * @param includeUnauthorized - specifies whether an unconfirmed Virgil Cards should be returned
              * @return Found Virgil Cards
              */
-            std::vector<virgil::sdk::models::CardModel> search(const virgil::sdk::dto::Identity& identity,
-                                                               const bool includeUnauthorized);
+            std::vector<virgil::sdk::models::CardModel>
+            search(const std::string& identityValue, const std::string& identityType,
+                  const bool includeUnauthorized = false);
             /**
              * @brief Performs the global search fot the applications' Virgil Cards
              *
-             * @param applicationIdentity - application identity value, i.e. "com.virgilsecurity.keys",
-             *                              or "com.virgilsecurity.*" to retreive Virgil Cards,
-             *                              associated with some organization
+             * @param identityValue - identity to be searched
+             * @param identityType - the type of identifier, Application or Email
              * @param skipVerification - skip verification of the service response;
-             * @return Found Virgil Cards associated with application identity
+             * @return Found Virgil Cards associated with application or email identity
              */
-            std::vector<virgil::sdk::models::CardModel> searchGlobal(const std::string& applicationIdentity,
+            std::vector<virgil::sdk::models::CardModel> searchGlobal(const std::string& identityValue,
+                                                                     const virgil::sdk::dto::IdentityType& identityType,
                                                                      bool skipVerification = false) const;
-            /**
-             * @brief Performs the global search for the emails' Virgil Cards
-             *
-             * @param email - email to be searched
-             * @return Found Virgil Cards
-             */
-            std::vector<virgil::sdk::models::CardModel> searchGlobalbyEmail(const std::string& email);
             /**
              * @brief Revoke validated the Virgil Card and all associated data
              *

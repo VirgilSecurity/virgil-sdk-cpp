@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
         vsdk::dto::Identity identity(userEmail, "email");
         std::cout << "Search for Cards" << std::endl;
         std::vector<vsdk::models::CardModel> foundCards;
-        foundCards = servicesHub.card().search(identity, includeUnauthorized);
+        foundCards = servicesHub.card().search(identity.getValue(), identity.getType(), includeUnauthorized);
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << std::endl;
 

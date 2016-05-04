@@ -69,9 +69,8 @@ int main(int argc, char** argv) {
 
         std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..." << std::endl;
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        vsdk::dto::Identity identity(userEmail, "email");
-        std::vector<vsdk::models::CardModel> recipientCards = servicesHub.card().search(identity, true);
+        std::vector<vsdk::models::CardModel> recipientCards =
+            servicesHub.card().searchGlobal(userEmail, vsdk::dto::IdentityType::Email);
 
         vcrypto::VirgilStreamCipher cipher;
         std::cout << "Add recipient..." << std::endl;
