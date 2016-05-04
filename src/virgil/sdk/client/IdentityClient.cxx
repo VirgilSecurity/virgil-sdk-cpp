@@ -72,7 +72,7 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
 std::string IdentityClient::verify(const Identity& identity) {
-    json payload = {{JsonKey::type, virgil::sdk::models::toString(identity.getType())},
+    json payload = {{JsonKey::type, identity.getType()},
                     {JsonKey::value, identity.getValue()}};
 
     Request request = Request()
@@ -113,7 +113,7 @@ ValidatedIdentity IdentityClient::confirm(const std::string& actionId, const std
 }
 
 bool IdentityClient::validate(const ValidatedIdentity& validatedIdentity) {
-    json payload = {{JsonKey::type, virgil::sdk::models::toString(validatedIdentity.getType())},
+    json payload = {{JsonKey::type, validatedIdentity.getType()},
                     {JsonKey::value, validatedIdentity.getValue()},
                     {JsonKey::validationToken, validatedIdentity.getToken()}};
 

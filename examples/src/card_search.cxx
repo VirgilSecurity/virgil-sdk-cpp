@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
         }
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::Identity identity(userEmail, "email");
         std::cout << "Search for Cards" << std::endl;
         std::vector<vsdk::models::CardModel> foundCards;
         foundCards = servicesHub.card().search(identity, includeUnauthorized);

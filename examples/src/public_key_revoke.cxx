@@ -74,8 +74,8 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::dto::ValidatedIdentity validatedIdentity1(token1, userEmail, vsdk::models::IdentityModel::Type::Email);
-        vsdk::dto::ValidatedIdentity validatedIdentity2(token2, userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::ValidatedIdentity validatedIdentity1(vsdk::dto::Identity(userEmail, "email"), token1);
+        vsdk::dto::ValidatedIdentity validatedIdentity2(vsdk::dto::Identity(userEmail, "email"), token2);
 
         std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;

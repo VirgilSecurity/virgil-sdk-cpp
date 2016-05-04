@@ -34,44 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <stdexcept>
-#include <string>
+#include <virgil/sdk/dto/IdentityType.h>
 
-#include <virgil/sdk/ServicesHub.h>
+using virgil::sdk::dto::IdentityType;
 
-namespace vsdk = virgil::sdk;
-namespace vcrypto = virgil::crypto;
-
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
-        return 1;
+std::string virgil::sdk::dto::toString(const IdentityType& identityType) {
+    if (identityType == IdentityType::Email) {
+        return std::string("email");
+    } else if (identityType == IdentityType::Application) {
+        return std::string("application");
+    } else {
+        return std::string();
     }
+}
 
-    try {
-        std::string userEmail = argv[1];
-
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        std::cout << "Verify the Identity..." << std::endl;
-        vsdk::dto::Identity identity(userEmail, "email");
-        std::string actionId = servicesHub.identity().verify(identity);
-
-        std::cout << "action_id " << std::endl;
-        std::cout << actionId << std::endl;
-
-    } catch (std::exception& exception) {
-        std::cerr << exception.what() << std::endl;
-        return 1;
+IdentityType virgil::sdk::dto::fromString(const std::string& identityType) {
+    if (identityType == "email") {
+        return IdentityType::Email;
+    } else if (identityType == "application") {
+        return IdentityType::Application;
+    } else {
+        return IdentityType::None;
     }
-
-    return 0;
 }

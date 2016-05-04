@@ -115,7 +115,7 @@ namespace test {
     }
 
     ValidatedIdentity getValidatedIdentity() {
-        return ValidatedIdentity(kToken, "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email);
+        return ValidatedIdentity(Identity("alice.cpp.virgilsecurity@mailinator.com", "email"), kToken);
     }
 
     json getJsonPublicKey() {
@@ -150,8 +150,8 @@ namespace test {
 
     CardModel getCard() {
         return CardModel("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                         IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000",
-                                       "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
+                         IdentityModel(Identity("alice.cpp.virgilsecurity@mailinator.com", "email"),
+                                       "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000"),
                          std::map<std::string, std::string>(), getPublicKey(), "com.mycompany.myapp");
     }
 
@@ -232,8 +232,8 @@ namespace test {
         cards.push_back(getCard());
 
         CardModel card("ea14f729-676f-47f1-8cc9-8adbf2a66a95", "2016-02-08T14:33:08+0000", kHash,
-                       IdentityModel("cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000",
-                                     "alice.cpp.virgilsecurity@mailinator.com", IdentityModel::Type::Email),
+                       IdentityModel(Identity("alice.cpp.virgilsecurity@mailinator.com", "email"),
+                                     "cc265059-6f0d-4bd0-945c-0c6e08eb9e0d", "2016-02-08T14:33:08+0000"),
                        {{"google", "calendar"}, {"test", "draft1"}}, getPublicKey(), "com.mycompany.myapp");
 
         cards.push_back(card);

@@ -67,7 +67,6 @@ using virgil::sdk::io::Marshaller;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::toString;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
@@ -88,7 +87,7 @@ CardModel CardClient::create(const ValidatedIdentity& validatedIdentity, const V
                              const Credentials& credentials, const std::map<std::string, std::string>& customData) {
     json payload = {{JsonKey::publicKey, VirgilBase64::encode(publicKey)},
                     {JsonKey::identity,
-                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                     {{JsonKey::type, validatedIdentity.getType()},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}}};
     json jsonCustomData(customData);
@@ -100,7 +99,7 @@ CardModel CardClient::create(const ValidatedIdentity& validatedIdentity, const s
                              const Credentials& credentials, const std::map<std::string, std::string>& customData) {
     json payload = {{JsonKey::publicKeyId, publicKeyId},
                     {JsonKey::identity,
-                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                     {{JsonKey::type, validatedIdentity.getType()},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}}};
     json jsonCustomData(customData);
@@ -112,7 +111,7 @@ CardModel CardClient::create(const Identity& identity, const VirgilByteArray& pu
                              const std::map<std::string, std::string>& customData) {
     json payload = {
         {JsonKey::publicKey, VirgilBase64::encode(publicKey)},
-        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
     json jsonCustomData(customData);
     payload[JsonKey::data] = jsonCustomData;
     return this->create(credentials, payload.dump());
@@ -122,7 +121,7 @@ CardModel CardClient::create(const Identity& identity, const std::string& public
                              const std::map<std::string, std::string>& customData) {
     json payload = {
         {JsonKey::publicKeyId, publicKeyId},
-        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
     json jsonCustomData(customData);
     payload[JsonKey::data] = jsonCustomData;
     return this->create(credentials, payload.dump());
@@ -130,7 +129,7 @@ CardModel CardClient::create(const Identity& identity, const std::string& public
 
 std::vector<CardModel> CardClient::search(const Identity& identity, const bool includeUnauthorized) {
     json payload = {{JsonKey::value, identity.getValue()},
-                    {JsonKey::type, virgil::sdk::models::toString(identity.getType())},
+                    {JsonKey::type, identity.getType()},
                     {JsonKey::includeUnauthorized, includeUnauthorized}};
 
     Request request = Request()
@@ -215,7 +214,7 @@ std::vector<CardModel> CardClient::get(const std::string& publicKeyId, const std
 void CardClient::revoke(const std::string& cardId, const ValidatedIdentity& validatedIdentity,
                         const Credentials& credentials) {
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, toString(validatedIdentity.getType())},
+                     {{JsonKey::type, validatedIdentity.getType()},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}}};
 
@@ -235,7 +234,7 @@ void CardClient::revoke(const std::string& cardId, const ValidatedIdentity& vali
 
 void CardClient::revoke(const std::string& cardId, const Identity& identity, const Credentials& credentials) {
     json payload = {
-        {JsonKey::identity, {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}}}};
+        {JsonKey::identity, {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}}}};
 
     Request request = Request()
                           .del()

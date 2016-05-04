@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::dto::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::ValidatedIdentity validatedIdentity(vsdk::dto::Identity(userEmail, "email"), token);
 
         std::cout << "Prepare private key file: " << pathPrivateKey << std::endl;
         std::cout << "Read private key..." << std::endl;

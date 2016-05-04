@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
 
         vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
 
-        vsdk::dto::ValidatedIdentity validatedIdentity(token, userEmail, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::ValidatedIdentity validatedIdentity(vsdk::dto::Identity(userEmail, "email"), token);
 
         std::cout << "Get a Private Key" << std::endl;
         vsdk::models::PrivateKeyModel privateKey = servicesHub.privateKey().get(cardId, validatedIdentity);

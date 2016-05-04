@@ -34,19 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <virgil/sdk/dto/Identity.h>
 
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::IdentityModel;
 
-Identity::Identity(const std::string& value, const IdentityModel::Type& type) : value_(value), type_(type) {
+Identity::Identity(const std::string& value, const std::string& type) : value_(value), type_(type) {
 }
 
 const std::string Identity::getValue() const {
     return value_;
 }
 
-const IdentityModel::Type Identity::getType() const {
+const std::string Identity::getType() const {
     return type_;
 }

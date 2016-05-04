@@ -47,8 +47,6 @@ using json = nlohmann::json;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::fromString;
-using virgil::sdk::models::toString;
 using virgil::sdk::models::IdentityModel;
 
 using virgil::crypto::foundation::VirgilBase64;
@@ -62,7 +60,7 @@ namespace sdk {
         template <> class Marshaller<ValidatedIdentity> {
         public:
             template <int INDENT = -1> static std::string toJson(const ValidatedIdentity& validatedIdentity) {
-                json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
+                json jsonValidatedIdentity = {{JsonKey::type, validatedIdentity.getType()},
                                               {JsonKey::value, validatedIdentity.getValue()},
                                               {JsonKey::validationToken, validatedIdentity.getToken()}};
 
@@ -71,12 +69,11 @@ namespace sdk {
 
             static ValidatedIdentity fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
-
-                IdentityModel::Type identityType = fromString(typeJson[JsonKey::type]);
                 std::string value = typeJson[JsonKey::value];
+                std::string identityType = typeJson[JsonKey::type];
                 std::string token = typeJson[JsonKey::validationToken];
 
-                return ValidatedIdentity(token, value, identityType);
+                return ValidatedIdentity(Identity(value, identityType), token);
             }
 
         private:

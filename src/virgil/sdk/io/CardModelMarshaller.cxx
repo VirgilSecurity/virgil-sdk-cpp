@@ -60,7 +60,6 @@ using virgil::sdk::dto::Identity;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::models::PublicKeyModel;
-using virgil::sdk::models::fromString;
 
 namespace virgil {
 namespace sdk {
@@ -87,7 +86,7 @@ namespace sdk {
                     IdentityModel cardIdentity = card.getCardIdentity();
                     jsonCard[JsonKey::identity] = {
                         {JsonKey::id, cardIdentity.getId()},
-                        {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
+                        {JsonKey::type, cardIdentity.getType()},
                         {JsonKey::value, cardIdentity.getValue()},
                         {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
@@ -118,15 +117,11 @@ namespace sdk {
                     }
 
                     json jsonCardIdentity = jsonCard[JsonKey::identity];
+                    std::string identityValue = jsonCardIdentity[JsonKey::value];
+                    std::string identityType = jsonCardIdentity[JsonKey::type];
                     std::string identityId = jsonCardIdentity[JsonKey::id];
                     std::string identityCreatedAt = jsonCardIdentity[JsonKey::createdAt];
-
-                    std::string identityValue = jsonCardIdentity[JsonKey::value];
-                    std::string identityValueString = jsonCardIdentity[JsonKey::type];
-                    IdentityModel::Type identityType = fromString(identityValueString);
-
-                    IdentityModel cardIdentity(identityId, identityCreatedAt, identityValue,
-                                               identityType);
+                    IdentityModel cardIdentity(Identity(identityValue, identityType), identityId, identityCreatedAt);
 
                     json jsonCustomData = jsonCard[JsonKey::data];
                     std::map<std::string, std::string> customData;
@@ -142,7 +137,6 @@ namespace sdk {
                     std::string pubKeyId = jsonPublicKey[JsonKey::id];
                     std::string pubKeyCreatedAt = jsonPublicKey[JsonKey::createdAt];
                     VirgilByteArray publicKeyBytes = VirgilBase64::decode(jsonPublicKey[JsonKey::publicKey]);
-
                     PublicKeyModel publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
                     return CardModel(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey,

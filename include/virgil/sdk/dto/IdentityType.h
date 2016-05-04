@@ -34,64 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H
-#define VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H
-
 #include <string>
-
-#include <virgil/sdk/dto/Identity.h>
 
 namespace virgil {
 namespace sdk {
     namespace dto {
-        /**
-         * @brief This class represents validated identity
-         *
-         * @details Validated identity tells that user validate identity and receive related token
-         */
-        class ValidatedIdentity : public Identity {
-        public:
-            /**
-             * @brief Create empty non valid identity
-             */
-            ValidatedIdentity() = default;
-            /**
-             * @brief Create identity with valid token
-             *
-             * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. identity type, i.e. email, phone etc
-             * @param token - validation token
-             */
-            ValidatedIdentity(const Identity& identity, const std::string& token);
-            /**
-             * @brief Return token that validate underlying identity
-             */
-            const std::string getToken() const;
 
-        private:
-            std::string token_;
+        /**
+         * @brief Enumerate possible identity types
+         */
+        enum class IdentityType {
+            None,       // Identity is undefined
+            Email,      // Identity is email
+            Application // Identity is application
         };
 
         /**
-         * @brief Compare identities for equality
-         *
-         * @return true if given objects are equal, false - otherwise
+         * @brief Return string representation of the identity type
          */
-        inline bool operator==(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            return static_cast<const Identity&>(left) == static_cast<const Identity&>(right) &&
-                   left.getToken() == right.getToken();
-        }
-
+        std::string toString(const IdentityType& identityType);
         /**
-         * @brief Compare identities for inequality
-         *
-         * @return true if given objects are inequal, false - otherwise
+         * @brief Use string representation to construct identity type
          */
-        inline bool operator!=(const ValidatedIdentity& left, const ValidatedIdentity& right) {
-            return !(left == right);
-        }
+        IdentityType fromString(const std::string& identityType);
     }
 }
 }
-
-#endif /* VIRGIL_SDK_MODELS_IDENTITY_TOKEN_H */

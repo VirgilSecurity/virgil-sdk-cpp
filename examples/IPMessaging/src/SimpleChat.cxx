@@ -82,7 +82,7 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
     }
 
     bool includeUnconfirmed = true;
-    vsdk::dto::Identity senderIdentity(sender, vsdk::models::IdentityModel::Type::Email);
+    vsdk::dto::Identity senderIdentity(sender, "email");
     auto foundCards = servicesHub_.card().search(senderIdentity, includeUnconfirmed);
     if (foundCards.empty()) {
         return;
@@ -118,7 +118,7 @@ void vipm::SimpleChat::onMessageRecived(const std::string& sender, const std::st
 }
 
 vipm::ChatMember vipm::SimpleChat::autorize(const std::string& emailAddress) {
-    vsdk::dto::Identity identity(emailAddress, vsdk::models::IdentityModel::Type::Email);
+    vsdk::dto::Identity identity(emailAddress, "email");
 
     bool includeUnconfirmed = true;
     std::vector<vsdk::models::CardModel> foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
@@ -150,7 +150,7 @@ vipm::ChatMember vipm::SimpleChat::registerUser(const std::string& email) {
     // public key and an email address identifier. The card will
     // be used for the public key identification and searching
     // for it in the Public Keys Service.
-    vsdk::dto::Identity identity(email, vsdk::models::IdentityModel::Type::Email);
+    vsdk::dto::Identity identity(email, "email");
     vsdk::Credentials credentials(newKeyPair.privateKey());
     vsdk::models::CardModel card = servicesHub_.card().create(identity, newKeyPair.publicKey(), credentials);
 
@@ -165,7 +165,7 @@ MapCardIdPublicKey vipm::SimpleChat::getChannelRecipients() {
     auto channelMembers = channel_.getMembers();
     std::vector<vsdk::models::CardModel> recipientsCards;
     for (const auto& channelMember : channelMembers) {
-        vsdk::dto::Identity identity(channelMember, vsdk::models::IdentityModel::Type::Email);
+        vsdk::dto::Identity identity(channelMember, "email");
         bool includeUnconfirmed = true;
         auto foundCards = servicesHub_.card().search(identity, includeUnconfirmed);
         recipientsCards.insert(std::end(recipientsCards), std::begin(foundCards), std::end(foundCards));

@@ -39,6 +39,8 @@
 
 #include <string>
 
+#include <virgil/sdk/dto/Identity.h>
+
 namespace virgil {
 namespace sdk {
     namespace models {
@@ -48,17 +50,7 @@ namespace sdk {
          * @details This class contains addition information of identity,
          *          that is used in conjuction with class @link CardModel @endlink.
          */
-        class IdentityModel {
-        public:
-            /**
-             * @brief Enumerate possible identity types
-             */
-            enum class Type {
-                None,        // Identity is undefined
-                Email,       // Identity is email
-                Application // Identity is application
-            };
-
+        class IdentityModel : public virgil::sdk::dto::Identity {
         public:
             /**
              * @brief Creates not valid identity
@@ -67,15 +59,13 @@ namespace sdk {
             /**
              * @brief Creates valid identity
              *
-             * @param id - unique object identifier defined by service
-             * @param createdAt - cretion date timestamp defined by service
-             * @param confirmed - true, if identity is confirmed by user
              * @param value - identity value
              * @param type - identity type
+             * @param id - unique object identifier defined by service
+             * @param createdAt - cretion date timestamp defined by service
              */
-            IdentityModel(
-                const std::string& id, const std::string& createdAt, const std::string& value,
-                const virgil::sdk::models::IdentityModel::Type& type = virgil::sdk::models::IdentityModel::Type::None);
+            IdentityModel(const virgil::sdk::dto::Identity& identity, const std::string& id,
+                          const std::string& createdAt);
             /**
              * @brief Return unique object identifier defined by service
              */
@@ -84,29 +74,11 @@ namespace sdk {
              * @brief Return cretion date timestamp defined by service
              */
             const std::string getCreatedAt() const;
-            /**
-             * @brief Return identity value
-             */
-            const std::string getValue() const;
-            /**
-             * @brief Return identity type
-             */
-            const virgil::sdk::models::IdentityModel::Type getType() const;
 
         private:
             std::string id_;
             std::string createdAt_;
-            std::string value_;
-            IdentityModel::Type type_ = IdentityModel::Type::None;
         };
-        /**
-         * @brief Return string representation of the identity type
-         */
-        std::string toString(const virgil::sdk::models::IdentityModel::Type& identityType);
-        /**
-         * @brief Use string representation to construct identity type
-         */
-        virgil::sdk::models::IdentityModel::Type fromString(const std::string& identityType);
 
         /**
          * @brief Compare identities for equality
