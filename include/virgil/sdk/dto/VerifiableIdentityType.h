@@ -34,31 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#ifndef VIRGIL_SDK_DTO_VERIFIABLE_IDENTITY_TYPE_H
+#define VIRGIL_SDK_DTO_VERIFIABLE_IDENTITY_TYPE_H
 
-using virgil::sdk::util::JsonKey;
+#include <string>
 
-const std::string JsonKey::id = "id";
-const std::string JsonKey::publicKey = "public_key";
-const std::string JsonKey::privateKey = "private_key";
-const std::string JsonKey::createdAt = "created_at";
-const std::string JsonKey::cards = "virgil_cards";
-const std::string JsonKey::cardId = "virgil_card_id";
-const std::string JsonKey::authorizedBy = "authorized_by";
-const std::string JsonKey::hash = "hash";
-const std::string JsonKey::identity = "identity";
-const std::string JsonKey::identities = "identities";
-const std::string JsonKey::type = "type";
-const std::string JsonKey::value = "value";
-const std::string JsonKey::publicKeyId = "public_key_id";
-const std::string JsonKey::data = "data";
-const std::string JsonKey::includeUnauthorized = "include_unauthorized";
-const std::string JsonKey::errorCode = "code";
-const std::string JsonKey::extraFields = "extra_fields";
-const std::string JsonKey::confirmationCode = "confirmation_code";
-const std::string JsonKey::actionId = "action_id";
-const std::string JsonKey::token = "token";
-const std::string JsonKey::timeToLive = "time_to_live";
-const std::string JsonKey::countToLive = "count_to_live";
-const std::string JsonKey::validationToken = "validation_token";
-const std::string JsonKey::responsePassword = "response_password";
+namespace virgil {
+namespace sdk {
+    namespace dto {
+        /**
+        * @brief Enumerate possible identity types
+        */
+            enum class VerifiableIdentityType {
+                None,
+                Email // Verify identity is email
+            };
+
+            /**
+             * @brief Return string representation of the verifiable identity type
+             */
+            std::string toString(const VerifiableIdentityType& verifiableIdentityType);
+            /**
+             * @brief Use string representation to construct verifiable identity type
+             */
+            VerifiableIdentityType fromVerifiableIdentityTypeString (const std::string& verifiableIdentityTypeStr);
+
+    }
+}
+}
+
+#endif /* VIRGIL_SDK_DTO_VERIFIABLE_IDENTITY_TYPE_H */

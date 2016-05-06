@@ -37,10 +37,13 @@
 #ifndef VIRGIL_SDK_IDENTITY_CLIENT_H
 #define VIRGIL_SDK_IDENTITY_CLIENT_H
 
+#include <string>
+#include <map>
+
 #include <virgil/sdk/client/Client.h>
 
 #include <virgil/sdk/dto/ValidatedIdentity.h>
-#include <virgil/sdk/dto/Identity.h>
+#include <virgil/sdk/dto/VerifiableIdentityType.h>
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
@@ -67,9 +70,13 @@ namespace sdk {
             /**
              * @brief Initiate identity verification process
              * @param identity - user's identity, that is sent to verification
+             * @param identityType - the type of identity
+             * @param extraFields - parameter will be passed back in an email in a hidden form with extra hidden fields
              * @return Unique identifier of the initiated verification action
              */
-            std::string verify(const virgil::sdk::dto::Identity& identity);
+            std::string
+            verify(const std::string& identityValue, const virgil::sdk::dto::VerifiableIdentityType& identityType,
+                   const std::map<std::string, std::string>& extraFields = std::map<std::string, std::string>());
             /**
              * @brief [brief description]
              * @details [long description]

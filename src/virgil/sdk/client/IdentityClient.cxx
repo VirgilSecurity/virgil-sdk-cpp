@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <stdexcept>
 
 #include <json.hpp>
@@ -61,19 +60,22 @@ using virgil::sdk::Error;
 using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::CardClient;
 using virgil::sdk::client::ClientConnection;
+using virgil::sdk::dto::Identity;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::VerifiableIdentityType;
+using virgil::sdk::dto::toString;
 using virgil::sdk::endpoints::IdentityEndpointUri;
 using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
-using virgil::sdk::dto::ValidatedIdentity;
-using virgil::sdk::dto::Identity;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-std::string IdentityClient::verify(const Identity& identity) {
-    json payload = {{JsonKey::type, identity.getType()},
-                    {JsonKey::value, identity.getValue()}};
+std::string IdentityClient::verify(const std::string& identityValue, const VerifiableIdentityType& type,
+                                   const std::map<std::string, std::string>& extraFields) {
+    json payload = {
+        {JsonKey::type, toString(type)}, {JsonKey::value, identityValue}, {JsonKey::extraFields, json(extraFields)}};
 
     Request request = Request()
                           .post()

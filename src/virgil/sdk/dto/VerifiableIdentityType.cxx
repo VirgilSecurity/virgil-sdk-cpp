@@ -34,31 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/dto/VerifiableIdentityType.h>
 
-using virgil::sdk::util::JsonKey;
+using virgil::sdk::dto::VerifiableIdentityType;
 
-const std::string JsonKey::id = "id";
-const std::string JsonKey::publicKey = "public_key";
-const std::string JsonKey::privateKey = "private_key";
-const std::string JsonKey::createdAt = "created_at";
-const std::string JsonKey::cards = "virgil_cards";
-const std::string JsonKey::cardId = "virgil_card_id";
-const std::string JsonKey::authorizedBy = "authorized_by";
-const std::string JsonKey::hash = "hash";
-const std::string JsonKey::identity = "identity";
-const std::string JsonKey::identities = "identities";
-const std::string JsonKey::type = "type";
-const std::string JsonKey::value = "value";
-const std::string JsonKey::publicKeyId = "public_key_id";
-const std::string JsonKey::data = "data";
-const std::string JsonKey::includeUnauthorized = "include_unauthorized";
-const std::string JsonKey::errorCode = "code";
-const std::string JsonKey::extraFields = "extra_fields";
-const std::string JsonKey::confirmationCode = "confirmation_code";
-const std::string JsonKey::actionId = "action_id";
-const std::string JsonKey::token = "token";
-const std::string JsonKey::timeToLive = "time_to_live";
-const std::string JsonKey::countToLive = "count_to_live";
-const std::string JsonKey::validationToken = "validation_token";
-const std::string JsonKey::responsePassword = "response_password";
+std::string virgil::sdk::dto::toString(const VerifiableIdentityType& type) {
+    if (type == VerifiableIdentityType::Email) {
+        return "email";
+    }
+    return std::string();
+}
+
+VerifiableIdentityType
+virgil::sdk::dto::fromVerifiableIdentityTypeString(const std::string& verifiableIdentityTypeStr) {
+    if (verifiableIdentityTypeStr == "email") {
+        return VerifiableIdentityType::Email;
+    }
+    return VerifiableIdentityType::None;
+}

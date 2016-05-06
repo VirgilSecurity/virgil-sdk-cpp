@@ -135,6 +135,12 @@ namespace sdk {
              */
             static const std::string errorCode;
             /**
+             * @property extraFields
+             * @brief Json Key that points parameter will be passed back in an email in a
+             * hidden form with extra hidden fields
+             */
+            static const std::string extraFields;
+            /**
              * @property confirmationCode
              * @brief Json Key that points identity confirmation code string
              */
