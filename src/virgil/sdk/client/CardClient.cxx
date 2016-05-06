@@ -153,7 +153,7 @@ std::vector<CardModel> CardClient::searchGlobal(const std::string& identityValue
     if (identityType == IdentityType::Application) {
         request.endpoint(CardEndpointUri::searchGlobal());
     } else {
-      // identityType == IdentityType::Email
+        // identityType == IdentityType::Email
         request.endpoint(CardEndpointUri::searchGlobalbyEmail());
     }
 

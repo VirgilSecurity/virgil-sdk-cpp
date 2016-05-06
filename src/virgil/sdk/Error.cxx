@@ -57,9 +57,10 @@ static std::string actionStr(Error::Action action) {
         {Error::Action::VIRGIL_CARD_CREATE, "create a Virgil Card."},
         {Error::Action::VIRGIL_CARD_GET, "get a Virgil Card."},
         {Error::Action::VIRGIL_CARD_SEARCH, "search a Virgil Card."},
-        {Error::Action::VIRGIL_CARD_SEARCH_GLOBAL, "the global search for the applications' Virgil Cards."},
+        {Error::Action::VIRGIL_CARD_SEARCH_GLOBAL,
+         "the global search for the applications Virgil Cards by application name."},
         {Error::Action::VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL,
-         "the global search for the applications' Virgil Cards by email."},
+         "the global search for the applications Virgil Cards by email."},
         {Error::Action::VIRGIL_CARD_REVOKE, "revoke a Virgil Card."},
 
         {Error::Action::PRIVATE_KEY_ADD, "load a Private Key into the Private"
