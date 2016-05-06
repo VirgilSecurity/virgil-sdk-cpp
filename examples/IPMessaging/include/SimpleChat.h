@@ -28,8 +28,9 @@ namespace IPMessaging {
         void startMessaging();
         void onMessageSend(const std::string& message);
         virgil::IPMessaging::ChatMember autorize(const std::string& emailAddress);
-        virgil::IPMessaging::ChatMember registerUser(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity);
+        virgil::IPMessaging::ChatMember registerUser(const std::string& emailAddress);
         MapCardIdPublicKey getChannelRecipients();
+        virgil::sdk::dto::ValidatedIdentity identityConfirm(const std::string& email);
 
     private:
         virgil::sdk::ServicesHub servicesHub_ = virgil::sdk::ServicesHub(virgil::IPMessaging::VIRGIL_ACCESS_TOKEN);
