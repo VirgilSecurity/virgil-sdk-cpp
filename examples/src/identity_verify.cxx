@@ -37,18 +37,12 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <fstream>
 
 #include <virgil/sdk/ServicesHub.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
-
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
 
 int main(int argc, char** argv) {
     if (argc < 2) {
@@ -57,13 +51,19 @@ int main(int argc, char** argv) {
     }
 
     try {
-        std::string userEmail = argv[1];
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        std::string userEmail = argv[1];
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
 
         std::cout << "Verify the Identity..." << std::endl;
-        vsdk::dto::Identity identity(userEmail, "email");
-        std::string actionId = servicesHub.identity().verify(identity);
+        std::string actionId = servicesHub.identity().verify(userEmail, vsdk::dto::VerifiableIdentityType::Email);
 
         std::cout << "action_id " << std::endl;
         std::cout << actionId << std::endl;

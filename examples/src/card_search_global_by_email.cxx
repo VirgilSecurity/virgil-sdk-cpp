@@ -48,13 +48,6 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <email> " << std::endl;
@@ -62,7 +55,15 @@ int main(int argc, char** argv) {
     }
 
     try {
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
         std::cout << "Search for Application Cards" << std::endl;
         std::string email = argv[1];
         std::vector<vsdk::models::CardModel> allAppCards =

@@ -47,24 +47,25 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
 const std::string PRIVATE_KEY_PASSWORD = "qwerty";
 
 int main(int argc, char** argv) {
-    if (argc < 7) {
+    if (argc < 6) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <public_key_id> " + " <virgil_card_id> " +
-                         " <path_private_key>" + " <validation_token_1>" + " <validation_token_2>"
+                         " <path_private_key>" + " <validation_token_1>"
                   << std::endl;
         return 1;
     }
 
     try {
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
         std::string userEmail = argv[1];
         std::string publicKeyId = argv[2];
         std::string cardId = argv[3];
@@ -72,7 +73,7 @@ int main(int argc, char** argv) {
         std::string token1 = argv[5];
         std::string token2 = argv[6];
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
 
         vsdk::dto::ValidatedIdentity validatedIdentity1(vsdk::dto::Identity(userEmail, "email"), token1);
         vsdk::dto::ValidatedIdentity validatedIdentity2(vsdk::dto::Identity(userEmail, "email"), token2);

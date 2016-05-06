@@ -51,13 +51,6 @@
 namespace vcrypto = virgil::crypto;
 namespace vsdk = virgil::sdk;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;
@@ -65,10 +58,18 @@ int main(int argc, char** argv) {
     }
 
     try {
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
         std::string userEmail = argv[1];
 
         std::cout << "Get recipient (" << userEmail << ") information from the Virgil PKI service..." << std::endl;
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
         std::vector<vsdk::models::CardModel> recipientCards =
             servicesHub.card().searchGlobal(userEmail, vsdk::dto::IdentityType::Email);
 
