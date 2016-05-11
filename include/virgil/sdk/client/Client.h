@@ -75,7 +75,7 @@ namespace sdk {
             Client(const std::string& accessToken, const std::string& baseServiceUri,
                    CardProviderFunc cardProviderFunc);
 
-            ~Client() = default;
+            virtual ~Client() = default;
 
             /**
              * @brief Return access token
