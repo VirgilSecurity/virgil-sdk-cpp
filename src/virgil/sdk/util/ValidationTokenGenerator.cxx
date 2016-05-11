@@ -50,8 +50,7 @@ using virgil::sdk::Credentials;
 using virgil::sdk::util::ValidationTokenGenerator;
 using virgil::sdk::util::uuid;
 
-std::string ValidationTokenGenerator::generate(const std::string& identityValue,
-                                               const std::string& identityType,
+std::string ValidationTokenGenerator::generate(const std::string& identityValue, const std::string& identityType,
                                                const Credentials& credentials) {
     std::string id = uuid();
     std::string toBeSignedData = id + identityType + identityValue;

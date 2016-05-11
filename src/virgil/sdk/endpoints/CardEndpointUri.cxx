@@ -55,7 +55,7 @@ std::string CardEndpointUri::searchGlobal() {
 }
 
 std::string CardEndpointUri::searchGlobalbyEmail() {
-  return "/v3/virgil-card/actions/search/email";
+    return "/v3/virgil-card/actions/search/email";
 }
 
 std::string CardEndpointUri::revoke(const std::string& cardId) {

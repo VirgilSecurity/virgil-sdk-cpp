@@ -64,12 +64,12 @@ namespace sdk {
             PUBLIC_KEY_GET_UNSIGN, ///< GET /public-key/{public-key-id} (unsigned)
             PUBLIC_KEY_REVOKE,     ///< DELETE /public-key{public-key-id} (unsigned)
 
-            VIRGIL_CARD_CREATE,     ///< POST /virgil-card
-            VIRGIL_CARD_GET,        ///< GET /virgil-card/{virgil-card-id}
-            VIRGIL_CARD_SEARCH,     ///< POST /virgil-card/actions/search
-            VIRGIL_CARD_SEARCH_GLOBAL, ///< POST /virgil-card/actions/search/app
+            VIRGIL_CARD_CREATE,                 ///< POST /virgil-card
+            VIRGIL_CARD_GET,                    ///< GET /virgil-card/{virgil-card-id}
+            VIRGIL_CARD_SEARCH,                 ///< POST /virgil-card/actions/search
+            VIRGIL_CARD_SEARCH_GLOBAL,          ///< POST /virgil-card/actions/search/app
             VIRGIL_CARD_SEARCH_GLOBAL_BY_EMAIL, ///< POST /virgil-card/actions/search/email
-            VIRGIL_CARD_REVOKE,     ///< DELETE /virgil-card/{virgil-card-id}
+            VIRGIL_CARD_REVOKE,                 ///< DELETE /virgil-card/{virgil-card-id}
 
             PRIVATE_KEY_ADD, ///< POST /private-key
             PRIVATE_KEY_GET, ///< POST /private-key/actions/grab

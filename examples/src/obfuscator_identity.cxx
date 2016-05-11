@@ -49,7 +49,6 @@ namespace vcrypto = virgil::crypto;
 
 const std::string APPLICATION_PASSWORD = "IDn)k\\0vT}CXM3V";
 
-
 int main(int argc, char** argv) {
     if (argc < 2) {
         std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" << std::endl;

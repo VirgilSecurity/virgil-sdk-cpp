@@ -39,8 +39,7 @@
 using virgil::sdk::dto::Identity;
 using virgil::sdk::models::IdentityModel;
 
-IdentityModel::IdentityModel(const Identity& identity, const std::string& id,
-                             const std::string& createdAt)
+IdentityModel::IdentityModel(const Identity& identity, const std::string& id, const std::string& createdAt)
         : Identity(identity), id_(id), createdAt_(createdAt) {
 }
 

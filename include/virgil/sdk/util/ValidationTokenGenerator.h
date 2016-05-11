@@ -57,8 +57,7 @@ namespace sdk {
              * @param appCredentials -  the application Private Key + Private Key password
              * @return validation token
              */
-            static std::string generate(const std::string& identityValue,
-                                        const std::string& identityType,
+            static std::string generate(const std::string& identityValue, const std::string& identityType,
                                         const virgil::sdk::Credentials& credentials);
         };
     }

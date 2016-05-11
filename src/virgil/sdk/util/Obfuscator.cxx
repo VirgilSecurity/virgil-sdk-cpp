@@ -47,7 +47,7 @@ using virgil::crypto::foundation::VirgilBase64;
 using virgil::sdk::util::Obfuscator;
 
 std::string Obfuscator::process(const std::string& value, const std::string& salt, const VirgilPBKDF::Hash& algorithm,
-                   const unsigned int iterations) {
+                                const unsigned int iterations) {
     VirgilPBKDF pbkdf(virgil::crypto::str2bytes(salt), iterations);
     pbkdf.setHash(algorithm);
     VirgilByteArray sequence = pbkdf.derive(virgil::crypto::str2bytes(value));

@@ -45,20 +45,19 @@ namespace sdk {
         /**
         * @brief Enumerate possible identity types
         */
-            enum class VerifiableIdentityType {
-                None,
-                Email // Verify identity is email
-            };
+        enum class VerifiableIdentityType {
+            None,
+            Email // Verify identity is email
+        };
 
-            /**
-             * @brief Return string representation of the verifiable identity type
-             */
-            std::string toString(const VerifiableIdentityType& verifiableIdentityType);
-            /**
-             * @brief Use string representation to construct verifiable identity type
-             */
-            VerifiableIdentityType fromVerifiableIdentityTypeString (const std::string& verifiableIdentityTypeStr);
-
+        /**
+         * @brief Return string representation of the verifiable identity type
+         */
+        std::string toString(const VerifiableIdentityType& verifiableIdentityType);
+        /**
+         * @brief Use string representation to construct verifiable identity type
+         */
+        VerifiableIdentityType fromVerifiableIdentityTypeString(const std::string& verifiableIdentityTypeStr);
     }
 }
 }

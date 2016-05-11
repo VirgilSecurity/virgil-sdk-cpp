@@ -60,9 +60,9 @@ namespace sdk {
              */
             static std::string
             process(const std::string& value, const std::string& salt,
-                   const virgil::crypto::foundation::VirgilPBKDF::Hash& algorithm =
-                       virgil::crypto::foundation::VirgilPBKDF::Hash::Hash_SHA384,
-                   const unsigned int iterations = virgil::crypto::foundation::VirgilPBKDF::kIterationCount_Default);
+                    const virgil::crypto::foundation::VirgilPBKDF::Hash& algorithm =
+                        virgil::crypto::foundation::VirgilPBKDF::Hash::Hash_SHA384,
+                    const unsigned int iterations = virgil::crypto::foundation::VirgilPBKDF::kIterationCount_Default);
         };
     }
 }

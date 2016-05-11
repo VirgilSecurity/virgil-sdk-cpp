@@ -84,11 +84,10 @@ namespace sdk {
                                                     {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
 
                     IdentityModel cardIdentity = card.getCardIdentity();
-                    jsonCard[JsonKey::identity] = {
-                        {JsonKey::id, cardIdentity.getId()},
-                        {JsonKey::type, cardIdentity.getType()},
-                        {JsonKey::value, cardIdentity.getValue()},
-                        {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
+                    jsonCard[JsonKey::identity] = {{JsonKey::id, cardIdentity.getId()},
+                                                   {JsonKey::type, cardIdentity.getType()},
+                                                   {JsonKey::value, cardIdentity.getValue()},
+                                                   {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (card.getData().empty()) {
                         jsonCard[JsonKey::data] = nullptr;

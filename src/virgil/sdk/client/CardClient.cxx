@@ -128,8 +128,9 @@ CardModel CardClient::create(const Identity& identity, const std::string& public
 
 std::vector<CardModel> CardClient::search(const std::string& identityValue, const std::string& identityType,
                                           const bool includeUnauthorized) {
-    json payload = {
-        {JsonKey::value, identityValue}, {JsonKey::type, identityType}, {JsonKey::includeUnauthorized, includeUnauthorized}};
+    json payload = {{JsonKey::value, identityValue},
+                    {JsonKey::type, identityType},
+                    {JsonKey::includeUnauthorized, includeUnauthorized}};
 
     Request request = Request()
                           .post()

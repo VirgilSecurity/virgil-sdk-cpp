@@ -122,9 +122,9 @@ namespace sdk {
              * @param includeUnauthorized - specifies whether an unconfirmed Virgil Cards should be returned
              * @return Found Virgil Cards
              */
-            std::vector<virgil::sdk::models::CardModel>
-            search(const std::string& identityValue, const std::string& identityType,
-                  const bool includeUnauthorized = false);
+            std::vector<virgil::sdk::models::CardModel> search(const std::string& identityValue,
+                                                               const std::string& identityType,
+                                                               const bool includeUnauthorized = false);
             /**
              * @brief Performs the global search fot the applications' Virgil Cards
              *

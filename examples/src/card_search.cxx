@@ -48,8 +48,7 @@ namespace vcrypto = virgil::crypto;
 
 int main(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <includeUnauthorized>"
-                  << std::endl;
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <includeUnauthorized>" << std::endl;
         return 1;
     }
 
