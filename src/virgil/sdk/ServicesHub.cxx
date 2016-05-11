@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <vector>
 
 #include <virgil/crypto/VirgilByteArray.h>

@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
