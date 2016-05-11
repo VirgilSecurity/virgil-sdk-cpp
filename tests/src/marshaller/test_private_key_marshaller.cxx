@@ -35,13 +35,13 @@
  */
 
 /**
- * @file test_identity_token_marshaller.cxx
+ * @file test_private_key_marshaller.cxx
  * @brief Convert json <-> PrivateKey.
  */
 
-#include "../catch.hpp"
+#include <catch.hpp>
 
-#include "../helpers.h"
+#include <helpers.h>
 
 #include <virgil/sdk/io/Marshaller.h>
 

@@ -41,9 +41,9 @@
 
 #include <string>
 
-#include "../catch.hpp"
+#include <catch.hpp>
 
-#include "../helpers.h"
+#include <helpers.h>
 
 #include <virgil/sdk/io/Marshaller.h>
 

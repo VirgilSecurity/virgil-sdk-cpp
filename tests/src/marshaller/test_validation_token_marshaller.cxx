@@ -35,36 +35,35 @@
  */
 
 /**
- * @file test_identity_token_marshaller.cxx
- * @brief Convert json <-> PublicKey.
+ * @file test_validation_token_marshaller.cxx
+ * @brief Convert json <-> ValidatedIdentity.
  */
 
-#include <string>
+#include <catch.hpp>
 
-#include "../catch.hpp"
+#include <helpers.h>
 
-#include <virgil/crypto/foundation/VirgilBase64.h>
+#include <json.hpp>
 
+#include <virgil/sdk/dto/ValidatedIdentity.h>
+#include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/io/Marshaller.h>
-
-#include "../helpers.h"
 
 using json = nlohmann::json;
 
-using virgil::crypto::foundation::VirgilBase64;
-
-using virgil::sdk::models::PublicKeyModel;
+using virgil::sdk::dto::ValidatedIdentity;
+using virgil::sdk::dto::Identity;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::io::Marshaller;
 
-TEST_CASE("PublicKey -> Json PublicKeyModel - FAILED", "class Marshaller") {
-    PublicKeyModel publicKey = virgil::test::getPublicKey();
-    std::string testJsonPublicKey = Marshaller<PublicKeyModel>::toJson<4>(publicKey);
-    REQUIRE(virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey);
+TEST_CASE("ValidatedIdentity -> Json ValidatedIdentity - FAILED", "class Marshaller") {
+    ValidatedIdentity validatedIdentity = virgil::test::getValidatedIdentity();
+    std::string testJsonValidatedIdentity = Marshaller<ValidatedIdentity>::toJson<4>(validatedIdentity);
+    REQUIRE(virgil::test::getJsonValidatedIdentity().dump(4) == testJsonValidatedIdentity);
 }
 
-TEST_CASE("Json PublicKeyModel -> PublicKeyModel - FAILED", "class Marshaller") {
-    json jsonPublicKey = virgil::test::getJsonPublicKey();
-    PublicKeyModel testPublicKey = Marshaller<PublicKeyModel>::fromJson(jsonPublicKey.dump());
-    REQUIRE(virgil::test::getPublicKey() == testPublicKey);
+TEST_CASE("Json ValidatedIdentity -> ValidatedIdentity - FAILED", "class Marshaller") {
+    json jsonValidatedIdentity = virgil::test::getJsonValidatedIdentity();
+    ValidatedIdentity testValidatedIdentity = Marshaller<ValidatedIdentity>::fromJson(jsonValidatedIdentity.dump());
+    REQUIRE(virgil::test::getValidatedIdentity() == testValidatedIdentity);
 }

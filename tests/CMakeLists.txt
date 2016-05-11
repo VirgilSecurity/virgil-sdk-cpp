@@ -39,7 +39,9 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 # Define variables
 set (TEST_RUNNER test_runner)
 
-file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
+include_directories ("include")
+
+file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx")
 
 # Configure test target
 add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})

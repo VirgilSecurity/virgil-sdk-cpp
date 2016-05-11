@@ -37,7 +37,7 @@
 #include <string>
 #include <vector>
 
-#include "helpers.h"
+#include <helpers.h>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
