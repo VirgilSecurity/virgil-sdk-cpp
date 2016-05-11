@@ -64,6 +64,7 @@ namespace sdk {
              * @param cardIdentity - identity associated with Virgil Card
              * @param data - custom data
              * @param publicKey - Public Key connected to the Virgil Card
+             * @param authorizedBy - by whom authorized
              */
             CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
                       const virgil::sdk::models::IdentityModel& cardIdentity,

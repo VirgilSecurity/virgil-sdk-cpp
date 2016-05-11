@@ -119,6 +119,7 @@ namespace sdk {
              * @brief Performs the search of a private application's Virgil Cards
              *
              * @param identityValue - identity to be searched
+             * @param identityType - identity type to be searched
              * @param includeUnauthorized - specifies whether an unconfirmed Virgil Cards should be returned
              * @return Found Virgil Cards
              */

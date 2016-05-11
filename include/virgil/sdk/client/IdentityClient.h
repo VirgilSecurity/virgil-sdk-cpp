@@ -69,7 +69,8 @@ namespace sdk {
             using Client::Client;
             /**
              * @brief Initiate identity verification process
-             * @param identity - user's identity, that is sent to verification
+             *
+             * @param identityValue - user's identity, that is sent to verification
              * @param identityType - the type of identity
              * @param extraFields - parameter will be passed back in an email in a hidden form with extra hidden fields
              * @return Unique identifier of the initiated verification action

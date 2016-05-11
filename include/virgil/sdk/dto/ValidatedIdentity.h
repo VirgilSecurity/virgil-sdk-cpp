@@ -58,8 +58,7 @@ namespace sdk {
             /**
              * @brief Create identity with valid token
              *
-             * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. identity type, i.e. email, phone etc
+             * @param identity - identity type + value, see @link Identity @endlink
              * @param token - validation token
              */
             ValidatedIdentity(const Identity& identity, const std::string& token);

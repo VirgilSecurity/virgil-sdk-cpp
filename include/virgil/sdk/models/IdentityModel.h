@@ -59,8 +59,7 @@ namespace sdk {
             /**
              * @brief Creates valid identity
              *
-             * @param value - identity value
-             * @param type - identity type
+             * @param identity - identity type + value, see @link Identity @endlink
              * @param id - unique object identifier defined by service
              * @param createdAt - cretion date timestamp defined by service
              */
