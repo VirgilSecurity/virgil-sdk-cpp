@@ -5,9 +5,9 @@
 
 #include <restless.hpp>
 
-#include "Channel.h"
-#include "Constants.h"
-#include "dto/Message.h"
+#include <virgil/IPMessaging/Channel.h>
+#include <virgil/IPMessaging/Constants.h>
+#include <virgil/IPMessaging/dto/Message.h>
 
 using json = nlohmann::json;
 

@@ -4,7 +4,7 @@
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include "models/EncryptedMessageModel.h"
+#include <virgil/IPMessaging/models/EncryptedMessageModel.h>
 
 using json = nlohmann::json;
 

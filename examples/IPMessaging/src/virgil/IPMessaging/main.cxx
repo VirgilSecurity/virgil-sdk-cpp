@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "SimpleChat.h"
+#include <virgil/IPMessaging/SimpleChat.h>
 
 int main() {
 

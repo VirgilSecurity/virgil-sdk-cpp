@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Channel.h"
+#include <virgil/IPMessaging/Channel.h>
 
 namespace virgil {
 namespace IPMessaging {

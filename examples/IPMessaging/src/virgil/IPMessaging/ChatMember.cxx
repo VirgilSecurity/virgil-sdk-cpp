@@ -1,4 +1,4 @@
-#include "ChatMember.h"
+#include <virgil/IPMessaging/ChatMember.h>
 
 namespace vipm = virgil::IPMessaging;
 

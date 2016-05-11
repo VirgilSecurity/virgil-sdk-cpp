@@ -2,7 +2,7 @@
 
 #include <json.hpp>
 
-#include "dto/Message.h"
+#include <virgil/IPMessaging/dto/Message.h>
 
 using json = nlohmann::json;
 

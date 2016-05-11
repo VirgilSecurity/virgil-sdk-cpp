@@ -11,9 +11,9 @@
 
 #include <virgil/sdk/dto/VerifiableIdentityType.h>
 
-#include "SimpleChat.h"
-#include "Constants.h"
-#include "models/EncryptedMessageModel.h"
+#include <virgil/IPMessaging/SimpleChat.h>
+#include <virgil/IPMessaging/Constants.h>
+#include <virgil/IPMessaging/models/EncryptedMessageModel.h>
 
 namespace vcrypto = virgil::crypto;
 namespace vsdk = virgil::sdk;

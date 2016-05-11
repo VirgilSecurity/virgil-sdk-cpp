@@ -6,8 +6,8 @@
 
 #include <restless.hpp>
 
-#include "Client.h"
-#include "Constants.h"
+#include <virgil/IPMessaging/Client.h>
+#include <virgil/IPMessaging/Constants.h>
 
 using json = nlohmann::json;
 
