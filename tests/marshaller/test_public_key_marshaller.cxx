@@ -39,7 +39,6 @@
  * @brief Convert json <-> PublicKey.
  */
 
-#include <iostream>
 #include <string>
 
 #include "../catch.hpp"
@@ -60,22 +59,12 @@ using virgil::sdk::io::Marshaller;
 
 TEST_CASE("PublicKey -> Json PublicKeyModel - FAILED", "class Marshaller") {
     PublicKeyModel publicKey = virgil::test::getPublicKey();
-    // PublicKeyModel -> Json
     std::string testJsonPublicKey = Marshaller<PublicKeyModel>::toJson<4>(publicKey);
-
     REQUIRE(virgil::test::getJsonPublicKey().dump(4) == testJsonPublicKey);
 }
 
 TEST_CASE("Json PublicKeyModel -> PublicKeyModel - FAILED", "class Marshaller") {
     json jsonPublicKey = virgil::test::getJsonPublicKey();
-    // Json -> PublicKey
     PublicKeyModel testPublicKey = Marshaller<PublicKeyModel>::fromJson(jsonPublicKey.dump());
-
-    // Beutiful!!!
-    // std::cout << testPublicKey.getKey() << "\n\n";
-
-    // Real world (*
-    // std::cout << VirgilBase64::encode( testPublicKey.getKey() )<< "\n\n";
-
     REQUIRE(virgil::test::getPublicKey() == testPublicKey);
 }

@@ -54,16 +54,12 @@ using virgil::sdk::io::Marshaller;
 TEST_CASE("PrivateKey -> Json PrivateKeyModel - FAILED", "class Marshaller") {
     PrivateKeyModel privateKey = virgil::test::getPrivateKey();
     json trueJsonPrivateKey = virgil::test::getJsonPrivateKey();
-
-    // PrivateKeyModel -> Json
     std::string testJsonPrivateKey = Marshaller<PrivateKeyModel>::toJson<4>(privateKey);
     REQUIRE(trueJsonPrivateKey.dump(4) == testJsonPrivateKey);
 }
 
 TEST_CASE("Json PrivateKeyModel -> PrivateKeyModel - FAILED", "class Marshaller") {
     json jsonPrivateKey = virgil::test::getJsonPrivateKey();
-
-    // Json -> PrivateKey
     PrivateKeyModel testPrivateKey = Marshaller<PrivateKeyModel>::fromJson(jsonPrivateKey.dump(4));
     PrivateKeyModel truePrivateKey = virgil::test::getPrivateKey();
     REQUIRE(truePrivateKey == testPrivateKey);

@@ -40,7 +40,6 @@
  */
 
 #include <string>
-#include <iostream>
 
 #include "../catch.hpp"
 
@@ -59,7 +58,6 @@ using virgil::sdk::io::Marshaller;
 
 TEST_CASE("JSON CardModel -> CardModel - FAILED", "class Marshaller") {
     json jsonCard = virgil::test::getJsonCard();
-    // JSON CardModel -> CardModel
     CardModel testCard = Marshaller<CardModel>::fromJson(jsonCard.dump(4));
     CardModel trueCard = virgil::test::getCard();
     REQUIRE(virgil::test::getCard() == testCard);
@@ -67,7 +65,6 @@ TEST_CASE("JSON CardModel -> CardModel - FAILED", "class Marshaller") {
 
 TEST_CASE("Card -> JSON CardModel - FAILED", "class Marshaller") {
     CardModel card = virgil::test::getCard();
-    // CardModel -> JSON Card
     std::string testJsonCard = Marshaller<CardModel>::toJson<4>(card);
     REQUIRE(virgil::test::getJsonCard().dump(4) == testJsonCard);
 }

@@ -58,14 +58,12 @@ using virgil::sdk::io::Marshaller;
 
 TEST_CASE("ValidatedIdentity -> Json ValidatedIdentity - FAILED", "class Marshaller") {
     ValidatedIdentity validatedIdentity = virgil::test::getValidatedIdentity();
-    // ValidatedIdentity -> Json
     std::string testJsonValidatedIdentity = Marshaller<ValidatedIdentity>::toJson<4>(validatedIdentity);
     REQUIRE(virgil::test::getJsonValidatedIdentity().dump(4) == testJsonValidatedIdentity);
 }
 
 TEST_CASE("Json ValidatedIdentity -> ValidatedIdentity - FAILED", "class Marshaller") {
     json jsonValidatedIdentity = virgil::test::getJsonValidatedIdentity();
-    // Json -> ValidatedIdentity
     ValidatedIdentity testValidatedIdentity = Marshaller<ValidatedIdentity>::fromJson(jsonValidatedIdentity.dump());
     REQUIRE(virgil::test::getValidatedIdentity() == testValidatedIdentity);
 }
