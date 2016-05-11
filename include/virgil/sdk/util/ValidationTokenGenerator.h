@@ -50,7 +50,7 @@ namespace sdk {
         class ValidationTokenGenerator {
         public:
             /**
-             * @brief Provides a helper methods to generate validation token based on application's private key.
+             * @brief Generates the validation token based on application's private key.
              *
              * @param identityValue - the identity value
              * @param identityType - the type of the identity

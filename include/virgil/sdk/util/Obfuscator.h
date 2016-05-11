@@ -45,18 +45,18 @@ namespace virgil {
 namespace sdk {
     namespace util {
         /**
-         * @brief Derives the obfuscated data from incoming parameters using PBKDF function.
+         * @brief Provides a helper methods to obfuscate the data.
          */
         class Obfuscator {
         public:
             /**
-             * @brief Provides a helper methods to generate validation token based on application's private key.
+             * @brief Derives the obfuscated data from incoming parameters using PBKDF function.
              *
              * @param value - the string value to be hashed
              * @param salt - the hash salt
              * @param algorithm - the hash algorithm
              * @param iterations - the count of iterations
-             * @return the hash salt
+             * @return the hash salt in Base64 format
              */
             static std::string
             process(const std::string& value, const std::string& salt,
