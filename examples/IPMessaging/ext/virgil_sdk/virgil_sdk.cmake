@@ -50,8 +50,8 @@ file (APPEND "@VIRGIL_DEPENDS_ARGS_FILE@"
 
 ExternalProject_Add (${PROJECT_NAME}
     DOWNLOAD_DIR "@VIRGIL_DEPENDS_PACKAGE_DOWNLOAD_DIR@"
-    URL "https://github.com/VirgilSecurity/virgil-sdk-cpp/archive/e732816f8deec5d634c7a8c073da20586e5ae2f0.tar.gz"
-    URL_HASH SHA1=66f78a3ccc5e93c708091da4949af2614fb7e89a
+    URL "https://github.com/VirgilSecurity/virgil-sdk-cpp/archive/735cd6e279892ddf561944e3c6f3b244d61513e3.tar.gz"
+    URL_HASH SHA1=b430b94506e565deceb407bcf2ecf30d360963ab
     PREFIX "@VIRGIL_DEPENDS_PACKAGE_BUILD_DIR@"
     CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
 )
