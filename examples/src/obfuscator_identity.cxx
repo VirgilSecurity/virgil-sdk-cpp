@@ -42,7 +42,7 @@
 #include <string>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/util/Obfuscator.h>
+#include <virgil/sdk/util/obfuscator.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
                                       std::istreambuf_iterator<char>());
 
         std::string userEmail = argv[1];
-        std::string obfuscatorIdentityValue = vsdk::util::Obfuscator::process(userEmail, "salt");
+        std::string obfuscatorIdentityValue = vsdk::util::obfuscate(userEmail, "salt");
 
         std::cout << "identity: " << userEmail << std::endl;
         std::cout << "obfuscator identity: " << std::endl;

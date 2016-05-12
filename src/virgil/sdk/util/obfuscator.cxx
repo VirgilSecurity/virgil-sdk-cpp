@@ -35,30 +35,19 @@
  */
 
 #include <virgil/crypto/VirgilByteArray.h>
-#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/foundation/VirgilPBKDF.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
-#include <virgil/sdk/util/ValidationTokenGenerator.h>
-#include <virgil/sdk/util/uuid.h>
+#include <virgil/sdk/util/obfuscator.h>
 
 using virgil::crypto::VirgilByteArray;
-using virgil::crypto::VirgilSigner;
+using virgil::crypto::foundation::VirgilPBKDF;
 using virgil::crypto::foundation::VirgilBase64;
-using virgil::crypto::str2bytes;
 
-using virgil::sdk::Credentials;
-using virgil::sdk::util::ValidationTokenGenerator;
-using virgil::sdk::util::uuid;
-
-std::string ValidationTokenGenerator::generate(const std::string& identityValue, const std::string& identityType,
-                                               const Credentials& credentials) {
-    std::string id = uuid();
-    std::string toBeSignedData = id + identityType + identityValue;
-
-    VirgilSigner signer;
-    VirgilByteArray signature =
-        signer.sign(str2bytes(toBeSignedData), credentials.privateKey(), credentials.privateKeyPassword());
-
-    std::string validationToken = id + std::string(".") + VirgilBase64::encode(signature);
-    return VirgilBase64::encode(str2bytes(validationToken));
+std::string virgil::sdk::util::obfuscate(const std::string& value, const std::string& salt,
+                                         const VirgilPBKDF::Hash& algorithm, const unsigned int iterations) {
+    VirgilPBKDF pbkdf(virgil::crypto::str2bytes(salt), iterations);
+    pbkdf.setHash(algorithm);
+    VirgilByteArray sequence = pbkdf.derive(virgil::crypto::str2bytes(value));
+    return VirgilBase64::encode(sequence);
 }

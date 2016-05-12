@@ -34,34 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_UTIL_VALIDATION_TOKEN_GENERATOR_H
-#define VIRGIL_SDK_UTIL_VALIDATION_TOKEN_GENERATOR_H
+#ifndef VIRGIL_SDK_UTIL_OBFUSCATOR_H
+#define VIRGIL_SDK_UTIL_OBFUSCATOR_H
 
 #include <string>
 
-#include <virgil/sdk/Credentials.h>
+#include <virgil/crypto/foundation/VirgilPBKDF.h>
 
 namespace virgil {
 namespace sdk {
     namespace util {
         /**
-         * @brief Provides a helper methods to generate validation token based on application's private key.
+         * @brief Derives the obfuscated data from incoming parameters using PBKDF function.
+         *
+         * @param value - the string value to be hashed
+         * @param salt - the salt
+         * @param hash - the hash algorithm
+         * @param iterations - the count of iterations
+         * @return the hash salt in Base64 format
          */
-        class ValidationTokenGenerator {
-        public:
-            /**
-             * @brief Generates the validation token based on application's private key.
-             *
-             * @param identityValue - the identity value
-             * @param identityType - the type of the identity
-             * @param appCredentials -  the application Private Key + Private Key password
-             * @return validation token
-             */
-            static std::string generate(const std::string& identityValue, const std::string& identityType,
-                                        const virgil::sdk::Credentials& credentials);
-        };
+        std::string
+        obfuscate(const std::string& value, const std::string& salt,
+                  const virgil::crypto::foundation::VirgilPBKDF::Hash& hash =
+                      virgil::crypto::foundation::VirgilPBKDF::Hash::Hash_SHA384,
+                  const unsigned int iterations = virgil::crypto::foundation::VirgilPBKDF::kIterationCount_Default);
     }
 }
 }
 
-#endif /* VIRGIL_SDK_UTIL_VALIDATION_TOKEN_GENERATOR_H */
+#endif /* VIRGIL_SDK_UTIL_OBFUSCATOR_H */

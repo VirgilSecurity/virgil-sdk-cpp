@@ -46,8 +46,8 @@
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
-#include <virgil/sdk/util/Obfuscator.h>
-#include <virgil/sdk/util/ValidationTokenGenerator.h>
+#include <virgil/sdk/util/obfuscator.h>
+#include <virgil/sdk/util/token.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
         std::string userIdentityValue = "bob@mailinator.com";
         std::string userIdentityType = "email";
 
-        std::string obfuscatorIdentityValue = vsdk::util::Obfuscator::process(userIdentityValue, "salt");
-        std::string obfuscatorIdentityType = vsdk::util::Obfuscator::process(userIdentityType, "salt");
+        std::string obfuscatorIdentityValue = vsdk::util::obfuscate(userIdentityValue, "salt");
+        std::string obfuscatorIdentityType = vsdk::util::obfuscate(userIdentityType, "salt");
 
         std::cout << "2. Generation Validation Token\n";
         std::string pathAppPrivateKey = "application_keys/private.key";
@@ -74,8 +74,8 @@ int main(int argc, char** argv) {
         std::string kApplicationPasswoord = "<APPLICATION_PRIVATE_KEY_PASSWORD>";
         vsdk::Credentials appCredentials(appPrivateKeyByteArray, virgil::crypto::str2bytes(kApplicationPasswoord));
 
-        std::string validationToken1 = vsdk::util::ValidationTokenGenerator::generate(
-            obfuscatorIdentityValue, obfuscatorIdentityType, appCredentials);
+        std::string validationToken1 =
+            vsdk::util::generate_validation_token(obfuscatorIdentityValue, obfuscatorIdentityType, appCredentials);
 
         std::cout << "3. Create a Private Virgil Card\n";
         std::string pathVirgilAccessToken = "virgil_access_token.txt";
@@ -104,8 +104,8 @@ int main(int argc, char** argv) {
         std::cout << "4. Revoke the Private Virgil Card\n";
         std::cout << "Revoke the Private Virgil Card" << std::endl;
 
-        std::string validationToken2 = vsdk::util::ValidationTokenGenerator::generate(
-            obfuscatorIdentityValue, obfuscatorIdentityType, appCredentials);
+        std::string validationToken2 =
+            vsdk::util::generate_validation_token(obfuscatorIdentityValue, obfuscatorIdentityType, appCredentials);
 
         vsdk::dto::ValidatedIdentity validatedIdentity2(
             vsdk::dto::Identity(obfuscatorIdentityValue, obfuscatorIdentityType), validationToken2);

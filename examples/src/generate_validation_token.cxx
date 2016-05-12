@@ -42,7 +42,7 @@
 #include <string>
 
 #include <virgil/sdk/ServicesHub.h>
-#include <virgil/sdk/util/ValidationTokenGenerator.h>
+#include <virgil/sdk/util/token.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
 
         std::cout << "Generatin a validation token " << std::endl;
         std::string validationToken =
-            vsdk::util::ValidationTokenGenerator::generate(obfuscatorIdentityValue, identityType, appCredentials);
+            vsdk::util::generate_validation_token(obfuscatorIdentityValue, identityType, appCredentials);
 
         std::cout << "The validation token generated " << std::endl;
         std::cout << validationToken << std::endl;
