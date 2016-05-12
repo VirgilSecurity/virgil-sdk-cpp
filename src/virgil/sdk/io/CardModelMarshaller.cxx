@@ -38,7 +38,7 @@
 #include <string>
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -60,7 +60,6 @@ using virgil::sdk::dto::Identity;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::models::IdentityModel;
 using virgil::sdk::models::PublicKeyModel;
-using virgil::sdk::models::fromString;
 
 namespace virgil {
 namespace sdk {
@@ -75,7 +74,7 @@ namespace sdk {
                     json jsonCard = {
                         {JsonKey::id, card.getId()},
                         {JsonKey::createdAt, card.getCreatedAt()},
-                        {JsonKey::isConfirmed, card.isConfirmed()},
+                        {JsonKey::authorizedBy, card.authorizedBy()},
                         {JsonKey::hash, card.getHash()},
                     };
 
@@ -85,12 +84,10 @@ namespace sdk {
                                                     {JsonKey::publicKey, VirgilBase64::encode(publicKey.getKey())}};
 
                     IdentityModel cardIdentity = card.getCardIdentity();
-                    jsonCard[JsonKey::identity] = {
-                        {JsonKey::id, cardIdentity.getId()},
-                        {JsonKey::type, virgil::sdk::models::toString(cardIdentity.getType())},
-                        {JsonKey::value, cardIdentity.getValue()},
-                        {JsonKey::isConfirmed, cardIdentity.isConfirmed()},
-                        {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
+                    jsonCard[JsonKey::identity] = {{JsonKey::id, cardIdentity.getId()},
+                                                   {JsonKey::type, cardIdentity.getType()},
+                                                   {JsonKey::value, cardIdentity.getValue()},
+                                                   {JsonKey::createdAt, cardIdentity.getCreatedAt()}};
 
                     if (card.getData().empty()) {
                         jsonCard[JsonKey::data] = nullptr;
@@ -106,26 +103,24 @@ namespace sdk {
                 }
             }
 
-            static CardModel fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static CardModel fromJson(const std::string& jsonString) {
                 try {
                     json jsonCard = json::parse(jsonString);
 
-                    bool cardConfirmed = jsonCard[JsonKey::isConfirmed];
                     std::string cardId = jsonCard[JsonKey::id];
                     std::string cardCreatedAt = jsonCard[JsonKey::createdAt];
                     std::string cardHash = jsonCard[JsonKey::hash];
+                    std::string cardAuthorizedBy;
+                    if (jsonCard[JsonKey::authorizedBy] != nullptr) {
+                        cardAuthorizedBy = jsonCard[JsonKey::authorizedBy];
+                    }
 
                     json jsonCardIdentity = jsonCard[JsonKey::identity];
-                    bool identityConfirmed = jsonCardIdentity[JsonKey::isConfirmed];
+                    std::string identityValue = jsonCardIdentity[JsonKey::value];
+                    std::string identityType = jsonCardIdentity[JsonKey::type];
                     std::string identityId = jsonCardIdentity[JsonKey::id];
                     std::string identityCreatedAt = jsonCardIdentity[JsonKey::createdAt];
-
-                    std::string identityValue = jsonCardIdentity[JsonKey::value];
-                    std::string identityValueString = jsonCardIdentity[JsonKey::type];
-                    IdentityModel::Type identityType = fromString(identityValueString);
-
-                    IdentityModel cardIdentity(identityId, identityCreatedAt, identityConfirmed, identityValue,
-                                               identityType);
+                    IdentityModel cardIdentity(Identity(identityValue, identityType), identityId, identityCreatedAt);
 
                     json jsonCustomData = jsonCard[JsonKey::data];
                     std::map<std::string, std::string> customData;
@@ -141,11 +136,10 @@ namespace sdk {
                     std::string pubKeyId = jsonPublicKey[JsonKey::id];
                     std::string pubKeyCreatedAt = jsonPublicKey[JsonKey::createdAt];
                     VirgilByteArray publicKeyBytes = VirgilBase64::decode(jsonPublicKey[JsonKey::publicKey]);
-
                     PublicKeyModel publicKey(pubKeyId, pubKeyCreatedAt, publicKeyBytes);
 
                     return CardModel(cardId, cardCreatedAt, cardHash, cardIdentity, customData, publicKey,
-                                     cardConfirmed);
+                                     cardAuthorizedBy);
 
                 } catch (std::exception& exception) {
                     throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CardModel>::fromJson ") +
@@ -195,9 +189,17 @@ namespace sdk {
 }
 }
 
-void marshaller_virgil_card_init() {
-    virgil::sdk::io::Marshaller<CardModel>::toJson(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::toJson<2>(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::toJson<4>(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson(const CardModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson<2>(const CardModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson<4>(const CardModel&);
+
+template CardModel
+virgil::sdk::io::Marshaller<CardModel>::fromJson(const std::string&);

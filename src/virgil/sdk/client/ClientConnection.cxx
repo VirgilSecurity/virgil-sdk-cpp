@@ -34,12 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
 #include <string>
 
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilCipher.h>
 #include <virgil/crypto/VirgilByteArray.h>

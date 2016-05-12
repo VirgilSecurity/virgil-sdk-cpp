@@ -64,9 +64,7 @@ ServiceUri::ServiceUri()
 
 ServiceUri::ServiceUri(const std::string& identityService, const std::string& keysService,
                        const std::string& privateKeyService)
-        : identityService_(identityService),
-          keysService_(keysService),
-          privateKeyService_(privateKeyService) {
+        : identityService_(identityService), keysService_(keysService), privateKeyService_(privateKeyService) {
 }
 
 std::string ServiceUri::getIdentityService() const {

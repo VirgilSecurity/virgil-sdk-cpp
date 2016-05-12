@@ -59,7 +59,7 @@ namespace sdk {
             /**
              * @brief Unmarshal Json representation to the associated object.
              */
-            static T fromJson(const std::string& jsonString);
+            template <int FAKE = 0> static T fromJson(const std::string& jsonString);
 
         private:
             /**

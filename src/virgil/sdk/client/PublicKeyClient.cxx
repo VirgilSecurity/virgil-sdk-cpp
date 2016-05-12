@@ -34,8 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 
@@ -65,7 +64,6 @@ using virgil::sdk::models::PublicKeyModel;
 using virgil::sdk::models::CardModel;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
-using virgil::sdk::models::toString;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
@@ -85,7 +83,7 @@ void PublicKeyClient::revoke(const std::string& publicKeyId, const std::vector<V
                              const std::string& cardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& validatedIdentity : validatedIdentitys) {
-        json jsonValidatedIdentity = {{JsonKey::type, toString(validatedIdentity.getType())},
+        json jsonValidatedIdentity = {{JsonKey::type, validatedIdentity.getType()},
                                       {JsonKey::value, validatedIdentity.getValue()},
                                       {JsonKey::validationToken, validatedIdentity.getToken()}};
         jsonArray.push_back(jsonValidatedIdentity);
@@ -111,7 +109,7 @@ void PublicKeyClient::revokeNotValid(const std::string& publicKeyId, const std::
                                      const std::string& cardId, const virgil::sdk::Credentials& credentials) {
     json jsonArray = json::array();
     for (const auto& identity : identitys) {
-        json jsonIdentity = {{JsonKey::type, toString(identity.getType())}, {JsonKey::value, identity.getValue()}};
+        json jsonIdentity = {{JsonKey::type, identity.getType()}, {JsonKey::value, identity.getValue()}};
         jsonArray.push_back(jsonIdentity);
     }
     json jsonIdentitys;

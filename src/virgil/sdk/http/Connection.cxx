@@ -36,9 +36,9 @@
 
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
-#include <restless.hpp>
+#include <restless/restless.hpp>
 
 #include <virgil/sdk/http/Connection.h>
 

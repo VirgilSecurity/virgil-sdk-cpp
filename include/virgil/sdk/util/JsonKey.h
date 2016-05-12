@@ -80,10 +80,10 @@ namespace sdk {
              */
             static const std::string cardId;
             /**
-             * @property isConfirmed
+             * @property authorizedBy
              * @brief Json Key that points boolean property which tells whether entity is confirmed, or not
              */
-            static const std::string isConfirmed;
+            static const std::string authorizedBy;
             /**
              * @property hash
              * @brief Json Key that points Virgil Card's hash
@@ -120,35 +120,10 @@ namespace sdk {
              */
             static const std::string data;
             /**
-             * @property signs
-             * @brief Json Key that points collection of Virgil Signs objects
-             */
-            static const std::string signs;
-            /**
-             * @property signerCardId
-             * @brief Json Key that points signer's Virgil Card identifier
-             */
-            static const std::string signerCardId;
-            /**
-             * @property signedCardId
-             * @brief Json Key that points signed Virgil Card identifier
-             */
-            static const std::string signedCardId;
-            /**
-             * @property signedDigest
-             * @brief Json Key that points signed digest
-             */
-            static const std::string signedDigest;
-            /**
-             * @property relations
-             * @brief Json Key that points collection of Virgil Card identifiers
-             */
-            static const std::string relations;
-            /**
-             * @property includeUnconfirmed
+             * @property includeUnauthorized
              * @brief Json Key that points boolean value which tell to include unconfirmed Virgil Cards, or not
              */
-            static const std::string includeUnconfirmed;
+            static const std::string includeUnauthorized;
             /**
              * @property error
              * @brief Json Key that points Error object
@@ -159,6 +134,12 @@ namespace sdk {
              * @brief Json Key that points points Error code
              */
             static const std::string errorCode;
+            /**
+             * @property extraFields
+             * @brief Json Key that points parameter will be passed back in an email in a
+             * hidden form with extra hidden fields
+             */
+            static const std::string extraFields;
             /**
              * @property confirmationCode
              * @brief Json Key that points identity confirmation code string

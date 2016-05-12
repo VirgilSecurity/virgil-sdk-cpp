@@ -38,6 +38,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
@@ -45,43 +46,33 @@
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
-
 int main(int argc, char** argv) {
-    if (argc < 4) {
-        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <relation>" + " <includeUnconfirmed>"
-                  << std::endl;
+    if (argc < 3) {
+        std::cerr << std::string("USAGE: ") + argv[0] + " <user_email>" + " <includeUnauthorized>" << std::endl;
         return 1;
     }
 
     try {
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
         std::string userEmail = argv[1];
-        std::string relation = argv[2];
-        std::string includeUnconfirmedStr = argv[3];
-
-        bool includeUnconfirmed = true;
-        if (includeUnconfirmedStr == "0") {
-            includeUnconfirmed = false;
+        std::string includeUnauthorizedStr = argv[2];
+        bool includeUnauthorized = true;
+        if (includeUnauthorizedStr == "0") {
+            includeUnauthorized = false;
         }
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN);
-
-        vsdk::dto::Identity identity(userEmail, vsdk::models::IdentityModel::Type::Email);
-
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
+        vsdk::dto::Identity identity(userEmail, "email");
         std::cout << "Search for Cards" << std::endl;
-
         std::vector<vsdk::models::CardModel> foundCards;
-        if (relation.empty()) {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed);
-        } else {
-            foundCards = servicesHub.card().search(identity, includeUnconfirmed, {relation});
-        }
-
+        foundCards = servicesHub.card().search(identity.getValue(), identity.getType(), includeUnauthorized);
         std::string foundCardsStr = vsdk::io::cardsToJson(foundCards, 4);
         std::cout << foundCardsStr << std::endl;
 
