@@ -38,7 +38,7 @@
 #include <string>
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
@@ -106,7 +106,7 @@ namespace sdk {
                 }
             }
 
-            static CardModel fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static CardModel fromJson(const std::string& jsonString) {
                 try {
                     json jsonCard = json::parse(jsonString);
 
@@ -195,9 +195,17 @@ namespace sdk {
 }
 }
 
-void marshaller_virgil_card_init() {
-    virgil::sdk::io::Marshaller<CardModel>::toJson(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::toJson<2>(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::toJson<4>(CardModel());
-    virgil::sdk::io::Marshaller<CardModel>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson(const CardModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson<2>(const CardModel&);
+
+template std::string
+virgil::sdk::io::Marshaller<CardModel>::toJson<4>(const CardModel&);
+
+template CardModel
+virgil::sdk::io::Marshaller<CardModel>::fromJson(const std::string&);

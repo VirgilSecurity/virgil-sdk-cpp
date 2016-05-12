@@ -2,9 +2,9 @@
 #include <string>
 #include <thread>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
-#include <restless.hpp>
+#include <restless/restless.hpp>
 
 #include "Client.h"
 #include "Constants.h"

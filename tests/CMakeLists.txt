@@ -43,7 +43,7 @@ file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/*.cxx")
 
 # Configure test target
 add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})
-target_link_libraries (${TEST_RUNNER} ${VIRGIL_SDK})
+target_link_libraries (${TEST_RUNNER} virgil_sdk)
 
 # Run tests
 add_test (

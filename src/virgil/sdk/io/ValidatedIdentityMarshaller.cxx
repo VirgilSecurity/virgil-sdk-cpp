@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/sdk/io/Marshaller.h>
 #include <virgil/sdk/util/JsonKey.h>
@@ -69,7 +69,7 @@ namespace sdk {
                 return jsonValidatedIdentity.dump(INDENT);
             }
 
-            static ValidatedIdentity fromJson(const std::string& jsonString) {
+            template <int FAKE = 0> static ValidatedIdentity fromJson(const std::string& jsonString) {
                 json typeJson = json::parse(jsonString);
 
                 IdentityModel::Type identityType = fromString(typeJson[JsonKey::type]);
@@ -86,9 +86,17 @@ namespace sdk {
 }
 }
 
-void marshaller_validation_token_init() {
-    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson(ValidatedIdentity());
-    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<2>(ValidatedIdentity());
-    virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<4>(ValidatedIdentity());
-    virgil::sdk::io::Marshaller<ValidatedIdentity>::fromJson(std::string());
-}
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson(const ValidatedIdentity&);
+
+template std::string
+virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<2>(const ValidatedIdentity&);
+
+template std::string
+virgil::sdk::io::Marshaller<ValidatedIdentity>::toJson<4>(const ValidatedIdentity&);
+
+template ValidatedIdentity
+virgil::sdk::io::Marshaller<ValidatedIdentity>::fromJson(const std::string&);

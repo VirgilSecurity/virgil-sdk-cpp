@@ -36,7 +36,7 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil_sdk CXX)
+project (virgil_sdk VERSION 3.1.0 LANGUAGES CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
@@ -47,13 +47,31 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
 set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
+
+## Crosscompiling
+set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
+
 ## Installation directories
-set (INSTALL_EXT_LIBS OFF CACHE BOOL "Enable installation of SDK dependency libraries")
-set (INSTALL_EXT_INCLUDES OFF CACHE BOOL "Enable installation of SDK dependency library headers")
-mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_INCLUDES)
+set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
+set (INSTALL_LIB_DIR_NAME lib CACHE STRING "Installation directory name for libraries")
+set (INSTALL_BIN_DIR_NAME bin CACHE STRING "Installation directory name for executables")
+set (INSTALL_CFG_DIR_NAME
+    "${INSTALL_LIB_DIR_NAME}/cmake/${PROJECT_NAME}" CACHE STRING
+    "Path to the CMake configuration files be installed"
+)
+
+## Installation options
+set (INSTALL_EXT_LIBS ON CACHE BOOL "Enable installation of SDK dependency libraries")
+set (INSTALL_EXT_HEADERS OFF CACHE BOOL "Enable installation of SDK dependency library headers")
+mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_HEADERS)
+
+# Build shared library if defined
+set (BUILD_SHARED_LIBS OFF CACHE BOOL "Force to create shared libraries")
+
 ## Doxygen
 set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen documentation")
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
+
 ## Environment
 set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
 if (ENABLE_STAGING_ENV)
@@ -85,37 +103,40 @@ if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
     add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
 endif ()
 
-# Define library name
-set (VIRGIL_SDK ${CMAKE_PROJECT_NAME})
-
 # Set library version
-set (VIRGIL_SDK_VERSION_MAJOR 3)
-set (VIRGIL_SDK_VERSION_MINOR 1)
-set (VIRGIL_SDK_VERSION_PATCH 0)
-set (VIRGIL_SDK_VERSION
-    ${VIRGIL_SDK_VERSION_MAJOR}.${VIRGIL_SDK_VERSION_MINOR}.${VIRGIL_SDK_VERSION_PATCH}
-)
-message (STATUS "Virgil SDK version: " ${VIRGIL_SDK_VERSION})
+message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
 
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_PATH})
 
-# Add self includes
-include_directories ("include")
-
-# Add external dependencies
-include (ExternalProject)
-
-include (json)
-include_directories (${JSON_INCLUDE_DIRS})
-
-include (rest)
-include_directories (${REST_INCLUDE_DIRS})
-
-include (virgil_crypto)
-include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
-
+# Add system external dependencies
 find_package (CURL REQUIRED)
+
+# Add in-house external dependencies
+include (virgil_depends)
+
+virgil_depends (
+    PACKAGE_NAME "virgil_crypto"
+    CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/virgil_crypto"
+)
+
+virgil_depends (
+    PACKAGE_NAME "nlohman_json"
+    CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/nlohman_json"
+)
+
+virgil_depends (
+    PACKAGE_NAME "restless"
+    CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
+)
+
+virgil_find_package (virgil_crypto 1.6.0 EXACT)
+virgil_find_package (nlohman_json 1.1.0 EXACT)
+virgil_find_package (restless 0.3.0 EXACT)
+virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
+virgil_find_package (RapidJSON) # Installed as virgil_crypto dependency, so found version will be appropriate
+
 include_directories (${CURL_INCLUDE_DIRS})
+include_directories (${NLOHMAN_JSON_INCLUDE_DIRS})
 
 # Grab source directory tree
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
@@ -130,27 +151,81 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 # Configure library build
-add_library (${VIRGIL_SDK} STATIC ${SRC_LIST})
-add_dependencies(${VIRGIL_SDK} json virgil_crypto rest)
-target_link_libraries (${VIRGIL_SDK} ${VIRGIL_CRYPTO_LIBRARIES} ${REST_LIBRARIES} ${CURL_LIBRARIES})
+add_library (${PROJECT_NAME} ${SRC_LIST})
+target_include_directories (${PROJECT_NAME}
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+)
+target_link_libraries (${PROJECT_NAME} virgil::security::virgil_crypto asoni::restless ${CURL_LIBRARIES})
+target_compile_definitions (${PROJECT_NAME} PUBLIC "UCLIBC=$<BOOL:${UCLIBC}>")
+set_target_properties (${PROJECT_NAME} PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+    INTERFACE_POSITION_INDEPENDENT_CODE ON
+    DEBUG_POSTFIX "_d"
+)
 
-# Install
-install (TARGETS ${VIRGIL_SDK} DESTINATION lib)
+if (BUILD_SHARED_LIBS)
+    set_target_properties (${PROJECT_NAME} PROPERTIES
+        VERSION ${${PROJECT_NAME}_VERSION} SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+    )
+endif ()
+
+# Define names for configuration files
+set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set (version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
+set (project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
+set (targets_export_name "${PROJECT_NAME}-targets")
+set (namespace "virgil::security::")
+
+# Create configuration files
+include (CMakePackageConfigHelpers)
+
+# Write Version Config
+write_basic_package_version_file (
+    "${version_config}" COMPATIBILITY SameMajorVersion
+)
+
+# Write Project Config
+configure_package_config_file (
+    "cmake/config/config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)
+
+# Install targets
+install (TARGETS ${PROJECT_NAME}
+    EXPORT "${targets_export_name}"
+    LIBRARY DESTINATION "${INSTALL_LIB_DIR_NAME}"
+    ARCHIVE DESTINATION "${INSTALL_LIB_DIR_NAME}"
+    RUNTIME DESTINATION "${INSTALL_BIN_DIR_NAME}"
+    INCLUDES DESTINATION "${INSTALL_INC_DIR_NAME}"
+)
+
 if (INSTALL_EXT_LIBS)
-    install (FILES ${REST_LIBRARY} DESTINATION lib)
-    install (FILES ${VIRGIL_CRYPTO_LIBRARIES} DESTINATION lib)
-    if (INSTALL_EXT_INCLUDES)
-        install (DIRECTORY "${JSON_INCLUDE_DIRS}/" DESTINATION "include")
-        install (DIRECTORY "${REST_INCLUDE_DIRS}/" DESTINATION "include")
-        install (DIRECTORY "${VIRGIL_CRYPTO_INCLUDE_DIRS}/" DESTINATION "include")
-    endif (INSTALL_EXT_INCLUDES)
+    install (DIRECTORY "${VIRGIL_DEPENDS_PREFIX}/lib/" DESTINATION "${INSTALL_LIB_DIR_NAME}")
 endif (INSTALL_EXT_LIBS)
 
+# Install headers
 install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "util" EXCLUDE
      PATTERN "endpoints" EXCLUDE
      PATTERN "ClientConnection.h" EXCLUDE
      PATTERN "Headers.h" EXCLUDE
+)
+
+if (INSTALL_EXT_HEADERS)
+    install (DIRECTORY "${VIRGIL_DEPENDS_PREFIX}/include/" DESTINATION "${INSTALL_INC_DIR_NAME}")
+endif ()
+
+# Install configurations
+install (
+    FILES "${project_config}" "${version_config}"
+    DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)
+
+install (
+    EXPORT "${targets_export_name}"
+    NAMESPACE "${namespace}"
+    DESTINATION "${INSTALL_CFG_DIR_NAME}"
 )
 
 # Add unit tests

@@ -34,51 +34,44 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Dependecy to https://github.com/anuragsoni/restless
+cmake_minimum_required (VERSION @CMAKE_VERSION@ FATAL_ERROR)
 
-# Define CMake variables
-set (CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-    -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-    -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+project (nlohman_json VERSION 1.1.0 LANGUAGES CXX)
+
+# Define names for configuration files
+set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "The directory the headers are installed in")
+set (INSTALL_CFG_DIR_NAME
+    "lib/cmake/${PROJECT_NAME}" CACHE STRING
+    "Path to the CMake configuration files be installed"
+)
+set (generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set (version_config "${generated_dir}/${PROJECT_NAME}-config-version.cmake")
+set (project_config "${generated_dir}/${PROJECT_NAME}-config.cmake")
+
+# Create configuration files
+include (CMakePackageConfigHelpers)
+
+# Write Version Config
+write_basic_package_version_file (
+    "${version_config}" COMPATIBILITY SameMajorVersion
 )
 
-if (CMAKE_PREFIX_PATH)
-    list (APPEND CMAKE_ARGS
-        -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
-    )
-endif (CMAKE_PREFIX_PATH)
+# Write  Project Config
+configure_package_config_file (
+    "cmake/config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${INSTALL_CFG_DIR_NAME}"
+    PATH_VARS INCLUDE_INSTALL_DIR
+)
 
+# Install headers
+install (
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
+    DESTINATION "include/nlohman"
+)
 
-if (NOT TARGET project_rest)
-    # Configure external project
-    ExternalProject_Add (project_rest
-        GIT_REPOSITORY "https://github.com/VirgilSecurity/restless.git"
-        GIT_TAG "http-del-with-body"
-        GIT_SUBMODULES "ext/curl"
-        PREFIX "${CMAKE_BINARY_DIR}/ext/rest"
-        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest"
-        CMAKE_ARGS ${CMAKE_ARGS}
-    )
-endif ()
-
-if (NOT TARGET rest)
-    # Define output
-    ExternalProject_Get_Property (project_rest INSTALL_DIR)
-
-    set (REST_LIBRARY_NAME ${CMAKE_STATIC_LIBRARY_PREFIX}restless${CMAKE_STATIC_LIBRARY_SUFFIX})
-    set (REST_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/rest/src/project_rest/include")
-    set (REST_LIBRARY "${INSTALL_DIR}/bin/${REST_LIBRARY_NAME}")
-    set (REST_LIBRARIES "${REST_LIBRARY}")
-
-    # Workaround of http://public.kitware.com/Bug/view.php?id=14495
-    file (MAKE_DIRECTORY ${REST_INCLUDE_DIRS})
-
-    # Make target
-    add_library (rest STATIC IMPORTED GLOBAL)
-    set_target_properties (rest PROPERTIES
-        IMPORTED_LOCATION ${REST_LIBRARY}
-        INTERFACE_INCLUDE_DIRECTORIES ${REST_INCLUDE_DIRS}
-    )
-    add_dependencies (rest project_rest)
-endif ()
+# Install configurations
+install (
+    FILES "${project_config}" "${version_config}"
+    DESTINATION "${INSTALL_CFG_DIR_NAME}"
+)

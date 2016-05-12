@@ -35,7 +35,7 @@
  */
 
 #include <iostream>
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/foundation/VirgilBase64.h>
 

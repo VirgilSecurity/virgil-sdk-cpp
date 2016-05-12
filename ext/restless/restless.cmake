@@ -34,31 +34,31 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
+cmake_minimum_required (VERSION @CMAKE_VERSION@ FATAL_ERROR)
 
-project (virgil-sdk-examples)
+project ("@VIRGIL_DEPENDS_PACKAGE_NAME@-depends")
 
-file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
+include (ExternalProject)
 
-foreach (DATA_FILE ${DATA_FILES})
-    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
-    configure_file (
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/${DATA_FILE_NAME}
-        ${CMAKE_CURRENT_BINARY_DIR}/${DATA_FILE_NAME}
-        COPYONLY
-    )
-endforeach (DATA_FILE)
+# Configure additional CMake parameters
+file (APPEND "@VIRGIL_DEPENDS_ARGS_FILE@"
+    "set (BUILD_RESTLESS_TESTS OFF CACHE INTERNAL \"\")\n"
+    "set (GENERATE_COVERAGE OFF CACHE INTERNAL \"\")\n"
+    "set (USE_SYSTEM_GTEST OFF CACHE INTERNAL \"\")\n"
+    "set (INSECURE_CURL OFF CACHE INTERNAL \"\")\n"
+    "set (USE_LOCAL_CURL OFF CACHE INTERNAL \"\")\n"
+)
 
-aux_source_directory ("src" EXAMPLES_SRC_LIST)
-foreach (SRC ${EXAMPLES_SRC_LIST})
-    get_filename_component (TARGET_NAME ${SRC} NAME_WE)
-    add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME} virgil_sdk)
-    if (INSTALL_EXAMPLES)
-        install (TARGETS ${TARGET_NAME} DESTINATION "share/doc/virgil-sdk/examples")
-    endif (INSTALL_EXAMPLES)
-endforeach (SRC)
+ExternalProject_Add (${PROJECT_NAME}
+    DOWNLOAD_DIR "@VIRGIL_DEPENDS_PACKAGE_DOWNLOAD_DIR@"
+    URL "https://github.com/VirgilSecurity/restless/archive/7210d88d095b50d123f6172499cd64170a6577d7.tar.gz"
+    URL_HASH SHA1=0df7fc4a98c6312c1e2b03eae0c167052695d8fb
+    PREFIX "@VIRGIL_DEPENDS_PACKAGE_BUILD_DIR@"
+    CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/patch"
+            "${CMAKE_CURRENT_BINARY_DIR}/src/${PROJECT_NAME}/src"
+)
 
-if (INSTALL_EXAMPLES)
-    install (DIRECTORY "data/" DESTINATION "share/doc/virgil-sdk/examples")
-endif (INSTALL_EXAMPLES)
+add_custom_target ("${PROJECT_NAME}-build" ALL COMMENT "Build package ${PROJECT_NAME}")
+add_dependencies ("${PROJECT_NAME}-build" ${PROJECT_NAME})

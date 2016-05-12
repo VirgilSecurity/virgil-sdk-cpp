@@ -36,7 +36,7 @@
 
 #include <iostream>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilCipher.h>

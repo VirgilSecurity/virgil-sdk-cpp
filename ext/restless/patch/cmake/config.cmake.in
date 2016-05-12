@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Virgil Security Inc.
+# Copyright (C) 2016 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,31 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-#
-# @brief Defines pointer size for current compiler.
-# @return pointer size in bytes thru @param 'pointer_size'
-#
-function (check_pointer_size pointer_size)
-    if (CMAKE_CROSSCOMPILING)
-        set (${pointer_size} "" PARENT_SCOPE)
-    else ()
-        file (WRITE
-            ${CMAKE_BINARY_DIR}/CMakeTmp/check_pointer_size.cxx
-            "int main() { void *ptr = 0; return sizeof(ptr); }"
-        )
+@PACKAGE_INIT@
 
-        try_run (
-            RUN_RESULT
-            COMPILE_RESULT
-            ${CMAKE_BINARY_DIR}
-            ${CMAKE_BINARY_DIR}/CMakeTmp/check_pointer_size.cxx
-            OUTPUT_VARIABLE OUTPUT
-        )
-
-        if (COMPILE_RESULT AND RUN_RESULT GREATER 0)
-            set (${pointer_size} ${RUN_RESULT} PARENT_SCOPE)
-        else ()
-            set (${pointer_size} "" PARENT_SCOPE)
-        endif ()
-    endif ()
-endfunction (check_pointer_size)
+include ("${CMAKE_CURRENT_LIST_DIR}/@targets_export_name@.cmake")
+check_required_components ("@PROJECT_NAME@")

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Virgil Security Inc.
+# Copyright (C) 2016 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,33 +34,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# Dependecy to https://github.com/nlohmann/json
+@PACKAGE_INIT@
 
-# Configure external project
-if (NOT TARGET project_json)
-    ExternalProject_Add (project_json
-        GIT_REPOSITORY "https://github.com/nlohmann/json.git"
-        GIT_TAG "v1.1.0"
-        PREFIX "${CMAKE_BINARY_DIR}/ext/json"
-        SOURCE_DIR "${CMAKE_BINARY_DIR}/ext/json/src/project_json"
-        CMAKE_COMMAND ""
-        BUILD_COMMAND ""
-        INSTALL_COMMAND ""
-        TEST_COMMAND ""
-    )
-endif ()
-
-if (NOT TARGET json)
-    # Configure output
-    set (JSON_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/ext/json/src/project_json/src")
-
-    # Workaround of http://public.kitware.com/Bug/view.php?id=14495
-    file (MAKE_DIRECTORY ${JSON_INCLUDE_DIRS})
-
-    # Make target
-    add_library (json STATIC IMPORTED GLOBAL)
-    set_target_properties (json PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES ${JSON_INCLUDE_DIRS}
-    )
-    add_dependencies (json project_json)
-endif ()
+include ("${CMAKE_CURRENT_LIST_DIR}/@targets_export_name@.cmake")
+check_required_components ("@PROJECT_NAME@")

@@ -43,7 +43,7 @@
 
 #include "../helpers.h"
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/sdk/dto/ValidatedIdentity.h>
 #include <virgil/sdk/util/JsonKey.h>

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015 Virgil Security Inc.
+# Copyright (C) 2016 Virgil Security Inc.
 #
 # Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
 #
@@ -34,31 +34,20 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
+#
+# See 'virgil_depends_local.cmake' for documentation
+# Note:
+#     VIRGIL_DEPENDS_CMAKE_FILE cache varibale can be used to define alternative 'virgil_depends.cmake'
+#     module implementation, i.e. from an upstream project.
+#
 
-project (virgil-sdk-examples)
-
-file (GLOB_RECURSE DATA_FILES "${CMAKE_CURRENT_SOURCE_DIR}/data/*")
-
-foreach (DATA_FILE ${DATA_FILES})
-    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/data/" "" DATA_FILE_NAME ${DATA_FILE})
-    configure_file (
-        ${CMAKE_CURRENT_SOURCE_DIR}/data/${DATA_FILE_NAME}
-        ${CMAKE_CURRENT_BINARY_DIR}/${DATA_FILE_NAME}
-        COPYONLY
-    )
-endforeach (DATA_FILE)
-
-aux_source_directory ("src" EXAMPLES_SRC_LIST)
-foreach (SRC ${EXAMPLES_SRC_LIST})
-    get_filename_component (TARGET_NAME ${SRC} NAME_WE)
-    add_executable (${TARGET_NAME} ${SRC})
-    target_link_libraries (${TARGET_NAME} virgil_sdk)
-    if (INSTALL_EXAMPLES)
-        install (TARGETS ${TARGET_NAME} DESTINATION "share/doc/virgil-sdk/examples")
-    endif (INSTALL_EXAMPLES)
-endforeach (SRC)
-
-if (INSTALL_EXAMPLES)
-    install (DIRECTORY "data/" DESTINATION "share/doc/virgil-sdk/examples")
-endif (INSTALL_EXAMPLES)
+if (EXISTS "${VIRGIL_DEPENDS_CMAKE_FILE}")
+    include ("${VIRGIL_DEPENDS_CMAKE_FILE}")
+else ()
+    find_file (VIRGIL_DEPENDS_CMAKE_FILE "virgil_depends_local.cmake" HINTS ${CMAKE_MODULE_PATH})
+    if (VIRGIL_DEPENDS_CMAKE_FILE)
+        include ("${VIRGIL_DEPENDS_CMAKE_FILE}")
+    else ()
+        include (virgil_depends_local)
+    endif ()
+endif ()

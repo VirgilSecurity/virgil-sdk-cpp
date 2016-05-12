@@ -39,7 +39,7 @@
 
 #include <stdexcept>
 
-#include <json.hpp>
+#include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilCipher.h>
 #include <virgil/crypto/VirgilByteArray.h>
