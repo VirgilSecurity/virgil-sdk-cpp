@@ -63,17 +63,11 @@ namespace sdk {
             /**
              * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern
              */
-            static std::string searchApp();
+            static std::string searchGlobal();
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card sign
-             * @param cardId - Virgil Card identifier
+             * @brief Returns the endpoint in charge of the Virgil Cards searches by an email
              */
-            static std::string sign(const std::string& cardId);
-            /**
-             * @brief Returns the endpoint in charge of the Virgil Card unsign
-             * @param cardId - Virgil Card identifier
-             */
-            static std::string unsign(const std::string& cardId);
+            static std::string searchGlobalbyEmail();
             /**
              * @brief Returns the endpoint in charge of the Virgil Card revoke
              * @param cardId - Virgil Card identifier

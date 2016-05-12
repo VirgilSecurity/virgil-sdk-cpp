@@ -64,12 +64,12 @@ namespace sdk {
              * @param cardIdentity - identity associated with Virgil Card
              * @param data - custom data
              * @param publicKey - Public Key connected to the Virgil Card
-             * @param confirmed - defines whether Identity connected to the Virgil Card is confirmed by user, or not
+             * @param authorizedBy - by whom authorized
              */
             CardModel(const std::string& id, const std::string& createdAt, const std::string& hash,
                       const virgil::sdk::models::IdentityModel& cardIdentity,
                       const std::map<std::string, std::string>& data,
-                      const virgil::sdk::models::PublicKeyModel& publicKey, const bool confirmed);
+                      const virgil::sdk::models::PublicKeyModel& publicKey, const std::string& authorizedBy);
             /**
              * @brief Return Virgil Card identifier
              */
@@ -98,7 +98,7 @@ namespace sdk {
             /**
              * @brief Return whether Identity connected to the Virgil Card is confirmed by user, or not
              */
-            bool isConfirmed() const;
+            std::string authorizedBy() const;
 
         private:
             std::string id_;
@@ -107,7 +107,7 @@ namespace sdk {
             virgil::sdk::models::IdentityModel cardIdentity_;
             std::map<std::string, std::string> data_;
             virgil::sdk::models::PublicKeyModel publicKey_;
-            bool confirmed_ = false;
+            std::string authorizedBy_;
         };
         /**
          * @brief Compare Virgil Cards for equality
@@ -115,7 +115,7 @@ namespace sdk {
          * @return true if given objects are equal, false - otherwise
          */
         inline bool operator==(const CardModel& left, const CardModel& right) {
-            return left.isConfirmed() == right.isConfirmed() && left.getId() == right.getId() &&
+            return left.authorizedBy() == right.authorizedBy() && left.getId() == right.getId() &&
                    left.getCreatedAt() == right.getCreatedAt() && left.getHash() == right.getHash() &&
                    left.getCardIdentity() == right.getCardIdentity() && left.getData() == right.getData() &&
                    left.getPublicKey() == right.getPublicKey();

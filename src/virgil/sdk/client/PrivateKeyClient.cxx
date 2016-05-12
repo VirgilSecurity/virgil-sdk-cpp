@@ -34,8 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
-
 #include <nlohman/json.hpp>
 
 #include <virgil/crypto/VirgilByteArray.h>
@@ -101,7 +99,7 @@ PrivateKeyModel PrivateKeyClient::get(const std::string& cardId, const Validated
     }
 
     json payload = {{JsonKey::identity,
-                     {{JsonKey::type, virgil::sdk::models::toString(validatedIdentity.getType())},
+                     {{JsonKey::type, validatedIdentity.getType()},
                       {JsonKey::value, validatedIdentity.getValue()},
                       {JsonKey::validationToken, validatedIdentity.getToken()}}},
                     {JsonKey::responsePassword, responsePassword},

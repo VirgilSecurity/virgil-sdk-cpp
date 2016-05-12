@@ -38,19 +38,13 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include <fstream>
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
-
-const std::string VIRGIL_ACCESS_TOKEN = "eyJpZCI6IjAwMmI1NzY0LTBmOTgtNDUyMC04YjA0LTc0ZmYxYjNl"
-                                        "NmYyMSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIwMmJmOTIwYS1m"
-                                        "MmI3LTQ1NzQtYTM1Ni0yYTY2MzVkOTdjMDUiLCJ0dGwiOi0xLCJj"
-                                        "dGwiOi0xLCJwcm9sb25nIjowfQ==.MFgwDQYJYIZIAWUDBAICBQA"
-                                        "ERzBFAiEA74ba/2MfdUu9ML2o9mVve5aC1U8rCGU1PY0u0v/luJY"
-                                        "CIAhKKHF4u642FrtJ/aVX8XE4z1EGAs/FD707Fuh8SSnu";
 
 const std::string VIRGIL_IDENTITY_SERVICE_URI_BASE = "https://identity-stg.virgilsecurity.com";
 const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
@@ -62,13 +56,24 @@ const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-
 
 int main() {
     try {
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
         vsdk::ServiceUri virgilUri(VIRGIL_IDENTITY_SERVICE_URI_BASE, VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
                                    VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
 
-        vsdk::ServicesHub servicesHub(VIRGIL_ACCESS_TOKEN, virgilUri);
-        auto identityServiceCards = servicesHub.card().searchApp(kIdentityServiceApplicationId, true);
-        auto publicKeysServiceCards = servicesHub.card().searchApp(kPublicKeyServiceApplicationId, true);
-        auto privateKeysServiceCards = servicesHub.card().searchApp(kPrivateKeyServiceApplicationId, true);
+        vsdk::ServicesHub servicesHub(virgilAccessToken, virgilUri);
+        auto identityServiceCards =
+            servicesHub.card().searchGlobal(kIdentityServiceApplicationId, vsdk::dto::IdentityType::Application, true);
+        auto publicKeysServiceCards =
+            servicesHub.card().searchGlobal(kPublicKeyServiceApplicationId, vsdk::dto::IdentityType::Application, true);
+        auto privateKeysServiceCards = servicesHub.card().searchGlobal(kPrivateKeyServiceApplicationId,
+                                                                       vsdk::dto::IdentityType::Application, true);
 
         vsdk::models::CardModel identityServiceCard = identityServiceCards.at(0);
         vsdk::models::CardModel publicKeysServiceCard = publicKeysServiceCards.at(0);

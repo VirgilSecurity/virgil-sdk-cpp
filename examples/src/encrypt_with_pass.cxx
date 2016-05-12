@@ -51,6 +51,14 @@ const std::string PASSWORD = "123456789";
 
 int main() {
     try {
+        std::string pathVirgilAccessToken = "virgil_access_token.txt";
+        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
+        if (!inVirgilAccessTokenFile) {
+            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
+        }
+        std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
+                                      std::istreambuf_iterator<char>());
+
         vcrypto::VirgilStreamCipher cipher;
 
         std::cout << "Add recipient pass..." << std::endl;

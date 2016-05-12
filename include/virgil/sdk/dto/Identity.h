@@ -39,8 +39,6 @@
 
 #include <string>
 
-#include <virgil/sdk/models/IdentityModel.h>
-
 namespace virgil {
 namespace sdk {
     namespace dto {
@@ -53,17 +51,17 @@ namespace sdk {
              * @brief Creates empty not valid identity
              */
             Identity() = default;
+
+            virtual ~Identity() = default;
+
             /**
              * @brief Creates identity with given values
              *
              * @param value - identity value, i.e. support@virgilsecurity.com
-             * @param type - identity type, i.e. IdentityModel::Type::Email
+             * @param type - identity type, i.e. email, phone etc
              *
-             * @note
-             *     If type is omitted, then server try to gess type of the identity according
-             *     to the value format
              */
-            Identity(const std::string& value, const virgil::sdk::models::IdentityModel::Type& type);
+            Identity(const std::string& value, const std::string& type);
             /**
              * @brief Return identity value
              */
@@ -71,11 +69,11 @@ namespace sdk {
             /**
              * @brief Return identity type
              */
-            const virgil::sdk::models::IdentityModel::Type getType() const;
+            const std::string getType() const;
 
         private:
             std::string value_;
-            virgil::sdk::models::IdentityModel::Type type_ = virgil::sdk::models::IdentityModel::Type::None;
+            std::string type_;
         };
 
         /**

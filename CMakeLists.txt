@@ -206,10 +206,10 @@ endif (INSTALL_EXT_LIBS)
 
 # Install headers
 install (DIRECTORY "include/" DESTINATION "include"
-     PATTERN "util" EXCLUDE
      PATTERN "endpoints" EXCLUDE
      PATTERN "ClientConnection.h" EXCLUDE
      PATTERN "Headers.h" EXCLUDE
+     PATTERN "JsonKey.h" EXCLUDE
 )
 
 if (INSTALL_EXT_HEADERS)
@@ -258,9 +258,9 @@ endif (DOT_PROGRAM)
 if (DOXYGEN_FOUND)
     if (DOXYGEN_EXCLUDE_PRIVATE)
         set (DOXYGEN_EXCLUDE
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/util/*"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/endpoints/*"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/http/Headers.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/util/JsonKey.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/client/ClientConnection.h"
         )
         string (REPLACE ";" " " DOXYGEN_EXCLUDE "${DOXYGEN_EXCLUDE}")
