@@ -46,24 +46,17 @@
 
 #include <virgil/sdk/ServicesHub.h>
 #include <virgil/sdk/io/Marshaller.h>
-#include <virgil/sdk/util/obfuscator.h>
-#include <virgil/sdk/util/token.h>
 
 namespace vsdk = virgil::sdk;
 namespace vcrypto = virgil::crypto;
 
-static vsdk::dto::ValidatedIdentity generateValidatedIdentity(const vsdk::dto::Identity& obfuscatedIdentity,
-                                                              const vsdk::Credentials& appCredentials);
-
 int main(int argc, char** argv) {
     try {
-        std::cout << "1. Obfuscate identity" << std::endl;
-        std::string userEmail = "bob@mailinator.com";
-        std::string obfuscatorIdentityValue = vsdk::util::obfuscate(userEmail, "salt");
-        std::string obfuscatorIdentityType = "obfuscated-email";
-        vsdk::dto::Identity obfuscatedIdentity(obfuscatorIdentityValue, obfuscatorIdentityType);
+        std::cout << "1. Create a Global Virgil Card" << std::endl;
+        std::string userEmail;
+        std::cout << "Enter email:" << std::endl;
+        std::cin >> userEmail;
 
-        std::cout << "2. Create a Private Virgil Card" << std::endl;
         std::string pathVirgilAccessToken = "virgil_access_token.txt";
         std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken, std::ios::in | std::ios::binary);
         if (!inVirgilAccessTokenFile) {
@@ -72,62 +65,57 @@ int main(int argc, char** argv) {
         std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
                                       std::istreambuf_iterator<char>());
 
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
+        std::cout << "1.1 Get Validated Identity from Identity Service" << std::endl;
+
+        std::cout << "The email with confirmation code has been sent to your email address. Please check it!"
+                  << std::endl;
+        std::string actionId = servicesHub.identity().verify(userEmail, vsdk::dto::VerifiableIdentityType::Email);
+        std::string confirmationCode;
+
+        std::cout << "Enter Code:" << std::endl;
+        std::cin >> confirmationCode;
+        vsdk::dto::ValidatedIdentity validatedIdentity =
+            servicesHub.identity().confirm(actionId, confirmationCode, 3600, 3);
+
         std::string kPrivateKeyPassword = "qwerty";
         vcrypto::VirgilKeyPair keyPair(vcrypto::str2bytes(kPrivateKeyPassword));
         vcrypto::VirgilByteArray userPublicKey = keyPair.publicKey();
         vcrypto::VirgilByteArray userPrivateKey = keyPair.privateKey();
         vsdk::Credentials userCredentials(userPrivateKey, virgil::crypto::str2bytes(kPrivateKeyPassword));
 
-        std::cout << "2.1 Generation Validation Token" << std::endl;
-        std::string pathAppPrivateKey = "application_keys/private.key";
-        std::ifstream inAppPrivateKeyFile(pathAppPrivateKey, std::ios::in | std::ios::binary);
-        if (!inAppPrivateKeyFile) {
-            throw std::runtime_error("can not read private key: " + pathAppPrivateKey);
-        }
-        vcrypto::VirgilByteArray appPrivateKeyByteArray;
-        std::copy(std::istreambuf_iterator<char>(inAppPrivateKeyFile), std::istreambuf_iterator<char>(),
-                  std::back_inserter(appPrivateKeyByteArray));
+        vsdk::models::CardModel globalCard =
+            servicesHub.card().create(validatedIdentity, userPublicKey, userCredentials);
+        std::cout << "A Global Virgil Card:" << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(globalCard) << std::endl;
 
-        std::string kApplicationPrivateKeyPassword = "<APPLICATION_PRIVATE_KEY_PASSWORD>";
-        vsdk::Credentials appCredentials(appPrivateKeyByteArray,
-                                         virgil::crypto::str2bytes(kApplicationPrivateKeyPassword));
+        std::cout << "3. Search for a Global Virgil Card" << std::endl;
+        std::vector<vsdk::models::CardModel> foundGlobalCard =
+            servicesHub.card().searchGlobal(userEmail, vsdk::dto::IdentityType::Email);
 
-        vsdk::ServicesHub servicesHub(virgilAccessToken);
-        vsdk::models::CardModel privateCard = servicesHub.card().create(
-            generateValidatedIdentity(obfuscatedIdentity, appCredentials), userPublicKey, userCredentials);
-
-        std::cout << "A Private Virgil Card:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(privateCard) << std::endl;
-
-        std::cout << "3. Search for a Private Virgil Card" << std::endl;
-        std::vector<vsdk::models::CardModel> foundPrivateCard =
-            servicesHub.card().search(obfuscatedIdentity.getValue(), obfuscatedIdentity.getType());
-
-        std::cout << "Found a Private Virgil Card:" << std::endl;
-        std::cout << vsdk::io::cardsToJson(foundPrivateCard, 4) << std::endl;
+        std::cout << "Found a Global Virgil Card:" << std::endl;
+        std::cout << virgil::sdk::io::cardsToJson(foundGlobalCard, 4) << std::endl;
 
         std::cout << "4. Get a Public Key" << std::endl;
-        std::string publicKeyId = privateCard.getPublicKey().getId();
+        std::string publicKeyId = globalCard.getPublicKey().getId();
         vsdk::models::PublicKeyModel foundPublicKey = servicesHub.publicKey().get(publicKeyId);
 
         std::cout << "Found a Public Key:" << std::endl;
         std::cout << vsdk::io::Marshaller<vsdk::models::PublicKeyModel>::toJson<4>(foundPublicKey) << std::endl;
 
         std::cout << "5. Stash a Private Key" << std::endl;
-        servicesHub.privateKey().add(privateCard.getId(), userCredentials);
+        servicesHub.privateKey().add(globalCard.getId(), userCredentials);
 
         std::cout << "6. Get a Private Key:" << std::endl;
-        vsdk::models::PrivateKeyModel privateKey = servicesHub.privateKey().get(
-            privateCard.getId(), generateValidatedIdentity(obfuscatedIdentity, appCredentials));
+        vsdk::models::PrivateKeyModel privateKey = servicesHub.privateKey().get(globalCard.getId(), validatedIdentity);
 
         std::cout << vsdk::io::Marshaller<vsdk::models::PrivateKeyModel>::toJson<4>(privateKey) << std::endl;
 
         std::cout << "7. Destroy a Private Key" << std::endl;
-        servicesHub.privateKey().del(privateCard.getId(), userCredentials);
+        servicesHub.privateKey().del(globalCard.getId(), userCredentials);
 
         std::cout << "8. Revoke the Private Virgil Card\n";
-        servicesHub.card().revoke(privateCard.getId(), generateValidatedIdentity(obfuscatedIdentity, appCredentials),
-                                  userCredentials);
+        servicesHub.card().revoke(globalCard.getId(), validatedIdentity, userCredentials);
 
     } catch (std::exception& exception) {
         std::cerr << exception.what();
@@ -135,13 +123,4 @@ int main(int argc, char** argv) {
     }
 
     return 0;
-}
-
-vsdk::dto::ValidatedIdentity generateValidatedIdentity(const vsdk::dto::Identity& obfuscatedIdentity,
-                                                       const vsdk::Credentials& appCredentials) {
-
-    std::string validationToken = vsdk::util::generate_validation_token(obfuscatedIdentity.getValue(),
-                                                                        obfuscatedIdentity.getType(), appCredentials);
-
-    return vsdk::dto::ValidatedIdentity(obfuscatedIdentity, validationToken);
 }
