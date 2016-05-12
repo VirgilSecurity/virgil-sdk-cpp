@@ -50,13 +50,11 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 project (simple_chat)
 
 # Configure path to custom modules
-set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/utils" ${CMAKE_MODULE_PATH})
 
 # Define enviroment parameters
-include (check_pointer_size)
-check_pointer_size (POINTER_SIZE)
-if (POINTER_SIZE)
-    message (STATUS "Compiler pointer size: " ${POINTER_SIZE} " bytes")
+if (CMAKE_SIZEOF_VOID_P)
+    message (STATUS "Compiler pointer size: " ${CMAKE_SIZEOF_VOID_P} " bytes")
 else ()
     message (STATUS "Compiler pointer size: UNDEFINED")
 endif ()
@@ -67,7 +65,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Inspect system
 set (SYSTEM_ARCH x86)
-if (POINTER_SIZE EQUAL 8)
+if (CMAKE_SIZEOF_VOID_P EQUAL 8)
     set (SYSTEM_ARCH x64)
 endif ()
 string (TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
@@ -109,38 +107,22 @@ if (NOT VIRGIL_ACCESS_TOKEN)
     message (FATAL_ERROR "VIRGIL_ACCESS_TOKEN configuration is not defined.")
 endif ()
 
-set (CMAKE_MODULE_PATH "cmake/" ${CMAKE_MODULE_PATH})
-
-# Add external dependencies
-include (ExternalProject)
-
-include (json)
-include_directories (${JSON_INCLUDE_DIRS})
-
-include (rest)
-include_directories (${REST_INCLUDE_DIRS})
-
-# Find dependencies
+# Add system external dependencies
 find_package (CURL REQUIRED)
 include_directories (${CURL_INCLUDE_DIRS})
 
-include (virgil)
-virgil_add_dependency ("crypto"
-    VIRGIL_CRYPTO_DEPENDENCIES
-    VIRGIL_CRYPTO_INCLUDE_DIRS
-    VIRGIL_CRYPTO_LIBRARIES
+# Add in-house external dependencies
+include (virgil_depends)
+
+virgil_depends (
+    PACKAGE_NAME "virgil_sdk"
+    CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/virgil_sdk"
 )
-include_directories (${VIRGIL_CRYPTO_INCLUDE_DIRS})
 
-virgil_add_dependency ("virgil-sdk"
-    VIRGIL_SDK_DEPENDENCIES
-    VIRGIL_SDK_INCLUDE_DIRS
-    VIRGIL_SDK_LIBRARIES
-)
-include_directories (${VIRGIL_SDK_INCLUDE_DIRS})
-
-
-include_directories ("include/")
+virgil_find_package (virgil_sdk 3.0.5 EXACT)
+virgil_find_package (restless)      # Installed as virgil_sdk dependency, so found version will be appropriate
+virgil_find_package (virgil_crypto) # Installed as virgil_sdk dependency, so found version will be appropriate
+virgil_find_package (MbedTLS)       # Installed as virgil_sdk dependency, so found version will be appropriate
 
 # Grab source directory tree
 file (GLOB_RECURSE SRC_LIST "src/*.cxx")
@@ -155,21 +137,10 @@ endforeach ()
 file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
 
 add_executable (simple_chat ${SRC_LIST})
-add_dependencies (simple_chat
-    ${VIRGIL_SDK_DEPENDENCIES}
-    json
-    ${VIRGIL_CRYPTO_DEPENDENCIES}
-    rest
+target_include_directories (${PROJECT_NAME}
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
 )
-
-target_link_libraries (simple_chat
-    ${VIRGIL_SDK_LIBRARIES}
-    ${VIRGIL_CRYPTO_LIBRARIES}
-    ${REST_LIBRARIES}
-    ${CURL_LIBRARIES}
-)
-
-set_target_properties (simple_chat PROPERTIES OUTPUT_NAME "simple_chat")
+target_link_libraries (simple_chat virgil::security::virgil_sdk ${CURL_LIBRARIES})
 
 # Install simple_chat
 install (TARGETS simple_chat DESTINATION ${INSTALL_BIN_DIR_NAME})
