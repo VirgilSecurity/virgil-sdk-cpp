@@ -1,4 +1,10 @@
 /**
+ * @file obfuscator.h
+ * @brief Provides a helper functions to obfuscate sensitive data.
+ *
+ */
+
+/**
  * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>

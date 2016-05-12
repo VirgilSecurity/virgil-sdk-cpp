@@ -1,4 +1,9 @@
 /**
+ * @file token.h
+ * @brief Provides a helper functions to generate validation token based on application's private key.
+ */
+
+/**
  * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
@@ -49,7 +54,7 @@ namespace sdk {
          *
          * @param identityValue - the identity value
          * @param identityType - the type of the identity
-         * @param appCredentials -  the application Private Key + Private Key password
+         * @param credentials -  the application Private Key + Private Key password
          * @return validation token
          */
         std::string generate_validation_token(const std::string& identityValue, const std::string& identityType,
