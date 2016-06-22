@@ -77,7 +77,11 @@ namespace sdk {
 
             IDENTITY_VERIFY,  ///< POST /verify
             IDENTITY_CONFIRM, ///< POST /confirm
-            IDENTITY_VALIDATE ///< POST /validate
+            IDENTITY_VALIDATE,///< POST /validate
+            
+            VIRGIL_CERTIFICATE_CREATE, /// POST /certificate
+            VIRGIL_CERTIFICATE_REVOKE, /// DELETE /certificate/{certificate-id}
+            VIRGIL_CERTIFICATE_PULL    /// POST /certificate/actions/pull
         };
         /**
          * @brief Initialize exception

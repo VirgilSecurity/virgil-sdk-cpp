@@ -69,7 +69,11 @@ static std::string actionStr(Error::Action action) {
         {Error::Action::PRIVATE_KEY_DEL, "delete a Private Key."},
         {Error::Action::IDENTITY_VERIFY, "verify the Identity."},
         {Error::Action::IDENTITY_CONFIRM, "confirms the Identity."},
-        {Error::Action::IDENTITY_VALIDATE, "validates the passed token."}};
+        {Error::Action::IDENTITY_VALIDATE, "validates the passed token."},
+        
+        {Error::Action::VIRGIL_CERTIFICATE_CREATE, "creates Virgil Certificate."},
+        {Error::Action::VIRGIL_CERTIFICATE_REVOKE, "revoke a Virgil Certificate."},
+        {Error::Action::VIRGIL_CERTIFICATE_PULL, "pull a Virgil Certificate."}};
     auto message = code2str.find(action);
     return "Failed action: " + (message != code2str.end() ? message->second : "unknown.");
 }

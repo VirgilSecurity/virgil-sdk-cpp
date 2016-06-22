@@ -176,6 +176,21 @@ namespace sdk {
              */
             static const std::string responsePassword;
 
+            /**
+             * @property certificate
+             * @brief Json Key that points Virgil Security Certificate
+             */
+            static const std::string certificate;
+            /**
+             * @property sign
+             * @brief Json Key that points Signature of Virgil Security Certificate
+             */
+            static const std::string sign;
+            /**
+             * @property signId
+             * @brief Json Key that points identifier for signature of Virgil Security Certificate
+             */
+            static const std::string signId;
         private:
             JsonKey();
         };
