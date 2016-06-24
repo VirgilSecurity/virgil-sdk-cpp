@@ -86,18 +86,22 @@ namespace virgil {
                 /**
                  * @brief Performs the pull of a private application's Virgil Certificate
                  *
-                 * @param identityValue - identity to be searched
-                 * @param identityType - identity type to be searched
+                 * @param identity - identity to be searched
                  * @return Found Virgil Certificate
                  */
-                virgil::sdk::models::CertificateModel pull(const std::string& identityValue,
-                                                            const std::string& identityType);
+                virgil::sdk::models::CertificateModel pull(const virgil::sdk::dto::Identity & identity);
                 
                 /**
                  * @brief Performs the pull of the Virgil Root Certificate
                  * @return Virgil Root Certificate
                  */
                 virgil::sdk::models::CertificateModel pullRootCertificate();
+            
+                /**
+                 * @brief Performs the pull of the Virgil Certificate Revocation List
+                 * @return Virgil Certificate Revocation List
+                 */
+                void getCRL();
             };
         }
     }

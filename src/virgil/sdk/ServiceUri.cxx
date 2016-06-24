@@ -56,15 +56,22 @@ const std::string ServiceUri::kPrivateKeyServiceUri = VIRGIL_PRIVATE_KEYS_SERVIC
 const std::string ServiceUri::kPrivateKeyServiceUri = "https://keys-private.virgilsecurity.com";
 #endif
 
+#if defined(VIRGIL_CA_SERVICE_URI)
+const std::string ServiceUri::kCAServiceUri = VIRGIL_CA_SERVICE_URI;
+#else
+const std::string ServiceUri::kCAServiceUri = "https://ca.virgilsecurity.com";
+#endif
+
 ServiceUri::ServiceUri()
         : identityService_(kIdentityServiceUri),
           keysService_(kKeysServiceUri),
-          privateKeyService_(kPrivateKeyServiceUri) {
+          privateKeyService_(kPrivateKeyServiceUri),
+          caService_(kCAServiceUri) {
 }
 
 ServiceUri::ServiceUri(const std::string& identityService, const std::string& keysService,
-                       const std::string& privateKeyService)
-        : identityService_(identityService), keysService_(keysService), privateKeyService_(privateKeyService) {
+                       const std::string& privateKeyService, const std::string& caService)
+        : identityService_(identityService), keysService_(keysService), privateKeyService_(privateKeyService), caService_(caService) {
 }
 
 std::string ServiceUri::getIdentityService() const {
@@ -77,4 +84,8 @@ std::string ServiceUri::getPublicKeyService() const {
 
 std::string ServiceUri::getPrivateKeyService() const {
     return privateKeyService_;
+}
+
+std::string ServiceUri::getCAService() const {
+    return caService_;
 }

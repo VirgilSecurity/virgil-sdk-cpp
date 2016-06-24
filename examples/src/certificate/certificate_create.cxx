@@ -54,61 +54,69 @@ namespace vcrypto = virgil::crypto;
 
 static vsdk::dto::ValidatedIdentity generateValidatedIdentity(const vsdk::dto::Identity& identity,
                                                               const vsdk::Credentials& appCredentials);
+static void showCertificate(const std::string & title, const vsdk::models::CertificateModel & certificate);
+static vcrypto::VirgilByteArray loadFile(const std::string & file);
 
 int main(int argc, char** argv) {
     try {
+        // Configuration section
+        const std::string pathVirgilAccessToken("virgil_access_token.txt");
+        const std::string pathAppPrivateKey("application_keys/private.key");
         const std::string identityStr("new-card-test-identity");
         const std::string identityType("test-identity-type");
+        const std::string kPrivateKeyPassword("qwerty");
+        const std::string kApplicationPrivateKeyPassword("qweASD123");
+        
+        // Load Access token
+        const std::string virgilAccessToken(vcrypto::bytes2str(loadFile(pathVirgilAccessToken)));
+        
+        // Prepare Sirvices Hub
+        vsdk::ServicesHub servicesHub(virgilAccessToken);
+#if 0
+        // Prepare identity
         vsdk::dto::Identity identity(identityStr, identityType);
         
-        std::cout << "1. Create a Virgil Certificate" << std::endl;
-        
-        const std::string pathVirgilAccessToken("virgil_access_token.txt");
-        std::ifstream inVirgilAccessTokenFile(pathVirgilAccessToken,
-                                              std::ios::in | std::ios::binary);
-        if (!inVirgilAccessTokenFile) {
-            throw std::runtime_error("can not read file: " + pathVirgilAccessToken);
-        }
-        const std::string virgilAccessToken((std::istreambuf_iterator<char>(inVirgilAccessTokenFile)),
-                                      std::istreambuf_iterator<char>());
-        
-        const std::string kPrivateKeyPassword("qwerty");
-        const vcrypto::VirgilKeyPair keyPair(vcrypto::str2bytes(kPrivateKeyPassword));
-        const vcrypto::VirgilByteArray userPublicKey(keyPair.publicKey());
-        const vcrypto::VirgilByteArray userPrivateKey(keyPair.privateKey());
-        const vsdk::Credentials userCredentials(userPrivateKey,
-                                                virgil::crypto::str2bytes(kPrivateKeyPassword));
+        // Get the root certificate
+        std::cout << "1 Getting of the Root Certificate" << std::endl;
+        auto rootCertificate(servicesHub.certificate().pullRootCertificate());
+        showCertificate("The Virgil Root Certificate:", rootCertificate);
         
         
-        std::cout << "1.1 Generation Validation Token" << std::endl;
+        std::cout << "2. Create a Virgil Certificate" << std::endl;
         
-        const std::string pathAppPrivateKey("application_keys/private.key");
-        std::ifstream inAppPrivateKeyFile(pathAppPrivateKey,
-                                          std::ios::in | std::ios::binary);
-        if (!inAppPrivateKeyFile) {
-            throw std::runtime_error("can not read private key: " + pathAppPrivateKey);
-        }
-        vcrypto::VirgilByteArray appPrivateKeyByteArray;
-        std::copy(std::istreambuf_iterator<char>(inAppPrivateKeyFile),
-                  std::istreambuf_iterator<char>(),
-                  std::back_inserter(appPrivateKeyByteArray));
-        
-        const std::string kApplicationPrivateKeyPassword("qweASD123");
+        // Get validation token
+        std::cout << "2.1 Generation Validation Token" << std::endl;
+        const vcrypto::VirgilByteArray appPrivateKeyByteArray(loadFile(pathAppPrivateKey));
         vsdk::Credentials appCredentials(appPrivateKeyByteArray,
                                          virgil::crypto::str2bytes(kApplicationPrivateKeyPassword));
-        
-        
-        vsdk::ServicesHub servicesHub(virgilAccessToken);
         vsdk::dto::ValidatedIdentity validatedIdentity(generateValidatedIdentity(identity, appCredentials));
+
         
-        vsdk::models::CertificateModel certificate(servicesHub
-                                            .certificate()
-                                            .create(validatedIdentity,
-                                                    userPublicKey,
-                                                    userCredentials));
+        // Create certificate
+        std::cout << "2.2 Certificate creation" << std::endl;
+        const vcrypto::VirgilKeyPair userKeyPair(vcrypto::str2bytes(kPrivateKeyPassword));
+        const vsdk::Credentials userCredentials(userKeyPair.privateKey(),
+                                                virgil::crypto::str2bytes(kPrivateKeyPassword));
+        showCertificate("A Virgil Certificate:", servicesHub.certificate()
+                                                            .create(validatedIdentity,
+                                                                    userKeyPair.publicKey(),
+                                                                    userCredentials));
         
-        std::cout << "A Virgil Certificate:" << std::endl;
-        std::cout << vsdk::io::Marshaller<vsdk::models::CertificateModel>::toJson<4>(certificate) << std::endl;
+        std::cout << "3 Pull Virgil Certificate by Identity" << std::endl;
+        auto pulledCertificate(servicesHub.certificate().pull(identity));
+        showCertificate("Pulled Virgil Certificate:", pulledCertificate);
+        
+        std::cout << "4 Revoke Virgil Certificate" << std::endl;
+        // Get validation token
+        std::cout << "4.1 Generation Validation Token" << std::endl;
+        
+        servicesHub.certificate().revoke(pulledCertificate.getCard().getId(),
+                                         validatedIdentity,
+                                         userCredentials);
+#endif
+        std::cout << "5 Get Certificates Revocation List" << std::endl;
+        servicesHub.certificate().getCRL();
+    
     } catch (std::exception& exception) {
         std::cerr << exception.what();
         return 1;
@@ -117,11 +125,29 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-vsdk::dto::ValidatedIdentity generateValidatedIdentity(const vsdk::dto::Identity& identity,
+static vcrypto::VirgilByteArray loadFile(const std::string & file) {
+    std::ifstream ifs(file, std::ios::in | std::ios::binary);
+    if (!ifs) throw std::runtime_error("can not read file: " + file);
+
+    vcrypto::VirgilByteArray ba;
+    std::copy(std::istreambuf_iterator<char>(ifs),
+              std::istreambuf_iterator<char>(),
+              std::back_inserter(ba));
+
+    return ba;
+}
+
+static void showCertificate(const std::string & title, const vsdk::models::CertificateModel & certificate) {
+    std::cout
+    << title << std::endl
+    << vsdk::io::Marshaller<vsdk::models::CertificateModel>::toJson<4>(certificate)
+    << std::endl << std::endl;
+}
+
+static vsdk::dto::ValidatedIdentity generateValidatedIdentity(const vsdk::dto::Identity& identity,
                                                        const vsdk::Credentials& appCredentials) {
-    
     std::string validationToken = vsdk::util::generate_validation_token(identity.getValue(),
-                                                                        identity.getType(), appCredentials);
-    
+                                                                        identity.getType(),
+                                                                        appCredentials);
     return vsdk::dto::ValidatedIdentity(identity, validationToken);
 }

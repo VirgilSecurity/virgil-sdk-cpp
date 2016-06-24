@@ -83,12 +83,16 @@ if (ENABLE_STAGING_ENV)
 
     set (VIRGIL_PRIVATE_KEYS_SERVICE_URI "https://keys-private-stg.virgilsecurity.com"
         CACHE STRING "Base URI to Virgil Private Keys service")
+		
+	set (VIRGIL_CA_SERVICE_URI "https://ca-stg.virgilsecurity.com"
+	    CACHE STRING "Base URI to Virgil CA service")
 endif ()
 mark_as_advanced (
     ENABLE_STAGING_ENV
     VIRGIL_IDENTITY_SERVICE_URI
     VIRGIL_KEYS_SERVICE_URI
     VIRGIL_PRIVATE_KEYS_SERVICE_URI
+	VIRGIL_CA_SERVICE_URI
 )
 
 if (VIRGIL_IDENTITY_SERVICE_URI)
@@ -101,6 +105,10 @@ endif ()
 
 if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
     add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
+endif ()
+
+if (VIRGIL_CA_SERVICE_URI)
+    add_definitions (-DVIRGIL_CA_SERVICE_URI="${VIRGIL_CA_SERVICE_URI}")
 endif ()
 
 # Set library version
