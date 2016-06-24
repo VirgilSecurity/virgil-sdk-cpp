@@ -49,3 +49,11 @@ std::string CertificateEndpointUri::revoke(const std::string& certificateId) {
 std::string CertificateEndpointUri::pull() {
     return "/v1/certificate/actions/pull";
 }
+
+std::string CertificateEndpointUri::pullRootCertificate() {
+    return "/v1/certificate/actions/pull-root-certificate";
+}
+
+std::string CertificateEndpointUri::crl() {
+    return "/v1/crl";
+}

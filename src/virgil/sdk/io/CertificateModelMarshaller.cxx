@@ -69,10 +69,26 @@ namespace virgil {
              */
             template <> class Marshaller<CertificateModel> {
             public:
+                static std::string toOriginalJson(const CertificateModel & certificate) {
+                    try {
+                        json jsonCertificate = {
+                            {JsonKey::certificate, certificate.getOrignalCard()},
+                            {JsonKey::signId, certificate.getSignId()},
+                            {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
+                        };
+                        
+                        return jsonCertificate.dump();
+                        
+                    } catch (std::exception& exception) {
+                        throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CertificateModel>::toOriginalJson ") +
+                                               exception.what());
+                    }
+                }
+                
                 template <int INDENT = -1> static std::string toJson(const CertificateModel & certificate) {
                     try {
                         json jsonCertificate = {
-                            {JsonKey::certificate, Marshaller<CardModel>::toJson<INDENT>(certificate.getCard())},
+                            {JsonKey::certificate, json::parse(Marshaller<CardModel>::toJson<INDENT>(certificate.getCard()))},
                             {JsonKey::signId, certificate.getSignId()},
                             {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
                         };
@@ -89,11 +105,12 @@ namespace virgil {
                     try {
                         json jsonCertificate = json::parse(jsonString);
                         
-                        const CardModel card = Marshaller<CardModel>::fromJson(jsonCertificate[JsonKey::certificate]);
                         const std::string signId = jsonCertificate[JsonKey::signId];
                         const VirgilByteArray sign = VirgilBase64::decode(jsonCertificate[JsonKey::sign]);
                         
-                        return CertificateModel(card, signId, sign);
+                        return CertificateModel(jsonCertificate[JsonKey::certificate].dump(),
+                                                signId,
+                                                sign);
                         
                     } catch (std::exception& exception) {
                         throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CertificateModel>::fromJson ") +

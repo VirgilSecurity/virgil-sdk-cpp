@@ -35,8 +35,18 @@
  */
 
 #include <virgil/sdk/models/CertificateModel.h>
+#include <virgil/sdk/models/CardModel.h>
+#include <virgil/sdk/io/Marshaller.h>
+
+#include <virgil/crypto/foundation/VirgilBase64.h>
+#include <virgil/crypto/VirgilSigner.h>
 
 using virgil::sdk::models::CertificateModel;
+using virgil::sdk::io::Marshaller;
+using virgil::sdk::models::CardModel;
+using virgil::crypto::VirgilSigner;
+using virgil::crypto::VirgilByteArray;
+using virgil::crypto::foundation::VirgilBase64;
 
 CertificateModel::CertificateModel(const virgil::sdk::models::CardModel & card,
                                    const std::string & signId,
@@ -46,8 +56,21 @@ signId_(signId),
 sign_(sign) {
 }
 
+CertificateModel::CertificateModel(const std::string & cardStr,
+                                   const std::string & signId,
+                                   const virgil::crypto::VirgilByteArray & sign) :
+originalCardStr_(cardStr),
+signId_(signId),
+sign_(sign) {
+    card_ = Marshaller<CardModel>::fromJson(originalCardStr_);
+}
+
 const virgil::sdk::models::CardModel CertificateModel::getCard() const {
     return card_;
+}
+
+const std::string CertificateModel::getOrignalCard() const {
+    return originalCardStr_;
 }
 
 const std::string CertificateModel::getSignId() const {
@@ -56,4 +79,12 @@ const std::string CertificateModel::getSignId() const {
 
 const virgil::crypto::VirgilByteArray CertificateModel::getSign() const {
     return sign_;
+}
+
+bool CertificateModel::verifyWith(const CertificateModel & checkerCertificate) const {
+    const std::string toBeVerified(signId_ + originalCardStr_);
+    
+    return VirgilSigner().verify(virgil::crypto::str2bytes(toBeVerified),
+                                 sign_,
+                                 checkerCertificate.getCard().getPublicKey().getKey());
 }

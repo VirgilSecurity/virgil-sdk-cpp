@@ -65,9 +65,24 @@ namespace sdk {
                              const std::string & signId,
                              const virgil::crypto::VirgilByteArray & sign);
             /**
+             * @brief Create Virgil Certificate with original card data
+             *
+             * @param cardStr - Virgil Card String
+             * @param signId - signature id
+             * @param sign - signature of the certificate
+             */
+            CertificateModel(const std::string & cardStr,
+                             const std::string & signId,
+                             const virgil::crypto::VirgilByteArray & sign);
+
+            /**
              * @brief Return Virgil Card
              */
             const virgil::sdk::models::CardModel getCard() const;
+            /**
+             * @brief Return original Virgil Card string
+             */
+            const std::string getOrignalCard() const;
             /**
              * @brief Return signature id
              */
@@ -76,8 +91,13 @@ namespace sdk {
              * @brief Return signature of the certificate
              */
             const virgil::crypto::VirgilByteArray getSign() const;
+            /**
+             * @brief Verifies current certificate with another one
+             */
+            bool verifyWith(const CertificateModel & checkerCertificate) const;
             
         private:
+            std::string originalCardStr_;
             virgil::sdk::models::CardModel card_;
             std::string signId_;
             virgil::crypto::VirgilByteArray sign_;

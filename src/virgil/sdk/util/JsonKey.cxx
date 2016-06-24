@@ -62,3 +62,6 @@ const std::string JsonKey::timeToLive = "time_to_live";
 const std::string JsonKey::countToLive = "count_to_live";
 const std::string JsonKey::validationToken = "validation_token";
 const std::string JsonKey::responsePassword = "response_password";
+const std::string JsonKey::certificate = "certificate";
+const std::string JsonKey::sign = "sign";
+const std::string JsonKey::signId = "sign_id";

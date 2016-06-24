@@ -109,7 +109,10 @@ namespace sdk {
 
                     std::string cardId = jsonCard[JsonKey::id];
                     std::string cardCreatedAt = jsonCard[JsonKey::createdAt];
-                    std::string cardHash = jsonCard[JsonKey::hash];
+                    std::string cardHash;
+                    if (jsonCard[JsonKey::hash] != nullptr) {
+                        cardHash = jsonCard[JsonKey::hash];
+                    }                    
                     std::string cardAuthorizedBy;
                     if (jsonCard[JsonKey::authorizedBy] != nullptr) {
                         cardAuthorizedBy = jsonCard[JsonKey::authorizedBy];

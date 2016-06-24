@@ -43,6 +43,7 @@
 #include <virgil/sdk/client/PrivateKeyClient.h>
 #include <virgil/sdk/client/PublicKeyClient.h>
 #include <virgil/sdk/client/CardClient.h>
+#include <virgil/sdk/client/CertificateClient.h>
 #include <virgil/sdk/ServiceUri.h>
 #include <virgil/sdk/dto/IdentityType.h>
 
@@ -55,8 +56,11 @@ using virgil::sdk::client::IdentityClient;
 using virgil::sdk::client::PrivateKeyClient;
 using virgil::sdk::client::PublicKeyClient;
 using virgil::sdk::client::CardClient;
+using virgil::sdk::client::CertificateClient;
 using virgil::sdk::dto::IdentityType;
 
+
+const std::string kCAServiceAppId =  "com.virgilsecurity.ca";
 const std::string kKeyServiceAppId = "com.virgilsecurity.keys";
 const std::string kIdentityServiceAppId = "com.virgilsecurity.identity";
 const std::string kPrivateKeyServiceAppId = "com.virgilsecurity.private-keys";
@@ -66,6 +70,7 @@ namespace sdk {
     class ServicesHubImpl {
     public:
         std::shared_ptr<CardClient> cardClient;
+        std::shared_ptr<CertificateClient> certificateClient;
         std::shared_ptr<IdentityClient> identityClient;
         std::shared_ptr<PublicKeyClient> publicKeyClient;
         std::shared_ptr<PrivateKeyClient> privateKeyClient;
@@ -87,6 +92,9 @@ ServicesHub::ServicesHub(const std::string& accessToken, const ServiceUri& baseS
     // Init CardClient first to use it for loading Virgil Cards for other services.
     // CardClient can download it's Virgil Card by itself
     impl_->cardClient = std::make_shared<CardClient>(accessToken, baseServiceUri.getPublicKeyService());
+    impl_->certificateClient = std::make_shared<CertificateClient>(accessToken, baseServiceUri.getCAService(), [this]() -> CardModel {
+                return getServiceCard(*impl_->cardClient, kCAServiceAppId);
+            });
     impl_->identityClient =
         std::make_shared<IdentityClient>(accessToken, baseServiceUri.getIdentityService(), [this]() -> CardModel {
             return getServiceCard(*impl_->cardClient, kIdentityServiceAppId);
@@ -105,6 +113,9 @@ ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::Serv
                          const virgil::sdk::ServiceUri& baseServiceUri) {
     impl_->cardClient = std::make_shared<CardClient>(accessToken, baseServiceUri.getPublicKeyService(),
                                                      [&]() -> CardModel { return serviceCards.loadKeyServiceCard(); });
+    impl_->certificateClient = std::make_shared<CertificateClient>(accessToken, baseServiceUri.getCAService(),
+                                                                   [&]() -> CardModel { return getServiceCard(*impl_->cardClient, kCAServiceAppId);
+    });
     impl_->identityClient =
         std::make_shared<IdentityClient>(accessToken, baseServiceUri.getIdentityService(),
                                          [&]() -> CardModel { return serviceCards.loadIdentityServiceCard(); });
@@ -118,6 +129,10 @@ ServicesHub::ServicesHub(const std::string& accessToken, const virgil::sdk::Serv
 
 CardClient& ServicesHub::card() {
     return *(impl_->cardClient);
+}
+
+CertificateClient& ServicesHub::certificate() {
+    return *(impl_->certificateClient);
 }
 
 IdentityClient& ServicesHub::identity() {

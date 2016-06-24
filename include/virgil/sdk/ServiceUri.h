@@ -62,7 +62,12 @@ namespace sdk {
          * @brief Default base address of the Virgil Private Keys Service
          */
         static const std::string kPrivateKeyServiceUri;
-
+        /**
+         * @property kCAServiceUri
+         * @brief Default base address of the Virgil CA Service
+         */
+        static const std::string kCAServiceUri;
+        
     public:
         /**
          * @brief Use default services URIs
@@ -79,7 +84,7 @@ namespace sdk {
          * @note Pass only base address of service without trailing slash, i.e. https://keys.virgilsecurity.com
          */
         ServiceUri(const std::string& identityService, const std::string& keysService,
-                   const std::string& privateKeyService);
+                   const std::string& privateKeyService, const std::string& caService);
 
     public:
         /**
@@ -94,11 +99,16 @@ namespace sdk {
          * @brief Return base URI of the Virgil Private Keys Service
          */
         std::string getPrivateKeyService() const;
+        /**
+         * @brief Return base URI of the Virgil CA Service
+         */
+        std::string getCAService() const;
 
     private:
         std::string identityService_;
         std::string keysService_;
         std::string privateKeyService_;
+        std::string caService_;
     };
 }
 }

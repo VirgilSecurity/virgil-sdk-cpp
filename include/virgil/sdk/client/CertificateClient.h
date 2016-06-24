@@ -92,6 +92,12 @@ namespace virgil {
                  */
                 virgil::sdk::models::CertificateModel pull(const std::string& identityValue,
                                                             const std::string& identityType);
+                
+                /**
+                 * @brief Performs the pull of the Virgil Root Certificate
+                 * @return Virgil Root Certificate
+                 */
+                virgil::sdk::models::CertificateModel pullRootCertificate();
             };
         }
     }

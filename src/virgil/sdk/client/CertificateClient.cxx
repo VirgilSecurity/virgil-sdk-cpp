@@ -70,8 +70,6 @@ using virgil::sdk::dto::Identity;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::uuid;
 
-const std::string kCertificateServiceAppId = "com.virgilsecurity.ca";
-
 CertificateModel CertificateClient::create(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity,
                                            const virgil::crypto::VirgilByteArray& publicKey,
                                            const virgil::sdk::Credentials& credentials,
@@ -84,10 +82,10 @@ CertificateModel CertificateClient::create(const virgil::sdk::dto::ValidatedIden
     json jsonCustomData(customData);
     jsonPayload[JsonKey::data] = jsonCustomData;
     
-    ClientConnection connection(this->getAccessToken());
+    ClientConnection connection(getAccessToken());
     Request request = Request()
     .post()
-    .baseAddress(this->getBaseServiceUri())
+    .baseAddress(getBaseServiceUri())
     .endpoint(CertificateEndpointUri::create())
     .body(jsonPayload.dump());
     
@@ -95,8 +93,9 @@ CertificateModel CertificateClient::create(const virgil::sdk::dto::ValidatedIden
     
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CERTIFICATE_CREATE);
-    this->verifyResponse(response);
-    
+#if 0
+    verifyResponse(response);
+#endif
     CertificateModel certificate = Marshaller<CertificateModel>::fromJson(response.body());
     return certificate;
 }
@@ -120,7 +119,7 @@ void CertificateClient::revoke(const std::string & certificateId,
     
     Response response = connection.send(signRequest);
     connection.checkResponseError(response, Error::Action::VIRGIL_CERTIFICATE_REVOKE);
-    this->verifyResponse(response);
+    verifyResponse(response);
 }
 
 CertificateModel CertificateClient::pull(const std::string& identityValue,
@@ -134,10 +133,24 @@ CertificateModel CertificateClient::pull(const std::string& identityValue,
     .endpoint(CertificateEndpointUri::pull())
     .body(payload.dump());
     
-    ClientConnection connection(this->getAccessToken());
+    ClientConnection connection(getAccessToken());
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CERTIFICATE_PULL);
-    this->verifyResponse(response);
+    verifyResponse(response);
+    const CertificateModel ceretificate = Marshaller<CertificateModel>::fromJson(response.body());
+    return ceretificate;
+}
+
+CertificateModel CertificateClient::pullRootCertificate() {
+    Request request = Request()
+    .post()
+    .baseAddress(getBaseServiceUri())
+    .endpoint(CertificateEndpointUri::pull());
+    
+    ClientConnection connection(getAccessToken());
+    Response response = connection.send(request);
+    connection.checkResponseError(response, Error::Action::VIRGIL_CERTIFICATE_PULL_ROOT);
+    verifyResponse(response);
     const CertificateModel ceretificate = Marshaller<CertificateModel>::fromJson(response.body());
     return ceretificate;
 }

@@ -58,9 +58,17 @@ namespace sdk {
              */
             static std::string revoke(const std::string& certificateId);
             /**
-             * @brief Returns the endpoint in charge of the Virgil Certificat pull
+             * @brief Returns the endpoint in charge of the Virgil Certificate pull
              */
             static std::string pull();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Root Certificate pull
+             */
+            static std::string pullRootCertificate();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Certificate Revocation List get
+             */
+            static std::string crl();
 
         private:
             /**

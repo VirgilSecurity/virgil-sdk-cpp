@@ -73,7 +73,9 @@ static std::string actionStr(Error::Action action) {
         
         {Error::Action::VIRGIL_CERTIFICATE_CREATE, "creates Virgil Certificate."},
         {Error::Action::VIRGIL_CERTIFICATE_REVOKE, "revoke a Virgil Certificate."},
-        {Error::Action::VIRGIL_CERTIFICATE_PULL, "pull a Virgil Certificate."}};
+        {Error::Action::VIRGIL_CERTIFICATE_PULL, "pull a Virgil Certificate."},
+        {Error::Action::VIRGIL_CERTIFICATE_PULL_ROOT, "pull the Virgil Root Certificate."},
+        {Error::Action::VIRGIL_CERTIFICATE_GET_CRL, "get Certificate Revocation List."}};
     auto message = code2str.find(action);
     return "Failed action: " + (message != code2str.end() ? message->second : "unknown.");
 }
