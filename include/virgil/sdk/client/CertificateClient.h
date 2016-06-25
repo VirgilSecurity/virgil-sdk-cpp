@@ -44,6 +44,7 @@
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/models/CertificateModel.h>
+#include <virgil/sdk/models/CRLModel.h>
 #include <virgil/sdk/dto/ValidatedIdentity.h>
 
 namespace virgil {
@@ -101,7 +102,7 @@ namespace virgil {
                  * @brief Performs the pull of the Virgil Certificate Revocation List
                  * @return Virgil Certificate Revocation List
                  */
-                void getCRL();
+                virgil::sdk::models::CRLModel getCRL();
             };
         }
     }

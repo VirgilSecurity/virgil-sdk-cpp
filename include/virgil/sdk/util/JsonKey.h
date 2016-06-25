@@ -175,7 +175,6 @@ namespace sdk {
              * @brief Json Key that points password which is used to encrypt a response from the Private Keys Service
              */
             static const std::string responsePassword;
-
             /**
              * @property certificate
              * @brief Json Key that points Virgil Security Certificate
@@ -191,6 +190,32 @@ namespace sdk {
              * @brief Json Key that points identifier for signature of Virgil Security Certificate
              */
             static const std::string signId;
+            /**
+             * @property revokedAt
+             * @brief Json Key that points timestamp string value
+             */
+            static const std::string revokedAt;
+            /**
+             * @property identityType
+             * @brief Json Key that points Virgil Identity type
+             */
+            static const std::string identityType;
+            /**
+             * @property identityValue
+             * @brief Json Key that points enumeration which represents Virgil Identity value
+             */
+            static const std::string identityValue;
+            /**
+             * @property issuedAt
+             * @brief Json Key that points timestamp string value
+             */
+            static const std::string issuedAt;
+            /**
+             * @property certificates
+             * @brief Json Key that points collection of Virgil CRL elementss
+             */
+            static const std::string certificates;
+            
         private:
             JsonKey();
         };

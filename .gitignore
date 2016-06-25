@@ -3,6 +3,8 @@
 *install*/
 origin_lib/
 examples_bin/
+CMakeFiles/
+CMakeScripts/
 .depends_cache/
 
 #####

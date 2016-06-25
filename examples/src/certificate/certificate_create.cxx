@@ -72,50 +72,45 @@ int main(int argc, char** argv) {
         
         // Prepare Sirvices Hub
         vsdk::ServicesHub servicesHub(virgilAccessToken);
-#if 0
+
         // Prepare identity
         vsdk::dto::Identity identity(identityStr, identityType);
-        
+ #if 0
         // Get the root certificate
-        std::cout << "1 Getting of the Root Certificate" << std::endl;
+        std::cout << "1. Getting of the Root Certificate" << std::endl;
         auto rootCertificate(servicesHub.certificate().pullRootCertificate());
         showCertificate("The Virgil Root Certificate:", rootCertificate);
         
         
         std::cout << "2. Create a Virgil Certificate" << std::endl;
-        
-        // Get validation token
-        std::cout << "2.1 Generation Validation Token" << std::endl;
+        // Create certificate
         const vcrypto::VirgilByteArray appPrivateKeyByteArray(loadFile(pathAppPrivateKey));
         vsdk::Credentials appCredentials(appPrivateKeyByteArray,
                                          virgil::crypto::str2bytes(kApplicationPrivateKeyPassword));
-        vsdk::dto::ValidatedIdentity validatedIdentity(generateValidatedIdentity(identity, appCredentials));
-
-        
-        // Create certificate
-        std::cout << "2.2 Certificate creation" << std::endl;
         const vcrypto::VirgilKeyPair userKeyPair(vcrypto::str2bytes(kPrivateKeyPassword));
         const vsdk::Credentials userCredentials(userKeyPair.privateKey(),
                                                 virgil::crypto::str2bytes(kPrivateKeyPassword));
         showCertificate("A Virgil Certificate:", servicesHub.certificate()
-                                                            .create(validatedIdentity,
+                                                            .create(generateValidatedIdentity(identity, appCredentials),
                                                                     userKeyPair.publicKey(),
                                                                     userCredentials));
         
-        std::cout << "3 Pull Virgil Certificate by Identity" << std::endl;
+        std::cout << "3. Pull Virgil Certificate by Identity" << std::endl;
         auto pulledCertificate(servicesHub.certificate().pull(identity));
         showCertificate("Pulled Virgil Certificate:", pulledCertificate);
         
-        std::cout << "4 Revoke Virgil Certificate" << std::endl;
-        // Get validation token
-        std::cout << "4.1 Generation Validation Token" << std::endl;
-        
+        std::cout << "4. Revoke Virgil Certificate" << std::endl;
         servicesHub.certificate().revoke(pulledCertificate.getCard().getId(),
-                                         validatedIdentity,
+                                         generateValidatedIdentity(identity, appCredentials),
                                          userCredentials);
 #endif
-        std::cout << "5 Get Certificates Revocation List" << std::endl;
-        servicesHub.certificate().getCRL();
+        std::cout << "5. Get Certificates Revocation List" << std::endl;
+        auto crl = servicesHub.certificate().getCRL();
+        
+        std::cout << "CRL: issesd at " << crl.getIssuedAt() << std::endl;
+        for (const auto & element: crl.getElements()) {
+            std::cout << vsdk::io::Marshaller<vsdk::models::CRLElementModel>::toJson<4>(element) << std::endl;
+        }
     
     } catch (std::exception& exception) {
         std::cerr << exception.what();

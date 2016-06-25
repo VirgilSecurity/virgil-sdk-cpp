@@ -64,6 +64,7 @@ using virgil::sdk::http::Request;
 using virgil::sdk::http::Response;
 using virgil::sdk::io::Marshaller;
 using virgil::sdk::models::CardModel;
+using virgil::sdk::models::CRLModel;
 using virgil::sdk::models::CertificateModel;
 using virgil::sdk::dto::ValidatedIdentity;
 using virgil::sdk::dto::Identity;
@@ -111,7 +112,7 @@ void CertificateClient::revoke(const std::string & certificateId,
     .endpoint(CertificateEndpointUri::revoke(certificateId))
     .body(payload.dump());
     
-    ClientConnection connection(this->getAccessToken());
+    ClientConnection connection(getAccessToken());
     Request signRequest = connection.signRequest(certificateId, credentials, request);
     
     Response response = connection.send(signRequest);
@@ -150,7 +151,7 @@ CertificateModel CertificateClient::pullRootCertificate() {
     return Marshaller<CertificateModel>::fromJson(response.body());
 }
 
-void CertificateClient::getCRL() {
+CRLModel CertificateClient::getCRL() {
     Request request = Request()
     .get()
     .baseAddress(getBaseServiceUri())
@@ -160,4 +161,5 @@ void CertificateClient::getCRL() {
     Response response = connection.send(request);
     connection.checkResponseError(response, Error::Action::VIRGIL_CERTIFICATE_GET_CRL);
     verifyResponse(response);
+    return Marshaller<CRLModel>::fromJson(response.body());
 }
