@@ -96,11 +96,23 @@ int main(int argc, char** argv) {
         auto pulledCertificate(servicesHub.certificate().pull(identity));
         showCertificate("Pulled Virgil Certificate:", pulledCertificate);
         
-        std::cout << "3. Revoke Virgil Certificate" << std::endl;
+        std::cout << "3. Verify certificate with root certificate" << std::endl;
+        
+        std::cout << "3.1 Getting of the Root Certificate" << std::endl;
+        auto rootCertificate(servicesHub.certificate().pullRootCertificate());
+        showCertificate("The Virgil Root Certificate:", rootCertificate);
+        
+        std::cout << "3.2 Verification" << std::endl;
+        
+        const bool verificationResult(cert.verifyWith(rootCertificate));
+        std::cout << "Verification done : "
+        << (verificationResult ? "SUCCESSFULLY" : "WITH ERROR")
+        << std::endl;
+
+        std::cout << "4. Revoke Virgil Certificate" << std::endl;
         servicesHub.certificate().revoke(cert.getCard().getId(),
                                          generateValidatedIdentity(identity, appCredentials),
                                          userCredentials);
-    
     } catch (std::exception& exception) {
         std::cerr << exception.what();
         return 1;

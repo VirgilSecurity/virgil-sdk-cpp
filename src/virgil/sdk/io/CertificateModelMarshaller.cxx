@@ -103,12 +103,34 @@ namespace virgil {
                 
                 template <int FAKE = 0> static CertificateModel fromJson(const std::string& jsonString) {
                     try {
+                        // Get original card from certificate
+                        std::string originalCertificateData;
+                        const std::string beginSubstr(std::string("\"") + JsonKey::certificate + "\":");
+                        const std::string endSubstr(std::string(",\"") + JsonKey::signId + "\"");
+                        
+                        size_t startPos(jsonString.find(beginSubstr));
+                        if (std::string::npos != startPos) {
+                            startPos += beginSubstr.length();
+                            const size_t endPos(jsonString.find(endSubstr));
+                            if (std::string::npos != endPos && endPos > startPos) {
+                                const size_t length(endPos - startPos);
+                                originalCertificateData = jsonString.substr(startPos, length);
+                                std::cout << originalCertificateData << std::endl;
+                            }
+                        }
+                        
+                        if (originalCertificateData.empty()) {
+                            throw std::logic_error("virgil-sdk:\n Marshaller<CertificateModel>::fromJson Can't get certificate data");
+                        }
+                        // ~ Get original card from certificate
+                        
+                        
                         json jsonCertificate = json::parse(jsonString);
                         
                         const std::string signId = jsonCertificate[JsonKey::signId];
                         const VirgilByteArray sign = VirgilBase64::decode(jsonCertificate[JsonKey::sign]);
                         
-                        return CertificateModel(jsonCertificate[JsonKey::certificate].dump(),
+                        return CertificateModel(originalCertificateData,
                                                 signId,
                                                 sign);
                         
