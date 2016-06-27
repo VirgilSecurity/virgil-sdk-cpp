@@ -49,10 +49,12 @@ namespace vcrypto = virgil::crypto;
 const std::string VIRGIL_IDENTITY_SERVICE_URI_BASE = "https://identity-stg.virgilsecurity.com";
 const std::string VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE = "https://keys-stg.virgilsecurity.com";
 const std::string VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE = "https://private-stg.virgilsecurity.com";
+const std::string VIRGIL_CA_SERVICE_URI_BASE = "https://ca-stg.virgilsecurity.com";
 
 const std::string kIdentityServiceApplicationId = "com.virgilsecurity.identity";
 const std::string kPublicKeyServiceApplicationId = "com.virgilsecurity.keys";
 const std::string kPrivateKeyServiceApplicationId = "com.virgilsecurity.private-keys";
+const std::string kCAServiceApplicationId = "com.virgilsecurity.ca";
 
 int main() {
     try {
@@ -65,7 +67,7 @@ int main() {
                                       std::istreambuf_iterator<char>());
 
         vsdk::ServiceUri virgilUri(VIRGIL_IDENTITY_SERVICE_URI_BASE, VIRGIL_PUBLIC_KEYS_SERVICE_URI_BASE,
-                                   VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE);
+                                   VIRGIL_PRIVATE_KEYS_SERVICE_URI_BASE, VIRGIL_CA_SERVICE_URI_BASE);
 
         vsdk::ServicesHub servicesHub(virgilAccessToken, virgilUri);
         auto identityServiceCards =
@@ -74,10 +76,13 @@ int main() {
             servicesHub.card().searchGlobal(kPublicKeyServiceApplicationId, vsdk::dto::IdentityType::Application, true);
         auto privateKeysServiceCards = servicesHub.card().searchGlobal(kPrivateKeyServiceApplicationId,
                                                                        vsdk::dto::IdentityType::Application, true);
+		auto caServiceCards = servicesHub.card().searchGlobal(kCAServiceApplicationId,
+															  vsdk::dto::IdentityType::Application, true);
 
         vsdk::models::CardModel identityServiceCard = identityServiceCards.at(0);
         vsdk::models::CardModel publicKeysServiceCard = publicKeysServiceCards.at(0);
         vsdk::models::CardModel privateKeysServiceCard = privateKeysServiceCards.at(0);
+		vsdk::models::CardModel caServiceCard = caServiceCards.at(0);
 
         std::cout << "Identity Service Card:" << std::endl;
         std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(identityServiceCard) << std::endl;
@@ -87,6 +92,9 @@ int main() {
 
         std::cout << "Private Keys Service Card:" << std::endl;
         std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(privateKeysServiceCard) << std::endl;
+		
+        std::cout << "CA Service Card:" << std::endl;
+        std::cout << vsdk::io::Marshaller<vsdk::models::CardModel>::toJson<4>(caServiceCard) << std::endl;
 
     } catch (std::exception& exception) {
         std::cerr << exception.what() << std::endl;
