@@ -69,29 +69,24 @@ namespace virgil {
              */
             template <> class Marshaller<CertificateModel> {
             public:
-                static std::string toOriginalJson(const CertificateModel & certificate) {
-                    try {
-                        json jsonCertificate = {
-                            {JsonKey::certificate, certificate.getOrignalCard()},
-                            {JsonKey::signId, certificate.getSignId()},
-                            {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
-                        };
-                        
-                        return jsonCertificate.dump();
-                        
-                    } catch (std::exception& exception) {
-                        throw std::logic_error(std::string("virgil-sdk:\n Marshaller<CertificateModel>::toOriginalJson ") +
-                                               exception.what());
-                    }
-                }
-                
                 template <int INDENT = -1> static std::string toJson(const CertificateModel & certificate) {
                     try {
-                        json jsonCertificate = {
-                            {JsonKey::certificate, json::parse(Marshaller<CardModel>::toJson<INDENT>(certificate.getCard()))},
-                            {JsonKey::signId, certificate.getSignId()},
-                            {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
-                        };
+                        json jsonCertificate;
+                        
+                        if (-1 == INDENT) {
+                            jsonCertificate = {
+                                {JsonKey::certificate, certificate.getOrignalCard()},
+                                {JsonKey::signId, certificate.getSignId()},
+                                {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
+                            };
+                        } else {
+                            jsonCertificate = {
+                                {JsonKey::certificate, json::parse(Marshaller<CardModel>::toJson<INDENT>(certificate.getCard()))},
+                                {JsonKey::signId, certificate.getSignId()},
+                                {JsonKey::sign, VirgilBase64::encode(certificate.getSign())}
+                            };
+                        }
+                        
                         
                         return jsonCertificate.dump(INDENT);
                         
