@@ -117,9 +117,28 @@ namespace virgil {
                             }
                         }
                         
+                        
                         if (originalCertificateData.empty()) {
                             throw std::logic_error("virgil-sdk:\n Marshaller<CertificateModel>::fromJson Can't get certificate data");
                         }
+                        
+                        if (originalCertificateData.substr(0, 1) == "\"") {
+                            originalCertificateData = originalCertificateData.substr(1);
+                        }
+                        
+                        if (originalCertificateData.substr(originalCertificateData.length() - 1) == "\"") {
+                            originalCertificateData = originalCertificateData.substr(0, originalCertificateData.length() - 1);
+                        }
+                        
+                        // Fix <\"> -> <">
+                        const std::string s = "\\\"";
+                        const std::string t = "\"";
+                        std::string::size_type n = 0;
+                        while ((n = originalCertificateData.find(s, n )) != std::string::npos){
+                            originalCertificateData.replace( n, s.size(), t );
+                            n += t.size();
+                        }
+                        
                         // ~ Get original card from certificate
                         
                         
