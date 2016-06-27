@@ -101,12 +101,15 @@ namespace virgil {
                         // Get original card from certificate
                         std::string originalCertificateData;
                         const std::string beginSubstr(std::string("\"") + JsonKey::certificate + "\":");
-                        const std::string endSubstr(std::string(",\"") + JsonKey::signId + "\"");
+                        const std::string endSubstr_v1(std::string(",\"") + JsonKey::signId + "\"");
+                        const std::string endSubstr_v2(std::string(",\"") + JsonKey::sign + "\"");
                         
                         size_t startPos(jsonString.find(beginSubstr));
                         if (std::string::npos != startPos) {
                             startPos += beginSubstr.length();
-                            const size_t endPos(jsonString.find(endSubstr));
+                            const size_t endPos_v1(jsonString.find(endSubstr_v1));
+                            const size_t endPos_v2(jsonString.find(endSubstr_v2));
+                            const size_t endPos(std::min(endPos_v1, endPos_v2));
                             if (std::string::npos != endPos && endPos > startPos) {
                                 const size_t length(endPos - startPos);
                                 originalCertificateData = jsonString.substr(startPos, length);
