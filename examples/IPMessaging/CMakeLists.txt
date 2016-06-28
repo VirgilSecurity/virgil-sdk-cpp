@@ -88,13 +88,12 @@ endif (MSVC)
 # Configure version
 set (SIMPLE_CHAT_VERSION_MAJOR 2)
 set (SIMPLE_CHAT_VERSION_MINOR 0)
-set (SIMPLE_CHAT_VERSION_PATCH 0)
+set (SIMPLE_CHAT_VERSION_PATCH 1)
 set (SIMPLE_CHAT_VERSION ${SIMPLE_CHAT_VERSION_MAJOR}.${SIMPLE_CHAT_VERSION_MINOR}.${SIMPLE_CHAT_VERSION_PATCH})
 message (STATUS "SIMPLE_CHAT version: " ${SIMPLE_CHAT_VERSION})
 
 # Configure path variables
 set (INSTALL_BIN_DIR_NAME bin CACHE STRING "Installation directory name for executables")
-set (INSTALL_MAN_DIR_NAME "share/man" CACHE STRING "Installation directory name for man pages")
 
 set(TOKEN "eyJpZCI6IjFmM2RhZThlLWI0NzItNDE3OC04ZTFlLTEyMDgwOTQ2MDMzNSIsImFwcGxpY2F0aW9uX2NhcmRfaWQiOiIyYzc0ZGRmNS0zZTcwLTQ1NmItYTE4Ny0yZTQwYWVmY2M5ODYiLCJ0dGwiOi0xLCJjdGwiOi0xLCJwcm9sb25nIjowfQ==.MIGaMA0GCWCGSAFlAwQCAgUABIGIMIGFAkB2sKGsBde6nVwfCN3XxJtOGltekVYwpcfZW2TN4VkKsgr3p7wpFZeF2Wy6P8gk11NnAIwvAAWE1wf6/vrUQzBUAkEAgkOE3Vou9U+YXI+cK2h+xG9O7ZWaKRdZa1c0RwVwCQqYQrNhz+Ct17c13g5mxcYu/FWGUxsLENZZv+6T6My2Aw==")
 
@@ -119,7 +118,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/virgil_sdk"
 )
 
-virgil_find_package (virgil_sdk 3.2.0 EXACT)
+virgil_find_package (virgil_sdk 3.2.2 EXACT)
 virgil_find_package (restless)      # Installed as virgil_sdk dependency, so found version will be appropriate
 virgil_find_package (virgil_crypto) # Installed as virgil_sdk dependency, so found version will be appropriate
 virgil_find_package (MbedTLS)       # Installed as virgil_sdk dependency, so found version will be appropriate

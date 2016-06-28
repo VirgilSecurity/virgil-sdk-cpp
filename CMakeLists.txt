@@ -36,7 +36,7 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil_sdk VERSION 3.2.1 LANGUAGES CXX)
+project (virgil_sdk VERSION 3.2.2 LANGUAGES CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
@@ -129,7 +129,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
 )
 
-virgil_find_package (virgil_crypto 1.7.0)
+virgil_find_package (virgil_crypto 1.8.0)
 virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
@@ -240,6 +240,7 @@ endif (ENABLE_TESTING)
 # Add examples
 if (ENABLE_EXAMPLES)
     add_subdirectory (examples)
+    add_subdirectory (examples/IPMessaging)
     message (STATUS "Examples status: ENABLED")
 else (ENABLE_EXAMPLES)
     message (STATUS "Examples status: DISABLED")
