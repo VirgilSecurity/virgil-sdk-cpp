@@ -240,6 +240,7 @@ endif (ENABLE_TESTING)
 # Add examples
 if (ENABLE_EXAMPLES)
     add_subdirectory (examples)
+    add_subdirectory (examples/IPMessaging)
     message (STATUS "Examples status: ENABLED")
 else (ENABLE_EXAMPLES)
     message (STATUS "Examples status: DISABLED")
