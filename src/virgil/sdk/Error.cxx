@@ -172,6 +172,13 @@ static std::string errorCodeStr(unsigned int errorCode) {
         {60010, "Identity Type not specified."},
         {60020, "Identity Value not specified."},
         {60030, "Identity Token not specified."},
+		
+		{70000, "Certificate's data parameters are incomplete."},
+		{70010, "Certificate's public key field is required."},
+		{70020, "Certificate's identity object is incomplete."},
+		{70030, "Identity validation token is required."},
+		{70040, "Root certificate is corrupted."},
+		{70050, "CRL list is corrupted."},
 
         {90000, "Identity validation under RA service failed."},
         {90010, "Access Token validation under Stats service failed."}
