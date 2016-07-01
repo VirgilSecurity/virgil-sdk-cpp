@@ -52,8 +52,8 @@ file (APPEND "@VIRGIL_DEPENDS_ARGS_FILE@"
 
 ExternalProject_Add (${PROJECT_NAME}
     DOWNLOAD_DIR "@VIRGIL_DEPENDS_PACKAGE_DOWNLOAD_DIR@"
-    URL "https://github.com/VirgilSecurity/virgil-crypto/archive/v1.8.0.tar.gz"
-    URL_HASH SHA1=6850962df26207ae32aa28f56f6d7cd9742d992f
+    URL "https://github.com/VirgilSecurity/virgil-crypto/archive/v1.8.1.tar.gz"
+    URL_HASH SHA1=4cf43a2eebf49645b5dbe2cff8c85ef8e6e95a1c
     PREFIX "@VIRGIL_DEPENDS_PACKAGE_BUILD_DIR@"
     CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
 )

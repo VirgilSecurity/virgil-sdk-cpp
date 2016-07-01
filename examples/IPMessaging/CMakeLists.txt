@@ -88,7 +88,7 @@ endif (MSVC)
 # Configure version
 set (SIMPLE_CHAT_VERSION_MAJOR 2)
 set (SIMPLE_CHAT_VERSION_MINOR 0)
-set (SIMPLE_CHAT_VERSION_PATCH 1)
+set (SIMPLE_CHAT_VERSION_PATCH 2)
 set (SIMPLE_CHAT_VERSION ${SIMPLE_CHAT_VERSION_MAJOR}.${SIMPLE_CHAT_VERSION_MINOR}.${SIMPLE_CHAT_VERSION_PATCH})
 message (STATUS "SIMPLE_CHAT version: " ${SIMPLE_CHAT_VERSION})
 
@@ -118,7 +118,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/virgil_sdk"
 )
 
-virgil_find_package (virgil_sdk 3.2.2 EXACT)
+virgil_find_package (virgil_sdk 3.2.3 EXACT)
 virgil_find_package (restless)      # Installed as virgil_sdk dependency, so found version will be appropriate
 virgil_find_package (virgil_crypto) # Installed as virgil_sdk dependency, so found version will be appropriate
 virgil_find_package (MbedTLS)       # Installed as virgil_sdk dependency, so found version will be appropriate
