@@ -139,16 +139,19 @@ include_directories (${CURL_INCLUDE_DIRS})
 include_directories (${NLOHMAN_JSON_INCLUDE_DIRS})
 
 # Grab source directory tree
-file (GLOB_RECURSE SRC_LIST "src/*.cxx")
-foreach (SRC_FILE ${SRC_LIST})
+file (GLOB_RECURSE SRC_CONF "src/*.cxx.in")
+foreach (SRC_FILE ${SRC_CONF})
     string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src/" "" SRC_REL_PATH ${SRC_FILE})
+    string (REPLACE ".in" "" SRC_REL_PATH ${SRC_REL_PATH})
     configure_file (
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}.in"
         "${CMAKE_CURRENT_BINARY_DIR}/src/${SRC_REL_PATH}"
         @ONLY
     )
 endforeach ()
-file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
+file (GLOB_RECURSE SRC_LIST_BIN "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
+file (GLOB_RECURSE SRC_LIST_SRC "src/*.cxx")
+set (SRC_LIST ${SRC_LIST_BIN} ${SRC_LIST_SRC})
 
 # Configure library build
 add_library (${PROJECT_NAME} ${SRC_LIST})
