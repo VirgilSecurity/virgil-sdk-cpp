@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #include <virgil/sdk/crypto/Fingerprint.h>
 #include <virgil/crypto/VirgilByteArrayUtils.h>
 

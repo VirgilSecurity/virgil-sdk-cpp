@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #include <virgil/sdk/crypto/Crypto.h>
 
 #include <virgil/crypto/VirgilKeyPair.h>

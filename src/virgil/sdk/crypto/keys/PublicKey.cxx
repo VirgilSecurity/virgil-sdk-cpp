@@ -34,6 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #include <virgil/sdk/crypto/keys/PublicKey.h>
 
 using namespace virgil::sdk::crypto::keys;
