@@ -43,12 +43,15 @@
 namespace virgil {
 namespace sdk {
 namespace crypto {
+    class Crypto; // forward decl
+
     namespace keys {
         class PublicKey {
-        public:
-            PublicKey(VirgilByteArray key, VirgilByteArray identifier);
+            friend class virgil::sdk::crypto::Crypto;
 
         private:
+            PublicKey(VirgilByteArray key, VirgilByteArray identifier);
+
             VirgilByteArray key_;
             VirgilByteArray identifier_;
         };
