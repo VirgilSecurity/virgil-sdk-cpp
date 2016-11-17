@@ -34,42 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_VERSION_H
-#define VIRGIL_SDK_VERSION_H
+#include <virgil/sdk/crypto/Fingerprint.h>
+#include <virgil/crypto/VirgilByteArrayUtils.h>
 
-#include <cstddef>
-#include <string>
+using namespace virgil::sdk::crypto;
 
-namespace virgil {
-namespace sdk {
-    /**
-     * @brief Provides information about Virgil Keys SDK version
-     */
-    class Version {
-    public:
-        /**
-         * Return version number in the format MMNNPP (Major, Minor, Patch)
-         *
-         */
-        static size_t asNumber();
-        /**
-         * Return the version number as string
-         */
-        static std::string asString();
-        /**
-         * Return the major version number
-         */
-        static size_t majorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t minorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t patchVersion();
-    };
-}
+Fingerprint::Fingerprint(VirgilByteArray value)
+        : value_(std::move(value)) {
 }
 
-#endif /* VIRGIL_SDK_VERSION_H */
+Fingerprint::Fingerprint(const std::string& hex)
+        : value_(virgil::crypto::VirgilByteArrayUtils::hexToBytes(hex)) {
+}
+
+const VirgilByteArray& Fingerprint::value() const {
+    return value_;
+}
+std::string Fingerprint::hexValue() const {
+    return virgil::crypto::VirgilByteArrayUtils::bytesToHex(value_);
+}

@@ -34,42 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_VERSION_H
-#define VIRGIL_SDK_VERSION_H
+#ifndef VIRGIL_SDK_CRYPTO_H
+#define VIRGIL_SDK_CRYPTO_H
 
-#include <cstddef>
-#include <string>
+#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/crypto/Common.h>
 
 namespace virgil {
 namespace sdk {
-    /**
-     * @brief Provides information about Virgil Keys SDK version
-     */
-    class Version {
-    public:
-        /**
-         * Return version number in the format MMNNPP (Major, Minor, Patch)
-         *
-         */
-        static size_t asNumber();
-        /**
-         * Return the version number as string
-         */
-        static std::string asString();
-        /**
-         * Return the major version number
-         */
-        static size_t majorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t minorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t patchVersion();
-    };
+    namespace crypto {
+        class Crypto: public CryptoInterface {
+        public:
+            Crypto();
+
+            KeyPair generateKeyPair() const override;
+            PrivateKey importPrivateKey(const VirgilByteArray &data, const std::string& password = "") const override;
+            PublicKey importPublicKey(const VirgilByteArray &data) const override;
+
+        private:
+            VirgilByteArray computeHashForPublicKey(const VirgilByteArray &publicKey) const;
+        };
+    }
 }
 }
 
-#endif /* VIRGIL_SDK_VERSION_H */
+#endif //VIRGIL_SDK_CRYPTO_H
