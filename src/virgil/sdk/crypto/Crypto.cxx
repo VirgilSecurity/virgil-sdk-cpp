@@ -243,6 +243,11 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 
 //Utils
 
+Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
+    auto hash = foundation::VirgilHash(foundation::VirgilHash::Algorithm::SHA256);
+    return Fingerprint(hash.hash(data));
+}
+
 VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
     auto publicKeyDER = VirgilKeyPair::publicKeyToDER(publicKey);
 

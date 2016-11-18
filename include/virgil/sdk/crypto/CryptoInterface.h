@@ -40,6 +40,7 @@
 
 #include <virgil/sdk/crypto/Common.h>
 #include <virgil/sdk/crypto/keys/KeyPair.h>
+#include <virgil/sdk/crypto/Fingerprint.h>
 
 using namespace virgil::sdk::crypto::keys;
 
@@ -65,6 +66,7 @@ namespace sdk {
             virtual VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const = 0;
             virtual VirgilByteArray generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const = 0;
             virtual VirgilByteArray generateSignature(std::istream &istream, const PrivateKey &privateKey) const = 0;
+            virtual Fingerprint calculateFingerprint(const VirgilByteArray &data) const = 0;
 
             virtual ~CryptoInterface(){}
         };

@@ -66,6 +66,7 @@ namespace sdk {
             VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const override;
             VirgilByteArray generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const override;
             VirgilByteArray generateSignature(std::istream &istream, const PrivateKey &privateKey) const override;
+            Fingerprint calculateFingerprint(const VirgilByteArray &data) const override;
 
         private:
             VirgilByteArray computeHashForPublicKey(const VirgilByteArray &publicKey) const;
