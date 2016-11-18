@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,33 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * @file test_private_key_marshaller.cxx
- * @brief Convert json <-> PrivateKey.
- */
+#include "catch.hpp"
 
-#include <catch.hpp>
+#include <virgil/crypto/VirgilByteArrayUtils.h>
+#include <virgil/sdk/crypto/Crypto.h>
 
-#include <helpers.h>
+using namespace virgil::crypto;
+using namespace virgil::sdk::crypto;
 
-#include <virgil/sdk/io/Marshaller.h>
+TEST_CASE("testED001_EncryptRandomData_SingleCorrectKey_ShouldDecrypt") {
+    auto data = VirgilByteArrayUtils::stringToBytes("Test");
+    auto crypto = Crypto();
 
-using json = nlohmann::json;
+    auto keyPair = crypto.generateKeyPair();
 
-using virgil::sdk::models::PrivateKeyModel;
-using virgil::sdk::util::JsonKey;
-using virgil::sdk::io::Marshaller;
+    auto encryptedData = crypto.encrypt(data, { keyPair.publicKey() });
 
-TEST_CASE("PrivateKey -> Json PrivateKeyModel - FAILED", "class Marshaller") {
-    PrivateKeyModel privateKey = virgil::test::getPrivateKey();
-    json trueJsonPrivateKey = virgil::test::getJsonPrivateKey();
-    std::string testJsonPrivateKey = Marshaller<PrivateKeyModel>::toJson<4>(privateKey);
-    REQUIRE(trueJsonPrivateKey.dump(4) == testJsonPrivateKey);
-}
+    auto decryptedData = crypto.decrypt(encryptedData, keyPair.privateKey());
 
-TEST_CASE("Json PrivateKeyModel -> PrivateKeyModel - FAILED", "class Marshaller") {
-    json jsonPrivateKey = virgil::test::getJsonPrivateKey();
-    PrivateKeyModel testPrivateKey = Marshaller<PrivateKeyModel>::fromJson(jsonPrivateKey.dump(4));
-    PrivateKeyModel truePrivateKey = virgil::test::getPrivateKey();
-    REQUIRE(truePrivateKey == testPrivateKey);
+    REQUIRE(data == decryptedData);
 }

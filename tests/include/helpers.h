@@ -37,35 +37,8 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#include <string>
-#include <vector>
-
-#include <virgil/sdk/models/PublicKeyModel.h>
-#include <virgil/sdk/models/PrivateKeyModel.h>
-#include <virgil/sdk/dto/ValidatedIdentity.h>
-#include <virgil/sdk/models/CardModel.h>
-#include <virgil/sdk/util/JsonKey.h>
-
-#include <nlohman/json.hpp>
-
 namespace virgil {
 namespace test {
-
-    nlohmann::json getJsonValidatedIdentity();
-    virgil::sdk::dto::ValidatedIdentity getValidatedIdentity();
-
-    nlohmann::json getJsonPublicKey();
-    virgil::sdk::models::PublicKeyModel getPublicKey();
-
-    nlohmann::json getJsonCard();
-    virgil::sdk::models::CardModel getCard();
-
-    nlohmann::json getJsonResponseCards();
-    nlohmann::json getJsonCards();
-    std::vector<virgil::sdk::models::CardModel> getCards();
-
-    nlohmann::json getJsonPrivateKey();
-    virgil::sdk::models::PrivateKeyModel getPrivateKey();
 }
 }
 
