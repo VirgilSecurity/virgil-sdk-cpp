@@ -40,55 +40,212 @@
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
 #include <virgil/crypto/VirgilByteArrayUtils.h>
-
-#include <type_traits>
+#include <virgil/crypto/VirgilCipher.h>
+#include <virgil/crypto/VirgilChunkCipher.h>
+#include <virgil/crypto/stream/VirgilStreamDataSink.h>
+#include <virgil/crypto/stream/VirgilStreamDataSource.h>
+#include <virgil/crypto/VirgilSigner.h>
+#include <virgil/crypto/VirgilStreamSigner.h>
 
 static_assert(!std::is_abstract<virgil::sdk::crypto::Crypto>(), "Crypto must not be abstract.");
 
+using namespace virgil::crypto;
 using namespace virgil::sdk::crypto;
 using namespace virgil::sdk::crypto::keys;
 
-using namespace virgil::crypto;
+const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
 Crypto::Crypto() {
 
 }
 
+
+// Key management
+
 KeyPair Crypto::generateKeyPair() const {
-    VirgilKeyPair keyPair = VirgilKeyPair::generateRecommended();
+    auto keyPair = VirgilKeyPair::generateRecommended();
 
-    VirgilByteArray keyPairId = computeHashForPublicKey(keyPair.publicKey());
+    auto keyPairId = computeHashForPublicKey(keyPair.publicKey());
 
-    PrivateKey privateKey = PrivateKey(keyPair.privateKey(), keyPairId);
-    PublicKey publicKey = PublicKey(keyPair.publicKey(), keyPairId);
+    auto privateKey = PrivateKey(keyPair.privateKey(), keyPairId);
+    auto publicKey = PublicKey(keyPair.publicKey(), keyPairId);
 
     return KeyPair(std::move(privateKey), std::move(publicKey));
 }
 
 PrivateKey Crypto::importPrivateKey(const VirgilByteArray &data, const std::string &password) const {
-    // FIXME
-    VirgilByteArray privateKeyData = password.length() == 0 ? VirgilKeyPair::privateKeyToDER(data) : VirgilKeyPair::decryptPrivateKey(data, VirgilByteArrayUtils::stringToBytes(password));
+    auto privateKeyData = password.length() == 0 ?
+         data : VirgilKeyPair::decryptPrivateKey(data, VirgilByteArrayUtils::stringToBytes(password));
 
-    VirgilByteArray publicKey = VirgilKeyPair::extractPublicKey(privateKeyData, VirgilByteArray());
+    auto publicKey = VirgilKeyPair::extractPublicKey(privateKeyData, VirgilByteArray());
 
-    VirgilByteArray keyIdentifier = computeHashForPublicKey(publicKey);
+    auto keyIdentifier = computeHashForPublicKey(publicKey);
 
-    VirgilByteArray exportedPrivateKeyData = VirgilKeyPair::privateKeyToDER(privateKeyData);
+    auto exportedPrivateKeyData = VirgilKeyPair::privateKeyToDER(privateKeyData);
 
     return PrivateKey(std::move(exportedPrivateKeyData), std::move(keyIdentifier));
 }
 
 PublicKey Crypto::importPublicKey(const VirgilByteArray &data) const {
-    VirgilByteArray keyIdentifier = computeHashForPublicKey(data);
+    auto keyIdentifier = computeHashForPublicKey(data);
 
-    VirgilByteArray exportedPublicKey = VirgilKeyPair::publicKeyToDER(data);
+    auto exportedPublicKey = VirgilKeyPair::publicKeyToDER(data);
 
     return PublicKey(std::move(exportedPublicKey), std::move(keyIdentifier));
 }
 
-VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
-    VirgilByteArray publicKeyDER = VirgilKeyPair::publicKeyToDER(publicKey);
+PublicKey Crypto::extractPublicKeyFromPrivateKey(const PrivateKey &privateKey) const {
+    auto privateKeyData = exportPrivateKey(privateKey);
+    auto publicKeyData = VirgilKeyPair::extractPublicKey(privateKeyData, VirgilByteArray());
 
-    foundation::VirgilHash hash = foundation::VirgilHash(foundation::VirgilHash::Algorithm::SHA256);
+    auto exportedPublicKey = VirgilKeyPair::publicKeyToDER(publicKeyData);
+
+    return PublicKey(exportedPublicKey, privateKey.identifier());
+}
+
+VirgilByteArray Crypto::exportPrivateKey(const PrivateKey &privateKey, const std::string &password) const {
+    if (password.length() == 0)
+        return VirgilKeyPair::privateKeyToDER(privateKey.key());
+
+    auto passwordBytes = VirgilByteArrayUtils::stringToBytes(password);
+
+    auto encryptedPrivateKeyData =
+        VirgilKeyPair::encryptPrivateKey(privateKey.key(), passwordBytes);
+
+    return VirgilKeyPair::privateKeyToDER(encryptedPrivateKeyData, passwordBytes);
+}
+
+VirgilByteArray Crypto::exportPublicKey(const PublicKey &publicKey) const {
+    return VirgilKeyPair::publicKeyToDER(publicKey.key());
+}
+
+
+// Crypto operations
+
+VirgilByteArray Crypto::encrypt(const VirgilByteArray &data, const std::vector<PublicKey> &recipients) const {
+    auto cipher = VirgilCipher();
+
+    for (auto& recipient : recipients) {
+        auto publicKeyData = exportPublicKey(recipient);
+
+        cipher.addKeyRecipient(recipient.identifier(), publicKeyData);
+    }
+
+    return cipher.encrypt(data);
+}
+
+void Crypto::encrypt(std::istream &istream, std::ostream &ostream, const std::vector<PublicKey> &recipients) const {
+    auto cipher = VirgilChunkCipher();
+
+    for (auto& recipient : recipients) {
+        auto publicKeyData = exportPublicKey(recipient);
+
+        cipher.addKeyRecipient(recipient.identifier(), publicKeyData);
+    }
+
+    auto dataSource = stream::VirgilStreamDataSource(istream);
+    auto dataSink = stream::VirgilStreamDataSink(ostream);
+
+    cipher.encrypt(dataSource, dataSink);
+}
+
+bool Crypto::verify(const VirgilByteArray &data, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const {
+    auto signer = VirgilSigner();
+
+    auto signerPublicKeyData = exportPublicKey(signerPublicKey);
+
+    return signer.verify(data, signature, signerPublicKeyData);
+}
+
+bool Crypto::verify(std::istream &istream, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const {
+    auto signer = VirgilStreamSigner();
+
+    auto signerPublicKeyData = exportPublicKey(signerPublicKey);
+
+    auto dataSource = stream::VirgilStreamDataSource(istream);
+
+    return signer.verify(dataSource, signature, signerPublicKeyData);
+}
+
+VirgilByteArray Crypto::decrypt(const VirgilByteArray &data, const PrivateKey &privateKey) const {
+    auto cipher = VirgilCipher();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+
+    return cipher.decryptWithKey(data, privateKey.identifier(), privateKeyData);
+}
+
+void Crypto::decrypt(std::istream &istream, std::ostream &ostream, const PrivateKey &privateKey) const {
+    auto cipher = VirgilChunkCipher();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+
+    auto dataSource = stream::VirgilStreamDataSource(istream);
+    auto dataSink = stream::VirgilStreamDataSink(ostream);
+
+    cipher.decryptWithKey(dataSource, dataSink, privateKey.identifier(), privateKeyData);
+}
+
+VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const PrivateKey &privateKey,
+                                        const std::vector<PublicKey> &recipients) const {
+    auto signer = VirgilSigner();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+
+    auto signature = signer.sign(data, privateKeyData);
+
+    auto cipher = VirgilCipher();
+
+    cipher.customParams().setData(CustomParamKeySignature, signature);
+
+    for (auto& recipient : recipients) {
+        auto publicKeyData = exportPublicKey(recipient);
+
+        cipher.addKeyRecipient(recipient.identifier(), publicKeyData);
+    }
+
+    return cipher.encrypt(data);
+}
+
+VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const {
+    auto cipher = VirgilCipher();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+    auto decryptedData = cipher.decryptWithKey(data, privateKey.identifier(), privateKeyData);
+
+    auto signature = cipher.customParams().getData(CustomParamKeySignature);
+
+    auto signer = VirgilSigner();
+    auto publicKeyData = exportPublicKey(signerPublicKey);
+    auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
+
+    // FIXME
+
+    return decryptedData;
+}
+
+VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const {
+    auto signer = VirgilSigner();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+
+    return signer.sign(data, privateKeyData);
+}
+
+VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKey &privateKey) const {
+    auto signer = VirgilStreamSigner();
+
+    auto dataSource = stream::VirgilStreamDataSource(istream);
+    auto privateKeyData = exportPrivateKey(privateKey);
+
+    return signer.sign(dataSource, privateKeyData);
+}
+
+//Utils
+
+VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
+    auto publicKeyDER = VirgilKeyPair::publicKeyToDER(publicKey);
+
+    auto hash = foundation::VirgilHash(foundation::VirgilHash::Algorithm::SHA256);
     return hash.hash(publicKeyDER);
 }

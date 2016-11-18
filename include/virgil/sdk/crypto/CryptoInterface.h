@@ -38,6 +38,7 @@
 #ifndef VIRGIL_SDK_CRYPTOINTERFACE_H
 #define VIRGIL_SDK_CRYPTOINTERFACE_H
 
+#include <virgil/sdk/crypto/Common.h>
 #include <virgil/sdk/crypto/keys/KeyPair.h>
 
 using namespace virgil::sdk::crypto::keys;
@@ -50,6 +51,20 @@ namespace sdk {
             virtual KeyPair generateKeyPair() const = 0;
             virtual PrivateKey importPrivateKey(const VirgilByteArray &data, const std::string& password = "") const = 0;
             virtual PublicKey importPublicKey(const VirgilByteArray &data) const = 0;
+            virtual PublicKey extractPublicKeyFromPrivateKey(const PrivateKey &privateKey) const = 0;
+            virtual VirgilByteArray exportPrivateKey(const PrivateKey &privateKey, const std::string &password = "") const = 0;
+            virtual VirgilByteArray exportPublicKey(const PublicKey &publicKey) const = 0;
+
+            virtual VirgilByteArray encrypt(const VirgilByteArray &data, const std::vector<PublicKey> &recipients) const = 0;
+            virtual void encrypt(std::istream &istream, std::ostream &ostream, const std::vector<PublicKey> &recipients) const = 0;
+            virtual bool verify(const VirgilByteArray &data, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const = 0;
+            virtual bool verify(std::istream &istream, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const = 0;
+            virtual VirgilByteArray decrypt(const VirgilByteArray &data, const PrivateKey &privateKey) const = 0;
+            virtual void decrypt(std::istream &istream, std::ostream &ostream, const PrivateKey &privateKey) const = 0;
+            virtual VirgilByteArray signThenEncrypt(const VirgilByteArray &data, const PrivateKey &privateKey, const std::vector<PublicKey> &recipients) const = 0;
+            virtual VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const = 0;
+            virtual VirgilByteArray generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const = 0;
+            virtual VirgilByteArray generateSignature(std::istream &istream, const PrivateKey &privateKey) const = 0;
 
             virtual ~CryptoInterface(){}
         };

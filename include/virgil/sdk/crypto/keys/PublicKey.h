@@ -40,20 +40,30 @@
 
 #include <virgil/sdk/crypto/Common.h>
 
+// forward decl
+namespace virgil {
+    namespace sdk {
+        namespace crypto {
+            class Crypto;
+        }
+    }
+}
+
 namespace virgil {
 namespace sdk {
 namespace crypto {
-    class Crypto; // forward decl
-
     namespace keys {
         class PublicKey {
-            friend class virgil::sdk::crypto::Crypto;
-
         private:
             PublicKey(VirgilByteArray key, VirgilByteArray identifier);
 
+            const VirgilByteArray &key() const { return key_; }
+            const VirgilByteArray &identifier() const { return identifier_; }
+
             VirgilByteArray key_;
             VirgilByteArray identifier_;
+
+            friend Crypto;
         };
     }
 }

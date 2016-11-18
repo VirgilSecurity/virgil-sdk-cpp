@@ -48,9 +48,24 @@ namespace sdk {
         public:
             Crypto();
 
+            // CryptoInterface implementation
             KeyPair generateKeyPair() const override;
             PrivateKey importPrivateKey(const VirgilByteArray &data, const std::string& password = "") const override;
             PublicKey importPublicKey(const VirgilByteArray &data) const override;
+            PublicKey extractPublicKeyFromPrivateKey(const PrivateKey &privateKey) const override;
+            VirgilByteArray exportPrivateKey(const PrivateKey &privateKey, const std::string &password = "") const override;
+            VirgilByteArray exportPublicKey(const PublicKey &publicKey) const override;
+
+            VirgilByteArray encrypt(const VirgilByteArray &data, const std::vector<PublicKey> &recipients) const override;
+            void encrypt(std::istream &istream, std::ostream &ostream, const std::vector<PublicKey> &recipients) const override;
+            bool verify(const VirgilByteArray &data, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const override;
+            bool verify(std::istream &istream, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const override;
+            VirgilByteArray decrypt(const VirgilByteArray &data, const PrivateKey &privateKey) const override;
+            void decrypt(std::istream &istream, std::ostream &ostream, const PrivateKey &privateKey) const override;
+            VirgilByteArray signThenEncrypt(const VirgilByteArray &data, const PrivateKey &privateKey, const std::vector<PublicKey> &recipients) const override;
+            VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const override;
+            VirgilByteArray generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const override;
+            VirgilByteArray generateSignature(std::istream &istream, const PrivateKey &privateKey) const override;
 
         private:
             VirgilByteArray computeHashForPublicKey(const VirgilByteArray &publicKey) const;
