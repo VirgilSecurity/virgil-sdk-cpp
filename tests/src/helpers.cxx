@@ -34,6 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/crypto/Common.h>
+
 
 namespace virgil {
 namespace test {

@@ -36,6 +36,7 @@
 
 
 #include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/VirgilSDKError.h>
 
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
@@ -49,9 +50,10 @@
 
 static_assert(!std::is_abstract<virgil::sdk::crypto::Crypto>(), "Crypto must not be abstract.");
 
-using namespace virgil::crypto;
+using virgil::sdk::make_error;
 using namespace virgil::sdk::crypto;
 using namespace virgil::sdk::crypto::keys;
+using namespace virgil::crypto;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
@@ -219,7 +221,9 @@ VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const Pri
     auto publicKeyData = exportPublicKey(signerPublicKey);
     auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
 
-    // FIXME
+    if (!isVerified) {
+        throw make_error(VirgilSDKError::VerificationFailed, "Invalid signature.");
+    }
 
     return decryptedData;
 }

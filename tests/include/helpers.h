@@ -37,8 +37,24 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
+
+#include <virgil/sdk/crypto/Common.h>
+
+#include <random>
+
 namespace virgil {
 namespace test {
+    using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char>;
+
+    class Utils {
+    public:
+        static virgil::sdk::crypto::VirgilByteArray generateRandomData(int size) {
+            random_bytes_engine rbe;
+            std::vector<unsigned char> data(size);
+            std::generate(begin(data), end(data), std::ref(rbe));
+            return data;
+        }
+    };
 }
 }
 

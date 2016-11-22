@@ -34,23 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "catch.hpp"
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
-#include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/VirgilSDKError.h>
 
-using namespace virgil::crypto;
-using namespace virgil::sdk::crypto;
+using virgil::sdk::VirgilSDKErrorCategory;
 
-TEST_CASE("testED001_EncryptRandomData_SingleCorrectKey_ShouldDecrypt") {
-    auto data = VirgilByteArrayUtils::stringToBytes("Test");
-    auto crypto = Crypto();
+const char* VirgilSDKErrorCategory::name() const noexcept {
+    return "virgil/sdk";
+}
 
-    auto keyPair = crypto.generateKeyPair();
+std::string VirgilSDKErrorCategory::message(int ev) const noexcept {
+    switch (static_cast<VirgilSDKError>(ev)) {
+        case VirgilSDKError::VerificationFailed:
+            return "Verification of signature failed.";
+        default:
+            return "Undefined error.";
+    }
+}
 
-    auto encryptedData = crypto.encrypt(data, { keyPair.publicKey() });
-
-    auto decryptedData = crypto.decrypt(encryptedData, keyPair.privateKey());
-
-    REQUIRE(data == decryptedData);
+const VirgilSDKErrorCategory& virgil::sdk::sdk_category() noexcept {
+    static VirgilSDKErrorCategory inst;
+    return inst;
 }
