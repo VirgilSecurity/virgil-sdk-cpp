@@ -240,15 +240,6 @@ else (ENABLE_TESTING)
     message (STATUS "Unit tests status: DISABLED")
 endif (ENABLE_TESTING)
 
-# Add examples
-if (ENABLE_EXAMPLES)
-    add_subdirectory (examples)
-    add_subdirectory (examples/IPMessaging)
-    message (STATUS "Examples status: ENABLED")
-else (ENABLE_EXAMPLES)
-    message (STATUS "Examples status: DISABLED")
-endif (ENABLE_EXAMPLES)
-
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 

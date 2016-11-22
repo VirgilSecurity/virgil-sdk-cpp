@@ -36,6 +36,8 @@
 
 #include <virgil/sdk/client/Client.h>
 
+static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
+
 using namespace virgil::sdk::client;
 
 std::future<Card> Client::createCard(const CreateCardRequest &request) const {
