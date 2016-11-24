@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/util/JsonKey.h>
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+using virgil::sdk::util::JsonKey;
 
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
-
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+const string JsonKey::Id = "id";
+const string JsonKey::CreatedAt = "created_at";
+const string JsonKey::CardVersion = "card_version";
+const string JsonKey::Type = "type";
+const string JsonKey::Value = "value";
+const string JsonKey::Identity = "identity";
+const string JsonKey::Data = "data";
+const string JsonKey::Info = "info";
+const string JsonKey::Device = "device";
+const string JsonKey::DeviceName = "device_name";
+const string JsonKey::PublicKey = "public_key";
+const string JsonKey::ContentSnapshot = "content_snapshot";
+const string JsonKey::Meta = "meta";
+const string JsonKey::CardScope = "scope";
+const string JsonKey::IdentityType = "identity_type";
+const string JsonKey::Signs = "signs";
+const string JsonKey::CardId = "card_id";
+const string JsonKey::RevocationReason = "revocation_reason";
+const string JsonKey::Identities = "identities";

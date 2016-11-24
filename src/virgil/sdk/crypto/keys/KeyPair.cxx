@@ -37,8 +37,11 @@
 
 #include <virgil/sdk/crypto/keys/KeyPair.h>
 
-using namespace virgil::sdk::crypto::keys;
+using virgil::sdk::crypto::keys::PrivateKey;
+using virgil::sdk::crypto::keys::PublicKey;
+using virgil::sdk::crypto::keys::KeyPair;
+using std::move;
 
 KeyPair::KeyPair(PrivateKey privateKey, PublicKey publicKey)
-        : privateKey_(std::move(privateKey)), publicKey_(std::move(publicKey)) {
+        : privateKey_(move(privateKey)), publicKey_(move(publicKey)) {
 }

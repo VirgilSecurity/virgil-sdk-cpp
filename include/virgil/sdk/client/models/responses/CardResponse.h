@@ -35,39 +35,46 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_CARDRESPONSE_H
+#define VIRGIL_SDK_CARDRESPONSE_H
 
+#include <unordered_map>
 #include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/Card.h>
+#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using std::unordered_map;
+using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+namespace client {
+namespace models {
+    namespace responses {
+        class CardResponse {
+        public:
+            Card buildCard() const;
+
+            CardResponse(unordered_map<string, VirgilByteArray> signatures,
+                    VirgilByteArray snapshot,
+                    CreateCardSnapshotModel model,
+                    string identifier,
+                    string createdAt,
+                    string cardVersion);
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            unordered_map<string, VirgilByteArray> signatures_;
+            VirgilByteArray snapshot_;
+            CreateCardSnapshotModel model_;
+            string identifier_;
+            string createdAt_;
+            string cardVersion_;
         };
     }
 }
 }
 }
+}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_CARDRESPONSE_H

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,48 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_UTIL_JSON_KEY_H
+#define VIRGIL_SDK_UTIL_JSON_KEY_H
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <string>
 
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using std::string;
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+    namespace util {
+        /**
+         * @brief This class holds string constants of Json keys.
+         *
+         * @note This class belongs to the **private** API
+         */
+        class JsonKey {
+        public:
+            static const string Id;
+            static const string CreatedAt;
+            static const string CardVersion;
+            static const string Type;
+            static const string Value;
+            static const string Identity;
+            static const string Data;
+            static const string Info;
+            static const string Device;
+            static const string DeviceName;
+            static const string PublicKey;
+            static const string ContentSnapshot;
+            static const string Meta;
+            static const string CardScope;
+            static const string IdentityType;
+            static const string Signs;
+            static const string CardId;
+            static const string RevocationReason;
+            static const string Identities;
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            JsonKey();
         };
     }
 }
 }
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif /* VIRGIL_SDK_UTIL_JSON_KEY_H */

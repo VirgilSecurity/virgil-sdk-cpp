@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,18 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/endpoints/CardEndpointUri.h>
 
-#ifndef VIRGIL_SDK_COMMON_H
-#define VIRGIL_SDK_COMMON_H
+using virgil::sdk::endpoints::CardEndpointUri;
 
-#include <virgil/crypto/VirgilByteArray.h>
-
-namespace virgil {
-namespace sdk {
-    namespace  crypto {
-        using VirgilByteArray = virgil::crypto::VirgilByteArray;
-    }
-}
+std::string CardEndpointUri::create() {
+    return "/v4/card";
 }
 
-#endif //VIRGIL_SDK_COMMON_H
+std::string CardEndpointUri::get(const std::string& cardId) {
+    return "/v4/card/" + cardId;
+}
+
+std::string CardEndpointUri::search() {
+    return "/v3/virgil-card/actions/search";
+}
+
+std::string CardEndpointUri::searchGlobal() {
+    return "/v3/virgil-card/actions/search/app";
+}
+
+std::string CardEndpointUri::searchGlobalbyEmail() {
+    return "/v3/virgil-card/actions/search/email";
+}
+
+std::string CardEndpointUri::revoke(const std::string& cardId) {
+    return "/v3/virgil-card/" + cardId;
+}

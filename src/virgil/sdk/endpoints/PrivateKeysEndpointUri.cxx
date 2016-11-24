@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/endpoints/PrivateKeyEndpointUri.h>
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+using virgil::sdk::endpoints::PrivateKeyEndpointUri;
 
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
+std::string PrivateKeyEndpointUri::add() {
+    return "/v3/private-key";
 }
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
+std::string PrivateKeyEndpointUri::get() {
+    return "/v3/private-key/actions/grab";
 }
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+std::string PrivateKeyEndpointUri::del() {
+    return "/v3/private-key/actions/delete";
+}

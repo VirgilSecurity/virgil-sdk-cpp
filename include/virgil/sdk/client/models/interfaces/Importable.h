@@ -35,39 +35,20 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
-
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+#ifndef VIRGIL_SDK_IMPORTABLE_H
+#define VIRGIL_SDK_IMPORTABLE_H
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+namespace client {
+    namespace models {
+        template <typename T>
+        class Importable {
+            virtual T(const std::string &data) = 0;
         };
     }
 }
 }
 }
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_IMPORTABLE_H

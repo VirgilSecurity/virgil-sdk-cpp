@@ -40,17 +40,16 @@
 
 #include <fstream>
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
-#include <virgil/crypto/foundation/VirgilBase64.h>
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
-using namespace virgil::sdk::crypto;
-using namespace virgil::crypto;
-using namespace virgil::crypto::foundation;
+using virgil::sdk::VirgilBase64;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::VirgilByteArrayUtils;
 
 using json = nlohmann::json;
 
-TEST_CASE("test001_CheckNumberOfTestsInJSON", "[crypto]") {
+TEST_CASE("test001_CheckNumberOfTestsInJSON", "[compatibility]") {
     std::ifstream input("sdk_compatibility_data.json");
 
     std::string str((std::istreambuf_iterator<char>(input)),
@@ -61,7 +60,7 @@ TEST_CASE("test001_CheckNumberOfTestsInJSON", "[crypto]") {
     REQUIRE(j.size() == 6);
 }
 
-TEST_CASE("test002_DecryptFromSingleRecipient_ShouldDecrypt", "[crypto]") {
+TEST_CASE("test002_DecryptFromSingleRecipient_ShouldDecrypt", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -87,7 +86,7 @@ TEST_CASE("test002_DecryptFromSingleRecipient_ShouldDecrypt", "[crypto]") {
     REQUIRE(decryptedDataStr == originalDataStr);
 }
 
-TEST_CASE("test003_DecryptFromMultipleRecipients_ShouldDecypt", "[crypto]") {
+TEST_CASE("test003_DecryptFromMultipleRecipients_ShouldDecypt", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -126,7 +125,7 @@ TEST_CASE("test003_DecryptFromMultipleRecipients_ShouldDecypt", "[crypto]") {
     }
 }
 
-TEST_CASE("test004_DecryptThenVerifySingleRecipient_ShouldDecryptAndVerify", "[crypto]") {
+TEST_CASE("test004_DecryptThenVerifySingleRecipient_ShouldDecryptAndVerify", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -153,7 +152,7 @@ TEST_CASE("test004_DecryptThenVerifySingleRecipient_ShouldDecryptAndVerify", "[c
     REQUIRE(decryptedDataStr == originalDataStr);
 }
 
-TEST_CASE("test005_DecryptThenVerifyMultipleRecipients_ShouldDecryptAndVerify", "[crypto]") {
+TEST_CASE("test005_DecryptThenVerifyMultipleRecipients_ShouldDecryptAndVerify", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -194,7 +193,7 @@ TEST_CASE("test005_DecryptThenVerifyMultipleRecipients_ShouldDecryptAndVerify", 
     }
 }
 
-TEST_CASE("test006_GenerateSignature_ShouldBeEqual", "[crypto]") {
+TEST_CASE("test006_GenerateSignature_ShouldBeEqual", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -220,7 +219,7 @@ TEST_CASE("test006_GenerateSignature_ShouldBeEqual", "[crypto]") {
     REQUIRE(signatureStr == originalSignatureStr);
 }
 
-TEST_CASE("test007_ExportSignableData_ShouldBeEqual", "[crypto]") {
+TEST_CASE("test007_ExportSignableData_ShouldBeEqual", "[compatibility]") {
     auto crypto = Crypto();
 
     std::ifstream input("sdk_compatibility_data.json");
@@ -234,5 +233,6 @@ TEST_CASE("test007_ExportSignableData_ShouldBeEqual", "[crypto]") {
 
     std::string exportedRequest = dict["exported_request"];
 
+// FIXME
 //    REQUIRE(decryptedDataStr == originalDataStr);
 }

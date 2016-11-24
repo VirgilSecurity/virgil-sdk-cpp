@@ -34,10 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/crypto/Common.h>
+#include <virgil/sdk/Common.h>
+#include <helpers.h>
 
-
-namespace virgil {
-namespace test {
-}
-}

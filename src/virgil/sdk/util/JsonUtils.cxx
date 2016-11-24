@@ -35,39 +35,16 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <virgil/sdk/util/JsonUtils.h>
 
-#include <virgil/sdk/Common.h>
+using virgil::sdk::util::JsonUtils;
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
+unordered_map<string, string> JsonUtils::jsonToUnorderedMap(const json &jsonObj) {
+    unordered_map<string, string> res;
+
+    for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
+        res[it.key()] = it.value();
     }
-}
-}
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+    return res;
+};

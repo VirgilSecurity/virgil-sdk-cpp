@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H
+#define VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
-
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+#include <string>
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+    namespace endpoints {
+        /**
+         * @brief This class provide URIs to the Identity endpoints
+         * @note All endpoints start with forward slash symbol "/" and contain version
+         */
+        class IdentityEndpointUri {
+        public:
+            /**
+              * @brief Returns the endpoint in charge of initiates the process to verify the Identity
+             */
+            static std::string verify();
+            /**
+              * @brief Returns the endpoint in charge of confirms the identity from the /verify step
+              *        to obtain an identity confirmation token
+             */
+            static std::string confirm();
+            /**
+              * @brief Returns the endpoint in charge of validates the passed token
+             */
+            static std::string validate();
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            /**
+             * @brief Deny object creation
+             */
+            IdentityEndpointUri();
         };
     }
 }
 }
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif /* VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H */

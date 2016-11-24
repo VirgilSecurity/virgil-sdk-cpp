@@ -35,17 +35,65 @@
  */
 
 #include <virgil/sdk/client/Client.h>
+#include <virgil/sdk/client/ClientConnection.h>
+#include <virgil/sdk/endpoints/CardEndpointUri.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/responses/CardResponse.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
 
-using namespace virgil::sdk::client;
+using virgil::sdk::client::Client;
+using virgil::sdk::client::ClientConnection;
+using virgil::sdk::http::Request;
+using virgil::sdk::http::Response;
+using virgil::sdk::endpoints::CardEndpointUri;
+using virgil::sdk::client::models::serialization::JsonSerializer;
+using virgil::sdk::client::models::responses::CardResponse;
+
+Client::Client(string accessToken, string baseServiceUri)
+        : accessToken_(std::move(accessToken)),
+          baseServiceUri_(std::move(baseServiceUri)) {
+}
+
+const string& Client::accessToken() const {
+    return accessToken_;
+}
+
+const string& Client::baseServiceUri() const {
+    return baseServiceUri_;
+}
 
 std::future<Card> Client::createCard(const CreateCardRequest &request) const {
+    auto future = std::async([=]{
+        Request httpRequest = Request()
+                .get()
+                .baseAddress(this->baseServiceUri())
+                .endpoint(CardEndpointUri::create())
+                .body(JsonSerializer<CreateCardRequest>::toJson(request));
 
+        ClientConnection connection(this->accessToken());
+        Response response = connection.send(httpRequest);
+
+        return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();
+    });
+
+    return future;
 }
 
 std::future<Card> Client::getCard(const std::string &cardId) const {
+    auto future = std::async([=]{
+        Request httpRequest = Request()
+                .get()
+                .baseAddress(this->baseServiceUri())
+                .endpoint(CardEndpointUri::get(cardId));
 
+        ClientConnection connection(this->accessToken());
+        Response response = connection.send(httpRequest);
+
+        return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();
+    });
+
+    return future;
 }
 
 std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &criteria) const {

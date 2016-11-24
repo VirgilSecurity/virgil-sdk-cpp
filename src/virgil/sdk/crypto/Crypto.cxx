@@ -36,6 +36,7 @@
 
 
 #include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/crypto/Fingerprint.h>
 #include <virgil/sdk/VirgilSDKError.h>
 
 #include <virgil/crypto/VirgilKeyPair.h>
@@ -51,9 +52,20 @@
 static_assert(!std::is_abstract<virgil::sdk::crypto::Crypto>(), "Crypto must not be abstract.");
 
 using virgil::sdk::make_error;
-using namespace virgil::sdk::crypto;
-using namespace virgil::sdk::crypto::keys;
-using namespace virgil::crypto;
+using virgil::sdk::VirgilByteArrayUtils;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::VirgilByteArray;
+using virgil::sdk::VirgilByteArrayUtils;
+using virgil::sdk::crypto::Fingerprint;
+
+using virgil::crypto::VirgilKeyPair;
+using virgil::crypto::VirgilSigner;
+using virgil::crypto::VirgilCipher;
+using virgil::crypto::VirgilChunkCipher;
+using virgil::crypto::VirgilStreamSigner;
+using virgil::crypto::stream::VirgilStreamDataSource;
+using virgil::crypto::stream::VirgilStreamDataSink;
+using virgil::crypto::foundation::VirgilHash;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
@@ -145,8 +157,8 @@ void Crypto::encrypt(std::istream &istream, std::ostream &ostream, const std::ve
         cipher.addKeyRecipient(recipient.identifier(), publicKeyData);
     }
 
-    auto dataSource = stream::VirgilStreamDataSource(istream);
-    auto dataSink = stream::VirgilStreamDataSink(ostream);
+    auto dataSource = VirgilStreamDataSource(istream);
+    auto dataSink = VirgilStreamDataSink(ostream);
 
     cipher.encrypt(dataSource, dataSink);
 }
@@ -164,7 +176,7 @@ bool Crypto::verify(std::istream &istream, const VirgilByteArray &signature, con
 
     auto signerPublicKeyData = exportPublicKey(signerPublicKey);
 
-    auto dataSource = stream::VirgilStreamDataSource(istream);
+    auto dataSource = VirgilStreamDataSource(istream);
 
     return signer.verify(dataSource, signature, signerPublicKeyData);
 }
@@ -182,8 +194,8 @@ void Crypto::decrypt(std::istream &istream, std::ostream &ostream, const Private
 
     auto privateKeyData = exportPrivateKey(privateKey);
 
-    auto dataSource = stream::VirgilStreamDataSource(istream);
-    auto dataSink = stream::VirgilStreamDataSink(ostream);
+    auto dataSource = VirgilStreamDataSource(istream);
+    auto dataSink = VirgilStreamDataSink(ostream);
 
     cipher.decryptWithKey(dataSource, dataSink, privateKey.identifier(), privateKeyData);
 }
@@ -239,7 +251,7 @@ VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const Pri
 VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKey &privateKey) const {
     auto signer = VirgilStreamSigner();
 
-    auto dataSource = stream::VirgilStreamDataSource(istream);
+    auto dataSource = VirgilStreamDataSource(istream);
     auto privateKeyData = exportPrivateKey(privateKey);
 
     return signer.sign(dataSource, privateKeyData);
@@ -248,13 +260,13 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 //Utils
 
 Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
-    auto hash = foundation::VirgilHash(foundation::VirgilHash::Algorithm::SHA256);
+    auto hash = VirgilHash(VirgilHash::Algorithm::SHA256);
     return Fingerprint(hash.hash(data));
 }
 
 VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
     auto publicKeyDER = VirgilKeyPair::publicKeyToDER(publicKey);
 
-    auto hash = foundation::VirgilHash(foundation::VirgilHash::Algorithm::SHA256);
+    auto hash = VirgilHash(VirgilHash::Algorithm::SHA256);
     return hash.hash(publicKeyDER);
 }

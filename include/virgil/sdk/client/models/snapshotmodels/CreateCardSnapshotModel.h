@@ -35,39 +35,54 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_CREATECARDSNAPSHOTMODEL_H
+#define VIRGIL_SDK_CREATECARDSNAPSHOTMODEL_H
+
+#include <string>
+#include <unordered_map>
 
 #include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/ClientCommon.h>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using std::string;
+using std::unordered_map;
+using virgil::sdk::VirgilByteArray;
+using virgil::sdk::client::models::CardScope;
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+namespace client {
+namespace models {
+    namespace snapshotmodels {
+        class CreateCardSnapshotModel {
+        public:
+            CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
+                    unordered_map<string, string> data, CardScope scope,
+                    unordered_map<string, string> info);
+
+            // getters
+            const string& identity() const { return identity_; }
+            const string& identityType() const { return identityType_; }
+            const VirgilByteArray & publicKeyData() const { return publicKeyData_; }
+            const unordered_map<string, string>& data() const { return data_; }
+            CardScope scope() const { return scope_; }
+            const unordered_map<string, string>& info() const { return info_; }
+
+            // FIXME
+            CreateCardSnapshotModel() { }
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            string identity_;
+            string identityType_;
+            VirgilByteArray publicKeyData_;
+            unordered_map<string, string> data_;
+            CardScope scope_;
+            unordered_map<string, string> info_;
         };
     }
 }
 }
 }
+}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_CREATECARDSNAPSHOTMODEL_H

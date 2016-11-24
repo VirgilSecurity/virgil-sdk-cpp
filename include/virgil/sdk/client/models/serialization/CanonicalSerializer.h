@@ -35,39 +35,46 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
+#define VIRGIL_SDK_CANONICALSERIALIZER_H
+
+#include <string>
+#include <vector>
 
 #include <virgil/sdk/Common.h>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using virgil::sdk::VirgilByteArray;
 
 namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
+    namespace sdk {
+        namespace client {
+            namespace models {
+                namespace serialization {
+                    /**
+                     * @brief This class responsible for the data object marshalling.
+                     *
+                     * Supported classes:
+                     */
+                    template<typename T>
+                    class CanonicalSerializer {
+                    public:
+                        /**
+                         * @brief Serialize given object to Json representation.
+                         */
+                        static VirgilByteArray toCanonicalForm(const T &obj);
 
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
+                        /**
+                         * @brief Deserialize object from its Json representation.
+                         */
+                        template<int FAKE = 0>
+                        static T fromCanonicalForm(const VirgilByteArray &data);
 
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
+                        CanonicalSerializer() = delete;
+                    };
+                }
+            }
+        }
     }
 }
-}
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_CANONICALSERIALIZER_H

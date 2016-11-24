@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_CARD_ENDPOINT_URI_H
+#define VIRGIL_SDK_CARD_ENDPOINT_URI_H
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
-
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+#include <string>
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+    namespace endpoints {
+        /**
+         * @brief This class provide URIs to the Virgil Card endpoints
+         * @note All endpoints start with forward slash symbol "/" and contain version
+         */
+        class CardEndpointUri {
+        public:
+            /**
+             * @brief Returns the endpoint in charge of a Virgil Card creation
+             */
+            static std::string create();
+            /**
+             * @brief Returns the endpoint in charge of a Virgil Card grab
+             */
+            static std::string get(const std::string& cardId);
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters
+             */
+            static std::string search();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Cards searches by a defined pattern
+             */
+            static std::string searchGlobal();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Cards searches by an email
+             */
+            static std::string searchGlobalbyEmail();
+            /**
+             * @brief Returns the endpoint in charge of the Virgil Card revoke
+             * @param cardId - Virgil Card identifier
+             */
+            static std::string revoke(const std::string& cardId);
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            /**
+             * @brief Deny object creation
+             */
+            CardEndpointUri();
         };
     }
 }
 }
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif /* VIRGIL_SDK_CARD_ENDPOINT_URI_H */

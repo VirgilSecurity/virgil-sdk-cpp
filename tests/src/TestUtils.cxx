@@ -35,39 +35,28 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <TestUtils.h>
 
-#include <virgil/sdk/Common.h>
+using virgil::sdk::test::TestUtils;
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
+CreateCardRequest TestUtils::instantiateCreateCardRequest() {
+    return CreateCardRequest();
 }
-}
-
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+//
+//let keyPair = self.crypto.generateKeyPair()
+//let exportedPublicKey = self.crypto.export(keyPair.publicKey)
+//
+//// some random value
+//let identityValue = UUID().uuidString
+//let identityType = self.consts.applicationIdentityType
+//let request = VSSCreateCardRequest(identity: identityValue, identityType: identityType, publicKey: exportedPublicKey)
+//
+//let privateAppKeyData = Data(base64Encoded: self.consts.applicationPrivateKeyBase64, options: Data.Base64DecodingOptions(rawValue: 0))!
+//let appPrivateKey = self.crypto.importPrivateKey(from: privateAppKeyData, withPassword: self.consts.applicationPrivateKeyPassword)!
+//
+//let signer = VSSRequestSigner(crypto: self.crypto)
+//
+//try! signer.selfSign(request, with: keyPair.privateKey)
+//try! signer.authoritySign(request, forAppId: self.consts.applicationId, with: appPrivateKey)
+//
+//return request;

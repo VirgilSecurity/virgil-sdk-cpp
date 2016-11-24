@@ -40,11 +40,11 @@
 #include <catch.hpp>
 #include <helpers.h>
 
-#include <virgil/crypto/VirgilByteArrayUtils.h>
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
-using namespace virgil::crypto;
-using namespace virgil::sdk::crypto;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::VirgilByteArrayUtils;
 
 TEST_CASE("testED001_EncryptRandomData_SingleCorrectKey_ShouldDecrypt", "[crypto]") {
     auto data = virgil::test::Utils::generateRandomData(100);

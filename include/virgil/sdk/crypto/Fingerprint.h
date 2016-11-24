@@ -38,7 +38,10 @@
 #ifndef VIRGIL_SDK_FINGERPRINT_H
 #define VIRGIL_SDK_FINGERPRINT_H
 
-#include <virgil/sdk/crypto/Common.h>
+#include <virgil/sdk/Common.h>
+#include <string>
+
+using std::string;
 
 namespace virgil {
 namespace sdk {
@@ -46,10 +49,10 @@ namespace sdk {
         class Fingerprint {
         public:
             explicit Fingerprint(VirgilByteArray value);
-            explicit Fingerprint(const std::string& hex);
+            explicit Fingerprint(const string& hex);
 
             const VirgilByteArray& value() const;
-            std::string hexValue() const;
+            string hexValue() const;
 
         private:
             VirgilByteArray value_;

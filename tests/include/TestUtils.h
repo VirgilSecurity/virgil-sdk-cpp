@@ -35,39 +35,34 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_TESTUTILS_H
+#define VIRGIL_SDK_TESTUTILS_H
 
-#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/crypto/Crypto.h>
 
-// forward decl
+#include <TestConst.h>
+
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::test::TestConst;
+using std::move;
+
 namespace virgil {
 namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+    namespace test {
+        class TestUtils {
+        public:
+            CreateCardRequest instantiateCreateCardRequest();
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+            TestUtils(Crypto crypto, TestConst consts) : crypto_(move(crypto)), consts_(move(consts)) { }
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            Crypto crypto_;
+            TestConst consts_;
         };
     }
 }
 }
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_TESTUTILS_H

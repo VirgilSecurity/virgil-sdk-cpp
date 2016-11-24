@@ -34,40 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/models/responses/CardResponse.h>
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+using virgil::sdk::client::models::responses::CardResponse;
+using std::move;
 
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
+Card CardResponse::buildCard() const {
+    // FIXME
+    return Card();
 }
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
+CardResponse::CardResponse(unordered_map<string, VirgilByteArray> signatures,
+        VirgilByteArray snapshot,
+        CreateCardSnapshotModel model,
+        string identifier,
+        string createdAt,
+        string cardVersion)
+        : signatures_(move(signatures)), snapshot_(move(snapshot)),
+          model_(move(model)), identifier_(move(identifier)),
+          createdAt_(move(createdAt)), cardVersion_(move(cardVersion)) {
 }
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H

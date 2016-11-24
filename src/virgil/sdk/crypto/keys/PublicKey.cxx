@@ -37,8 +37,10 @@
 
 #include <virgil/sdk/crypto/keys/PublicKey.h>
 
-using namespace virgil::sdk::crypto::keys;
+using virgil::sdk::VirgilByteArray;
+using virgil::sdk::crypto::keys::PublicKey;
+using std::move;
 
 PublicKey::PublicKey(VirgilByteArray key, VirgilByteArray identifier)
-        : key_(std::move(key)), identifier_(std::move(identifier)) {
+        : key_(move(key)), identifier_(move(identifier)) {
 }

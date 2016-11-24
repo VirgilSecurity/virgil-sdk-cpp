@@ -38,12 +38,15 @@
 #ifndef VIRGIL_SDK_CLIENTINTERFACE_H
 #define VIRGIL_SDK_CLIENTINTERFACE_H
 
-#include <future>
 #include <string>
+#include <future>
 #include <vector>
 
-class Card;
-class CreateCardRequest;
+#include <virgil/sdk/client/models/Card.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+
+using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::requests::CreateCardRequest;
 class SearchCardsCriteria;
 class RevokeCardRequest;
 
@@ -51,6 +54,7 @@ namespace virgil {
 namespace sdk {
     namespace client {
         class ClientInterface {
+        public:
             virtual std::future<Card> createCard(const CreateCardRequest &request) const = 0;
 
             virtual std::future<Card> getCard(const std::string &cardId) const = 0;
@@ -58,6 +62,8 @@ namespace sdk {
             virtual std::future<std::vector<Card>> searchCards(const SearchCardsCriteria &criteria) const = 0;
 
             virtual std::future<void> revokeCard(const RevokeCardRequest &request) const = 0;
+
+            virtual ~ClientInterface() = default;
         };
     }
 }

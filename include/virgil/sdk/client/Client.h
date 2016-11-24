@@ -44,6 +44,21 @@ namespace virgil {
 namespace sdk {
     namespace client {
         class Client : public ClientInterface {
+        public:
+            Client(std::string accessToken, std::string baseServiceUri);
+            /**
+             * @brief Return access token
+             *
+             * Return authenticated secure access token to the Virgil Keys Service.
+             * It MUST be passed to each API call.
+             */
+            virtual const string& accessToken() const;
+            /**
+             * @brief Return base service uri token
+             * @note Base service URI does not contain trailing slash.
+             */
+            virtual const string& baseServiceUri() const;
+
             std::future<Card> createCard(const CreateCardRequest &request) const override;
 
             std::future<Card> getCard(const std::string &cardId) const override;
@@ -51,6 +66,10 @@ namespace sdk {
             std::future<std::vector<Card>> searchCards(const SearchCardsCriteria &criteria) const override;
 
             std::future<void> revokeCard(const RevokeCardRequest &request) const override;
+
+        private:
+            string accessToken_;
+            string baseServiceUri_;
         };
     }
 }

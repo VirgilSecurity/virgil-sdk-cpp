@@ -35,39 +35,15 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <virgil/sdk/client/models/Card.h>
 
-#include <virgil/sdk/Common.h>
+using std::move;
+using virgil::sdk::client::models::Card;
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
+Card::Card(string identifier, string identity, string identityType, VirgilByteArray publicKeyData,
+        VirgilByteArray data, CardScope scope, unordered_map<string, string> info,
+        string createdAt, string cardVersion)
+        : identifier_(move(identifier)), identityType_(move(identityType)),
+        publicKeyData_(move(publicKeyData)), data_(move(data)), scope_(scope),
+        info_(move(info)), createdAt_(move(createdAt)), cardVersion_(move(cardVersion)) {
 }
-}
-
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H

@@ -38,11 +38,13 @@
 #ifndef VIRGIL_SDK_CRYPTOINTERFACE_H
 #define VIRGIL_SDK_CRYPTOINTERFACE_H
 
-#include <virgil/sdk/crypto/Common.h>
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/keys/KeyPair.h>
 #include <virgil/sdk/crypto/Fingerprint.h>
 
-using namespace virgil::sdk::crypto::keys;
+using virgil::sdk::crypto::keys::PrivateKey;
+using virgil::sdk::crypto::keys::PublicKey;
+using virgil::sdk::crypto::keys::KeyPair;
 
 namespace virgil {
 namespace sdk {

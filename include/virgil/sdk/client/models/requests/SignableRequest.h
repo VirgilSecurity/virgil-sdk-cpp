@@ -35,39 +35,36 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_SIGNABLEREQUEST_H
+#define VIRGIL_SDK_SIGNABLEREQUEST_H
 
 #include <virgil/sdk/Common.h>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+#include <unordered_map>
+#include <string>
+
+using std::unordered_map;
+using std::string;
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+namespace client {
+namespace models {
+    namespace requests {
+        template <typename T>
+        class SignableRequest {
+        public:
+            void addSignature(VirgilByteArray signature, string fingerprint);
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            unordered_map<string, VirgilByteArray> signatures_;
+            VirgilByteArray snapshot_;
+            T snapshotModel_;
         };
     }
 }
 }
 }
+}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_SIGNABLEREQUEST_H

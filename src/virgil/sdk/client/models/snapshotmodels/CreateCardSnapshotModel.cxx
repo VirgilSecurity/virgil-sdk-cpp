@@ -34,40 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+using std::move;
 
-#include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
+CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
+        unordered_map<string, string> data, CardScope scope,
+        unordered_map<string, string> info)
+        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
+        data_(move(data)), scope_(scope), info_(move(info)) {
 }
-}
-
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
-}
-}
-}
-
-#endif //VIRGIL_SDK_PRIVATEKEY_H

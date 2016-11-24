@@ -39,7 +39,7 @@
 #define VIRGIL_SDK_CRYPTO_H
 
 #include <virgil/sdk/crypto/CryptoInterface.h>
-#include <virgil/sdk/crypto/Common.h>
+#include <virgil/sdk/Common.h>
 
 namespace virgil {
 namespace sdk {

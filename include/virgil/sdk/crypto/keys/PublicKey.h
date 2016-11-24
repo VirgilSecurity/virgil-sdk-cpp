@@ -38,7 +38,7 @@
 #ifndef VIRGIL_SDK_PUBLICKEY_H
 #define VIRGIL_SDK_PUBLICKEY_H
 
-#include <virgil/sdk/crypto/Common.h>
+#include <virgil/sdk/Common.h>
 
 // forward decl
 namespace virgil {

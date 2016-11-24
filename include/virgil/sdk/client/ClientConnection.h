@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,40 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_CLIENT_CONNECTION_H
+#define VIRGIL_SDK_CLIENT_CONNECTION_H
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <string>
 
 #include <virgil/sdk/Common.h>
-
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+#include <virgil/sdk/http/Connection.h>
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
+    namespace client {
+        /**
+         * @brief Specific HTTP layer used for default clients
+         *
+         * @note This class belongs to the **private** API
+         */
+        class ClientConnection : public virgil::sdk::http::Connection {
+        public:
+            /**
+             * @brief Configure connection application specific token and with base address URI
+             *
+             * @param accessToken - application specific token
+             */
+            explicit ClientConnection(std::string accessToken);
+            /**
+             * @brief Return access token
+             */
+            const std::string& accessToken() const;
+            /**
+             * @brief Send synchronous request
+             *
+             * @param request - request to be send
+             *
+             * @throw std::logic_error - if given parameters are inconsistent
+             * @throw std::runtime_error - if error was occured when send request
+             */
+            virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
+
         private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            std::string accessToken_;
         };
     }
 }
 }
-}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif /* VIRGIL_SDK_CLIENT_CONNECTION_H */

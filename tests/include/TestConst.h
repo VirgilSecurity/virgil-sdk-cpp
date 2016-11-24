@@ -35,39 +35,27 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_TESTCONST_H
+#define VIRGIL_SDK_TESTCONST_H
 
-#include <virgil/sdk/Common.h>
+#include <string>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using std::string;
 
 namespace virgil {
 namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
-        };
-    }
+namespace test {
+    class TestConst {
+    public:
+        string applicationToken() const;
+        string applicationPublicKeyBase64() const;
+        string applicationPrivateKeyBase64() const;
+        string applicationPrivateKeyPassword() const;
+        string applicationIdentityType() const;
+        string applicationId() const;
+    };
 }
 }
 }
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_TESTCONST_H

@@ -35,39 +35,38 @@
  */
 
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#ifndef VIRGIL_SDK_CREATECARDREQUEST_H
+#define VIRGIL_SDK_CREATECARDREQUEST_H
 
-#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/requests/SignableRequest.h>
+#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-// forward decl
+#include <string>
+#include <unordered_map>
+
+using std::string;
+using std::unordered_map;
+
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+
 namespace virgil {
 namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+namespace client {
+namespace models {
+    namespace requests {
+        class CreateCardRequest: public SignableRequest<CreateCardSnapshotModel> {
+        public:
+            static CreateCardRequest createRequest(string identity, string identityType,
+                                                   VirgilByteArray publicKeyData,
+                                                   unordered_map <string, string> data);
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
-
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
-
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
-
-            friend Crypto;
+            static CreateCardRequest createRequest(string identity, string identityType,
+                                                   VirgilByteArray publicKeyData);
         };
     }
 }
 }
 }
+}
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+#endif //VIRGIL_SDK_CREATECARDREQUEST_H

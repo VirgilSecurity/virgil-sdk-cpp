@@ -34,40 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <catch.hpp>
 
-#ifndef VIRGIL_SDK_PRIVATEKEY_H
-#define VIRGIL_SDK_PRIVATEKEY_H
+#include <TestConst.h>
+#include <TestUtils.h>
 
-#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/Client.h>
 
-// forward decl
-namespace virgil {
-namespace sdk {
-    namespace crypto {
-        class Crypto;
-    }
-}
-}
+using virgil::sdk::client::Client;
+using virgil::sdk::client::ClientInterface;
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::test::TestUtils;
 
-namespace virgil {
-namespace sdk {
-namespace crypto {
-    namespace keys {
-        class PrivateKey {
-        private:
-            PrivateKey(VirgilByteArray key, VirgilByteArray identifier);
+TEST_CASE("test001_CreateCard", "[client]") {
+    auto client = Client("AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b",
+                         "https://cards.virgilsecurity.com/");
+    Crypto crypto;
 
-            const VirgilByteArray &key() const { return key_; }
-            const VirgilByteArray &identifier() const { return identifier_; }
+    TestConst consts;
+    TestUtils utils(crypto, consts);
 
-            VirgilByteArray key_;
-            VirgilByteArray identifier_;
+    auto createCardRequest = utils.instantiateCreateCardRequest();
 
-            friend Crypto;
-        };
-    }
-}
-}
+    auto future = client.createCard(createCardRequest);
+
+    auto card = future.get();
 }
 
-#endif //VIRGIL_SDK_PRIVATEKEY_H
+TEST_CASE("test004_GetCard", "[client]") {
+    auto client = Client("AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b",
+                                    "https://cards.virgilsecurity.com/");
+
+    Crypto crypto;
+
+    TestConst consts;
+    TestUtils utils(crypto, consts);
+
+//    auto future = client.getCard("8045d25cb37e00e979cecd39b4552d4befed707dc3d69ca6ca34f8341869f43f");
+//
+//    auto card = future.get();
+}
