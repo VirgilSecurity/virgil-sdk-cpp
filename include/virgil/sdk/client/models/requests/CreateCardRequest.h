@@ -54,14 +54,18 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class CreateCardRequest: public SignableRequest<CreateCardSnapshotModel> {
+        class CreateCardRequest final : public SignableRequest<CreateCardSnapshotModel> {
         public:
-            static CreateCardRequest createRequest(string identity, string identityType,
-                                                   VirgilByteArray publicKeyData,
-                                                   unordered_map <string, string> data);
+            static CreateCardRequest createRequest(const string &identity,
+                                                   const string &identityType,
+                                                   const VirgilByteArray &publicKeyData,
+                                                   const unordered_map<string, string> &data = {});
 
-            static CreateCardRequest createRequest(string identity, string identityType,
-                                                   VirgilByteArray publicKeyData);
+        private:
+            CreateCardRequest(string identity,
+                              string identityType,
+                              VirgilByteArray publicKeyData,
+                              unordered_map <string, string> data);
         };
     }
 }

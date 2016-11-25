@@ -35,7 +35,31 @@
  */
 
 
-#ifndef VIRGIL_SDK_SIGNABLE_H
-#define VIRGIL_SDK_SIGNABLE_H
+#ifndef VIRGIL_SDK_REQUESTSIGNERINTERFACE_H
+#define VIRGIL_SDK_REQUESTSIGNERINTERFACE_H
 
-#endif //VIRGIL_SDK_SIGNABLE_H
+#include <virgil/sdk/client/models/interfaces/SignableInterface.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/crypto/keys/PrivateKey.h>
+
+namespace virgil {
+namespace sdk {
+namespace client {
+    class RequestSignerInterface {
+    public:
+        virtual void selfSign(const crypto::CryptoInterface &crypto,
+                              models::interfaces::SignableInterface &request,
+                              const crypto::keys::PrivateKey &privateKey) const = 0;
+
+        virtual void authoritySign(const crypto::CryptoInterface &crypto,
+                                   models::interfaces::SignableInterface &request,
+                                   const std::string &appId,
+                                   const crypto::keys::PrivateKey &privateKey) const = 0;
+
+        virtual ~RequestSignerInterface() = default;
+    };
+}
+}
+}
+
+#endif //VIRGIL_SDK_REQUESTSIGNERINTERFACE_H

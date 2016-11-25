@@ -34,21 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+#include <virgil/sdk/http/ClientRequest.h>
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
-}
+using virgil::sdk::http::ClientRequest;
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
+static const auto kHeaderField_AccessToken = "Authorization";
+
+ClientRequest::ClientRequest(std::string accessToken) {
+    header(std::map<std::string, std::string> { std::make_pair(kHeaderField_AccessToken, "VIRGIL " + accessToken) });
+    contentType("application/json");
 }

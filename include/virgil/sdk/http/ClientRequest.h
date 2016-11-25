@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,49 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_CLIENT_CONNECTION_H
-#define VIRGIL_SDK_CLIENT_CONNECTION_H
 
-#include <string>
+#ifndef VIRGIL_SDK_CLIENTREQUEST_H
+#define VIRGIL_SDK_CLIENTREQUEST_H
 
-#include <virgil/sdk/Common.h>
-#include <virgil/sdk/http/Connection.h>
+#include <virgil/sdk/http/Request.h>
 
 namespace virgil {
 namespace sdk {
-    namespace client {
+    namespace http {
         /**
-         * @brief Specific HTTP layer used for default clients
-         *
-         * @note This class belongs to the **private** API
+         * @brief This is base class for all HTTP requests.
          */
-        class ClientConnection : public virgil::sdk::http::Connection {
+        class ClientRequest : public Request {
         public:
-            /**
-             * @brief Configure connection application specific token and with base address URI
-             *
-             * @param accessToken - application specific token
-             */
-            explicit ClientConnection(std::string accessToken);
-            /**
-             * @brief Return access token
-             */
-            const std::string& accessToken() const;
-            /**
-             * @brief Send synchronous request
-             *
-             * @param request - request to be send
-             *
-             * @throw std::logic_error - if given parameters are inconsistent
-             * @throw std::runtime_error - if error was occured when send request
-             */
-            virgil::sdk::http::Response send(const virgil::sdk::http::Request& request) override;
-
-        private:
-            std::string accessToken_;
+            ClientRequest(std::string accessToken);
         };
     }
 }
 }
 
-#endif /* VIRGIL_SDK_CLIENT_CONNECTION_H */
+#endif //VIRGIL_SDK_CLIENTREQUEST_H

@@ -34,21 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+#ifndef VIRGIL_SDK_SIGNABLEINTERFACE_H
+#define VIRGIL_SDK_SIGNABLEINTERFACE_H
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+#include <string>
+#include <virgil/sdk/Common.h>
+
+namespace virgil {
+namespace sdk {
+namespace client {
+namespace models {
+    namespace interfaces {
+        class SignableInterface {
+        public:
+            virtual const VirgilByteArray& snapshot() const = 0;
+
+            virtual void addSignature(VirgilByteArray signature, std::string fingerprint) = 0;
+
+            virtual ~SignableInterface() = default;
+        };
+    }
+}
+}
+}
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
-}
+#endif //VIRGIL_SDK_SIGNABLEINTERFACE_H

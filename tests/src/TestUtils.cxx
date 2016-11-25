@@ -36,27 +36,32 @@
 
 
 #include <TestUtils.h>
+#include <helpers.h>
+#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/RequestSigner.h>
 
+using virgil::sdk::VirgilByteArrayUtils;
+using virgil::sdk::test::Utils;
 using virgil::sdk::test::TestUtils;
+using virgil::sdk::VirgilBase64;
+using virgil::sdk::client::RequestSigner;
 
 CreateCardRequest TestUtils::instantiateCreateCardRequest() {
-    return CreateCardRequest();
+    auto keyPair = crypto.generateKeyPair();
+    auto exportedPublicKey = crypto.exportPublicKey(keyPair.publicKey());
+
+    auto identity = VirgilByteArrayUtils::bytesToString(Utils::generateRandomData(20));
+    auto identityType = consts.applicationIdentityType();
+
+    auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey);
+
+    auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
+    auto appPrivateKey = crypto.importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
+
+    auto signer = RequestSigner();
+
+    signer.selfSign(crypto, request, keyPair.privateKey());
+    signer.authoritySign(crypto, request, consts.applicationId(), appPrivateKey);
+
+    return request;
 }
-//
-//let keyPair = self.crypto.generateKeyPair()
-//let exportedPublicKey = self.crypto.export(keyPair.publicKey)
-//
-//// some random value
-//let identityValue = UUID().uuidString
-//let identityType = self.consts.applicationIdentityType
-//let request = VSSCreateCardRequest(identity: identityValue, identityType: identityType, publicKey: exportedPublicKey)
-//
-//let privateAppKeyData = Data(base64Encoded: self.consts.applicationPrivateKeyBase64, options: Data.Base64DecodingOptions(rawValue: 0))!
-//let appPrivateKey = self.crypto.importPrivateKey(from: privateAppKeyData, withPassword: self.consts.applicationPrivateKeyPassword)!
-//
-//let signer = VSSRequestSigner(crypto: self.crypto)
-//
-//try! signer.selfSign(request, with: keyPair.privateKey)
-//try! signer.authoritySign(request, forAppId: self.consts.applicationId, with: appPrivateKey)
-//
-//return request;

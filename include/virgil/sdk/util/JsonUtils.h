@@ -43,17 +43,17 @@
 #include <string>
 #include <unordered_map>
 
-using std::string;
-using std::unordered_map;
-
-using json = nlohmann::json;
+#include <virgil/sdk/Common.h>
 
 namespace virgil {
     namespace sdk {
         namespace util {
             class JsonUtils {
             public:
-                static unordered_map<string, string> jsonToUnorderedMap(const json &jsonObj);
+                static std::unordered_map<std::string, std::string> jsonToUnorderedMap(const nlohmann::json &jsonObj);
+                static std::unordered_map<std::string, VirgilByteArray> jsonToUnorderedBinaryMap(const nlohmann::json &jsonObj);
+                static nlohmann::json unorderedMapToJson(const std::unordered_map<std::string, std::string> &map);
+                static nlohmann::json unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map);
 
                 JsonUtils() = delete;
             };

@@ -34,21 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+#ifndef VIRGIL_SDK_REQUESTSIGNER_H
+#define VIRGIL_SDK_REQUESTSIGNER_H
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+#include <virgil/sdk/client/RequestSignerInterface.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
+
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            class RequestSigner: public RequestSignerInterface {
+            public:
+                void selfSign(const crypto::CryptoInterface &crypto,
+                              models::interfaces::SignableInterface &request,
+                              const crypto::keys::PrivateKey &privateKey) const override;
+
+                void authoritySign(const crypto::CryptoInterface &crypto,
+                                   models::interfaces::SignableInterface &request,
+                                   const std::string &appId, const crypto::keys::PrivateKey &privateKey) const override;
+            };
+        }
+    }
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
-}
+#endif //VIRGIL_SDK_REQUESTSIGNER_H

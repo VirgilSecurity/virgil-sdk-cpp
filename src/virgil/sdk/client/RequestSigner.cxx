@@ -34,21 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+#include <virgil/sdk/client/RequestSigner.h>
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+using virgil::sdk::client::RequestSigner;
+using virgil::sdk::crypto::keys::PrivateKey;
+using virgil::sdk::client::models::interfaces::SignableInterface;
+using virgil::sdk::crypto::CryptoInterface;
+
+void RequestSigner::selfSign(const CryptoInterface &crypto, SignableInterface &request, const PrivateKey &privateKey) const {
+    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
+
+    request.addSignature(crypto.generateSignature(fingerprint.value(), privateKey), fingerprint.hexValue());
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
+void RequestSigner::authoritySign(const CryptoInterface &crypto,
+                                  SignableInterface &request,
+                                  const std::string &appId,
+                                  const PrivateKey &privateKey) const {
+    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
+    request.addSignature(crypto.generateSignature(fingerprint.value(), privateKey), appId);
 }

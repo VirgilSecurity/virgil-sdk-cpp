@@ -55,11 +55,11 @@ namespace sdk {
         public:
             CreateCardRequest instantiateCreateCardRequest();
 
-            TestUtils(Crypto crypto, TestConst consts) : crypto_(move(crypto)), consts_(move(consts)) { }
+            TestUtils(Crypto crypto, TestConst consts) : crypto(move(crypto)), consts(move(consts)) { }
 
         private:
-            Crypto crypto_;
-            TestConst consts_;
+            Crypto crypto;
+            TestConst consts;
         };
     }
 }

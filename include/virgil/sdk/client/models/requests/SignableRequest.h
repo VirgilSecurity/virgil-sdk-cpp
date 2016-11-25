@@ -39,12 +39,13 @@
 #define VIRGIL_SDK_SIGNABLEREQUEST_H
 
 #include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
+#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
 
 #include <unordered_map>
 #include <string>
 
-using std::unordered_map;
-using std::string;
+using virgil::sdk::client::models::serialization::CanonicalSerializer;
 
 namespace virgil {
 namespace sdk {
@@ -52,12 +53,30 @@ namespace client {
 namespace models {
     namespace requests {
         template <typename T>
-        class SignableRequest {
+        class SignableRequest : public interfaces::SignableRequestInterface {
         public:
-            void addSignature(VirgilByteArray signature, string fingerprint);
+            const VirgilByteArray& snapshot() const override { return snapshot_; }
+
+            void addSignature(VirgilByteArray signature, std::string fingerprint) override {
+                signatures_[std::move(fingerprint)] = std::move(signature);
+            }
+
+            const std::unordered_map<std::string, VirgilByteArray>& signatures() const override { return signatures_; };
+
+        protected:
+            SignableRequest(T snapshotModel)
+                    : SignableRequest<T>(CanonicalSerializer<T>::toCanonicalForm(snapshotModel),
+                                         std::move(snapshotModel)) { };
 
         private:
-            unordered_map<string, VirgilByteArray> signatures_;
+            SignableRequest(VirgilByteArray snapshot,
+                            T snapshotModel,
+                            std::unordered_map<std::string, VirgilByteArray> signatures = {})
+                    : snapshot_(std::move(snapshot)),
+                      snapshotModel_(std::move(snapshotModel)),
+                      signatures_(std::move(signatures)) { };
+
+            std::unordered_map<std::string, VirgilByteArray> signatures_;
             VirgilByteArray snapshot_;
             T snapshotModel_;
         };

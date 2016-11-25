@@ -40,70 +40,57 @@
 #include <nlohman/json.hpp>
 
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
-#include <virgil/sdk/client/models/responses/CardResponse.h>
+#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/Common.h>
 
 using json = nlohmann::json;
-
-using std::string;
-
-using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
+using virgil::sdk::VirgilBase64;
+
+using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 
 namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace serialization {
-        /**
-         * @brief JSONSerializer<CardResponse> specialization.
-         */
-        template<>
-        class JsonSerializer<CardResponse> {
-        public:
-            template<int FAKE = 0>
-            static CardResponse fromJson(const std::string &jsonString) {
-                try {
-                    auto j = json::parse(jsonString);
+    namespace sdk {
+        namespace client {
+            namespace models {
+                namespace serialization {
+                    /**
+                     * @brief JSONSerializer<SignableRequest> specialization.
+                     */
+                    template <>
+                    class JsonSerializer<SignableRequestInterface> {
+                    public:
+                        template<int INDENT = -1>
+                        static std::string toJson(const SignableRequestInterface &request) {
+                            json j = {
+                                    {JsonKey::ContentSnapshot, VirgilBase64::encode(request.snapshot())}
+                            };
 
-                    string snapshotStr = j[JsonKey::ContentSnapshot];
+                            j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(request.signatures());
 
-                    VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
+                            return j.dump(INDENT);
+                        }
 
-                    auto model = CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm(snapshot);
-
-                    string identifier = j[JsonKey::Id];
-
-                    json meta = j[JsonKey::Meta];
-
-                    auto signatures = JsonUtils::jsonToUnorderedBinaryMap(meta[JsonKey::Signs]);
-
-                    string createdAt = meta[JsonKey::CreatedAt];
-
-                    string cardVersion = meta[JsonKey::CardVersion];
-
-                    return CardResponse(signatures, snapshot, model, identifier, createdAt, cardVersion);
-                } catch (std::exception &exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CardResponse>::fromJson ") +
-                                           exception.what());
+                    private:
+                        JsonSerializer() {};
+                    };
                 }
             }
-
-        private:
-            JsonSerializer() {};
-        };
+        }
     }
-}
-}
-}
 }
 
 /**
  * Explicit methods instantiation
  */
-template CardResponse
-virgil::sdk::client::models::serialization::JsonSerializer<CardResponse>::fromJson(const std::string&);
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson(const SignableRequestInterface&);
+
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson<2>(const SignableRequestInterface&);
+
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson<4>(const SignableRequestInterface&);

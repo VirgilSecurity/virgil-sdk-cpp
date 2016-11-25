@@ -49,11 +49,12 @@ using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
 
 TEST_CASE("test001_CreateCard", "[client]") {
-    auto client = Client("AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b",
+    TestConst consts;
+
+    auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
     Crypto crypto;
 
-    TestConst consts;
     TestUtils utils(crypto, consts);
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
@@ -64,12 +65,13 @@ TEST_CASE("test001_CreateCard", "[client]") {
 }
 
 TEST_CASE("test004_GetCard", "[client]") {
-    auto client = Client("AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b",
-                                    "https://cards.virgilsecurity.com/");
+    TestConst consts;
+
+    auto client = Client(consts.applicationToken(),
+                         "https://cards.virgilsecurity.com/");
 
     Crypto crypto;
 
-    TestConst consts;
     TestUtils utils(crypto, consts);
 
 //    auto future = client.getCard("8045d25cb37e00e979cecd39b4552d4befed707dc3d69ca6ca34f8341869f43f");

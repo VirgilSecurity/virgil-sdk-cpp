@@ -43,11 +43,13 @@
 
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 
 using std::string;
 using std::unordered_map;
 using virgil::sdk::VirgilByteArray;
 using virgil::sdk::client::models::CardScope;
+using virgil::sdk::client::models::serialization::JsonSerializer;
 
 namespace virgil {
 namespace sdk {
@@ -56,9 +58,9 @@ namespace models {
     namespace snapshotmodels {
         class CreateCardSnapshotModel {
         public:
-            CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-                    unordered_map<string, string> data, CardScope scope,
-                    unordered_map<string, string> info);
+            static CreateCardSnapshotModel createModel(const string &identity, const string &identityType,
+                                                       const VirgilByteArray &publicKeyData,
+                                                       const unordered_map<string, string> &data);
 
             // getters
             const string& identity() const { return identity_; }
@@ -68,8 +70,9 @@ namespace models {
             CardScope scope() const { return scope_; }
             const unordered_map<string, string>& info() const { return info_; }
 
-            // FIXME
-            CreateCardSnapshotModel() { }
+            CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
+                                    unordered_map<string, string> data, CardScope scope,
+                                    unordered_map<string, string> info);
 
         private:
             string identity_;

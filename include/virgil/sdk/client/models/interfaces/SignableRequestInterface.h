@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,27 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/ClientConnection.h>
-#include <virgil/sdk/http/Request.h>
-#include <virgil/sdk/http/Response.h>
 
-using virgil::sdk::client::ClientConnection;
-using virgil::sdk::http::Connection;
-using virgil::sdk::http::Request;
-using virgil::sdk::http::Response;
+#ifndef VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H
+#define VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H
 
-static const auto kHeaderField_AccessToken = "Authorization";
+#include <virgil/sdk/client/models/interfaces/SignableInterface.h>
+#include <unordered_map>
 
-ClientConnection::ClientConnection(std::string accessToken) : accessToken_(std::move(accessToken)) {
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace models {
+                namespace interfaces {
+                    class SignableRequestInterface: public SignableInterface {
+                    public:
+                        virtual const VirgilByteArray& snapshot() const = 0;
+
+                        virtual const std::unordered_map<std::string, VirgilByteArray>& signatures() const = 0;
+
+                        virtual ~SignableRequestInterface() = default;
+                    };
+                }
+            }
+        }
+    }
 }
 
-const std::string& ClientConnection::accessToken() const {
-    return accessToken_;
-}
-
-Response ClientConnection::send(const Request& request) {
-    // Add application token to the header
-    auto header = request.header();
-    header[kHeaderField_AccessToken] = "VIRGIL " + this->accessToken();
-    return Connection::send(Request(request).header(header).contentType("application/json"));
-}
+#endif //VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H

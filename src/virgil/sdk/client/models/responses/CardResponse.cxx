@@ -37,11 +37,10 @@
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 
 using virgil::sdk::client::models::responses::CardResponse;
-using std::move;
 
 Card CardResponse::buildCard() const {
-    // FIXME
-    return Card();
+    return Card(identifier_, model_.identity(), model_.identityType(), model_.publicKeyData(), model_.data(),
+                model_.scope(), model_.info(), createdAt_, cardVersion_);
 }
 
 CardResponse::CardResponse(unordered_map<string, VirgilByteArray> signatures,
@@ -50,7 +49,7 @@ CardResponse::CardResponse(unordered_map<string, VirgilByteArray> signatures,
         string identifier,
         string createdAt,
         string cardVersion)
-        : signatures_(move(signatures)), snapshot_(move(snapshot)),
-          model_(move(model)), identifier_(move(identifier)),
-          createdAt_(move(createdAt)), cardVersion_(move(cardVersion)) {
+        : signatures_(std::move(signatures)), snapshot_(std::move(snapshot)),
+          model_(std::move(model)), identifier_(std::move(identifier)),
+          createdAt_(std::move(createdAt)), cardVersion_(std::move(cardVersion)) {
 }

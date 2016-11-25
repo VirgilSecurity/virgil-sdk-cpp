@@ -35,20 +35,23 @@
  */
 
 #include <virgil/sdk/client/Client.h>
-#include <virgil/sdk/client/ClientConnection.h>
+#include <virgil/sdk/http/ClientRequest.h>
+#include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/endpoints/CardEndpointUri.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/responses/CardResponse.h>
+#include <virgil/sdk/http/Connection.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
 
 using virgil::sdk::client::Client;
-using virgil::sdk::client::ClientConnection;
-using virgil::sdk::http::Request;
+using virgil::sdk::http::Connection;
+using virgil::sdk::http::ClientRequest;
 using virgil::sdk::http::Response;
 using virgil::sdk::endpoints::CardEndpointUri;
 using virgil::sdk::client::models::serialization::JsonSerializer;
 using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 
 Client::Client(string accessToken, string baseServiceUri)
         : accessToken_(std::move(accessToken)),
@@ -65,13 +68,14 @@ const string& Client::baseServiceUri() const {
 
 std::future<Card> Client::createCard(const CreateCardRequest &request) const {
     auto future = std::async([=]{
-        Request httpRequest = Request()
-                .get()
+        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        httpRequest
+                .post()
                 .baseAddress(this->baseServiceUri())
                 .endpoint(CardEndpointUri::create())
-                .body(JsonSerializer<CreateCardRequest>::toJson(request));
+                .body(JsonSerializer<SignableRequestInterface>::toJson(request));
 
-        ClientConnection connection(this->accessToken());
+        Connection connection;
         Response response = connection.send(httpRequest);
 
         return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();
@@ -82,12 +86,13 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
 
 std::future<Card> Client::getCard(const std::string &cardId) const {
     auto future = std::async([=]{
-        Request httpRequest = Request()
+        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        httpRequest
                 .get()
                 .baseAddress(this->baseServiceUri())
                 .endpoint(CardEndpointUri::get(cardId));
 
-        ClientConnection connection(this->accessToken());
+        Connection connection;
         Response response = connection.send(httpRequest);
 
         return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();

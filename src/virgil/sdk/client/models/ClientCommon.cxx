@@ -34,21 +34,45 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
+#include <virgil/sdk/client/models/ClientCommon.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+using virgil::sdk::client::models::CardScope;
+using virgil::sdk::client::models::CardRevocationReason;
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+std::string virgil::sdk::client::models::cardScopeToStr(CardScope scope) {
+    switch (scope) {
+        case CardScope::application: return "application";
+        case CardScope::global: return "global";
+    }
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
+CardScope virgil::sdk::client::models::strToCardScope(const std::string &scopeStr) {
+    if (scopeStr == "application") {
+        return CardScope::application;
+    }
+    else if (scopeStr == "global") {
+        return CardScope::global;
+    }
+    else {
+        return CardScope::application;
+    }
+}
+
+std::string virgil::sdk::client::models::cardRevocationReasonToStr(CardRevocationReason reason) {
+    switch (reason) {
+        case CardRevocationReason::unspecified: return "unspecified";
+        case CardRevocationReason::compromised: return "compromised";
+    }
+}
+
+CardRevocationReason virgil::sdk::client::models::strToCardRevocationReason(const std::string &reasonStr) {
+    if (reasonStr == "unspecified") {
+        return CardRevocationReason::unspecified;
+    }
+    else if (reasonStr == "compromised") {
+        return CardRevocationReason::compromised;
+    }
+    else {
+        return CardRevocationReason::unspecified;
+    }
 }

@@ -38,6 +38,8 @@
 #ifndef VIRGIL_SDK_CLIENTCOMMON_H
 #define VIRGIL_SDK_CLIENTCOMMON_H
 
+#include <string>
+
 namespace virgil {
 namespace sdk {
 namespace client {
@@ -47,10 +49,18 @@ namespace client {
             global
         };
 
+        std::string cardScopeToStr(virgil::sdk::client::models::CardScope scope);
+
+        virgil::sdk::client::models::CardScope strToCardScope(const std::string &scopeStr);
+
         enum class CardRevocationReason {
             unspecified,
             compromised
         };
+
+        std::string cardRevocationReasonToStr(virgil::sdk::client::models::CardRevocationReason reason);
+
+        virgil::sdk::client::models::CardRevocationReason strToCardRevocationReason(const std::string &reasonStr);
     }
 }
 }

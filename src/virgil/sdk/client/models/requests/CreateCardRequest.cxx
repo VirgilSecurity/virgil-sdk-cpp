@@ -34,21 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::requests::SignableRequest;
 using std::move;
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+CreateCardRequest CreateCardRequest::createRequest(const string &identity,
+                                       const string &identityType,
+                                       const VirgilByteArray &publicKeyData,
+                                       const unordered_map<string, string> &data) {
+    return CreateCardRequest(identity, identityType, publicKeyData, data);
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
+CreateCardRequest::CreateCardRequest(string identity,
+        string identityType,
+        VirgilByteArray publicKeyData,
+        unordered_map <string, string> data)
+        : SignableRequest<CreateCardSnapshotModel>(CreateCardSnapshotModel::createModel(identity, identityType, publicKeyData, data)){
 }
+

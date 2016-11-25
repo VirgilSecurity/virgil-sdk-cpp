@@ -43,7 +43,6 @@
 #include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using std::unordered_map;
 using virgil::sdk::client::models::Card;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 
@@ -63,13 +62,21 @@ namespace models {
                     string createdAt,
                     string cardVersion);
 
+            const std::unordered_map<std::string, VirgilByteArray>& signatures() const { return signatures_; };
+            const VirgilByteArray& snapshot() const { return snapshot_; };
+            const CreateCardSnapshotModel& model() const { return model_; };
+            const std::string& identifier() const { return identifier_; };
+            const std::string& createdAt() const { return createdAt_; };
+            const std::string& cardVersion() const { return cardVersion_; };
+
+
         private:
-            unordered_map<string, VirgilByteArray> signatures_;
+            std::unordered_map<std::string, VirgilByteArray> signatures_;
             VirgilByteArray snapshot_;
             CreateCardSnapshotModel model_;
-            string identifier_;
-            string createdAt_;
-            string cardVersion_;
+            std::string identifier_;
+            std::string createdAt_;
+            std::string cardVersion_;
         };
     }
 }

@@ -65,35 +65,44 @@ namespace virgil {
                     public:
                         template<int INDENT = -1>
                         static std::string toJson(const CreateCardSnapshotModel &model) {
-                            json j = {
-                                    {JsonKey::PublicKey, VirgilBase64::encode(model.publicKeyData())},
-                                    {JsonKey::IdentityType, model.identityType()},
-                                    {JsonKey::Identity, model.identity()},
-                                    {JsonKey::CardScope, 1} // FIXME
-                            };
+                            try {
+                                json j = {
+                                        {JsonKey::PublicKey, VirgilBase64::encode(model.publicKeyData())},
+                                        {JsonKey::IdentityType, model.identityType()},
+                                        {JsonKey::Identity, model.identity()},
+                                        {JsonKey::CardScope, cardScopeToStr(model.scope())}
+                                };
 
-                            if (model.data().size() > 0) {
-                                j[JsonKey::Data] = model.data();
+                                if (model.data().size() > 0) {
+                                    j[JsonKey::Data] = model.data();
+                                }
+
+                                if (model.info().size() > 0) {
+                                    j[JsonKey::Info] = model.info();
+                                }
+
+                                return j.dump(INDENT);
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CreateCardSnapshotModel>::toJson ") +
+                                                       exception.what());
                             }
-
-                            if (model.info().size() > 0) {
-                                j[JsonKey::Info] = model.info();
-                            }
-
-                            return j;
                         }
 
                         template<int FAKE = 0>
                         static CreateCardSnapshotModel fromJson(const std::string &jsonString) {
-                            auto j = json::parse(jsonString);
+                            try {
+                                auto j = json::parse(jsonString);
 
-                            return CreateCardSnapshotModel(j[JsonKey::Identity],
-                                                           j[JsonKey::IdentityType],
-                                                           VirgilBase64::decode(j[JsonKey::PublicKey]),
-                                                           JsonUtils::jsonToUnorderedMap(j[JsonKey::Data]),
-                                                           // FIXME
-                                                           CardScope::application,
-                                                           JsonUtils::jsonToUnorderedMap(j[JsonKey::Info]));
+                                return CreateCardSnapshotModel(j[JsonKey::Identity],
+                                                               j[JsonKey::IdentityType],
+                                                               VirgilBase64::decode(j[JsonKey::PublicKey]),
+                                                               JsonUtils::jsonToUnorderedMap(j[JsonKey::Data]),
+                                                               strToCardScope(j[JsonKey::CardScope]),
+                                                               JsonUtils::jsonToUnorderedMap(j[JsonKey::Info]));
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CreateCardSnapshotModel>::fromJson ") +
+                                                       exception.what());
+                            }
                         }
 
                     private:
@@ -105,12 +114,22 @@ namespace virgil {
                     public:
                         template<int INDENT = -1>
                         static VirgilByteArray toCanonicalForm(const CreateCardSnapshotModel &model) {
-                            return VirgilByteArray();
+                            try {
+                                return VirgilByteArrayUtils::stringToBytes(JsonSerializer<CreateCardSnapshotModel>::toJson<INDENT>(model));
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n CanonicalSerializer<CreateCardSnapshotModel>::toCanonicalForm ") +
+                                                       exception.what());
+                            }
                         }
 
                         template<int FAKE = 0>
                         static CreateCardSnapshotModel fromCanonicalForm(const VirgilByteArray &data) {
-                            return JsonSerializer<CreateCardSnapshotModel>::fromJson(VirgilByteArrayUtils::bytesToString(data));
+                            try {
+                                return JsonSerializer<CreateCardSnapshotModel>::fromJson(VirgilByteArrayUtils::bytesToString(data));
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm ") +
+                                                       exception.what());
+                            }
                         }
 
                     private:

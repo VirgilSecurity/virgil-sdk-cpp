@@ -35,12 +35,15 @@
  */
 
 
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/util/JsonUtils.h>
 
 using virgil::sdk::util::JsonUtils;
+using virgil::sdk::VirgilByteArray;
+using nlohmann::json;
 
-unordered_map<string, string> JsonUtils::jsonToUnorderedMap(const json &jsonObj) {
-    unordered_map<string, string> res;
+std::unordered_map<std::string, std::string> JsonUtils::jsonToUnorderedMap(const json &jsonObj) {
+    std::unordered_map<std::string, std::string> res;
 
     for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
         res[it.key()] = it.value();
@@ -48,3 +51,33 @@ unordered_map<string, string> JsonUtils::jsonToUnorderedMap(const json &jsonObj)
 
     return res;
 };
+
+std::unordered_map<std::string, VirgilByteArray> JsonUtils::jsonToUnorderedBinaryMap(const json &jsonObj) {
+    std::unordered_map<std::string, VirgilByteArray > res;
+
+    for (auto it = jsonObj.begin(); it != jsonObj.end(); ++it) {
+        res[it.key()] = VirgilBase64::decode(it.value());
+    }
+
+    return res;
+};
+
+json JsonUtils::unorderedMapToJson(const std::unordered_map<std::string, std::string> &map) {
+    json j;
+
+    for (auto it = map.begin(); it != map.end(); ++it) {
+        j[it->first] = it->second;
+    }
+
+    return j;
+}
+
+json JsonUtils::unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map) {
+    json j;
+
+    for (auto it = map.begin(); it != map.end(); ++it) {
+        j[it->first] = VirgilBase64::encode(it->second);
+    }
+
+    return j;
+}

@@ -61,6 +61,7 @@ namespace virgil {
                         /**
                          * @brief Serialize given object to Json representation.
                          */
+                        template<int INDENT = -1>
                         static VirgilByteArray toCanonicalForm(const T &obj);
 
                         /**

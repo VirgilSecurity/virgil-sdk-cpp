@@ -37,13 +37,12 @@
 
 #include <virgil/sdk/client/models/Card.h>
 
-using std::move;
 using virgil::sdk::client::models::Card;
 
-Card::Card(string identifier, string identity, string identityType, VirgilByteArray publicKeyData,
-        VirgilByteArray data, CardScope scope, unordered_map<string, string> info,
-        string createdAt, string cardVersion)
-        : identifier_(move(identifier)), identityType_(move(identityType)),
-        publicKeyData_(move(publicKeyData)), data_(move(data)), scope_(scope),
-        info_(move(info)), createdAt_(move(createdAt)), cardVersion_(move(cardVersion)) {
+Card::Card(std::string identifier, std::string identity, std::string identityType, VirgilByteArray publicKeyData,
+           std::unordered_map<std::string, std::string> data, CardScope scope, std::unordered_map<std::string, std::string> info,
+           std::string createdAt, std::string cardVersion)
+        : identifier_(std::move(identifier)), identityType_(std::move(identityType)),
+        publicKeyData_(std::move(publicKeyData)), data_(std::move(data)), scope_(scope),
+        info_(std::move(info)), createdAt_(std::move(createdAt)), cardVersion_(std::move(cardVersion)) {
 }

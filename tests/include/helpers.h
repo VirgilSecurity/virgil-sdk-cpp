@@ -43,6 +43,7 @@
 #include <random>
 
 namespace virgil {
+namespace sdk {
 namespace test {
     using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char>;
 
@@ -55,6 +56,7 @@ namespace test {
             return data;
         }
     };
+}
 }
 }
 
