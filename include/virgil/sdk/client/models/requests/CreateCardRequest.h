@@ -55,7 +55,8 @@ namespace models {
                                                    const std::string &identityType,
                                                    const VirgilByteArray &publicKeyData,
                                                    const std::unordered_map<std::string, std::string> &data = {},
-                                                   const std::unordered_map<std::string, std::string> &info = {});
+                                                   const std::string& device = "",
+                                                   const std::string& deviceName = "");
 
         private:
             CreateCardRequest(const std::string &identity,

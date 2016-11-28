@@ -46,14 +46,17 @@ using virgil::sdk::test::TestUtils;
 using virgil::sdk::VirgilBase64;
 using virgil::sdk::client::RequestSigner;
 
-CreateCardRequest TestUtils::instantiateCreateCardRequest() {
+CreateCardRequest TestUtils::instantiateCreateCardRequest(
+        const std::unordered_map<std::string, std::string> &data,
+        const std::string &device,
+        const std::string &deviceName) const {
     auto keyPair = crypto.generateKeyPair();
     auto exportedPublicKey = crypto.exportPublicKey(keyPair.publicKey());
 
     auto identity = Utils::generateRandomStr(20);
     auto identityType = consts.applicationIdentityType();
 
-    auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey);
+    auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey, data, device, deviceName);
 
     auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
     auto appPrivateKey = crypto.importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
@@ -64,4 +67,29 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest() {
     signer.authoritySign(crypto, request, consts.applicationId(), appPrivateKey);
 
     return request;
+}
+
+bool TestUtils::checkCardEquality(const Card &card, const CreateCardRequest &request) {
+    auto equals = card.identityType() == request.snapshotModel().identityType()
+        && card.identity() == request.snapshotModel().identity()
+        && card.data() == request.snapshotModel().data()
+        && card.info() == request.snapshotModel().info()
+        && card.publicKeyData() == request.snapshotModel().publicKeyData()
+        && card.scope() == request.snapshotModel().scope();
+
+    return equals;
+}
+
+bool TestUtils::checkCardEquality(const Card &card1, const Card &card2) {
+    auto equals = card1.identityType() == card2.identityType()
+                  && card1.identity() == card2.identity()
+                  && card1.identifier() == card2.identifier()
+                  && card1.createdAt() == card2.createdAt()
+                  && card1.cardVersion() == card2.cardVersion()
+                  && card1.data() == card2.data()
+                  && card1.info() == card2.info()
+                  && card1.publicKeyData() == card2.publicKeyData()
+                  && card1.scope() == card2.scope();
+
+    return equals;
 }

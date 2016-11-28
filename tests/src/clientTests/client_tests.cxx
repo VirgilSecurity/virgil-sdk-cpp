@@ -36,6 +36,9 @@
 
 #include <catch.hpp>
 
+#include <chrono>
+#include <thread>
+
 #include <TestConst.h>
 #include <TestUtils.h>
 
@@ -62,6 +65,30 @@ TEST_CASE("test001_CreateCard", "[client]") {
     auto future = client.createCard(createCardRequest);
 
     auto card = future.get();
+
+    REQUIRE(utils.checkCardEquality(card, createCardRequest));
+}
+
+TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
+    TestConst consts;
+
+    auto client = Client(consts.applicationToken(),
+                         "https://cards.virgilsecurity.com/");
+    Crypto crypto;
+
+    TestUtils utils(crypto, consts);
+
+    std::unordered_map<std::string, std::string> data;
+    data["some_random_key1"] = "some_random_data1";
+    data["some_random_key2"] = "some_random_data2";
+
+    auto createCardRequest = utils.instantiateCreateCardRequest(data, "mac", "very_good_mac");
+
+    auto future = client.createCard(createCardRequest);
+
+    auto card = future.get();
+
+    REQUIRE(utils.checkCardEquality(card, createCardRequest));
 }
 
 TEST_CASE("test004_GetCard", "[client]") {
@@ -74,7 +101,17 @@ TEST_CASE("test004_GetCard", "[client]") {
 
     TestUtils utils(crypto, consts);
 
-//    auto future = client.getCard("8045d25cb37e00e979cecd39b4552d4befed707dc3d69ca6ca34f8341869f43f");
-//
-//    auto card = future.get();
+    auto createCardRequest = utils.instantiateCreateCardRequest();
+
+    auto future = client.createCard(createCardRequest);
+
+    auto card = future.get();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+    auto future2 = client.getCard(card.identifier());
+
+    auto foundCard = future2.get();
+
+    REQUIRE(utils.checkCardEquality(card, foundCard));
 }

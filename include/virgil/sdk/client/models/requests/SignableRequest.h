@@ -60,6 +60,7 @@ namespace models {
             }
 
             const std::unordered_map<std::string, VirgilByteArray>& signatures() const override { return signatures_; };
+            const T& snapshotModel() const { return snapshotModel_; }
 
         protected:
             SignableRequest(T snapshotModel)

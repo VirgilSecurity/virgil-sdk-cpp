@@ -80,7 +80,9 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();
+        auto cardResponse = JsonSerializer<CardResponse>::fromJson(response.body());
+
+        return cardResponse.buildCard();
     });
 
     return future;

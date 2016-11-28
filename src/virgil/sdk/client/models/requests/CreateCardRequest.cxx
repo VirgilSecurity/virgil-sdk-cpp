@@ -46,7 +46,18 @@ CreateCardRequest CreateCardRequest::createRequest(
         const std::string &identityType,
         const VirgilByteArray &publicKeyData,
         const std::unordered_map<std::string, std::string> &data,
-        const std::unordered_map<std::string, std::string> &info) {
+        const std::string &device,
+        const std::string &deviceName) {
+
+    std::unordered_map<std::string, std::string> info;
+    if (!device.empty()) {
+        info["device"] = device;
+    }
+
+    if (!deviceName.empty()) {
+        info["device_name"] = deviceName;
+    }
+
     return CreateCardRequest(identity, identityType, publicKeyData, data, CardScope::application, info);
 }
 

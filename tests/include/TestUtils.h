@@ -39,11 +39,13 @@
 #define VIRGIL_SDK_TESTUTILS_H
 
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
 #include <TestConst.h>
 
 using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::Card;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
 
@@ -52,9 +54,22 @@ namespace sdk {
     namespace test {
         class TestUtils {
         public:
-            CreateCardRequest instantiateCreateCardRequest();
-
             TestUtils(Crypto crypto, TestConst consts) : crypto(std::move(crypto)), consts(std::move(consts)) { }
+
+            CreateCardRequest instantiateCreateCardRequest(
+                    const std::unordered_map<std::string, std::string> &data = {},
+                    const std::string &device = "",
+                    const std::string &deviceName = "") const;
+
+            static bool checkCardEquality(const Card &card, const CreateCardRequest &request);
+            static bool checkCardEquality(const Card &card1, const Card &card2);
+
+//            - (VSSRevokeCardRequest * __nonnull)instantiateRevokeCardForCard:(VSSCard * __nonnull)card;
+//            - (BOOL)checkVirgilCard:(VSSVirgilCard * __nonnull)card isEqualToCreateCardRequest:(VSSCreateCardRequest * __nonnull)request;
+//            - (BOOL)checkCard:(VSSCard * __nonnull)card1 isEqualToCard:(VSSCard * __nonnull)card2;
+//            - (BOOL)checkCreateCardRequest:(VSSCreateCardRequest * __nonnull)request1 isEqualToCreateCardRequest:(VSSCreateCardRequest * __nonnull)request2;
+//            - (BOOL)checkRevokeCardRequest:(VSSRevokeCardRequest * __nonnull)request1 isEqualToRevokeCardRequest:(VSSRevokeCardRequest * __nonnull)request2;
+
 
         private:
             Crypto crypto;
