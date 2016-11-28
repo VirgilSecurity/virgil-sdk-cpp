@@ -52,17 +52,19 @@ using virgil::sdk::endpoints::CardEndpointUri;
 using virgil::sdk::client::models::serialization::JsonSerializer;
 using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::Card;
 
-Client::Client(string accessToken, string baseServiceUri)
+Client::Client(std::string accessToken, std::string baseServiceUri)
         : accessToken_(std::move(accessToken)),
           baseServiceUri_(std::move(baseServiceUri)) {
 }
 
-const string& Client::accessToken() const {
+const std::string& Client::accessToken() const {
     return accessToken_;
 }
 
-const string& Client::baseServiceUri() const {
+const std::string& Client::baseServiceUri() const {
     return baseServiceUri_;
 }
 

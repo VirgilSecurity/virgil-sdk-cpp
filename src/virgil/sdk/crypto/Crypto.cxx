@@ -66,6 +66,9 @@ using virgil::crypto::VirgilStreamSigner;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
 using virgil::crypto::foundation::VirgilHash;
+using virgil::sdk::crypto::keys::PrivateKey;
+using virgil::sdk::crypto::keys::PublicKey;
+using virgil::sdk::crypto::keys::KeyPair;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 

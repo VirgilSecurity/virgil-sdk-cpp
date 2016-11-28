@@ -37,7 +37,6 @@
 
 #include <virgil/sdk/crypto/Fingerprint.h>
 
-using std::move;
 using virgil::sdk::crypto::Fingerprint;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::VirgilByteArray;
@@ -46,13 +45,14 @@ Fingerprint::Fingerprint(VirgilByteArray value)
         : value_(move(value)) {
 }
 
-Fingerprint::Fingerprint(const string& hex)
+Fingerprint::Fingerprint(const std::string& hex)
         : value_(VirgilByteArrayUtils::hexToBytes(hex)) {
 }
 
 const VirgilByteArray& Fingerprint::value() const {
     return value_;
 }
-string Fingerprint::hexValue() const {
+
+std::string Fingerprint::hexValue() const {
     return VirgilByteArrayUtils::bytesToHex(value_);
 }

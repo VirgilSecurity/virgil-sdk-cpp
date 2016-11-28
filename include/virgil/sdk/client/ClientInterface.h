@@ -45,8 +45,6 @@
 #include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 
-using virgil::sdk::client::models::Card;
-using virgil::sdk::client::models::requests::CreateCardRequest;
 class SearchCardsCriteria;
 class RevokeCardRequest;
 
@@ -55,11 +53,11 @@ namespace sdk {
     namespace client {
         class ClientInterface {
         public:
-            virtual std::future<Card> createCard(const CreateCardRequest &request) const = 0;
+            virtual std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const = 0;
 
-            virtual std::future<Card> getCard(const std::string &cardId) const = 0;
+            virtual std::future<models::Card> getCard(const std::string &cardId) const = 0;
 
-            virtual std::future<std::vector<Card>> searchCards(const SearchCardsCriteria &criteria) const = 0;
+            virtual std::future<std::vector<models::Card>> searchCards(const SearchCardsCriteria &criteria) const = 0;
 
             virtual std::future<void> revokeCard(const RevokeCardRequest &request) const = 0;
 

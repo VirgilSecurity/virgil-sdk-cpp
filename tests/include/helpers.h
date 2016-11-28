@@ -55,6 +55,17 @@ namespace test {
             std::generate(begin(data), end(data), std::ref(rbe));
             return data;
         }
+
+        static std::string generateRandomStr(int size) {
+            static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            std::string st;
+            for (int i = 0; i < size; ++i) {
+                st += alphanum[rand() % (sizeof(alphanum) - 1)];
+            }
+
+            return st;
+        }
     };
 }
 }

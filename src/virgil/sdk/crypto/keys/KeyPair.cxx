@@ -40,8 +40,7 @@
 using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::crypto::keys::PublicKey;
 using virgil::sdk::crypto::keys::KeyPair;
-using std::move;
 
 KeyPair::KeyPair(PrivateKey privateKey, PublicKey publicKey)
-        : privateKey_(move(privateKey)), publicKey_(move(publicKey)) {
+        : privateKey_(std::move(privateKey)), publicKey_(std::move(publicKey)) {
 }

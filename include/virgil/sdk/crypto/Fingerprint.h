@@ -41,18 +41,16 @@
 #include <virgil/sdk/Common.h>
 #include <string>
 
-using std::string;
-
 namespace virgil {
 namespace sdk {
     namespace crypto {
         class Fingerprint {
         public:
             explicit Fingerprint(VirgilByteArray value);
-            explicit Fingerprint(const string& hex);
+            explicit Fingerprint(const std::string& hex);
 
             const VirgilByteArray& value() const;
-            string hexValue() const;
+            std::string hexValue() const;
 
         private:
             VirgilByteArray value_;

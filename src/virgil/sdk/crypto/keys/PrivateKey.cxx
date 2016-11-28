@@ -39,8 +39,7 @@
 
 using virgil::sdk::VirgilByteArray;
 using virgil::sdk::crypto::keys::PrivateKey;
-using std::move;
 
 PrivateKey::PrivateKey(VirgilByteArray key, VirgilByteArray identifier)
-        : key_(move(key)), identifier_(move(identifier)) {
+        : key_(std::move(key)), identifier_(std::move(identifier)) {
 }

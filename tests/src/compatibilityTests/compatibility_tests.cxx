@@ -46,6 +46,7 @@
 using virgil::sdk::VirgilBase64;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilByteArrayUtils;
+using virgil::sdk::crypto::keys::PrivateKey;
 
 using json = nlohmann::json;
 

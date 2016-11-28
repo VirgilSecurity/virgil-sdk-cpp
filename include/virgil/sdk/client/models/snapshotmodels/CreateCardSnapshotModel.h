@@ -45,12 +45,6 @@
 #include <virgil/sdk/client/models/ClientCommon.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 
-using std::string;
-using std::unordered_map;
-using virgil::sdk::VirgilByteArray;
-using virgil::sdk::client::models::CardScope;
-using virgil::sdk::client::models::serialization::JsonSerializer;
-
 namespace virgil {
 namespace sdk {
 namespace client {
@@ -58,29 +52,32 @@ namespace models {
     namespace snapshotmodels {
         class CreateCardSnapshotModel {
         public:
-            static CreateCardSnapshotModel createModel(const string &identity, const string &identityType,
-                                                       const VirgilByteArray &publicKeyData,
-                                                       const unordered_map<string, string> &data);
+            static CreateCardSnapshotModel createModel(
+                    const std::string &identity, const std::string &identityType,
+                    const VirgilByteArray &publicKeyData,
+                    const std::unordered_map<std::string, std::string> &data,
+                    CardScope scope,
+                    const std::unordered_map<std::string, std::string> &info);
 
             // getters
-            const string& identity() const { return identity_; }
-            const string& identityType() const { return identityType_; }
+            const std::string& identity() const { return identity_; }
+            const std::string& identityType() const { return identityType_; }
             const VirgilByteArray & publicKeyData() const { return publicKeyData_; }
-            const unordered_map<string, string>& data() const { return data_; }
+            const std::unordered_map<std::string, std::string>& data() const { return data_; }
             CardScope scope() const { return scope_; }
-            const unordered_map<string, string>& info() const { return info_; }
-
-            CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-                                    unordered_map<string, string> data, CardScope scope,
-                                    unordered_map<string, string> info);
+            const std::unordered_map<std::string, std::string>& info() const { return info_; }
 
         private:
-            string identity_;
-            string identityType_;
+            CreateCardSnapshotModel(std::string identity, std::string identityType, VirgilByteArray publicKeyData,
+                                    std::unordered_map<std::string, std::string> data, CardScope scope,
+                                    std::unordered_map<std::string, std::string> info);
+
+            std::string identity_;
+            std::string identityType_;
             VirgilByteArray publicKeyData_;
-            unordered_map<string, string> data_;
+            std::unordered_map<std::string, std::string> data_;
             CardScope scope_;
-            unordered_map<string, string> info_;
+            std::unordered_map<std::string, std::string> info_;
         };
     }
 }

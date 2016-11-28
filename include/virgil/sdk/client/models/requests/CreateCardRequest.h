@@ -44,28 +44,26 @@
 #include <string>
 #include <unordered_map>
 
-using std::string;
-using std::unordered_map;
-
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-
 namespace virgil {
 namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class CreateCardRequest final : public SignableRequest<CreateCardSnapshotModel> {
+        class CreateCardRequest final : public SignableRequest<snapshotmodels::CreateCardSnapshotModel> {
         public:
-            static CreateCardRequest createRequest(const string &identity,
-                                                   const string &identityType,
+            static CreateCardRequest createRequest(const std::string &identity,
+                                                   const std::string &identityType,
                                                    const VirgilByteArray &publicKeyData,
-                                                   const unordered_map<string, string> &data = {});
+                                                   const std::unordered_map<std::string, std::string> &data = {},
+                                                   const std::unordered_map<std::string, std::string> &info = {});
 
         private:
-            CreateCardRequest(string identity,
-                              string identityType,
-                              VirgilByteArray publicKeyData,
-                              unordered_map <string, string> data);
+            CreateCardRequest(const std::string &identity,
+                              const std::string &identityType,
+                              const VirgilByteArray &publicKeyData,
+                              const std::unordered_map<std::string, std::string> &data,
+                              CardScope scope,
+                              const std::unordered_map<std::string, std::string> &info);
         };
     }
 }

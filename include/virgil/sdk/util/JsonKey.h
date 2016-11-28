@@ -39,8 +39,6 @@
 
 #include <string>
 
-using std::string;
-
 namespace virgil {
 namespace sdk {
     namespace util {
@@ -51,25 +49,25 @@ namespace sdk {
          */
         class JsonKey {
         public:
-            static const string Id;
-            static const string CreatedAt;
-            static const string CardVersion;
-            static const string Type;
-            static const string Value;
-            static const string Identity;
-            static const string Data;
-            static const string Info;
-            static const string Device;
-            static const string DeviceName;
-            static const string PublicKey;
-            static const string ContentSnapshot;
-            static const string Meta;
-            static const string CardScope;
-            static const string IdentityType;
-            static const string Signs;
-            static const string CardId;
-            static const string RevocationReason;
-            static const string Identities;
+            static const std::string Id;
+            static const std::string CreatedAt;
+            static const std::string CardVersion;
+            static const std::string Type;
+            static const std::string Value;
+            static const std::string Identity;
+            static const std::string Data;
+            static const std::string Info;
+            static const std::string Device;
+            static const std::string DeviceName;
+            static const std::string PublicKey;
+            static const std::string ContentSnapshot;
+            static const std::string Meta;
+            static const std::string CardScope;
+            static const std::string IdentityType;
+            static const std::string Signs;
+            static const std::string CardId;
+            static const std::string RevocationReason;
+            static const std::string Identities;
 
         private:
             JsonKey();

@@ -46,7 +46,6 @@
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
-using std::move;
 
 namespace virgil {
 namespace sdk {
@@ -55,7 +54,7 @@ namespace sdk {
         public:
             CreateCardRequest instantiateCreateCardRequest();
 
-            TestUtils(Crypto crypto, TestConst consts) : crypto(move(crypto)), consts(move(consts)) { }
+            TestUtils(Crypto crypto, TestConst consts) : crypto(std::move(crypto)), consts(std::move(consts)) { }
 
         private:
             Crypto crypto;

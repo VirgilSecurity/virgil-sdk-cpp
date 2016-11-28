@@ -52,24 +52,24 @@ namespace sdk {
              * Return authenticated secure access token to the Virgil Keys Service.
              * It MUST be passed to each API call.
              */
-            virtual const string& accessToken() const;
+            virtual const std::string& accessToken() const;
             /**
              * @brief Return base service uri token
              * @note Base service URI does not contain trailing slash.
              */
-            virtual const string& baseServiceUri() const;
+            virtual const std::string& baseServiceUri() const;
 
-            std::future<Card> createCard(const CreateCardRequest &request) const override;
+            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
 
-            std::future<Card> getCard(const std::string &cardId) const override;
+            std::future<models::Card> getCard(const std::string &cardId) const override;
 
-            std::future<std::vector<Card>> searchCards(const SearchCardsCriteria &criteria) const override;
+            std::future<std::vector<models::Card>> searchCards(const SearchCardsCriteria &criteria) const override;
 
             std::future<void> revokeCard(const RevokeCardRequest &request) const override;
 
         private:
-            string accessToken_;
-            string baseServiceUri_;
+            std::string accessToken_;
+            std::string baseServiceUri_;
         };
     }
 }

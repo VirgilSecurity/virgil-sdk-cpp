@@ -45,8 +45,6 @@
 #include <unordered_map>
 #include <string>
 
-using virgil::sdk::client::models::serialization::CanonicalSerializer;
-
 namespace virgil {
 namespace sdk {
 namespace client {
@@ -65,13 +63,14 @@ namespace models {
 
         protected:
             SignableRequest(T snapshotModel)
-                    : SignableRequest<T>(CanonicalSerializer<T>::toCanonicalForm(snapshotModel),
+                    : SignableRequest<T>(serialization::CanonicalSerializer<T>::toCanonicalForm(snapshotModel),
                                          std::move(snapshotModel)) { };
 
         private:
-            SignableRequest(VirgilByteArray snapshot,
-                            T snapshotModel,
-                            std::unordered_map<std::string, VirgilByteArray> signatures = {})
+            SignableRequest(
+                    VirgilByteArray snapshot,
+                    T snapshotModel,
+                    std::unordered_map<std::string, VirgilByteArray> signatures = {})
                     : snapshot_(std::move(snapshot)),
                       snapshotModel_(std::move(snapshotModel)),
                       signatures_(std::move(signatures)) { };

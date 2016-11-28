@@ -40,19 +40,17 @@
 
 #include <string>
 
-using std::string;
-
 namespace virgil {
 namespace sdk {
 namespace test {
     class TestConst {
     public:
-        string applicationToken() const;
-        string applicationPublicKeyBase64() const;
-        string applicationPrivateKeyBase64() const;
-        string applicationPrivateKeyPassword() const;
-        string applicationIdentityType() const;
-        string applicationId() const;
+        std::string applicationToken() const;
+        std::string applicationPublicKeyBase64() const;
+        std::string applicationPrivateKeyBase64() const;
+        std::string applicationPrivateKeyPassword() const;
+        std::string applicationIdentityType() const;
+        std::string applicationId() const;
     };
 }
 }

@@ -39,19 +39,24 @@
 
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
-using std::move;
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 
-CreateCardRequest CreateCardRequest::createRequest(const string &identity,
-                                       const string &identityType,
-                                       const VirgilByteArray &publicKeyData,
-                                       const unordered_map<string, string> &data) {
-    return CreateCardRequest(identity, identityType, publicKeyData, data);
+CreateCardRequest CreateCardRequest::createRequest(
+        const std::string &identity,
+        const std::string &identityType,
+        const VirgilByteArray &publicKeyData,
+        const std::unordered_map<std::string, std::string> &data,
+        const std::unordered_map<std::string, std::string> &info) {
+    return CreateCardRequest(identity, identityType, publicKeyData, data, CardScope::application, info);
 }
 
-CreateCardRequest::CreateCardRequest(string identity,
-        string identityType,
-        VirgilByteArray publicKeyData,
-        unordered_map <string, string> data)
-        : SignableRequest<CreateCardSnapshotModel>(CreateCardSnapshotModel::createModel(identity, identityType, publicKeyData, data)){
+CreateCardRequest::CreateCardRequest(
+        const std::string &identity,
+        const std::string &identityType,
+        const VirgilByteArray &publicKeyData,
+        const std::unordered_map<std::string, std::string> &data,
+        CardScope scope,
+        const std::unordered_map<std::string, std::string> &info)
+        : SignableRequest<CreateCardSnapshotModel>(
+            CreateCardSnapshotModel::createModel(identity, identityType, publicKeyData, data, scope, info)) {
 }
-

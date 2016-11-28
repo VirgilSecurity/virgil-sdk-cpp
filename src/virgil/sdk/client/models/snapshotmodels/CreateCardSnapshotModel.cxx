@@ -37,18 +37,23 @@
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using std::move;
+using virgil::sdk::VirgilByteArray;
+using virgil::sdk::client::models::CardScope;
+using virgil::sdk::client::models::serialization::JsonSerializer;
 
-CreateCardSnapshotModel CreateCardSnapshotModel::createModel(const string &identity, const string &identityType,
-                                           const VirgilByteArray &publicKeyData,
-                                           const unordered_map<string, string> &data) {
-    // FIXME: some info?
-    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, CardScope::application, {});
+CreateCardSnapshotModel CreateCardSnapshotModel::createModel(
+        const std::string &identity, const std::string &identityType,
+        const VirgilByteArray &publicKeyData,
+        const std::unordered_map<std::string, std::string> &data,
+        CardScope scope,
+        const std::unordered_map<std::string, std::string> &info) {
+    return CreateCardSnapshotModel(identity, identityType, publicKeyData, data, scope, info);
 }
 
-CreateCardSnapshotModel::CreateCardSnapshotModel(string identity, string identityType, VirgilByteArray publicKeyData,
-        unordered_map<string, string> data, CardScope scope,
-        unordered_map<string, string> info)
-        : identity_(move(identity)), identityType_(move(identityType)), publicKeyData_(move(publicKeyData)),
-        data_(move(data)), scope_(scope), info_(move(info)) {
+CreateCardSnapshotModel::CreateCardSnapshotModel(
+        std::string identity, std::string identityType, VirgilByteArray publicKeyData,
+        std::unordered_map<std::string, std::string> data, CardScope scope,
+        std::unordered_map<std::string, std::string> info)
+        : identity_(std::move(identity)), identityType_(std::move(identityType)), publicKeyData_(std::move(publicKeyData)),
+        data_(std::move(data)), scope_(scope), info_(std::move(info)) {
 }

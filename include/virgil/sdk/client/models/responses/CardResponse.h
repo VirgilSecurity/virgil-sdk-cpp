@@ -43,9 +43,6 @@
 #include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
-using virgil::sdk::client::models::Card;
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-
 namespace virgil {
 namespace sdk {
 namespace client {
@@ -55,16 +52,17 @@ namespace models {
         public:
             Card buildCard() const;
 
-            CardResponse(unordered_map<string, VirgilByteArray> signatures,
+            CardResponse(
+                    std::unordered_map<std::string, VirgilByteArray> signatures,
                     VirgilByteArray snapshot,
-                    CreateCardSnapshotModel model,
-                    string identifier,
-                    string createdAt,
-                    string cardVersion);
+                    snapshotmodels::CreateCardSnapshotModel model,
+                    std::string identifier,
+                    std::string createdAt,
+                    std::string cardVersion);
 
             const std::unordered_map<std::string, VirgilByteArray>& signatures() const { return signatures_; };
             const VirgilByteArray& snapshot() const { return snapshot_; };
-            const CreateCardSnapshotModel& model() const { return model_; };
+            const snapshotmodels::CreateCardSnapshotModel& model() const { return model_; };
             const std::string& identifier() const { return identifier_; };
             const std::string& createdAt() const { return createdAt_; };
             const std::string& cardVersion() const { return cardVersion_; };
@@ -73,7 +71,7 @@ namespace models {
         private:
             std::unordered_map<std::string, VirgilByteArray> signatures_;
             VirgilByteArray snapshot_;
-            CreateCardSnapshotModel model_;
+            snapshotmodels::CreateCardSnapshotModel model_;
             std::string identifier_;
             std::string createdAt_;
             std::string cardVersion_;

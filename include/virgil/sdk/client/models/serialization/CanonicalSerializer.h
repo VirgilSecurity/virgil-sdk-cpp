@@ -43,8 +43,6 @@
 
 #include <virgil/sdk/Common.h>
 
-using virgil::sdk::VirgilByteArray;
-
 namespace virgil {
     namespace sdk {
         namespace client {

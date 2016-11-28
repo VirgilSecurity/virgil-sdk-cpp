@@ -50,7 +50,7 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest() {
     auto keyPair = crypto.generateKeyPair();
     auto exportedPublicKey = crypto.exportPublicKey(keyPair.publicKey());
 
-    auto identity = VirgilByteArrayUtils::bytesToString(Utils::generateRandomData(20));
+    auto identity = Utils::generateRandomStr(20);
     auto identityType = consts.applicationIdentityType();
 
     auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey);

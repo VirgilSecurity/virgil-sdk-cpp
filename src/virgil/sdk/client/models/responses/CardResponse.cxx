@@ -37,18 +37,21 @@
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 
 using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 
 Card CardResponse::buildCard() const {
     return Card(identifier_, model_.identity(), model_.identityType(), model_.publicKeyData(), model_.data(),
                 model_.scope(), model_.info(), createdAt_, cardVersion_);
 }
 
-CardResponse::CardResponse(unordered_map<string, VirgilByteArray> signatures,
+CardResponse::CardResponse(
+        std::unordered_map<std::string, VirgilByteArray> signatures,
         VirgilByteArray snapshot,
         CreateCardSnapshotModel model,
-        string identifier,
-        string createdAt,
-        string cardVersion)
+        std::string identifier,
+        std::string createdAt,
+        std::string cardVersion)
         : signatures_(std::move(signatures)), snapshot_(std::move(snapshot)),
           model_(std::move(model)), identifier_(std::move(identifier)),
           createdAt_(std::move(createdAt)), cardVersion_(std::move(cardVersion)) {

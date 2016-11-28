@@ -39,26 +39,26 @@
 
 using virgil::sdk::test::TestConst;
 
-string TestConst::applicationToken() const {
+std::string TestConst::applicationToken() const {
     return "";
 }
 
-string TestConst::applicationPublicKeyBase64() const {
+std::string TestConst::applicationPublicKeyBase64() const {
     return "";
 }
 
-string TestConst::applicationPrivateKeyBase64() const {
+std::string TestConst::applicationPrivateKeyBase64() const {
     return "";
 }
 
-string TestConst::applicationPrivateKeyPassword() const {
+std::string TestConst::applicationPrivateKeyPassword() const {
     return "";
 }
 
-string TestConst::applicationIdentityType() const {
+std::string TestConst::applicationIdentityType() const {
     return "";
 }
 
-string TestConst::applicationId() const {
+std::string TestConst::applicationId() const {
     return "";
 }

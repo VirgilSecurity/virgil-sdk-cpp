@@ -48,8 +48,6 @@
 
 using json = nlohmann::json;
 
-using std::string;
-
 using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
@@ -70,21 +68,21 @@ namespace models {
                 try {
                     auto j = json::parse(jsonString);
 
-                    string snapshotStr = j[JsonKey::ContentSnapshot];
+                    std::string snapshotStr = j[JsonKey::ContentSnapshot];
 
                     VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
 
-                    auto model = CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm(snapshot);
+                    auto model = CanonicalSerializer<snapshotmodels::CreateCardSnapshotModel>::fromCanonicalForm(snapshot);
 
-                    string identifier = j[JsonKey::Id];
+                    std::string identifier = j[JsonKey::Id];
 
                     json meta = j[JsonKey::Meta];
 
                     auto signatures = JsonUtils::jsonToUnorderedBinaryMap(meta[JsonKey::Signs]);
 
-                    string createdAt = meta[JsonKey::CreatedAt];
+                    std::string createdAt = meta[JsonKey::CreatedAt];
 
-                    string cardVersion = meta[JsonKey::CardVersion];
+                    std::string cardVersion = meta[JsonKey::CardVersion];
 
                     return CardResponse(signatures, snapshot, model, identifier, createdAt, cardVersion);
                 } catch (std::exception &exception) {

@@ -39,21 +39,18 @@
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
 #include <map>
-#include <string>
-#include <stdexcept>
 
 #include <nlohman/json.hpp>
 
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
-#include <virgil/sdk/client/models/Card.h>
 
 using json = nlohmann::json;
 
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+using virgil::sdk::VirgilByteArray;
 
 namespace virgil {
     namespace sdk {
@@ -93,7 +90,7 @@ namespace virgil {
                             try {
                                 auto j = json::parse(jsonString);
 
-                                return CreateCardSnapshotModel(j[JsonKey::Identity],
+                                return CreateCardSnapshotModel::createModel(j[JsonKey::Identity],
                                                                j[JsonKey::IdentityType],
                                                                VirgilBase64::decode(j[JsonKey::PublicKey]),
                                                                JsonUtils::jsonToUnorderedMap(j[JsonKey::Data]),
