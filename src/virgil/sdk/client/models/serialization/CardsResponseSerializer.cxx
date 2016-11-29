@@ -34,15 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
-#define VIRGIL_SDK_CANONICALSERIALIZER_H
-
 #include <string>
-#include <vector>
 
-#include <virgil/sdk/Common.h>
+#include <nlohman/json.hpp>
+
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/responses/CardsResponse.h>
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
+
+using json = nlohmann::json;
+
+using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::responses::CardsResponse;
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::util::JsonUtils;
 
 namespace virgil {
     namespace sdk {
@@ -50,20 +56,27 @@ namespace virgil {
             namespace models {
                 namespace serialization {
                     /**
-                     * @brief This class responsible for the data object marshalling.
-                     *
-                     * Supported classes:
+                     * @brief JSONSerializer<CardsResponse> specialization.
                      */
-                    template<typename T>
-                    class CanonicalSerializer {
+                    template<>
+                    class JsonSerializer<CardsResponse> {
                     public:
-                        template<int INDENT = -1>
-                        static VirgilByteArray toCanonicalForm(const T &model) ;
-
                         template<int FAKE = 0>
-                        static T fromCanonicalForm(const VirgilByteArray &data);
+                        static CardsResponse fromJson(const json &j) {
+                            try {
+                                std::vector<CardResponse> response;
+                                for (const auto& jElement : j) {
+                                    response.push_back(JsonSerializer<CardResponse>::fromJson(jElement));
+                                }
 
-                        CanonicalSerializer() = delete;
+                                return CardsResponse(response);
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CardsResponse>::fromJson ") +
+                                                       exception.what());
+                            }
+                        }
+
+                        JsonSerializer() = delete;
                     };
                 }
             }
@@ -71,4 +84,9 @@ namespace virgil {
     }
 }
 
-#endif //VIRGIL_SDK_CANONICALSERIALIZER_H
+/**
+ * Explicit methods instantiation
+ */
+
+template CardsResponse
+virgil::sdk::client::models::serialization::JsonSerializer<CardsResponse>::fromJson(const json&);

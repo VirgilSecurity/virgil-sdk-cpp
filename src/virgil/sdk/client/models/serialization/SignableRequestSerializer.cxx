@@ -43,7 +43,6 @@
 #include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
-#include <virgil/sdk/Common.h>
 
 using json = nlohmann::json;
 using virgil::sdk::util::JsonKey;
@@ -65,17 +64,22 @@ namespace virgil {
                     public:
                         template<int INDENT = -1>
                         static std::string toJson(const SignableRequestInterface &request) {
-                            json j = {
-                                    {JsonKey::ContentSnapshot, VirgilBase64::encode(request.snapshot())}
-                            };
+                            try {
+                                json j = {
+                                        {JsonKey::ContentSnapshot, VirgilBase64::encode(request.snapshot())}
+                                };
 
-                            j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(request.signatures());
+                                j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(
+                                        request.signatures());
 
-                            return j.dump(INDENT);
+                                return j.dump(INDENT);
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::toJson ") +
+                                                       exception.what());
+                            }
                         }
 
-                    private:
-                        JsonSerializer() {};
+                        JsonSerializer() = delete;
                     };
                 }
             }

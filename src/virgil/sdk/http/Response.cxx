@@ -78,7 +78,7 @@ Response::StatusCode Response::statusCode() const {
 }
 
 Response& Response::statusCodeRaw(int code) {
-    std::set<int> availableCodes{200, 400, 401, 404, 405, 500, 501};
+    std::set<int> availableCodes{200, 400, 401, 403, 404, 405, 500};
     if (availableCodes.find(code) != availableCodes.end()) {
         statusCode_ = static_cast<Response::StatusCode>(code);
     } else {

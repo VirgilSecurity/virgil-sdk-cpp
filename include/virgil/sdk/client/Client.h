@@ -63,9 +63,9 @@ namespace sdk {
 
             std::future<models::Card> getCard(const std::string &cardId) const override;
 
-            std::future<std::vector<models::Card>> searchCards(const SearchCardsCriteria &criteria) const override;
+            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
 
-            std::future<void> revokeCard(const RevokeCardRequest &request) const override;
+            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
 
         private:
             std::string accessToken_;

@@ -40,6 +40,7 @@
 
 #include <string>
 #include <vector>
+#include <nlohman/json.hpp>
 
 namespace virgil {
 namespace sdk {
@@ -51,8 +52,24 @@ namespace models {
          *
          * Supported classes:
          */
+
         template<typename T>
-        class JsonSerializer {
+        class JsonSerializer;
+
+        template <typename T>
+        class JsonSerializerBase {
+        public:
+            /**
+             * @brief Deserialize object from its Json representation.
+             */
+            template<int FAKE = 0>
+            static T fromJsonString(const std::string &jsonString) {
+                return JsonSerializer<T>::fromJson(nlohmann::json::parse(jsonString));
+            }
+        };
+
+        template<typename T>
+        class JsonSerializer: public JsonSerializerBase<T> {
         public:
             /**
              * @brief Serialize given object to Json representation.
@@ -60,11 +77,8 @@ namespace models {
             template<int INDENT = -1>
             static std::string toJson(const T &obj);
 
-            /**
-             * @brief Deserialize object from its Json representation.
-             */
             template<int FAKE = 0>
-            static T fromJson(const std::string &jsonString);
+            static T fromJson(const nlohmann::json &json);
 
             JsonSerializer() = delete;
         };

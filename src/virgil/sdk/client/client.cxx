@@ -40,6 +40,7 @@
 #include <virgil/sdk/endpoints/CardEndpointUri.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/responses/CardResponse.h>
+#include <virgil/sdk/client/models/responses/CardsResponse.h>
 #include <virgil/sdk/http/Connection.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
@@ -51,9 +52,12 @@ using virgil::sdk::http::Response;
 using virgil::sdk::endpoints::CardEndpointUri;
 using virgil::sdk::client::models::serialization::JsonSerializer;
 using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::responses::CardsResponse;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::SearchCardsCriteria;
 
 Client::Client(std::string accessToken, std::string baseServiceUri)
         : accessToken_(std::move(accessToken)),
@@ -80,7 +84,7 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        auto cardResponse = JsonSerializer<CardResponse>::fromJson(response.body());
+        auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
 
         return cardResponse.buildCard();
     });
@@ -99,16 +103,47 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        return JsonSerializer<CardResponse>::fromJson(response.body()).buildCard();
+        return JsonSerializer<CardResponse>::fromJsonString(response.body()).buildCard();
     });
 
     return future;
 }
 
 std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &criteria) const {
+    auto future = std::async([=]{
+        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        httpRequest
+                .post()
+                .baseAddress(this->baseServiceUri())
+                .endpoint(CardEndpointUri::search())
+                .body(JsonSerializer<SearchCardsCriteria>::toJson(criteria));
 
+        Connection connection;
+        Response response = connection.send(httpRequest);
+
+        return JsonSerializer<CardsResponse>::fromJsonString(response.body()).buildCards();
+    });
+
+    return future;
 }
 
 std::future<void> Client::revokeCard(const RevokeCardRequest &request) const {
+    auto future = std::async([=]{
+        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        httpRequest
+                .del()
+                .baseAddress(this->baseServiceUri())
+                .endpoint(CardEndpointUri::revoke(request.snapshotModel().cardId()))
+                .body(JsonSerializer<SignableRequestInterface>::toJson(request));
 
+        Connection connection;
+        Response response = connection.send(httpRequest);
+
+        response.body();
+        response.statusCode();
+
+        return;
+    });
+
+    return future;
 }

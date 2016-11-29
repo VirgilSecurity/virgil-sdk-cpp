@@ -44,7 +44,6 @@
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
-#include <virgil/sdk/Common.h>
 
 using json = nlohmann::json;
 
@@ -64,10 +63,8 @@ namespace models {
         class JsonSerializer<CardResponse> {
         public:
             template<int FAKE = 0>
-            static CardResponse fromJson(const std::string &jsonString) {
+            static CardResponse fromJson(const json &j) {
                 try {
-                    auto j = json::parse(jsonString);
-
                     std::string snapshotStr = j[JsonKey::ContentSnapshot];
 
                     VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
@@ -91,8 +88,7 @@ namespace models {
                 }
             }
 
-        private:
-            JsonSerializer() {};
+            JsonSerializer() = delete;
         };
     }
 }
@@ -104,4 +100,4 @@ namespace models {
  * Explicit methods instantiation
  */
 template CardResponse
-virgil::sdk::client::models::serialization::JsonSerializer<CardResponse>::fromJson(const std::string&);
+virgil::sdk::client::models::serialization::JsonSerializer<CardResponse>::fromJson(const json&);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,39 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H
-#define VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H
+#include <virgil/sdk/client/models/SearchCardsCriteria.h>
 
-#include <string>
+using virgil::sdk::client::models::SearchCardsCriteria;
+using virgil::sdk::client::models::CardScope;
 
-namespace virgil {
-namespace sdk {
-    namespace endpoints {
-        /**
-         * @brief This class provide URIs to the Virgil Public Key endpoints
-         * @note All endpoints start with forward slash symbol "/" and contain version
-         */
-        class PublicKeyEndpointUri {
-        public:
-            /**
-             * @brief Returns the endpoint in charge of a public key by its identifier grab
-             * @param publicKeyId - public key identifier
-             */
-            static std::string get(const std::string& publicKeyId);
-            /**
-             * @brief Returns the endpoint in charge of the Public Key revoke
-             * @param publicKeyId - public key identifier
-             */
-            static std::string revoke(const std::string& publicKeyId);
-
-        private:
-            /**
-             * @brief Deny object creation
-             */
-            PublicKeyEndpointUri();
-        };
-    }
-}
+SearchCardsCriteria SearchCardsCriteria::createCriteria(
+        CardScope scope,
+        const std::string& identityType,
+        const std::vector<std::string>& identities) {
+    return SearchCardsCriteria(identities, identityType, scope);
 }
 
-#endif /* VIRGIL_SDK_PUBLIC_KEY_ENDPOINT_URI_H */
+SearchCardsCriteria::SearchCardsCriteria(
+        std::vector<std::string> identities, std::string identityType, CardScope scope)
+        : identities_(std::move(identities)), identityType_(std::move(identityType)), scope_(scope) {
+}

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,14 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/PublicKeyEndpointUri.h>
 
-using virgil::sdk::endpoints::PublicKeyEndpointUri;
+#ifndef VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
+#define VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
 
-std::string PublicKeyEndpointUri::get(const std::string& publicKeyId) {
-    return "/v3/public-key/" + publicKeyId;
+#include <string>
+#include <virgil/sdk/client/models/ClientCommon.h>
+
+namespace virgil {
+namespace sdk {
+namespace client {
+namespace models {
+    namespace snapshotmodels {
+        class RevokeCardSnapshotModel {
+        public:
+            static RevokeCardSnapshotModel createModel(const std::string &cardId, CardRevocationReason reason);
+
+            // getters
+            const std::string& cardId() const { return cardId_; }
+            CardRevocationReason revocationReason() const { return reason_; }
+
+        private:
+            RevokeCardSnapshotModel(std::string cardId, CardRevocationReason reason);
+
+            std::string cardId_;
+            CardRevocationReason reason_;
+        };
+    }
+}
+}
+}
 }
 
-std::string PublicKeyEndpointUri::revoke(const std::string& publicKeyId) {
-    return "/v3/public-key/" + publicKeyId;
-}
+#endif //VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H

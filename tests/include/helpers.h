@@ -57,6 +57,7 @@ namespace test {
         }
 
         static std::string generateRandomStr(int size) {
+            srand(time(0));
             static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
             std::string st;

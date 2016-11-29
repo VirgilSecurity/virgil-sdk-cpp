@@ -34,13 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
-
-#include <map>
-
-#include <nlohman/json.hpp>
 
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
@@ -86,24 +82,35 @@ namespace virgil {
                         }
 
                         template<int FAKE = 0>
-                        static CreateCardSnapshotModel fromJson(const std::string &jsonString) {
+                        static CreateCardSnapshotModel fromJson(const json &j) {
                             try {
-                                auto j = json::parse(jsonString);
+                                std::unordered_map<std::string, std::string> data;
+
+                                try {
+                                    data = JsonUtils::jsonToUnorderedMap(j.at(JsonKey::Data));
+                                }
+                                catch (...) { }
+
+                                std::unordered_map<std::string, std::string> info;
+
+                                try {
+                                    info = JsonUtils::jsonToUnorderedMap(j.at(JsonKey::Info));
+                                }
+                                catch (...) { }
 
                                 return CreateCardSnapshotModel::createModel(j[JsonKey::Identity],
                                                                j[JsonKey::IdentityType],
                                                                VirgilBase64::decode(j[JsonKey::PublicKey]),
-                                                               JsonUtils::jsonToUnorderedMap(j[JsonKey::Data]),
+                                                               data,
                                                                strToCardScope(j[JsonKey::CardScope]),
-                                                               JsonUtils::jsonToUnorderedMap(j[JsonKey::Info]));
+                                                               info);
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CreateCardSnapshotModel>::fromJson ") +
                                                        exception.what());
                             }
                         }
 
-                    private:
-                        JsonSerializer() {};
+                        JsonSerializer() = delete;
                     };
 
                     template<>
@@ -122,15 +129,14 @@ namespace virgil {
                         template<int FAKE = 0>
                         static CreateCardSnapshotModel fromCanonicalForm(const VirgilByteArray &data) {
                             try {
-                                return JsonSerializer<CreateCardSnapshotModel>::fromJson(VirgilByteArrayUtils::bytesToString(data));
+                                return JsonSerializerBase<CreateCardSnapshotModel>::fromJsonString(VirgilByteArrayUtils::bytesToString(data));
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm ") +
                                                        exception.what());
                             }
                         }
 
-                    private:
-                        CanonicalSerializer() {};
+                        CanonicalSerializer() = delete;
                     };
                 }
             }
@@ -151,7 +157,7 @@ template std::string
 virgil::sdk::client::models::serialization::JsonSerializer<CreateCardSnapshotModel>::toJson<4>(const CreateCardSnapshotModel&);
 
 template CreateCardSnapshotModel
-virgil::sdk::client::models::serialization::JsonSerializer<CreateCardSnapshotModel>::fromJson(const std::string&);
+virgil::sdk::client::models::serialization::JsonSerializer<CreateCardSnapshotModel>::fromJson(const json&);
 
 template VirgilByteArray
 virgil::sdk::client::models::serialization::CanonicalSerializer<CreateCardSnapshotModel>::toCanonicalForm(const CreateCardSnapshotModel&);

@@ -34,15 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
-#define VIRGIL_SDK_CANONICALSERIALIZER_H
-
 #include <string>
-#include <vector>
 
-#include <virgil/sdk/Common.h>
+#include <nlohman/json.hpp>
+
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/SearchCardsCriteria.h>
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
+
+using json = nlohmann::json;
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::util::JsonUtils;
+using virgil::sdk::VirgilBase64;
+
+using virgil::sdk::client::models::SearchCardsCriteria;
 
 namespace virgil {
     namespace sdk {
@@ -50,20 +56,28 @@ namespace virgil {
             namespace models {
                 namespace serialization {
                     /**
-                     * @brief This class responsible for the data object marshalling.
-                     *
-                     * Supported classes:
+                     * @brief JSONSerializer<SearchCardsCriteria> specialization.
                      */
-                    template<typename T>
-                    class CanonicalSerializer {
+                    template <>
+                    class JsonSerializer<SearchCardsCriteria> {
                     public:
                         template<int INDENT = -1>
-                        static VirgilByteArray toCanonicalForm(const T &model) ;
+                        static std::string toJson(const SearchCardsCriteria &criteria) {
+                            try {
+                                json j = {
+                                        {JsonKey::CardScope, cardScopeToStr(criteria.scope())},
+                                        {JsonKey::IdentityType, criteria.identityType()},
+                                        {JsonKey::Identities, criteria.identities()}
+                                };
 
-                        template<int FAKE = 0>
-                        static T fromCanonicalForm(const VirgilByteArray &data);
+                                return j.dump(INDENT);
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SearchCardsCriteria>::toJson ") +
+                                                       exception.what());
+                            }
+                        }
 
-                        CanonicalSerializer() = delete;
+                        JsonSerializer() = delete;
                     };
                 }
             }
@@ -71,4 +85,14 @@ namespace virgil {
     }
 }
 
-#endif //VIRGIL_SDK_CANONICALSERIALIZER_H
+/**
+ * Explicit methods instantiation
+ */
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SearchCardsCriteria>::toJson(const SearchCardsCriteria&);
+
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SearchCardsCriteria>::toJson<2>(const SearchCardsCriteria&);
+
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<SearchCardsCriteria>::toJson<4>(const SearchCardsCriteria&);

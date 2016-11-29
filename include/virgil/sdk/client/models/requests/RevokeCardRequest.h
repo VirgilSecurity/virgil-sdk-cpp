@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,46 +34,31 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_CARD_ENDPOINT_URI_H
-#define VIRGIL_SDK_CARD_ENDPOINT_URI_H
+
+#ifndef VIRGIL_SDK_REVOKECARDREQUEST_H
+#define VIRGIL_SDK_REVOKECARDREQUEST_H
+
+#include <virgil/sdk/client/models/requests/SignableRequest.h>
+#include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
 
 #include <string>
 
 namespace virgil {
 namespace sdk {
-    namespace endpoints {
-        /**
-         * @brief This class provide URIs to the Virgil Card endpoints
-         * @note All endpoints start with forward slash symbol "/" and contain version
-         */
-        class CardEndpointUri {
+namespace client {
+namespace models {
+    namespace requests {
+        class RevokeCardRequest final : public SignableRequest<snapshotmodels::RevokeCardSnapshotModel> {
         public:
-            /**
-             * @brief Returns the endpoint in charge of a Virgil Card creation
-             */
-            static std::string create();
-            /**
-             * @brief Returns the endpoint in charge of a Virgil Card grab
-             */
-            static std::string get(const std::string& cardId);
-            /**
-             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters
-             */
-            static std::string search();
-            /**
-             * @brief Returns the endpoint in charge of the Virgil Card revoke
-             * @param cardId - Virgil Card identifier
-             */
-            static std::string revoke(const std::string& cardId);
+            static RevokeCardRequest createRequest(const std::string &cardId, CardRevocationReason reason);
 
         private:
-            /**
-             * @brief Deny object creation
-             */
-            CardEndpointUri();
+            RevokeCardRequest(const std::string &cardId, CardRevocationReason reason);
         };
     }
 }
 }
+}
+}
 
-#endif /* VIRGIL_SDK_CARD_ENDPOINT_URI_H */
+#endif //VIRGIL_SDK_REVOKECARDREQUEST_H

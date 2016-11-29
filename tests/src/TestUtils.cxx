@@ -37,10 +37,11 @@
 
 #include <TestUtils.h>
 #include <helpers.h>
-#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/models/ClientCommon.h>
 #include <virgil/sdk/client/RequestSigner.h>
 
 using virgil::sdk::VirgilByteArrayUtils;
+using virgil::sdk::client::models::CardRevocationReason;
 using virgil::sdk::test::Utils;
 using virgil::sdk::test::TestUtils;
 using virgil::sdk::VirgilBase64;
@@ -69,6 +70,19 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest(
     return request;
 }
 
+RevokeCardRequest TestUtils::instantiateRevokeCardRequest(const Card &card) const {
+    auto request = RevokeCardRequest::createRequest(card.identifier(), CardRevocationReason::unspecified);
+
+    auto signer = RequestSigner();
+
+    auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
+    auto appPrivateKey = crypto.importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
+
+    signer.authoritySign(crypto, request, consts.applicationId(), appPrivateKey);
+
+    return request;
+}
+
 bool TestUtils::checkCardEquality(const Card &card, const CreateCardRequest &request) {
     auto equals = card.identityType() == request.snapshotModel().identityType()
         && card.identity() == request.snapshotModel().identity()
@@ -90,6 +104,28 @@ bool TestUtils::checkCardEquality(const Card &card1, const Card &card2) {
                   && card1.info() == card2.info()
                   && card1.publicKeyData() == card2.publicKeyData()
                   && card1.scope() == card2.scope();
+
+    return equals;
+}
+
+bool TestUtils::checkCreateCardRequestEquality(const CreateCardRequest &request1, const CreateCardRequest &request2) {
+    auto equals = request1.snapshot() == request2.snapshot()
+                  && request1.signatures() == request2.signatures()
+                  && request1.snapshotModel().data() == request2.snapshotModel().data()
+                  && request1.snapshotModel().identity() == request2.snapshotModel().identity()
+                  && request1.snapshotModel().identityType() == request2.snapshotModel().identityType()
+                  && request1.snapshotModel().info() == request2.snapshotModel().info()
+                  && request1.snapshotModel().publicKeyData() == request2.snapshotModel().publicKeyData()
+                  && request1.snapshotModel().scope() == request2.snapshotModel().scope();
+
+    return equals;
+}
+
+bool TestUtils::checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2) {
+    auto equals = request1.snapshot() == request2.snapshot()
+                  && request1.signatures() == request2.signatures()
+                  && request1.snapshotModel().cardId() == request2.snapshotModel().cardId()
+                  && request1.snapshotModel().revocationReason() == request2.snapshotModel().revocationReason();
 
     return equals;
 }

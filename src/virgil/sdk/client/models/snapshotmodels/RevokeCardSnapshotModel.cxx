@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,42 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H
-#define VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H
 
-#include <string>
+#include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
 
-namespace virgil {
-namespace sdk {
-    namespace endpoints {
-        /**
-         * @brief This class provide URIs to the Identity endpoints
-         * @note All endpoints start with forward slash symbol "/" and contain version
-         */
-        class IdentityEndpointUri {
-        public:
-            /**
-              * @brief Returns the endpoint in charge of initiates the process to verify the Identity
-             */
-            static std::string verify();
-            /**
-              * @brief Returns the endpoint in charge of confirms the identity from the /verify step
-              *        to obtain an identity confirmation token
-             */
-            static std::string confirm();
-            /**
-              * @brief Returns the endpoint in charge of validates the passed token
-             */
-            static std::string validate();
+using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
 
-        private:
-            /**
-             * @brief Deny object creation
-             */
-            IdentityEndpointUri();
-        };
-    }
-}
+RevokeCardSnapshotModel RevokeCardSnapshotModel::createModel(const std::string &cardId, CardRevocationReason reason) {
+    return RevokeCardSnapshotModel(cardId, reason);
 }
 
-#endif /* VIRGIL_SDK_IDENTITY_ENDPOINT_URI_H */
+RevokeCardSnapshotModel::RevokeCardSnapshotModel(std::string cardId, CardRevocationReason reason)
+        : cardId_(std::move(cardId)), reason_(reason) {
+}

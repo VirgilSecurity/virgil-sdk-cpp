@@ -36,18 +36,18 @@
 
 #include <catch.hpp>
 
-#include <chrono>
 #include <thread>
 
 #include <TestConst.h>
 #include <TestUtils.h>
 
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/Client.h>
 
 using virgil::sdk::client::Client;
 using virgil::sdk::client::ClientInterface;
 using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::SearchCardsCriteria;
+using virgil::sdk::client::models::CardScope;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
 
@@ -91,6 +91,33 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
     REQUIRE(utils.checkCardEquality(card, createCardRequest));
 }
 
+TEST_CASE("test003_SearchCards", "[client]") {
+    TestConst consts;
+
+    auto client = Client(consts.applicationToken(),
+                         "https://cards.virgilsecurity.com/");
+
+    Crypto crypto;
+
+    TestUtils utils(crypto, consts);
+
+    auto createCardRequest = utils.instantiateCreateCardRequest();
+
+    auto future = client.createCard(createCardRequest);
+
+    auto card = future.get();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+    auto future2 = client.searchCards(
+            SearchCardsCriteria::createCriteria(CardScope::application, card.identityType(), { card.identity() }));
+
+    auto foundCards = future2.get();
+
+    REQUIRE(foundCards.size() == 1);
+    REQUIRE(utils.checkCardEquality(card, foundCards[0]));
+}
+
 TEST_CASE("test004_GetCard", "[client]") {
     TestConst consts;
 
@@ -114,4 +141,41 @@ TEST_CASE("test004_GetCard", "[client]") {
     auto foundCard = future2.get();
 
     REQUIRE(utils.checkCardEquality(card, foundCard));
+}
+
+TEST_CASE("test005_RevokeCard", "[client]") {
+    TestConst consts;
+
+    auto client = Client(consts.applicationToken(),
+                         "https://cards.virgilsecurity.com/");
+
+    Crypto crypto;
+
+    TestUtils utils(crypto, consts);
+
+    auto createCardRequest = utils.instantiateCreateCardRequest();
+
+    auto future = client.createCard(createCardRequest);
+
+    auto card = future.get();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+    auto revokeRequest = utils.instantiateRevokeCardRequest(card);
+
+    auto future2 = client.revokeCard(revokeRequest);
+
+    future2.get();
+
+    auto future3 = client.getCard(card.identifier());
+
+    bool errorWasThrown = false;
+    try {
+        future3.get();
+    }
+    catch (...) {
+        errorWasThrown = true;
+    }
+
+    REQUIRE(errorWasThrown);
 }

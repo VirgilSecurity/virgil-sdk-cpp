@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,18 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/IdentityEndpointUri.h>
+#include <virgil/sdk/client/models/responses/CardsResponse.h>
 
-using virgil::sdk::endpoints::IdentityEndpointUri;
+using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::responses::CardsResponse;
+using virgil::sdk::client::models::Card;
 
-std::string IdentityEndpointUri::verify() {
-    return "/v1/verify";
+std::vector<Card> CardsResponse::buildCards() const {
+    std::vector<Card> result;
+
+    for (const auto& cardResponse : cardsResponse_) {
+        result.push_back(cardResponse.buildCard());
+    }
+
+    return result;
 }
 
-std::string IdentityEndpointUri::confirm() {
-    return "/v1/confirm";
-}
-
-std::string IdentityEndpointUri::validate() {
-    return "/v1/validate";
+CardsResponse::CardsResponse(std::vector<CardResponse> cardsResponse)
+        : cardsResponse_(std::move(cardsResponse)) {
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,18 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/endpoints/PrivateKeyEndpointUri.h>
 
-using virgil::sdk::endpoints::PrivateKeyEndpointUri;
+#ifndef VIRGIL_SDK_CARDSRESPONSE_H
+#define VIRGIL_SDK_CARDSRESPONSE_H
 
-std::string PrivateKeyEndpointUri::add() {
-    return "/v3/private-key";
+#include <vector>
+
+#include <virgil/sdk/client/models/responses/CardResponse.h>
+
+namespace virgil {
+namespace sdk {
+namespace client {
+namespace models {
+    namespace responses {
+        class CardsResponse {
+        public:
+            std::vector<Card> buildCards() const;
+
+            CardsResponse(std::vector<CardResponse> cardsResponse);
+
+            const std::vector<CardResponse>& cardsResponse() const { return cardsResponse_; };
+
+        private:
+            std::vector<CardResponse> cardsResponse_;
+        };
+    }
+}
+}
+}
 }
 
-std::string PrivateKeyEndpointUri::get() {
-    return "/v3/private-key/actions/grab";
-}
-
-std::string PrivateKeyEndpointUri::del() {
-    return "/v3/private-key/actions/delete";
-}
+#endif //VIRGIL_SDK_CARDSRESPONSE_H

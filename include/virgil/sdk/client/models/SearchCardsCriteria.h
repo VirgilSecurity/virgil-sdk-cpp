@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,41 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_PRIVATE_KEY_ENDPOINT_URI_H
-#define VIRGIL_SDK_PRIVATE_KEY_ENDPOINT_URI_H
 
+#ifndef VIRGIL_SDK_SEARCHCARDSCRITERIA_H
+#define VIRGIL_SDK_SEARCHCARDSCRITERIA_H
+
+#include <vector>
 #include <string>
+
+#include <virgil/sdk/client/models/ClientCommon.h>
 
 namespace virgil {
 namespace sdk {
-    namespace endpoints {
-        /**
-         * @brief This class provide URIs to the Virgil Private Key endpoints.
-         * @note All endpoints start with forward slash symbol "/" and contain version.
-         */
-        class PrivateKeyEndpointUri {
+namespace client {
+    namespace models {
+        class SearchCardsCriteria {
         public:
-            /**
-             * @brief Returns the endpoint in charge of the Private Key load.
-             */
-            static std::string add();
-            /**
-             * @brief Returns the endpoint in charge of the Private Key get.
-             */
-            static std::string get();
-            /**
-             * @brief Returns the endpoint in charge of the Private Key delete.
-             */
-            static std::string del();
+            static SearchCardsCriteria createCriteria(
+                    CardScope scope,
+                    const std::string& identityType,
+                    const std::vector<std::string>& identities);
+
+            // getters
+            const std::vector<std::string>& identities() const { return identities_; }
+            const std::string& identityType() const { return identityType_; }
+            CardScope scope() const { return scope_; }
 
         private:
-            /**
-             * @brief Deny object creation
-             */
-            PrivateKeyEndpointUri();
+            SearchCardsCriteria(std::vector<std::string> identities, std::string identityType, CardScope scope);
+
+            std::vector<std::string> identities_;
+            std::string identityType_;
+            CardScope scope_;
         };
     }
 }
 }
+}
 
-#endif /* VIRGIL_SDK_PRIVATE_KEY_ENDPOINT_URI_H */
+#endif //VIRGIL_SDK_SEARCHCARDSCRITERIA_H

@@ -55,6 +55,7 @@ namespace sdk {
                 OK = 200,
                 REQUEST_ERROR = 400,
                 AUTHORIZATION_ERROR = 401,
+                FORBIDDEN = 403,
                 ENTITY_NOT_FOUND = 404,
                 METHOD_NOT_ALLOWED = 405,
                 SERVER_ERROR = 500
