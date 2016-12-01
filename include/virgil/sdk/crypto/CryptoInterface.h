@@ -66,7 +66,7 @@ namespace sdk {
             virtual VirgilByteArray generateSignature(std::istream &istream, const keys::PrivateKey &privateKey) const = 0;
             virtual Fingerprint calculateFingerprint(const VirgilByteArray &data) const = 0;
 
-            virtual ~CryptoInterface(){}
+            virtual ~CryptoInterface() = default;
         };
     }
 }

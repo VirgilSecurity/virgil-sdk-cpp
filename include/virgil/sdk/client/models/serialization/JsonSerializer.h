@@ -66,6 +66,11 @@ namespace models {
             static T fromJsonString(const std::string &jsonString) {
                 return JsonSerializer<T>::fromJson(nlohmann::json::parse(jsonString));
             }
+
+            template<typename ResultType>
+            static ResultType fromJsonStringTemp(const std::string &jsonString) {
+                return JsonSerializer<T>::template fromJsonTemp<ResultType>(nlohmann::json::parse(jsonString));
+            }
         };
 
         template<typename T>
@@ -79,6 +84,9 @@ namespace models {
 
             template<int FAKE = 0>
             static T fromJson(const nlohmann::json &json);
+
+            template<typename ResultType>
+            static ResultType fromJsonTemp(const nlohmann::json &json);
 
             JsonSerializer() = delete;
         };

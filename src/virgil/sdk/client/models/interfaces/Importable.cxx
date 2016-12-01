@@ -34,28 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/models/interfaces/Importable.h>
+#import <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#import <virgil/sdk/Common.h>
+#import <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
+#import <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#import <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 
-#ifndef VIRGIL_SDK_IMPORTABLE_H
-#define VIRGIL_SDK_IMPORTABLE_H
+using virgil::sdk::client::models::interfaces::Importable;
+using virgil::sdk::client::models::interfaces::SignableRequestInterface;
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::requests::RevokeCardRequest;
 
-#include <string>
-
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace interfaces {
-        template<typename DerivedClass>
-        class Importable {
-        public:
-            static DerivedClass importFromString(const std::string &data);
-
-            virtual ~Importable() = default;
-        };
-    }
-}
-}
-}
+template<typename DerivedClass>
+DerivedClass Importable<DerivedClass>::importFromString(const std::string &data) {
+    auto jsonStr = VirgilByteArrayUtils::bytesToString(VirgilBase64::decode(data));
+    return serialization::JsonSerializer<SignableRequestInterface>::fromJsonStringTemp<DerivedClass>(jsonStr);
 }
 
-#endif //VIRGIL_SDK_IMPORTABLE_H
+
+template RevokeCardRequest Importable<RevokeCardRequest>::importFromString(const std::string &data);
+
+template CreateCardRequest Importable<CreateCardRequest>::importFromString(const std::string &data);

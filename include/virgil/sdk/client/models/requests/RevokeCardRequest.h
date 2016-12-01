@@ -48,12 +48,18 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class RevokeCardRequest final : public SignableRequest<snapshotmodels::RevokeCardSnapshotModel> {
+        class RevokeCardRequest final : public SignableRequest<snapshotmodels::RevokeCardSnapshotModel, RevokeCardRequest> {
         public:
             static RevokeCardRequest createRequest(const std::string &cardId, CardRevocationReason reason);
 
+            RevokeCardRequest(const VirgilByteArray &snapshot,
+                              const std::unordered_map<std::string, VirgilByteArray > &signatures = {});
+
         private:
             RevokeCardRequest(const std::string &cardId, CardRevocationReason reason);
+
+            RevokeCardRequest(const snapshotmodels::RevokeCardSnapshotModel &model,
+                              const std::unordered_map<std::string, VirgilByteArray > &signatures = {});
         };
     }
 }

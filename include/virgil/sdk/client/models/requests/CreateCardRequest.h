@@ -49,7 +49,7 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class CreateCardRequest final : public SignableRequest<snapshotmodels::CreateCardSnapshotModel> {
+        class CreateCardRequest final : public SignableRequest<snapshotmodels::CreateCardSnapshotModel, CreateCardRequest> {
         public:
             static CreateCardRequest createRequest(const std::string &identity,
                                                    const std::string &identityType,
@@ -58,6 +58,9 @@ namespace models {
                                                    const std::string& device = "",
                                                    const std::string& deviceName = "");
 
+            CreateCardRequest(const VirgilByteArray &snapshot,
+                              const std::unordered_map<std::string, VirgilByteArray> &signatures = {});
+
         private:
             CreateCardRequest(const std::string &identity,
                               const std::string &identityType,
@@ -65,6 +68,9 @@ namespace models {
                               const std::unordered_map<std::string, std::string> &data,
                               CardScope scope,
                               const std::unordered_map<std::string, std::string> &info);
+
+            CreateCardRequest(const snapshotmodels::CreateCardSnapshotModel &model,
+                              const std::unordered_map<std::string, VirgilByteArray> &signatures = {});
         };
     }
 }

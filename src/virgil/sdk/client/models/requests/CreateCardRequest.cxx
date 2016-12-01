@@ -36,10 +36,12 @@
 
 
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+using virgil::sdk::client::models::serialization::CanonicalSerializer;
 
 CreateCardRequest CreateCardRequest::createRequest(
         const std::string &identity,
@@ -68,6 +70,21 @@ CreateCardRequest::CreateCardRequest(
         const std::unordered_map<std::string, std::string> &data,
         CardScope scope,
         const std::unordered_map<std::string, std::string> &info)
-        : SignableRequest<CreateCardSnapshotModel>(
+        : CreateCardRequest(
             CreateCardSnapshotModel::createModel(identity, identityType, publicKeyData, data, scope, info)) {
+}
+
+CreateCardRequest::CreateCardRequest(
+        const VirgilByteArray &snapshot,
+        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+        : SignableRequest<CreateCardSnapshotModel, CreateCardRequest>(
+            snapshot,
+            CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm(snapshot),
+            signatures) {
+}
+
+CreateCardRequest::CreateCardRequest(
+        const snapshotmodels::CreateCardSnapshotModel &model,
+        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+        : SignableRequest<CreateCardSnapshotModel, CreateCardRequest>(model) {
 }

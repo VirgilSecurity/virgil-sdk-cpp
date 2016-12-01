@@ -41,6 +41,8 @@
 
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
 
@@ -49,6 +51,8 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::VirgilBase64;
 
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 
 namespace virgil {
@@ -57,7 +61,7 @@ namespace virgil {
             namespace models {
                 namespace serialization {
                     /**
-                     * @brief JSONSerializer<SignableRequest> specialization.
+                     * @brief JSONSerializer<SignableRequestInterface> specialization.
                      */
                     template <>
                     class JsonSerializer<SignableRequestInterface> {
@@ -75,6 +79,22 @@ namespace virgil {
                                 return j.dump(INDENT);
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::toJson ") +
+                                                       exception.what());
+                            }
+                        }
+
+                        template<typename ResultType>
+                        static ResultType fromJsonTemp(const json &j) {
+                            try {
+                                std::string snapshotStr = j[JsonKey::ContentSnapshot];
+
+                                auto snapshot = VirgilBase64::decode(snapshotStr);
+
+                                auto signatures = JsonUtils::jsonToUnorderedBinaryMap(j[JsonKey::Meta][JsonKey::Signs]);
+
+                                return ResultType(snapshot, signatures);
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::fromJson ") +
                                                        exception.what());
                             }
                         }
@@ -98,3 +118,9 @@ virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterf
 
 template std::string
 virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson<4>(const SignableRequestInterface&);
+
+template CreateCardRequest
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::fromJsonTemp<CreateCardRequest>(const json&);
+
+template RevokeCardRequest
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::fromJsonTemp<RevokeCardRequest>(const json&);

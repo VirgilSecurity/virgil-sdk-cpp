@@ -34,28 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/models/requests/SignableRequest.h>
+#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 
-#ifndef VIRGIL_SDK_IMPORTABLE_H
-#define VIRGIL_SDK_IMPORTABLE_H
+using virgil::sdk::client::models::requests::SignableRequest;
+using virgil::sdk::client::models::serialization::JsonSerializer;
+using virgil::sdk::client::models::interfaces::SignableRequestInterface;
+using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::client::models::requests::RevokeCardRequest;
+using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
+using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
 
-#include <string>
+template <typename SnapshotModelType, typename DerivedClass>
+std::string SignableRequest<SnapshotModelType, DerivedClass>::exportAsString() const {
+    auto json = serialization::JsonSerializer<SignableRequestInterface>::toJson(*this);
 
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace interfaces {
-        template<typename DerivedClass>
-        class Importable {
-        public:
-            static DerivedClass importFromString(const std::string &data);
-
-            virtual ~Importable() = default;
-        };
-    }
-}
-}
-}
+    return VirgilBase64::encode(VirgilByteArrayUtils::stringToBytes(json));
 }
 
-#endif //VIRGIL_SDK_IMPORTABLE_H
+template std::string SignableRequest<CreateCardSnapshotModel, CreateCardRequest>::exportAsString() const;
+
+template std::string SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>::exportAsString() const;

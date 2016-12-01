@@ -42,11 +42,13 @@
 
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 
 using virgil::sdk::VirgilBase64;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::crypto::keys::PrivateKey;
+using virgil::sdk::client::models::requests::CreateCardRequest;
 
 using json = nlohmann::json;
 
@@ -234,6 +236,16 @@ TEST_CASE("test007_ExportSignableData_ShouldBeEqual", "[compatibility]") {
 
     std::string exportedRequest = dict["exported_request"];
 
-// FIXME
-//    REQUIRE(decryptedDataStr == originalDataStr);
+    auto request = CreateCardRequest::importFromString(exportedRequest);
+
+    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
+
+    auto creatorPublicKey = crypto.importPublicKey(request.snapshotModel().publicKeyData());
+
+    auto fingerprintHex = fingerprint.hexValue();
+
+    auto signature = request.signatures().at(fingerprintHex);
+
+    auto verified = crypto.verify(fingerprint.value(), signature, creatorPublicKey);
+    REQUIRE(verified);
 }

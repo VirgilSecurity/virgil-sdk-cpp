@@ -35,17 +35,34 @@
  */
 
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
+#include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
+using virgil::sdk::client::models::serialization::CanonicalSerializer;
 
 RevokeCardRequest RevokeCardRequest::createRequest(const std::string &cardId, CardRevocationReason reason) {
     return RevokeCardRequest(cardId, reason);
 }
 
 RevokeCardRequest::RevokeCardRequest(const std::string &cardId, CardRevocationReason reason)
-        : SignableRequest<RevokeCardSnapshotModel>(
-        RevokeCardSnapshotModel::createModel(cardId, reason)) {
+        : RevokeCardRequest(
+            RevokeCardSnapshotModel::createModel(cardId, reason)) {
+}
+
+RevokeCardRequest::RevokeCardRequest(
+        const VirgilByteArray &snapshot,
+        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+        : SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>(
+            snapshot,
+            CanonicalSerializer<RevokeCardSnapshotModel>::fromCanonicalForm(snapshot),
+            signatures) {
+}
+
+RevokeCardRequest::RevokeCardRequest(
+        const snapshotmodels::RevokeCardSnapshotModel &model,
+        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+        : SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>(model) {
 }
 

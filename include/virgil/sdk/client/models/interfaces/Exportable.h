@@ -38,16 +38,23 @@
 #ifndef VIRGIL_SDK_EXPORTABLE_H
 #define VIRGIL_SDK_EXPORTABLE_H
 
+#import <string>
+
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                class Exportable {
-                    virtual std::string export() const = 0;
-                };
-            }
-        }
+namespace sdk {
+namespace client {
+namespace models {
+    namespace interfaces {
+        class Exportable {
+        public:
+            virtual std::string exportAsString() const = 0;
+
+            virtual ~Exportable() = default;
+        };
     }
+}
+}
+}
 }
 
 #endif //VIRGIL_SDK_EXPORTABLE_H
