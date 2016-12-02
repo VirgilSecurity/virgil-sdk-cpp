@@ -53,8 +53,7 @@ using virgil::sdk::test::TestUtils;
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
 
-    auto client = Client(consts.applicationToken(),
-                         "https://cards.virgilsecurity.com/");
+    auto client = Client(consts.applicationToken());
 
     TestUtils utils(consts);
 
@@ -70,8 +69,7 @@ TEST_CASE("test001_CreateCard", "[client]") {
 TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
     TestConst consts;
 
-    auto client = Client(consts.applicationToken(),
-                         "https://cards.virgilsecurity.com/");
+    auto client = Client(consts.applicationToken());
 
     TestUtils utils(consts);
 
@@ -91,8 +89,7 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
 TEST_CASE("test003_SearchCards", "[client]") {
     TestConst consts;
 
-    auto client = Client(consts.applicationToken(),
-                         "https://cards.virgilsecurity.com/");
+    auto client = Client(consts.applicationToken());
 
     TestUtils utils( consts);
 
@@ -116,8 +113,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
 TEST_CASE("test004_GetCard", "[client]") {
     TestConst consts;
 
-    auto client = Client(consts.applicationToken(),
-                         "https://cards.virgilsecurity.com/");
+    auto client = Client(consts.applicationToken());
 
     TestUtils utils(consts);
 
@@ -139,8 +135,7 @@ TEST_CASE("test004_GetCard", "[client]") {
 TEST_CASE("test005_RevokeCard", "[client]") {
     TestConst consts;
 
-    auto client = Client(consts.applicationToken(),
-                         "https://cards.virgilsecurity.com/");
+    auto client = Client(consts.applicationToken());
 
     TestUtils utils(consts);
 

@@ -35,37 +35,40 @@
  */
 
 
-#ifndef VIRGIL_SDK_CLIENT_H
-#define VIRGIL_SDK_CLIENT_H
+#ifndef VIRGIL_SDK_SERVICECONFIG_H
+#define VIRGIL_SDK_SERVICECONFIG_H
 
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
-#include <virgil/sdk/client/ServiceConfig.h>
+#include <virgil/sdk/client/CardValidator.h>
 
 namespace virgil {
 namespace sdk {
     namespace client {
-        class Client : public interfaces::ClientInterface {
+        class ServiceConfig {
         public:
-            Client(std::string accessToken);
+            static ServiceConfig createConfig(const std::string &token);
 
-            Client(ServiceConfig serviceConfig);
+            // setters
+            ServiceConfig& token(std::string token);
+            ServiceConfig& cardsServiceURL(std::string cardsServiceURL);
+            ServiceConfig& cardsServiceROURL(std::string cardsServiceROURL);
+            ServiceConfig& cardValidator(std::unique_ptr<CardValidator> validator);
 
-            const ServiceConfig& serviceConfig() const { return serviceConfig_; }
-
-            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
-
-            std::future<models::Card> getCard(const std::string &cardId) const override;
-
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
-
-            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
+            // getters
+            const std::string& token() const { return token_; }
+            const std::string& cardsServiceURL() const { return cardsServiceURL_; }
+            const std::string& cardsServiceROURL() const { return cardsServiceROURL_; }
+            const std::unique_ptr<CardValidator>& cardValidator() const { return validator_; }
 
         private:
-            std::string accessToken_;
-            ServiceConfig serviceConfig_;
+            ServiceConfig(std::string token);
+
+            std::string token_;
+            std::string cardsServiceURL_;
+            std::string cardsServiceROURL_;
+            std::unique_ptr<CardValidator> validator_;
         };
     }
 }
 }
 
-#endif //VIRGIL_SDK_CLIENT_H
+#endif //VIRGIL_SDK_SERVICECONFIG_H

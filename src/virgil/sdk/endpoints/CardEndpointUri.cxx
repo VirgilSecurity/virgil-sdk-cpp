@@ -39,17 +39,17 @@
 using virgil::sdk::endpoints::CardEndpointUri;
 
 std::string CardEndpointUri::create() {
-    return "/v4/card";
+    return "/card";
 }
 
 std::string CardEndpointUri::get(const std::string& cardId) {
-    return "/v4/card/" + cardId;
+    return "/card/" + cardId;
 }
 
 std::string CardEndpointUri::search() {
-    return "/v4/card/actions/search";
+    return "/card/actions/search";
 }
 
 std::string CardEndpointUri::revoke(const std::string& cardId) {
-    return "/v4/card/" + cardId;
+    return "/card/" + cardId;
 }

@@ -58,26 +58,22 @@ using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::Card;
 using virgil::sdk::client::models::SearchCardsCriteria;
+using virgil::sdk::client::ServiceConfig;
 
-Client::Client(std::string accessToken, std::string baseServiceUri)
-        : accessToken_(std::move(accessToken)),
-          baseServiceUri_(std::move(baseServiceUri)) {
+Client::Client(std::string accessToken)
+        : Client(ServiceConfig::createConfig(std::move(accessToken))) {
 }
 
-const std::string& Client::accessToken() const {
-    return accessToken_;
-}
-
-const std::string& Client::baseServiceUri() const {
-    return baseServiceUri_;
+Client::Client(ServiceConfig serviceConfig)
+        : serviceConfig_(std::move(serviceConfig)) {
 }
 
 std::future<Card> Client::createCard(const CreateCardRequest &request) const {
     auto future = std::async([=]{
-        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
                 .post()
-                .baseAddress(this->baseServiceUri())
+                .baseAddress(this->serviceConfig_.cardsServiceURL())
                 .endpoint(CardEndpointUri::create())
                 .body(JsonSerializer<SignableRequestInterface>::toJson(request));
 
@@ -94,10 +90,10 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
 
 std::future<Card> Client::getCard(const std::string &cardId) const {
     auto future = std::async([=]{
-        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
                 .get()
-                .baseAddress(this->baseServiceUri())
+                .baseAddress(this->serviceConfig_.cardsServiceROURL())
                 .endpoint(CardEndpointUri::get(cardId));
 
         Connection connection;
@@ -111,10 +107,10 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
 
 std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &criteria) const {
     auto future = std::async([=]{
-        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
                 .post()
-                .baseAddress(this->baseServiceUri())
+                .baseAddress(this->serviceConfig_.cardsServiceROURL())
                 .endpoint(CardEndpointUri::search())
                 .body(JsonSerializer<SearchCardsCriteria>::toJson(criteria));
 
@@ -129,10 +125,10 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
 
 std::future<void> Client::revokeCard(const RevokeCardRequest &request) const {
     auto future = std::async([=]{
-        ClientRequest httpRequest = ClientRequest(this->accessToken());
+        ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
                 .del()
-                .baseAddress(this->baseServiceUri())
+                .baseAddress(this->serviceConfig_.cardsServiceURL())
                 .endpoint(CardEndpointUri::revoke(request.snapshotModel().cardId()))
                 .body(JsonSerializer<SignableRequestInterface>::toJson(request));
 

@@ -34,38 +34,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#ifndef VIRGIL_SDK_CLIENT_H
-#define VIRGIL_SDK_CLIENT_H
-
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
 #include <virgil/sdk/client/ServiceConfig.h>
 
-namespace virgil {
-namespace sdk {
-    namespace client {
-        class Client : public interfaces::ClientInterface {
-        public:
-            Client(std::string accessToken);
+using virgil::sdk::client::ServiceConfig;
 
-            Client(ServiceConfig serviceConfig);
-
-            const ServiceConfig& serviceConfig() const { return serviceConfig_; }
-
-            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
-
-            std::future<models::Card> getCard(const std::string &cardId) const override;
-
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
-
-            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
-
-        private:
-            std::string accessToken_;
-            ServiceConfig serviceConfig_;
-        };
-    }
-}
+ServiceConfig& ServiceConfig::cardValidator(std::unique_ptr<CardValidator> validator) {
+    validator_ = std::move(validator);
+    return *this;
 }
 
-#endif //VIRGIL_SDK_CLIENT_H
+ServiceConfig& ServiceConfig::cardsServiceURL(std::string cardsServiceURL) {
+    cardsServiceURL_ = std::move(cardsServiceURL);
+    return *this;
+}
+
+ServiceConfig& ServiceConfig::token(std::string token) {
+    token_ = std::move(token);
+    return *this;
+}
+
+ServiceConfig& ServiceConfig::cardsServiceROURL(std::string cardsServiceROURL) {
+    cardsServiceROURL_ = std::move(cardsServiceROURL);
+    return *this;
+}
+
+ServiceConfig ServiceConfig::createConfig(const std::string &token) {
+    return ServiceConfig(token);
+}
+
+ServiceConfig::ServiceConfig(std::string token)
+        : token_(std::move(token)),
+          cardsServiceURL_("https://cards.virgilsecurity.com/v4/"),
+          cardsServiceROURL_("https://cards-ro.virgilsecurity.com/v4/") {
+}
