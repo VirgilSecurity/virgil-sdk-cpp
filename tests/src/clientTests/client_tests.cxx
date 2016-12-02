@@ -44,7 +44,6 @@
 #include <virgil/sdk/client/Client.h>
 
 using virgil::sdk::client::Client;
-using virgil::sdk::client::ClientInterface;
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::models::CardScope;

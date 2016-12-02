@@ -35,44 +35,33 @@
  */
 
 
-#ifndef VIRGIL_SDK_CLIENT_H
-#define VIRGIL_SDK_CLIENT_H
+#ifndef VIRGIL_SDK_REQUESTSIGNERINTERFACE_H
+#define VIRGIL_SDK_REQUESTSIGNERINTERFACE_H
 
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
+#include <virgil/sdk/client/models/interfaces/SignableInterface.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/crypto/keys/PrivateKey.h>
 
 namespace virgil {
 namespace sdk {
-    namespace client {
-        class Client : public interfaces::ClientInterface {
-        public:
-            Client(std::string accessToken, std::string baseServiceUri);
-            /**
-             * @brief Return access token
-             *
-             * Return authenticated secure access token to the Virgil Keys Service.
-             * It MUST be passed to each API call.
-             */
-            virtual const std::string& accessToken() const;
-            /**
-             * @brief Return base service uri token
-             * @note Base service URI does not contain trailing slash.
-             */
-            virtual const std::string& baseServiceUri() const;
+namespace client {
+namespace interfaces {
+    class RequestSignerInterface {
+    public:
+        virtual void selfSign(const crypto::CryptoInterface &crypto,
+                              models::interfaces::SignableInterface &request,
+                              const crypto::keys::PrivateKey &privateKey) const = 0;
 
-            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
+        virtual void authoritySign(const crypto::CryptoInterface &crypto,
+                                   models::interfaces::SignableInterface &request,
+                                   const std::string &appId,
+                                   const crypto::keys::PrivateKey &privateKey) const = 0;
 
-            std::future<models::Card> getCard(const std::string &cardId) const override;
-
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
-
-            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
-
-        private:
-            std::string accessToken_;
-            std::string baseServiceUri_;
-        };
-    }
+        virtual ~RequestSignerInterface() = default;
+    };
+}
+}
 }
 }
 
-#endif //VIRGIL_SDK_CLIENT_H
+#endif //VIRGIL_SDK_REQUESTSIGNERINTERFACE_H

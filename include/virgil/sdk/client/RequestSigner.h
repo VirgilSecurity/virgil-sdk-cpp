@@ -38,13 +38,13 @@
 #ifndef VIRGIL_SDK_REQUESTSIGNER_H
 #define VIRGIL_SDK_REQUESTSIGNER_H
 
-#include <virgil/sdk/client/RequestSignerInterface.h>
+#include <virgil/sdk/client/interfaces/RequestSignerInterface.h>
 #include <virgil/sdk/crypto/CryptoInterface.h>
 
 namespace virgil {
     namespace sdk {
         namespace client {
-            class RequestSigner: public RequestSignerInterface {
+            class RequestSigner: public interfaces::RequestSignerInterface {
             public:
                 void selfSign(const crypto::CryptoInterface &crypto,
                               models::interfaces::SignableInterface &request,
