@@ -46,7 +46,7 @@ namespace client {
     namespace interfaces {
         class CardValidatorInterface {
         public:
-            virtual bool validateCardResponse(const CardResponse &response) const = 0;
+            virtual bool validateCardResponse(const models::responses::CardResponse &response) const = 0;
 
             virtual ~CardValidatorInterface() = default;
         };

@@ -51,8 +51,8 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest(
         const std::unordered_map<std::string, std::string> &data,
         const std::string &device,
         const std::string &deviceName) const {
-    auto keyPair = crypto.generateKeyPair();
-    auto exportedPublicKey = crypto.exportPublicKey(keyPair.publicKey());
+    auto keyPair = crypto_->generateKeyPair();
+    auto exportedPublicKey = crypto_->exportPublicKey(keyPair.publicKey());
 
     auto identity = Utils::generateRandomStr(20);
     auto identityType = consts.applicationIdentityType();
@@ -60,12 +60,12 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest(
     auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey, data, device, deviceName);
 
     auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
-    auto appPrivateKey = crypto.importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
+    auto appPrivateKey = crypto_->importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
 
-    auto signer = RequestSigner();
+    auto signer = RequestSigner(crypto_);
 
-    signer.selfSign(crypto, request, keyPair.privateKey());
-    signer.authoritySign(crypto, request, consts.applicationId(), appPrivateKey);
+    signer.selfSign(request, keyPair.privateKey());
+    signer.authoritySign(request, consts.applicationId(), appPrivateKey);
 
     return request;
 }
@@ -73,12 +73,12 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest(
 RevokeCardRequest TestUtils::instantiateRevokeCardRequest(const Card &card) const {
     auto request = RevokeCardRequest::createRequest(card.identifier(), CardRevocationReason::unspecified);
 
-    auto signer = RequestSigner();
+    auto signer = RequestSigner(crypto_);
 
     auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
-    auto appPrivateKey = crypto.importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
+    auto appPrivateKey = crypto_->importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
 
-    signer.authoritySign(crypto, request, consts.applicationId(), appPrivateKey);
+    signer.authoritySign(request, consts.applicationId(), appPrivateKey);
 
     return request;
 }

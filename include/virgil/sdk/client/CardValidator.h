@@ -34,50 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <catch.hpp>
 
-#include <thread>
+#ifndef VIRGIL_SDK_CARDVALIDATOR_H
+#define VIRGIL_SDK_CARDVALIDATOR_H
 
-#include <TestConst.h>
-#include <TestUtils.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
+#include <virgil/sdk/crypto/keys/PublicKey.h>
 
-#include <virgil/sdk/client/Client.h>
-#include <virgil/sdk/client/models/ClientCommon.h>
+namespace virgil {
+namespace sdk {
+namespace client {
+    class CardValidator: public interfaces::CardValidatorInterface {
+    public:
+        CardValidator(const std::shared_ptr<crypto::CryptoInterface> &crypto);
 
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::requests::RevokeCardRequest;
-using virgil::sdk::client::models::CardRevocationReason;
-using virgil::sdk::crypto::Crypto;
-using virgil::sdk::test::TestUtils;
+        bool validateCardResponse(const models::responses::CardResponse &response) const override;
 
-TEST_CASE("test001_CardImportExport", "[models]") {
-    TestUtils utils((TestConst()));
+        void addVerifier(std::string verifierId, VirgilByteArray publicKeyData);
 
-    std::unordered_map<std::string, std::string> data;
-    data["some_random_key1"] = "some_random_data1";
-    data["some_random_key2"] = "some_random_data2";
+        const std::unordered_map<std::string, VirgilByteArray>& verifiers() const { return verifiers_; };
 
-    auto createCardRequest = utils.instantiateCreateCardRequest(data, "mac", "very_good_mac");
-
-    auto request = createCardRequest.exportAsString();
-
-    auto importedRequest = CreateCardRequest::importFromString(request);
-
-    REQUIRE(utils.checkCreateCardRequestEquality(createCardRequest, importedRequest));
+    private:
+        std::shared_ptr<crypto::CryptoInterface> crypto_;
+        std::unordered_map<std::string, VirgilByteArray> verifiers_;
+    };
+}
+}
 }
 
-TEST_CASE("test002_RevokeCardImportExport", "[models]") {
-    TestUtils utils((TestConst()));
-
-    std::unordered_map<std::string, std::string> data;
-    data["some_random_key1"] = "some_random_data1";
-    data["some_random_key2"] = "some_random_data2";
-
-    auto revokeCardRequest = RevokeCardRequest::createRequest("testId", CardRevocationReason::unspecified);
-
-    auto request = revokeCardRequest.exportAsString();
-
-    auto importedRequest = RevokeCardRequest::importFromString(request);
-
-    REQUIRE(utils.checkRevokeCardRequestEquality(revokeCardRequest, importedRequest));
-}
+#endif //VIRGIL_SDK_CARDVALIDATOR_H

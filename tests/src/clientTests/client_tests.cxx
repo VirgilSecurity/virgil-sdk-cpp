@@ -55,9 +55,8 @@ TEST_CASE("test001_CreateCard", "[client]") {
 
     auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
-    Crypto crypto;
 
-    TestUtils utils(crypto, consts);
+    TestUtils utils(consts);
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -73,9 +72,8 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
 
     auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
-    Crypto crypto;
 
-    TestUtils utils(crypto, consts);
+    TestUtils utils(consts);
 
     std::unordered_map<std::string, std::string> data;
     data["some_random_key1"] = "some_random_data1";
@@ -96,9 +94,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
 
-    Crypto crypto;
-
-    TestUtils utils(crypto, consts);
+    TestUtils utils( consts);
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -123,9 +119,7 @@ TEST_CASE("test004_GetCard", "[client]") {
     auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
 
-    Crypto crypto;
-
-    TestUtils utils(crypto, consts);
+    TestUtils utils(consts);
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -148,9 +142,7 @@ TEST_CASE("test005_RevokeCard", "[client]") {
     auto client = Client(consts.applicationToken(),
                          "https://cards.virgilsecurity.com/");
 
-    Crypto crypto;
-
-    TestUtils utils(crypto, consts);
+    TestUtils utils(consts);
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 

@@ -41,6 +41,7 @@
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 #include <virgil/sdk/client/models/Card.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
 #include <TestConst.h>
@@ -48,6 +49,7 @@
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::Card;
+using virgil::sdk::crypto::CryptoInterface;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
 
@@ -56,7 +58,8 @@ namespace sdk {
     namespace test {
         class TestUtils {
         public:
-            TestUtils(Crypto crypto, TestConst consts) : crypto(std::move(crypto)), consts(std::move(consts)) { }
+            TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {
+            }
 
             CreateCardRequest instantiateCreateCardRequest(
                     const std::unordered_map<std::string, std::string> &data = {},
@@ -72,7 +75,7 @@ namespace sdk {
             static bool checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2);
 
         private:
-            Crypto crypto;
+            const std::shared_ptr<CryptoInterface> crypto_;
             TestConst consts;
         };
     }

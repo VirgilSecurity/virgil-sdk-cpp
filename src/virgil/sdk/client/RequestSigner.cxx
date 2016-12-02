@@ -42,16 +42,19 @@ using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::client::models::interfaces::SignableInterface;
 using virgil::sdk::crypto::CryptoInterface;
 
-void RequestSigner::selfSign(const CryptoInterface &crypto, SignableInterface &request, const PrivateKey &privateKey) const {
-    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
-
-    request.addSignature(crypto.generateSignature(fingerprint.value(), privateKey), fingerprint.hexValue());
+RequestSigner::RequestSigner(const std::shared_ptr<CryptoInterface> &crypto)
+        : crypto_(crypto) {
 }
 
-void RequestSigner::authoritySign(const CryptoInterface &crypto,
-                                  SignableInterface &request,
+void RequestSigner::selfSign(SignableInterface &request, const PrivateKey &privateKey) const {
+    auto fingerprint = crypto_->calculateFingerprint(request.snapshot());
+
+    request.addSignature(crypto_->generateSignature(fingerprint.value(), privateKey), fingerprint.hexValue());
+}
+
+void RequestSigner::authoritySign(SignableInterface &request,
                                   const std::string &appId,
                                   const PrivateKey &privateKey) const {
-    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
-    request.addSignature(crypto.generateSignature(fingerprint.value(), privateKey), appId);
+    auto fingerprint = crypto_->calculateFingerprint(request.snapshot());
+    request.addSignature(crypto_->generateSignature(fingerprint.value(), privateKey), appId);
 }

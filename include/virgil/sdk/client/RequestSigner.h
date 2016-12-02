@@ -46,13 +46,16 @@ namespace virgil {
         namespace client {
             class RequestSigner: public interfaces::RequestSignerInterface {
             public:
-                void selfSign(const crypto::CryptoInterface &crypto,
-                              models::interfaces::SignableInterface &request,
+                RequestSigner(const std::shared_ptr<crypto::CryptoInterface> &crypto);
+
+                void selfSign(models::interfaces::SignableInterface &request,
                               const crypto::keys::PrivateKey &privateKey) const override;
 
-                void authoritySign(const crypto::CryptoInterface &crypto,
-                                   models::interfaces::SignableInterface &request,
+                void authoritySign(models::interfaces::SignableInterface &request,
                                    const std::string &appId, const crypto::keys::PrivateKey &privateKey) const override;
+
+            private:
+                std::shared_ptr<crypto::CryptoInterface> crypto_;
             };
         }
     }

@@ -34,50 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <catch.hpp>
+#include <virgil/sdk/client/CardValidator.h>
 
-#include <thread>
+using virgil::sdk::client::CardValidator;
+using virgil::sdk::client::models::responses::CardResponse;
 
-#include <TestConst.h>
-#include <TestUtils.h>
-
-#include <virgil/sdk/client/Client.h>
-#include <virgil/sdk/client/models/ClientCommon.h>
-
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::requests::RevokeCardRequest;
-using virgil::sdk::client::models::CardRevocationReason;
-using virgil::sdk::crypto::Crypto;
-using virgil::sdk::test::TestUtils;
-
-TEST_CASE("test001_CardImportExport", "[models]") {
-    TestUtils utils((TestConst()));
-
-    std::unordered_map<std::string, std::string> data;
-    data["some_random_key1"] = "some_random_data1";
-    data["some_random_key2"] = "some_random_data2";
-
-    auto createCardRequest = utils.instantiateCreateCardRequest(data, "mac", "very_good_mac");
-
-    auto request = createCardRequest.exportAsString();
-
-    auto importedRequest = CreateCardRequest::importFromString(request);
-
-    REQUIRE(utils.checkCreateCardRequestEquality(createCardRequest, importedRequest));
+CardValidator::CardValidator(const std::shared_ptr<crypto::CryptoInterface> &crypto)
+        : crypto_(crypto) {
 }
 
-TEST_CASE("test002_RevokeCardImportExport", "[models]") {
-    TestUtils utils((TestConst()));
-
-    std::unordered_map<std::string, std::string> data;
-    data["some_random_key1"] = "some_random_data1";
-    data["some_random_key2"] = "some_random_data2";
-
-    auto revokeCardRequest = RevokeCardRequest::createRequest("testId", CardRevocationReason::unspecified);
-
-    auto request = revokeCardRequest.exportAsString();
-
-    auto importedRequest = RevokeCardRequest::importFromString(request);
-
-    REQUIRE(utils.checkRevokeCardRequestEquality(revokeCardRequest, importedRequest));
+void CardValidator::addVerifier(std::string verifierId, VirgilByteArray publicKeyData) {
+    verifiers_[std::move(verifierId)] = std::move(publicKeyData);
 }
+
+bool CardValidator::validateCardResponse(const CardResponse &response) const {
+    if (response.cardVersion() == "3.0")
+        return true;
+
+    auto fingerprint = crypto_->calculateFingerprint(response.snapshot());
+
+    if (response.identifier() != fingerprint.hexValue())
+        return false;
+
+    auto verifiers = verifiers_;
+
+    verifiers[fingerprint.hexValue()] = response.model().publicKeyData();
+
+    for (const auto& verifier : verifiers_) {
+        try {
+            auto signature = response.signatures().at(verifier.first);
+            auto publicKey = crypto_->importPublicKey(verifier.second);
+            auto isVerified = crypto_->verify(fingerprint.value(), signature, publicKey);
+
+            if (!isVerified) {
+                return false;
+            }
+        }
+        catch (...) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
