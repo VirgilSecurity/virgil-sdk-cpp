@@ -57,3 +57,4 @@ const std::string JsonKey::Signs = "signs";
 const std::string JsonKey::CardId = "card_id";
 const std::string JsonKey::RevocationReason = "revocation_reason";
 const std::string JsonKey::Identities = "identities";
+const std::string JsonKey::Code = "code";

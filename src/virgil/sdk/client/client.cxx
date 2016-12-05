@@ -43,6 +43,7 @@
 #include <virgil/sdk/client/models/responses/CardsResponse.h>
 #include <virgil/sdk/http/Connection.h>
 #include <virgil/sdk/VirgilSDKError.h>
+#include <virgil/sdk/client/models/errors/VirgilError.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
 
@@ -61,6 +62,8 @@ using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::Card;
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::ServiceConfig;
+using virgil::sdk::client::models::errors::Error;
+using virgil::sdk::client::models::errors::VirgilError;
 
 Client::Client(std::string accessToken)
         : Client(ServiceConfig::createConfig(std::move(accessToken))) {
@@ -68,6 +71,16 @@ Client::Client(std::string accessToken)
 
 Client::Client(ServiceConfig serviceConfig)
         : serviceConfig_(std::move(serviceConfig)) {
+}
+
+Error Client::parseError(const http::Response &response) const {
+    try {
+        auto virgilError = JsonSerializer<VirgilError>::fromJsonString(response.body());
+        return Error(response.statusCodeRaw(), virgilError);
+    }
+    catch (...) {
+        return Error(response.statusCodeRaw(), VirgilError(0));
+    }
 }
 
 std::future<Card> Client::createCard(const CreateCardRequest &request) const {
@@ -81,6 +94,11 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
 
         Connection connection;
         Response response = connection.send(httpRequest);
+
+        if (response.fail()) {
+            auto error = this->parseError(response);
+            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
+        }
 
         auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
 
@@ -107,6 +125,11 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
+        if (response.fail()) {
+            auto error = this->parseError(response);
+            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
+        }
+
         auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
 
         if (this->serviceConfig_.cardValidator() != nullptr) {
@@ -132,6 +155,11 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
 
         Connection connection;
         Response response = connection.send(httpRequest);
+
+        if (response.fail()) {
+            auto error = this->parseError(response);
+            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
+        }
 
         auto cardsResponse = JsonSerializer<CardsResponse>::fromJsonString(response.body());
 
@@ -161,8 +189,10 @@ std::future<void> Client::revokeCard(const RevokeCardRequest &request) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        response.body();
-        response.statusCode();
+        if (response.fail()) {
+            auto error = this->parseError(response);
+            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
+        }
 
         return;
     });

@@ -35,41 +35,34 @@
  */
 
 
-#ifndef VIRGIL_SDK_CLIENT_H
-#define VIRGIL_SDK_CLIENT_H
+#ifndef VIRGIL_SDK_ERROR_H
+#define VIRGIL_SDK_ERROR_H
 
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
-#include <virgil/sdk/client/ServiceConfig.h>
-#include <virgil/sdk/client/models/errors/Error.h>
-#include <virgil/sdk/http/Response.h>
+#include <string>
+#include <virgil/sdk/client/models/errors/VirgilError.h>
 
 namespace virgil {
 namespace sdk {
-    namespace client {
-        class Client : public interfaces::ClientInterface {
+namespace client {
+namespace models {
+    namespace errors {
+        class Error {
         public:
-            Client(std::string accessToken);
+            Error(int httpErrorCode, const VirgilError &virgilError);
 
-            Client(ServiceConfig serviceConfig);
-
-            const ServiceConfig& serviceConfig() const { return serviceConfig_; }
-
-            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
-
-            std::future<models::Card> getCard(const std::string &cardId) const override;
-
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
-
-            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
+            int httpErrorCode() const { return httpErrorCode_; }
+            int virgilErrorCode() const { return virgilErrorCode_; }
+            const std::string& errorMsg() const { return errorMsg_; }
 
         private:
-            models::errors::Error parseError(const http::Response &response) const;
-
-            std::string accessToken_;
-            ServiceConfig serviceConfig_;
+            int httpErrorCode_;
+            int virgilErrorCode_;
+            std::string errorMsg_;
         };
     }
 }
 }
+}
+}
 
-#endif //VIRGIL_SDK_CLIENT_H
+#endif //VIRGIL_SDK_ERROR_H

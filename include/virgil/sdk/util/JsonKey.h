@@ -68,6 +68,7 @@ namespace sdk {
             static const std::string CardId;
             static const std::string RevocationReason;
             static const std::string Identities;
+            static const std::string Code;
 
         private:
             JsonKey();

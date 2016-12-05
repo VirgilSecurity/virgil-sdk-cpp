@@ -34,42 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <string>
 
-#ifndef VIRGIL_SDK_CLIENT_H
-#define VIRGIL_SDK_CLIENT_H
+#include <nlohman/json.hpp>
 
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
-#include <virgil/sdk/client/ServiceConfig.h>
-#include <virgil/sdk/client/models/errors/Error.h>
-#include <virgil/sdk/http/Response.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/errors/VirgilError.h>
+#include <virgil/sdk/util/JsonKey.h>
+
+using json = nlohmann::json;
+
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::client::models::errors::VirgilError;
 
 namespace virgil {
-namespace sdk {
-    namespace client {
-        class Client : public interfaces::ClientInterface {
-        public:
-            Client(std::string accessToken);
+    namespace sdk {
+        namespace client {
+            namespace models {
+                namespace serialization {
+                    /**
+                     * @brief JSONSerializer<VirgilError> specialization.
+                     */
+                    template<>
+                    class JsonSerializer<VirgilError> {
+                    public:
+                        template<int FAKE = 0>
+                        static VirgilError fromJson(const json &j) {
+                            try {
+                                std::string errorCodeStr = j[JsonKey::Code];
 
-            Client(ServiceConfig serviceConfig);
+                                return VirgilError(std::stoi(errorCodeStr));
+                            } catch (std::exception &exception) {
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<VirgilError>::fromJson ") +
+                                                       exception.what());
+                            }
+                        }
 
-            const ServiceConfig& serviceConfig() const { return serviceConfig_; }
-
-            std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
-
-            std::future<models::Card> getCard(const std::string &cardId) const override;
-
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
-
-            std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
-
-        private:
-            models::errors::Error parseError(const http::Response &response) const;
-
-            std::string accessToken_;
-            ServiceConfig serviceConfig_;
-        };
+                        JsonSerializer() = delete;
+                    };
+                }
+            }
+        }
     }
 }
-}
 
-#endif //VIRGIL_SDK_CLIENT_H
+/**
+ * Explicit methods instantiation
+ */
+template VirgilError
+virgil::sdk::client::models::serialization::JsonSerializer<VirgilError>::fromJson(const json&);

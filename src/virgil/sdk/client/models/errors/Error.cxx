@@ -34,30 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/models/errors/Error.h>
 
-#ifndef VIRGIL_SDK_ERROR_H
-#define VIRGIL_SDK_ERROR_H
+using virgil::sdk::client::models::errors::Error;
+using virgil::sdk::client::models::errors::VirgilError;
 
-#include <string>
-
-namespace virgil {
-namespace sdk {
-namespace client {
-    namespace models {
-        class Error {
-        public:
-            Error(int errorCode);
-
-            int errorCode() const { return errorCode_; }
-            const std::string& errorMsg() const { return errorMsg_; }
-
-        private:
-            int errorCode_;
-            std::string errorMsg_;
-        };
-    }
+Error::Error(int httpErrorCode, const VirgilError &virgilError)
+        : httpErrorCode_(httpErrorCode),
+          virgilErrorCode_(virgilError.virgilErrorCode()) {
+    errorMsg_ = "HTTP Code: " + std::to_string(httpErrorCode)
+                + "; Virgil Code: " + std::to_string(virgilErrorCode_)
+                + "; Description: " + virgilError.errorMsg();
 }
-}
-}
-
-#endif //VIRGIL_SDK_ERROR_H
