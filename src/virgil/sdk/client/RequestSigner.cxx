@@ -37,6 +37,8 @@
 
 #include <virgil/sdk/client/RequestSigner.h>
 
+static_assert(!std::is_abstract<virgil::sdk::client::RequestSigner>(), "RequestSigner must not be abstract.");
+
 using virgil::sdk::client::RequestSigner;
 using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::client::models::interfaces::SignableInterface;

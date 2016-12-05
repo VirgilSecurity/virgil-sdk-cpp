@@ -37,6 +37,8 @@
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 
+static_assert(!std::is_abstract<virgil::sdk::client::models::requests::RevokeCardRequest>(), "RevokeCardRequest must not be abstract.");
+
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;

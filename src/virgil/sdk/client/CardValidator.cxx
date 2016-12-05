@@ -36,6 +36,8 @@
 
 #include <virgil/sdk/client/CardValidator.h>
 
+static_assert(!std::is_abstract<virgil::sdk::client::CardValidator>(), "CardValidator must not be abstract.");
+
 using virgil::sdk::client::CardValidator;
 using virgil::sdk::client::models::responses::CardResponse;
 

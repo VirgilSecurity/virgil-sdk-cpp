@@ -38,6 +38,8 @@
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 
+static_assert(!std::is_abstract<virgil::sdk::client::models::requests::CreateCardRequest>(), "CreateCardRequest must not be abstract.");
+
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
