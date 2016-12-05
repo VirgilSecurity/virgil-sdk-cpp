@@ -49,7 +49,7 @@ using virgil::sdk::client::models::requests::RevokeCardRequest;
 template<typename DerivedClass>
 DerivedClass Importable<DerivedClass>::importFromString(const std::string &data) {
     auto jsonStr = VirgilByteArrayUtils::bytesToString(VirgilBase64::decode(data));
-    return serialization::JsonSerializer<SignableRequestInterface>::fromJsonStringTemp<DerivedClass>(jsonStr);
+    return serialization::JsonSerializer<SignableRequestInterface>::templatedFromJsonString<DerivedClass>(jsonStr);
 }
 
 

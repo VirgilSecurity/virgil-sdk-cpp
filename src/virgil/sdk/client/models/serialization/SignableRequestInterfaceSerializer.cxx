@@ -84,7 +84,7 @@ namespace virgil {
                         }
 
                         template<typename ResultType>
-                        static ResultType fromJsonTemp(const json &j) {
+                        static ResultType templatedFromJson(const json &j) {
                             try {
                                 std::string snapshotStr = j[JsonKey::ContentSnapshot];
 
@@ -120,7 +120,7 @@ template std::string
 virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson<4>(const SignableRequestInterface&);
 
 template CreateCardRequest
-virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::fromJsonTemp<CreateCardRequest>(const json&);
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::templatedFromJson<CreateCardRequest>(const json&);
 
 template RevokeCardRequest
-virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::fromJsonTemp<RevokeCardRequest>(const json&);
+virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::templatedFromJson<RevokeCardRequest>(const json&);
