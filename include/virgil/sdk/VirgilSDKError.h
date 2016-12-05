@@ -49,9 +49,10 @@ namespace virgil { namespace sdk {
  * @brief Specific error codes for the sdk.
  * @ingroup Error
 */
-enum class VirgilSDKError  {
+enum class VirgilSdkError  {
     Reserved = 0, ///< Should not be used.
     VerificationFailed, ///< Verification of signature failed.
+    CardValidationFailed, ///< Validation of Virgil Card failed.
     Undefined = std::numeric_limits<int>::max()
 };
 
@@ -59,7 +60,7 @@ enum class VirgilSDKError  {
  * @brief This is specific error category that contains information about sdk errors.
  * @ingroup Error
  */
-class VirgilSDKErrorCategory : public std::error_category {
+class VirgilSdkErrorCategory : public std::error_category {
 public:
     /**
      * @return Category name.
@@ -80,7 +81,7 @@ public:
  * @return Instance of the sdk error categoty.
  * @ingroup Error
  */
-const VirgilSDKErrorCategory& sdk_category() noexcept;
+const VirgilSdkErrorCategory& sdk_category() noexcept;
 
 /**
  * @brief Build exception with given error value and corresond error category.
@@ -89,8 +90,8 @@ const VirgilSDKErrorCategory& sdk_category() noexcept;
  * @see VirgilSDKError for specific error values.
  * @ingroup Error
  */
-inline VirgilSDKException make_error(VirgilSDKError ev) {
-    return VirgilSDKException(static_cast<int>(ev), sdk_category());
+inline VirgilSdkException make_error(VirgilSdkError ev) {
+    return VirgilSdkException(static_cast<int>(ev), sdk_category());
 }
 
 /**
@@ -101,8 +102,8 @@ inline VirgilSDKException make_error(VirgilSDKError ev) {
  * @see VirgilSDKError for specific error values.
  * @ingroup Error
  */
-inline VirgilSDKException make_error(VirgilSDKError ev, const std::string& what) {
-    return VirgilSDKException(static_cast<int>(ev), sdk_category(), what);
+inline VirgilSdkException make_error(VirgilSdkError ev, const std::string& what) {
+    return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
 }
 
 /**
@@ -113,8 +114,8 @@ inline VirgilSDKException make_error(VirgilSDKError ev, const std::string& what)
  * @see VirgilSDKError for specific error values.
  * @ingroup Error
  */
-inline VirgilSDKException make_error(VirgilSDKError ev, const char* what) {
-    return VirgilSDKException(static_cast<int>(ev), sdk_category(), what);
+inline VirgilSdkException make_error(VirgilSdkError ev, const char* what) {
+    return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
 }
 }}
 

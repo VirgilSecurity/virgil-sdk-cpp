@@ -52,14 +52,14 @@ namespace virgil { namespace sdk {
  *
  * @ingroup Error
  */
-class VirgilSDKException : public std::exception {
+class VirgilSdkException : public std::exception {
 public:
     /**
      * @brief Initialize Exception with specific error code and correspond error category.
      * @param ev Error value (code).
      * @param ecat Error category.
      */
-    VirgilSDKException(int ev, const std::error_category& ecat);
+    VirgilSdkException(int ev, const std::error_category& ecat);
 
     /**
      * @brief Initialize Exception with specific error code, correspond error category, and error description.
@@ -67,7 +67,7 @@ public:
      * @param ecat Error category.
      * @param what Additional error description.
      */
-    VirgilSDKException(int ev, const std::error_category& ecat, const std::string& what);
+    VirgilSdkException(int ev, const std::error_category& ecat, const std::string& what);
 
     /**
      * @brief Initialize Exception with specific error code, correspond error category, and error description.
@@ -75,7 +75,7 @@ public:
      * @param ecat Error category.
      * @param what Additional error description.
      */
-    VirgilSDKException(int ev, const std::error_category& ecat, const char* what);
+    VirgilSdkException(int ev, const std::error_category& ecat, const char* what);
 
     /**
      * Get string identifying exception.

@@ -39,7 +39,7 @@
 #include <sstream>
 #include <tinyformat/tinyformat.h>
 
-using virgil::sdk::VirgilSDKException;
+using virgil::sdk::VirgilSdkException;
 
 namespace virgil { namespace sdk { namespace internal {
 
@@ -58,17 +58,17 @@ namespace virgil { namespace sdk { namespace internal {
 
 }}}
 
-VirgilSDKException::VirgilSDKException(int ev, const std::error_category& ecat)
+VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat)
         : condition_(ev, ecat), what_(internal::format_message(condition_)) {
 }
 
-VirgilSDKException::VirgilSDKException(int ev, const std::error_category& ecat, const std::string& what)
+VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat, const std::string& what)
         : condition_(ev, ecat), what_(internal::format_message(condition_, what)) {}
 
-VirgilSDKException::VirgilSDKException(int ev, const std::error_category& ecat, const char* what)
+VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat, const char* what)
         : condition_(ev, ecat), what_(internal::format_message(condition_, what)) {}
 
-const char* VirgilSDKException::what() const noexcept {
+const char* VirgilSdkException::what() const noexcept {
     return what_.c_str();
 }
 

@@ -35,26 +35,29 @@
  */
 
 
-#include <virgil/sdk/VirgilSDKError.h>
+#ifndef VIRGIL_SDK_ERROR_H
+#define VIRGIL_SDK_ERROR_H
 
-using virgil::sdk::VirgilSdkErrorCategory;
+#include <string>
 
-const char* VirgilSdkErrorCategory::name() const noexcept {
-    return "virgil/sdk";
-}
+namespace virgil {
+namespace sdk {
+namespace client {
+    namespace models {
+        class Error {
+        public:
+            Error(int errorCode);
 
-std::string VirgilSdkErrorCategory::message(int ev) const noexcept {
-    switch (static_cast<VirgilSdkError>(ev)) {
-        case VirgilSdkError::VerificationFailed:
-            return "Verification of signature failed.";
-        case VirgilSdkError::CardValidationFailed:
-            return "Validation of Virgil Card failed.";
-        default:
-            return "Undefined error.";
+            int errorCode() const { return errorCode_; }
+            const std::string& errorMsg() const { return errorMsg_; }
+
+        private:
+            int errorCode_;
+            std::string errorMsg_;
+        };
     }
 }
-
-const VirgilSdkErrorCategory& virgil::sdk::sdk_category() noexcept {
-    static VirgilSdkErrorCategory inst;
-    return inst;
 }
+}
+
+#endif //VIRGIL_SDK_ERROR_H

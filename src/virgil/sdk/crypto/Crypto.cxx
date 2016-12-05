@@ -37,7 +37,7 @@
 
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/crypto/Fingerprint.h>
-#include <virgil/sdk/VirgilSDKError.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
@@ -237,7 +237,7 @@ VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const Pri
     auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
 
     if (!isVerified) {
-        throw make_error(VirgilSDKError::VerificationFailed, "Invalid signature.");
+        throw make_error(VirgilSdkError::VerificationFailed, "Invalid signature.");
     }
 
     return decryptedData;

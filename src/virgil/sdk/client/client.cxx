@@ -42,9 +42,11 @@
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 #include <virgil/sdk/client/models/responses/CardsResponse.h>
 #include <virgil/sdk/http/Connection.h>
+#include <virgil/sdk/VirgilSDKError.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");
 
+using virgil::sdk::make_error;
 using virgil::sdk::client::Client;
 using virgil::sdk::http::Connection;
 using virgil::sdk::http::ClientRequest;
@@ -82,6 +84,12 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
 
         auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
 
+        if (this->serviceConfig_.cardValidator() != nullptr) {
+            if (!this->serviceConfig_.cardValidator()->validateCardResponse(cardResponse)) {
+                throw make_error(VirgilSdkError::CardValidationFailed, "Card validation failed.");
+            }
+        }
+
         return cardResponse.buildCard();
     });
 
@@ -99,7 +107,15 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        return JsonSerializer<CardResponse>::fromJsonString(response.body()).buildCard();
+        auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
+
+        if (this->serviceConfig_.cardValidator() != nullptr) {
+            if (!this->serviceConfig_.cardValidator()->validateCardResponse(cardResponse)) {
+                throw make_error(VirgilSdkError::CardValidationFailed, "Card validation failed.");
+            }
+        }
+
+        return cardResponse.buildCard();
     });
 
     return future;
@@ -117,7 +133,17 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        return JsonSerializer<CardsResponse>::fromJsonString(response.body()).buildCards();
+        auto cardsResponse = JsonSerializer<CardsResponse>::fromJsonString(response.body());
+
+        if (this->serviceConfig_.cardValidator() != nullptr) {
+            for (const auto &cardResponse : cardsResponse.cardsResponse()) {
+                if (!this->serviceConfig_.cardValidator()->validateCardResponse(cardResponse)) {
+                    throw make_error(VirgilSdkError::CardValidationFailed, "Card validation failed.");
+                }
+            }
+        }
+
+        return cardsResponse.buildCards();
     });
 
     return future;

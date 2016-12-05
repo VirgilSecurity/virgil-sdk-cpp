@@ -74,6 +74,8 @@ namespace sdk {
             static bool checkCreateCardRequestEquality(const CreateCardRequest &request1, const CreateCardRequest &request2);
             static bool checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2);
 
+            const std::shared_ptr<CryptoInterface>& crypto() const { return crypto_; }
+
         private:
             const std::shared_ptr<CryptoInterface> crypto_;
             TestConst consts;

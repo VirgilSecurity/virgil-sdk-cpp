@@ -44,18 +44,21 @@
 #include <virgil/sdk/client/Client.h>
 
 using virgil::sdk::client::Client;
+using virgil::sdk::client::ServiceConfig;
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::models::CardScope;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
+using virgil::sdk::client::CardValidator;
 
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
-
-    auto client = Client(consts.applicationToken());
-
     TestUtils utils(consts);
+
+    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
+    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -68,10 +71,11 @@ TEST_CASE("test001_CreateCard", "[client]") {
 
 TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
     TestConst consts;
-
-    auto client = Client(consts.applicationToken());
-
     TestUtils utils(consts);
+
+    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
+    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto client = Client(std::move(serviceConfig));
 
     std::unordered_map<std::string, std::string> data;
     data["some_random_key1"] = "some_random_data1";
@@ -88,10 +92,11 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
 
 TEST_CASE("test003_SearchCards", "[client]") {
     TestConst consts;
+    TestUtils utils(consts);
 
-    auto client = Client(consts.applicationToken());
-
-    TestUtils utils( consts);
+    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
+    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -112,10 +117,11 @@ TEST_CASE("test003_SearchCards", "[client]") {
 
 TEST_CASE("test004_GetCard", "[client]") {
     TestConst consts;
-
-    auto client = Client(consts.applicationToken());
-
     TestUtils utils(consts);
+
+    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
+    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -134,10 +140,11 @@ TEST_CASE("test004_GetCard", "[client]") {
 
 TEST_CASE("test005_RevokeCard", "[client]") {
     TestConst consts;
-
-    auto client = Client(consts.applicationToken());
-
     TestUtils utils(consts);
+
+    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
+    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
