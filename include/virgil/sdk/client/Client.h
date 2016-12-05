@@ -34,14 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CLIENT_H
 #define VIRGIL_SDK_CLIENT_H
 
-#include <virgil/sdk/client/interfaces/ClientInterface.h>
-#include <virgil/sdk/client/ServiceConfig.h>
-#include <virgil/sdk/client/models/errors/Error.h>
 #include <virgil/sdk/http/Response.h>
+#include <virgil/sdk/client/ServiceConfig.h>
+#include <virgil/sdk/client/interfaces/ClientInterface.h>
+#include <virgil/sdk/client/models/errors/Error.h>
+
 
 namespace virgil {
 namespace sdk {
@@ -58,7 +58,8 @@ namespace sdk {
 
             std::future<models::Card> getCard(const std::string &cardId) const override;
 
-            std::future<std::vector<models::Card>> searchCards(const models::SearchCardsCriteria &criteria) const override;
+            std::future<std::vector<models::Card>> searchCards(
+                    const models::SearchCardsCriteria &criteria) const override;
 
             std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const override;
 

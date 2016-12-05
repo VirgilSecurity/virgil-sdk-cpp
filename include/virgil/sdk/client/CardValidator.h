@@ -34,13 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CARDVALIDATOR_H
 #define VIRGIL_SDK_CARDVALIDATOR_H
 
 #include <virgil/sdk/crypto/CryptoInterface.h>
-#include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
 #include <virgil/sdk/crypto/keys/PublicKey.h>
+#include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
 
 namespace virgil {
 namespace sdk {

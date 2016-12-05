@@ -34,12 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CRYPTO_H
 #define VIRGIL_SDK_CRYPTO_H
 
-#include <virgil/sdk/crypto/CryptoInterface.h>
 #include <virgil/sdk/Common.h>
+#include <virgil/sdk/crypto/CryptoInterface.h>
 
 namespace virgil {
 namespace sdk {
@@ -50,22 +49,47 @@ namespace sdk {
 
             // CryptoInterface implementation
             keys::KeyPair generateKeyPair() const override;
-            keys::PrivateKey importPrivateKey(const VirgilByteArray &data, const std::string& password = "") const override;
+
+            keys::PrivateKey importPrivateKey(const VirgilByteArray &data,
+                                              const std::string& password = "") const override;
+
             keys::PublicKey importPublicKey(const VirgilByteArray &data) const override;
+
             keys::PublicKey extractPublicKeyFromPrivateKey(const keys::PrivateKey &privateKey) const override;
-            VirgilByteArray exportPrivateKey(const keys::PrivateKey &privateKey, const std::string &password = "") const override;
+
+            VirgilByteArray exportPrivateKey(const keys::PrivateKey &privateKey,
+                                             const std::string &password = "") const override;
+
             VirgilByteArray exportPublicKey(const keys::PublicKey &publicKey) const override;
 
-            VirgilByteArray encrypt(const VirgilByteArray &data, const std::vector<keys::PublicKey> &recipients) const override;
-            void encrypt(std::istream &istream, std::ostream &ostream, const std::vector<keys::PublicKey> &recipients) const override;
-            bool verify(const VirgilByteArray &data, const VirgilByteArray &signature, const keys::PublicKey &signerPublicKey) const override;
-            bool verify(std::istream &istream, const VirgilByteArray &signature, const keys::PublicKey &signerPublicKey) const override;
+            VirgilByteArray encrypt(const VirgilByteArray &data,
+                                    const std::vector<keys::PublicKey> &recipients) const override;
+
+            void encrypt(std::istream &istream, std::ostream &ostream,
+                         const std::vector<keys::PublicKey> &recipients) const override;
+
+            bool verify(const VirgilByteArray &data, const VirgilByteArray &signature,
+                        const keys::PublicKey &signerPublicKey) const override;
+
+            bool verify(std::istream &istream, const VirgilByteArray &signature,
+                        const keys::PublicKey &signerPublicKey) const override;
+
             VirgilByteArray decrypt(const VirgilByteArray &data, const keys::PrivateKey &privateKey) const override;
-            void decrypt(std::istream &istream, std::ostream &ostream, const keys::PrivateKey &privateKey) const override;
-            VirgilByteArray signThenEncrypt(const VirgilByteArray &data, const keys::PrivateKey &privateKey, const std::vector<keys::PublicKey> &recipients) const override;
-            VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const keys::PrivateKey &privateKey, const keys::PublicKey &signerPublicKey) const override;
-            VirgilByteArray generateSignature(const VirgilByteArray &data, const keys::PrivateKey &privateKey) const override;
+
+            void decrypt(std::istream &istream, std::ostream &ostream,
+                         const keys::PrivateKey &privateKey) const override;
+
+            VirgilByteArray signThenEncrypt(const VirgilByteArray &data, const keys::PrivateKey &privateKey,
+                                            const std::vector<keys::PublicKey> &recipients) const override;
+
+            VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const keys::PrivateKey &privateKey,
+                                              const keys::PublicKey &signerPublicKey) const override;
+
+            VirgilByteArray generateSignature(const VirgilByteArray &data,
+                                              const keys::PrivateKey &privateKey) const override;
+
             VirgilByteArray generateSignature(std::istream &istream, const keys::PrivateKey &privateKey) const override;
+
             Fingerprint calculateFingerprint(const VirgilByteArray &data) const override;
 
         private:

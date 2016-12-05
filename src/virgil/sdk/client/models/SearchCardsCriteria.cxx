@@ -39,14 +39,11 @@
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::models::CardScope;
 
-SearchCardsCriteria SearchCardsCriteria::createCriteria(
-        CardScope scope,
-        const std::string& identityType,
-        const std::vector<std::string>& identities) {
+SearchCardsCriteria SearchCardsCriteria::createCriteria(CardScope scope, const std::string& identityType,
+                                                        const std::vector<std::string>& identities) {
     return SearchCardsCriteria(identities, identityType, scope);
 }
 
-SearchCardsCriteria::SearchCardsCriteria(
-        std::vector<std::string> identities, std::string identityType, CardScope scope)
+SearchCardsCriteria::SearchCardsCriteria(std::vector<std::string> identities, std::string identityType, CardScope scope)
         : identities_(std::move(identities)), identityType_(std::move(identityType)), scope_(scope) {
 }

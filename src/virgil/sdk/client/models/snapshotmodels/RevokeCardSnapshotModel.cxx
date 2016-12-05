@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
 
 using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;

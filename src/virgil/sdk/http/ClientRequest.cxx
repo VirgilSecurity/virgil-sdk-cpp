@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <virgil/sdk/http/ClientRequest.h>
 
 using virgil::sdk::http::ClientRequest;

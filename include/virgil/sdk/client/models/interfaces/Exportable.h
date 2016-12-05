@@ -34,11 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_EXPORTABLE_H
 #define VIRGIL_SDK_EXPORTABLE_H
 
-#import <string>
+#include <string>
 
 namespace virgil {
 namespace sdk {

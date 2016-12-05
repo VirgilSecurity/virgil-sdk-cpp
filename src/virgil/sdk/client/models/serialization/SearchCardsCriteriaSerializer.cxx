@@ -38,51 +38,51 @@
 
 #include <nlohman/json.hpp>
 
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#include <virgil/sdk/client/models/SearchCardsCriteria.h>
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/SearchCardsCriteria.h>
 
 using json = nlohmann::json;
+
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::VirgilBase64;
-
 using virgil::sdk::client::models::SearchCardsCriteria;
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    /**
-                     * @brief JSONSerializer<SearchCardsCriteria> specialization.
-                     */
-                    template <>
-                    class JsonSerializer<SearchCardsCriteria> {
-                    public:
-                        template<int INDENT = -1>
-                        static std::string toJson(const SearchCardsCriteria &criteria) {
-                            try {
-                                json j = {
-                                        {JsonKey::CardScope, cardScopeToStr(criteria.scope())},
-                                        {JsonKey::IdentityType, criteria.identityType()},
-                                        {JsonKey::Identities, criteria.identities()}
-                                };
-
-                                return j.dump(INDENT);
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SearchCardsCriteria>::toJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        JsonSerializer() = delete;
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief JSONSerializer<SearchCardsCriteria> specialization.
+         */
+        template <>
+        class JsonSerializer<SearchCardsCriteria> {
+        public:
+            template<int INDENT = -1>
+            static std::string toJson(const SearchCardsCriteria &criteria) {
+                try {
+                    json j = {
+                            {JsonKey::CardScope, cardScopeToStr(criteria.scope())},
+                            {JsonKey::IdentityType, criteria.identityType()},
+                            {JsonKey::Identities, criteria.identities()}
                     };
+
+                    return j.dump(INDENT);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SearchCardsCriteria>::toJson ") +
+                                           exception.what());
                 }
             }
-        }
+
+            JsonSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 /**

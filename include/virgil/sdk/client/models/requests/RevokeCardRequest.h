@@ -34,21 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_REVOKECARDREQUEST_H
 #define VIRGIL_SDK_REVOKECARDREQUEST_H
 
+#include <string>
+
 #include <virgil/sdk/client/models/requests/SignableRequest.h>
 #include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
-
-#include <string>
 
 namespace virgil {
 namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class RevokeCardRequest final : public SignableRequest<snapshotmodels::RevokeCardSnapshotModel, RevokeCardRequest> {
+        class RevokeCardRequest final :
+                public SignableRequest<snapshotmodels::RevokeCardSnapshotModel, RevokeCardRequest> {
         public:
             static RevokeCardRequest createRequest(const std::string &cardId, CardRevocationReason reason);
 

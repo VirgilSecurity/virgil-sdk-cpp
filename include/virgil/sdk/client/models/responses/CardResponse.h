@@ -34,11 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CARDRESPONSE_H
 #define VIRGIL_SDK_CARDRESPONSE_H
 
 #include <unordered_map>
+
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>

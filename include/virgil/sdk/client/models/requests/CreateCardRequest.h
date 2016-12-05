@@ -34,22 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CREATECARDREQUEST_H
 #define VIRGIL_SDK_CREATECARDREQUEST_H
 
-#include <virgil/sdk/client/models/requests/SignableRequest.h>
-#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
-
 #include <string>
 #include <unordered_map>
+
+#include <virgil/sdk/client/models/requests/SignableRequest.h>
+#include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
 namespace virgil {
 namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
-        class CreateCardRequest final : public SignableRequest<snapshotmodels::CreateCardSnapshotModel, CreateCardRequest> {
+        class CreateCardRequest final
+                : public SignableRequest<snapshotmodels::CreateCardSnapshotModel, CreateCardRequest> {
         public:
             static CreateCardRequest createRequest(const std::string &identity,
                                                    const std::string &identityType,

@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 
@@ -45,14 +44,10 @@ using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 using virgil::sdk::client::models::serialization::CanonicalSerializer;
 
-CreateCardRequest CreateCardRequest::createRequest(
-        const std::string &identity,
-        const std::string &identityType,
-        const VirgilByteArray &publicKeyData,
-        const std::unordered_map<std::string, std::string> &data,
-        const std::string &device,
-        const std::string &deviceName) {
-
+CreateCardRequest CreateCardRequest::createRequest(const std::string &identity, const std::string &identityType,
+                                                   const VirgilByteArray &publicKeyData,
+                                                   const std::unordered_map<std::string, std::string> &data,
+                                                   const std::string &device, const std::string &deviceName) {
     std::unordered_map<std::string, std::string> info;
     if (!device.empty()) {
         info["device"] = device;
@@ -65,28 +60,22 @@ CreateCardRequest CreateCardRequest::createRequest(
     return CreateCardRequest(identity, identityType, publicKeyData, data, CardScope::application, info);
 }
 
-CreateCardRequest::CreateCardRequest(
-        const std::string &identity,
-        const std::string &identityType,
-        const VirgilByteArray &publicKeyData,
-        const std::unordered_map<std::string, std::string> &data,
-        CardScope scope,
-        const std::unordered_map<std::string, std::string> &info)
+CreateCardRequest::CreateCardRequest(const std::string &identity, const std::string &identityType,
+                                     const VirgilByteArray &publicKeyData,
+                                     const std::unordered_map<std::string, std::string> &data,
+                                     CardScope scope, const std::unordered_map<std::string, std::string> &info)
         : CreateCardRequest(
             CreateCardSnapshotModel::createModel(identity, identityType, publicKeyData, data, scope, info)) {
 }
 
-CreateCardRequest::CreateCardRequest(
-        const VirgilByteArray &snapshot,
-        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+CreateCardRequest::CreateCardRequest(const VirgilByteArray &snapshot,
+                                     const std::unordered_map<std::string, VirgilByteArray> &signatures)
         : SignableRequest<CreateCardSnapshotModel, CreateCardRequest>(
             snapshot,
-            CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm(snapshot),
-            signatures) {
+            CanonicalSerializer<CreateCardSnapshotModel>::fromCanonicalForm(snapshot), signatures) {
 }
 
-CreateCardRequest::CreateCardRequest(
-        const snapshotmodels::CreateCardSnapshotModel &model,
-        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+CreateCardRequest::CreateCardRequest(const snapshotmodels::CreateCardSnapshotModel &model,
+                                     const std::unordered_map<std::string, VirgilByteArray> &signatures)
         : SignableRequest<CreateCardSnapshotModel, CreateCardRequest>(model) {
 }

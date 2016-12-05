@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CRYPTOINTERFACE_H
 #define VIRGIL_SDK_CRYPTOINTERFACE_H
 
@@ -48,22 +47,50 @@ namespace sdk {
         class CryptoInterface {
         public:
             virtual keys::KeyPair generateKeyPair() const = 0;
-            virtual keys::PrivateKey importPrivateKey(const VirgilByteArray &data, const std::string& password = "") const = 0;
+
+            virtual keys::PrivateKey importPrivateKey(const VirgilByteArray &data,
+                                                      const std::string& password = "") const = 0;
+
             virtual keys::PublicKey importPublicKey(const VirgilByteArray &data) const = 0;
+
             virtual keys::PublicKey extractPublicKeyFromPrivateKey(const keys::PrivateKey &privateKey) const = 0;
-            virtual VirgilByteArray exportPrivateKey(const keys::PrivateKey &privateKey, const std::string &password = "") const = 0;
+
+            virtual VirgilByteArray exportPrivateKey(const keys::PrivateKey &privateKey,
+                                                     const std::string &password = "") const = 0;
+
             virtual VirgilByteArray exportPublicKey(const keys::PublicKey &publicKey) const = 0;
 
-            virtual VirgilByteArray encrypt(const VirgilByteArray &data, const std::vector<keys::PublicKey> &recipients) const = 0;
-            virtual void encrypt(std::istream &istream, std::ostream &ostream, const std::vector<keys::PublicKey> &recipients) const = 0;
-            virtual bool verify(const VirgilByteArray &data, const VirgilByteArray &signature, const keys::PublicKey &signerPublicKey) const = 0;
-            virtual bool verify(std::istream &istream, const VirgilByteArray &signature, const keys::PublicKey &signerPublicKey) const = 0;
+            virtual VirgilByteArray encrypt(const VirgilByteArray &data,
+                                            const std::vector<keys::PublicKey> &recipients) const = 0;
+
+            virtual void encrypt(std::istream &istream, std::ostream &ostream,
+                                 const std::vector<keys::PublicKey> &recipients) const = 0;
+
+            virtual bool verify(const VirgilByteArray &data, const VirgilByteArray &signature,
+                                const keys::PublicKey &signerPublicKey) const = 0;
+
+            virtual bool verify(std::istream &istream, const VirgilByteArray &signature,
+                                const keys::PublicKey &signerPublicKey) const = 0;
+
             virtual VirgilByteArray decrypt(const VirgilByteArray &data, const keys::PrivateKey &privateKey) const = 0;
-            virtual void decrypt(std::istream &istream, std::ostream &ostream, const keys::PrivateKey &privateKey) const = 0;
-            virtual VirgilByteArray signThenEncrypt(const VirgilByteArray &data, const keys::PrivateKey &privateKey, const std::vector<keys::PublicKey> &recipients) const = 0;
-            virtual VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const keys::PrivateKey &privateKey, const keys::PublicKey &signerPublicKey) const = 0;
-            virtual VirgilByteArray generateSignature(const VirgilByteArray &data, const keys::PrivateKey &privateKey) const = 0;
-            virtual VirgilByteArray generateSignature(std::istream &istream, const keys::PrivateKey &privateKey) const = 0;
+
+            virtual void decrypt(std::istream &istream, std::ostream &ostream,
+                                 const keys::PrivateKey &privateKey) const = 0;
+
+            virtual VirgilByteArray signThenEncrypt(const VirgilByteArray &data,
+                                                    const keys::PrivateKey &privateKey,
+                                                    const std::vector<keys::PublicKey> &recipients) const = 0;
+
+            virtual VirgilByteArray decryptThenVerify(const VirgilByteArray &data,
+                                                      const keys::PrivateKey &privateKey,
+                                                      const keys::PublicKey &signerPublicKey) const = 0;
+
+            virtual VirgilByteArray generateSignature(const VirgilByteArray &data,
+                                                      const keys::PrivateKey &privateKey) const = 0;
+
+            virtual VirgilByteArray generateSignature(std::istream &istream, const
+            keys::PrivateKey &privateKey) const = 0;
+
             virtual Fingerprint calculateFingerprint(const VirgilByteArray &data) const = 0;
 
             virtual ~CryptoInterface() = default;

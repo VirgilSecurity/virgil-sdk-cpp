@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_JSONSERIALIZER_H
 #define VIRGIL_SDK_JSONSERIALIZER_H
 
 #include <string>
 #include <vector>
+
 #include <nlohman/json.hpp>
 
 namespace virgil {

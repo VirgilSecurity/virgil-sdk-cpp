@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/interfaces/Importable.h>
-#import <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#import <virgil/sdk/Common.h>
-#import <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
-#import <virgil/sdk/client/models/requests/CreateCardRequest.h>
-#import <virgil/sdk/client/models/requests/RevokeCardRequest.h>
+#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
+#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 
 using virgil::sdk::client::models::interfaces::Importable;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
@@ -52,7 +52,9 @@ DerivedClass Importable<DerivedClass>::importFromString(const std::string &data)
     return serialization::JsonSerializer<SignableRequestInterface>::templatedFromJsonString<DerivedClass>(jsonStr);
 }
 
-
+/**
+ * Explicit methods instantiation
+ */
 template RevokeCardRequest Importable<RevokeCardRequest>::importFromString(const std::string &data);
 
 template CreateCardRequest Importable<CreateCardRequest>::importFromString(const std::string &data);

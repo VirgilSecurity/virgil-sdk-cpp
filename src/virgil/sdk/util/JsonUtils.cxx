@@ -38,9 +38,10 @@
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/util/JsonUtils.h>
 
+using nlohmann::json;
+
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::VirgilByteArray;
-using nlohmann::json;
 
 std::unordered_map<std::string, std::string> JsonUtils::jsonToUnorderedMap(const json &jsonObj) {
     std::unordered_map<std::string, std::string> res;

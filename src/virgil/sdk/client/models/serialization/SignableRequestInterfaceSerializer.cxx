@@ -39,72 +39,74 @@
 
 #include <nlohman/json.hpp>
 
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
-#include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/util/JsonUtils.h>
 
 using json = nlohmann::json;
+
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::VirgilBase64;
-
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    /**
-                     * @brief JSONSerializer<SignableRequestInterface> specialization.
-                     */
-                    template <>
-                    class JsonSerializer<SignableRequestInterface> {
-                    public:
-                        template<int INDENT = -1>
-                        static std::string toJson(const SignableRequestInterface &request) {
-                            try {
-                                json j = {
-                                        {JsonKey::ContentSnapshot, VirgilBase64::encode(request.snapshot())}
-                                };
-
-                                j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(
-                                        request.signatures());
-
-                                return j.dump(INDENT);
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::toJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        template<typename ResultType>
-                        static ResultType templatedFromJson(const json &j) {
-                            try {
-                                std::string snapshotStr = j[JsonKey::ContentSnapshot];
-
-                                auto snapshot = VirgilBase64::decode(snapshotStr);
-
-                                auto signatures = JsonUtils::jsonToUnorderedBinaryMap(j[JsonKey::Meta][JsonKey::Signs]);
-
-                                return ResultType(snapshot, signatures);
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::fromJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        JsonSerializer() = delete;
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief JSONSerializer<SignableRequestInterface> specialization.
+         */
+        template <>
+        class JsonSerializer<SignableRequestInterface> {
+        public:
+            template<int INDENT = -1>
+            static std::string toJson(const SignableRequestInterface &request) {
+                try {
+                    json j = {
+                            {JsonKey::ContentSnapshot, VirgilBase64::encode(request.snapshot())}
                     };
+
+                    j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(
+                            request.signatures());
+
+                    return j.dump(INDENT);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::toJson ")
+                            + exception.what());
                 }
             }
-        }
+
+            template<typename ResultType>
+            static ResultType templatedFromJson(const json &j) {
+                try {
+                    std::string snapshotStr = j[JsonKey::ContentSnapshot];
+
+                    auto snapshot = VirgilBase64::decode(snapshotStr);
+
+                    auto signatures = JsonUtils::jsonToUnorderedBinaryMap(j[JsonKey::Meta][JsonKey::Signs]);
+
+                    return ResultType(snapshot, signatures);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::fromJson ")
+                            + exception.what());
+                }
+            }
+
+            JsonSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 /**

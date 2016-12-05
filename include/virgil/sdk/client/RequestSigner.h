@@ -34,31 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_REQUESTSIGNER_H
 #define VIRGIL_SDK_REQUESTSIGNER_H
 
-#include <virgil/sdk/client/interfaces/RequestSignerInterface.h>
 #include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/client/interfaces/RequestSignerInterface.h>
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            class RequestSigner: public interfaces::RequestSignerInterface {
-            public:
-                RequestSigner(const std::shared_ptr<crypto::CryptoInterface> &crypto);
+namespace sdk {
+    namespace client {
+        class RequestSigner: public interfaces::RequestSignerInterface {
+        public:
+            RequestSigner(const std::shared_ptr<crypto::CryptoInterface> &crypto);
 
-                void selfSign(models::interfaces::SignableInterface &request,
-                              const crypto::keys::PrivateKey &privateKey) const override;
+            void selfSign(models::interfaces::SignableInterface &request,
+                          const crypto::keys::PrivateKey &privateKey) const override;
 
-                void authoritySign(models::interfaces::SignableInterface &request,
-                                   const std::string &appId, const crypto::keys::PrivateKey &privateKey) const override;
+            void authoritySign(models::interfaces::SignableInterface &request,
+                               const std::string &appId, const crypto::keys::PrivateKey &privateKey) const override;
 
-            private:
-                std::shared_ptr<crypto::CryptoInterface> crypto_;
-            };
-        }
+        private:
+            std::shared_ptr<crypto::CryptoInterface> crypto_;
+        };
     }
+}
 }
 
 #endif //VIRGIL_SDK_REQUESTSIGNER_H

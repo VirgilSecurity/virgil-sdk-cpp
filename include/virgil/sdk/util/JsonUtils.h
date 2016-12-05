@@ -34,31 +34,34 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_JSONUTILS_H
 #define VIRGIL_SDK_JSONUTILS_H
-
-#include <nlohman/json.hpp>
 
 #include <string>
 #include <unordered_map>
 
+#include <nlohman/json.hpp>
+
 #include <virgil/sdk/Common.h>
 
 namespace virgil {
-    namespace sdk {
-        namespace util {
-            class JsonUtils {
-            public:
-                static std::unordered_map<std::string, std::string> jsonToUnorderedMap(const nlohmann::json &jsonObj);
-                static std::unordered_map<std::string, VirgilByteArray> jsonToUnorderedBinaryMap(const nlohmann::json &jsonObj);
-                static nlohmann::json unorderedMapToJson(const std::unordered_map<std::string, std::string> &map);
-                static nlohmann::json unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map);
+namespace sdk {
+    namespace util {
+        class JsonUtils {
+        public:
+            static std::unordered_map<std::string, std::string> jsonToUnorderedMap(const nlohmann::json &jsonObj);
 
-                JsonUtils() = delete;
-            };
-        }
+            static std::unordered_map<std::string, VirgilByteArray> jsonToUnorderedBinaryMap(
+                    const nlohmann::json &jsonObj);
+
+            static nlohmann::json unorderedMapToJson(const std::unordered_map<std::string, std::string> &map);
+
+            static nlohmann::json unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map);
+
+            JsonUtils() = delete;
+        };
     }
+}
 }
 
 #endif //VIRGIL_SDK_JSONUTILS_H

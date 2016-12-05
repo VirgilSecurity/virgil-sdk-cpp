@@ -34,11 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_SIGNABLEINTERFACE_H
 #define VIRGIL_SDK_SIGNABLEINTERFACE_H
 
 #include <string>
+
 #include <virgil/sdk/Common.h>
 
 namespace virgil {

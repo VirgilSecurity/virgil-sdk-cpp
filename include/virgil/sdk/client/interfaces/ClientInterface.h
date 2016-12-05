@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CLIENTINTERFACE_H
 #define VIRGIL_SDK_CLIENTINTERFACE_H
 
@@ -43,8 +42,8 @@
 #include <vector>
 
 #include <virgil/sdk/client/models/Card.h>
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/SearchCardsCriteria.h>
+#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 
 namespace virgil {
@@ -53,13 +52,12 @@ namespace client {
     namespace interfaces {
         class ClientInterface {
         public:
-            virtual std::future<models::Card>
-            createCard(const models::requests::CreateCardRequest &request) const = 0;
+            virtual std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const = 0;
 
             virtual std::future<models::Card> getCard(const std::string &cardId) const = 0;
 
-            virtual std::future<std::vector<models::Card>>
-            searchCards(const models::SearchCardsCriteria &criteria) const = 0;
+            virtual std::future<std::vector<models::Card>> searchCards(
+                    const models::SearchCardsCriteria &criteria) const = 0;
 
             virtual std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const = 0;
 

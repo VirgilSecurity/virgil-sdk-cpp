@@ -34,12 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_FINGERPRINT_H
 #define VIRGIL_SDK_FINGERPRINT_H
 
-#include <virgil/sdk/Common.h>
 #include <string>
+
+#include <virgil/sdk/Common.h>
 
 namespace virgil {
 namespace sdk {

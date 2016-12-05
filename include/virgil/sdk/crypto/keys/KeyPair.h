@@ -34,18 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_KEYPAIR_H
 #define VIRGIL_SDK_KEYPAIR_H
 
 #include <virgil/sdk/crypto/keys/PrivateKey.h>
 #include <virgil/sdk/crypto/keys/PublicKey.h>
 
+// forward decl
+namespace virgil {
+    namespace sdk {
+        namespace crypto {
+            class Crypto;
+        }
+    }
+}
+
 namespace virgil {
 namespace sdk {
 namespace crypto {
-    class Crypto; // forward decl
-
     namespace keys {
         class KeyPair {
             friend class virgil::sdk::crypto::Crypto;

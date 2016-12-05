@@ -51,42 +51,41 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    /**
-                     * @brief JSONSerializer<CardsResponse> specialization.
-                     */
-                    template<>
-                    class JsonSerializer<CardsResponse> {
-                    public:
-                        template<int FAKE = 0>
-                        static CardsResponse fromJson(const json &j) {
-                            try {
-                                std::vector<CardResponse> response;
-                                for (const auto& jElement : j) {
-                                    response.push_back(JsonSerializer<CardResponse>::fromJson(jElement));
-                                }
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief JSONSerializer<CardsResponse> specialization.
+         */
+        template<>
+        class JsonSerializer<CardsResponse> {
+        public:
+            template<int FAKE = 0>
+            static CardsResponse fromJson(const json &j) {
+                try {
+                    std::vector<CardResponse> response;
+                    for (const auto& jElement : j) {
+                        response.push_back(JsonSerializer<CardResponse>::fromJson(jElement));
+                    }
 
-                                return CardsResponse(response);
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CardsResponse>::fromJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        JsonSerializer() = delete;
-                    };
+                    return CardsResponse(response);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CardsResponse>::fromJson ") +
+                                           exception.what());
                 }
             }
-        }
+
+            JsonSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 /**
  * Explicit methods instantiation
  */
-
 template CardsResponse
 virgil::sdk::client::models::serialization::JsonSerializer<CardsResponse>::fromJson(const json&);

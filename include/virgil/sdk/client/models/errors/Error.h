@@ -34,11 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_ERROR_H
 #define VIRGIL_SDK_ERROR_H
 
 #include <string>
+
 #include <virgil/sdk/client/models/errors/VirgilError.h>
 
 namespace virgil {

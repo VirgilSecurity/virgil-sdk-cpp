@@ -34,9 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/http/Request.h>
-
 #include <sstream>
+
+#include <virgil/sdk/http/Request.h>
 
 using virgil::sdk::http::Request;
 

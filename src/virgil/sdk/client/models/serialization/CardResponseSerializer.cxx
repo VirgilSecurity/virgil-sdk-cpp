@@ -34,16 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <string>
 
 #include <nlohman/json.hpp>
 
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/responses/CardResponse.h>
-#include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/util/JsonUtils.h>
 
 using json = nlohmann::json;
 
@@ -69,7 +68,8 @@ namespace models {
 
                     VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
 
-                    auto model = CanonicalSerializer<snapshotmodels::CreateCardSnapshotModel>::fromCanonicalForm(snapshot);
+                    auto model =
+                            CanonicalSerializer<snapshotmodels::CreateCardSnapshotModel>::fromCanonicalForm(snapshot);
 
                     std::string identifier = j[JsonKey::Id];
 

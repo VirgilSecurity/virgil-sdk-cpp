@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <virgil/sdk/crypto/keys/PrivateKey.h>
 
 using virgil::sdk::VirgilByteArray;

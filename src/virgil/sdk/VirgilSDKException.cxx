@@ -34,29 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/VirgilSDKException.h>
-
 #include <sstream>
+
 #include <tinyformat/tinyformat.h>
+
+#include <virgil/sdk/VirgilSDKException.h>
 
 using virgil::sdk::VirgilSdkException;
 
-namespace virgil { namespace sdk { namespace internal {
+namespace virgil {
+namespace sdk {
+    namespace internal {
+        static std::string format_message(const std::error_condition& condition) noexcept {
+            try {
+                return tfm::format("Module: %s. Error code: %s. %s",
+                                   condition.category().name(), condition.value(), condition.message());
+            } catch (...) {
+                return std::string();
+            }
+        }
 
-    static std::string format_message(const std::error_condition& condition) noexcept {
-        try {
-            return tfm::format("Module: %s. Error code: %s. %s",
-                               condition.category().name(), condition.value(), condition.message());
-        } catch (...) {
-            return std::string();
+        static std::string format_message(const std::error_condition& condition, const std::string& what) noexcept {
+            return tfm::format("%s %s", format_message(condition), what);
         }
     }
-
-    static std::string format_message(const std::error_condition& condition, const std::string& what) noexcept {
-        return tfm::format("%s %s", format_message(condition), what);
-    }
-
-}}}
+}
+}
 
 VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat)
         : condition_(ev, ecat), what_(internal::format_message(condition_)) {

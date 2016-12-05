@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_SEARCHCARDSCRITERIA_H
 #define VIRGIL_SDK_SEARCHCARDSCRITERIA_H
 
@@ -49,10 +48,9 @@ namespace client {
     namespace models {
         class SearchCardsCriteria {
         public:
-            static SearchCardsCriteria createCriteria(
-                    CardScope scope,
-                    const std::string& identityType,
-                    const std::vector<std::string>& identities);
+            static SearchCardsCriteria createCriteria(CardScope scope,
+                                                      const std::string& identityType,
+                                                      const std::vector<std::string>& identities);
 
             // getters
             const std::vector<std::string>& identities() const { return identities_; }

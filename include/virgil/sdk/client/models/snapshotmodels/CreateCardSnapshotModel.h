@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CREATECARDSNAPSHOTMODEL_H
 #define VIRGIL_SDK_CREATECARDSNAPSHOTMODEL_H
 
@@ -52,12 +51,11 @@ namespace models {
     namespace snapshotmodels {
         class CreateCardSnapshotModel {
         public:
-            static CreateCardSnapshotModel createModel(
-                    const std::string &identity, const std::string &identityType,
-                    const VirgilByteArray &publicKeyData,
-                    const std::unordered_map<std::string, std::string> &data,
-                    CardScope scope,
-                    const std::unordered_map<std::string, std::string> &info);
+            static CreateCardSnapshotModel createModel(const std::string &identity, const std::string &identityType,
+                                                       const VirgilByteArray &publicKeyData,
+                                                       const std::unordered_map<std::string, std::string> &data,
+                                                       CardScope scope,
+                                                       const std::unordered_map<std::string, std::string> &info);
 
             // getters
             const std::string& identity() const { return identity_; }

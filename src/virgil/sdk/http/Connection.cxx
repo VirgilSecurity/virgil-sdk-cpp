@@ -37,16 +37,13 @@
 #include <stdexcept>
 
 #include <nlohman/json.hpp>
-
 #include <restless/restless.hpp>
 
 #include <virgil/sdk/http/Connection.h>
-
 #include <virgil/sdk/http/Request.h>
 #include <virgil/sdk/http/Response.h>
 
 using json = nlohmann::json;
-
 using HttpRequest = asoni::Handle;
 
 using virgil::sdk::http::Connection;

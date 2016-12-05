@@ -55,6 +55,9 @@ std::string SignableRequest<SnapshotModelType, DerivedClass>::exportAsString() c
     return VirgilBase64::encode(VirgilByteArrayUtils::stringToBytes(json));
 }
 
+/**
+ * Explicit methods instantiation
+ */
 template std::string SignableRequest<CreateCardSnapshotModel, CreateCardRequest>::exportAsString() const;
 
 template std::string SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>::exportAsString() const;

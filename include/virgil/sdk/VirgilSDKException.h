@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_VIRGILSDKEXCEPTION_H
 #define VIRGIL_SDK_VIRGILSDKEXCEPTION_H
 
@@ -42,61 +41,62 @@
 #include <stdexcept>
 #include <system_error>
 
-namespace virgil { namespace sdk {
+namespace virgil {
+    namespace sdk {
 
-/**
- * @brief This only exception that sdk can produce.
- *
- * To determine the real exception reason, error codes in conjuction with error category are used.
- * Error codes can be found in the enumeration @link VirgilSDKError @endlink.
- *
- * @ingroup Error
- */
-class VirgilSdkException : public std::exception {
-public:
-    /**
-     * @brief Initialize Exception with specific error code and correspond error category.
-     * @param ev Error value (code).
-     * @param ecat Error category.
-     */
-    VirgilSdkException(int ev, const std::error_category& ecat);
+        /**
+         * @brief This only exception that sdk can produce.
+         *
+         * To determine the real exception reason, error codes in conjuction with error category are used.
+         * Error codes can be found in the enumeration @link VirgilSDKError @endlink.
+         *
+         * @ingroup Error
+         */
+        class VirgilSdkException : public std::exception {
+        public:
+            /**
+             * @brief Initialize Exception with specific error code and correspond error category.
+             * @param ev Error value (code).
+             * @param ecat Error category.
+             */
+            VirgilSdkException(int ev, const std::error_category& ecat);
 
-    /**
-     * @brief Initialize Exception with specific error code, correspond error category, and error description.
-     * @param ev Error value (code).
-     * @param ecat Error category.
-     * @param what Additional error description.
-     */
-    VirgilSdkException(int ev, const std::error_category& ecat, const std::string& what);
+            /**
+             * @brief Initialize Exception with specific error code, correspond error category, and error description.
+             * @param ev Error value (code).
+             * @param ecat Error category.
+             * @param what Additional error description.
+             */
+            VirgilSdkException(int ev, const std::error_category& ecat, const std::string& what);
 
-    /**
-     * @brief Initialize Exception with specific error code, correspond error category, and error description.
-     * @param ev Error value (code).
-     * @param ecat Error category.
-     * @param what Additional error description.
-     */
-    VirgilSdkException(int ev, const std::error_category& ecat, const char* what);
+            /**
+             * @brief Initialize Exception with specific error code, correspond error category, and error description.
+             * @param ev Error value (code).
+             * @param ecat Error category.
+             * @param what Additional error description.
+             */
+            VirgilSdkException(int ev, const std::error_category& ecat, const char* what);
 
-    /**
-     * Get string identifying exception.
-     *
-     * @return null terminated character sequence that may be used to identify the exception.
-     */
-    const char* what() const noexcept override;
-private:
-    std::error_condition condition_;
-    std::string what_;
-};
+            /**
+             * Get string identifying exception.
+             *
+             * @return null terminated character sequence that may be used to identify the exception.
+             */
+            const char* what() const noexcept override;
+        private:
+            std::error_condition condition_;
+            std::string what_;
+        };
 
-/**
- * @brief Unwind information about nested excpetions.
- * @param exception - Top level exception.
- * @param level - initial identation level.
- * @return Formatted message of top level exception and all nested exceptions.
- */
-std::string backtrace_exception(const std::exception& exception, size_t level = 0);
-
-}}
+        /**
+         * @brief Unwind information about nested excpetions.
+         * @param exception - Top level exception.
+         * @param level - initial identation level.
+         * @return Formatted message of top level exception and all nested exceptions.
+         */
+        std::string backtrace_exception(const std::exception& exception, size_t level = 0);
+    }
+}
 
 //! @cond Doxygen_Suppress
 // TODO: Remove this when Clang compiler will be used from the Android NDK, possible in the release r13.

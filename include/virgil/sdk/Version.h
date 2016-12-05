@@ -41,35 +41,35 @@
 #include <string>
 
 namespace virgil {
-namespace sdk {
-    /**
-     * @brief Provides information about Virgil Keys SDK version
-     */
-    class Version {
-    public:
+    namespace sdk {
         /**
-         * Return version number in the format MMNNPP (Major, Minor, Patch)
-         *
+         * @brief Provides information about Virgil Keys SDK version
          */
-        static size_t asNumber();
-        /**
-         * Return the version number as string
-         */
-        static std::string asString();
-        /**
-         * Return the major version number
-         */
-        static size_t majorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t minorVersion();
-        /**
-         * Return the minor version number
-         */
-        static size_t patchVersion();
-    };
-}
+        class Version {
+        public:
+            /**
+             * Return version number in the format MMNNPP (Major, Minor, Patch)
+             *
+             */
+            static size_t asNumber();
+            /**
+             * Return the version number as string
+             */
+            static std::string asString();
+            /**
+             * Return the major version number
+             */
+            static size_t majorVersion();
+            /**
+             * Return the minor version number
+             */
+            static size_t minorVersion();
+            /**
+             * Return the minor version number
+             */
+            static size_t patchVersion();
+        };
+    }
 }
 
 #endif /* VIRGIL_SDK_VERSION_H */

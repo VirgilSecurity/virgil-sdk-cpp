@@ -38,7 +38,6 @@
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/crypto/Fingerprint.h>
 #include <virgil/sdk/VirgilSdkError.h>
-
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
 #include <virgil/crypto/VirgilByteArrayUtils.h>
@@ -57,7 +56,6 @@ using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilByteArray;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::crypto::Fingerprint;
-
 using virgil::crypto::VirgilKeyPair;
 using virgil::crypto::VirgilSigner;
 using virgil::crypto::VirgilCipher;
@@ -73,12 +71,9 @@ using virgil::sdk::crypto::keys::KeyPair;
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
 Crypto::Crypto() {
-
 }
 
-
 // Key management
-
 KeyPair Crypto::generateKeyPair() const {
     auto keyPair = VirgilKeyPair::generateRecommended();
 
@@ -166,7 +161,8 @@ void Crypto::encrypt(std::istream &istream, std::ostream &ostream, const std::ve
     cipher.encrypt(dataSource, dataSink);
 }
 
-bool Crypto::verify(const VirgilByteArray &data, const VirgilByteArray &signature, const PublicKey &signerPublicKey) const {
+bool Crypto::verify(const VirgilByteArray &data, const VirgilByteArray &signature,
+                    const PublicKey &signerPublicKey) const {
     auto signer = VirgilSigner();
 
     auto signerPublicKeyData = exportPublicKey(signerPublicKey);
@@ -224,7 +220,8 @@ VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const Priva
     return cipher.encrypt(data);
 }
 
-VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey, const PublicKey &signerPublicKey) const {
+VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const PrivateKey &privateKey,
+                                          const PublicKey &signerPublicKey) const {
     auto cipher = VirgilCipher();
 
     auto privateKeyData = exportPrivateKey(privateKey);

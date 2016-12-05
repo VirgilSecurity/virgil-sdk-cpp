@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_VIRGILSDKERROR_H
 #define VIRGIL_SDK_VIRGILSDKERROR_H
 
@@ -43,81 +42,83 @@
 
 #include <virgil/sdk/VirgilSDKException.h>
 
-namespace virgil { namespace sdk {
+namespace virgil {
+    namespace sdk {
 
-/**
- * @brief Specific error codes for the sdk.
- * @ingroup Error
-*/
-enum class VirgilSdkError  {
-    Reserved = 0, ///< Should not be used.
-    VerificationFailed, ///< Verification of signature failed.
-    CardValidationFailed, ///< Validation of Virgil Card failed.
-    ServiceQueryFailed, ///< REST Query to Virgil Service failed.
-    Undefined = std::numeric_limits<int>::max()
-};
+        /**
+         * @brief Specific error codes for the sdk.
+         * @ingroup Error
+        */
+        enum class VirgilSdkError  {
+            Reserved = 0, ///< Should not be used.
+            VerificationFailed, ///< Verification of signature failed.
+            CardValidationFailed, ///< Validation of Virgil Card failed.
+            ServiceQueryFailed, ///< REST Query to Virgil Service failed.
+            Undefined = std::numeric_limits<int>::max()
+        };
 
-/**
- * @brief This is specific error category that contains information about sdk errors.
- * @ingroup Error
- */
-class VirgilSdkErrorCategory : public std::error_category {
-public:
-    /**
-     * @return Category name.
-     */
-    const char* name() const noexcept override;
+        /**
+         * @brief This is specific error category that contains information about sdk errors.
+         * @ingroup Error
+         */
+        class VirgilSdkErrorCategory : public std::error_category {
+        public:
+            /**
+             * @return Category name.
+             */
+            const char* name() const noexcept override;
 
-    /**
-     *
-     * @param ev Error value.
-     * @return Error description for given error value.
-     * @see VirgilSDKError for specific error values.
-     */
-    std::string message(int ev) const noexcept override;
-};
+            /**
+             *
+             * @param ev Error value.
+             * @return Error description for given error value.
+             * @see VirgilSDKError for specific error values.
+             */
+            std::string message(int ev) const noexcept override;
+        };
 
-/**
- * @brief Return singleton instance of the sdk error category.
- * @return Instance of the sdk error categoty.
- * @ingroup Error
- */
-const VirgilSdkErrorCategory& sdk_category() noexcept;
+        /**
+         * @brief Return singleton instance of the sdk error category.
+         * @return Instance of the sdk error categoty.
+         * @ingroup Error
+         */
+        const VirgilSdkErrorCategory& sdk_category() noexcept;
 
-/**
- * @brief Build exception with given error value and corresond error category.
- * @param ev Error value.
- * @return Exception with given error value and corresond error category.
- * @see VirgilSDKError for specific error values.
- * @ingroup Error
- */
-inline VirgilSdkException make_error(VirgilSdkError ev) {
-    return VirgilSdkException(static_cast<int>(ev), sdk_category());
+        /**
+         * @brief Build exception with given error value and corresond error category.
+         * @param ev Error value.
+         * @return Exception with given error value and corresond error category.
+         * @see VirgilSDKError for specific error values.
+         * @ingroup Error
+         */
+        inline VirgilSdkException make_error(VirgilSdkError ev) {
+            return VirgilSdkException(static_cast<int>(ev), sdk_category());
+        }
+
+        /**
+         * @brief Build exception with given error value and corresponding error category.
+         * @param ev Error value.
+         * @param what Additional error description.
+         * @return Exception with given error value and corresond error category.
+         * @see VirgilSDKError for specific error values.
+         * @ingroup Error
+         */
+        inline VirgilSdkException make_error(VirgilSdkError ev, const std::string& what) {
+            return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
+        }
+
+        /**
+         * @brief Build exception with given error value and corresponding error category.
+         * @param ev Error value.
+         * @param what Additional error description.
+         * @return Exception with given error value and corresond error category.
+         * @see VirgilSDKError for specific error values.
+         * @ingroup Error
+         */
+        inline VirgilSdkException make_error(VirgilSdkError ev, const char* what) {
+            return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
+        }
+    }
 }
-
-/**
- * @brief Build exception with given error value and corresponding error category.
- * @param ev Error value.
- * @param what Additional error description.
- * @return Exception with given error value and corresond error category.
- * @see VirgilSDKError for specific error values.
- * @ingroup Error
- */
-inline VirgilSdkException make_error(VirgilSdkError ev, const std::string& what) {
-    return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
-}
-
-/**
- * @brief Build exception with given error value and corresponding error category.
- * @param ev Error value.
- * @param what Additional error description.
- * @return Exception with given error value and corresond error category.
- * @see VirgilSDKError for specific error values.
- * @ingroup Error
- */
-inline VirgilSdkException make_error(VirgilSdkError ev, const char* what) {
-    return VirgilSdkException(static_cast<int>(ev), sdk_category(), what);
-}
-}}
 
 #endif //VIRGIL_SDK_VIRGILSDKERROR_H

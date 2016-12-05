@@ -48,34 +48,34 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::client::models::errors::VirgilError;
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    /**
-                     * @brief JSONSerializer<VirgilError> specialization.
-                     */
-                    template<>
-                    class JsonSerializer<VirgilError> {
-                    public:
-                        template<int FAKE = 0>
-                        static VirgilError fromJson(const json &j) {
-                            try {
-                                std::string errorCodeStr = j[JsonKey::Code];
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief JSONSerializer<VirgilError> specialization.
+         */
+        template<>
+        class JsonSerializer<VirgilError> {
+        public:
+            template<int FAKE = 0>
+            static VirgilError fromJson(const json &j) {
+                try {
+                    std::string errorCodeStr = j[JsonKey::Code];
 
-                                return VirgilError(std::stoi(errorCodeStr));
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<VirgilError>::fromJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        JsonSerializer() = delete;
-                    };
+                    return VirgilError(std::stoi(errorCodeStr));
+                } catch (std::exception &exception) {
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<VirgilError>::fromJson ") +
+                                           exception.what());
                 }
             }
-        }
+
+            JsonSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 /**

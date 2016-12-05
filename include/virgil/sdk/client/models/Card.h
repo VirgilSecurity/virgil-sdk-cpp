@@ -40,6 +40,7 @@
 
 #include <unordered_map>
 #include <string>
+
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
 
@@ -50,8 +51,8 @@ namespace client {
         class Card {
         public:
             Card(std::string identifier, std::string identity, std::string identityType, VirgilByteArray publicKeyData,
-                 std::unordered_map<std::string, std::string> data, CardScope scope, std::unordered_map<std::string, std::string> info,
-                 std::string createdAt, std::string cardVersion);
+                 std::unordered_map<std::string, std::string> data, CardScope scope,
+                 std::unordered_map<std::string, std::string> info, std::string createdAt, std::string cardVersion);
 
             // getters
             const std::string& identifier() const { return identifier_; }

@@ -34,30 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H
 #define VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H
 
-#include <virgil/sdk/client/models/interfaces/SignableInterface.h>
 #include <unordered_map>
 
+#include <virgil/sdk/client/models/interfaces/SignableInterface.h>
+
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace interfaces {
-                    class SignableRequestInterface: public SignableInterface {
-                    public:
-                        virtual const VirgilByteArray& snapshot() const = 0;
+namespace sdk {
+namespace client {
+namespace models {
+    namespace interfaces {
+        class SignableRequestInterface: public SignableInterface {
+        public:
+            virtual const VirgilByteArray& snapshot() const = 0;
 
-                        virtual const std::unordered_map<std::string, VirgilByteArray>& signatures() const = 0;
+            virtual const std::unordered_map<std::string, VirgilByteArray>& signatures() const = 0;
 
-                        virtual ~SignableRequestInterface() = default;
-                    };
-                }
-            }
-        }
+            virtual ~SignableRequestInterface() = default;
+        };
     }
+}
+}
+}
 }
 
 #endif //VIRGIL_SDK_SIGNABLEREQUESTINTERFACE_H

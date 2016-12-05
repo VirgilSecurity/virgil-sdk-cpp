@@ -49,22 +49,19 @@ RevokeCardRequest RevokeCardRequest::createRequest(const std::string &cardId, Ca
 }
 
 RevokeCardRequest::RevokeCardRequest(const std::string &cardId, CardRevocationReason reason)
-        : RevokeCardRequest(
-            RevokeCardSnapshotModel::createModel(cardId, reason)) {
+        : RevokeCardRequest(RevokeCardSnapshotModel::createModel(cardId, reason)) {
 }
 
-RevokeCardRequest::RevokeCardRequest(
-        const VirgilByteArray &snapshot,
-        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+RevokeCardRequest::RevokeCardRequest(const VirgilByteArray &snapshot,
+                                     const std::unordered_map<std::string, VirgilByteArray> &signatures)
         : SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>(
             snapshot,
             CanonicalSerializer<RevokeCardSnapshotModel>::fromCanonicalForm(snapshot),
             signatures) {
 }
 
-RevokeCardRequest::RevokeCardRequest(
-        const snapshotmodels::RevokeCardSnapshotModel &model,
-        const std::unordered_map<std::string, VirgilByteArray> &signatures)
+RevokeCardRequest::RevokeCardRequest(const snapshotmodels::RevokeCardSnapshotModel &model,
+                                     const std::unordered_map<std::string, VirgilByteArray> &signatures)
         : SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>(model) {
 }
 

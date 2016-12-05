@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
 #define VIRGIL_SDK_CANONICALSERIALIZER_H
 
@@ -45,30 +44,30 @@
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    /**
-                     * @brief This class responsible for the data object marshalling.
-                     *
-                     * Supported classes:
-                     */
-                    template<typename T>
-                    class CanonicalSerializer {
-                    public:
-                        template<int INDENT = -1>
-                        static VirgilByteArray toCanonicalForm(const T &model) ;
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief This class responsible for the data object marshalling.
+         *
+         * Supported classes:
+         */
+        template<typename T>
+        class CanonicalSerializer {
+        public:
+            template<int INDENT = -1>
+            static VirgilByteArray toCanonicalForm(const T &model) ;
 
-                        template<int FAKE = 0>
-                        static T fromCanonicalForm(const VirgilByteArray &data);
+            template<int FAKE = 0>
+            static T fromCanonicalForm(const VirgilByteArray &data);
 
-                        CanonicalSerializer() = delete;
-                    };
-                }
-            }
-        }
+            CanonicalSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 #endif //VIRGIL_SDK_CANONICALSERIALIZER_H

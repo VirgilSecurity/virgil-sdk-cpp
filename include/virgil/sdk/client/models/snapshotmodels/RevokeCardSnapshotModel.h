@@ -34,11 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
 #define VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
 
 #include <string>
+
 #include <virgil/sdk/client/models/ClientCommon.h>
 
 namespace virgil {

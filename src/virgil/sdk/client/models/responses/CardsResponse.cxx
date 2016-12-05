@@ -50,6 +50,5 @@ std::vector<Card> CardsResponse::buildCards() const {
     return result;
 }
 
-CardsResponse::CardsResponse(std::vector<CardResponse> cardsResponse)
-        : cardsResponse_(std::move(cardsResponse)) {
+CardsResponse::CardsResponse(std::vector<CardResponse> cardsResponse) : cardsResponse_(std::move(cardsResponse)) {
 }

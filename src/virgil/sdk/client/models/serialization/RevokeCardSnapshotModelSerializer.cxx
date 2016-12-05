@@ -34,12 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
-
-#include <virgil/sdk/util/JsonKey.h>
-#include <virgil/sdk/util/JsonUtils.h>
 
 using json = nlohmann::json;
 
@@ -49,77 +48,83 @@ using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
 using virgil::sdk::VirgilByteArray;
 
 namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                namespace serialization {
-                    template<>
-                    class JsonSerializer<RevokeCardSnapshotModel> {
-                    public:
-                        template<int INDENT = -1>
-                        static std::string toJson(const RevokeCardSnapshotModel &model) {
-                            try {
-                                json j = {
-                                        {JsonKey::CardId, model.cardId()},
-                                        {JsonKey::RevocationReason, cardRevocationReasonToStr(model.revocationReason())},
-                                };
-
-                                return j.dump(INDENT);
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<RevokeCardSnapshotModel>::toJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        template<int FAKE = 0>
-                        static RevokeCardSnapshotModel fromJson(const json &j) {
-                            try {
-                                return RevokeCardSnapshotModel::createModel(
-                                        j[JsonKey::CardId],
-                                        strToCardRevocationReason(j[JsonKey::RevocationReason]));
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<RevokeCardSnapshotModel>::fromJson ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        JsonSerializer() = delete;
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        template<>
+        class JsonSerializer<RevokeCardSnapshotModel> {
+        public:
+            template<int INDENT = -1>
+            static std::string toJson(const RevokeCardSnapshotModel &model) {
+                try {
+                    json j = {
+                            {JsonKey::CardId, model.cardId()},
+                            {JsonKey::RevocationReason, cardRevocationReasonToStr(model.revocationReason())},
                     };
 
-                    template<>
-                    class CanonicalSerializer<RevokeCardSnapshotModel> {
-                    public:
-                        template<int INDENT = -1>
-                        static VirgilByteArray toCanonicalForm(const RevokeCardSnapshotModel &model) {
-                            try {
-                                return VirgilByteArrayUtils::stringToBytes(JsonSerializer<RevokeCardSnapshotModel>::toJson<INDENT>(model));
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n CanonicalSerializer<RevokeCardSnapshotModel>::toCanonicalForm ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        template<int FAKE = 0>
-                        static RevokeCardSnapshotModel foo(const std::string &jsonString) {
-                            return RevokeCardSnapshotModel::createModel("", CardRevocationReason::unspecified);
-                        }
-
-                        template<int FAKE = 0>
-                        static RevokeCardSnapshotModel fromCanonicalForm(const VirgilByteArray &data) {
-                            try {
-                                return JsonSerializerBase<RevokeCardSnapshotModel>::fromJsonString(VirgilByteArrayUtils::bytesToString(data));
-                            } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n CanonicalSerializer<RevokeCardSnapshotModel>::fromCanonicalForm ") +
-                                                       exception.what());
-                            }
-                        }
-
-                        CanonicalSerializer() = delete;
-                    };
+                    return j.dump(INDENT);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n JsonSerializer<RevokeCardSnapshotModel>::toJson ")
+                            + exception.what());
                 }
             }
-        }
+
+            template<int FAKE = 0>
+            static RevokeCardSnapshotModel fromJson(const json &j) {
+                try {
+                    return RevokeCardSnapshotModel::createModel(
+                            j[JsonKey::CardId],
+                            strToCardRevocationReason(j[JsonKey::RevocationReason]));
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n JsonSerializer<RevokeCardSnapshotModel>::fromJson ")
+                            + exception.what());
+                }
+            }
+
+            JsonSerializer() = delete;
+        };
+
+        template<>
+        class CanonicalSerializer<RevokeCardSnapshotModel> {
+        public:
+            template<int INDENT = -1>
+            static VirgilByteArray toCanonicalForm(const RevokeCardSnapshotModel &model) {
+                try {
+                    return VirgilByteArrayUtils::stringToBytes(
+                            JsonSerializer<RevokeCardSnapshotModel>::toJson<INDENT>(model));
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n CanonicalSerializer<RevokeCardSnapshotModel>::toCanonicalForm ")
+                            + exception.what());
+                }
+            }
+
+            template<int FAKE = 0>
+            static RevokeCardSnapshotModel foo(const std::string &jsonString) {
+                return RevokeCardSnapshotModel::createModel("", CardRevocationReason::unspecified);
+            }
+
+            template<int FAKE = 0>
+            static RevokeCardSnapshotModel fromCanonicalForm(const VirgilByteArray &data) {
+                try {
+                    return JsonSerializerBase<RevokeCardSnapshotModel>::fromJsonString(
+                            VirgilByteArrayUtils::bytesToString(data));
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n CanonicalSerializer<RevokeCardSnapshotModel>::fromCanonicalForm ")
+                            + exception.what());
+                }
+            }
+
+            CanonicalSerializer() = delete;
+        };
     }
+}
+}
+}
 }
 
 /**
