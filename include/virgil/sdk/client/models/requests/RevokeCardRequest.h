@@ -53,13 +53,15 @@ namespace models {
             static RevokeCardRequest createRequest(const std::string &cardId, CardRevocationReason reason);
 
             RevokeCardRequest(const VirgilByteArray &snapshot,
-                              const std::unordered_map<std::string, VirgilByteArray > &signatures = {});
+                              const std::unordered_map<std::string, VirgilByteArray> &signatures
+                              = std::unordered_map<std::string, VirgilByteArray>());
 
         private:
             RevokeCardRequest(const std::string &cardId, CardRevocationReason reason);
 
             RevokeCardRequest(const snapshotmodels::RevokeCardSnapshotModel &model,
-                              const std::unordered_map<std::string, VirgilByteArray > &signatures = {});
+                              const std::unordered_map<std::string, VirgilByteArray> &signatures
+                                    = std::unordered_map<std::string, VirgilByteArray>());
         };
     }
 }

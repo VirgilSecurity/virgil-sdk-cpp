@@ -62,7 +62,8 @@ namespace sdk {
             }
 
             CreateCardRequest instantiateCreateCardRequest(
-                    const std::unordered_map<std::string, std::string> &data = {},
+                    const std::unordered_map<std::string, std::string> &data
+                          = std::unordered_map<std::string, std::string>(),
                     const std::string &device = "",
                     const std::string &deviceName = "") const;
 

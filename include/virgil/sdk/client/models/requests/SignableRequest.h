@@ -71,7 +71,8 @@ namespace models {
         protected:
             SignableRequest(
                     const SnapshotModelType &snapshotModel,
-                    const std::unordered_map<std::string, VirgilByteArray> &signatures = {})
+                    const std::unordered_map<std::string, VirgilByteArray> &signatures
+                          = std::unordered_map<std::string, VirgilByteArray>())
                     : SignableRequest<SnapshotModelType, DerivedClass>(
                         serialization::CanonicalSerializer<SnapshotModelType>::toCanonicalForm(snapshotModel),
                         snapshotModel, signatures) { };
