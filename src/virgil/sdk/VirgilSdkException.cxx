@@ -38,7 +38,7 @@
 
 #include <tinyformat/tinyformat.h>
 
-#include <virgil/sdk/VirgilSDKException.h>
+#include <virgil/sdk/VirgilSdkException.h>
 
 using virgil::sdk::VirgilSdkException;
 

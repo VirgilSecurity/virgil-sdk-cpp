@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/VirgilSDKError.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
 using virgil::sdk::VirgilSdkErrorCategory;
 
