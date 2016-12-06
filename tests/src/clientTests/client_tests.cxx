@@ -37,6 +37,7 @@
 #include <catch.hpp>
 
 #include <thread>
+#include <memory>
 
 #include <TestConst.h>
 #include <TestUtils.h>
