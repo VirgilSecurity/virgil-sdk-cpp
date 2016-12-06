@@ -40,7 +40,7 @@
 
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 
@@ -59,7 +59,7 @@ namespace models {
          * @brief JSONSerializer<CardResponse> specialization.
          */
         template<>
-        class JsonSerializer<CardResponse> {
+        class JsonDeserializer<CardResponse> {
         public:
             template<int FAKE = 0>
             static CardResponse fromJson(const json &j) {
@@ -83,12 +83,12 @@ namespace models {
 
                     return CardResponse(signatures, snapshot, model, identifier, createdAt, cardVersion);
                 } catch (std::exception &exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<CardResponse>::fromJson ") +
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<CardResponse>::fromJson ") +
                                            exception.what());
                 }
             }
 
-            JsonSerializer() = delete;
+            JsonDeserializer() = delete;
         };
     }
 }
@@ -100,4 +100,4 @@ namespace models {
  * Explicit methods instantiation
  */
 template CardResponse
-virgil::sdk::client::models::serialization::JsonSerializer<CardResponse>::fromJson(const json&);
+virgil::sdk::client::models::serialization::JsonDeserializer<CardResponse>::fromJson(const json&);

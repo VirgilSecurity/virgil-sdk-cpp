@@ -39,6 +39,7 @@
 #include <virgil/sdk/http/Response.h>
 #include <virgil/sdk/endpoints/CardEndpointUri.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 #include <virgil/sdk/client/models/responses/CardsResponse.h>
 #include <virgil/sdk/http/Connection.h>
@@ -54,6 +55,7 @@ using virgil::sdk::http::ClientRequest;
 using virgil::sdk::http::Response;
 using virgil::sdk::endpoints::CardEndpointUri;
 using virgil::sdk::client::models::serialization::JsonSerializer;
+using virgil::sdk::client::models::serialization::JsonDeserializer;
 using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::client::models::responses::CardsResponse;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
@@ -75,7 +77,7 @@ Client::Client(ServiceConfig serviceConfig)
 
 Error Client::parseError(const http::Response &response) const {
     try {
-        auto virgilError = JsonSerializer<VirgilError>::fromJsonString(response.body());
+        auto virgilError = JsonDeserializer<VirgilError>::fromJsonString(response.body());
         return Error(response.statusCodeRaw(), virgilError);
     }
     catch (...) {
@@ -100,7 +102,7 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
             throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
         }
 
-        auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
+        auto cardResponse = JsonDeserializer<CardResponse>::fromJsonString(response.body());
 
         if (this->serviceConfig_.cardValidator() != nullptr) {
             if (!this->serviceConfig_.cardValidator()->validateCardResponse(cardResponse)) {
@@ -130,7 +132,7 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
             throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
         }
 
-        auto cardResponse = JsonSerializer<CardResponse>::fromJsonString(response.body());
+        auto cardResponse = JsonDeserializer<CardResponse>::fromJsonString(response.body());
 
         if (this->serviceConfig_.cardValidator() != nullptr) {
             if (!this->serviceConfig_.cardValidator()->validateCardResponse(cardResponse)) {
@@ -161,7 +163,7 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
             throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
         }
 
-        auto cardsResponse = JsonSerializer<CardsResponse>::fromJsonString(response.body());
+        auto cardsResponse = JsonDeserializer<CardsResponse>::fromJsonString(response.body());
 
         if (this->serviceConfig_.cardValidator() != nullptr) {
             for (const auto &cardResponse : cardsResponse.cardsResponse()) {

@@ -41,7 +41,7 @@
 
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/serialization/JsonTemplatedDeserializer.h>
 #include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
@@ -84,8 +84,14 @@ namespace models {
                 }
             }
 
+            JsonSerializer() = delete;
+        };
+
+        template <>
+        class JsonTemplatedDeserializer<SignableRequestInterface> {
+        public:
             template<typename ResultType>
-            static ResultType templatedFromJson(const json &j) {
+            static ResultType fromJson(const json &j) {
                 try {
                     std::string snapshotStr = j[JsonKey::ContentSnapshot];
 
@@ -96,12 +102,10 @@ namespace models {
                     return ResultType(snapshot, signatures);
                 } catch (std::exception &exception) {
                     throw std::logic_error(
-                            std::string("virgil-sdk:\n JsonSerializer<SignableRequestInterface>::fromJson ")
+                            std::string("virgil-sdk:\n JsonTemplatedDeserializer<SignableRequestInterface>::fromJson ")
                             + exception.what());
                 }
             }
-
-            JsonSerializer() = delete;
         };
     }
 }
@@ -122,7 +126,7 @@ template std::string
 virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::toJson<4>(const SignableRequestInterface&);
 
 template CreateCardRequest
-virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::templatedFromJson<CreateCardRequest>(const json&);
+virgil::sdk::client::models::serialization::JsonTemplatedDeserializer<SignableRequestInterface>::fromJson<CreateCardRequest>(const json&);
 
 template RevokeCardRequest
-virgil::sdk::client::models::serialization::JsonSerializer<SignableRequestInterface>::templatedFromJson<RevokeCardRequest>(const json&);
+virgil::sdk::client::models::serialization::JsonTemplatedDeserializer<SignableRequestInterface>::fromJson<RevokeCardRequest>(const json&);

@@ -54,39 +54,13 @@ namespace models {
          */
 
         template<typename T>
-        class JsonSerializer;
-
-        template <typename T>
-        class JsonSerializerBase {
-        public:
-            /**
-             * @brief Deserialize object from its Json representation.
-             */
-            template<int FAKE = 0>
-            static T fromJsonString(const std::string &jsonString) {
-                return JsonSerializer<T>::fromJson(nlohmann::json::parse(jsonString));
-            }
-
-            template<typename ResultType>
-            static ResultType templatedFromJsonString(const std::string &jsonString) {
-                return JsonSerializer<T>::template templatedFromJson<ResultType>(nlohmann::json::parse(jsonString));
-            }
-        };
-
-        template<typename T>
-        class JsonSerializer: public JsonSerializerBase<T> {
+        class JsonSerializer {
         public:
             /**
              * @brief Serialize given object to Json representation.
              */
             template<int INDENT = -1>
             static std::string toJson(const T &obj);
-
-            template<int FAKE = 0>
-            static T fromJson(const nlohmann::json &json);
-
-            template<typename ResultType>
-            static ResultType templatedFromJson(const nlohmann::json &json);
 
             JsonSerializer() = delete;
         };

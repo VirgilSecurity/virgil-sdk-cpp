@@ -34,27 +34,50 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/Common.h>
-#include <virgil/sdk/client/models/interfaces/Importable.h>
-#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
-#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
-#include <virgil/sdk/client/models/serialization/JsonTemplatedDeserializer.h>
+#ifndef VIRGIL_SDK_JSONDESERIALIZER_H
+#define VIRGIL_SDK_JSONDESERIALIZER_H
 
-using virgil::sdk::client::models::interfaces::Importable;
-using virgil::sdk::client::models::interfaces::SignableRequestInterface;
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::requests::RevokeCardRequest;
+#include <nlohman/json.hpp>
 
-template<typename DerivedClass>
-DerivedClass Importable<DerivedClass>::importFromString(const std::string &data) {
-    auto jsonStr = VirgilByteArrayUtils::bytesToString(VirgilBase64::decode(data));
-    return serialization::JsonTemplatedDeserializer<SignableRequestInterface>::fromJsonString<DerivedClass>(jsonStr);
+namespace virgil {
+namespace sdk {
+namespace client {
+namespace models {
+    namespace serialization {
+        /**
+         * @brief This class responsible for the data object marshalling.
+         *
+         * Supported classes:
+         */
+
+        // Forward decl
+        template<typename T>
+        class JsonDeserializer;
+
+        template <typename T>
+        class JsonDeserializerBase {
+        public:
+            /**
+             * @brief Deserialize object from its Json representation.
+             */
+            template<int FAKE = 0>
+            static T fromJsonString(const std::string &jsonString) {
+                return JsonDeserializer<T>::fromJson(nlohmann::json::parse(jsonString));
+            }
+        };
+
+        template<typename T>
+        class JsonDeserializer: public JsonDeserializerBase<T> {
+        public:
+            template<int FAKE = 0>
+            static T fromJson(const nlohmann::json &json);
+
+            JsonDeserializer() = delete;
+        };
+    }
+}
+}
+}
 }
 
-/**
- * Explicit methods instantiation
- */
-template RevokeCardRequest Importable<RevokeCardRequest>::importFromString(const std::string &data);
-
-template CreateCardRequest Importable<CreateCardRequest>::importFromString(const std::string &data);
+#endif //VIRGIL_SDK_JSONDESERIALIZER_H

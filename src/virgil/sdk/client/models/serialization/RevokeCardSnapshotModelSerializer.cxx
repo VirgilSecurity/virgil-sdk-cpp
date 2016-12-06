@@ -37,6 +37,7 @@
 #include <virgil/sdk/util/JsonKey.h>
 #include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
 
@@ -71,6 +72,12 @@ namespace models {
                 }
             }
 
+            JsonSerializer() = delete;
+        };
+
+        template<>
+        class JsonDeserializer<RevokeCardSnapshotModel> {
+        public:
             template<int FAKE = 0>
             static RevokeCardSnapshotModel fromJson(const json &j) {
                 try {
@@ -79,12 +86,12 @@ namespace models {
                             strToCardRevocationReason(j[JsonKey::RevocationReason]));
                 } catch (std::exception &exception) {
                     throw std::logic_error(
-                            std::string("virgil-sdk:\n JsonSerializer<RevokeCardSnapshotModel>::fromJson ")
+                            std::string("virgil-sdk:\n JsonDeserializer<RevokeCardSnapshotModel>::fromJson ")
                             + exception.what());
                 }
             }
 
-            JsonSerializer() = delete;
+            JsonDeserializer() = delete;
         };
 
         template<>
@@ -110,7 +117,7 @@ namespace models {
             template<int FAKE = 0>
             static RevokeCardSnapshotModel fromCanonicalForm(const VirgilByteArray &data) {
                 try {
-                    return JsonSerializerBase<RevokeCardSnapshotModel>::fromJsonString(
+                    return JsonDeserializerBase<RevokeCardSnapshotModel>::fromJsonString(
                             VirgilByteArrayUtils::bytesToString(data));
                 } catch (std::exception &exception) {
                     throw std::logic_error(
@@ -140,7 +147,7 @@ template std::string
 virgil::sdk::client::models::serialization::JsonSerializer<RevokeCardSnapshotModel>::toJson<4>(const RevokeCardSnapshotModel&);
 
 template RevokeCardSnapshotModel
-virgil::sdk::client::models::serialization::JsonSerializer<RevokeCardSnapshotModel>::fromJson(const json&);
+virgil::sdk::client::models::serialization::JsonDeserializer<RevokeCardSnapshotModel>::fromJson(const json&);
 
 template VirgilByteArray
 virgil::sdk::client::models::serialization::CanonicalSerializer<RevokeCardSnapshotModel>::toCanonicalForm(const RevokeCardSnapshotModel&);

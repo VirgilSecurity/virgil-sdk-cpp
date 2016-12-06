@@ -38,7 +38,7 @@
 
 #include <nlohman/json.hpp>
 
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 #include <virgil/sdk/client/models/errors/VirgilError.h>
 #include <virgil/sdk/util/JsonKey.h>
 
@@ -56,7 +56,7 @@ namespace models {
          * @brief JSONSerializer<VirgilError> specialization.
          */
         template<>
-        class JsonSerializer<VirgilError> {
+        class JsonDeserializer<VirgilError> {
         public:
             template<int FAKE = 0>
             static VirgilError fromJson(const json &j) {
@@ -65,12 +65,12 @@ namespace models {
 
                     return VirgilError(std::stoi(errorCodeStr));
                 } catch (std::exception &exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n JsonSerializer<VirgilError>::fromJson ") +
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<VirgilError>::fromJson ") +
                                            exception.what());
                 }
             }
 
-            JsonSerializer() = delete;
+            JsonDeserializer() = delete;
         };
     }
 }
@@ -82,4 +82,4 @@ namespace models {
  * Explicit methods instantiation
  */
 template VirgilError
-virgil::sdk::client::models::serialization::JsonSerializer<VirgilError>::fromJson(const json&);
+virgil::sdk::client::models::serialization::JsonDeserializer<VirgilError>::fromJson(const json&);
