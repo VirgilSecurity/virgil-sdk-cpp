@@ -40,25 +40,25 @@
 using virgil::sdk::test::TestConst;
 
 std::string TestConst::applicationToken() const {
-    return "AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b";
+    return "";
 }
 
 std::string TestConst::applicationPublicKeyBase64() const {
-    return "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1Db3dCUVlESzJWd0F5RUExblJKZHpWeDVDcE10VGJjbTNLZVk1b3Q2OU5OV3lNTjV1cDNRbDE1N1ZJPQ0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tDQo=";
+    return "";
 }
 
 std::string TestConst::applicationPrivateKeyBase64() const {
-    return "LS0tLS1CRUdJTiBFTkNSWVBURUQgUFJJVkFURSBLRVktLS0tLQ0KTUlHaE1GMEdDU3FHU0liM0RRRUZEVEJRTUM4R0NTcUdTSWIzRFFFRkREQWlCQkRROWFBSHdRbjFXckxlMDN5Sw0KR2R0aEFnSVJpakFLQmdncWhraUc5dzBDQ2pBZEJnbGdoa2dCWlFNRUFTb0VFTXhwQTNzVVVaMXlWR1V2VWVTTA0KUmE4RVFKcHVZOXV1eCs2d0NVSno0Ti9qVnZ2WmRPMTdmcnAwMytYZWhxN1ZhbUNwK0Y1RFE1cS82M2tGV0drMw0KcXA4Wk5GQlZ4VEpKY1grRkFLVGIvc0VGTnhFPQ0KLS0tLS1FTkQgRU5DUllQVEVEIFBSSVZBVEUgS0VZLS0tLS0NCg==";
+    return "";
 }
 
 std::string TestConst::applicationPrivateKeyPassword() const {
-    return "test";
+    return "";
 }
 
 std::string TestConst::applicationIdentityType() const {
-    return "test";
+    return "";
 }
 
 std::string TestConst::applicationId() const {
-    return "c53035253366736218ea3ebc924275073aafc2e78d09fe4f910e6b33a7297dd7";
+    return "";
 }
