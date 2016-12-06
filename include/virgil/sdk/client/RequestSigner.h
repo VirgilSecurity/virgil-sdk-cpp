@@ -37,6 +37,8 @@
 #ifndef VIRGIL_SDK_REQUESTSIGNER_H
 #define VIRGIL_SDK_REQUESTSIGNER_H
 
+#include <memory>
+
 #include <virgil/sdk/crypto/CryptoInterface.h>
 #include <virgil/sdk/client/interfaces/RequestSignerInterface.h>
 

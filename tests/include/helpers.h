@@ -37,10 +37,11 @@
 #ifndef HELPERS_H
 #define HELPERS_H
 
+#include <random>
+#include <functional>
+#include <limits.h>
 
 #include <virgil/sdk/Common.h>
-
-#include <random>
 
 namespace virgil {
 namespace sdk {
