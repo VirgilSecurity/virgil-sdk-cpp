@@ -37,8 +37,9 @@
 #include <virgil/sdk/client/ServiceConfig.h>
 
 using virgil::sdk::client::ServiceConfig;
+using virgil::sdk::client::interfaces::CardValidatorInterface;
 
-ServiceConfig& ServiceConfig::cardValidator(std::unique_ptr<CardValidator> validator) {
+ServiceConfig& ServiceConfig::cardValidator(std::unique_ptr<CardValidatorInterface> validator) {
     validator_ = std::move(validator);
     return *this;
 }

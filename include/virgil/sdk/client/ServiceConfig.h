@@ -37,7 +37,7 @@
 #ifndef VIRGIL_SDK_SERVICECONFIG_H
 #define VIRGIL_SDK_SERVICECONFIG_H
 
-#include <virgil/sdk/client/CardValidator.h>
+#include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
 
 namespace virgil {
 namespace sdk {
@@ -50,13 +50,13 @@ namespace sdk {
             ServiceConfig& token(std::string token);
             ServiceConfig& cardsServiceURL(std::string cardsServiceURL);
             ServiceConfig& cardsServiceROURL(std::string cardsServiceROURL);
-            ServiceConfig& cardValidator(std::unique_ptr<CardValidator> validator);
+            ServiceConfig& cardValidator(std::unique_ptr<interfaces::CardValidatorInterface> validator);
 
             // getters
             const std::string& token() const { return token_; }
             const std::string& cardsServiceURL() const { return cardsServiceURL_; }
             const std::string& cardsServiceROURL() const { return cardsServiceROURL_; }
-            const std::unique_ptr<CardValidator>& cardValidator() const { return validator_; }
+            const std::unique_ptr<interfaces::CardValidatorInterface>& cardValidator() const { return validator_; }
 
         private:
             ServiceConfig(std::string token);
@@ -64,7 +64,7 @@ namespace sdk {
             std::string token_;
             std::string cardsServiceURL_;
             std::string cardsServiceROURL_;
-            std::unique_ptr<CardValidator> validator_;
+            std::unique_ptr<interfaces::CardValidatorInterface> validator_;
         };
     }
 }

@@ -43,6 +43,7 @@
 #include <TestUtils.h>
 
 #include <virgil/sdk/client/Client.h>
+#include <virgil/sdk/client/CardValidator.h>
 
 using virgil::sdk::client::Client;
 using virgil::sdk::client::ServiceConfig;
