@@ -43,7 +43,7 @@
 #include <virgil/sdk/client/models/responses/CardResponse.h>
 #include <virgil/sdk/client/models/responses/CardsResponse.h>
 #include <virgil/sdk/http/Connection.h>
-#include <virgil/sdk/VirgilSDKError.h>
+#include <virgil/sdk/VirgilSdkError.h>
 #include <virgil/sdk/client/models/errors/VirgilError.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::Client>(), "Client must not be abstract.");

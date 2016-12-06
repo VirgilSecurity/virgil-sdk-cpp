@@ -40,7 +40,7 @@
 #include <limits>
 #include <system_error>
 
-#include <virgil/sdk/VirgilSDKException.h>
+#include <virgil/sdk/VirgilSdkException.h>
 
 namespace virgil {
     namespace sdk {
