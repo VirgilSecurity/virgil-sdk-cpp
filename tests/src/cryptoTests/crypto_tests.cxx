@@ -103,14 +103,14 @@ TEST_CASE("testES001_EncryptRandomDataStream_SingleCorrectKey_ShouldDecrypt", "[
     auto data = Utils::generateRandomData(100);
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
-    auto inputStreamForEncryption = std::istringstream(dataStr);
+    std::istringstream inputStreamForEncryption(dataStr);
     auto outputStreamForEncryption = std::ostringstream();
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
-    auto inputStreamForDecryption = std::istringstream(encryptedStr);
+    std::istringstream inputStreamForDecryption(encryptedStr);
     auto outputStreamForDecryption = std::ostringstream();
 
     crypto.decrypt(inputStreamForDecryption, outputStreamForDecryption, keyPair.privateKey());
@@ -130,14 +130,14 @@ TEST_CASE("testES002_EncryptRandomDataStream_SingleIncorrectKey_ShouldNotDecrypt
     auto data = Utils::generateRandomData(100);
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
-    auto inputStreamForEncryption = std::istringstream(dataStr);
+    std::istringstream inputStreamForEncryption(dataStr);
     auto outputStreamForEncryption = std::ostringstream();
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
-    auto inputStreamForDecryption = std::istringstream(encryptedStr);
+    std::istringstream inputStreamForDecryption(encryptedStr);
     auto outputStreamForDecryption = std::ostringstream();
 
     auto errorWasThrown = false;
@@ -159,14 +159,14 @@ TEST_CASE("testES003_EncryptRandomDataStream_TwoCorrectKeys_ShouldDecrypt", "[cr
     auto data = Utils::generateRandomData(100);
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
-    auto inputStreamForEncryption = std::istringstream(dataStr);
+    std::istringstream inputStreamForEncryption(dataStr);
     auto outputStreamForEncryption = std::ostringstream();
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair1.publicKey(), keyPair2.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
-    auto inputStreamForDecryption1 = std::istringstream(encryptedStr);
+    std::istringstream inputStreamForDecryption1(encryptedStr);
     auto outputStreamForDecryption1 = std::ostringstream();
 
     auto inputStreamForDecryption2 = std::istringstream(encryptedStr);
@@ -196,7 +196,7 @@ TEST_CASE("testES004_EncryptFileDataStream_SingleCorrectKey_ShouldDecrypt", "[cr
 
     auto encryptedStr = outputStreamForEncryption.str();
 
-    auto inputStreamForDecryption = std::istringstream(encryptedStr);
+    std::istringstream inputStreamForDecryption(encryptedStr);
     auto outputStreamForDecryption = std::ostringstream();
 
     crypto.decrypt(inputStreamForDecryption, outputStreamForDecryption, keyPair.privateKey());
