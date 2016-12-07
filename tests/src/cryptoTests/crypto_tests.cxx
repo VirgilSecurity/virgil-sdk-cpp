@@ -49,7 +49,7 @@ using virgil::sdk::test::Utils;
 
 TEST_CASE("testED001_EncryptRandomData_SingleCorrectKey_ShouldDecrypt", "[crypto]") {
     auto data = Utils::generateRandomData(100);
-    auto crypto = Crypto();
+    Crypto crypto;
 
     auto keyPair = crypto.generateKeyPair();
 
@@ -62,7 +62,7 @@ TEST_CASE("testED001_EncryptRandomData_SingleCorrectKey_ShouldDecrypt", "[crypto
 
 TEST_CASE("testED002_EncryptRandomData_SingleIncorrectKey_ShouldNotDecrypt", "[crypto]") {
     auto data = Utils::generateRandomData(100);
-    auto crypto = Crypto();
+    Crypto crypto;
 
     auto keyPair = crypto.generateKeyPair();
     auto wrongKeyPair = crypto.generateKeyPair();
@@ -82,7 +82,7 @@ TEST_CASE("testED002_EncryptRandomData_SingleIncorrectKey_ShouldNotDecrypt", "[c
 
 TEST_CASE("testED003_EncryptRandomData_TwoCorrectKeys_ShouldDecrypt", "[crypto]") {
     auto data = Utils::generateRandomData(100);
-    auto crypto = Crypto();
+    Crypto crypto;
 
     auto keyPair1 = crypto.generateKeyPair();
     auto keyPair2 = crypto.generateKeyPair();
@@ -97,21 +97,21 @@ TEST_CASE("testED003_EncryptRandomData_TwoCorrectKeys_ShouldDecrypt", "[crypto]"
 }
 
 TEST_CASE("testES001_EncryptRandomDataStream_SingleCorrectKey_ShouldDecrypt", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto keyPair = crypto.generateKeyPair();
 
     auto data = Utils::generateRandomData(100);
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
     std::istringstream inputStreamForEncryption(dataStr);
-    auto outputStreamForEncryption = std::ostringstream();
+    std::ostringstream outputStreamForEncryption;
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
     std::istringstream inputStreamForDecryption(encryptedStr);
-    auto outputStreamForDecryption = std::ostringstream();
+    std::ostringstream outputStreamForDecryption;
 
     crypto.decrypt(inputStreamForDecryption, outputStreamForDecryption, keyPair.privateKey());
 
@@ -123,7 +123,7 @@ TEST_CASE("testES001_EncryptRandomDataStream_SingleCorrectKey_ShouldDecrypt", "[
 }
 
 TEST_CASE("testES002_EncryptRandomDataStream_SingleIncorrectKey_ShouldNotDecrypt", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto keyPair = crypto.generateKeyPair();
     auto wrongKeyPair = crypto.generateKeyPair();
 
@@ -131,14 +131,14 @@ TEST_CASE("testES002_EncryptRandomDataStream_SingleIncorrectKey_ShouldNotDecrypt
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
     std::istringstream inputStreamForEncryption(dataStr);
-    auto outputStreamForEncryption = std::ostringstream();
+    std::ostringstream outputStreamForEncryption;
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
     std::istringstream inputStreamForDecryption(encryptedStr);
-    auto outputStreamForDecryption = std::ostringstream();
+    std::ostringstream outputStreamForDecryption;
 
     auto errorWasThrown = false;
     try {
@@ -152,7 +152,7 @@ TEST_CASE("testES002_EncryptRandomDataStream_SingleIncorrectKey_ShouldNotDecrypt
 }
 
 TEST_CASE("testES003_EncryptRandomDataStream_TwoCorrectKeys_ShouldDecrypt", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto keyPair1 = crypto.generateKeyPair();
     auto keyPair2 = crypto.generateKeyPair();
 
@@ -160,17 +160,17 @@ TEST_CASE("testES003_EncryptRandomDataStream_TwoCorrectKeys_ShouldDecrypt", "[cr
 
     auto dataStr = VirgilByteArrayUtils::bytesToHex(data);
     std::istringstream inputStreamForEncryption(dataStr);
-    auto outputStreamForEncryption = std::ostringstream();
+    std::ostringstream outputStreamForEncryption;
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair1.publicKey(), keyPair2.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
     std::istringstream inputStreamForDecryption1(encryptedStr);
-    auto outputStreamForDecryption1 = std::ostringstream();
+    std::ostringstream outputStreamForDecryption1;
 
-    auto inputStreamForDecryption2 = std::istringstream(encryptedStr);
-    auto outputStreamForDecryption2 = std::ostringstream();
+    std::istringstream inputStreamForDecryption2(encryptedStr);
+    std::ostringstream outputStreamForDecryption2;
 
     crypto.decrypt(inputStreamForDecryption1, outputStreamForDecryption1, keyPair1.privateKey());
     crypto.decrypt(inputStreamForDecryption2, outputStreamForDecryption2, keyPair2.privateKey());
@@ -186,18 +186,18 @@ TEST_CASE("testES003_EncryptRandomDataStream_TwoCorrectKeys_ShouldDecrypt", "[cr
 }
 
 TEST_CASE("testES004_EncryptFileDataStream_SingleCorrectKey_ShouldDecrypt", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto keyPair = crypto.generateKeyPair();
 
-    auto inputStreamForEncryption = std::ifstream("testData.txt");
-    auto outputStreamForEncryption = std::ostringstream();
+    std::ifstream inputStreamForEncryption("testData.txt");
+    std::ostringstream outputStreamForEncryption;
 
     crypto.encrypt(inputStreamForEncryption, outputStreamForEncryption, { keyPair.publicKey() });
 
     auto encryptedStr = outputStreamForEncryption.str();
 
     std::istringstream inputStreamForDecryption(encryptedStr);
-    auto outputStreamForDecryption = std::ostringstream();
+    std::ostringstream outputStreamForDecryption;
 
     crypto.decrypt(inputStreamForDecryption, outputStreamForDecryption, keyPair.privateKey());
 
@@ -218,7 +218,7 @@ TEST_CASE("testSD001_SignRandomData_CorrectKeys_ShouldValidate", "[crypto]") {
 }
 
 TEST_CASE("testSD002_SignRandomData_IncorrectKeys_ShouldNotValidate", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto keyPair = crypto.generateKeyPair();
     auto wrongKeyPair = crypto.generateKeyPair();
 
@@ -230,7 +230,7 @@ TEST_CASE("testSD002_SignRandomData_IncorrectKeys_ShouldNotValidate", "[crypto]"
 }
 
 TEST_CASE("testESD001_SignAndEncryptRandomData_CorrectKeys_ShouldDecryptValidate", "[crypto]") {
-    auto crypto = Crypto();
+    Crypto crypto;
     auto senderKeyPair = crypto.generateKeyPair();
     auto receiverKeyPair = crypto.generateKeyPair();
 
