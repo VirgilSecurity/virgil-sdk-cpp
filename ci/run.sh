@@ -39,20 +39,8 @@ set -ev
 
 cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR_NAME}"
 
-if [ "${TRAVIS_BRANCH}" == "coverity_scan" ] && [ "${CC}" == "gcc-4.8" ]; then
-    # Build for Coverity Scan.
-    export COVERITY_SCAN_PROJECT_NAME="VirgilSecurity/virgil-sdk-cpp"
-    export COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
-    export COVERITY_SCAN_NOTIFICATION_EMAIL="sergey.seroshtan@gmail.com"
-    export COVERITY_SCAN_BUILD_COMMAND="make -j2"
-    export COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --compiler \`which ${CC}\` --comptype gcc"
-
-    # Run Coverity Scan build
-    curl -s "https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh" | bash
-else
-    # Build
-    make -j2 VERBOSE=1
-    ctest --verbose
-    make doc
-    make install
-fi
+# Build
+make -j4 VERBOSE=1
+ctest --verbose
+make doc
+make install
