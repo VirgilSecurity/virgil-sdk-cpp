@@ -46,6 +46,7 @@ addons:
 before_install:
   - bash ./ci/install-cmake.sh
   - bash ./ci/install-credentials.sh
+  - bash ./ci/install-doxygen.sh
 before_script:
   - bash ./ci/configure.sh
 script:
