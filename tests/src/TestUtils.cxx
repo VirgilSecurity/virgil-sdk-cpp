@@ -54,7 +54,7 @@ CreateCardRequest TestUtils::instantiateCreateCardRequest(
     auto keyPair = crypto_->generateKeyPair();
     auto exportedPublicKey = crypto_->exportPublicKey(keyPair.publicKey());
 
-    auto identity = Utils::generateRandomStr(20);
+    auto identity = Utils::generateRandomStr(40);
     auto identityType = consts.applicationIdentityType();
 
     auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey, data, device, deviceName);
