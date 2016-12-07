@@ -23,11 +23,10 @@ matrix:
           packages:
             - clang-3.8
           sources: *sources
-
-env:
-  global:
-    - BUILD_DIR_NAME=build
-    - DOC_BRANCH=master
+          
+global:
+  - BUILD_DIR_NAME=build
+  - DOC_BRANCH=master
 
 cache:
   directories:
