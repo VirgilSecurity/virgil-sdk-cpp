@@ -51,19 +51,24 @@ namespace test {
     class Utils {
     public:
         static virgil::sdk::VirgilByteArray generateRandomData(int size) {
-            random_bytes_engine rbe;
+            std::random_device rd;
+            random_bytes_engine rbe(rd());
             std::vector<unsigned char> data(size);
             std::generate(begin(data), end(data), std::ref(rbe));
             return data;
         }
 
         static std::string generateRandomStr(int size) {
-            srand(time(0));
             static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+            std::random_device rd;
+            std::default_random_engine generator(rd());
+            std::uniform_int_distribution<int> distribution(0, sizeof(alphanum) - 1);
+            auto randomCharNum = std::bind(distribution, generator);
 
             std::string st;
             for (int i = 0; i < size; ++i) {
-                st += alphanum[rand() % (sizeof(alphanum) - 1)];
+                st += alphanum[randomCharNum()];
             }
 
             return st;
