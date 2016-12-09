@@ -49,20 +49,61 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace snapshotmodels {
+        /*!
+         * @brief Model which contains basic Virgil Card data needed for Card Creation.
+         */
         class CreateCardSnapshotModel {
         public:
+            /*!
+             * @brief Creates CreateCardSnapshotModel instance and initializes with given parameters.
+             * @param identity std::string with Card identity
+             * @param identityType std::string with Card identity type
+             * @param publicKeyData raw representation of Card's public key
+             * @param data std::unordered_map with custom user payload
+             * @param scope CardScope (application or global)
+             * @param info std::unordered_map with info about device on which Card was created
+             * @return initialized CreateCardSnapshotModel instance
+             */
             static CreateCardSnapshotModel createModel(const std::string &identity, const std::string &identityType,
                                                        const VirgilByteArray &publicKeyData,
                                                        const std::unordered_map<std::string, std::string> &data,
                                                        CardScope scope,
                                                        const std::unordered_map<std::string, std::string> &info);
 
-            // getters
+            /*!
+             * @brief Getter.
+             * @return std::string with Card identity
+             */
             const std::string& identity() const { return identity_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with Card identity type
+             */
             const std::string& identityType() const { return identityType_; }
+
+            /*!
+             * @brief Getter.
+             * @return raw representation of Card's public key
+             */
             const VirgilByteArray & publicKeyData() const { return publicKeyData_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::unordered_map with custom user payload
+             */
             const std::unordered_map<std::string, std::string>& data() const { return data_; }
+
+            /*!
+             * @brief Getter.
+             * @return CardScope (application or global)
+             */
             CardScope scope() const { return scope_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::unordered_map with info about device on which Card was created
+             */
             const std::unordered_map<std::string, std::string>& info() const { return info_; }
 
         private:

@@ -44,11 +44,27 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace errors {
+        /*!
+         * @brief Model for errors which can be received from the Virgil Service.
+         */
         class VirgilError {
         public:
+            /*!
+             * @brief Constructor
+             * @param virgilErrorCode int with error code
+             */
             VirgilError(int virgilErrorCode);
 
+            /*!
+             * @brief Getter.
+             * @return int with error code
+             */
             int virgilErrorCode() const { return virgilErrorCode_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with english (debug-only) error message.
+             */
             const std::string& errorMsg() const { return errorMsg_; }
 
         private:

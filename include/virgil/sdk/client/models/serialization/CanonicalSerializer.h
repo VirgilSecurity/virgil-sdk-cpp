@@ -49,19 +49,34 @@ namespace client {
 namespace models {
     namespace serialization {
         /**
-         * @brief This class responsible for the data object marshalling.
-         *
-         * Supported classes:
+         * @brief This class is responsible for serializing and deserializing models in Canonical Form.
+         * @tparam T concrete subclass
+         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel
          */
         template<typename T>
         class CanonicalSerializer {
         public:
+            /*!
+             * @brief Serizalizes model to Canonical Form.
+             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
+             * @param model model to serialize
+             * @return serialized representation of model
+             */
             template<int INDENT = -1>
             static VirgilByteArray toCanonicalForm(const T &model) ;
 
+            /*!
+             * @brief Constructs object from its Canonical Form representation.
+             * @tparam FAKE fake argument to allow template implementation in source file.
+             * @param data Canonical representation of object
+             * @return Constructed object
+             */
             template<int FAKE = 0>
             static T fromCanonicalForm(const VirgilByteArray &data);
 
+            /*!
+             * @brief Forbid instantiation.
+             */
             CanonicalSerializer() = delete;
         };
     }

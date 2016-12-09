@@ -46,12 +46,28 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace interfaces {
+        /*!
+         * @brief This interface is designed for Classes instances of which can be signed.
+         * @see SignableRequest, SignableRequestInterface
+         */
         class SignableInterface {
         public:
+            /*!
+             * @brief Getter.
+             * @return Snapshot of data to be signed
+             */
             virtual const VirgilByteArray& snapshot() const = 0;
 
+            /*!
+             * @brief Adds signature.
+             * @param signature Signature
+             * @param fingerprint std::string representation of Fingerprint
+             */
             virtual void addSignature(VirgilByteArray signature, std::string fingerprint) = 0;
 
+            /*!
+             * @brief Virtual destructor.
+             */
             virtual ~SignableInterface() = default;
         };
     }

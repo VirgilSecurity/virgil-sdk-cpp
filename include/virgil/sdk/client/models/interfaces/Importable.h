@@ -44,11 +44,24 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace interfaces {
+        /*!
+         * @brief This interface is designed for objects which can be exported in std::string representation.
+         * @tparam DerivedClass template parameter represents class which implements Importable interface
+         * @see Impotrable
+         */
         template<typename DerivedClass>
         class Importable {
         public:
+            /*!
+             * @brief Creates instance of DerivedClass using its std::string representation.
+             * @param data std::string representation of DerivedClass instance
+             * @return DerivedClass instance constructed from std::string representation
+             */
             static DerivedClass importFromString(const std::string &data);
 
+            /*!
+             * @brief Virtual destructor.
+             */
             virtual ~Importable() = default;
         };
     }

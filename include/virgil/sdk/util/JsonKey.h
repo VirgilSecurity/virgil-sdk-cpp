@@ -69,7 +69,8 @@ namespace sdk {
             //! @endcond
 
             /*!
-             * Forbid creation.
+             * @brief Forbid creation.
+             *
              */
             JsonKey() = delete;
         };

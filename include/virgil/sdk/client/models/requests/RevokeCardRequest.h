@@ -47,14 +47,26 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
+        /*!
+         * @brief This class represents request for Card Revocation on the Virgil Service.
+         */
         class RevokeCardRequest final :
                 public SignableRequest<snapshotmodels::RevokeCardSnapshotModel, RevokeCardRequest> {
         public:
+            /*!
+             * @brief Creates RevokeCardRequest with given arguments.
+             * @param cardId std::string with card ID to revoke
+             * @param reason CardRevocationReason
+             * @return RevokeCardRequest instance initialized with given values
+             */
             static RevokeCardRequest createRequest(const std::string &cardId, CardRevocationReason reason);
 
+            // This is private API
+            //! @cond Doxygen_Suppress
             RevokeCardRequest(const VirgilByteArray &snapshot,
                               const std::unordered_map<std::string, VirgilByteArray> &signatures
                               = std::unordered_map<std::string, VirgilByteArray>());
+            //! @endcond
 
         private:
             RevokeCardRequest(const std::string &cardId, CardRevocationReason reason);

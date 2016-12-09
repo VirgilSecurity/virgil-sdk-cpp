@@ -46,12 +46,34 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace errors {
+        /*!
+         * @brief Wrapper for errors in sdk.
+         */
         class Error {
         public:
+            /*!
+             * @brief Constructor.
+             * @param httpErrorCode int with http response status code
+             * @param virgilError VirgilError instance
+             */
             Error(int httpErrorCode, const VirgilError &virgilError);
 
+            /*!
+             * @brief Getter.
+             * @return int http response status code
+             */
             int httpErrorCode() const { return httpErrorCode_; }
+
+            /*!
+             * @brief Getter.
+             * @return error code from Virgil Service
+             */
             int virgilErrorCode() const { return virgilErrorCode_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with full error descriptino
+             */
             const std::string& errorMsg() const { return errorMsg_; }
 
         private:

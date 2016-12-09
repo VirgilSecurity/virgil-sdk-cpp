@@ -46,12 +46,29 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace snapshotmodels {
+        /*!
+         * @brief Model which contains basic Virgil Card data needed for Card Revocation.
+         */
         class RevokeCardSnapshotModel {
         public:
+            /*!
+             * @brief Creates RevokeCardSnapshotModel instance and initializes with given parameters.
+             * @param cardId std::string with Card ID
+             * @param reason CardRevocationReason
+             * @return initialized RevokeCardSnapshotModel instance
+             */
             static RevokeCardSnapshotModel createModel(const std::string &cardId, CardRevocationReason reason);
 
-            // getters
+            /*!
+             * @brief Getter.
+             * @return std::string with Card ID
+             */
             const std::string& cardId() const { return cardId_; }
+
+            /*!
+             * @brief Getter.
+             * @return CardRevocationReason
+             */
             CardRevocationReason revocationReason() const { return reason_; }
 
         private:

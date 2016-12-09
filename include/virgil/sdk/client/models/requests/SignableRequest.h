@@ -52,23 +52,36 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
+        /*!
+         * @brief This is base class for all requests to the Virgil Service.
+         * @tparam SnapshotModelType template type for Snapshot Model
+         * @tparam DerivedClass represents concrete DerivedClass
+         */
         template <typename SnapshotModelType, typename DerivedClass>
         class SignableRequest : public interfaces::SignableRequestInterface,
                                 public interfaces::Exportable,
                                 public interfaces::Importable<DerivedClass> {
         public:
+            /*!
+             * @brief Getter.
+             * @return Return snapshot model
+             */
+            const SnapshotModelType& snapshotModel() const { return snapshotModel_; }
+
+            /// @section Interface implementations
             const VirgilByteArray& snapshot() const override { return snapshot_; }
+
+            const std::unordered_map<std::string, VirgilByteArray>& signatures() const override { return signatures_; };
+
+            std::string exportAsString() const override;
 
             void addSignature(VirgilByteArray signature, std::string fingerprint) override {
                 signatures_[std::move(fingerprint)] = std::move(signature);
             }
 
-            const std::unordered_map<std::string, VirgilByteArray>& signatures() const override { return signatures_; };
-            const SnapshotModelType& snapshotModel() const { return snapshotModel_; }
-
-            std::string exportAsString() const override;
-
         protected:
+            // This is private API
+            //! @cond Doxygen_Suppress
             SignableRequest(
                     const SnapshotModelType &snapshotModel,
                     const std::unordered_map<std::string, VirgilByteArray> &signatures
@@ -84,6 +97,7 @@ namespace models {
                     : snapshot_(std::move(snapshot)),
                       snapshotModel_(std::move(snapshotModel)),
                       signatures_(std::move(signatures)) { };
+            //! @endcond
 
         private:
             VirgilByteArray snapshot_;

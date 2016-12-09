@@ -48,10 +48,55 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace responses {
+        /*!
+         * @brief This class represents response for card requests from the Virgil Service.
+         */
         class CardResponse {
         public:
+            /*!
+             * @brief Creates Card instance using CardResponse data
+             * @return Card instance
+             */
             Card buildCard() const;
 
+            /*!
+             * @brief Getter.
+             * @return std::unordered_map with signatures
+             */
+            const std::unordered_map<std::string, VirgilByteArray>& signatures() const { return signatures_; };
+
+            /*!
+             * @brief Getter.
+             * @return snapshot
+             */
+            const VirgilByteArray& snapshot() const { return snapshot_; };
+
+            /*!
+             * @brief Getter.
+             * @return CreateCardSnapshotModel
+             */
+            const snapshotmodels::CreateCardSnapshotModel& model() const { return model_; };
+
+            /*!
+             * @brief Getter.
+             * @return std::string with card response identifier
+             */
+            const std::string& identifier() const { return identifier_; };
+
+            /*!
+             * @brief Getter.
+             * @return std::string with date of card creation (format is yyyy-MM-dd'T'HH:mm:ssZ)
+             */
+            const std::string& createdAt() const { return createdAt_; };
+
+            /*!
+             * @brief Getter.
+             * @return
+             */
+            const std::string& cardVersion() const { return cardVersion_; };
+
+            // This is private API
+            //! @cond Doxygen_Suppress
             CardResponse(
                     std::unordered_map<std::string, VirgilByteArray> signatures,
                     VirgilByteArray snapshot,
@@ -59,14 +104,7 @@ namespace models {
                     std::string identifier,
                     std::string createdAt,
                     std::string cardVersion);
-
-            const std::unordered_map<std::string, VirgilByteArray>& signatures() const { return signatures_; };
-            const VirgilByteArray& snapshot() const { return snapshot_; };
-            const snapshotmodels::CreateCardSnapshotModel& model() const { return model_; };
-            const std::string& identifier() const { return identifier_; };
-            const std::string& createdAt() const { return createdAt_; };
-            const std::string& cardVersion() const { return cardVersion_; };
-
+            //! @endcond
 
         private:
             std::unordered_map<std::string, VirgilByteArray> signatures_;

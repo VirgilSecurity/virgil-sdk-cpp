@@ -46,13 +46,27 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace responses {
+        /*!
+         * @brief This class represents response for collection of cards requests from the Virgil Service.
+         */
         class CardsResponse {
         public:
+            /*!
+             * @brief Creates std::vector of Card instances using CardResponse data
+             * @return
+             */
             std::vector<Card> buildCards() const;
 
-            CardsResponse(std::vector<CardResponse> cardsResponse);
-
+            /*!
+             * @brief Getter.
+             * @return std::vectpr of CardResponse instances
+             */
             const std::vector<CardResponse>& cardsResponse() const { return cardsResponse_; };
+
+            // This is private API
+            //! @cond Doxygen_Suppress
+            CardsResponse(std::vector<CardResponse> cardsResponse);
+            //! @endcond
 
         private:
             std::vector<CardResponse> cardsResponse_;

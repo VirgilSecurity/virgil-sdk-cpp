@@ -46,12 +46,20 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace interfaces {
+        /*!
+         * @brief This interface extends SignableInterface with getter for signatures.
+         */
         class SignableRequestInterface: public SignableInterface {
         public:
-            virtual const VirgilByteArray& snapshot() const = 0;
-
+            /*!
+             * @brief Getter.
+             * @return std::unordered_map of all signatures of this request.
+             */
             virtual const std::unordered_map<std::string, VirgilByteArray>& signatures() const = 0;
 
+            /*!
+             * @brief Virtual destructor.
+             */
             virtual ~SignableRequestInterface() = default;
         };
     }

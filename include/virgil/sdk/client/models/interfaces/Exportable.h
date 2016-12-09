@@ -44,10 +44,21 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace interfaces {
+        /*!
+         * @brief This interface is designed for objects which can be exported in std::string representation.
+         * @see Impotrable
+         */
         class Exportable {
         public:
+            /*!
+             * @brief Exports object.
+             * @return std::string representation of object
+             */
             virtual std::string exportAsString() const = 0;
 
+            /*!
+             * @brief Virtual destructor.
+             */
             virtual ~Exportable() = default;
         };
     }

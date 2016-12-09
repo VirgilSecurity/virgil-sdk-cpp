@@ -66,7 +66,7 @@ namespace sdk {
             //! @endcond
 
             /*!
-             * Forbid creation.
+             * @brief Forbid creation.
              */
             JsonUtils() = delete;
         };

@@ -44,34 +44,49 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace serialization {
-        /**
-         * @brief This class responsible for the data object marshalling.
-         *
-         * Supported classes:
-         */
-
-        // Forward decl
+        /// Forward decl
         template<typename T>
         class JsonDeserializer;
 
+        /*!
+         * @brief Base class for JsonDeserializer.
+         * @tparam T Class to be deserialized
+         */
         template <typename T>
         class JsonDeserializerBase {
         public:
-            /**
-             * @brief Deserialize object from its Json representation.
-             */
+            /*!
+            * @brief Deserialize object from its Json representation.
+            * @tparam FAKE Fake parameter to allow implementation in source files
+            * @param jsonString std::string with json representation of model
+            * @return deserialized object
+            */
             template<int FAKE = 0>
             static T fromJsonString(const std::string &jsonString) {
                 return JsonDeserializer<T>::fromJson(nlohmann::json::parse(jsonString));
             }
         };
 
+        /*!
+         * @brief This class is responsible for model deserialization.
+         * @note Supported classes: CardResponse, CardsResponse, VirgilError
+         * @tparam T Class to be deserialized
+         */
         template<typename T>
         class JsonDeserializer: public JsonDeserializerBase<T> {
         public:
+            /*!
+             * @brief Deserialize object from its Json representation.
+             * @tparam FAKE Fake parameter to allow implementation in source files
+             * @param json json representation of model
+             * @return deserialized object
+             */
             template<int FAKE = 0>
             static T fromJson(const nlohmann::json &json);
 
+            /*!
+             * @brief Forbid instantiation.
+             */
             JsonDeserializer() = delete;
         };
     }

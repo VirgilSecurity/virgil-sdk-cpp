@@ -47,21 +47,27 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace serialization {
-        /**
-         * @brief This class responsible for the data object marshalling.
-         *
-         * Supported classes:
+        /*!
+         * @brief This class is responsible for the data object marshalling.
+         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel, SearchCardsCriteria,
+         *       SignableRequestInterface
+         * @tparam T represents class to be serialized
          */
-
         template<typename T>
         class JsonSerializer {
         public:
-            /**
-             * @brief Serialize given object to Json representation.
+            /*!
+             * @brief Serializes given object to std::string Json representation.
+             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
+             * @param obj object to be serialized
+             * @return std::string json representation of the object
              */
             template<int INDENT = -1>
             static std::string toJson(const T &obj);
 
+            /*!
+             * @brief Forbid instantiation
+             */
             JsonSerializer() = delete;
         };
     }

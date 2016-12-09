@@ -44,16 +44,14 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace serialization {
-        /**
-         * @brief This class responsible for the data object marshalling.
-         *
-         * Supported classes:
-         */
-
-        // Forward decl
+        /// Forward decl
         template<typename T>
         class JsonTemplatedDeserializer;
 
+        /*!
+        * @brief Base class for JsonTemplatedDeserializer.
+        * @tparam T Class to be deserialized
+        */
         template <typename T>
         class JsonTemplatedDeserializerBase {
         public:
@@ -63,12 +61,27 @@ namespace models {
             }
         };
 
+        /*!
+         * @brief This class is responsible for deserializing of templated models.
+         * @note Supported classes: SignableRequestInterface
+         * @tparam T
+         */
         template<typename T>
         class JsonTemplatedDeserializer: public JsonTemplatedDeserializerBase<T> {
         public:
+            /*!
+             *
+             * @tparam ResultType type for deserialized objects. Supported classes: CreateCardRequest,
+             *         RevokeCardRequest.
+             * @param json json representation of the object
+             * @return deserialized object
+             */
             template<typename ResultType>
             static ResultType fromJson(const nlohmann::json &json);
 
+            /*!
+             * @brief Forbid instantiation.
+             */
             JsonTemplatedDeserializer() = delete;
         };
     }

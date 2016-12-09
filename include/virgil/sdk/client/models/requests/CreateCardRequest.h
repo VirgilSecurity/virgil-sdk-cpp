@@ -48,9 +48,22 @@ namespace sdk {
 namespace client {
 namespace models {
     namespace requests {
+        /*!
+         * @brief This class represents request for Virgil Card creation.
+         */
         class CreateCardRequest final
                 : public SignableRequest<snapshotmodels::CreateCardSnapshotModel, CreateCardRequest> {
         public:
+            /*!
+             * @brief Creates CreateCardRequest with given arguments.
+             * @param identity std::string with identity for Card
+             * @param identityType std::string with identity type for Card
+             * @param publicKeyData raw representation of Public Key for Card
+             * @param data std::unordered_map with custom user payload
+             * @param device std::string with device type
+             * @param deviceName std::string with device name
+             * @return CreateCardRequest initialized with given values
+             */
             static CreateCardRequest createRequest(
                     const std::string &identity,
                     const std::string &identityType,
@@ -60,9 +73,12 @@ namespace models {
                     const std::string& device = "",
                     const std::string& deviceName = "");
 
+            // This is private API
+            //! @cond Doxygen_Suppress
             CreateCardRequest(const VirgilByteArray &snapshot,
                               const std::unordered_map<std::string, VirgilByteArray> &signatures
                                     = std::unordered_map<std::string, VirgilByteArray>());
+            //! @endcond
 
         private:
             CreateCardRequest(const std::string &identity,
