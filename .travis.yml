@@ -6,9 +6,6 @@ cache:
   apt: true
 
 matrix:
-  exclude:
-    - compiler: gcc
-    
   include:
     - compiler: gcc
       env: CXX=g++-5 CC=gcc-5
@@ -28,6 +25,9 @@ matrix:
           sources:
               - ubuntu-toolchain-r-test
               - llvm-toolchain-precise-3.7
+
+  exclude:
+    - compiler: gcc
 
 env:
   global:
