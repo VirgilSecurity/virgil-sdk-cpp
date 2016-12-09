@@ -43,10 +43,21 @@ namespace virgil {
 namespace sdk {
 namespace client {
     namespace interfaces {
+        /*!
+         * Interface designed for validation of CardResponse instances.
+         */
         class CardValidatorInterface {
         public:
+            /*!
+             * @brief Validates CardResponse.
+             * @param response CardResponse to be validated
+             * @return true if CardResponse passed validation, false otherwise
+             */
             virtual bool validateCardResponse(const models::responses::CardResponse &response) const = 0;
 
+            /*!
+             * @brief Virtual destructor.
+             */
             virtual ~CardValidatorInterface() = default;
         };
     }

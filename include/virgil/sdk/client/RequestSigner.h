@@ -45,10 +45,18 @@
 namespace virgil {
 namespace sdk {
     namespace client {
+        /*!
+         * @brief Default implementation of RequestSignerInterface
+         */
         class RequestSigner: public interfaces::RequestSignerInterface {
         public:
+            /*!
+             * @brief Constructor
+             * @param crypto std::shared_ptr with some CryptoInterface implementation
+             */
             RequestSigner(const std::shared_ptr<crypto::CryptoInterface> &crypto);
 
+            /// @section CardValidatorInterface implementation
             void selfSign(models::interfaces::SignableInterface &request,
                           const crypto::keys::PrivateKey &privateKey) const override;
 

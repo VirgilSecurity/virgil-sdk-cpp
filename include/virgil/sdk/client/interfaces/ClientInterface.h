@@ -50,17 +50,49 @@ namespace virgil {
 namespace sdk {
 namespace client {
     namespace interfaces {
+        /*!
+         * @brief This interface is designed for all interactions with the Virgil Service.
+         */
         class ClientInterface {
         public:
+            /*!
+             * @brief Creates Virgil Card instance on the Virgil Cards Service.
+             * Creates Virgil Card instance on the Virgil Cards Service and associates it with unique identifier.
+             * Also makes the Card accessible for search/get/revoke queries from other users.
+             * @note CreateCardRequest should be signed at least by Owner (Creator) and Application.
+             *       Additional signatures may be applied if needed.
+             * @see Card
+             * @param request CreateCardRequest instance with Card data and signatures
+             * @return std::future with Card
+             */
             virtual std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const = 0;
 
+            /*!
+             * @brief Returns Virgil Card from the Virgil Cards Service with given ID, if exists.
+             * @param cardId std::string with card ID
+             * @return std::future with Card
+             */
             virtual std::future<models::Card> getCard(const std::string &cardId) const = 0;
 
+            /*!
+             * @brief Performs search of Virgil Cards using search criteria on the Virgil Cards Service.
+             * @param criteria SearchCardsCriteria instance with criteria for desired cards
+             * @return std::future with std::vector which contains found cards
+             */
             virtual std::future<std::vector<models::Card>> searchCards(
                     const models::SearchCardsCriteria &criteria) const = 0;
 
+            /*!
+             * @brief Revokes previously registered card.
+             * @note RevokeCardRequest instance should be signed by Application.
+             * @param request RevokeCardRequest with data for Card to be revoked
+             * @return empty std::future
+             */
             virtual std::future<void> revokeCard(const models::requests::RevokeCardRequest &request) const = 0;
 
+            /*!
+             * @brief Virtual destructor
+             */
             virtual ~ClientInterface() = default;
         };
     }

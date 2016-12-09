@@ -98,7 +98,7 @@ namespace virgil {
     }
 }
 
-//! @cond Doxygen_Suppress
+//! @cond Doxygen_S
 // TODO: Remove this when Clang compiler will be used from the Android NDK, possible in the release r13.
 #if defined(ANDROID) && defined(__GCC_ATOMIC_INT_LOCK_FREE) && __GCC_ATOMIC_INT_LOCK_FREE < 2
 namespace std {
@@ -112,6 +112,6 @@ void rethrow_if_nested(const T&) {
 }
 }
 #endif
-//! @endcond
+//! @endconduppress
 
 #endif //VIRGIL_SDK_VIRGILSDKEXCEPTION_H

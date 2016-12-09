@@ -46,14 +46,32 @@
 namespace virgil {
 namespace sdk {
     namespace client {
+        /*!
+         * @brief Default implementation of Client.
+         */
         class Client : public interfaces::ClientInterface {
         public:
+            /*!
+             * @brief Constructor.
+             * @note For advanced setup see ServiceConfig
+             * @param accessToken std::string with access token generated from Virgil dashboard
+             */
             Client(std::string accessToken);
 
+            /*!
+             * @brief Constructor.
+             * @see ServiceConfig
+             * @param serviceConfig ServiceConfig instance with all data needed to initialize Client
+             */
             Client(ServiceConfig serviceConfig);
 
+            /*!
+             * @brief Getter.
+             * @return ServiceConfig instance used to setup Client
+             */
             const ServiceConfig& serviceConfig() const { return serviceConfig_; }
 
+            /// @section ClientInterface implementation
             std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
 
             std::future<models::Card> getCard(const std::string &cardId) const override;

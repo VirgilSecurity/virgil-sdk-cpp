@@ -42,20 +42,72 @@
 namespace virgil {
 namespace sdk {
     namespace client {
+        /*!
+         * @brief This class is Container for data needed to setup Client
+         * @see Client
+         */
         class ServiceConfig {
         public:
+            /*!
+             * @brief Creates config with given token and default value
+             * @note Default ServiceConfig doesn't use any card validation @see CardValidatorInterface
+             * @param token
+             * @return ServiceConfig instance with given token and default values
+             */
             static ServiceConfig createConfig(const std::string &token);
 
-            // setters
+            /*! @brief Setter.
+             * @param token std::string to be set
+             * @return current ServiceConfig instance
+             */
             ServiceConfig& token(std::string token);
+
+            /*! @brief Setter.
+             * @param token std::string with url of cards service (includes base url, version and /)
+             * @note This url is used for endpoints capable to perform both read and write operations
+             * @return current ServiceConfig instance
+             */
             ServiceConfig& cardsServiceURL(std::string cardsServiceURL);
+
+            /*! @brief Setter.
+             * @param token std::string with url of cards service (includes base url, version and /)
+             * @note This url is used for endpoints capable to perform only read.
+             *       Don't use read/write url cause this can lead to performance issues
+             * @return current ServiceConfig instance
+             */
             ServiceConfig& cardsServiceROURL(std::string cardsServiceROURL);
+
+            /*!
+             * @brief Setter.
+             * @param validator std::unique_ptr with CardValidator implementation
+             * @note Can be null
+             * @return current ServiceConfig instance
+             */
             ServiceConfig& cardValidator(std::unique_ptr<interfaces::CardValidatorInterface> validator);
 
-            // getters
+            /*!
+             * @brief Getter.
+             * @return std::string with token.
+             */
             const std::string& token() const { return token_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with cards service URL.
+             */
             const std::string& cardsServiceURL() const { return cardsServiceURL_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with cards service read only URL.
+             */
             const std::string& cardsServiceROURL() const { return cardsServiceROURL_; }
+
+            /*!
+             * @brief Getter.
+             * @note Can be null
+             * @return std::unique_ptr with CardValidator interface.
+             */
             const std::unique_ptr<interfaces::CardValidatorInterface>& cardValidator() const { return validator_; }
 
         private:

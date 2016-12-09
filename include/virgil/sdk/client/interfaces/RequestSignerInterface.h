@@ -44,15 +44,32 @@ namespace virgil {
 namespace sdk {
 namespace client {
     namespace interfaces {
+        /*!
+         * @brief This interface is designed to sign Requests to the Virgil Service.
+         */
         class RequestSignerInterface {
         public:
+            /*!
+             * @brief Adds owner's signature to given request using provided Private Key
+             * @param request request to be signed in form of SignableInterface
+             * @param privateKey PrivateKey instance used to sign request
+             */
             virtual void selfSign(models::interfaces::SignableInterface &request,
                                   const crypto::keys::PrivateKey &privateKey) const = 0;
 
+            /*!
+             * @brief Adds Authority signature to given request using provided Private Key and Application ID
+             * @param request request to be signed in form of SignableInterface
+             * @param appId std::string which represents Authority identifier (for example, AppID)
+             * @param privateKey PrivateKey instance used to sign request
+              */
             virtual void authoritySign(models::interfaces::SignableInterface &request,
                                        const std::string &appId,
                                        const crypto::keys::PrivateKey &privateKey) const = 0;
 
+            /*!
+             * @brief Virtual destructor
+             */
             virtual ~RequestSignerInterface() = default;
         };
     }

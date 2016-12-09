@@ -46,15 +46,39 @@ namespace virgil {
 namespace sdk {
 namespace client {
     namespace models {
+        /*!
+         * @brief This class represent criteria used for Cards Search operation on the Virgil Service.
+         * @see Client
+         */
         class SearchCardsCriteria {
         public:
+            /*!
+             * @brief Create SearchCardsCriteria instance using given arguments.
+             * @param scope CardScope (global or application)
+             * @param identityType std::string representing identity type of desired cards
+             * @param identities std::vector of std::string instances with identities of desired cards
+             * @return
+             */
             static SearchCardsCriteria createCriteria(CardScope scope,
                                                       const std::string& identityType,
                                                       const std::vector<std::string>& identities);
 
-            // getters
+            /*!
+             * @brief Getter.
+             * @return std::vector of std::string instances with identities of desired cards
+             */
             const std::vector<std::string>& identities() const { return identities_; }
+
+            /*!
+             * @brief Getter.
+             * @return std::string with identity type of desired cards
+             */
             const std::string& identityType() const { return identityType_; }
+
+            /*!
+             * @brief Getter.
+             * @return CardScope of desired cards
+             */
             CardScope scope() const { return scope_; }
 
         private:

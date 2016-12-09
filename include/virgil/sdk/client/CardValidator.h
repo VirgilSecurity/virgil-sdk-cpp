@@ -44,15 +44,32 @@
 namespace virgil {
 namespace sdk {
 namespace client {
+    /*!
+     * @brief Default implementation of CardValidatorInterface
+     */
     class CardValidator: public interfaces::CardValidatorInterface {
     public:
+        /*!
+         * @brief Constructor.
+         * @param crypto std::shared_ptr to some CryptoInterface implementation
+         */
         CardValidator(const std::shared_ptr<crypto::CryptoInterface> &crypto);
 
-        bool validateCardResponse(const models::responses::CardResponse &response) const override;
-
+        /*!
+         * @brief Adds custom verifier to validator.
+         * @param verifierId std::string verifier ID
+         * @param publicKeyData exported Public Key of verifier
+         */
         void addVerifier(std::string verifierId, VirgilByteArray publicKeyData);
 
+        /*!
+         * @brief Getter.
+         * @return std::unordered_map of all verifiers, except owner
+         */
         const std::unordered_map<std::string, VirgilByteArray>& verifiers() const { return verifiers_; };
+
+        /// @section CardValidatorInterface implementation
+        bool validateCardResponse(const models::responses::CardResponse &response) const override;
 
     private:
         std::shared_ptr<crypto::CryptoInterface> crypto_;

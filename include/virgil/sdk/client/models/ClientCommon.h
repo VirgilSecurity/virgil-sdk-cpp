@@ -43,23 +43,30 @@ namespace virgil {
 namespace sdk {
 namespace client {
     namespace models {
+        /*!
+         * @brief Represents Card Scope on the Virgil Service
+         */
         enum class CardScope {
             application,
             global
         };
 
-        std::string cardScopeToStr(virgil::sdk::client::models::CardScope scope);
-
-        virgil::sdk::client::models::CardScope strToCardScope(const std::string &scopeStr);
-
+        /*!
+         * @brief Represents Card Revocation Reason
+         */
         enum class CardRevocationReason {
             unspecified,
             compromised
         };
 
-        std::string cardRevocationReasonToStr(virgil::sdk::client::models::CardRevocationReason reason);
+        // This is private API
+        //! @cond Doxygen_S
+        std::string cardScopeToStr(virgil::sdk::client::models::CardScope scope);
+        virgil::sdk::client::models::CardScope strToCardScope(const std::string &scopeStr);
 
+        std::string cardRevocationReasonToStr(virgil::sdk::client::models::CardRevocationReason reason);
         virgil::sdk::client::models::CardRevocationReason strToCardRevocationReason(const std::string &reasonStr);
+        //! @endconduppress
     }
 }
 }
