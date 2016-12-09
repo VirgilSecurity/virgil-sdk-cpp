@@ -61,17 +61,15 @@ using virgil::crypto::VirgilSigner;
 using virgil::crypto::VirgilCipher;
 using virgil::crypto::VirgilChunkCipher;
 using virgil::crypto::VirgilStreamSigner;
+using virgil::crypto::foundation::VirgilHash;
 using virgil::crypto::stream::VirgilStreamDataSource;
 using virgil::crypto::stream::VirgilStreamDataSink;
-using virgil::crypto::foundation::VirgilHash;
 using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::crypto::keys::PublicKey;
 using virgil::sdk::crypto::keys::KeyPair;
+using virgil::sdk::VirgilHashAlgorithm;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
-
-Crypto::Crypto() {
-}
 
 // Key management
 KeyPair Crypto::generateKeyPair() const {
@@ -258,15 +256,15 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 }
 
 //Utils
-
 Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
-    auto hash = VirgilHash(VirgilHash::Algorithm::SHA256);
-    return Fingerprint(hash.hash(data));
+    return Fingerprint(computeHash(data, VirgilHashAlgorithm::SHA256));
+}
+
+VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const {
+    auto hash = VirgilHash(algorithm);
+    return hash.hash(data);
 }
 
 VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
-    auto publicKeyDER = VirgilKeyPair::publicKeyToDER(publicKey);
-
-    auto hash = VirgilHash(VirgilHash::Algorithm::SHA256);
-    return hash.hash(publicKeyDER);
+    return computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA256);
 }

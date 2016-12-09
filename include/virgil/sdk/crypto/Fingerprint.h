@@ -44,12 +44,35 @@
 namespace virgil {
 namespace sdk {
     namespace crypto {
+        /*!
+         * @brief Class representing fingerprint of data.
+         */
         class Fingerprint {
         public:
+            /*!
+             * @brief Constructor.
+             * @param value raw data
+             */
             explicit Fingerprint(VirgilByteArray value);
+
+            /*!
+             * @brief Constructor.
+             * @param hex std::string with hex data representation
+             */
             explicit Fingerprint(const std::string& hex);
 
+            /*!
+             * Getter.
+             * @return returns
+             */
             const VirgilByteArray& value() const;
+
+            /*!
+             * Getter.
+             * @note implementation includes conversion of data
+             *       from raw to hex representation on every call
+             * @return std::string with hex representation of data
+             */
             std::string hexValue() const;
 
         private:

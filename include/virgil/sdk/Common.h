@@ -40,12 +40,14 @@
 #include <virgil/crypto/VirgilByteArray.h>
 #include <virgil/crypto/VirgilByteArrayUtils.h>
 #include <virgil/crypto/foundation/VirgilBase64.h>
+#include <virgil/crypto/foundation/VirgilHash.h>
 
 namespace virgil {
 namespace sdk {
     using VirgilByteArray = virgil::crypto::VirgilByteArray;
     using VirgilBase64 = virgil::crypto::foundation::VirgilBase64;
     using VirgilByteArrayUtils = virgil::crypto::VirgilByteArrayUtils;
+    using VirgilHashAlgorithm = virgil::crypto::foundation::VirgilHash::Algorithm;
 }
 }
 

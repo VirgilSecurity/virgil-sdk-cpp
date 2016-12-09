@@ -43,11 +43,13 @@
 namespace virgil {
 namespace sdk {
     namespace crypto {
+        /*!
+         * @brief Default implementation of CryptoInterface using VirgilCrypto lib
+         */
         class Crypto: public CryptoInterface {
         public:
-            Crypto();
+            /// @section Implementation of CryptoInterface member functions
 
-            // CryptoInterface implementation
             keys::KeyPair generateKeyPair() const override;
 
             keys::PrivateKey importPrivateKey(const VirgilByteArray &data,
@@ -91,6 +93,16 @@ namespace sdk {
             VirgilByteArray generateSignature(std::istream &istream, const keys::PrivateKey &privateKey) const override;
 
             Fingerprint calculateFingerprint(const VirgilByteArray &data) const override;
+
+            /// @section Additional functionality
+
+            /*!
+             * @brief Computes hash of data using selected algorithm.
+             * @param data data of which hash is computed
+             * @param algorithm hash algorithm
+             * @return hash
+             */
+            VirgilByteArray computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const;
 
         private:
             VirgilByteArray computeHashForPublicKey(const VirgilByteArray &publicKey) const;

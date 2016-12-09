@@ -39,7 +39,7 @@
 
 #include <virgil/sdk/Common.h>
 
-// forward decl
+/// forward decl
 namespace virgil {
 namespace sdk {
     namespace crypto {
@@ -52,6 +52,10 @@ namespace virgil {
 namespace sdk {
 namespace crypto {
     namespace keys {
+        /*!
+         * @brief Container for Private Key which is used for crypto operations.
+         * @see CryptoInterface
+         */
         class PrivateKey {
         private:
             PrivateKey(VirgilByteArray key, VirgilByteArray identifier);

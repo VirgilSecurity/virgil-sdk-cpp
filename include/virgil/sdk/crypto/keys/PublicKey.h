@@ -39,19 +39,23 @@
 
 #include <virgil/sdk/Common.h>
 
-// forward decl
+/// forward decl
 namespace virgil {
-    namespace sdk {
-        namespace crypto {
-            class Crypto;
-        }
+namespace sdk {
+    namespace crypto {
+        class Crypto;
     }
+}
 }
 
 namespace virgil {
 namespace sdk {
 namespace crypto {
     namespace keys {
+        /*!
+         * @brief Container for Public Key which is used for crypto operations.
+         * @see CryptoInterface
+         */
         class PublicKey {
         private:
             PublicKey(VirgilByteArray key, VirgilByteArray identifier);

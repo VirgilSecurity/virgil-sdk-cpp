@@ -40,24 +40,35 @@
 #include <virgil/sdk/crypto/keys/PrivateKey.h>
 #include <virgil/sdk/crypto/keys/PublicKey.h>
 
-// forward decl
+/// forward decl
 namespace virgil {
-    namespace sdk {
-        namespace crypto {
-            class Crypto;
-        }
+namespace sdk {
+    namespace crypto {
+        class Crypto;
     }
+}
 }
 
 namespace virgil {
 namespace sdk {
 namespace crypto {
     namespace keys {
+        /*!
+         * @brief Wrapper for related Public Key and Private Key.
+         * @see CryptoInterface
+         */
         class KeyPair {
-            friend class virgil::sdk::crypto::Crypto;
-
         public:
+            /*!
+             * @brief Getter.
+             * @return Public Key
+             */
             const PublicKey& publicKey() const { return publicKey_; }
+
+            /*!
+             * @brief Getter.
+             * @return Private Key
+             */
             const PrivateKey& privateKey() const { return privateKey_; }
 
         private:
@@ -65,6 +76,8 @@ namespace crypto {
 
             PrivateKey privateKey_;
             PublicKey publicKey_;
+
+            friend Crypto;
         };
     }
 }
