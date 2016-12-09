@@ -1,6 +1,5 @@
 sudo: false
 language: generic
-os: linux
 
 cache:
   apt: true
@@ -8,7 +7,8 @@ cache:
 matrix:
   include:
     - compiler: gcc
-      env: CXX=g++-5 CC=gcc-5
+      os: linux
+      env: CXX=g++-5 CC=gcc-5 BUILD_DIR_NAME=build DOC_BRANCH=master
       addons:
         apt:
           packages:
@@ -17,7 +17,8 @@ matrix:
             - ubuntu-toolchain-r-test
       
     - compiler: clang
-      env: CXX=clang++-3.7 CC=clang-3.7
+      os: linux
+      env: CXX=clang++-3.7 CC=clang-3.7 BUILD_DIR_NAME=build DOC_BRANCH=master
       addons:
         apt:
           packages:
@@ -28,11 +29,6 @@ matrix:
 
   exclude:
     - compiler: gcc
-
-env:
-  global:
-    - BUILD_DIR_NAME=build
-    - DOC_BRANCH=master
 
 cache:
   directories:
