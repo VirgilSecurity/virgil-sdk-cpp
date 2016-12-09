@@ -45,6 +45,7 @@ namespace sdk {
     namespace http {
         /**
          * @brief This is base class for all HTTP responses.
+         * @note This class belongs to the **private** API
          */
         class Response {
         public:

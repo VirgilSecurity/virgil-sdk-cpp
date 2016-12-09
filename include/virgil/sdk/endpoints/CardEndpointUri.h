@@ -43,34 +43,32 @@ namespace virgil {
 namespace sdk {
     namespace endpoints {
         /**
-         * @brief This class provide URIs to the Virgil Card endpoints
-         * @note All endpoints start with forward slash symbol "/" and contain version
+         * @brief This class provides URIs to the Virgil Service endpoints.
          */
         class CardEndpointUri {
         public:
             /**
-             * @brief Returns the endpoint in charge of a Virgil Card creation
+             * @brief Returns the endpoint in charge of a Virgil Card creation.
              */
             static std::string create();
             /**
-             * @brief Returns the endpoint in charge of a Virgil Card grab
+             * @brief Returns the endpoint in charge of a Virgil Card grab.
              */
             static std::string get(const std::string& cardId);
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters
+             * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
              */
             static std::string search();
             /**
-             * @brief Returns the endpoint in charge of the Virgil Card revoke
+             * @brief Returns the endpoint in charge of the Virgil Card revoke.
              * @param cardId - Virgil Card identifier
              */
             static std::string revoke(const std::string& cardId);
 
-        private:
             /**
              * @brief Deny object creation
              */
-            CardEndpointUri();
+            CardEndpointUri() = delete;
         };
     }
 }

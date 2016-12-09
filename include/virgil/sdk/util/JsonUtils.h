@@ -47,8 +47,14 @@
 namespace virgil {
 namespace sdk {
     namespace util {
+        /**
+         * @brief This class holds utils for Json processing.
+         *
+         * @note This class belongs to the **private** API
+         */
         class JsonUtils {
         public:
+            //! @cond Doxygen_Suppress
             static std::unordered_map<std::string, std::string> jsonToUnorderedMap(const nlohmann::json &jsonObj);
 
             static std::unordered_map<std::string, VirgilByteArray> jsonToUnorderedBinaryMap(
@@ -57,7 +63,11 @@ namespace sdk {
             static nlohmann::json unorderedMapToJson(const std::unordered_map<std::string, std::string> &map);
 
             static nlohmann::json unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map);
+            //! @endcond
 
+            /*!
+             * Forbid creation.
+             */
             JsonUtils() = delete;
         };
     }

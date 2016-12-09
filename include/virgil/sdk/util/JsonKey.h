@@ -49,6 +49,7 @@ namespace sdk {
          */
         class JsonKey {
         public:
+            //! @cond Doxygen_Suppress
             static const std::string Id;
             static const std::string CreatedAt;
             static const std::string CardVersion;
@@ -65,9 +66,12 @@ namespace sdk {
             static const std::string RevocationReason;
             static const std::string Identities;
             static const std::string Code;
+            //! @endcond
 
-        private:
-            JsonKey();
+            /*!
+             * Forbid creation.
+             */
+            JsonKey() = delete;
         };
     }
 }

@@ -43,9 +43,9 @@
 namespace virgil {
 namespace sdk {
     namespace http {
-
         /**
          * @brief This class encapsulates access to the HTTP layer.
+         * @note This class belongs to the **private** API
          */
         class Connection {
         public:

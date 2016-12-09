@@ -44,7 +44,6 @@
 
 namespace virgil {
     namespace sdk {
-
         /**
          * @brief Specific error codes for the sdk.
          * @ingroup Error
@@ -85,9 +84,9 @@ namespace virgil {
         const VirgilSdkErrorCategory& sdk_category() noexcept;
 
         /**
-         * @brief Build exception with given error value and corresond error category.
+         * @brief Build exception with given error value and corresponding error category.
          * @param ev Error value.
-         * @return Exception with given error value and corresond error category.
+         * @return Exception with given error value and corresponding error category.
          * @see VirgilSDKError for specific error values.
          * @ingroup Error
          */
@@ -99,7 +98,7 @@ namespace virgil {
          * @brief Build exception with given error value and corresponding error category.
          * @param ev Error value.
          * @param what Additional error description.
-         * @return Exception with given error value and corresond error category.
+         * @return Exception with given error value and corresponding error category.
          * @see VirgilSDKError for specific error values.
          * @ingroup Error
          */
@@ -111,7 +110,7 @@ namespace virgil {
          * @brief Build exception with given error value and corresponding error category.
          * @param ev Error value.
          * @param what Additional error description.
-         * @return Exception with given error value and corresond error category.
+         * @return Exception with given error value and corresponding error category.
          * @see VirgilSDKError for specific error values.
          * @ingroup Error
          */

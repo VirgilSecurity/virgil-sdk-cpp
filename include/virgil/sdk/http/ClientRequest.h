@@ -44,7 +44,7 @@ namespace virgil {
 namespace sdk {
     namespace http {
         /**
-         * @brief This is base class for all HTTP requests.
+         * @brief This is base class for all HTTP requests to the Virgil Service.
          */
         class ClientRequest : public Request {
         public:
