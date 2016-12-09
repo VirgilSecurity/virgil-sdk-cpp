@@ -6,6 +6,9 @@ cache:
   apt: true
 
 matrix:
+  exclude:
+    - compiler: gcc
+    
   include:
     - compiler: gcc
       env: CXX=g++-5 CC=gcc-5
