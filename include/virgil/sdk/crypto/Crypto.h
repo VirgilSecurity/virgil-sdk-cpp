@@ -48,8 +48,7 @@ namespace sdk {
          */
         class Crypto: public CryptoInterface {
         public:
-            /// @section Implementation of CryptoInterface member functions
-
+            /// Implementation of CryptoInterface member functions
             keys::KeyPair generateKeyPair() const override;
 
             keys::PrivateKey importPrivateKey(const VirgilByteArray &data,
@@ -94,7 +93,7 @@ namespace sdk {
 
             Fingerprint calculateFingerprint(const VirgilByteArray &data) const override;
 
-            /// @section Additional functionality
+            /// Additional functionality
 
             /*!
              * @brief Computes hash of data using selected algorithm.

@@ -63,14 +63,14 @@ namespace sdk {
             ServiceConfig& token(std::string token);
 
             /*! @brief Setter.
-             * @param token std::string with url of cards service (includes base url, version and /)
+             * @param cardsServiceURL std::string with url of cards service (includes base url, version and /)
              * @note This url is used for endpoints capable to perform both read and write operations
              * @return current ServiceConfig instance
              */
             ServiceConfig& cardsServiceURL(std::string cardsServiceURL);
 
             /*! @brief Setter.
-             * @param token std::string with url of cards service (includes base url, version and /)
+             * @param cardsServiceROURL std::string with url of cards service (includes base url, version and /)
              * @note This url is used for endpoints capable to perform only read.
              *       Don't use read/write url cause this can lead to performance issues
              * @return current ServiceConfig instance

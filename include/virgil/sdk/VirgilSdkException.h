@@ -48,7 +48,7 @@ namespace virgil {
          * @brief This only exception that sdk can produce.
          *
          * To determine the real exception reason, error codes in conjuction with error category are used.
-         * Error codes can be found in the enumeration @link VirgilSDKError @endlink.
+         * Error codes can be found in the enumeration VirgilSdkError.
          *
          * @ingroup Error
          */
@@ -112,6 +112,6 @@ void rethrow_if_nested(const T&) {
 }
 }
 #endif
-//! @endconduppress
+//! @endcond
 
 #endif //VIRGIL_SDK_VIRGILSDKEXCEPTION_H

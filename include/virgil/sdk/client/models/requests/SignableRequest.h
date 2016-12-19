@@ -64,17 +64,33 @@ namespace models {
         public:
             /*!
              * @brief Getter.
-             * @return Return snapshot model
+             * @return Returns snapshot model
              */
             const SnapshotModelType& snapshotModel() const { return snapshotModel_; }
 
-            /// @section Interface implementations
+            /*!
+             * @brief Getter.
+             * @return Snapshot of data to be signed
+             */
             const VirgilByteArray& snapshot() const override { return snapshot_; }
 
+            /*!
+             * @brief Getter.
+             * @return std::unordered_map of all signatures of this request.
+             */
             const std::unordered_map<std::string, VirgilByteArray>& signatures() const override { return signatures_; };
 
+            /*!
+             * @brief Exports object.
+             * @return std::string representation of object
+             */
             std::string exportAsString() const override;
 
+            /*!
+             * @brief Adds new signature.
+             * @param signature raw signature
+             * @param fingerprint std::string with related fingerprint
+             */
             void addSignature(VirgilByteArray signature, std::string fingerprint) override {
                 signatures_[std::move(fingerprint)] = std::move(signature);
             }

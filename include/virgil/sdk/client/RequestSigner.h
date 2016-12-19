@@ -56,7 +56,6 @@ namespace sdk {
              */
             RequestSigner(const std::shared_ptr<crypto::CryptoInterface> &crypto);
 
-            /// @section CardValidatorInterface implementation
             void selfSign(models::interfaces::SignableInterface &request,
                           const crypto::keys::PrivateKey &privateKey) const override;
 

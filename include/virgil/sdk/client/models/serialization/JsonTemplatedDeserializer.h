@@ -55,6 +55,13 @@ namespace models {
         template <typename T>
         class JsonTemplatedDeserializerBase {
         public:
+            /*!
+             *
+             * @tparam ResultType type for deserialized objects. Supported classes: CreateCardRequest,
+             *         RevokeCardRequest.
+             * @param jsonString json representation of the object in std::string form
+             * @return deserialized object
+             */
             template<typename ResultType>
             static ResultType fromJsonString(const std::string &jsonString) {
                 return JsonTemplatedDeserializer<T>::template fromJson<ResultType>(nlohmann::json::parse(jsonString));

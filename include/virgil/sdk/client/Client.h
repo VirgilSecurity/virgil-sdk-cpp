@@ -71,7 +71,6 @@ namespace sdk {
              */
             const ServiceConfig& serviceConfig() const { return serviceConfig_; }
 
-            /// @section ClientInterface implementation
             std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const override;
 
             std::future<models::Card> getCard(const std::string &cardId) const override;

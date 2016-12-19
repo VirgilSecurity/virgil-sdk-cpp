@@ -68,7 +68,6 @@ namespace client {
          */
         const std::unordered_map<std::string, VirgilByteArray>& verifiers() const { return verifiers_; };
 
-        /// @section CardValidatorInterface implementation
         bool validateCardResponse(const models::responses::CardResponse &response) const override;
 
     private:

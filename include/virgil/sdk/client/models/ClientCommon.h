@@ -66,7 +66,7 @@ namespace client {
 
         std::string cardRevocationReasonToStr(virgil::sdk::client::models::CardRevocationReason reason);
         virgil::sdk::client::models::CardRevocationReason strToCardRevocationReason(const std::string &reasonStr);
-        //! @endconduppress
+        //! @endcond
     }
 }
 }
