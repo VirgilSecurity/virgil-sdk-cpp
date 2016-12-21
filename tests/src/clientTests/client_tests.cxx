@@ -53,13 +53,18 @@ using virgil::sdk::client::models::CardScope;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
 using virgil::sdk::client::CardValidator;
+using virgil::crypto::foundation::VirgilBase64;
+using virgil::sdk::client::interfaces::CardValidatorInterface;
 
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
 
     auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    serviceConfig.cardValidator(std::move(validator));
+
     auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
@@ -76,7 +81,10 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
     TestUtils utils(consts);
 
     auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    serviceConfig.cardValidator(std::move(validator));
+
     auto client = Client(std::move(serviceConfig));
 
     std::unordered_map<std::string, std::string> data;
@@ -97,7 +105,10 @@ TEST_CASE("test003_SearchCards", "[client]") {
     TestUtils utils(consts);
 
     auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    serviceConfig.cardValidator(std::move(validator));
+
     auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
@@ -122,7 +133,10 @@ TEST_CASE("test004_GetCard", "[client]") {
     TestUtils utils(consts);
 
     auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    serviceConfig.cardValidator(std::move(validator));
+
     auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
@@ -145,7 +159,10 @@ TEST_CASE("test005_RevokeCard", "[client]") {
     TestUtils utils(consts);
 
     auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    serviceConfig.cardValidator(std::make_unique<CardValidator>(utils.crypto()));
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    serviceConfig.cardValidator(std::move(validator));
+
     auto client = Client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
