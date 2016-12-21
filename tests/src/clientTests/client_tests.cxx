@@ -65,7 +65,7 @@ TEST_CASE("test001_CreateCard", "[client]") {
     validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
     serviceConfig.cardValidator(std::move(validator));
 
-    auto client = Client(std::move(serviceConfig));
+    Client client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -85,7 +85,7 @@ TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
     validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
     serviceConfig.cardValidator(std::move(validator));
 
-    auto client = Client(std::move(serviceConfig));
+    Client client(std::move(serviceConfig));
 
     std::unordered_map<std::string, std::string> data;
     data["some_random_key1"] = "some_random_data1";
@@ -109,7 +109,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
     serviceConfig.cardValidator(std::move(validator));
 
-    auto client = Client(std::move(serviceConfig));
+    Client client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -137,7 +137,7 @@ TEST_CASE("test004_GetCard", "[client]") {
     validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
     serviceConfig.cardValidator(std::move(validator));
 
-    auto client = Client(std::move(serviceConfig));
+    Client client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
@@ -163,7 +163,7 @@ TEST_CASE("test005_RevokeCard", "[client]") {
     validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
     serviceConfig.cardValidator(std::move(validator));
 
-    auto client = Client(std::move(serviceConfig));
+    Client client(std::move(serviceConfig));
 
     auto createCardRequest = utils.instantiateCreateCardRequest();
 
