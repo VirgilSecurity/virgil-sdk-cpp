@@ -61,9 +61,9 @@ namespace models {
             template<int FAKE = 0>
             static VirgilError fromJson(const json &j) {
                 try {
-                    std::string errorCodeStr = j[JsonKey::Code];
+                    int errorCodeStr = j[JsonKey::Code];
 
-                    return VirgilError(std::stoi(errorCodeStr));
+                    return VirgilError(errorCodeStr);
                 } catch (std::exception &exception) {
                     throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<VirgilError>::fromJson ") +
                                            exception.what());
