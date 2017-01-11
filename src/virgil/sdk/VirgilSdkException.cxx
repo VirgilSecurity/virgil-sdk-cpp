@@ -71,6 +71,10 @@ VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat, 
 VirgilSdkException::VirgilSdkException(int ev, const std::error_category& ecat, const char* what)
         : condition_(ev, ecat), what_(internal::format_message(condition_, what)) {}
 
+const std::error_condition& VirgilSdkException::condition() const {
+    return condition_;
+}
+
 const char* VirgilSdkException::what() const noexcept {
     return what_.c_str();
 }
