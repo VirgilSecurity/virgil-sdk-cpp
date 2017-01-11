@@ -40,6 +40,8 @@ using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::client::models::Card;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 
+using virgil::crypto::VirgilByteArray;
+
 Card CardResponse::buildCard() const {
     return Card(identifier_, model_.identity(), model_.identityType(), model_.publicKeyData(), model_.data(),
                 model_.scope(), model_.info(), createdAt_, cardVersion_);

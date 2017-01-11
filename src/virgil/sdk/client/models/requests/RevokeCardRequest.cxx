@@ -36,13 +36,17 @@
 
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
+#include <virgil/sdk/client/models/ClientCommon.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::models::requests::RevokeCardRequest>(), "RevokeCardRequest must not be abstract.");
 
+using virgil::sdk::client::models::CardRevocationReason;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
 using virgil::sdk::client::models::serialization::CanonicalSerializer;
+
+using virgil::crypto::VirgilByteArray;
 
 RevokeCardRequest RevokeCardRequest::createRequest(const std::string &cardId, CardRevocationReason reason) {
     return RevokeCardRequest(cardId, reason);
@@ -60,7 +64,7 @@ RevokeCardRequest::RevokeCardRequest(const VirgilByteArray &snapshot,
             signatures) {
 }
 
-RevokeCardRequest::RevokeCardRequest(const snapshotmodels::RevokeCardSnapshotModel &model,
+RevokeCardRequest::RevokeCardRequest(const RevokeCardSnapshotModel &model,
                                      const std::unordered_map<std::string, VirgilByteArray> &signatures)
         : SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>(model) {
 }

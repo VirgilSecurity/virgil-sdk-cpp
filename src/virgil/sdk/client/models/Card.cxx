@@ -37,6 +37,8 @@
 #include <virgil/sdk/client/models/Card.h>
 
 using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::CardScope;
+using virgil::crypto::VirgilByteArray;
 
 Card::Card(std::string identifier, std::string identity, std::string identityType, VirgilByteArray publicKeyData,
            std::unordered_map<std::string, std::string> data, CardScope scope,

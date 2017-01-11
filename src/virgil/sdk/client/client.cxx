@@ -75,7 +75,7 @@ Client::Client(ServiceConfig serviceConfig)
         : serviceConfig_(std::move(serviceConfig)) {
 }
 
-Error Client::parseError(const http::Response &response) const {
+Error Client::parseError(const Response &response) const {
     try {
         auto virgilError = JsonDeserializer<VirgilError>::fromJsonString(response.body());
         return Error(response.statusCodeRaw(), virgilError);

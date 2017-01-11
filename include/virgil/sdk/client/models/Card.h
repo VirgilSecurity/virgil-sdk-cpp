@@ -58,6 +58,11 @@ namespace client {
         class Card {
         public:
             /*!
+             * @brief Required within std::future
+             */
+            Card() = default;
+
+            /*!
              * @brief Constructor.
              * @param identifier std::string with card ID
              * @param identity std::string with card identity

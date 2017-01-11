@@ -36,6 +36,9 @@
 
 #include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
 
+#include <virgil/sdk/client/models/ClientCommon.h>
+
+using virgil::sdk::client::models::CardRevocationReason;
 using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
 
 RevokeCardSnapshotModel RevokeCardSnapshotModel::createModel(const std::string &cardId, CardRevocationReason reason) {

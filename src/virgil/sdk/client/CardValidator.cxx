@@ -36,12 +36,19 @@
 
 #include <virgil/sdk/client/CardValidator.h>
 
+#include <virgil/sdk/crypto/CryptoInterface.h>
+
+#include <virgil/crypto/VirgilByteArray.h>
+
+using virgil::sdk::crypto::CryptoInterface;
+using virgil::crypto::VirgilByteArray;
+
 static_assert(!std::is_abstract<virgil::sdk::client::CardValidator>(), "CardValidator must not be abstract.");
 
 using virgil::sdk::client::CardValidator;
 using virgil::sdk::client::models::responses::CardResponse;
 
-CardValidator::CardValidator(const std::shared_ptr<crypto::CryptoInterface> &crypto)
+CardValidator::CardValidator(const std::shared_ptr<CryptoInterface> &crypto)
         : crypto_(crypto) {
 }
 
