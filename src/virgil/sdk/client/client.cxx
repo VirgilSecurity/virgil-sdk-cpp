@@ -110,7 +110,7 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
             }
         }
 
-        return cardResponse.buildCard();
+        return Card::buildCard(cardResponse);
     });
 
     return future;
@@ -140,7 +140,7 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
             }
         }
 
-        return cardResponse.buildCard();
+        return Card::buildCard(cardResponse);
     });
 
     return future;
@@ -173,7 +173,12 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
             }
         }
 
-        return cardsResponse.buildCards();
+        std::vector<Card> result;
+        for (const auto& cardResponse : cardsResponse.cardsResponse()) {
+            result.push_back(Card::buildCard(cardResponse));
+        }
+
+        return result;
     });
 
     return future;

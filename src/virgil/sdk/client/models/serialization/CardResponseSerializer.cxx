@@ -90,6 +90,33 @@ namespace models {
 
             JsonDeserializer() = delete;
         };
+
+        template<>
+        class JsonSerializer<CardResponse> {
+        public:
+            template<int INDENT = -1>
+            static std::string toJson(const CardResponse &response) {
+                try {
+                    json j = {
+                            {JsonKey::ContentSnapshot, VirgilBase64::encode(response.snapshot())}
+                    };
+
+                    j[JsonKey::Id] = response.identifier();
+                    j[JsonKey::Meta][JsonKey::Signs] = JsonUtils::unorderedBinaryMapToJson(
+                            response.signatures());
+                    j[JsonKey::Meta][JsonKey::CreatedAt] = response.createdAt();
+                    j[JsonKey::Meta][JsonKey::CardVersion] = response.cardVersion();
+
+                    return j.dump(INDENT);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(
+                            std::string("virgil-sdk:\n JsonSerializer<CardResponse>::toJson ")
+                            + exception.what());
+                }
+            }
+
+            JsonSerializer() = delete;
+        };
     }
 }
 }
@@ -101,3 +128,6 @@ namespace models {
  */
 template CardResponse
 virgil::sdk::client::models::serialization::JsonDeserializer<CardResponse>::fromJson(const json&);
+
+template std::string
+virgil::sdk::client::models::serialization::JsonSerializer<CardResponse>::toJson(const CardResponse&);

@@ -42,11 +42,15 @@
 #include <TestUtils.h>
 
 #include <virgil/sdk/client/Client.h>
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
+#include <virgil/sdk/client/CardValidator.h>
 
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::CardRevocationReason;
+using virgil::sdk::client::CardValidator;
+using virgil::sdk::VirgilBase64;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
 
@@ -80,4 +84,22 @@ TEST_CASE("test002_RevokeCardImportExport", "[models]") {
     auto importedRequest = RevokeCardRequest::importFromString(request);
 
     REQUIRE(utils.checkRevokeCardRequestEquality(revokeCardRequest, importedRequest));
+}
+
+TEST_CASE("test003_CardImportExport", "[models]") {
+    TestConst consts;
+    TestUtils utils((TestConst()));
+
+    auto card = utils.instantiateCard();
+
+    auto cardStr = card.exportAsString();
+
+    auto importedCard = Card::importFromString(cardStr);
+
+    auto validator = std::make_unique<CardValidator>(utils.crypto());
+    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
+    REQUIRE(validator->verifiers().size() == 2);
+
+    REQUIRE(utils.checkCardEquality(card, importedCard));
+    REQUIRE(validator->validateCardResponse(importedCard.cardResponse()));
 }

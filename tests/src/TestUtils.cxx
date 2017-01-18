@@ -39,6 +39,8 @@
 #include <helpers.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
 #include <virgil/sdk/client/RequestSigner.h>
+#include <virgil/sdk/client/models/responses/CardResponse.h>
+#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::client::models::CardRevocationReason;
@@ -46,6 +48,8 @@ using virgil::sdk::test::Utils;
 using virgil::sdk::test::TestUtils;
 using virgil::sdk::VirgilBase64;
 using virgil::sdk::client::RequestSigner;
+using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::client::models::serialization::JsonDeserializer;
 
 CreateCardRequest TestUtils::instantiateCreateCardRequest(
         const std::unordered_map<std::string, std::string> &data,
@@ -81,6 +85,11 @@ RevokeCardRequest TestUtils::instantiateRevokeCardRequest(const Card &card) cons
     signer.authoritySign(request, consts.applicationId(), appPrivateKey);
 
     return request;
+}
+
+Card TestUtils::instantiateCard() const {
+    auto cardResponse = JsonDeserializer<CardResponse>::fromJsonString("{\"id\":\"5bbe7efe9786e0b6d8409a5ec0fc45d7b9956548e0cc2baba58e05b8934f3d1f\",\"content_snapshot\":\"eyJpZGVudGl0eSI6IkMzN2dFRnY0RG14d25WOXRVcEJEZ2FxT3RwQ1Q0bDRSZDF0ZTJPTFEiLCJpZGVudGl0eV90eXBlIjoidGVzdCIsInB1YmxpY19rZXkiOiJNQ293QlFZREsyVndBeUVBK3c0bGNNcnBKbkN3dEExeDlHMEJTM0hzWFF5QlAxVlRTOTlUV1gzSnpOTT0iLCJzY29wZSI6ImFwcGxpY2F0aW9uIn0=\",\"meta\":{\"created_at\":\"2017-01-18T11:51:17+0000\",\"card_version\":\"4.0\",\"signs\":{\"5bbe7efe9786e0b6d8409a5ec0fc45d7b9956548e0cc2baba58e05b8934f3d1f\":\"MFEwDQYJYIZIAWUDBAICBQAEQOtH1Xxm9MAN3UJGrOjt8g6LoA5ovB2kX1IMOFgjYl7+QQy3c+Qz1qThekwS8SETTXqVEwJSvS9X+o9BDReJ4AM=\",\"c53035253366736218ea3ebc924275073aafc2e78d09fe4f910e6b33a7297dd7\":\"MFEwDQYJYIZIAWUDBAICBQAEQIATNZh6jjHvXyq314uXwzKTh9h\\/mqK3S+EeKE+pFuSoaw1BLytaN9CVyJFPkfdaRpdU2uYPMGjQlBrXfmCaDws=\",\"3e29d43373348cfb373b7eae189214dc01d7237765e572db685839b64adca853\":\"MFEwDQYJYIZIAWUDBAICBQAEQIW7qBS\\/8tHo8pKfNMb4GO1ARsWqkuh157F8JENBQSrnPhZC5oe9z8\\/2hD+OGUFoaubaDEl\\/PJcO4RzACdw46Qg=\"}}}");
+    return Card::buildCard(cardResponse);
 }
 
 bool TestUtils::checkCardEquality(const Card &card, const CreateCardRequest &request) {

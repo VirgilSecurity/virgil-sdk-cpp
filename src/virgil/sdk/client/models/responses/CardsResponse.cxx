@@ -38,17 +38,6 @@
 
 using virgil::sdk::client::models::responses::CardResponse;
 using virgil::sdk::client::models::responses::CardsResponse;
-using virgil::sdk::client::models::Card;
-
-std::vector<Card> CardsResponse::buildCards() const {
-    std::vector<Card> result;
-
-    for (const auto& cardResponse : cardsResponse_) {
-        result.push_back(cardResponse.buildCard());
-    }
-
-    return result;
-}
 
 CardsResponse::CardsResponse(std::vector<CardResponse> cardsResponse) : cardsResponse_(std::move(cardsResponse)) {
 }

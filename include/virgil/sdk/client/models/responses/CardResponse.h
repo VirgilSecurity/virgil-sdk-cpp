@@ -40,7 +40,6 @@
 #include <unordered_map>
 
 #include <virgil/sdk/Common.h>
-#include <virgil/sdk/client/models/Card.h>
 #include <virgil/sdk/client/models/snapshotmodels/CreateCardSnapshotModel.h>
 
 namespace virgil {
@@ -54,10 +53,9 @@ namespace models {
         class CardResponse {
         public:
             /*!
-             * @brief Creates Card instance using CardResponse data
-             * @return Card instance
+             * @brief Required within std::future
              */
-            Card buildCard() const;
+            CardResponse() = default;
 
             /*!
              * @brief Getter.

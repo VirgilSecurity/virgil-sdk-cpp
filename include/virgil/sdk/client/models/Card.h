@@ -43,6 +43,9 @@
 
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
+#include <virgil/sdk/client/models/responses/CardResponse.h>
+#include <virgil/sdk/client/models/interfaces/Exportable.h>
+#include <virgil/sdk/client/models/interfaces/Importable.h>
 
 namespace virgil {
 namespace sdk {
@@ -55,7 +58,7 @@ namespace client {
          * info about device on which Card was created, custom payload, version,
          * creation date and scope (global or application)
          */
-        class Card {
+        class Card: interfaces::Exportable, interfaces::Importable<Card> {
         public:
             /*!
              * @brief Required within std::future
@@ -63,21 +66,16 @@ namespace client {
             Card() = default;
 
             /*!
-             * @brief Constructor.
-             * @param identifier std::string with card ID
-             * @param identity std::string with card identity
-             * @param identityType std::string with card identity type
-             * @param publicKeyData raw representation of Public Key which corresponds to this Card
-             * @param data std::unordered_map with custom user payload
-             * @param scope CardScope (global or application)
-             * @param info std::unordered_map with info about device which generated this Card
-             * @param createdAt std::string with date of Card creation (format is yyyy-MM-dd'T'HH:mm:ssZ)
-             * @param cardVersion std::string with card version
-             * @note this constructor belongs to **private** interface, use Client to create cards
+             * @brief Creates Card instance from CardResponse with response form Virgil Service.
+             * @param cardResponse CardResponse instance
+             * @return instantiated Card instance
              */
-            Card(std::string identifier, std::string identity, std::string identityType, VirgilByteArray publicKeyData,
-                 std::unordered_map<std::string, std::string> data, CardScope scope,
-                 std::unordered_map<std::string, std::string> info, std::string createdAt, std::string cardVersion);
+            static Card buildCard(const responses::CardResponse &cardResponse);
+
+            std::string exportAsString() const override;
+
+            /// WARNING: Calling side is responsible for validating cardResponse using CardValidator after this import!
+            static Card importFromString(const std::string &data);
 
             /*!
              * @brief Getter.
@@ -133,7 +131,19 @@ namespace client {
              */
             const std::string& cardVersion() const { return cardVersion_; }
 
+            /*!
+             * @brief Getter.
+             * @return Card Response with response from Virgil Service
+             */
+            const responses::CardResponse& cardResponse() const { return cardResponse_; };
+
         private:
+            Card(responses::CardResponse cardResponse, std::string identifier, std::string identity,
+                 std::string identityType, VirgilByteArray publicKeyData,
+                 std::unordered_map<std::string, std::string> data, CardScope scope,
+                 std::unordered_map<std::string, std::string> info, std::string createdAt, std::string cardVersion);
+
+            responses::CardResponse cardResponse_;
             std::string identifier_;
             std::string identity_;
             std::string identityType_;

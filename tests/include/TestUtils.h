@@ -69,6 +69,8 @@ namespace sdk {
 
             RevokeCardRequest instantiateRevokeCardRequest(const Card &card) const;
 
+            Card instantiateCard() const;
+
             static bool checkCardEquality(const Card &card, const CreateCardRequest &request);
             static bool checkCardEquality(const Card &card1, const Card &card2);
 

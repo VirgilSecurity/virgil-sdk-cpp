@@ -34,19 +34,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
 #include <virgil/sdk/client/models/ClientCommon.h>
 
 static_assert(!std::is_abstract<virgil::sdk::client::models::requests::CreateCardRequest>(), "CreateCardRequest must not be abstract.");
 
+using virgil::sdk::VirgilByteArray;
 using virgil::sdk::client::models::CardScope;
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::SignableRequest;
 using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
 using virgil::sdk::client::models::serialization::CanonicalSerializer;
-
-using virgil::crypto::VirgilByteArray;
 
 CreateCardRequest CreateCardRequest::createRequest(const std::string &identity, const std::string &identityType,
                                                    const VirgilByteArray &publicKeyData,

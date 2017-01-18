@@ -34,22 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/Common.h>
 #include <virgil/sdk/client/CardValidator.h>
-
 #include <virgil/sdk/crypto/CryptoInterface.h>
-
-#include <virgil/crypto/VirgilByteArray.h>
-
-using virgil::sdk::crypto::CryptoInterface;
-using virgil::crypto::VirgilByteArray;
 
 static_assert(!std::is_abstract<virgil::sdk::client::CardValidator>(), "CardValidator must not be abstract.");
 
 using virgil::sdk::client::CardValidator;
 using virgil::sdk::client::models::responses::CardResponse;
+using virgil::sdk::crypto::CryptoInterface;
+using virgil::sdk::VirgilBase64;
+
+static const std::string kServiceCardId = "3e29d43373348cfb373b7eae189214dc01d7237765e572db685839b64adca853";
+static const std::string kServicePublicKey = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUNvd0JRWURLMlZ3QXlFQVlSNTAxa1YxdFVuZTJ1T2RrdzRrRXJSUmJKcmMyU3lhejVWMWZ1RytyVnM9Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=";
+
 
 CardValidator::CardValidator(const std::shared_ptr<CryptoInterface> &crypto)
         : crypto_(crypto) {
+    auto servicePublicKeyData = VirgilBase64::decode(kServicePublicKey);
+    verifiers_[kServiceCardId] = servicePublicKeyData;
 }
 
 void CardValidator::addVerifier(std::string verifierId, VirgilByteArray publicKeyData) {
@@ -69,7 +72,7 @@ bool CardValidator::validateCardResponse(const CardResponse &response) const {
 
     verifiers[fingerprint.hexValue()] = response.model().publicKeyData();
 
-    for (const auto& verifier : verifiers_) {
+    for (const auto& verifier : verifiers) {
         try {
             auto signature = response.signatures().at(verifier.first);
             auto publicKey = crypto_->importPublicKey(verifier.second);

@@ -55,6 +55,11 @@ namespace models {
         class CreateCardSnapshotModel {
         public:
             /*!
+             * @brief Required within std::future
+             */
+            CreateCardSnapshotModel() = default;
+
+            /*!
              * @brief Creates CreateCardSnapshotModel instance and initializes with given parameters.
              * @param identity std::string with Card identity
              * @param identityType std::string with Card identity type

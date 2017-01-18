@@ -52,12 +52,6 @@ namespace models {
         class CardsResponse {
         public:
             /*!
-             * @brief Creates std::vector of Card instances using CardResponse data
-             * @return
-             */
-            std::vector<Card> buildCards() const;
-
-            /*!
              * @brief Getter.
              * @return std::vectpr of CardResponse instances
              */
