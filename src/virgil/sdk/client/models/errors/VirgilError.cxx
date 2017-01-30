@@ -159,6 +159,18 @@ VirgilError::VirgilError(int virgilErrorCode) : virgilErrorCode_(virgilErrorCode
         case 30139:
             errorMsg_ = "Virigl Card revocation reason isn't specified or is invalid";
             break;
+        case 30140:
+            errorMsg_ = "SCR sign validation failed";
+            break;
+        case 30141:
+            errorMsg_ = "SCR one of signers Virgil Cards is not found";
+            break;
+        case 30142:
+            errorMsg_ = "SCR sign item is invalid or missing for the Client";
+            break;
+        case 30143:
+            errorMsg_ = "SCR sign item is invalid or missing for the Virgil Registration Authority service";
+            break;
 
         default:
             errorMsg_ = "Unknown error";
