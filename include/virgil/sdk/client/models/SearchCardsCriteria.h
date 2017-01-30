@@ -39,6 +39,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <virgil/sdk/client/models/ClientCommon.h>
 
@@ -54,14 +55,39 @@ namespace client {
         public:
             /*!
              * @brief Create SearchCardsCriteria instance using given arguments.
+             * @param identities std::vector of std::string instances with identities of desired cards
              * @param scope CardScope (global or application)
              * @param identityType std::string representing identity type of desired cards
-             * @param identities std::vector of std::string instances with identities of desired cards
-             * @return
+             * @return Initialized SearchCardsCriteria object
              */
-            static SearchCardsCriteria createCriteria(CardScope scope,
-                                                      const std::string& identityType,
-                                                      const std::vector<std::string>& identities);
+            static SearchCardsCriteria createCriteria(const std::vector<std::string>& identities,
+                                                      CardScope scope,
+                                                      const std::string& identityType);
+
+            /*!
+             * @brief Create SearchCardsCriteria instance using given arguments.
+             * @param identities std::vector of std::string instances with identities of desired cards
+             * @param identityType std::string representing identity type of desired cards
+             * @return Initialized SearchCardsCriteria object
+             */
+            static SearchCardsCriteria createCriteria(const std::vector<std::string>& identities,
+                                                      const std::string& identityType);
+
+            /*!
+             * @brief Create SearchCardsCriteria instance using given arguments.
+             * @param identities std::vector of std::string instances with identities of desired cards
+             * @param scope CardScope (global or application)
+             * @return Initialized SearchCardsCriteria object
+             */
+            static SearchCardsCriteria createCriteria(const std::vector<std::string>& identities,
+                                                      CardScope scope);
+
+            /*!
+             * @brief Create SearchCardsCriteria instance using given arguments.
+             * @param identities std::vector of std::string instances with identities of desired cards
+             * @return Initialized SearchCardsCriteria object
+             */
+            static SearchCardsCriteria createCriteria(const std::vector<std::string>& identities);
 
             /*!
              * @brief Getter.
@@ -79,14 +105,20 @@ namespace client {
              * @brief Getter.
              * @return CardScope of desired cards
              */
-            CardScope scope() const { return scope_; }
+            const std::unique_ptr<CardScope>& scope() const { return scope_; }
+
+            /*!
+             * @brief Copy constructor.
+             */
+            SearchCardsCriteria(const SearchCardsCriteria &);
 
         private:
-            SearchCardsCriteria(std::vector<std::string> identities, std::string identityType, CardScope scope);
+            SearchCardsCriteria(std::vector<std::string> identities, std::string identityType,
+                                std::unique_ptr<CardScope> scope);
 
             std::vector<std::string> identities_;
             std::string identityType_;
-            CardScope scope_;
+            std::unique_ptr<CardScope> scope_;
         };
     }
 }

@@ -65,10 +65,17 @@ namespace models {
             static std::string toJson(const SearchCardsCriteria &criteria) {
                 try {
                     json j = {
-                            {JsonKey::CardScope, cardScopeToStr(criteria.scope())},
-                            {JsonKey::IdentityType, criteria.identityType()},
+
                             {JsonKey::Identities, criteria.identities()}
                     };
+
+                    if (criteria.scope() != nullptr) {
+                        j[JsonKey::CardScope] = cardScopeToStr(*criteria.scope());
+                    }
+
+                    if (!criteria.identityType().empty()) {
+                        j[JsonKey::IdentityType] = criteria.identityType();
+                    }
 
                     return j.dump(INDENT);
                 } catch (std::exception &exception) {

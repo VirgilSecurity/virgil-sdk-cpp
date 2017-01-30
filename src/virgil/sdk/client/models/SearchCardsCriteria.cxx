@@ -39,11 +39,33 @@
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::models::CardScope;
 
-SearchCardsCriteria SearchCardsCriteria::createCriteria(CardScope scope, const std::string& identityType,
-                                                        const std::vector<std::string>& identities) {
-    return SearchCardsCriteria(identities, identityType, scope);
+SearchCardsCriteria SearchCardsCriteria::createCriteria(const std::vector<std::string>& identities,
+                                                        CardScope scope, const std::string& identityType) {
+    return SearchCardsCriteria(identities, identityType, std::make_unique<CardScope>(scope));
 }
 
-SearchCardsCriteria::SearchCardsCriteria(std::vector<std::string> identities, std::string identityType, CardScope scope)
-        : identities_(std::move(identities)), identityType_(std::move(identityType)), scope_(scope) {
+SearchCardsCriteria SearchCardsCriteria::createCriteria(const std::vector<std::string>& identities,
+                                                        const std::string& identityType) {
+    return SearchCardsCriteria(identities, identityType, nullptr);
+}
+
+SearchCardsCriteria SearchCardsCriteria::createCriteria(const std::vector<std::string>& identities,
+                                                        CardScope scope) {
+    return SearchCardsCriteria(identities, "", std::make_unique<CardScope>(scope));
+}
+
+SearchCardsCriteria SearchCardsCriteria::createCriteria(const std::vector<std::string>& identities) {
+    return SearchCardsCriteria(identities, "", nullptr);
+}
+
+SearchCardsCriteria::SearchCardsCriteria(const SearchCardsCriteria & other)
+        : identities_(other.identities()), identityType_(other.identityType()) {
+    if (other.scope() != nullptr) {
+        scope_ = std::make_unique<CardScope>(*other.scope());
+    }
+}
+
+SearchCardsCriteria::SearchCardsCriteria(std::vector<std::string> identities, std::string identityType,
+                                         std::unique_ptr<CardScope> scope)
+        : identities_(std::move(identities)), identityType_(std::move(identityType)), scope_(std::move(scope)) {
 }

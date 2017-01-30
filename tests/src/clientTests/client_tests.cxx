@@ -124,7 +124,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
     auto future2 = client.searchCards(
-            SearchCardsCriteria::createCriteria(CardScope::application, card.identityType(), { card.identity() }));
+            SearchCardsCriteria::createCriteria({ card.identity() }, CardScope::application, card.identityType()));
 
     auto foundCards = future2.get();
 
