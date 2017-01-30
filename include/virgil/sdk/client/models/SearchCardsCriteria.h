@@ -110,7 +110,27 @@ namespace client {
             /*!
              * @brief Copy constructor.
              */
-            SearchCardsCriteria(const SearchCardsCriteria &);
+            SearchCardsCriteria(const SearchCardsCriteria&);
+
+            /*!
+             * @brief Assignment operator.
+             */
+            SearchCardsCriteria& operator=(const SearchCardsCriteria&);
+
+            /*!
+             * @brief Move assignment.
+             */
+            SearchCardsCriteria& operator=(SearchCardsCriteria&&) = default;
+
+            /*!
+             * @brief Move constructor.
+             */
+            SearchCardsCriteria(SearchCardsCriteria&&) = default;
+
+            /*!
+             * @brief Destructor.
+             */
+            ~SearchCardsCriteria() = default;
 
         private:
             SearchCardsCriteria(std::vector<std::string> identities, std::string identityType,

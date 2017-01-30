@@ -58,11 +58,22 @@ SearchCardsCriteria SearchCardsCriteria::createCriteria(const std::vector<std::s
     return SearchCardsCriteria(identities, "", nullptr);
 }
 
-SearchCardsCriteria::SearchCardsCriteria(const SearchCardsCriteria & other)
+SearchCardsCriteria::SearchCardsCriteria(const SearchCardsCriteria &other)
         : identities_(other.identities()), identityType_(other.identityType()) {
     if (other.scope() != nullptr) {
         scope_ = std::make_unique<CardScope>(*other.scope());
     }
+}
+
+SearchCardsCriteria& SearchCardsCriteria::operator=(const SearchCardsCriteria &other) {
+    identities_ = other.identities();
+    identityType_ = other.identityType();
+
+    if (other.scope() != nullptr) {
+        scope_ = std::make_unique<CardScope>(*other.scope());
+    }
+
+    return *this;
 }
 
 SearchCardsCriteria::SearchCardsCriteria(std::vector<std::string> identities, std::string identityType,
