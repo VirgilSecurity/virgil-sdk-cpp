@@ -46,6 +46,8 @@
 #include <virgil/sdk/client/models/ClientCommon.h>
 #include <virgil/sdk/client/CardValidator.h>
 
+#include <virgil/sdk/util/Memory.h>
+
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::CardRevocationReason;

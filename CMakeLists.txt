@@ -38,8 +38,8 @@ cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
 project (virgil_sdk VERSION 3.2.3 LANGUAGES CXX)
 
-# Enable C++14
-set (CMAKE_CXX_STANDARD 14)
+# Enable C++11
+set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Configurable variables
@@ -213,6 +213,7 @@ install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "ClientConnection.h" EXCLUDE
      PATTERN "Headers.h" EXCLUDE
      PATTERN "JsonKey.h" EXCLUDE
+     PATTERN "Memory.h" EXCLUDE
 )
 
 if (INSTALL_EXT_HEADERS)

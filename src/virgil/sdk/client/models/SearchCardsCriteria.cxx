@@ -36,6 +36,8 @@
 
 #include <virgil/sdk/client/models/SearchCardsCriteria.h>
 
+#include <virgil/sdk/util/Memory.h>
+
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::models::CardScope;
 
