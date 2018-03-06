@@ -15,12 +15,10 @@ Virgil Security, Inc., guides software developers into the forthcoming security 
 
 ## Resources
 
-* [Quickstart](https://github.com/VirgilSecurity/virgil/blob/master/c-cpp/quickstart/readme.md)
 * Crypto Library
-  * [Tutorial](https://github.com/VirgilSecurity/virgil/blob/master/c-cpp/crypto-library/readme.md)
+  * [Tutorial](https://github.com/VirgilSecurity/virgil-crypto)
   * [Reference API](http://virgilsecurity.github.io/virgil-crypto/)
 * SDK
-  * [Tutorial](https://github.com/VirgilSecurity/virgil/blob/master/c-cpp/keys-sdk/readme.md)
   * [Reference API](http://VirgilSecurity.github.io/virgil-sdk-cpp)
 
 ## License
