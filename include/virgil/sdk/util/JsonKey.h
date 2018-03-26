@@ -50,6 +50,11 @@ namespace sdk {
         class JsonKey {
         public:
             //! @cond Doxygen_Suppress
+            static const std::string Signer;
+            static const std::string Snapshot;
+            static const std::string Signature;
+            static const std::string Signatures;
+
             static const std::string Id;
             static const std::string CreatedAt;
             static const std::string CardVersion;

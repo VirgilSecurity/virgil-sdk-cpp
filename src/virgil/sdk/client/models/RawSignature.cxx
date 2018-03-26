@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,29 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/client/models/RawSignature.h>
 
-using virgil::sdk::util::JsonKey;
+using virgil::sdk::client::models::RawSignature;
+using virgil::sdk::VirgilByteArray;
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
+RawSignature::RawSignature(const std::string &signer,
+                           const VirgilByteArray &snapshot,
+                           const VirgilByteArray &signature)
+: signer_(signer), snapshot_(snapshot), signature_(signature) {}
 
+const std::string& RawSignature::signer() const { return signer_; }
 
-const std::string JsonKey::Id = "id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::CardVersion = "card_version";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Data = "data";
-const std::string JsonKey::Info = "info";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::Meta = "meta";
-const std::string JsonKey::CardScope = "scope";
-const std::string JsonKey::IdentityType = "identity_type";
-const std::string JsonKey::Signs = "signs";
-const std::string JsonKey::CardId = "card_id";
-const std::string JsonKey::RevocationReason = "revocation_reason";
-const std::string JsonKey::Identities = "identities";
-const std::string JsonKey::Code = "code";
+const VirgilByteArray& RawSignature::snapshot() const { return snapshot_; }
+
+const VirgilByteArray& RawSignature::signature() const { return signature_; }

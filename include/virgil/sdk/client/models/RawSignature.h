@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,29 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#ifndef VIRGIL_SDK_RAWSIGNATURE_H
+#define VIRGIL_SDK_RAWSIGNATURE_H
 
-using virgil::sdk::util::JsonKey;
+#include <string>
+#include <virgil/sdk/Common.h>
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace models {
+                class RawSignature {
+                public:
+                    RawSignature(const std::string &signer,
+                                 const VirgilByteArray &snapshot,
+                                 const VirgilByteArray &signature);
 
+                    const std::string& signer() const;
 
-const std::string JsonKey::Id = "id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::CardVersion = "card_version";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Data = "data";
-const std::string JsonKey::Info = "info";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::Meta = "meta";
-const std::string JsonKey::CardScope = "scope";
-const std::string JsonKey::IdentityType = "identity_type";
-const std::string JsonKey::Signs = "signs";
-const std::string JsonKey::CardId = "card_id";
-const std::string JsonKey::RevocationReason = "revocation_reason";
-const std::string JsonKey::Identities = "identities";
-const std::string JsonKey::Code = "code";
+                    const VirgilByteArray& snapshot() const;
+
+                    const VirgilByteArray& signature() const;
+                private:
+                    std::string signer_;
+                    VirgilByteArray snapshot_;
+                    VirgilByteArray signature_;
+                };
+            }
+        }
+    }
+}
+
+#endif //VIRGIL_SDK_RAWSIGNATURE_H
