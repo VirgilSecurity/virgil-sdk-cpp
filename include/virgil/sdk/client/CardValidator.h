@@ -37,7 +37,7 @@
 #ifndef VIRGIL_SDK_CARDVALIDATOR_H
 #define VIRGIL_SDK_CARDVALIDATOR_H
 
-#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
 
 namespace virgil {
@@ -52,7 +52,7 @@ namespace client {
          * @brief Constructor.
          * @param crypto std::shared_ptr to some CryptoInterface implementation
          */
-        CardValidator(const std::shared_ptr<crypto::CryptoInterface> &crypto);
+        CardValidator(const std::shared_ptr<crypto::Crypto> &crypto);
 
         /*!
          * @brief Adds custom verifier to validator.
@@ -70,7 +70,7 @@ namespace client {
         bool validateCardResponse(const models::responses::CardResponse &response) const override;
 
     private:
-        std::shared_ptr<crypto::CryptoInterface> crypto_;
+        std::shared_ptr<crypto::Crypto> crypto_;
         std::unordered_map<std::string, VirgilByteArray> verifiers_;
     };
 }

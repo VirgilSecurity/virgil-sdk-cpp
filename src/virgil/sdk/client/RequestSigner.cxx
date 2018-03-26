@@ -42,9 +42,9 @@ static_assert(!std::is_abstract<virgil::sdk::client::RequestSigner>(), "RequestS
 using virgil::sdk::client::RequestSigner;
 using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::client::models::interfaces::SignableInterface;
-using virgil::sdk::crypto::CryptoInterface;
+using virgil::sdk::crypto::Crypto;
 
-RequestSigner::RequestSigner(const std::shared_ptr<CryptoInterface> &crypto)
+RequestSigner::RequestSigner(const std::shared_ptr<Crypto> &crypto)
         : crypto_(crypto) {
 }
 

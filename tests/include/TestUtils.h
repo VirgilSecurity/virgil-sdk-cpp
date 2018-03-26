@@ -41,7 +41,7 @@
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
 #include <virgil/sdk/client/models/Card.h>
-#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
 #include <TestConst.h>
@@ -49,7 +49,6 @@
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
 using virgil::sdk::client::models::Card;
-using virgil::sdk::crypto::CryptoInterface;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
 
@@ -77,10 +76,10 @@ namespace sdk {
             static bool checkCreateCardRequestEquality(const CreateCardRequest &request1, const CreateCardRequest &request2);
             static bool checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2);
 
-            const std::shared_ptr<CryptoInterface>& crypto() const { return crypto_; }
+            const std::shared_ptr<Crypto>& crypto() const { return crypto_; }
 
         private:
-            const std::shared_ptr<CryptoInterface> crypto_;
+            const std::shared_ptr<Crypto> crypto_;
             TestConst consts;
         };
     }

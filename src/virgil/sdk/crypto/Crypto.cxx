@@ -71,6 +71,9 @@ using virgil::sdk::VirgilHashAlgorithm;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
+Crypto::Crypto(const bool &useSHA256Fingerprints)
+        : useSHA256Fingerprints_(useSHA256Fingerprints) {}
+
 // Key management
 KeyPair Crypto::generateKeyPair() const {
     auto keyPair = VirgilKeyPair::generateRecommended();
@@ -257,7 +260,7 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 
 //Utils
 Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
-    return Fingerprint(computeHash(data, VirgilHashAlgorithm::SHA256));
+    return Fingerprint(computeHash(data, VirgilHashAlgorithm::SHA512));
 }
 
 VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const {
@@ -266,5 +269,15 @@ VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgor
 }
 
 VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
-    return computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA256);
+    if (useSHA256Fingerprints_)
+        return computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA256);
+    else {
+        VirgilByteArray hash = computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA512);
+        hash.resize(8);
+        return hash;
+    }
+}
+
+const bool Crypto::useSHA256Fingerprints() const {
+    return useSHA256Fingerprints_;
 }
