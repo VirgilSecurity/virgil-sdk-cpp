@@ -96,7 +96,7 @@ namespace virgil {
                                         {JsonKey::ContentSnapshot, VirgilBase64::encode(rawCard.contentSnapshot())}
                                 };
 
-                                json signatures;
+                                json signatures = json::array();
                                 for (auto& signature : rawCard.signatures()) {
                                     auto signatureJson = JsonSerializer<RawSignature>::toJson(signature);
                                     signatures.push_back(signatureJson);

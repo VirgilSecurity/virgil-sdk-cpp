@@ -66,13 +66,17 @@ namespace virgil {
                             try {
                                 std::string signer = j[JsonKey::Signer];
 
-                                std::string snapshotStr = j[JsonKey::Snapshot];
-                                VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
+                                std::shared_ptr<VirgilByteArray> snapshotPtr = nullptr;
+                                try {
+                                    std::string snapshotStr = j.at(JsonKey::Snapshot);
+                                    VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
+                                    snapshotPtr = std::make_shared<VirgilByteArray>(snapshot);
+                                } catch (std::exception &exception) {}
 
                                 std::string signatureStr = j[JsonKey::Signature];
                                 VirgilByteArray signature = VirgilBase64::decode(signatureStr);
 
-                                return RawSignature(signer, signature, std::make_shared<VirgilByteArray>(snapshot));
+                                return RawSignature(signer, signature, snapshotPtr);
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawSignature>::fromJson ") +
                                                        exception.what());
@@ -92,7 +96,10 @@ namespace virgil {
                                         {JsonKey::Signer, rawSignature.signer()}
                                 };
 
-                                j[JsonKey::Snapshot] = VirgilBase64::encode(*rawSignature.snapshot());
+                                if (rawSignature.snapshot() != nullptr) {
+                                    j[JsonKey::Snapshot] = VirgilBase64::encode(*rawSignature.snapshot());
+                                }
+
                                 j[JsonKey::Signature] = VirgilBase64::encode(rawSignature.signature());
 
                                 return j.dump(INDENT);

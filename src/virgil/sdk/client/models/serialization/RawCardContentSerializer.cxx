@@ -72,12 +72,16 @@ namespace virgil {
                                 std::string version = j[JsonKey::Version];
                                 int createdAt = j[JsonKey::CreatedAt];
 
-                                std::string previousCardId = j.at(JsonKey::PreviousCardId);
+                                std::shared_ptr<std::string> previousCardIdPtr = nullptr;
+                                try {
+                                    std::string previousCardIdStr = j.at(JsonKey::PreviousCardId);
+                                    previousCardIdPtr = std::make_shared<std::string>(previousCardIdStr);
+                                } catch (std::exception &exception) {}
 
-                                return RawCardContent(identity, publicKey, version, createdAt,
-                                                      std::make_shared<std::string>(previousCardId));
+                                return RawCardContent(identity, publicKey, version,
+                                                      createdAt, previousCardIdPtr);
                             } catch (std::exception &exception) {
-                                throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawSignature>::fromJson ") +
+                                throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawCardContent>::fromJson ") +
                                                        exception.what());
                             }
                         }
@@ -98,7 +102,10 @@ namespace virgil {
                                 j[JsonKey::PublicKey] = VirgilBase64::encode(rawCardContent.publicKey());
                                 j[JsonKey::Version] = rawCardContent.version();
                                 j[JsonKey::CreatedAt] = rawCardContent.createdAt();
-                                j[JsonKey::PreviousCardId] = *rawCardContent.previousCardId();
+
+                                if (rawCardContent.previousCardId() != nullptr) {
+                                    j[JsonKey::PreviousCardId] = *rawCardContent.previousCardId();
+                                }
 
                                 return j.dump(INDENT);
                             } catch (std::exception &exception) {
