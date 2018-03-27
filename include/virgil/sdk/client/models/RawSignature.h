@@ -48,16 +48,16 @@ namespace virgil {
                 public:
                     RawSignature(const std::string &signer,
                                  const VirgilByteArray &signature,
-                                 const std::shared_ptr<VirgilByteArray> &snapshot = nullptr);
+                                 const VirgilByteArray &snapshot = VirgilByteArray());
 
                     const std::string& signer() const;
 
-                    const std::shared_ptr<VirgilByteArray>& snapshot() const;
+                    const VirgilByteArray& snapshot() const;
 
                     const VirgilByteArray& signature() const;
                 private:
                     std::string signer_;
-                    std::shared_ptr<VirgilByteArray> snapshot_;
+                    VirgilByteArray snapshot_;
                     VirgilByteArray signature_;
                 };
             }

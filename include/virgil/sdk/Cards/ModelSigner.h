@@ -34,39 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_CARDSIGNATURE_H
-#define VIRGIL_SDK_CARDSIGNATURE_H
+#ifndef VIRGIL_SDK_MODELSIGNER_H
+#define VIRGIL_SDK_MODELSIGNER_H
 
-#include <string>
 #include <unordered_map>
 #include <virgil/sdk/Common.h>
+#include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/client/models/RawSignedModel.h>
 
 namespace virgil {
     namespace sdk {
         namespace cards {
-            class CardSignature {
+            class ModelSigner {
             public:
-                CardSignature(const std::string &signer,
-                              const VirgilByteArray &signature,
-                              const VirgilByteArray &snapshot,
-                              const std::unordered_map<std::string, std::string> extraFields);
+                ModelSigner(const std::shared_ptr<crypto::Crypto> &crypto);
 
-                const std::string& signer() const;
+                static const std::string selfSignerIdentifier;
 
-                const VirgilByteArray& signature() const;
+                const std::shared_ptr<crypto::Crypto>& crypto() const;
 
-                const VirgilByteArray& snapshot() const;
+                void sign(client::models::RawSignedModel &model,
+                          const std::string &signer,
+                          const crypto::keys::PrivateKey &privateKey,
+                          const VirgilByteArray &additionalData = VirgilByteArray()) const;
 
-                const std::unordered_map<std::string, std::string>& extraFields() const;
+                void selfSign(client::models::RawSignedModel &model,
+                              const crypto::keys::PrivateKey &privateKey,
+                              const VirgilByteArray &additionalData = VirgilByteArray()) const;
 
+                void sign(client::models::RawSignedModel &model,
+                          const std::string &signer,
+                          const crypto::keys::PrivateKey &privateKey,
+                          const std::unordered_map<std::string, std::string> &extraFields = std::unordered_map<std::string, std::string>()) const;
+
+                void selfSign(client::models::RawSignedModel &model,
+                              const crypto::keys::PrivateKey &privateKey,
+                              const std::unordered_map<std::string, std::string> &extraFields = std::unordered_map<std::string, std::string>()) const;
             private:
-                std::string signer_;
-                VirgilByteArray signature_;
-                VirgilByteArray snapshot_;
-                std::unordered_map<std::string, std::string> extraFields_;
+                std::shared_ptr<crypto::Crypto> crypto_;
             };
         }
     }
 }
 
-#endif //VIRGIL_SDK_CARDSIGNATURE_H
+#endif //VIRGIL_SDK_MODELSIGNER_H

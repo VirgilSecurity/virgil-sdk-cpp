@@ -66,17 +66,16 @@ namespace virgil {
                             try {
                                 std::string signer = j[JsonKey::Signer];
 
-                                std::shared_ptr<VirgilByteArray> snapshotPtr = nullptr;
+                                VirgilByteArray snapshot = VirgilByteArray();
                                 try {
                                     std::string snapshotStr = j.at(JsonKey::Snapshot);
-                                    VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
-                                    snapshotPtr = std::make_shared<VirgilByteArray>(snapshot);
+                                    snapshot = VirgilBase64::decode(snapshotStr);
                                 } catch (std::exception &exception) {}
 
                                 std::string signatureStr = j[JsonKey::Signature];
                                 VirgilByteArray signature = VirgilBase64::decode(signatureStr);
 
-                                return RawSignature(signer, signature, snapshotPtr);
+                                return RawSignature(signer, signature, snapshot);
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawSignature>::fromJson ") +
                                                        exception.what());
@@ -96,8 +95,8 @@ namespace virgil {
                                         {JsonKey::Signer, rawSignature.signer()}
                                 };
 
-                                if (rawSignature.snapshot() != nullptr) {
-                                    j[JsonKey::Snapshot] = VirgilBase64::encode(*rawSignature.snapshot());
+                                if (rawSignature.snapshot().size() != 0) {
+                                    j[JsonKey::Snapshot] = VirgilBase64::encode(rawSignature.snapshot());
                                 }
 
                                 j[JsonKey::Signature] = VirgilBase64::encode(rawSignature.signature());

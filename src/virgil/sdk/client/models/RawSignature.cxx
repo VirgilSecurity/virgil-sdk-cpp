@@ -41,11 +41,11 @@ using virgil::sdk::VirgilByteArray;
 
 RawSignature::RawSignature(const std::string &signer,
                            const VirgilByteArray &signature,
-                           const std::shared_ptr<VirgilByteArray> &snapshot)
+                           const VirgilByteArray &snapshot)
 : signer_(signer), snapshot_(snapshot), signature_(signature) {}
 
 const std::string& RawSignature::signer() const { return signer_; }
 
-const std::shared_ptr<VirgilByteArray>& RawSignature::snapshot() const { return snapshot_; }
+const VirgilByteArray& RawSignature::snapshot() const { return snapshot_; }
 
 const VirgilByteArray& RawSignature::signature() const { return signature_; }
