@@ -34,18 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/RawSignature.h>
+#include <virgil/sdk/client/models/RawCardContent.h>
 
-using virgil::sdk::client::models::RawSignature;
+using virgil::sdk::client::models::RawCardContent;
 using virgil::sdk::VirgilByteArray;
 
-RawSignature::RawSignature(const std::string &signer,
-                           const VirgilByteArray &signature,
-                           const std::shared_ptr<VirgilByteArray> &snapshot)
-: signer_(signer), snapshot_(snapshot), signature_(signature) {}
+RawCardContent::RawCardContent(const std::string &identity,
+                           const VirgilByteArray &publicKey,
+                           const std::string &version,
+                           const int &createdAt,
+                           const std::shared_ptr<std::string> &previousCardId)
+        : identity_(identity), publicKey_(publicKey), version_(version),
+          createdAt_(createdAt), previousCardId_(previousCardId) {}
 
-const std::string& RawSignature::signer() const { return signer_; }
+const std::string& RawCardContent::identity() const { return identity_; }
 
-const std::shared_ptr<VirgilByteArray>& RawSignature::snapshot() const { return snapshot_; }
+const VirgilByteArray& RawCardContent::publicKey() const { return publicKey_; }
 
-const VirgilByteArray& RawSignature::signature() const { return signature_; }
+const std::string& RawCardContent::version() const { return version_; }
+
+const int& RawCardContent::createdAt() const { return createdAt_; }
+
+const std::shared_ptr<std::string>& RawCardContent::previousCardId() const { return  previousCardId_; }

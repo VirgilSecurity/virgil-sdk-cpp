@@ -54,15 +54,17 @@ namespace sdk {
             static const std::string Snapshot;
             static const std::string Signature;
             static const std::string Signatures;
-
-            static const std::string Id;
-            static const std::string CreatedAt;
-            static const std::string CardVersion;
-            static const std::string Identity;
-            static const std::string Data;
-            static const std::string Info;
             static const std::string PublicKey;
             static const std::string ContentSnapshot;
+            static const std::string PreviousCardId;
+            static const std::string CreatedAt;
+            static const std::string Identity;
+            static const std::string Version;
+
+            static const std::string Id;
+            static const std::string CardVersion;
+            static const std::string Data;
+            static const std::string Info;
             static const std::string Meta;
             static const std::string CardScope;
             static const std::string IdentityType;

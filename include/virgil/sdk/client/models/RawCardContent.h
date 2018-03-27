@@ -34,18 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/RawSignature.h>
+#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
+#define VIRGIL_SDK_RAWCARDCONTENT_H
 
-using virgil::sdk::client::models::RawSignature;
-using virgil::sdk::VirgilByteArray;
+#include <string>
+#include <virgil/sdk/Common.h>
 
-RawSignature::RawSignature(const std::string &signer,
-                           const VirgilByteArray &signature,
-                           const std::shared_ptr<VirgilByteArray> &snapshot)
-: signer_(signer), snapshot_(snapshot), signature_(signature) {}
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace models {
+                class RawCardContent {
+                public:
+                    RawCardContent(const std::string &identity,
+                                   const VirgilByteArray &publicKey,
+                                   const std::string &version,
+                                   const int &createdAt,
+                                   const std::shared_ptr<std::string> &previousCardId = nullptr);
 
-const std::string& RawSignature::signer() const { return signer_; }
+                    const std::string& identity() const;
 
-const std::shared_ptr<VirgilByteArray>& RawSignature::snapshot() const { return snapshot_; }
+                    const VirgilByteArray& publicKey() const;
 
-const VirgilByteArray& RawSignature::signature() const { return signature_; }
+                    const std::string& version() const;
+
+                    const int& createdAt() const;
+
+                    const std::shared_ptr<std::string>& previousCardId() const;
+                private:
+                    std::string identity_;
+                    VirgilByteArray publicKey_;
+                    std::string version_;
+                    int createdAt_;
+                    std::shared_ptr<std::string> previousCardId_;
+                };
+            }
+        }
+    }
+}
+
+#endif //VIRGIL_SDK_RAWCARDCONTENT_H

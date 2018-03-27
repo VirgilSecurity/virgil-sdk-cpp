@@ -42,11 +42,11 @@
 #include <virgil/sdk/util/JsonUtils.h>
 #include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
 #include <virgil/sdk/client/models/serialization/CanonicalSerializer.h>
-#include <virgil/sdk/client/models/RawSignature.h>
+#include <virgil/sdk/client/models/RawCardContent.h>
 
 using json = nlohmann::json;
 
-using virgil::sdk::client::models::RawSignature;
+using virgil::sdk::client::models::RawCardContent;
 using virgil::sdk::util::JsonKey;
 using virgil::sdk::util::JsonUtils;
 
@@ -56,23 +56,26 @@ namespace virgil {
             namespace models {
                 namespace serialization {
                     /**
-                     * @brief JSONSerializer<RawSignature> specialization.
+                     * @brief JSONSerializer<RawCardContent> specialization.
                      */
                     template<>
-                    class JsonDeserializer<RawSignature> {
+                    class JsonDeserializer<RawCardContent> {
                     public:
                         template<int FAKE = 0>
-                        static RawSignature fromJson(const json &j) {
+                        static RawCardContent fromJson(const json &j) {
                             try {
-                                std::string signer = j[JsonKey::Signer];
+                                std::string identity = j[JsonKey::Identity];
 
-                                std::string snapshotStr = j[JsonKey::Snapshot];
-                                VirgilByteArray snapshot = VirgilBase64::decode(snapshotStr);
+                                std::string publicKeyStr = j[JsonKey::PublicKey];
+                                VirgilByteArray publicKey = VirgilBase64::decode(publicKeyStr);
 
-                                std::string signatureStr = j[JsonKey::Signature];
-                                VirgilByteArray signature = VirgilBase64::decode(signatureStr);
+                                std::string version = j[JsonKey::Version];
+                                int createdAt = j[JsonKey::CreatedAt];
 
-                                return RawSignature(signer, signature, std::make_shared<VirgilByteArray>(snapshot));
+                                std::string previousCardId = j.at(JsonKey::PreviousCardId);
+
+                                return RawCardContent(identity, publicKey, version, createdAt,
+                                                      std::make_shared<std::string>(previousCardId));
                             } catch (std::exception &exception) {
                                 throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawSignature>::fromJson ") +
                                                        exception.what());
@@ -83,22 +86,24 @@ namespace virgil {
                     };
 
                     template<>
-                    class JsonSerializer<RawSignature> {
+                    class JsonSerializer<RawCardContent> {
                     public:
                         template<int INDENT = -1>
-                        static std::string toJson(const RawSignature &rawSignature) {
+                        static std::string toJson(const RawCardContent &rawCardContent) {
                             try {
                                 json j = {
-                                        {JsonKey::Signer, rawSignature.signer()}
+                                        {JsonKey::Identity, rawCardContent.identity()}
                                 };
 
-                                j[JsonKey::Snapshot] = VirgilBase64::encode(*rawSignature.snapshot());
-                                j[JsonKey::Signature] = VirgilBase64::encode(rawSignature.signature());
+                                j[JsonKey::PublicKey] = VirgilBase64::encode(rawCardContent.publicKey());
+                                j[JsonKey::Version] = rawCardContent.version();
+                                j[JsonKey::CreatedAt] = rawCardContent.createdAt();
+                                j[JsonKey::PreviousCardId] = *rawCardContent.previousCardId();
 
                                 return j.dump(INDENT);
                             } catch (std::exception &exception) {
                                 throw std::logic_error(
-                                        std::string("virgil-sdk:\n JsonSerializer<RawSignature>::toJson ")
+                                        std::string("virgil-sdk:\n JsonSerializer<RawCardContent>::toJson ")
                                         + exception.what());
                             }
                         }
@@ -114,8 +119,8 @@ namespace virgil {
 /**
  * Explicit methods instantiation
  */
-template RawSignature
-virgil::sdk::client::models::serialization::JsonDeserializer<RawSignature>::fromJson(const json&);
+template RawCardContent
+virgil::sdk::client::models::serialization::JsonDeserializer<RawCardContent>::fromJson(const json&);
 
 template std::string
-virgil::sdk::client::models::serialization::JsonSerializer<RawSignature>::toJson(const RawSignature&);
+virgil::sdk::client::models::serialization::JsonSerializer<RawCardContent>::toJson(const RawCardContent&);

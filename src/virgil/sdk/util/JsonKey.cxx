@@ -42,16 +42,17 @@ const std::string JsonKey::Signer = "signer";
 const std::string JsonKey::Snapshot = "snapshot";
 const std::string JsonKey::Signature = "signature";
 const std::string JsonKey::Signatures = "signatures";
-
-
-const std::string JsonKey::Id = "id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::CardVersion = "card_version";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Data = "data";
-const std::string JsonKey::Info = "info";
 const std::string JsonKey::PublicKey = "public_key";
 const std::string JsonKey::ContentSnapshot = "content_snapshot";
+const std::string JsonKey::PreviousCardId = "previous_card_id";
+const std::string JsonKey::CreatedAt = "created_at";
+const std::string JsonKey::Identity = "identity";
+const std::string JsonKey::Version = "version";
+
+const std::string JsonKey::Id = "id";
+const std::string JsonKey::CardVersion = "card_version";
+const std::string JsonKey::Data = "data";
+const std::string JsonKey::Info = "info";
 const std::string JsonKey::Meta = "meta";
 const std::string JsonKey::CardScope = "scope";
 const std::string JsonKey::IdentityType = "identity_type";

@@ -47,17 +47,17 @@ namespace virgil {
                 class RawSignature {
                 public:
                     RawSignature(const std::string &signer,
-                                 const VirgilByteArray &snapshot,
-                                 const VirgilByteArray &signature);
+                                 const VirgilByteArray &signature,
+                                 const std::shared_ptr<VirgilByteArray> &snapshot = nullptr);
 
                     const std::string& signer() const;
 
-                    const VirgilByteArray& snapshot() const;
+                    const std::shared_ptr<VirgilByteArray>& snapshot() const;
 
                     const VirgilByteArray& signature() const;
                 private:
                     std::string signer_;
-                    VirgilByteArray snapshot_;
+                    std::shared_ptr<VirgilByteArray> snapshot_;
                     VirgilByteArray signature_;
                 };
             }
