@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/Cards/ModelSigner.h>
+#include <virgil/sdk/cards/ModelSigner.h>
 #include <virgil/sdk/client/models/RawSignature.h>
 #include <virgil/sdk/util/JsonUtils.h>
 

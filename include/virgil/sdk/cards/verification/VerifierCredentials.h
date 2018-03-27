@@ -34,47 +34,30 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_VERIFIERCREDENTIALS_H
+#define VIRGIL_SDK_VERIFIERCREDENTIALS_H
 
 #include <string>
 #include <virgil/sdk/Common.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
+        namespace cards {
+            namespace verification {
+                class VerifierCredentials {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::shared_ptr<std::string> &previousCardId = nullptr);
+                    VerifierCredentials(const std::string& signer, const VirgilByteArray& publicKey);
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
-
-                    const std::string& identity() const;
+                    const std::string& signer() const;
 
                     const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const int& createdAt() const;
-
-                    const std::shared_ptr<std::string>& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
                 private:
-                    std::string identity_;
+                    std::string signer_;
                     VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::shared_ptr<std::string> previousCardId_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_VERIFIERCREDENTIALS_H

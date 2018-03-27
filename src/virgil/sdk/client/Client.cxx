@@ -61,7 +61,7 @@ using virgil::sdk::client::models::responses::CardsResponse;
 using virgil::sdk::client::models::interfaces::SignableRequestInterface;
 using virgil::sdk::client::models::requests::CreateCardRequest;
 using virgil::sdk::client::models::requests::RevokeCardRequest;
-using virgil::sdk::client::models::Card;
+using virgil::sdk::client::models::CardMock;
 using virgil::sdk::client::models::SearchCardsCriteria;
 using virgil::sdk::client::ServiceConfig;
 using virgil::sdk::client::models::errors::Error;
@@ -85,7 +85,7 @@ Error Client::parseError(const Response &response) const {
     }
 }
 
-std::future<Card> Client::createCard(const CreateCardRequest &request) const {
+std::future<CardMock> Client::createCard(const CreateCardRequest &request) const {
     auto future = std::async([=]{
         ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
@@ -110,13 +110,13 @@ std::future<Card> Client::createCard(const CreateCardRequest &request) const {
             }
         }
 
-        return Card::buildCard(cardResponse);
+        return CardMock::buildCard(cardResponse);
     });
 
     return future;
 }
 
-std::future<Card> Client::getCard(const std::string &cardId) const {
+std::future<CardMock> Client::getCard(const std::string &cardId) const {
     auto future = std::async([=]{
         ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
@@ -140,13 +140,13 @@ std::future<Card> Client::getCard(const std::string &cardId) const {
             }
         }
 
-        return Card::buildCard(cardResponse);
+        return CardMock::buildCard(cardResponse);
     });
 
     return future;
 }
 
-std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &criteria) const {
+std::future<std::vector<CardMock>> Client::searchCards(const SearchCardsCriteria &criteria) const {
     auto future = std::async([=]{
         ClientRequest httpRequest = ClientRequest(this->serviceConfig_.token());
         httpRequest
@@ -173,9 +173,9 @@ std::future<std::vector<Card>> Client::searchCards(const SearchCardsCriteria &cr
             }
         }
 
-        std::vector<Card> result;
+        std::vector<CardMock> result;
         for (const auto& cardResponse : cardsResponse.cardsResponse()) {
-            result.push_back(Card::buildCard(cardResponse));
+            result.push_back(CardMock::buildCard(cardResponse));
         }
 
         return result;

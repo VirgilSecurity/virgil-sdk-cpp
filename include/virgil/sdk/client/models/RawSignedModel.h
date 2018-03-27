@@ -41,6 +41,7 @@
 #include <virgil/sdk/client/models/interfaces/Importable.h>
 #include <virgil/sdk/client/models/RawSignature.h>
 #include <virgil/sdk/Common.h>
+#include <vector>
 
 namespace virgil {
     namespace sdk {

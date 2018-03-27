@@ -34,47 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#include <virgil/sdk/cards/verification/Whitelist.h>
 
-#include <string>
-#include <virgil/sdk/Common.h>
+using virgil::sdk::cards::verification::VerifierCredentials;
+using virgil::sdk::cards::verification::Whitelist;
 
-namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
-                public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::shared_ptr<std::string> &previousCardId = nullptr);
-
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
-
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const int& createdAt() const;
-
-                    const std::shared_ptr<std::string>& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
-                private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::shared_ptr<std::string> previousCardId_;
-                };
-            }
+Whitelist::Whitelist(const std::vector<VerifierCredentials> &verifierCredentials)
+: verifierCredentials_(verifierCredentials) {
+    std::vector<std::string> dic;
+    for (auto& credentials : verifierCredentials) {
+        if (std::find(dic.begin(), dic.end(), credentials.signer()) != dic.end()) {
+            //FIXME: throw error here for duplicate signer
+        } else {
+            dic.push_back(credentials.signer());
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+const std::vector<VerifierCredentials>& Whitelist::verifierCredentials() const { return verifierCredentials_; }

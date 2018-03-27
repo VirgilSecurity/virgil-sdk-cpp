@@ -35,8 +35,8 @@
  */
 
 
-#ifndef VIRGIL_SDK_CARD_H
-#define VIRGIL_SDK_CARD_H
+#ifndef VIRGIL_SDK_CARDMOCK_H
+#define VIRGIL_SDK_CARDMOCK_H
 
 #include <unordered_map>
 #include <string>
@@ -58,24 +58,24 @@ namespace client {
          * info about device on which Card was created, custom payload, version,
          * creation date and scope (global or application)
          */
-        class Card: interfaces::Exportable, interfaces::Importable<Card> {
+        class CardMock: interfaces::Exportable, interfaces::Importable<CardMock> {
         public:
             /*!
              * @brief Required within std::future
              */
-            Card() = default;
+            CardMock() = default;
 
             /*!
              * @brief Creates Card instance from CardResponse with response form Virgil Service.
              * @param cardResponse CardResponse instance
              * @return instantiated Card instance
              */
-            static Card buildCard(const responses::CardResponse &cardResponse);
+            static CardMock buildCard(const responses::CardResponse &cardResponse);
 
             std::string exportAsString() const override;
 
             /// WARNING: Calling side is responsible for validating cardResponse using CardValidator after this import!
-            static Card importFromString(const std::string &data);
+            static CardMock importFromString(const std::string &data);
 
             /*!
              * @brief Getter.
@@ -138,7 +138,7 @@ namespace client {
             const responses::CardResponse& cardResponse() const { return cardResponse_; };
 
         private:
-            Card(responses::CardResponse cardResponse, std::string identifier, std::string identity,
+            CardMock(responses::CardResponse cardResponse, std::string identifier, std::string identity,
                  std::string identityType, VirgilByteArray publicKeyData,
                  std::unordered_map<std::string, std::string> data, CardScope scope,
                  std::unordered_map<std::string, std::string> info, std::string createdAt, std::string cardVersion);
@@ -159,4 +159,4 @@ namespace client {
 }
 }
 
-#endif //VIRGIL_SDK_CARD_H
+#endif //VIRGIL_SDK_CARDMOCK_H

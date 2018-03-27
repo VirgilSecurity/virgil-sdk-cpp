@@ -34,42 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/RawCardContent.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
+#include <virgil/sdk/cards/CardSignature.h>
 
-using virgil::sdk::client::models::RawCardContent;
+using virgil::sdk::cards::CardSignature;
 using virgil::sdk::VirgilByteArray;
-using virgil::sdk::client::models::serialization::JsonSerializer;
-using virgil::sdk::client::models::serialization::JsonDeserializer;
-using virgil::sdk::VirgilByteArrayUtils;
 
-RawCardContent::RawCardContent(const std::string &identity,
-                               const VirgilByteArray &publicKey,
-                               const int &createdAt,
-                               const std::string &version,
-                               const std::shared_ptr<std::string> &previousCardId)
-        : identity_(identity), publicKey_(publicKey), version_(version),
-          createdAt_(createdAt), previousCardId_(previousCardId) {}
+CardSignature::CardSignature(const std::string &signer,
+                             const VirgilByteArray &signature,
+                             const VirgilByteArray &snapshot,
+                             const std::unordered_map<std::string, std::string> extraFields)
+        : signer_(signer), signature_(signature), snapshot_(snapshot), extraFields_(extraFields) {}
 
-RawCardContent RawCardContent::parse(const VirgilByteArray &snapshot) {
-    auto contentStr = VirgilByteArrayUtils::bytesToString(snapshot);
+const std::string& CardSignature::signer() const { return signer_; }
 
-    return JsonDeserializer<RawCardContent>::fromJsonString(contentStr);
-}
+const VirgilByteArray& CardSignature::signature() const { return signature_; }
 
-const std::string& RawCardContent::identity() const { return identity_; }
+const VirgilByteArray& CardSignature::snapshot() const { return snapshot_; }
 
-const VirgilByteArray& RawCardContent::publicKey() const { return publicKey_; }
-
-const std::string& RawCardContent::version() const { return version_; }
-
-const int& RawCardContent::createdAt() const { return createdAt_; }
-
-const std::shared_ptr<std::string>& RawCardContent::previousCardId() const { return  previousCardId_; }
-
-VirgilByteArray RawCardContent::snapshot() const {
-    auto contentStr = JsonSerializer<RawCardContent>::toJson(*this);
-
-    return VirgilByteArrayUtils::stringToBytes(contentStr);
-}
+const std::unordered_map<std::string, std::string>& CardSignature::extraFields() const { return extraFields_; }

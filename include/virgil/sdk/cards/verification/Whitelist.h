@@ -34,47 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_WHITELIST_H
+#define VIRGIL_SDK_WHITELIST_H
 
-#include <string>
-#include <virgil/sdk/Common.h>
+#include <vector>
+#include <virgil/sdk/cards/verification/VerifierCredentials.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
+        namespace cards {
+            namespace verification {
+                class Whitelist {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::shared_ptr<std::string> &previousCardId = nullptr);
+                    Whitelist(const std::vector<VerifierCredentials>& verifierCredentials);
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+                    const std::vector<VerifierCredentials>& verifierCredentials() const;
 
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const int& createdAt() const;
-
-                    const std::shared_ptr<std::string>& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
                 private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::shared_ptr<std::string> previousCardId_;
+                    std::vector<VerifierCredentials> verifierCredentials_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+
+#endif //VIRGIL_SDK_WHITELIST_H

@@ -34,47 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_VIRGILCARDVERIFIER_H
+#define VIRGIL_SDK_VIRGILCARDVERIFIER_H
 
-#include <string>
-#include <virgil/sdk/Common.h>
+#include <vector>
+#include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/cards/verification/Whitelist.h>
+#include <virgil/sdk/cards/verification/CardVerifierInterface.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
+        namespace cards {
+            namespace verification {
+                class VirgilCardVerifier : public CardVerifierInterface {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::shared_ptr<std::string> &previousCardId = nullptr);
+                    VirgilCardVerifier(const std::shared_ptr<crypto::Crypto> &crypto,
+                                       const std::vector<Whitelist>& whitelists = std::vector<Whitelist>());
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+                    static const std::string selfSignerIdentifier;
+                    static const std::string virgilSignerIdentifier;
+                    static const std::string virgilPublicKeyBase64;
 
-                    const std::string& identity() const;
+                    bool verifySelfSignature;
+                    bool verifyVirgilSignature;
 
-                    const VirgilByteArray& publicKey() const;
+                    crypto::keys::PublicKey virgilPublicKey;
 
-                    const std::string& version() const;
+                    const std::shared_ptr<crypto::Crypto>& crypto() const;
 
-                    const int& createdAt() const;
+                    bool verifyCard(const Card &card) const override;
 
-                    const std::shared_ptr<std::string>& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
                 private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::shared_ptr<std::string> previousCardId_;
+                    bool verifySelf(const Card &card) const;
+                    bool verifyVirgil(const Card &card) const;
+                    bool verifyWhitelists(const Card &card) const;
+                    bool verify(const Card &card, const std::string& signer,
+                                const crypto::keys::PublicKey& signerPublicKey) const;
+
+                    std::shared_ptr<crypto::Crypto> crypto_;
+                    std::vector<Whitelist> whitelists_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_VIRGILCARDVERIFIER_H

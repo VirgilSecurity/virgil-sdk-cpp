@@ -34,21 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/Cards/CardSignature.h>
+#ifndef VIRGIL_SDK_CARDVERIFIERINTERFACE_H
+#define VIRGIL_SDK_CARDVERIFIERINTERFACE_H
 
-using virgil::sdk::cards::CardSignature;
-using virgil::sdk::VirgilByteArray;
+#include <virgil/sdk/cards/Card.h>
 
-CardSignature::CardSignature(const std::string &signer,
-                             const VirgilByteArray &signature,
-                             const VirgilByteArray &snapshot,
-                             const std::unordered_map<std::string, std::string> extraFields)
-        : signer_(signer), signature_(signature), snapshot_(snapshot), extraFields_(extraFields) {}
+namespace virgil {
+    namespace sdk {
+        namespace cards {
+            namespace verification {
+                class CardVerifierInterface {
+                public:
+                    virtual bool verifyCard(const Card &card) const = 0;
 
-const std::string& CardSignature::signer() const { return signer_; }
+                    virtual ~CardVerifierInterface() = default;
+                };
+            }
+        }
+    }
+}
 
-const VirgilByteArray& CardSignature::signature() const { return signature_; }
-
-const VirgilByteArray& CardSignature::snapshot() const { return snapshot_; }
-
-const std::unordered_map<std::string, std::string>& CardSignature::extraFields() const { return extraFields_; }
+#endif //VIRGIL_SDK_CARDVERIFIERINTERFACE_H

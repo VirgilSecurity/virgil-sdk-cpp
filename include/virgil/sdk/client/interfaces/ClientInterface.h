@@ -41,7 +41,7 @@
 #include <future>
 #include <vector>
 
-#include <virgil/sdk/client/models/Card.h>
+#include <virgil/sdk/client/models/CardMock.h>
 #include <virgil/sdk/client/models/SearchCardsCriteria.h>
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
@@ -65,21 +65,21 @@ namespace client {
              * @param request CreateCardRequest instance with Card data and signatures
              * @return std::future with Card
              */
-            virtual std::future<models::Card> createCard(const models::requests::CreateCardRequest &request) const = 0;
+            virtual std::future<models::CardMock> createCard(const models::requests::CreateCardRequest &request) const = 0;
 
             /*!
              * @brief Returns Virgil Card from the Virgil Cards Service with given ID, if exists.
              * @param cardId std::string with card ID
              * @return std::future with Card
              */
-            virtual std::future<models::Card> getCard(const std::string &cardId) const = 0;
+            virtual std::future<models::CardMock> getCard(const std::string &cardId) const = 0;
 
             /*!
              * @brief Performs search of Virgil Cards using search criteria on the Virgil Cards Service.
              * @param criteria SearchCardsCriteria instance with criteria for desired cards
              * @return std::future with std::vector which contains found cards
              */
-            virtual std::future<std::vector<models::Card>> searchCards(
+            virtual std::future<std::vector<models::CardMock>> searchCards(
                     const models::SearchCardsCriteria &criteria) const = 0;
 
             /*!

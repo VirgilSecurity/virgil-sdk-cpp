@@ -40,7 +40,7 @@
 
 #include <virgil/sdk/client/models/requests/CreateCardRequest.h>
 #include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
-#include <virgil/sdk/client/models/Card.h>
+#include <virgil/sdk/client/models/CardMock.h>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/crypto/Crypto.h>
 
