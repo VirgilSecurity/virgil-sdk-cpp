@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,47 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_CARDVALIDATOR_H
-#define VIRGIL_SDK_CARDVALIDATOR_H
+#ifndef VIRGIL_SDK_HTTP_CONNECTION_H
+#define VIRGIL_SDK_HTTP_CONNECTION_H
 
-#include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/client/interfaces/CardValidatorInterface.h>
+#include <virgil/sdk/client/networking/Request.h>
+#include <virgil/sdk/client/networking/Response.h>
 
 namespace virgil {
-namespace sdk {
-namespace client {
-    /*!
-     * @brief Default implementation of CardValidatorInterface
-     */
-    class CardValidator: public interfaces::CardValidatorInterface {
-    public:
-        /*!
-         * @brief Constructor.
-         * @param crypto std::shared_ptr to some CryptoInterface implementation
-         */
-        CardValidator(const std::shared_ptr<crypto::Crypto> &crypto);
-
-        /*!
-         * @brief Adds custom verifier to validator.
-         * @param verifierId std::string verifier ID
-         * @param publicKeyData exported Public Key of verifier
-         */
-        void addVerifier(std::string verifierId, VirgilByteArray publicKeyData);
-
-        /*!
-         * @brief Getter.
-         * @return std::unordered_map of all verifiers, except owner
-         */
-        const std::unordered_map<std::string, VirgilByteArray>& verifiers() const { return verifiers_; };
-
-        bool validateCardResponse(const models::responses::CardResponse &response) const override;
-
-    private:
-        std::shared_ptr<crypto::Crypto> crypto_;
-        std::unordered_map<std::string, VirgilByteArray> verifiers_;
-    };
-}
-}
+    namespace sdk {
+        namespace client {
+            namespace networking {
+                /**
+                 * @brief This class encapsulates access to the HTTP layer.
+                 * @note This class belongs to the **private** API
+                 */
+                class Connection {
+                public:
+                    /**
+                     * @brief Send synchronous request.
+                     * @param request - request to be send.
+                     * @throw std::logic_error - if given parameters are inconsistent.
+                     * @throw std::runtime_error - if error was occured when send request.
+                     */
+                    virtual virgil::sdk::client::networking::Response send(const virgil::sdk::client::networking::Request &request);
+                };
+            }
+        }
+    }
 }
 
-#endif //VIRGIL_SDK_CARDVALIDATOR_H
+#endif /* VIRGIL_SDK_HTTP_CONNECTION_H */

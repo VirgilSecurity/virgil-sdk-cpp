@@ -34,53 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <virgil/sdk/client/networking/Response.h>
+
 #include <stdexcept>
+#include <set>
 
-#include <nlohman/json.hpp>
-#include <restless/restless.hpp>
+using virgil::sdk::client::networking::Response;
 
-#include <virgil/sdk/http/Connection.h>
-#include <virgil/sdk/http/Request.h>
-#include <virgil/sdk/http/Response.h>
+Response& Response::body(const std::string& body) {
+    body_ = body;
+    return *this;
+}
 
-using json = nlohmann::json;
-using HttpRequest = asoni::Handle;
+std::string Response::body() const {
+    return body_;
+}
 
-using virgil::sdk::http::Connection;
-using virgil::sdk::http::Request;
-using virgil::sdk::http::Response;
+Response& Response::contentType(const std::string& contentType) {
+    contentType_ = contentType;
+    return *this;
+}
 
-Response Connection::send(const Request& request) {
-    // Make Request
-    HttpRequest httpRequest;
-    httpRequest.header(request.header()).content(request.contentType(), request.body());
+std::string Response::contentType() const {
+    return contentType_;
+}
 
-    switch (request.method()) {
-        case Request::Method::GET:
-            httpRequest.get(request.uri());
-            break;
-        case Request::Method::POST:
-            httpRequest.post(request.uri());
-            break;
-        case Request::Method::PUT:
-            httpRequest.put(request.uri());
-            break;
-        case Request::Method::DEL:
-            httpRequest.del(request.uri());
-            break;
-        default:
-            throw std::logic_error("Unknown HTTP method.");
+Response& Response::header(const Response::Header& header) {
+    header_ = header;
+    return *this;
+}
+
+Response::Header Response::header() const {
+    return header_;
+}
+
+Response& Response::statusCode(Response::StatusCode statusCode) {
+    statusCode_ = statusCode;
+    return *this;
+}
+
+Response::StatusCode Response::statusCode() const {
+    return statusCode_;
+}
+
+Response& Response::statusCodeRaw(int code) {
+    std::set<int> availableCodes{200, 400, 401, 403, 404, 405, 500};
+    if (availableCodes.find(code) != availableCodes.end()) {
+        statusCode_ = static_cast<Response::StatusCode>(code);
+    } else {
+        throw std::logic_error("Given status code is not supported.");
     }
-    // Execute
-    auto httpResponse = httpRequest.exec();
-    // Make response
-    Response response;
-    try {
-        response.statusCodeRaw(httpResponse.code);
-    } catch (const std::logic_error&) {
-        throw std::runtime_error(httpResponse.body);
-    }
+    return *this;
+}
 
-    response.header(httpResponse.headers).body(httpResponse.body);
-    return response;
+int Response::statusCodeRaw() const {
+    return static_cast<int>(statusCode_);
+}
+
+bool Response::fail() const {
+    return statusCode_ != StatusCode::OK;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,30 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/requests/SignableRequest.h>
-#include <virgil/sdk/client/models/interfaces/SignableRequestInterface.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
-#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
+#include <virgil/sdk/client/networking/CardEndpointUri.h>
 
-using virgil::sdk::client::models::requests::SignableRequest;
-using virgil::sdk::client::models::serialization::JsonSerializer;
-using virgil::sdk::client::models::interfaces::SignableRequestInterface;
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::requests::RevokeCardRequest;
-using virgil::sdk::client::models::snapshotmodels::CreateCardSnapshotModel;
-using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
+using virgil::sdk::client::networking::CardEndpointUri;
 
-template <typename SnapshotModelType, typename DerivedClass>
-std::string SignableRequest<SnapshotModelType, DerivedClass>::exportAsString() const {
-    auto json = serialization::JsonSerializer<SignableRequestInterface>::toJson(*this);
-
-    return VirgilBase64::encode(VirgilByteArrayUtils::stringToBytes(json));
+std::string CardEndpointUri::publish() {
+    return "/card/v5";
 }
 
-/**
- * Explicit methods instantiation
- */
-template std::string SignableRequest<CreateCardSnapshotModel, CreateCardRequest>::exportAsString() const;
+std::string CardEndpointUri::get(const std::string& cardId) {
+    return "/card/v5/" + cardId;
+}
 
-template std::string SignableRequest<RevokeCardSnapshotModel, RevokeCardRequest>::exportAsString() const;
+std::string CardEndpointUri::search() {
+    return "/card/v5/actions/search";
+}

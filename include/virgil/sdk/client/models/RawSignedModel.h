@@ -37,8 +37,6 @@
 #ifndef VIRGIL_SDK_RAWSIGNEDMODEL_H
 #define VIRGIL_SDK_RAWSIGNEDMODEL_H
 
-#include <virgil/sdk/client/models/interfaces/Exportable.h>
-#include <virgil/sdk/client/models/interfaces/Importable.h>
 #include <virgil/sdk/client/models/RawSignature.h>
 #include <virgil/sdk/Common.h>
 #include <vector>

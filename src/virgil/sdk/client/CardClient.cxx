@@ -36,24 +36,24 @@
 
 #include <unordered_map>
 #include <virgil/sdk/client/CardClient.h>
-#include <virgil/sdk/http/ClientRequest.h>
-#include <virgil/sdk/endpoints/CardEndpointUri.h>
+#include <virgil/sdk/client/networking/ClientRequest.h>
+#include <virgil/sdk/client/networking/CardEndpointUri.h>
 #include <virgil/sdk/client/models/serialization/JsonSerializer.h>
 #include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
-#include <virgil/sdk/http/Connection.h>
-#include <virgil/sdk/http/Response.h>
+#include <virgil/sdk/client/networking/Connection.h>
+#include <virgil/sdk/client/networking/Response.h>
 #include <virgil/sdk/VirgilSdkError.h>
 #include <virgil/sdk/client/models/errors/VirgilError.h>
 #include <virgil/sdk/util/JsonUtils.h>
 
 using virgil::sdk::client::CardClient;
 using virgil::sdk::client::models::RawSignedModel;
-using virgil::sdk::http::ClientRequest;
-using virgil::sdk::endpoints::CardEndpointUri;
+using virgil::sdk::client::networking::ClientRequest;
+using virgil::sdk::client::networking::CardEndpointUri;
 using virgil::sdk::client::models::serialization::JsonSerializer;
 using virgil::sdk::client::models::serialization::JsonDeserializer;
-using virgil::sdk::http::Connection;
-using virgil::sdk::http::Response;
+using virgil::sdk::client::networking::Connection;
+using virgil::sdk::client::networking::Response;
 using virgil::sdk::client::models::errors::Error;
 using virgil::sdk::client::models::errors::VirgilError;
 using virgil::sdk::util::JsonUtils;

@@ -34,17 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/snapshotmodels/RevokeCardSnapshotModel.h>
+#include <virgil/sdk/client/networking/ClientRequest.h>
 
-#include <virgil/sdk/client/models/ClientCommon.h>
+using virgil::sdk::client::networking::ClientRequest;
 
-using virgil::sdk::client::models::CardRevocationReason;
-using virgil::sdk::client::models::snapshotmodels::RevokeCardSnapshotModel;
+const std::string ClientRequest::accessTokenHeader = "Authorization";
+const std::string ClientRequest::accessTokenPrefix = "Virgil";
 
-RevokeCardSnapshotModel RevokeCardSnapshotModel::createModel(const std::string &cardId, CardRevocationReason reason) {
-    return RevokeCardSnapshotModel(cardId, reason);
-}
-
-RevokeCardSnapshotModel::RevokeCardSnapshotModel(std::string cardId, CardRevocationReason reason)
-        : cardId_(std::move(cardId)), reason_(reason) {
+ClientRequest::ClientRequest(std::string accessToken) {
+    header(std::map<std::string, std::string> { std::make_pair(accessTokenHeader, accessTokenPrefix + " " + accessToken) });
+    contentType("application/json");
 }

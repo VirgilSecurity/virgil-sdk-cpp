@@ -34,37 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/ServiceConfig.h>
 
-using virgil::sdk::client::ServiceConfig;
-using virgil::sdk::client::interfaces::CardValidatorInterface;
+#ifndef VIRGIL_SDK_CLIENTREQUEST_H
+#define VIRGIL_SDK_CLIENTREQUEST_H
 
-ServiceConfig& ServiceConfig::cardValidator(std::unique_ptr<CardValidatorInterface> validator) {
-    validator_ = std::move(validator);
-    return *this;
+#include <virgil/sdk/client/networking/Request.h>
+
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace networking {
+                /**
+                 * @brief This is base class for all HTTP requests to the Virgil Service.
+                 */
+                class ClientRequest : public Request {
+                public:
+                    static const std::string accessTokenHeader;
+                    static const std::string accessTokenPrefix;
+
+                    /*!
+                     * @brief Constructor.
+                     * @param accessToken std::string with access token for the Virgil Service
+                     */
+                    ClientRequest(std::string accessToken);
+                };
+            }
+        }
+    }
 }
 
-ServiceConfig& ServiceConfig::cardsServiceURL(std::string cardsServiceURL) {
-    cardsServiceURL_ = std::move(cardsServiceURL);
-    return *this;
-}
-
-ServiceConfig& ServiceConfig::token(std::string token) {
-    token_ = std::move(token);
-    return *this;
-}
-
-ServiceConfig& ServiceConfig::cardsServiceROURL(std::string cardsServiceROURL) {
-    cardsServiceROURL_ = std::move(cardsServiceROURL);
-    return *this;
-}
-
-ServiceConfig ServiceConfig::createConfig(const std::string &token) {
-    return ServiceConfig(token);
-}
-
-ServiceConfig::ServiceConfig(std::string token)
-        : token_(std::move(token)),
-          cardsServiceURL_("https://cards.virgilsecurity.com/v4/"),
-          cardsServiceROURL_("https://cards-ro.virgilsecurity.com/v4/") {
-}
+#endif //VIRGIL_SDK_CLIENTREQUEST_H

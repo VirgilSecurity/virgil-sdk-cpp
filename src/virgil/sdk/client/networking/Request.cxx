@@ -36,9 +36,9 @@
 
 #include <sstream>
 
-#include <virgil/sdk/http/Request.h>
+#include <virgil/sdk/client/networking/Request.h>
 
-using virgil::sdk::http::Request;
+using virgil::sdk::client::networking::Request;
 
 static std::string normalize_base_address(const std::string& baseAddress) {
     if (!baseAddress.empty() && baseAddress.back() == '/') {

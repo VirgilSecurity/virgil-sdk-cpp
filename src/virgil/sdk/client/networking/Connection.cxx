@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2015 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,53 +34,53 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
-#define VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
+#include <stdexcept>
 
-#include <string>
+#include <nlohman/json.hpp>
+#include <restless/restless.hpp>
 
-#include <virgil/sdk/client/models/ClientCommon.h>
+#include <virgil/sdk/client/networking/Connection.h>
+#include <virgil/sdk/client/networking/Request.h>
+#include <virgil/sdk/client/networking/Response.h>
 
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace snapshotmodels {
-        /*!
-         * @brief Model which contains basic Virgil Card data needed for Card Revocation.
-         */
-        class RevokeCardSnapshotModel {
-        public:
-            /*!
-             * @brief Creates RevokeCardSnapshotModel instance and initializes with given parameters.
-             * @param cardId std::string with Card ID
-             * @param reason CardRevocationReason
-             * @return initialized RevokeCardSnapshotModel instance
-             */
-            static RevokeCardSnapshotModel createModel(const std::string &cardId, CardRevocationReason reason);
+using json = nlohmann::json;
+using HttpRequest = asoni::Handle;
 
-            /*!
-             * @brief Getter.
-             * @return std::string with Card ID
-             */
-            const std::string& cardId() const { return cardId_; }
+using virgil::sdk::client::networking::Connection;
+using virgil::sdk::client::networking::Request;
+using virgil::sdk::client::networking::Response;
 
-            /*!
-             * @brief Getter.
-             * @return CardRevocationReason
-             */
-            CardRevocationReason revocationReason() const { return reason_; }
+Response Connection::send(const Request& request) {
+    // Make Request
+    HttpRequest httpRequest;
+    httpRequest.header(request.header()).content(request.contentType(), request.body());
 
-        private:
-            RevokeCardSnapshotModel(std::string cardId, CardRevocationReason reason);
-
-            std::string cardId_;
-            CardRevocationReason reason_;
-        };
+    switch (request.method()) {
+        case Request::Method::GET:
+            httpRequest.get(request.uri());
+            break;
+        case Request::Method::POST:
+            httpRequest.post(request.uri());
+            break;
+        case Request::Method::PUT:
+            httpRequest.put(request.uri());
+            break;
+        case Request::Method::DEL:
+            httpRequest.del(request.uri());
+            break;
+        default:
+            throw std::logic_error("Unknown HTTP method.");
     }
-}
-}
-}
-}
+    // Execute
+    auto httpResponse = httpRequest.exec();
+    // Make response
+    Response response;
+    try {
+        response.statusCodeRaw(httpResponse.code);
+    } catch (const std::logic_error&) {
+        throw std::runtime_error(httpResponse.body);
+    }
 
-#endif //VIRGIL_SDK_REVOKECARDSNAPSHOTMODEL_H
+    response.header(httpResponse.headers).body(httpResponse.body);
+    return response;
+}

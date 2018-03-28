@@ -34,31 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_HTTP_CONNECTION_H
-#define VIRGIL_SDK_HTTP_CONNECTION_H
+#ifndef VIRGIL_SDK_CARD_ENDPOINT_URI_H
+#define VIRGIL_SDK_CARD_ENDPOINT_URI_H
 
-#include <virgil/sdk/http/Request.h>
-#include <virgil/sdk/http/Response.h>
+#include <string>
 
 namespace virgil {
-namespace sdk {
-    namespace http {
-        /**
-         * @brief This class encapsulates access to the HTTP layer.
-         * @note This class belongs to the **private** API
-         */
-        class Connection {
-        public:
-            /**
-             * @brief Send synchronous request.
-             * @param request - request to be send.
-             * @throw std::logic_error - if given parameters are inconsistent.
-             * @throw std::runtime_error - if error was occured when send request.
-             */
-            virtual virgil::sdk::http::Response send(const virgil::sdk::http::Request& request);
-        };
+    namespace sdk {
+        namespace client {
+            namespace networking {
+                /**
+                 * @brief This class provides URIs to the Virgil Service endpoints.
+                 */
+                class CardEndpointUri {
+                public:
+                    /**
+                     * @brief Returns the endpoint in charge of a Virgil Card publishing.
+                     */
+                    static std::string publish();
+
+                    /**
+                     * @brief Returns the endpoint in charge of a Virgil Card grab.
+                     */
+                    static std::string get(const std::string &cardId);
+
+                    /**
+                     * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
+                     */
+                    static std::string search();
+
+                    /**
+                     * @brief Deny object creation
+                     */
+                    CardEndpointUri() = delete;
+                };
+            }
+        }
     }
 }
-}
 
-#endif /* VIRGIL_SDK_HTTP_CONNECTION_H */
+#endif /* VIRGIL_SDK_CARD_ENDPOINT_URI_H */
