@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,14 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/http/ClientRequest.h>
+#ifndef VIRGIL_SDK_CARDCLIENT_H
+#define VIRGIL_SDK_CARDCLIENT_H
 
-using virgil::sdk::http::ClientRequest;
+#include <virgil/sdk/http/Response.h>
+#include <virgil/sdk/client/models/errors/Error.h>
+#include <virgil/sdk/client/CardClientInterface.h>
 
-const std::string ClientRequest::accessTokenHeader = "Authorization";
-const std::string ClientRequest::accessTokenPrefix = "Virgil";
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            class CardClient : public interfaces::CardClientInterface {
+            public:
+                static const std::string xVirgilIsSuperseededKey;
 
-ClientRequest::ClientRequest(std::string accessToken) {
-    header(std::map<std::string, std::string> { std::make_pair(accessTokenHeader, accessTokenPrefix + " " + accessToken) });
-    contentType("application/json");
+                CardClient(const std::string& serviceUrl = "https://api.virgilsecurity.com");
+
+                const std::string& serviceUrl() const;
+
+                std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
+                                                     const std::string& token) const override;
+
+                std::future<models::GetCardResponse> getCard(const std::string &cardId,
+                                                 const std::string& token) const override;
+
+                std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
+                                                           const std::string& token) const override ;
+            private:
+                models::errors::Error parseError(const http::Response &response) const;
+
+                std::string serviceUrl_;
+            };
+        }
+    }
 }
+
+#endif //VIRGIL_SDK_CARDCLIENT_H

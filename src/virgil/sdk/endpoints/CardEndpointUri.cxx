@@ -42,14 +42,18 @@ std::string CardEndpointUri::create() {
     return "/card";
 }
 
-std::string CardEndpointUri::get(const std::string& cardId) {
+std::string CardEndpointUri::revoke(const std::string& cardId) {
     return "/card/" + cardId;
+}
+
+std::string CardEndpointUri::publish() {
+    return "/card/v5";
+}
+
+std::string CardEndpointUri::get(const std::string& cardId) {
+    return "/card/v5/" + cardId;
 }
 
 std::string CardEndpointUri::search() {
-    return "/card/actions/search";
-}
-
-std::string CardEndpointUri::revoke(const std::string& cardId) {
-    return "/card/" + cardId;
+    return "/card/v5/actions/search";
 }

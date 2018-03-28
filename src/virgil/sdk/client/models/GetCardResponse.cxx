@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,14 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/http/ClientRequest.h>
+#include <virgil/sdk/client/models/GetCardResponse.h>
 
-using virgil::sdk::http::ClientRequest;
+using virgil::sdk::client::models::GetCardResponse;
+using virgil::sdk::client::models::RawSignedModel;
 
-const std::string ClientRequest::accessTokenHeader = "Authorization";
-const std::string ClientRequest::accessTokenPrefix = "Virgil";
+GetCardResponse::GetCardResponse(const RawSignedModel &rawCard,
+                                 const bool &isOutdated)
+: rawCard_(rawCard), isOutdated_(isOutdated) {}
 
-ClientRequest::ClientRequest(std::string accessToken) {
-    header(std::map<std::string, std::string> { std::make_pair(accessTokenHeader, accessTokenPrefix + " " + accessToken) });
-    contentType("application/json");
-}
+const RawSignedModel& GetCardResponse::rawCard() const { return rawCard_; }
+
+const bool& GetCardResponse::isOutdated() const { return isOutdated_; }

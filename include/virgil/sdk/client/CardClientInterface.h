@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,14 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/http/ClientRequest.h>
+#ifndef VIRGIL_SDK_CARDCLIENTINTERFACE_H
+#define VIRGIL_SDK_CARDCLIENTINTERFACE_H
 
-using virgil::sdk::http::ClientRequest;
+#include <string>
+#include <future>
+#include <vector>
+#include <tuple>
 
-const std::string ClientRequest::accessTokenHeader = "Authorization";
-const std::string ClientRequest::accessTokenPrefix = "Virgil";
+#include <virgil/sdk/client/models/RawSignedModel.h>
+#include <virgil/sdk/client/models/GetCardResponse.h>
 
-ClientRequest::ClientRequest(std::string accessToken) {
-    header(std::map<std::string, std::string> { std::make_pair(accessTokenHeader, accessTokenPrefix + " " + accessToken) });
-    contentType("application/json");
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace interfaces {
+                class CardClientInterface {
+                public:
+                    virtual std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
+                                                         const std::string& token) const = 0;
+
+                    virtual std::future<models::GetCardResponse> getCard(const std::string &cardId,
+                                                      const std::string& token) const = 0;
+
+                    virtual std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
+                                                                       const std::string& token) const = 0;
+
+                    virtual ~CardClientInterface() = default;
+                };
+            }
+        }
+    }
 }
+
+#endif //VIRGIL_SDK_CARDCLIENTINTERFACE_H

@@ -47,10 +47,12 @@ namespace sdk {
          */
         class CardEndpointUri {
         public:
-            /**
-             * @brief Returns the endpoint in charge of a Virgil Card creation.
-             */
+
             static std::string create();
+            /**
+             * @brief Returns the endpoint in charge of a Virgil Card publishing.
+             */
+            static std::string publish();
             /**
              * @brief Returns the endpoint in charge of a Virgil Card grab.
              */
@@ -59,10 +61,7 @@ namespace sdk {
              * @brief Returns the endpoint in charge of the Virgil Card searches by provided parameters.
              */
             static std::string search();
-            /**
-             * @brief Returns the endpoint in charge of the Virgil Card revoke.
-             * @param cardId - Virgil Card identifier
-             */
+
             static std::string revoke(const std::string& cardId);
 
             /**

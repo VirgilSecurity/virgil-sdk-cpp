@@ -48,6 +48,9 @@ namespace sdk {
          */
         class ClientRequest : public Request {
         public:
+            static const std::string accessTokenHeader;
+            static const std::string accessTokenPrefix;
+
             /*!
              * @brief Constructor.
              * @param accessToken std::string with access token for the Virgil Service
