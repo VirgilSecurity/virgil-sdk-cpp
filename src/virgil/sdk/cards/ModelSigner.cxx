@@ -54,6 +54,11 @@ const std::string ModelSigner::selfSignerIdentifier = "self";
 
 const std::shared_ptr<Crypto>& ModelSigner::crypto() const { return crypto_; }
 
+void ModelSigner::sign(RawSignedModel &model, const std::string &signer,
+                       const PrivateKey &privateKey) const {
+    this->sign(model, signer, privateKey, VirgilByteArray());
+}
+
 void ModelSigner::sign(RawSignedModel &model,
                        const std::string &signer,
                        const PrivateKey &privateKey,
@@ -65,6 +70,11 @@ void ModelSigner::sign(RawSignedModel &model,
     auto rawSignature = RawSignature(signer, signature, additionalData);
 
     model.addSignature(rawSignature);
+}
+
+void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,
+                           const virgil::sdk::crypto::keys::PrivateKey &privateKey) const {
+    this->sign(model, selfSignerIdentifier, privateKey, VirgilByteArray());
 }
 
 void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,

@@ -48,6 +48,8 @@ const std::string JsonKey::PreviousCardId = "previous_card_id";
 const std::string JsonKey::CreatedAt = "created_at";
 const std::string JsonKey::Identity = "identity";
 const std::string JsonKey::Version = "version";
+const std::string JsonKey::Code = "code";
+const std::string JsonKey::Message = "message";
 
 const std::string JsonKey::Id = "id";
 const std::string JsonKey::CardVersion = "card_version";
@@ -60,4 +62,3 @@ const std::string JsonKey::Signs = "signs";
 const std::string JsonKey::CardId = "card_id";
 const std::string JsonKey::RevocationReason = "revocation_reason";
 const std::string JsonKey::Identities = "identities";
-const std::string JsonKey::Code = "code";

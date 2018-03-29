@@ -60,6 +60,8 @@ namespace sdk {
             static const std::string CreatedAt;
             static const std::string Identity;
             static const std::string Version;
+            static const std::string Code;
+            static const std::string Message;
 
             static const std::string Id;
             static const std::string CardVersion;
@@ -72,7 +74,6 @@ namespace sdk {
             static const std::string CardId;
             static const std::string RevocationReason;
             static const std::string Identities;
-            static const std::string Code;
             //! @endcond
 
             /*!

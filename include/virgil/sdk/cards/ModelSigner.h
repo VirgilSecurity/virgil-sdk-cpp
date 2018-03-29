@@ -56,21 +56,28 @@ namespace virgil {
 
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
-                          const crypto::keys::PrivateKey &privateKey,
-                          const VirgilByteArray &additionalData = VirgilByteArray()) const;
-
-                void selfSign(client::models::RawSignedModel &model,
-                              const crypto::keys::PrivateKey &privateKey,
-                              const VirgilByteArray &additionalData = VirgilByteArray()) const;
+                          const crypto::keys::PrivateKey &privateKey) const;
 
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
                           const crypto::keys::PrivateKey &privateKey,
-                          const std::unordered_map<std::string, std::string> &extraFields = std::unordered_map<std::string, std::string>()) const;
+                          const VirgilByteArray &additionalData) const;
+
+                void sign(client::models::RawSignedModel &model,
+                          const std::string &signer,
+                          const crypto::keys::PrivateKey &privateKey,
+                          const std::unordered_map<std::string, std::string> &extraFields) const;
+
+                void selfSign(client::models::RawSignedModel &model,
+                              const crypto::keys::PrivateKey &privateKey) const;
 
                 void selfSign(client::models::RawSignedModel &model,
                               const crypto::keys::PrivateKey &privateKey,
-                              const std::unordered_map<std::string, std::string> &extraFields = std::unordered_map<std::string, std::string>()) const;
+                              const VirgilByteArray &additionalData) const;
+
+                void selfSign(client::models::RawSignedModel &model,
+                              const crypto::keys::PrivateKey &privateKey,
+                              const std::unordered_map<std::string, std::string> &extraFields) const;
             private:
                 std::shared_ptr<crypto::Crypto> crypto_;
             };

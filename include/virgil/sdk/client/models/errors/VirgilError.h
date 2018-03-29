@@ -53,7 +53,7 @@ namespace models {
              * @brief Constructor
              * @param virgilErrorCode int with error code
              */
-            VirgilError(int virgilErrorCode);
+            VirgilError(int virgilErrorCode, std::string errorMsg = "Unknown error");
 
             /*!
              * @brief Getter.

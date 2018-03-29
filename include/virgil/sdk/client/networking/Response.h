@@ -55,6 +55,7 @@ namespace virgil {
                      */
                     enum class StatusCode {
                         OK = 200,
+                        CREATED = 201,
                         REQUEST_ERROR = 400,
                         AUTHORIZATION_ERROR = 401,
                         FORBIDDEN = 403,

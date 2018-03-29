@@ -72,7 +72,14 @@ namespace virgil {
 
                                 auto rawCard = RawSignedModel(contentSnapshot);
                                 for (auto& element : signaturesJson) {
-                                    auto signature = JsonDeserializer<RawSignature>::fromJson(element);
+                                    std::string signer = element[JsonKey::Signer];
+
+                                    VirgilByteArray snapshot = element.value("VirgilByteArray", VirgilByteArray());
+
+                                    std::string signatureStr = element[JsonKey::Signature];
+                                    VirgilByteArray signatureBytes = VirgilBase64::decode(signatureStr);
+
+                                    auto signature = RawSignature(signer, signatureBytes, snapshot);
                                     rawCard.addSignature(signature);
                                 }
 
@@ -98,7 +105,13 @@ namespace virgil {
 
                                 json signatures = json::array();
                                 for (auto& signature : rawCard.signatures()) {
-                                    auto signatureJson = JsonSerializer<RawSignature>::toJson(signature);
+                                    json signatureJson = {
+                                            {JsonKey::Signer, signature.signer()}
+                                    };
+                                    if (signature.snapshot().size() != 0) {
+                                        signatureJson[JsonKey::Snapshot] = VirgilBase64::encode(signature.snapshot());
+                                    }
+                                    signatureJson[JsonKey::Signature] = VirgilBase64::encode(signature.signature());
                                     signatures.push_back(signatureJson);
                                 }
                                 j[JsonKey::Signatures] = signatures;

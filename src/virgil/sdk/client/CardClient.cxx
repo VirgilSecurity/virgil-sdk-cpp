@@ -66,6 +66,16 @@ CardClient::CardClient(const std::string &serviceUrl)
 
 const std::string& CardClient::serviceUrl() const { return serviceUrl_; }
 
+Error CardClient::parseError(const Response &response) const {
+    try {
+        auto virgilError = JsonDeserializer<VirgilError>::fromJsonString(response.body());
+        return Error(response.statusCodeRaw(), virgilError);
+    }
+    catch (...) {
+        return Error(response.statusCodeRaw(), VirgilError(0));
+    }
+}
+
 std::future<RawSignedModel> CardClient::publishCard(const RawSignedModel &model, const std::string &token) const {
     auto future = std::async([=]{
         ClientRequest httpRequest = ClientRequest(token);
