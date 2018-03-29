@@ -42,6 +42,8 @@ project (virgil_sdk VERSION 3.2.3 LANGUAGES CXX)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 # Configurable variables
 ## Features
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
