@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_RAWCARDCONTENT_H
 
 #include <string>
+#include <memory>
 #include <virgil/sdk/Common.h>
 
 namespace virgil {

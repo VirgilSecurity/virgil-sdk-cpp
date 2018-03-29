@@ -37,6 +37,7 @@
 #ifndef VIRGIL_SDK_MODELSIGNER_H
 #define VIRGIL_SDK_MODELSIGNER_H
 
+#include <memory>
 #include <unordered_map>
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/Crypto.h>

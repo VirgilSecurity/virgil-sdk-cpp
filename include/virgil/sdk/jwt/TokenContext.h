@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_TOKENCONTEXT_H
 
 #include <string>
+#include <memory>
 
 namespace virgil {
     namespace sdk {

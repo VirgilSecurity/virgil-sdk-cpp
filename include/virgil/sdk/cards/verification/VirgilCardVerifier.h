@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_VIRGILCARDVERIFIER_H
 
 #include <vector>
+#include <memory>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/cards/verification/Whitelist.h>
 #include <virgil/sdk/cards/verification/CardVerifierInterface.h>
