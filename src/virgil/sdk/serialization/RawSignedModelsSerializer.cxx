@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,46 +34,53 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JSONSERIALIZER_H
-#define VIRGIL_SDK_JSONSERIALIZER_H
-
 #include <string>
-#include <vector>
 
 #include <nlohman/json.hpp>
 
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace serialization {
-        /*!
-         * @brief This class is responsible for the data object marshalling.
-         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel, SearchCardsCriteria,
-         *       SignableRequestInterface
-         * @tparam T represents class to be serialized
-         */
-        template<typename T>
-        class JsonSerializer {
-        public:
-            /*!
-             * @brief Serializes given object to std::string Json representation.
-             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
-             * @param obj object to be serialized
-             * @return std::string json representation of the object
-             */
-            template<int INDENT = -1>
-            static std::string toJson(const T &obj);
+#include <virgil/sdk/serialization/JsonDeserializer.h>
+#include <virgil/sdk/client/models/RawSignedModel.h>
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/util/JsonUtils.h>
 
-            /*!
-             * @brief Forbid instantiation
+using json = nlohmann::json;
+
+using virgil::sdk::client::models::RawSignedModel;
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::util::JsonUtils;
+
+namespace virgil {
+    namespace sdk {
+        namespace serialization {
+            /**
+             * @brief JSONSerializer<std::vector<RawSignedModel>> specialization.
              */
-            JsonSerializer() = delete;
-        };
+            template<>
+            class JsonDeserializer<std::vector<RawSignedModel>> {
+            public:
+                template<int FAKE = 0>
+                static std::vector<RawSignedModel> fromJson(const json &j) {
+                    try {
+                        std::vector<RawSignedModel> response;
+                        for (const auto& jElement : j) {
+                            response.push_back(JsonDeserializer<RawSignedModel>::fromJson(jElement));
+                        }
+
+                        return response;
+                    } catch (std::exception &exception) {
+                        throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<std::vector<RawSignedModel>>::fromJson ") +
+                                               exception.what());
+                    }
+                }
+
+                JsonDeserializer() = delete;
+            };
+        }
     }
 }
-}
-}
-}
 
-#endif //VIRGIL_SDK_JSONSERIALIZER_H
+/**
+ * Explicit methods instantiation
+ */
+template std::vector<RawSignedModel>
+virgil::sdk::serialization::JsonDeserializer<std::vector<RawSignedModel>>::fromJson(const json&);

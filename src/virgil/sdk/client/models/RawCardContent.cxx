@@ -35,13 +35,13 @@
  */
 
 #include <virgil/sdk/client/models/RawCardContent.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
-#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
+#include <virgil/sdk/serialization/JsonSerializer.h>
+#include <virgil/sdk/serialization/JsonDeserializer.h>
 
 using virgil::sdk::client::models::RawCardContent;
 using virgil::sdk::VirgilByteArray;
-using virgil::sdk::client::models::serialization::JsonSerializer;
-using virgil::sdk::client::models::serialization::JsonDeserializer;
+using virgil::sdk::serialization::JsonSerializer;
+using virgil::sdk::serialization::JsonDeserializer;
 using virgil::sdk::VirgilByteArrayUtils;
 
 RawCardContent::RawCardContent(const std::string &identity,

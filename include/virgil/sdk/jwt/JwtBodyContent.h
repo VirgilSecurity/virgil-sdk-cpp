@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,53 +34,43 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef VIRGIL_SDK_JWTBODYCONTENT_H
+#define VIRGIL_SDK_JWTBODYCONTENT_H
+
 #include <string>
-
-#include <nlohman/json.hpp>
-
-#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
-#include <virgil/sdk/client/models/errors/VirgilError.h>
-#include <virgil/sdk/util/JsonKey.h>
-
-using json = nlohmann::json;
-
-using virgil::sdk::util::JsonKey;
-using virgil::sdk::client::models::errors::VirgilError;
+#include <ctime>
+#include <virgil/sdk/Common.h>
 
 namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace serialization {
-        /**
-         * @brief JSONSerializer<VirgilError> specialization.
-         */
-        template<>
-        class JsonDeserializer<VirgilError> {
-        public:
-            template<int FAKE = 0>
-            static VirgilError fromJson(const json &j) {
-                try {
-                    int errorCodeStr = j[JsonKey::Code];
-                    std::string errorMsg = j[JsonKey::Message];
+    namespace sdk {
+        namespace jwt {
+            class JwtBodyContent {
+            public:
+                JwtBodyContent(const std::string& appId,
+                               const std::string& identity,
+                               const std::time_t& expiresAt,
+                               const std::time_t& issuedAt,
+                               const VirgilByteArray& additionalData = VirgilByteArray());
 
-                    return VirgilError(errorCodeStr, errorMsg);
-                } catch (std::exception &exception) {
-                    throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<VirgilError>::fromJson ") +
-                                           exception.what());
-                }
-            }
+                const std::string& appId() const;
 
-            JsonDeserializer() = delete;
-        };
+                const std::string& identity() const;
+
+                const std::time_t & expiresAt() const;
+
+                const std::time_t& issuedAt() const;
+
+                const VirgilByteArray& additionalData() const;
+
+            private:
+                std::string appId_;
+                std::string identity_;
+                std::time_t expiresAt_;
+                std::time_t issuedAt_;
+                VirgilByteArray additionalData_;
+            };
+        }
     }
 }
-}
-}
-}
 
-/**
- * Explicit methods instantiation
- */
-template VirgilError
-virgil::sdk::client::models::serialization::JsonDeserializer<VirgilError>::fromJson(const json&);
+#endif //VIRGIL_SDK_JWTBODYCONTENT_H

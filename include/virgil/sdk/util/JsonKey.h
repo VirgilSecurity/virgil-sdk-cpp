@@ -63,17 +63,17 @@ namespace sdk {
             static const std::string Code;
             static const std::string Message;
 
-            static const std::string Id;
-            static const std::string CardVersion;
-            static const std::string Data;
-            static const std::string Info;
-            static const std::string Meta;
-            static const std::string CardScope;
-            static const std::string IdentityType;
-            static const std::string Signs;
-            static const std::string CardId;
-            static const std::string RevocationReason;
-            static const std::string Identities;
+            static const std::string Algorithm;
+            static const std::string Type;
+            static const std::string ContentType;
+            static const std::string KeyIdentifier;
+
+            static const std::string AppId;
+            static const std::string IdentityJWT;
+            static const std::string IssuedAt;
+            static const std::string ExpiresAt;
+            static const std::string AdditionalData;
+
             //! @endcond
 
             /*!

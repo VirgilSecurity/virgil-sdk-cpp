@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,30 +34,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#ifndef VIRGIL_SDK_VIRGILERROR_H
+#define VIRGIL_SDK_VIRGILERROR_H
 
-using virgil::sdk::util::JsonKey;
+#include <string>
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::PreviousCardId = "previous_card_id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Version = "version";
-const std::string JsonKey::Code = "code";
-const std::string JsonKey::Message = "message";
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace networking {
+                namespace errors {
+                    /*!
+                     * @brief Model for errors which can be received from the Virgil Service.
+                     */
+                    class VirgilError {
+                    public:
+                        /*!
+                         * @brief Constructor
+                         * @param virgilErrorCode int with error code
+                         */
+                        VirgilError(int virgilErrorCode, std::string errorMsg = "Unknown error");
 
-const std::string JsonKey::Algorithm = "alg";
-const std::string JsonKey::Type = "typ";
-const std::string JsonKey::ContentType = "cty";
-const std::string JsonKey::KeyIdentifier = "kid";
+                        /*!
+                         * @brief Getter.
+                         * @return int with error code
+                         */
+                        int virgilErrorCode() const { return virgilErrorCode_; }
 
-const std::string JsonKey::AppId = "iss";
-const std::string JsonKey::IdentityJWT = "sub";
-const std::string JsonKey::IssuedAt = "iat";
-const std::string JsonKey::ExpiresAt = "exp";
-const std::string JsonKey::AdditionalData = "ada";
+                        /*!
+                         * @brief Getter.
+                         * @return std::string with english (debug-only) error message.
+                         */
+                        const std::string &errorMsg() const { return errorMsg_; }
+
+                    private:
+                        int virgilErrorCode_;
+                        std::string errorMsg_;
+                    };
+                }
+            }
+        }
+    }
+}
+
+#endif //VIRGIL_SDK_VIRGILERROR_H

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,30 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/jwt/JwtHeaderContent.h>
 
-using virgil::sdk::util::JsonKey;
+using virgil::sdk::jwt::JwtHeaderContent;
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::PreviousCardId = "previous_card_id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Version = "version";
-const std::string JsonKey::Code = "code";
-const std::string JsonKey::Message = "message";
+JwtHeaderContent::JwtHeaderContent(const std::string &keyIdentifier, const std::string &algorithm,
+                                   const std::string &type, const std::string &contentType)
+: keyIdentifier_(keyIdentifier), algorithm_(algorithm), type_(type), contentType_(contentType) {}
 
-const std::string JsonKey::Algorithm = "alg";
-const std::string JsonKey::Type = "typ";
-const std::string JsonKey::ContentType = "cty";
-const std::string JsonKey::KeyIdentifier = "kid";
+const std::string& JwtHeaderContent::algorithm() const { return algorithm_; }
 
-const std::string JsonKey::AppId = "iss";
-const std::string JsonKey::IdentityJWT = "sub";
-const std::string JsonKey::IssuedAt = "iat";
-const std::string JsonKey::ExpiresAt = "exp";
-const std::string JsonKey::AdditionalData = "ada";
+const std::string& JwtHeaderContent::type() const { return type_; }
+
+const std::string& JwtHeaderContent::contentType() const { return contentType_; }
+
+const std::string& JwtHeaderContent::keyIdentifier() const { return keyIdentifier_; }

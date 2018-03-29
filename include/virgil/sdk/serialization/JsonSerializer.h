@@ -34,10 +34,42 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/errors/VirgilError.h>
+#ifndef VIRGIL_SDK_JSONSERIALIZER_H
+#define VIRGIL_SDK_JSONSERIALIZER_H
 
-using virgil::sdk::client::models::errors::VirgilError;
+#include <string>
+#include <vector>
 
-VirgilError::VirgilError(int virgilErrorCode, std::string errorMsg)
-: virgilErrorCode_(virgilErrorCode), errorMsg_(errorMsg) {}
+#include <nlohman/json.hpp>
 
+namespace virgil {
+namespace sdk {
+    namespace serialization {
+        /*!
+         * @brief This class is responsible for the data object marshalling.
+         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel, SearchCardsCriteria,
+         *       SignableRequestInterface
+         * @tparam T represents class to be serialized
+         */
+        template<typename T>
+        class JsonSerializer {
+        public:
+            /*!
+             * @brief Serializes given object to std::string Json representation.
+             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
+             * @param obj object to be serialized
+             * @return std::string json representation of the object
+             */
+            template<int INDENT = -1>
+            static std::string toJson(const T &obj);
+
+            /*!
+             * @brief Forbid instantiation
+             */
+            JsonSerializer() = delete;
+        };
+    }
+}
+}
+
+#endif //VIRGIL_SDK_JSONSERIALIZER_H

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,47 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_VIRGILERROR_H
-#define VIRGIL_SDK_VIRGILERROR_H
+#include <virgil/sdk/jwt/JwtBodyContent.h>
 
-#include <string>
+using virgil::sdk::jwt::JwtBodyContent;
+using virgil::sdk::VirgilByteArray;
 
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace errors {
-        /*!
-         * @brief Model for errors which can be received from the Virgil Service.
-         */
-        class VirgilError {
-        public:
-            /*!
-             * @brief Constructor
-             * @param virgilErrorCode int with error code
-             */
-            VirgilError(int virgilErrorCode, std::string errorMsg = "Unknown error");
+JwtBodyContent::JwtBodyContent(const std::string &appId, const std::string &identity, const std::time_t &expiresAt,
+                               const std::time_t &issuedAt, const VirgilByteArray &additionalData)
+: appId_(appId), identity_(identity), expiresAt_(expiresAt), issuedAt_(issuedAt), additionalData_(additionalData) {}
 
-            /*!
-             * @brief Getter.
-             * @return int with error code
-             */
-            int virgilErrorCode() const { return virgilErrorCode_; }
+const std::string& JwtBodyContent::appId() const { return appId_; }
 
-            /*!
-             * @brief Getter.
-             * @return std::string with english (debug-only) error message.
-             */
-            const std::string& errorMsg() const { return errorMsg_; }
+const std::string& JwtBodyContent::identity() const { return identity_; }
 
-        private:
-            int virgilErrorCode_;
-            std::string errorMsg_;
-        };
-    }
-}
-}
-}
-}
+const std::time_t& JwtBodyContent::expiresAt() const { return expiresAt_; }
 
-#endif //VIRGIL_SDK_VIRGILERROR_H
+const std::time_t& JwtBodyContent::issuedAt() const { return issuedAt_; }
+
+const VirgilByteArray& JwtBodyContent::additionalData() const { return additionalData_; }

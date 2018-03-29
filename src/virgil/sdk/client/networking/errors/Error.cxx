@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,30 +34,15 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/client/networking/errors/Error.h>
 
-using virgil::sdk::util::JsonKey;
+using virgil::sdk::client::networking::errors::Error;
+using virgil::sdk::client::networking::errors::VirgilError;
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::PreviousCardId = "previous_card_id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Version = "version";
-const std::string JsonKey::Code = "code";
-const std::string JsonKey::Message = "message";
-
-const std::string JsonKey::Algorithm = "alg";
-const std::string JsonKey::Type = "typ";
-const std::string JsonKey::ContentType = "cty";
-const std::string JsonKey::KeyIdentifier = "kid";
-
-const std::string JsonKey::AppId = "iss";
-const std::string JsonKey::IdentityJWT = "sub";
-const std::string JsonKey::IssuedAt = "iat";
-const std::string JsonKey::ExpiresAt = "exp";
-const std::string JsonKey::AdditionalData = "ada";
+Error::Error(int httpErrorCode, const VirgilError &virgilError)
+        : httpErrorCode_(httpErrorCode),
+          virgilErrorCode_(virgilError.virgilErrorCode()) {
+    errorMsg_ = "HTTP Code: " + std::to_string(httpErrorCode)
+                + "; Virgil Code: " + std::to_string(virgilErrorCode_)
+                + "; Description: " + virgilError.errorMsg();
+}

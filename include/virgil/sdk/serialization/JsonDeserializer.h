@@ -41,8 +41,6 @@
 
 namespace virgil {
 namespace sdk {
-namespace client {
-namespace models {
     namespace serialization {
         /// Forward decl
         template<typename T>
@@ -90,8 +88,6 @@ namespace models {
             JsonDeserializer() = delete;
         };
     }
-}
-}
 }
 }
 

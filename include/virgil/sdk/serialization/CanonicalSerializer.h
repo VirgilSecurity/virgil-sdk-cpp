@@ -34,67 +34,51 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JSONTEMPLATEDDESERIALIZER_H
-#define VIRGIL_SDK_JSONTEMPLATEDDESERIALIZER_H
+#ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
+#define VIRGIL_SDK_CANONICALSERIALIZER_H
 
-#include <nlohman/json.hpp>
+#include <string>
+#include <vector>
+
+#include <virgil/sdk/Common.h>
+#include <virgil/sdk/serialization/JsonSerializer.h>
 
 namespace virgil {
 namespace sdk {
-namespace client {
-namespace models {
     namespace serialization {
-        /// Forward decl
-        template<typename T>
-        class JsonTemplatedDeserializer;
-
-        /*!
-        * @brief Base class for JsonTemplatedDeserializer.
-        * @tparam T Class to be deserialized
-        */
-        template <typename T>
-        class JsonTemplatedDeserializerBase {
-        public:
-            /*!
-             *
-             * @tparam ResultType type for deserialized objects. Supported classes: CreateCardRequest,
-             *         RevokeCardRequest.
-             * @param jsonString json representation of the object in std::string form
-             * @return deserialized object
-             */
-            template<typename ResultType>
-            static ResultType fromJsonString(const std::string &jsonString) {
-                return JsonTemplatedDeserializer<T>::template fromJson<ResultType>(nlohmann::json::parse(jsonString));
-            }
-        };
-
-        /*!
-         * @brief This class is responsible for deserializing of templated models.
-         * @note Supported classes: SignableRequestInterface
-         * @tparam T
+        /**
+         * @brief This class is responsible for serializing and deserializing models in Canonical Form.
+         * @tparam T concrete subclass
+         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel
          */
         template<typename T>
-        class JsonTemplatedDeserializer: public JsonTemplatedDeserializerBase<T> {
+        class CanonicalSerializer {
         public:
             /*!
-             *
-             * @tparam ResultType type for deserialized objects. Supported classes: CreateCardRequest,
-             *         RevokeCardRequest.
-             * @param json json representation of the object
-             * @return deserialized object
+             * @brief Serizalizes model to Canonical Form.
+             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
+             * @param model model to serialize
+             * @return serialized representation of model
              */
-            template<typename ResultType>
-            static ResultType fromJson(const nlohmann::json &json);
+            template<int INDENT = -1>
+            static VirgilByteArray toCanonicalForm(const T &model) ;
+
+            /*!
+             * @brief Constructs object from its Canonical Form representation.
+             * @tparam FAKE fake argument to allow template implementation in source file.
+             * @param data Canonical representation of object
+             * @return Constructed object
+             */
+            template<int FAKE = 0>
+            static T fromCanonicalForm(const VirgilByteArray &data);
 
             /*!
              * @brief Forbid instantiation.
              */
-            JsonTemplatedDeserializer() = delete;
+            CanonicalSerializer() = delete;
         };
     }
 }
 }
-}
-}
 
-#endif //VIRGIL_SDK_JSONTEMPLATEDDESERIALIZER_H
+#endif //VIRGIL_SDK_CANONICALSERIALIZER_H

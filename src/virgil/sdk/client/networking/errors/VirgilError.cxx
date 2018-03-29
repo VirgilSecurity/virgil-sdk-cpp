@@ -34,55 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_CANONICALSERIALIZER_H
-#define VIRGIL_SDK_CANONICALSERIALIZER_H
+#include <virgil/sdk/client/networking/errors/VirgilError.h>
 
-#include <string>
-#include <vector>
+using virgil::sdk::client::networking::errors::VirgilError;
 
-#include <virgil/sdk/Common.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+VirgilError::VirgilError(int virgilErrorCode, std::string errorMsg)
+: virgilErrorCode_(virgilErrorCode), errorMsg_(errorMsg) {}
 
-namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace serialization {
-        /**
-         * @brief This class is responsible for serializing and deserializing models in Canonical Form.
-         * @tparam T concrete subclass
-         * @note Supported classes: CreateCardSnapshotModel, RevokeCardSnapshotModel
-         */
-        template<typename T>
-        class CanonicalSerializer {
-        public:
-            /*!
-             * @brief Serizalizes model to Canonical Form.
-             * @tparam INDENT if > 0 - pretty print, 0 - only new lines, -1 - compact
-             * @param model model to serialize
-             * @return serialized representation of model
-             */
-            template<int INDENT = -1>
-            static VirgilByteArray toCanonicalForm(const T &model) ;
-
-            /*!
-             * @brief Constructs object from its Canonical Form representation.
-             * @tparam FAKE fake argument to allow template implementation in source file.
-             * @param data Canonical representation of object
-             * @return Constructed object
-             */
-            template<int FAKE = 0>
-            static T fromCanonicalForm(const VirgilByteArray &data);
-
-            /*!
-             * @brief Forbid instantiation.
-             */
-            CanonicalSerializer() = delete;
-        };
-    }
-}
-}
-}
-}
-
-#endif //VIRGIL_SDK_CANONICALSERIALIZER_H

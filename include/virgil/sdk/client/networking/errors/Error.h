@@ -39,52 +39,52 @@
 
 #include <string>
 
-#include <virgil/sdk/client/models/errors/VirgilError.h>
+#include <virgil/sdk/client/networking/errors/VirgilError.h>
 
 namespace virgil {
-namespace sdk {
-namespace client {
-namespace models {
-    namespace errors {
-        /*!
-         * @brief Wrapper for errors in sdk.
-         */
-        class Error {
-        public:
-            /*!
-             * @brief Constructor.
-             * @param httpErrorCode int with http response status code
-             * @param virgilError VirgilError instance
-             */
-            Error(int httpErrorCode, const VirgilError &virgilError);
+    namespace sdk {
+        namespace client {
+            namespace networking {
+                namespace errors {
+                    /*!
+                     * @brief Wrapper for errors in sdk.
+                     */
+                    class Error {
+                    public:
+                        /*!
+                         * @brief Constructor.
+                         * @param httpErrorCode int with http response status code
+                         * @param virgilError VirgilError instance
+                         */
+                        Error(int httpErrorCode, const VirgilError &virgilError);
 
-            /*!
-             * @brief Getter.
-             * @return int http response status code
-             */
-            int httpErrorCode() const { return httpErrorCode_; }
+                        /*!
+                         * @brief Getter.
+                         * @return int http response status code
+                         */
+                        int httpErrorCode() const { return httpErrorCode_; }
 
-            /*!
-             * @brief Getter.
-             * @return error code from Virgil Service
-             */
-            int virgilErrorCode() const { return virgilErrorCode_; }
+                        /*!
+                         * @brief Getter.
+                         * @return error code from Virgil Service
+                         */
+                        int virgilErrorCode() const { return virgilErrorCode_; }
 
-            /*!
-             * @brief Getter.
-             * @return std::string with full error descriptino
-             */
-            const std::string& errorMsg() const { return errorMsg_; }
+                        /*!
+                         * @brief Getter.
+                         * @return std::string with full error descriptino
+                         */
+                        const std::string &errorMsg() const { return errorMsg_; }
 
-        private:
-            int httpErrorCode_;
-            int virgilErrorCode_;
-            std::string errorMsg_;
-        };
+                    private:
+                        int httpErrorCode_;
+                        int virgilErrorCode_;
+                        std::string errorMsg_;
+                    };
+                }
+            }
+        }
     }
-}
-}
-}
 }
 
 #endif //VIRGIL_SDK_ERROR_H

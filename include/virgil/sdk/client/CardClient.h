@@ -38,7 +38,7 @@
 #define VIRGIL_SDK_CARDCLIENT_H
 
 #include <virgil/sdk/client/networking/Response.h>
-#include <virgil/sdk/client/models/errors/Error.h>
+#include <virgil/sdk/client/networking/errors/Error.h>
 #include <virgil/sdk/client/CardClientInterface.h>
 
 namespace virgil {
@@ -61,7 +61,7 @@ namespace virgil {
                 std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
                                                            const std::string& token) const override ;
             private:
-                models::errors::Error parseError(const client::networking::Response &response) const;
+                networking::errors::Error parseError(const client::networking::Response &response) const;
 
                 std::string serviceUrl_;
             };

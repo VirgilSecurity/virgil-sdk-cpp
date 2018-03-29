@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
+ * Copyright (C) 2018 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,30 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/util/JsonKey.h>
+#ifndef VIRGIL_SDK_JWTHEADERCONTENT_H
+#define VIRGIL_SDK_JWTHEADERCONTENT_H
 
-using virgil::sdk::util::JsonKey;
+#include <string>
 
-const std::string JsonKey::Signer = "signer";
-const std::string JsonKey::Snapshot = "snapshot";
-const std::string JsonKey::Signature = "signature";
-const std::string JsonKey::Signatures = "signatures";
-const std::string JsonKey::PublicKey = "public_key";
-const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::PreviousCardId = "previous_card_id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Version = "version";
-const std::string JsonKey::Code = "code";
-const std::string JsonKey::Message = "message";
+namespace virgil {
+    namespace sdk {
+        namespace jwt {
+            class JwtHeaderContent {
+            public:
+                JwtHeaderContent(const std::string& keyIdentifier,
+                                 const std::string& algorithm = "VEDS512",
+                                 const std::string& type = "JWT",
+                                 const std::string& contentType = "virgil-jwt;v=1");
 
-const std::string JsonKey::Algorithm = "alg";
-const std::string JsonKey::Type = "typ";
-const std::string JsonKey::ContentType = "cty";
-const std::string JsonKey::KeyIdentifier = "kid";
+                const std::string& algorithm() const;
 
-const std::string JsonKey::AppId = "iss";
-const std::string JsonKey::IdentityJWT = "sub";
-const std::string JsonKey::IssuedAt = "iat";
-const std::string JsonKey::ExpiresAt = "exp";
-const std::string JsonKey::AdditionalData = "ada";
+                const std::string& type() const;
+
+                const std::string& contentType() const;
+
+                const std::string& keyIdentifier() const;
+
+            private:
+                std::string algorithm_;
+                std::string type_;
+                std::string contentType_;
+                std::string keyIdentifier_;
+            };
+        }
+    }
+}
+
+#endif //VIRGIL_SDK_JWTHEADERCONTENT_H

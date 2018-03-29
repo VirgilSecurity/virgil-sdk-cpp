@@ -34,15 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/client/models/errors/Error.h>
+#include <string>
 
-using virgil::sdk::client::models::errors::Error;
-using virgil::sdk::client::models::errors::VirgilError;
+#include <nlohman/json.hpp>
 
-Error::Error(int httpErrorCode, const VirgilError &virgilError)
-        : httpErrorCode_(httpErrorCode),
-          virgilErrorCode_(virgilError.virgilErrorCode()) {
-    errorMsg_ = "HTTP Code: " + std::to_string(httpErrorCode)
-                + "; Virgil Code: " + std::to_string(virgilErrorCode_)
-                + "; Description: " + virgilError.errorMsg();
+#include <virgil/sdk/serialization/JsonDeserializer.h>
+#include <virgil/sdk/client/networking/errors/VirgilError.h>
+#include <virgil/sdk/util/JsonKey.h>
+
+using json = nlohmann::json;
+
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::client::networking::errors::VirgilError;
+
+namespace virgil {
+namespace sdk {
+    namespace serialization {
+        /**
+         * @brief JSONSerializer<VirgilError> specialization.
+         */
+        template<>
+        class JsonDeserializer<VirgilError> {
+        public:
+            template<int FAKE = 0>
+            static VirgilError fromJson(const json &j) {
+                try {
+                    int errorCodeStr = j[JsonKey::Code];
+                    std::string errorMsg = j[JsonKey::Message];
+
+                    return VirgilError(errorCodeStr, errorMsg);
+                } catch (std::exception &exception) {
+                    throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<VirgilError>::fromJson ") +
+                                           exception.what());
+                }
+            }
+
+            JsonDeserializer() = delete;
+        };
+    }
 }
+}
+
+/**
+ * Explicit methods instantiation
+ */
+template VirgilError
+virgil::sdk::serialization::JsonDeserializer<VirgilError>::fromJson(const json&);

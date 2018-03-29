@@ -35,14 +35,14 @@
  */
 
 #include <virgil/sdk/client/models/RawSignedModel.h>
-#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
-#include <virgil/sdk/client/models/serialization/JsonSerializer.h>
+#include <virgil/sdk/serialization/JsonDeserializer.h>
+#include <virgil/sdk/serialization/JsonSerializer.h>
 
 using virgil::sdk::client::models::RawSignedModel;
 using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::VirgilByteArray;
-using virgil::sdk::client::models::serialization::JsonDeserializer;
-using virgil::sdk::client::models::serialization::JsonSerializer;
+using virgil::sdk::serialization::JsonDeserializer;
+using virgil::sdk::serialization::JsonSerializer;
 
 RawSignedModel::RawSignedModel(const VirgilByteArray &contentSnapshot)
 : contentSnapshot_(contentSnapshot) {
