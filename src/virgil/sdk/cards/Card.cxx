@@ -66,7 +66,7 @@ const VirgilByteArray& Card::contentSnapshot() const { return contentSnapshot_; 
 
 const bool& Card::isOutdated() const { return isOutdated_; }
 
-const std::vector<CardSignature> & Card::signatures() const { return signatures_; }
+const std::vector<CardSignature>& Card::signatures() const { return signatures_; }
 
 const std::shared_ptr<std::string>& Card::previousCardId() const { return previousCardId_; }
 

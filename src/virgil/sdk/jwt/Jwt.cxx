@@ -66,8 +66,8 @@ Jwt Jwt::parse(const std::string &stringRepresentation) {
     return Jwt(headerContent, bodyContent, signatureContent);
 }
 
-const VirgilByteArray Jwt::dataToSign(const virgil::sdk::jwt::JwtHeaderContent &headerContent,
-                                      const virgil::sdk::jwt::JwtBodyContent &bodyContent) {
+VirgilByteArray Jwt::dataToSign(const virgil::sdk::jwt::JwtHeaderContent &headerContent,
+                                const virgil::sdk::jwt::JwtBodyContent &bodyContent) {
     return VirgilByteArrayUtils::stringToBytes(headerContent.base64Url() + "." + bodyContent.base64Url());
 }
 
@@ -75,7 +75,7 @@ const std::string& Jwt::identity() const {
     return bodyContent_.identity();
 }
 
-const bool Jwt::isExpired() const {
+bool Jwt::isExpired() const {
     return std::time(0) >= bodyContent_.expiresAt();
 }
 

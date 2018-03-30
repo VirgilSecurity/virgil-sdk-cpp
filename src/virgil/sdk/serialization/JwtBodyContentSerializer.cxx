@@ -71,8 +71,8 @@ namespace virgil {
                         std::time_t issuedAt = j[JsonKey::IssuedAt];
                         std::time_t expiresAt = j[JsonKey::ExpiresAt];
 
-                        std::string additionalDataStr = j.value(JsonKey::AdditionalData, std::string());
-                        VirgilByteArray additionalData = VirgilByteArrayUtils::stringToBytes(additionalDataStr);
+                        json additionalDataJson = j.value(JsonKey::AdditionalData, json::parse(std::string()));
+                        auto additionalData = JsonUtils::jsonToUnorderedMap(additionalDataJson);
 
                         return JwtBodyContent(appId, identity, expiresAt, issuedAt, additionalData);
                     } catch (std::exception &exception) {
@@ -98,8 +98,7 @@ namespace virgil {
                         j[JsonKey::IssuedAt] = bodyContent.issuedAt();
                         j[JsonKey::ExpiresAt] = bodyContent.expiresAt();
 
-                        auto additionalDataStr = VirgilByteArrayUtils::bytesToString(bodyContent.additionalData());
-                        j[JsonKey::AdditionalData] = additionalDataStr;
+                        j[JsonKey::AdditionalData] = JsonUtils::unorderedMapToJson(bodyContent.additionalData());
 
                         return j.dump(INDENT);
                     } catch (std::exception &exception) {

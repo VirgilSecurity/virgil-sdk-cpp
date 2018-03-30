@@ -34,36 +34,37 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/jwt/JwtBodyContent.h>
-#include <virgil/sdk/util/Base64Url.h>
-#include <virgil/sdk/serialization/JsonSerializer.h>
-#include <virgil/sdk/serialization/JsonDeserializer.h>
+#ifndef VIRGIL_SDK_JWTVERIFIER_H
+#define VIRGIL_SDK_JWTVERIFIER_H
 
-using virgil::sdk::jwt::JwtBodyContent;
-using virgil::sdk::VirgilByteArray;
-using virgil::sdk::util::Base64Url;
-using virgil::sdk::serialization::JsonSerializer;
-using virgil::sdk::serialization::JsonDeserializer;
+#include <memory>
+#include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/jwt/Jwt.h>
 
-JwtBodyContent::JwtBodyContent(const std::string &appId, const std::string &identity,
-                               const std::time_t &expiresAt, const std::time_t &issuedAt,
-                               const std::unordered_map<std::string, std::string> &additionalData)
-: appId_(appId), identity_(identity), expiresAt_(expiresAt), issuedAt_(issuedAt), additionalData_(additionalData) {}
+namespace virgil {
+    namespace sdk {
+        namespace jwt {
+            class JwtVerifier {
+            public:
+                JwtVerifier(const crypto::keys::PublicKey& apiPublicKey,
+                             const std::string& apiPublicKeyIdentifier,
+                             const std::shared_ptr<crypto::Crypto>& crypto);
 
-JwtBodyContent JwtBodyContent::parse(const std::string &base64url) {
-    return JsonDeserializer<JwtBodyContent>::fromJsonString(Base64Url::decode(base64url));
+                bool verifyToken(const Jwt& token) const;
+
+                const crypto::keys::PublicKey& apiPublicKey() const;
+
+                const std::string& apiPublicKeyIdentifier() const;
+
+                const std::shared_ptr<crypto::Crypto>& crypto() const;
+
+            private:
+                crypto::keys::PublicKey apiPublicKey_;
+                std::string apiPublicKeyIdentifier_;
+                std::shared_ptr<crypto::Crypto> crypto_;
+            };
+        }
+    }
 }
 
-std::string JwtBodyContent::base64Url() const {
-    return Base64Url::encode(JsonSerializer<JwtBodyContent>::toJson(*this));
-}
-
-const std::string& JwtBodyContent::appId() const { return appId_; }
-
-const std::string& JwtBodyContent::identity() const { return identity_; }
-
-const std::time_t& JwtBodyContent::expiresAt() const { return expiresAt_; }
-
-const std::time_t& JwtBodyContent::issuedAt() const { return issuedAt_; }
-
-const std::unordered_map<std::string, std::string>& JwtBodyContent::additionalData() const { return additionalData_; }
+#endif //VIRGIL_SDK_JWTVERIFIER_H

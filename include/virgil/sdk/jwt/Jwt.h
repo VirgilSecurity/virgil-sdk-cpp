@@ -64,10 +64,10 @@ namespace virgil {
 
                 const VirgilByteArray& dataToSign() const;
 
-                const bool isExpired() const;
+                bool isExpired() const;
 
-                static const VirgilByteArray dataToSign(const JwtHeaderContent& headerContent,
-                                                        const JwtBodyContent& bodyContent);
+                static VirgilByteArray dataToSign(const JwtHeaderContent& headerContent,
+                                                  const JwtBodyContent& bodyContent);
 
             private:
                 JwtHeaderContent headerContent_;

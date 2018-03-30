@@ -39,6 +39,7 @@
 
 #include <string>
 #include <ctime>
+#include <unordered_map>
 #include <virgil/sdk/Common.h>
 
 namespace virgil {
@@ -50,7 +51,8 @@ namespace virgil {
                                const std::string& identity,
                                const std::time_t& expiresAt,
                                const std::time_t& issuedAt,
-                               const VirgilByteArray& additionalData = VirgilByteArray());
+                               const std::unordered_map<std::string, std::string>& additionalData
+                               = std::unordered_map<std::string, std::string>());
 
                 static JwtBodyContent parse(const std::string& base64url);
 
@@ -58,11 +60,11 @@ namespace virgil {
 
                 const std::string& identity() const;
 
-                const std::time_t & expiresAt() const;
+                const std::time_t& expiresAt() const;
 
                 const std::time_t& issuedAt() const;
 
-                const VirgilByteArray& additionalData() const;
+                const std::unordered_map<std::string, std::string>& additionalData() const;
 
                 std::string base64Url() const;
 
@@ -71,7 +73,7 @@ namespace virgil {
                 std::string identity_;
                 std::time_t expiresAt_;
                 std::time_t issuedAt_;
-                VirgilByteArray additionalData_;
+                std::unordered_map<std::string, std::string> additionalData_;
             };
         }
     }

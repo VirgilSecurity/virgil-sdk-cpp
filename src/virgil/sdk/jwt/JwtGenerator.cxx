@@ -34,36 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <virgil/sdk/jwt/JwtBodyContent.h>
-#include <virgil/sdk/util/Base64Url.h>
-#include <virgil/sdk/serialization/JsonSerializer.h>
-#include <virgil/sdk/serialization/JsonDeserializer.h>
+#include <virgil/sdk/jwt/JwtGenerator.h>
 
+using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::jwt::Jwt;
+using virgil::sdk::jwt::JwtHeaderContent;
 using virgil::sdk::jwt::JwtBodyContent;
-using virgil::sdk::VirgilByteArray;
-using virgil::sdk::util::Base64Url;
-using virgil::sdk::serialization::JsonSerializer;
-using virgil::sdk::serialization::JsonDeserializer;
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::crypto::keys::PrivateKey;
 
-JwtBodyContent::JwtBodyContent(const std::string &appId, const std::string &identity,
-                               const std::time_t &expiresAt, const std::time_t &issuedAt,
-                               const std::unordered_map<std::string, std::string> &additionalData)
-: appId_(appId), identity_(identity), expiresAt_(expiresAt), issuedAt_(issuedAt), additionalData_(additionalData) {}
+JwtGenerator::JwtGenerator(const PrivateKey &apiKey, const std::string &apiPublicKeyIdentifier,
+                           const std::shared_ptr<Crypto> &crypto, const std::string &appId, const int &ttl)
+: apiKey_(apiKey), apiPublicKeyIdentifier_(apiPublicKeyIdentifier), crypto_(crypto), appId_(appId), ttl_(ttl) {}
 
-JwtBodyContent JwtBodyContent::parse(const std::string &base64url) {
-    return JsonDeserializer<JwtBodyContent>::fromJsonString(Base64Url::decode(base64url));
+Jwt JwtGenerator::generateToken(const std::string &identity,
+                                const std::unordered_map<std::string, std::string> &additionalData) {
+    auto headerContent = JwtHeaderContent(apiPublicKeyIdentifier_);
+    auto bodyContent = JwtBodyContent(appId_, identity, std::time(0) + ttl_, std::time(0), additionalData);
+    auto data = Jwt::dataToSign(headerContent, bodyContent);
+    auto signatureContent = crypto_->generateSignature(data, apiKey_);
+
+    return Jwt(headerContent, bodyContent, signatureContent);
 }
 
-std::string JwtBodyContent::base64Url() const {
-    return Base64Url::encode(JsonSerializer<JwtBodyContent>::toJson(*this));
-}
+const PrivateKey& JwtGenerator::apiKey() const { return apiKey_; }
 
-const std::string& JwtBodyContent::appId() const { return appId_; }
+const std::string& JwtGenerator::apiPublicKeyIdentifier() const { return apiPublicKeyIdentifier_; }
 
-const std::string& JwtBodyContent::identity() const { return identity_; }
+const std::shared_ptr<Crypto>& JwtGenerator::crypto() const { return crypto_; }
 
-const std::time_t& JwtBodyContent::expiresAt() const { return expiresAt_; }
+const std::string& JwtGenerator::appId() const { return appId_; }
 
-const std::time_t& JwtBodyContent::issuedAt() const { return issuedAt_; }
-
-const std::unordered_map<std::string, std::string>& JwtBodyContent::additionalData() const { return additionalData_; }
+const int& JwtGenerator::ttl() const { return ttl_; }
