@@ -52,6 +52,8 @@ namespace virgil {
                                const std::time_t& issuedAt,
                                const VirgilByteArray& additionalData = VirgilByteArray());
 
+                static JwtBodyContent parse(const std::string& base64url);
+
                 const std::string& appId() const;
 
                 const std::string& identity() const;
@@ -61,6 +63,8 @@ namespace virgil {
                 const std::time_t& issuedAt() const;
 
                 const VirgilByteArray& additionalData() const;
+
+                std::string base64Url() const;
 
             private:
                 std::string appId_;

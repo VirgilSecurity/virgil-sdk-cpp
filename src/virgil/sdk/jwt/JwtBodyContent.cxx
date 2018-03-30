@@ -35,13 +35,27 @@
  */
 
 #include <virgil/sdk/jwt/JwtBodyContent.h>
+#include <virgil/sdk/util/Base64Url.h>
+#include <virgil/sdk/serialization/JsonSerializer.h>
+#include <virgil/sdk/serialization/JsonDeserializer.h>
 
 using virgil::sdk::jwt::JwtBodyContent;
 using virgil::sdk::VirgilByteArray;
+using virgil::sdk::util::Base64Url;
+using virgil::sdk::serialization::JsonSerializer;
+using virgil::sdk::serialization::JsonDeserializer;
 
 JwtBodyContent::JwtBodyContent(const std::string &appId, const std::string &identity, const std::time_t &expiresAt,
                                const std::time_t &issuedAt, const VirgilByteArray &additionalData)
 : appId_(appId), identity_(identity), expiresAt_(expiresAt), issuedAt_(issuedAt), additionalData_(additionalData) {}
+
+JwtBodyContent JwtBodyContent::parse(const std::string &base64url) {
+    return JsonDeserializer<JwtBodyContent>::fromJsonString(Base64Url::decode(base64url));
+}
+
+std::string JwtBodyContent::base64Url() const {
+    return Base64Url::encode(JsonSerializer<JwtBodyContent>::toJson(*this));
+}
 
 const std::string& JwtBodyContent::appId() const { return appId_; }
 

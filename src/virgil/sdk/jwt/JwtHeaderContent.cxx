@@ -35,12 +35,26 @@
  */
 
 #include <virgil/sdk/jwt/JwtHeaderContent.h>
+#include <virgil/sdk/util/Base64Url.h>
+#include <virgil/sdk/serialization/JsonSerializer.h>
+#include <virgil/sdk/serialization/JsonDeserializer.h>
 
 using virgil::sdk::jwt::JwtHeaderContent;
+using virgil::sdk::util::Base64Url;
+using virgil::sdk::serialization::JsonSerializer;
+using virgil::sdk::serialization::JsonDeserializer;
 
 JwtHeaderContent::JwtHeaderContent(const std::string &keyIdentifier, const std::string &algorithm,
                                    const std::string &type, const std::string &contentType)
 : keyIdentifier_(keyIdentifier), algorithm_(algorithm), type_(type), contentType_(contentType) {}
+
+JwtHeaderContent JwtHeaderContent::parse(const std::string &base64url) {
+    return JsonDeserializer<JwtHeaderContent>::fromJsonString(Base64Url::decode(base64url));
+}
+
+std::string JwtHeaderContent::base64Url() const {
+    return Base64Url::encode(JsonSerializer<JwtHeaderContent>::toJson(*this));
+}
 
 const std::string& JwtHeaderContent::algorithm() const { return algorithm_; }
 

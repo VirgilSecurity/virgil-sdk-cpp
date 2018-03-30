@@ -34,41 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JWTHEADERCONTENT_H
-#define VIRGIL_SDK_JWTHEADERCONTENT_H
+#ifndef VIRGIL_SDK_BASE64URL_H
+#define VIRGIL_SDK_BASE64URL_H
 
 #include <string>
 
 namespace virgil {
     namespace sdk {
-        namespace jwt {
-            class JwtHeaderContent {
+        namespace util {
+            class Base64Url {
             public:
-                JwtHeaderContent(const std::string& keyIdentifier,
-                                 const std::string& algorithm = "VEDS512",
-                                 const std::string& type = "JWT",
-                                 const std::string& contentType = "virgil-jwt;v=1");
+                static const char base64_url_alphabet[];
 
-                static JwtHeaderContent parse(const std::string& base64url);
+                static std::string encode(const std::string &in);
 
-                const std::string& algorithm() const;
+                static std::string decode(const std::string &in);
 
-                const std::string& type() const;
-
-                const std::string& contentType() const;
-
-                const std::string& keyIdentifier() const;
-
-                std::string base64Url() const;
-
-            private:
-                std::string algorithm_;
-                std::string type_;
-                std::string contentType_;
-                std::string keyIdentifier_;
+                /*!
+                 * @brief Forbid creation.
+                 */
+                Base64Url() = delete;
             };
         }
     }
 }
 
-#endif //VIRGIL_SDK_JWTHEADERCONTENT_H
+#endif //VIRGIL_SDK_BASE64URL_H

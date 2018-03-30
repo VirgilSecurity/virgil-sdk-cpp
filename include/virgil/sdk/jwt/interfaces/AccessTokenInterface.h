@@ -45,9 +45,9 @@ namespace virgil {
             namespace interfaces {
                 class AccessTokenInterface {
                 public:
-                    virtual std::string stringRepresentation() const = 0;
+                    virtual const std::string& stringRepresentation() const = 0;
 
-                    virtual std::string identity() const = 0;
+                    virtual const std::string& identity() const = 0;
 
                     virtual ~AccessTokenInterface() = default;
                 };

@@ -34,41 +34,52 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JWTHEADERCONTENT_H
-#define VIRGIL_SDK_JWTHEADERCONTENT_H
+#ifndef VIRGIL_SDK_JWT_H
+#define VIRGIL_SDK_JWT_H
 
-#include <string>
+#include <virgil/sdk/jwt/interfaces/AccessTokenInterface.h>
+#include <virgil/sdk/jwt/JwtHeaderContent.h>
+#include <virgil/sdk/jwt/JwtBodyContent.h>
 
 namespace virgil {
     namespace sdk {
         namespace jwt {
-            class JwtHeaderContent {
+            class Jwt : public interfaces::AccessTokenInterface {
             public:
-                JwtHeaderContent(const std::string& keyIdentifier,
-                                 const std::string& algorithm = "VEDS512",
-                                 const std::string& type = "JWT",
-                                 const std::string& contentType = "virgil-jwt;v=1");
+                Jwt(const JwtHeaderContent& headerContent,
+                    const JwtBodyContent& bodyContent,
+                    const VirgilByteArray& signatureContent);
 
-                static JwtHeaderContent parse(const std::string& base64url);
+                static Jwt parse(const std::string& stringRepresentation);
 
-                const std::string& algorithm() const;
+                const JwtHeaderContent& headerContent() const;
 
-                const std::string& type() const;
+                const JwtBodyContent& bodyContent() const;
 
-                const std::string& contentType() const;
+                const VirgilByteArray& signatureContent() const;
 
-                const std::string& keyIdentifier() const;
+                const std::string& stringRepresentation() const;
 
-                std::string base64Url() const;
+                const std::string& identity() const;
+
+                const VirgilByteArray& dataToSign() const;
+
+                const bool isExpired() const;
+
+                static const VirgilByteArray dataToSign(const JwtHeaderContent& headerContent,
+                                                        const JwtBodyContent& bodyContent);
 
             private:
-                std::string algorithm_;
-                std::string type_;
-                std::string contentType_;
-                std::string keyIdentifier_;
+                JwtHeaderContent headerContent_;
+                JwtBodyContent bodyContent_;
+                VirgilByteArray signatureContent_;
+                std::string stringRepresentation_;
+                VirgilByteArray dataToSign_;
+
+                const std::string signatureBase64Url() const;
             };
         }
     }
 }
 
-#endif //VIRGIL_SDK_JWTHEADERCONTENT_H
+#endif //VIRGIL_SDK_JWT_H
