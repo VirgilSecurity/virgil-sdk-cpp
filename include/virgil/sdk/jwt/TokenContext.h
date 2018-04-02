@@ -46,17 +46,17 @@ namespace virgil {
             class TokenContext {
             public:
                 TokenContext(const std::string& operation,
-                             const std::shared_ptr<std::string>& identity = nullptr,
+                             const std::string& identity = std::string(),
                              const bool& forceReload = false);
 
                 const std::string& operation() const;
 
-                const std::shared_ptr<std::string>& identity() const;
+                const std::string& identity() const;
 
                 const bool& forceReload() const;
 
             private:
-                std::shared_ptr<std::string> identity_;
+                std::string identity_;
                 std::string operation_;
                 bool forceReload_;
             };

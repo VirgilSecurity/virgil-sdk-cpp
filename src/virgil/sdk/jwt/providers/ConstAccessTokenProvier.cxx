@@ -34,48 +34,21 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JWTGENERATOR_H
-#define VIRGIL_SDK_JWTGENERATOR_H
+#include <virgil/sdk/jwt/providers/ConstAccessTokenProvider.h>
 
-#include <memory>
-#include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/jwt/Jwt.h>
-#include <unordered_map>
+using virgil::sdk::jwt::providers::ConstAccessTokenProvider;
+using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
-namespace virgil {
-    namespace sdk {
-        namespace jwt {
-            class JwtGenerator {
-            public:
-                JwtGenerator(const crypto::keys::PrivateKey& apiKey,
-                             const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto,
-                             const std::string& appId,
-                             const int& ttl);
+ConstAccessTokenProvider::ConstAccessTokenProvider(const std::shared_ptr<AccessTokenInterface> &accessToken)
+: accessToken_(accessToken) {}
 
-                Jwt generateToken(const std::string& identity,
-                                  const std::unordered_map<std::string, std::string>& additionalData
-                                  = std::unordered_map<std::string, std::string>()) const;
+std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::getToken(
+        const virgil::sdk::jwt::TokenContext &tokenContext) const
+{
+    std::promise<std::shared_ptr<AccessTokenInterface>> p;
+    p.set_value(accessToken_);
 
-                const crypto::keys::PrivateKey& apiKey() const;
-
-                const std::string& apiPublicKeyIdentifier() const;
-
-                const std::shared_ptr<crypto::Crypto>& crypto() const;
-
-                const std::string& appId() const;
-
-                const int& ttl() const;
-
-            private:
-                crypto::keys::PrivateKey apiKey_;
-                std::string apiPublicKeyIdentifier_;
-                std::shared_ptr<crypto::Crypto> crypto_;
-                std::string appId_;
-                int ttl_;
-            };
-        }
-    }
+    return p.get_future();
 }
 
-#endif //VIRGIL_SDK_JWTGENERATOR_H
+const std::shared_ptr<AccessTokenInterface> & ConstAccessTokenProvider::accessToken() const { return accessToken_; }

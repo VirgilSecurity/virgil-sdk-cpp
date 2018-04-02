@@ -48,7 +48,7 @@ JwtGenerator::JwtGenerator(const PrivateKey &apiKey, const std::string &apiPubli
 : apiKey_(apiKey), apiPublicKeyIdentifier_(apiPublicKeyIdentifier), crypto_(crypto), appId_(appId), ttl_(ttl) {}
 
 Jwt JwtGenerator::generateToken(const std::string &identity,
-                                const std::unordered_map<std::string, std::string> &additionalData) {
+                                const std::unordered_map<std::string, std::string> &additionalData) const {
     auto headerContent = JwtHeaderContent(apiPublicKeyIdentifier_);
     auto bodyContent = JwtBodyContent(appId_, identity, std::time(0) + ttl_, std::time(0), additionalData);
     auto data = Jwt::dataToSign(headerContent, bodyContent);

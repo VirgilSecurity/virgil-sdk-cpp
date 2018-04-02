@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_ACCESSTOKENPROVIDERINTERFACE_H
 
 #include <future>
+#include <memory>
 #include <virgil/sdk/jwt/interfaces/AccessTokenInterface.h>
 #include <virgil/sdk/jwt/TokenContext.h>
 
@@ -47,7 +48,7 @@ namespace virgil {
             namespace interfaces {
                 class AccessTokenProviderInterface {
                 public:
-                    virtual std::future<AccessTokenInterface*> getToken(const TokenContext& tokenContext) const = 0;
+                    virtual std::future<std::shared_ptr<AccessTokenInterface>> getToken(const TokenContext& tokenContext) const = 0;
 
                     virtual ~AccessTokenProviderInterface() = default;
                 };

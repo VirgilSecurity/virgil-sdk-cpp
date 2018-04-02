@@ -34,48 +34,33 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JWTGENERATOR_H
-#define VIRGIL_SDK_JWTGENERATOR_H
+#include <virgil/sdk/jwt/providers/CallbackJwtProvider.h>
+#include <virgil/sdk/jwt/JwtGenerator.h>
 
-#include <memory>
-#include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/jwt/Jwt.h>
-#include <unordered_map>
+using virgil::sdk::jwt::providers::CallbackJwtProvider;
+using virgil::sdk::jwt::interfaces::AccessTokenInterface;
+using virgil::sdk::jwt::TokenContext;
+using virgil::sdk::jwt::Jwt;
 
-namespace virgil {
-    namespace sdk {
-        namespace jwt {
-            class JwtGenerator {
-            public:
-                JwtGenerator(const crypto::keys::PrivateKey& apiKey,
-                             const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto,
-                             const std::string& appId,
-                             const int& ttl);
+CallbackJwtProvider::CallbackJwtProvider(
+        std::function<void(const TokenContext&, std::function<void(const std::string&)>)> getTokenCallback)
+: getTokenCallback_(getTokenCallback) {}
 
-                Jwt generateToken(const std::string& identity,
-                                  const std::unordered_map<std::string, std::string>& additionalData
-                                  = std::unordered_map<std::string, std::string>()) const;
-
-                const crypto::keys::PrivateKey& apiKey() const;
-
-                const std::string& apiPublicKeyIdentifier() const;
-
-                const std::shared_ptr<crypto::Crypto>& crypto() const;
-
-                const std::string& appId() const;
-
-                const int& ttl() const;
-
-            private:
-                crypto::keys::PrivateKey apiKey_;
-                std::string apiPublicKeyIdentifier_;
-                std::shared_ptr<crypto::Crypto> crypto_;
-                std::string appId_;
-                int ttl_;
-            };
-        }
+std::future<std::shared_ptr<AccessTokenInterface>> CallbackJwtProvider::getToken(const TokenContext &tokenContext) const {
+    std::promise<std::shared_ptr<AccessTokenInterface>> p;
+    try {
+        getTokenCallback_(tokenContext, [&](std::string token) {
+            auto jwt = Jwt::parse(token);
+            auto tokenPtr = std::shared_ptr<AccessTokenInterface>(new Jwt(jwt.headerContent(), jwt.bodyContent(), jwt.signatureContent()));
+            p.set_value(tokenPtr);
+        });
+    } catch (...) {
+        p.set_exception(std::current_exception());
     }
+
+    return p.get_future();
 }
 
-#endif //VIRGIL_SDK_JWTGENERATOR_H
+const std::function<void(const TokenContext&, std::function<void(const std::string&)>)>& CallbackJwtProvider::getTokenCallback() const {
+    return getTokenCallback_;
+}

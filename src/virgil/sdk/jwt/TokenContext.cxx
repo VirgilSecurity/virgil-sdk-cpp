@@ -39,12 +39,12 @@
 using virgil::sdk::jwt::TokenContext;
 
 TokenContext::TokenContext(const std::string &operation,
-                           const std::shared_ptr<std::string> &identity,
+                           const std::string &identity,
                            const bool &forceReload)
 : operation_(operation), identity_(identity), forceReload_(forceReload) {}
 
 const std::string& TokenContext::operation() const { return operation_; }
 
-const std::shared_ptr<std::string>& TokenContext::identity() const { return identity_; }
+const std::string& TokenContext::identity() const { return identity_; }
 
 const bool& TokenContext::forceReload() const { return forceReload_; }

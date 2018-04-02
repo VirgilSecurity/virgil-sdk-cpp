@@ -34,48 +34,29 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_JWTGENERATOR_H
-#define VIRGIL_SDK_JWTGENERATOR_H
+#ifndef VIRGIL_SDK_CONSTACCESSTOKENPROVIDER_H
+#define VIRGIL_SDK_CONSTACCESSTOKENPROVIDER_H
 
-#include <memory>
-#include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/jwt/Jwt.h>
-#include <unordered_map>
+#include <virgil/sdk/jwt/interfaces/AccessTokenProviderInterface.h>
 
 namespace virgil {
     namespace sdk {
         namespace jwt {
-            class JwtGenerator {
-            public:
-                JwtGenerator(const crypto::keys::PrivateKey& apiKey,
-                             const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto,
-                             const std::string& appId,
-                             const int& ttl);
+            namespace providers {
+                class ConstAccessTokenProvider : public interfaces::AccessTokenProviderInterface {
+                public:
+                    ConstAccessTokenProvider(const std::shared_ptr<interfaces::AccessTokenInterface> &accessToken);
 
-                Jwt generateToken(const std::string& identity,
-                                  const std::unordered_map<std::string, std::string>& additionalData
-                                  = std::unordered_map<std::string, std::string>()) const;
+                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext) const;
 
-                const crypto::keys::PrivateKey& apiKey() const;
+                    const std::shared_ptr<interfaces::AccessTokenInterface>& accessToken() const;
 
-                const std::string& apiPublicKeyIdentifier() const;
-
-                const std::shared_ptr<crypto::Crypto>& crypto() const;
-
-                const std::string& appId() const;
-
-                const int& ttl() const;
-
-            private:
-                crypto::keys::PrivateKey apiKey_;
-                std::string apiPublicKeyIdentifier_;
-                std::shared_ptr<crypto::Crypto> crypto_;
-                std::string appId_;
-                int ttl_;
-            };
+                private:
+                    std::shared_ptr<interfaces::AccessTokenInterface> accessToken_;
+                };
+            }
         }
     }
 }
 
-#endif //VIRGIL_SDK_JWTGENERATOR_H
+#endif //VIRGIL_SDK_CONSTACCESSTOKENPROVIDER_H
