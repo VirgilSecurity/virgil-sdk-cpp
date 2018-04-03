@@ -38,7 +38,12 @@
 #ifndef VIRGIL_SDK_TESTUTILS_H
 #define VIRGIL_SDK_TESTUTILS_H
 
+#include <memory>
+#include <string>
+#include <ctime>
+#include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/crypto/Crypto.h>
+#include <virgil/sdk/cards/Card.h>
 
 #include <TestConst.h>
 
@@ -50,10 +55,13 @@ namespace sdk {
     namespace test {
         class TestUtils {
         public:
-            TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {
-            }
+            TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {}
 
-            const std::shared_ptr<Crypto>& crypto() const { return crypto_; }
+            jwt::Jwt getToken(const std::string& identity);
+
+            bool isCardsEqual(const cards::Card& card1, const cards::Card& card2);
+
+            const std::shared_ptr<Crypto>& crypto() const;
 
         private:
             const std::shared_ptr<Crypto> crypto_;

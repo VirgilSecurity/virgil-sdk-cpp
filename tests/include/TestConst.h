@@ -45,12 +45,20 @@ namespace sdk {
 namespace test {
     class TestConst {
     public:
-        std::string applicationToken() const;
-        std::string applicationPublicKeyBase64() const;
-        std::string applicationPrivateKeyBase64() const;
-        std::string applicationPrivateKeyPassword() const;
-        std::string applicationIdentityType() const;
-        std::string applicationId() const;
+        TestConst(const std::string &fileName = "consts.json", bool enableStg = false);
+
+        const std::string& ApiPublicKeyId() const;
+        const std::string& ApiPrivateKey() const;
+        const std::string& ApiPublicKey() const;
+        const std::string& AppId() const;
+        const std::string& ServiceURL() const;
+
+    private:
+        std::string ApiPublicKeyId_;
+        std::string ApiPrivateKey_;
+        std::string ApiPublicKey_;
+        std::string AppId_;
+        std::string ServiceURL_;
     };
 }
 }

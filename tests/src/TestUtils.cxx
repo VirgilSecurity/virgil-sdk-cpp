@@ -37,7 +37,38 @@
 
 #include <TestUtils.h>
 #include <helpers.h>
+#include <virgil/sdk/jwt/JwtGenerator.h>
+#include <virgil/sdk/jwt/providers/GeneratorJwtProvider.h>
 
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::test::Utils;
 using virgil::sdk::test::TestUtils;
+using virgil::sdk::jwt::Jwt;
+using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::jwt::providers::GeneratorJwtProvider;
+using virgil::sdk::jwt::TokenContext;
+using virgil::sdk::cards::Card;
+
+Jwt TestUtils::getToken(const std::string &identity) {
+    auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
+    auto privateKey = crypto_->importPrivateKey(privateKeyData);
+
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), *crypto_, consts.AppId(), 1000);
+
+    return jwtGenerator.generateToken(identity);
+}
+
+bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) {
+    auto equals = card1.identifier() == card2.identifier()
+                  && card1.identity() == card2.identity()
+                  && card1.version() == card2.version()
+                  && card1.createdAt() == card2.createdAt()
+                  && card1.previousCardId() == card2.previousCardId()
+                  && card1.isOutdated() == card2.isOutdated()
+                  && card1.contentSnapshot() == card2.contentSnapshot()
+                  && ((card1.previousCard() == nullptr && card2.previousCard() == nullptr) || (isCardsEqual(*card1.previousCard(), *card2.previousCard())));
+
+    return equals;
+}
+
+const std::shared_ptr<Crypto>& TestUtils::crypto() const { return crypto_; }
