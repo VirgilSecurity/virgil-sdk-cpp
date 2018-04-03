@@ -266,7 +266,7 @@ Card CardManager::parseCard(const RawSignedModel &model, const Crypto& crypto) {
     auto rawCardContent = RawCardContent::parse(model.contentSnapshot());
 
     auto publicKey = crypto.importPublicKey(rawCardContent.publicKey());
-    auto fingerprint = crypto.computeHash(model.contentSnapshot(), VirgilHashAlgorithm::SHA512);
+    auto fingerprint = crypto.generateSHA512(model.contentSnapshot());
     fingerprint.resize(32);
     auto cardId = VirgilByteArrayUtils::bytesToHex(fingerprint);
 

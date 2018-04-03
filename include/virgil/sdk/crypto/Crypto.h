@@ -39,7 +39,6 @@
 
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/crypto/keys/KeyPair.h>
-#include <virgil/sdk/crypto/Fingerprint.h>
 
 namespace virgil {
 namespace sdk {
@@ -90,7 +89,7 @@ namespace sdk {
 
             VirgilByteArray generateSignature(std::istream &istream, const keys::PrivateKey &privateKey) const;
 
-            Fingerprint calculateFingerprint(const VirgilByteArray &data) const;
+            VirgilByteArray generateSHA512(const VirgilByteArray &data) const;
 
             /*!
              * @brief Computes hash of data using selected algorithm.

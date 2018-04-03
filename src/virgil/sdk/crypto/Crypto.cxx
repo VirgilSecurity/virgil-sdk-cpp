@@ -36,7 +36,6 @@
 
 
 #include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/crypto/Fingerprint.h>
 #include <virgil/sdk/VirgilSdkError.h>
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
@@ -55,7 +54,6 @@ using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilByteArray;
 using virgil::sdk::VirgilByteArrayUtils;
-using virgil::sdk::crypto::Fingerprint;
 using virgil::crypto::VirgilKeyPair;
 using virgil::crypto::VirgilSigner;
 using virgil::crypto::VirgilCipher;
@@ -259,8 +257,8 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 }
 
 //Utils
-Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
-    return Fingerprint(computeHash(data, VirgilHashAlgorithm::SHA512));
+VirgilByteArray Crypto::generateSHA512(const VirgilByteArray &data) const {
+    return computeHash(data, VirgilHashAlgorithm::SHA512);
 }
 
 VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const {
