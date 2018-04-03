@@ -49,7 +49,7 @@ namespace virgil {
             namespace verification {
                 class VirgilCardVerifier : public CardVerifierInterface {
                 public:
-                    VirgilCardVerifier(const std::shared_ptr<crypto::Crypto> &crypto,
+                    VirgilCardVerifier(const crypto::Crypto &crypto,
                                        const std::vector<Whitelist>& whitelists = std::vector<Whitelist>());
 
                     static const std::string selfSignerIdentifier;
@@ -61,7 +61,7 @@ namespace virgil {
 
                     crypto::keys::PublicKey virgilPublicKey;
 
-                    const std::shared_ptr<crypto::Crypto>& crypto() const;
+                    const crypto::Crypto& crypto() const;
 
                     bool verifyCard(const Card &card) const override;
 
@@ -72,7 +72,7 @@ namespace virgil {
                     bool verify(const Card &card, const std::string& signer,
                                 const crypto::keys::PublicKey& signerPublicKey) const;
 
-                    std::shared_ptr<crypto::Crypto> crypto_;
+                    crypto::Crypto crypto_;
                     std::vector<Whitelist> whitelists_;
                 };
             }
