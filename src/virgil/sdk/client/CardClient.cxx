@@ -88,10 +88,8 @@ std::future<RawSignedModel> CardClient::publishCard(const RawSignedModel &model,
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        if (response.fail()) {
-            auto error = this->parseError(response);
-            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
-        }
+        if (response.fail())
+            throw this->parseError(response);
 
         auto rawCard = JsonDeserializer<RawSignedModel>::fromJsonString(response.body());
 
@@ -115,10 +113,8 @@ std::future<std::vector<RawSignedModel>> CardClient::searchCards(const std::stri
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        if (response.fail()) {
-            auto error = this->parseError(response);
-            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
-        }
+        if (response.fail())
+            throw this->parseError(response);
 
         auto rawCards = JsonDeserializer<std::vector<RawSignedModel>>::fromJsonString(response.body());
 
@@ -139,10 +135,8 @@ std::future<GetCardResponse> CardClient::getCard(const std::string &cardId, cons
         Connection connection;
         Response response = connection.send(httpRequest);
 
-        if (response.fail()) {
-            auto error = this->parseError(response);
-            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
-        }
+        if (response.fail())
+            throw this->parseError(response);
 
         auto rawCard = JsonDeserializer<RawSignedModel>::fromJsonString(response.body());
 

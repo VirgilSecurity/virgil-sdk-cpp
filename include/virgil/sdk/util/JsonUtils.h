@@ -63,6 +63,8 @@ namespace sdk {
             static nlohmann::json unorderedMapToJson(const std::unordered_map<std::string, std::string> &map);
 
             static nlohmann::json unorderedBinaryMapToJson(const std::unordered_map<std::string, VirgilByteArray> &map);
+
+            static std::unordered_map<std::string, std::string> bytesToUnorderedMap(const VirgilByteArray& bytes);
             //! @endcond
 
             /*!

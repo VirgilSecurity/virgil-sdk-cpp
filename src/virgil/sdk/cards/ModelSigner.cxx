@@ -47,12 +47,12 @@ using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::util::JsonUtils;
 
-ModelSigner::ModelSigner(const std::shared_ptr<Crypto> &crypto)
+ModelSigner::ModelSigner(const Crypto &crypto)
         : crypto_(crypto) {}
 
 const std::string ModelSigner::selfSignerIdentifier = "self";
 
-const std::shared_ptr<Crypto>& ModelSigner::crypto() const { return crypto_; }
+const Crypto& ModelSigner::crypto() const { return crypto_; }
 
 void ModelSigner::sign(RawSignedModel &model, const std::string &signer,
                        const PrivateKey &privateKey) const {
@@ -66,7 +66,7 @@ void ModelSigner::sign(RawSignedModel &model,
     auto combinedSnapshot = model.contentSnapshot();
     VirgilByteArrayUtils::append(combinedSnapshot, additionalData);
 
-    auto signature = crypto_->generateSignature(combinedSnapshot, privateKey);
+    auto signature = crypto_.generateSignature(combinedSnapshot, privateKey);
     auto rawSignature = RawSignature(signer, signature, additionalData);
 
     model.addSignature(rawSignature);

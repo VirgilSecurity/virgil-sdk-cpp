@@ -40,29 +40,25 @@
 #include <string>
 #include <future>
 #include <vector>
-#include <tuple>
-
 #include <virgil/sdk/client/models/RawSignedModel.h>
 #include <virgil/sdk/client/models/GetCardResponse.h>
 
 namespace virgil {
     namespace sdk {
         namespace client {
-            namespace interfaces {
-                class CardClientInterface {
-                public:
-                    virtual std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
-                                                         const std::string& token) const = 0;
+            class CardClientInterface {
+            public:
+                virtual std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
+                                                                        const std::string& token) const = 0;
 
-                    virtual std::future<models::GetCardResponse> getCard(const std::string &cardId,
-                                                      const std::string& token) const = 0;
+                virtual std::future<models::GetCardResponse> getCard(const std::string &cardId,
+                                                                     const std::string& token) const = 0;
 
-                    virtual std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
-                                                                       const std::string& token) const = 0;
+                virtual std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
+                                                                                     const std::string& token) const = 0;
 
-                    virtual ~CardClientInterface() = default;
-                };
-            }
+                virtual ~CardClientInterface() = default;
+            };
         }
     }
 }

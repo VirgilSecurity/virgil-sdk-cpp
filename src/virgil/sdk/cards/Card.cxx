@@ -46,7 +46,7 @@ using virgil::sdk::client::models::RawSignature;
 Card::Card(const std::string &identifier, const std::string &identity,
            const virgil::sdk::crypto::keys::PublicKey &publicKey, const std::string &version,
            const std::time_t &createdAt, const virgil::sdk::VirgilByteArray &contentSnapshot, const bool &isOutdated,
-           const std::vector<CardSignature> &signatures, const std::shared_ptr<std::string> &previousCardId,
+           const std::vector<CardSignature> &signatures, const std::string &previousCardId,
            const std::shared_ptr<virgil::sdk::cards::Card> &previousCard)
 : identifier_(identifier), identity_(identity), publicKey_(publicKey), version_(version),
   createdAt_(createdAt), contentSnapshot_(contentSnapshot), isOutdated_(isOutdated),
@@ -68,9 +68,21 @@ const bool& Card::isOutdated() const { return isOutdated_; }
 
 const std::vector<CardSignature>& Card::signatures() const { return signatures_; }
 
-const std::shared_ptr<std::string>& Card::previousCardId() const { return previousCardId_; }
+const std::string& Card::previousCardId() const { return previousCardId_; }
 
 const std::shared_ptr<Card>& Card::previousCard() const { return previousCard_; }
+
+void Card::previousCard(const std::shared_ptr<virgil::sdk::cards::Card> &newPreviousCard) {
+    previousCard_ = newPreviousCard;
+}
+
+void Card::isOutdated(const bool &newIsOutdated) {
+    isOutdated_ = newIsOutdated;
+}
+
+void Card::previousCardId(const std::string &newPreviousCardId) {
+    previousCardId_ = newPreviousCardId;
+}
 
 RawSignedModel Card::getRawCard() const {
     auto rawCard = RawSignedModel(contentSnapshot_);

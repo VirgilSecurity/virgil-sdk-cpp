@@ -51,7 +51,7 @@ namespace virgil {
         enum class VirgilSdkError  {
             Reserved = 0, ///< Should not be used.
             VerificationFailed, ///< Verification of signature failed.
-            CardValidationFailed, ///< Validation of Virgil Card failed.
+            CardVerificationFailed, ///< Verification of Virgil Card failed.
             ServiceQueryFailed, ///< REST Query to Virgil Service failed.
             Undefined = std::numeric_limits<int>::max()
         };

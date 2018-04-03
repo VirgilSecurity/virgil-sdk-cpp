@@ -43,24 +43,27 @@ using virgil::sdk::jwt::TokenContext;
 using virgil::sdk::jwt::Jwt;
 
 CallbackJwtProvider::CallbackJwtProvider(
-        std::function<void(const TokenContext&, std::function<void(const std::string&)>)> getTokenCallback)
-: getTokenCallback_(getTokenCallback) {}
+        std::function<std::future<std::string>(const TokenContext&)> getTokenCallback)
+: getTokenCallback_(std::move(getTokenCallback)) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> CallbackJwtProvider::getToken(const TokenContext &tokenContext) const {
-    std::promise<std::shared_ptr<AccessTokenInterface>> p;
-    try {
-        getTokenCallback_(tokenContext, [&](std::string token) {
-            auto jwt = Jwt::parse(token);
+    auto future = std::async([=]{
+        std::promise<std::shared_ptr<AccessTokenInterface>> p;
+        try {
+            auto future = getTokenCallback_(tokenContext);
+            auto jwt = Jwt::parse(future.get());
             auto tokenPtr = std::shared_ptr<AccessTokenInterface>(new Jwt(jwt.headerContent(), jwt.bodyContent(), jwt.signatureContent()));
             p.set_value(tokenPtr);
-        });
-    } catch (...) {
-        p.set_exception(std::current_exception());
-    }
+        } catch (...) {
+            p.set_exception(std::current_exception());
+        }
 
-    return p.get_future();
+        return p.get_future().get();
+    });
+
+    return future;
 }
 
-const std::function<void(const TokenContext&, std::function<void(const std::string&)>)>& CallbackJwtProvider::getTokenCallback() const {
+const std::function<std::future<std::string>(const TokenContext&)>& CallbackJwtProvider::getTokenCallback() const {
     return getTokenCallback_;
 }

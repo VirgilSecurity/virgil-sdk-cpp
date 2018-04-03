@@ -46,8 +46,8 @@ std::string VirgilSdkErrorCategory::message(int ev) const noexcept {
     switch (static_cast<VirgilSdkError>(ev)) {
         case VirgilSdkError::VerificationFailed:
             return "Verification of signature failed.";
-        case VirgilSdkError::CardValidationFailed:
-            return "Validation of Virgil Card failed.";
+        case VirgilSdkError::CardVerificationFailed:
+            return "Verification of Virgil Card failed.";
         case VirgilSdkError::ServiceQueryFailed:
             return "REST Query to Virgil Service failed.";
         default:

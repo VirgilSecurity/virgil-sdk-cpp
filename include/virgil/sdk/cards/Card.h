@@ -55,7 +55,7 @@ namespace virgil {
                      const VirgilByteArray& contentSnapshot,
                      const bool& isOutdated = false,
                      const std::vector<cards::CardSignature>& signatures = std::vector<cards::CardSignature>(),
-                     const std::shared_ptr<std::string>& previousCardId = nullptr,
+                     const std::string& previousCardId = std::string(),
                      const std::shared_ptr<Card>& previousCard = nullptr);
 
                 const std::string& identifier() const;
@@ -71,12 +71,15 @@ namespace virgil {
                 const VirgilByteArray& contentSnapshot() const;
 
                 const bool& isOutdated() const;
+                void isOutdated(const bool& newIsOutdated);
 
-                const std::vector<cards::CardSignature>& signatures() const;
-
-                const std::shared_ptr<std::string>& previousCardId() const;
+                const std::string& previousCardId() const;
+                void previousCardId(const std::string& newPreviousCardId);
 
                 const std::shared_ptr<Card>& previousCard() const;
+                void previousCard(const std::shared_ptr<Card>& newPreviousCard);
+
+                const std::vector<cards::CardSignature>& signatures() const;
 
                 client::models::RawSignedModel getRawCard() const;
 
@@ -84,7 +87,7 @@ namespace virgil {
                 std::string identifier_;
                 std::string identity_;
                 crypto::keys::PublicKey publicKey_;
-                std::shared_ptr<std::string> previousCardId_;
+                std::string previousCardId_;
                 std::shared_ptr<Card> previousCard_;
                 bool isOutdated_;
                 std::string version_;

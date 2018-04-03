@@ -44,7 +44,7 @@
 namespace virgil {
     namespace sdk {
         namespace client {
-            class CardClient : public interfaces::CardClientInterface {
+            class CardClient : public CardClientInterface {
             public:
                 static const std::string xVirgilIsSuperseededKey;
 

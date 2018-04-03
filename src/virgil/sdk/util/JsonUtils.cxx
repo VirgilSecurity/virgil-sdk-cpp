@@ -82,3 +82,10 @@ json JsonUtils::unorderedBinaryMapToJson(const std::unordered_map<std::string, V
 
     return j;
 }
+
+std::unordered_map<std::string, std::string> JsonUtils::bytesToUnorderedMap(
+        const virgil::sdk::VirgilByteArray &bytes) {
+    json j = json::parse(VirgilByteArrayUtils::bytesToString(bytes));
+
+    return JsonUtils::jsonToUnorderedMap(j);
+}
