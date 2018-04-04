@@ -111,14 +111,8 @@ namespace virgil {
                 std::function<std::future<RawSignedModel>(RawSignedModel)> signCallback_;
                 bool retryOnUnauthorized_;
 
-                RawSignedModel tryPublish(const jwt::TokenContext& tokenContext, const RawSignedModel& rawCard,
-                                          const std::string& token) const;
-
-                GetCardResponse tryGet(const jwt::TokenContext& tokenContext, const std::string& cardId,
-                                       const std::string& token) const;
-
-                std::vector<RawSignedModel> trySearch(const jwt::TokenContext& tokenContext, const std::string& identity,
-                                                      const std::string& token) const;
+                template<typename T> T tryQuery(const jwt::TokenContext &tokenContext, const std::string& token,
+                                                std::function<std::future<T>(const std::string& token)> query) const;
             };
         }
     }

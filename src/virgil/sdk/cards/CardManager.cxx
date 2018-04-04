@@ -91,7 +91,10 @@ std::future<Card> CardManager::publishCard(const RawSignedModel& rawCard) const 
             rawSignedModel = signCallback_(rawCard).get();
         }
 
-        auto publishedRawCard = tryPublish(tokenContext, rawSignedModel, tokenFuture.get()->stringRepresentation());
+        std::function<std::future<RawSignedModel>(const std::string& token)> publishFunc = [&](const std::string& token) {
+            return cardClient_->publishCard(rawCard, token);
+        };
+        auto publishedRawCard = tryQuery<RawSignedModel>(tokenContext, tokenFuture.get()->stringRepresentation(), publishFunc);
 
         if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot()){
             throw make_error(VirgilSdkError::CardVerificationFailed, "Publishing returns invalid card");
@@ -125,7 +128,10 @@ std::future<Card> CardManager::publishCard(const virgil::sdk::crypto::keys::Priv
             rawSignedModel = signCallback_(rawCard).get();
         }
 
-        auto publishedRawCard = tryPublish(tokenContext, rawSignedModel, token->stringRepresentation());
+        std::function<std::future<RawSignedModel>(const std::string& token)> publishFunc = [&](const std::string& token) {
+            return cardClient_->publishCard(rawCard, token);
+        };
+        auto publishedRawCard = tryQuery<RawSignedModel>(tokenContext, token->stringRepresentation(), publishFunc);
 
         if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot()){
             throw make_error(VirgilSdkError::CardVerificationFailed, "Publishing returns invalid card");
@@ -144,30 +150,17 @@ std::future<Card> CardManager::publishCard(const virgil::sdk::crypto::keys::Priv
     return future;
 }
 
-RawSignedModel CardManager::tryPublish(const TokenContext &tokenContext, const RawSignedModel &rawCard,
-                                       const std::string &token) const {
-    try {
-        auto futureResponse = cardClient_->publishCard(rawCard, token);
-
-        return futureResponse.get();
-    } catch (Error error) {
-        if (error.httpErrorCode() == 401 && retryOnUnauthorized_) {
-            auto newTokenContext = TokenContext(tokenContext.operation(), tokenContext.identity(), true);
-            auto newTokenFuture = accessTokenProvider_->getToken(newTokenContext);
-            auto newFutureResponse = cardClient_->publishCard(rawCard, newTokenFuture.get()->stringRepresentation());
-
-            return newFutureResponse.get();
-        } else
-            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
-    }
-}
-
 std::future<Card> CardManager::getCard(const std::string &cardId) const {
     auto future = std::async([=]{
         auto tokenContext = TokenContext("get");
         auto tokenFuture = accessTokenProvider_->getToken(tokenContext);
 
-        auto getCardResponse = tryGet(tokenContext, cardId, tokenFuture.get()->stringRepresentation());
+        std::function<std::future<GetCardResponse>(const std::string& token)> getFunc = [&](const std::string& token) {
+            return cardClient_->getCard(cardId, token);
+        };
+        auto getCardResponse = tryQuery<GetCardResponse>(tokenContext,
+                                                         tokenFuture.get()->stringRepresentation(),
+                                                         getFunc);
 
         auto card = parseCard(getCardResponse.rawCard());
         card.isOutdated(getCardResponse.isOutdated());
@@ -187,30 +180,17 @@ std::future<Card> CardManager::getCard(const std::string &cardId) const {
     return future;
 }
 
-GetCardResponse CardManager::tryGet(const virgil::sdk::jwt::TokenContext &tokenContext, const std::string &cardId,
-                                    const std::string &token) const {
-    try {
-        auto futureResponse = cardClient_->getCard(cardId, token);
-
-        return futureResponse.get();
-    } catch (Error error) {
-        if (error.httpErrorCode() == 401 && retryOnUnauthorized_) {
-            auto newTokenContext = TokenContext(tokenContext.operation(), tokenContext.identity(), true);
-            auto newTokenFuture = accessTokenProvider_->getToken(newTokenContext);
-            auto newFutureResponse = cardClient_->getCard(cardId, newTokenFuture.get()->stringRepresentation());
-
-            return newFutureResponse.get();
-        } else
-            throw make_error(VirgilSdkError::ServiceQueryFailed, error.errorMsg());
-    }
-}
-
 std::future<std::vector<Card>> CardManager::searchCards(const std::string &identity) const {
     auto future = std::async([=]{
         auto tokenContext = TokenContext("search");
         auto tokenFuture = accessTokenProvider_->getToken(tokenContext);
 
-        auto rawCards = trySearch(tokenContext, identity, tokenFuture.get()->stringRepresentation());
+        std::function<std::future<std::vector<RawSignedModel>>(const std::string& token)> searchFunc = [&](const std::string& token) {
+            return cardClient_->searchCards(identity, token);
+        };
+        auto rawCards = tryQuery<std::vector<RawSignedModel>>(tokenContext,
+                                                              tokenFuture.get()->stringRepresentation(),
+                                                              searchFunc);
 
         auto cards = std::vector<Card>();
         auto unsorted = std::map<std::string, std::shared_ptr<Card>>();
@@ -223,12 +203,11 @@ std::future<std::vector<Card>> CardManager::searchCards(const std::string &ident
                 if (!cardVerifier_->verifyCard(card))
                     throw make_error(VirgilSdkError::CardVerificationFailed, "Card verification failed.");
             }
-
             unsorted[card.identifier()] = std::make_shared<Card>(card);
             cards.push_back(parseCard(rawCard));
         }
 
-        for (std::vector<Card>::iterator card = cards.begin(); card != cards.end(); card++) {
+        for (auto card = cards.begin(); card != cards.end(); card++) {
             if (unsorted.find(card->previousCardId()) != unsorted.end()) {
                 card->previousCard(unsorted[card->previousCardId()]);
                 unsorted[card->previousCardId()]->isOutdated(true);
@@ -244,17 +223,18 @@ std::future<std::vector<Card>> CardManager::searchCards(const std::string &ident
     return future;
 }
 
-std::vector<RawSignedModel> CardManager::trySearch(const virgil::sdk::jwt::TokenContext &tokenContext,
-                                                   const std::string &identity, const std::string &token) const {
+template<typename T>
+T CardManager::tryQuery(const virgil::sdk::jwt::TokenContext &tokenContext, const std::string &token,
+                        std::function<std::future<T>(const std::string &)> query) const {
     try {
-        auto futureResponse = cardClient_->searchCards(identity, token);
+        auto futureResponse = query(token);
 
         return futureResponse.get();
     } catch (Error error) {
         if (error.httpErrorCode() == 401 && retryOnUnauthorized_) {
             auto newTokenContext = TokenContext(tokenContext.operation(), tokenContext.identity(), true);
             auto newTokenFuture = accessTokenProvider_->getToken(newTokenContext);
-            auto newFutureResponse = cardClient_->searchCards(identity, newTokenFuture.get()->stringRepresentation());
+            auto newFutureResponse = query(newTokenFuture.get()->stringRepresentation());
 
             return newFutureResponse.get();
         } else
