@@ -48,6 +48,9 @@ using virgil::sdk::jwt::JwtGenerator;
 using virgil::sdk::jwt::providers::GeneratorJwtProvider;
 using virgil::sdk::jwt::TokenContext;
 using virgil::sdk::cards::Card;
+using virgil::sdk::client::models::RawCardContent;
+using virgil::sdk::client::models::RawSignature;
+using virgil::sdk::cards::CardSignature;
 
 Jwt TestUtils::getToken(const std::string &identity) {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
@@ -58,7 +61,7 @@ Jwt TestUtils::getToken(const std::string &identity) {
     return jwtGenerator.generateToken(identity);
 }
 
-bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) {
+bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) const {
     auto equals = card1.identifier() == card2.identifier()
                   && card1.identity() == card2.identity()
                   && card1.version() == card2.version()
@@ -69,6 +72,60 @@ bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) {
                   && ((card1.previousCard() == nullptr && card2.previousCard() == nullptr) || (isCardsEqual(*card1.previousCard(), *card2.previousCard())));
 
     return equals;
+}
+
+bool TestUtils::isRawCardContentEqual(const RawCardContent &content1, const RawCardContent &content2) const {
+    auto equals = content1.identity() == content2.identity()
+                  && content1.publicKey() == content2.publicKey()
+                  && content1.version() == content2.version()
+                  && content1.createdAt() == content2.createdAt()
+                  && content1.previousCardId() == content2.previousCardId();
+
+    return equals;
+}
+
+bool TestUtils::isRawSignaturesEqual(const std::vector<RawSignature> &signatures1,
+                                                   const std::vector<RawSignature> &signatures2) const {
+    if (signatures1.size() != signatures2.size())
+        return false;
+
+    for (auto& signature1 : signatures1) {
+        bool found = false;
+        for (auto &signature2 : signatures2) {
+            if (signature1.signer() == signature2.signer()) {
+                found = true;
+                if (signature1.signature() != signature2.signature() || signature1.snapshot() != signature2.snapshot())
+                    return false;
+            }
+        }
+        if (!found)
+            return false;
+    }
+
+    return true;
+}
+
+bool TestUtils::isCardSignaturesEqual(const std::vector<CardSignature> &signatures1,
+                                      const std::vector<CardSignature> &signatures2) const {
+    if (signatures1.size() != signatures2.size())
+        return false;
+
+    for (auto& signature1 : signatures1) {
+        bool found = false;
+        for (auto &signature2 : signatures2) {
+            if (signature1.signer() == signature2.signer()) {
+                found = true;
+                if (signature1.signature() != signature2.signature()
+                    || signature1.snapshot() != signature2.snapshot()
+                    || signature1.extraFields() != signature2.extraFields())
+                    return false;
+            }
+        }
+        if (!found)
+            return false;
+    }
+
+    return true;
 }
 
 const std::shared_ptr<Crypto>& TestUtils::crypto() const { return crypto_; }

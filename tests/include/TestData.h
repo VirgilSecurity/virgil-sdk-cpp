@@ -34,48 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_TESTDATA_H
+#define VIRGIL_SDK_TESTDATA_H
 
 #include <string>
-#include <memory>
-#include <virgil/sdk/Common.h>
+#include <nlohman/json.hpp>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
-                public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::string &previousCardId = std::string());
+        namespace test {
+            class TestData {
+            public:
+                TestData(const std::string &fileName = "data.json");
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+                const nlohmann::json& dict() const;
 
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const int& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
-                private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::string previousCardId_;
-                };
-            }
+            private:
+                nlohmann::json dict_;
+            };
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_TESTDATA_H

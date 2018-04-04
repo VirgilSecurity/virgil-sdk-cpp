@@ -60,14 +60,14 @@ bool VirgilCardVerifier::verifySelf(const virgil::sdk::cards::Card &card) const 
     if (verifySelfSignature)
         return verify(card, selfSignerIdentifier, card.publicKey());
 
-    return false;
+    return true;
 }
 
 bool VirgilCardVerifier::verifyVirgil(const virgil::sdk::cards::Card &card) const {
     if (verifyVirgilSignature)
         return verify(card, virgilSignerIdentifier, virgilPublicKey);
 
-    return false;
+    return true;
 }
 
 bool VirgilCardVerifier::verifyWhitelists(const virgil::sdk::cards::Card &card) const {

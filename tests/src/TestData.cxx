@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
+ * Copyright (C) 2016 Virgil Security Inc.
  *
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  *
@@ -34,48 +34,23 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#include <TestData.h>
+#include <fstream>
 
-#include <string>
-#include <memory>
-#include <virgil/sdk/Common.h>
+using virgil::sdk::test::TestData;
+using json = nlohmann::json;
 
-namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
-                public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const int &createdAt,
-                                   const std::string &version = "5.0",
-                                   const std::string &previousCardId = std::string());
+TestData::TestData(const std::string &fileName) {
+    std::ifstream input(fileName);
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+    std::string str((std::istreambuf_iterator<char>(input)),
+                    std::istreambuf_iterator<char>());
 
-                    const std::string& identity() const;
+    if (!str.empty())
+        dict_ = json::parse(str);
 
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const int& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
-                private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    int createdAt_;
-                    std::string previousCardId_;
-                };
-            }
-        }
-    }
+    input.close();
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+const json& TestData::dict() const { return dict_; }
+

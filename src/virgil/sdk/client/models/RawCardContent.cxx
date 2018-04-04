@@ -48,7 +48,7 @@ RawCardContent::RawCardContent(const std::string &identity,
                                const VirgilByteArray &publicKey,
                                const int &createdAt,
                                const std::string &version,
-                               const std::shared_ptr<std::string> &previousCardId)
+                               const std::string &previousCardId)
         : identity_(identity), publicKey_(publicKey), version_(version),
           createdAt_(createdAt), previousCardId_(previousCardId) {}
 
@@ -66,7 +66,7 @@ const std::string& RawCardContent::version() const { return version_; }
 
 const int& RawCardContent::createdAt() const { return createdAt_; }
 
-const std::shared_ptr<std::string>& RawCardContent::previousCardId() const { return  previousCardId_; }
+const std::string& RawCardContent::previousCardId() const { return  previousCardId_; }
 
 VirgilByteArray RawCardContent::snapshot() const {
     auto contentStr = JsonSerializer<RawCardContent>::toJson(*this);

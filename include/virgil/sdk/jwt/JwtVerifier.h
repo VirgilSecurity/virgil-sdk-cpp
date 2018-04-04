@@ -48,7 +48,7 @@ namespace virgil {
             public:
                 JwtVerifier(const crypto::keys::PublicKey& apiPublicKey,
                              const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto);
+                             const crypto::Crypto& crypto);
 
                 bool verifyToken(const Jwt& token) const;
 
@@ -56,12 +56,12 @@ namespace virgil {
 
                 const std::string& apiPublicKeyIdentifier() const;
 
-                const std::shared_ptr<crypto::Crypto>& crypto() const;
+                const crypto::Crypto& crypto() const;
 
             private:
                 crypto::keys::PublicKey apiPublicKey_;
                 std::string apiPublicKeyIdentifier_;
-                std::shared_ptr<crypto::Crypto> crypto_;
+                crypto::Crypto crypto_;
             };
         }
     }

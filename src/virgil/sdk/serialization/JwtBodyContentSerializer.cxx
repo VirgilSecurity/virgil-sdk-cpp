@@ -66,12 +66,12 @@ namespace virgil {
                         std::string issuer = j[JsonKey::AppId];
                         std::string subject = j[JsonKey::IdentityJWT];
 
-                        std::string appId = std::move(issuer.erase(7));
-                        std::string identity = std::move(subject.erase(9));
+                        std::string appId = std::move(issuer.erase(0, 7));
+                        std::string identity = std::move(subject.erase(0,9));
                         std::time_t issuedAt = j[JsonKey::IssuedAt];
                         std::time_t expiresAt = j[JsonKey::ExpiresAt];
 
-                        json additionalDataJson = j.value(JsonKey::AdditionalData, json::parse(std::string()));
+                        json additionalDataJson = j.value(JsonKey::AdditionalData, json());
                         auto additionalData = JsonUtils::jsonToUnorderedMap(additionalDataJson);
 
                         return JwtBodyContent(appId, identity, expiresAt, issuedAt, additionalData);

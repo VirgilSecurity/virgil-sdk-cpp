@@ -73,11 +73,8 @@ namespace virgil {
                         std::string previousCardIdStr = j.value(JsonKey::PreviousCardId, std::string());
                         std::shared_ptr<std::string> previousCardIdPtr = nullptr;
 
-                        if (!previousCardIdStr.empty())
-                            previousCardIdPtr = std::make_shared<std::string>(previousCardIdStr);
-
                         return RawCardContent(identity, publicKey, createdAt,
-                                              version, previousCardIdPtr);
+                                              version, previousCardIdStr);
                     } catch (std::exception &exception) {
                         throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawCardContent>::fromJson ") +
                                                exception.what());
@@ -101,8 +98,8 @@ namespace virgil {
                         j[JsonKey::Version] = rawCardContent.version();
                         j[JsonKey::CreatedAt] = rawCardContent.createdAt();
 
-                        if (rawCardContent.previousCardId() != nullptr) {
-                            j[JsonKey::PreviousCardId] = *rawCardContent.previousCardId();
+                        if (!rawCardContent.previousCardId().empty()) {
+                            j[JsonKey::PreviousCardId] = rawCardContent.previousCardId();
                         }
 
                         return j.dump(INDENT);

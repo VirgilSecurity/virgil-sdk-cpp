@@ -46,6 +46,7 @@
 #include <virgil/sdk/cards/Card.h>
 
 #include <TestConst.h>
+#include <virgil/sdk/client/models/RawCardContent.h>
 
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
@@ -59,7 +60,16 @@ namespace sdk {
 
             jwt::Jwt getToken(const std::string& identity);
 
-            bool isCardsEqual(const cards::Card& card1, const cards::Card& card2);
+            bool isCardsEqual(const cards::Card& card1, const cards::Card& card2) const;
+
+            bool isRawCardContentEqual(const client::models::RawCardContent& content1,
+                                       const client::models::RawCardContent& content2) const;
+
+            bool isRawSignaturesEqual(const std::vector<client::models::RawSignature>& signatures1,
+                                      const std::vector<client::models::RawSignature>& signatures2) const;
+
+            bool isCardSignaturesEqual(const std::vector<cards::CardSignature>& signatures1,
+                                       const std::vector<cards::CardSignature>& signatures2) const;
 
             const std::shared_ptr<Crypto>& crypto() const;
 
