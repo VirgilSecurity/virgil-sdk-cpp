@@ -39,6 +39,7 @@
 #include <helpers.h>
 #include <virgil/sdk/jwt/JwtGenerator.h>
 #include <virgil/sdk/jwt/providers/GeneratorJwtProvider.h>
+#include <random>
 
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::test::Utils;
@@ -51,6 +52,7 @@ using virgil::sdk::cards::Card;
 using virgil::sdk::client::models::RawCardContent;
 using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::cards::CardSignature;
+using virgil::sdk::VirgilByteArray;
 
 Jwt TestUtils::getToken(const std::string &identity) {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
@@ -126,6 +128,14 @@ bool TestUtils::isCardSignaturesEqual(const std::vector<CardSignature> &signatur
     }
 
     return true;
+}
+
+VirgilByteArray TestUtils::getRandomBytes(const int& size) const {
+    std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char> engine;
+    VirgilByteArray data(size);
+    std::generate(begin(data), end(data), std::ref(engine));
+
+    return data;
 }
 
 const std::shared_ptr<Crypto>& TestUtils::crypto() const { return crypto_; }

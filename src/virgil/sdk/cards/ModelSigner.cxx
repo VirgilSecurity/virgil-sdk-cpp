@@ -87,7 +87,7 @@ void ModelSigner::sign(virgil::sdk::client::models::RawSignedModel &model, const
                        const virgil::sdk::crypto::keys::PrivateKey &privateKey,
                        const std::unordered_map<std::string, std::string> &extraFields) const {
     auto additionalData = VirgilByteArray();
-    if (extraFields.size() != 0) {
+    if (!extraFields.empty()) {
         auto extraFieldsStr = JsonUtils::unorderedMapToJson(extraFields).dump();
         additionalData = VirgilByteArrayUtils::stringToBytes(extraFieldsStr);
     }
@@ -99,7 +99,7 @@ void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,
                            const virgil::sdk::crypto::keys::PrivateKey &privateKey,
                            const std::unordered_map<std::string, std::string> &extraFields) const {
     auto additionalData = VirgilByteArray();
-    if (extraFields.size() != 0) {
+    if (!extraFields.empty()) {
         auto extraFieldsStr = JsonUtils::unorderedMapToJson(extraFields).dump();
         additionalData = VirgilByteArrayUtils::stringToBytes(extraFieldsStr);
     }

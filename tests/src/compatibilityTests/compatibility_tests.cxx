@@ -147,7 +147,7 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
     TestUtils utils(consts);
     Crypto crypto;
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(VirgilCardVerifier(crypto));
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
@@ -184,7 +184,7 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
     TestUtils utils(consts);
     Crypto crypto;
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(VirgilCardVerifier(crypto));
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 

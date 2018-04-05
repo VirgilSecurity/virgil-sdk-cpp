@@ -71,6 +71,8 @@ namespace sdk {
             bool isCardSignaturesEqual(const std::vector<cards::CardSignature>& signatures1,
                                        const std::vector<cards::CardSignature>& signatures2) const;
 
+            VirgilByteArray getRandomBytes(const int& size = 10) const;
+
             const std::shared_ptr<Crypto>& crypto() const;
 
         private:

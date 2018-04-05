@@ -63,6 +63,9 @@ namespace virgil {
 
                     const crypto::Crypto& crypto() const;
 
+                    const std::vector<Whitelist>& whitelists() const;
+                    void whitelists(const std::vector<Whitelist>& newWhitelists);
+
                     bool verifyCard(const Card &card) const override;
 
                 private:

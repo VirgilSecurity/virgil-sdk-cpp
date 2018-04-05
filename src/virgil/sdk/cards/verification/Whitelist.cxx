@@ -35,6 +35,7 @@
  */
 
 #include <virgil/sdk/cards/verification/Whitelist.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
 using virgil::sdk::cards::verification::VerifierCredentials;
 using virgil::sdk::cards::verification::Whitelist;
@@ -44,7 +45,7 @@ Whitelist::Whitelist(const std::vector<VerifierCredentials> &verifierCredentials
     std::vector<std::string> dic;
     for (auto& credentials : verifierCredentials) {
         if (std::find(dic.begin(), dic.end(), credentials.signer()) != dic.end()) {
-            //FIXME: throw error here for duplicate signer
+            throw make_error(VirgilSdkError::AddVerifierCredentialsFailed, "Verifier credentials with same signer already exists");
         } else {
             dic.push_back(credentials.signer());
         }

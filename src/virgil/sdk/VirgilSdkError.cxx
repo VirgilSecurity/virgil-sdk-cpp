@@ -50,6 +50,10 @@ std::string VirgilSdkErrorCategory::message(int ev) const noexcept {
             return "Verification of Virgil Card failed.";
         case VirgilSdkError::ServiceQueryFailed:
             return "REST Query to Virgil Service failed.";
+        case VirgilSdkError::AddSignatureFailed:
+            return "Adding duplicate signature failed.";
+        case VirgilSdkError::AddVerifierCredentialsFailed:
+            return "Adding duplicate verifier credentials failed.";
         default:
             return "Undefined error.";
     }

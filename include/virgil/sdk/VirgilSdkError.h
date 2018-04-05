@@ -53,6 +53,8 @@ namespace virgil {
             VerificationFailed, ///< Verification of signature failed.
             CardVerificationFailed, ///< Verification of Virgil Card failed.
             ServiceQueryFailed, ///< REST Query to Virgil Service failed.
+            AddSignatureFailed, ///< Adding duplicate signature failed.
+            AddVerifierCredentialsFailed, ///< Adding duplicate verifier credentials failed.
             Undefined = std::numeric_limits<int>::max()
         };
 

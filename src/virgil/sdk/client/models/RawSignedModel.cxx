@@ -37,6 +37,7 @@
 #include <virgil/sdk/client/models/RawSignedModel.h>
 #include <virgil/sdk/serialization/JsonDeserializer.h>
 #include <virgil/sdk/serialization/JsonSerializer.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
 using virgil::sdk::client::models::RawSignedModel;
 using virgil::sdk::client::models::RawSignature;
@@ -52,8 +53,7 @@ RawSignedModel::RawSignedModel(const VirgilByteArray &contentSnapshot)
 void RawSignedModel::addSignature(const RawSignature &newSignature) {
     for (RawSignature& signature : signatures_) {
         if (signature.signer() == newSignature.signer())
-            //FIXME: throw error
-            return;
+            throw make_error(VirgilSdkError::AddSignatureFailed, "Signature with same signer already exist");
     }
     signatures_.push_back(newSignature);
 }
