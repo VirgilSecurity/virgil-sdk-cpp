@@ -264,7 +264,7 @@ Card CardManager::parseCard(const RawSignedModel &model, const Crypto& crypto) {
     auto cardSignatures = std::vector<CardSignature>();
     for (auto& rawSignature : model.signatures()) {
         auto extraFields = std::unordered_map<std::string, std::string>();
-        if (rawSignature.snapshot().size() > 0)
+        if (!rawSignature.snapshot().empty())
             extraFields = JsonUtils::bytesToUnorderedMap(rawSignature.snapshot());
 
         auto cardSignature = CardSignature(rawSignature.signer(), rawSignature.signature(),
