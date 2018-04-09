@@ -58,7 +58,7 @@ Jwt TestUtils::getToken(const std::string &identity, const int& ttl) const {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
     auto privateKey = crypto_->importPrivateKey(privateKeyData);
 
-    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), *crypto_, consts.AppId(), ttl);
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto_, consts.AppId(), ttl);
 
     return jwtGenerator.generateToken(identity);
 }

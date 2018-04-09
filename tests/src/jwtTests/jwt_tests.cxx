@@ -59,12 +59,12 @@ using virgil::sdk::util::JsonUtils;
 const auto testData = virgil::sdk::test::TestData();
 
 TEST_CASE("test001_STC_24", "[card_manager]") {
-    Crypto crypto;
+    auto crypto = std::make_shared<Crypto>();
 
     std::function<std::future<std::string>(const TokenContext&)> callback = [&](const TokenContext& tokenContext) {
         std::promise<std::string> p;
 
-        auto keyPair = crypto.generateKeyPair();
+        auto keyPair = crypto->generateKeyPair();
         auto generator = JwtGenerator(keyPair.privateKey(), "id", crypto, "appId", 10);
         auto jwt = generator.generateToken(tokenContext.identity());
         p.set_value(jwt.stringRepresentation());
@@ -101,8 +101,9 @@ TEST_CASE("test001_STC_24", "[card_manager]") {
 }
 
 TEST_CASE("test001_STC_37", "[card_manager]") {
-    Crypto crypto;
-    auto keyPair = crypto.generateKeyPair();
+    auto crypto = std::make_shared<Crypto>();
+
+    auto keyPair = crypto->generateKeyPair();
 
     auto ttl = 1;
     auto generator = JwtGenerator(keyPair.privateKey(), "id", crypto, "appId", ttl);

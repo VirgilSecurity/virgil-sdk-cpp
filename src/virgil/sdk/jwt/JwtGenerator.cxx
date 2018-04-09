@@ -44,7 +44,7 @@ using virgil::sdk::crypto::Crypto;
 using virgil::sdk::crypto::keys::PrivateKey;
 
 JwtGenerator::JwtGenerator(const PrivateKey &apiKey, const std::string &apiPublicKeyIdentifier,
-                           const Crypto &crypto, const std::string &appId, const int &ttl)
+                           const std::shared_ptr<Crypto> &crypto, const std::string &appId, const int &ttl)
 : apiKey_(apiKey), apiPublicKeyIdentifier_(apiPublicKeyIdentifier), crypto_(crypto), appId_(appId), ttl_(ttl) {}
 
 Jwt JwtGenerator::generateToken(const std::string &identity,
@@ -52,7 +52,7 @@ Jwt JwtGenerator::generateToken(const std::string &identity,
     auto headerContent = JwtHeaderContent(apiPublicKeyIdentifier_);
     auto bodyContent = JwtBodyContent(appId_, identity, std::time(0) + ttl_, std::time(0), additionalData);
     auto data = Jwt::dataToSign(headerContent, bodyContent);
-    auto signatureContent = crypto_.generateSignature(data, apiKey_);
+    auto signatureContent = crypto_->generateSignature(data, apiKey_);
 
     return Jwt(headerContent, bodyContent, signatureContent);
 }
@@ -61,7 +61,7 @@ const PrivateKey& JwtGenerator::apiKey() const { return apiKey_; }
 
 const std::string& JwtGenerator::apiPublicKeyIdentifier() const { return apiPublicKeyIdentifier_; }
 
-const Crypto& JwtGenerator::crypto() const { return crypto_; }
+const std::shared_ptr<Crypto>& JwtGenerator::crypto() const { return crypto_; }
 
 const std::string& JwtGenerator::appId() const { return appId_; }
 

@@ -66,10 +66,10 @@ const auto testData = virgil::sdk::test::TestData();
 TEST_CASE("test001_STC_8", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto signer = ModelSigner(crypto);
-    auto keyPair1 = crypto.generateKeyPair();
+    auto keyPair1 = crypto->generateKeyPair();
     auto randomBytes = utils.getRandomBytes();
 
     auto rawCard = RawSignedModel(randomBytes);
@@ -84,17 +84,17 @@ TEST_CASE("test001_STC_8", "[signer_verifier]") {
     }
     REQUIRE(errorWasThrown);
 
-    auto keyPair2 = crypto.generateKeyPair();
+    auto keyPair2 = crypto->generateKeyPair();
     signer.sign(rawCard, "test", keyPair2.privateKey());
     REQUIRE(rawCard.signatures().size() == 2);
 
     for (auto& signature : rawCard.signatures()) {
         if (signature.signer() == "self") {
-            REQUIRE(crypto.verify(randomBytes, signature.signature(), keyPair1.publicKey()));
+            REQUIRE(crypto->verify(randomBytes, signature.signature(), keyPair1.publicKey()));
             REQUIRE(signature.snapshot().empty());
         }
         else if (signature.signer() == "test") {
-            REQUIRE(crypto.verify(randomBytes, signature.signature(), keyPair2.publicKey()));
+            REQUIRE(crypto->verify(randomBytes, signature.signature(), keyPair2.publicKey()));
             REQUIRE(signature.snapshot().empty());
         }
         else
@@ -113,10 +113,10 @@ TEST_CASE("test001_STC_8", "[signer_verifier]") {
 TEST_CASE("test002_STC_9", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto signer = ModelSigner(crypto);
-    auto keyPair1 = crypto.generateKeyPair();
+    auto keyPair1 = crypto->generateKeyPair();
     auto randomBytes = utils.getRandomBytes();
 
     auto rawCard = RawSignedModel(randomBytes);
@@ -136,7 +136,7 @@ TEST_CASE("test002_STC_9", "[signer_verifier]") {
     }
     REQUIRE(errorWasThrown);
 
-    auto keyPair2 = crypto.generateKeyPair();
+    auto keyPair2 = crypto->generateKeyPair();
     signer.sign(rawCard, "test", keyPair2.privateKey(), dic);
     REQUIRE(rawCard.signatures().size() == 2);
 
@@ -144,7 +144,7 @@ TEST_CASE("test002_STC_9", "[signer_verifier]") {
         if (signature.signer() == "self") {
             auto cardSnapshot = rawCard.contentSnapshot();
             VirgilByteArrayUtils::append(cardSnapshot, signature.snapshot());
-            REQUIRE(crypto.verify(cardSnapshot, signature.signature(), keyPair1.publicKey()));
+            REQUIRE(crypto->verify(cardSnapshot, signature.signature(), keyPair1.publicKey()));
 
             auto additionalDataStr = VirgilByteArrayUtils::bytesToString(signature.snapshot());
             auto additionalDataJson = nlohmann::json::parse(additionalDataStr);
@@ -155,7 +155,7 @@ TEST_CASE("test002_STC_9", "[signer_verifier]") {
         else if (signature.signer() == "test") {
             auto cardSnapshot = rawCard.contentSnapshot();
             VirgilByteArrayUtils::append(cardSnapshot, signature.snapshot());
-            REQUIRE(crypto.verify(cardSnapshot, signature.signature(), keyPair2.publicKey()));
+            REQUIRE(crypto->verify(cardSnapshot, signature.signature(), keyPair2.publicKey()));
 
             auto additionalDataStr = VirgilByteArrayUtils::bytesToString(signature.snapshot());
             auto additionalDataJson = nlohmann::json::parse(additionalDataStr);
@@ -179,7 +179,8 @@ TEST_CASE("test002_STC_9", "[signer_verifier]") {
 TEST_CASE("test003_STC_10", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
+
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
@@ -191,12 +192,12 @@ TEST_CASE("test003_STC_10", "[signer_verifier]") {
 
     auto privateKey1Str = testData.dict()["STC-10.private_key1_base64"];
     auto privateKey1Data = VirgilBase64::decode(privateKey1Str);
-    auto privateKey1 = crypto.importPrivateKey(privateKey1Data);
+    auto privateKey1 = crypto->importPrivateKey(privateKey1Data);
 
-    auto publicKey1 = crypto.extractPublicKeyFromPrivateKey(privateKey1);
-    auto publicKey1Data = crypto.exportPublicKey(publicKey1);
-    auto publicKey2Data = crypto.exportPublicKey(crypto.generateKeyPair().publicKey());
-    auto publicKey3Data = crypto.exportPublicKey(crypto.generateKeyPair().publicKey());
+    auto publicKey1 = crypto->extractPublicKeyFromPrivateKey(privateKey1);
+    auto publicKey1Data = crypto->exportPublicKey(publicKey1);
+    auto publicKey2Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
+    auto publicKey3Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
 
     REQUIRE(verifier->verifyCard(card));
 
@@ -225,12 +226,12 @@ TEST_CASE("test003_STC_10", "[signer_verifier]") {
 TEST_CASE("test004_STC_11", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto());
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
 
     auto cardStr = testData.dict()["STC-11.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -244,12 +245,12 @@ TEST_CASE("test004_STC_11", "[signer_verifier]") {
 TEST_CASE("test005_STC_12", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto());
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
 
     auto cardStr = testData.dict()["STC-12.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -263,12 +264,12 @@ TEST_CASE("test005_STC_12", "[signer_verifier]") {
 TEST_CASE("test006_STC_14", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto());
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
 
     auto cardStr = testData.dict()["STC-14.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -280,12 +281,12 @@ TEST_CASE("test006_STC_14", "[signer_verifier]") {
 TEST_CASE("test007_STC_15", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto());
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
 
     auto cardStr = testData.dict()["STC-15.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -297,7 +298,8 @@ TEST_CASE("test007_STC_15", "[signer_verifier]") {
 TEST_CASE("test008_STC_16", "[signer_verifier]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
+
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
@@ -309,7 +311,7 @@ TEST_CASE("test008_STC_16", "[signer_verifier]") {
 
     auto publicKeyStr = testData.dict()["STC-16.public_key1_base64"];
     auto publicKey1Data = VirgilBase64::decode(publicKeyStr);
-    auto publicKey2Data = crypto.exportPublicKey(crypto.generateKeyPair().publicKey());
+    auto publicKey2Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
 
     auto whitelist1 = Whitelist({VerifierCredentials("extra", publicKey2Data)});
     verifier->whitelists({whitelist1});

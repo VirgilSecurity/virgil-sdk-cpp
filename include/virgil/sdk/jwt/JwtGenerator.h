@@ -49,7 +49,7 @@ namespace virgil {
             public:
                 JwtGenerator(const crypto::keys::PrivateKey& apiKey,
                              const std::string& apiPublicKeyIdentifier,
-                             const crypto::Crypto& crypto,
+                             const std::shared_ptr<crypto::Crypto>& crypto,
                              const std::string& appId,
                              const int& ttl);
 
@@ -61,7 +61,7 @@ namespace virgil {
 
                 const std::string& apiPublicKeyIdentifier() const;
 
-                const crypto::Crypto& crypto() const;
+                const std::shared_ptr<crypto::Crypto>& crypto() const;
 
                 const std::string& appId() const;
 
@@ -70,7 +70,7 @@ namespace virgil {
             private:
                 crypto::keys::PrivateKey apiKey_;
                 std::string apiPublicKeyIdentifier_;
-                crypto::Crypto crypto_;
+                std::shared_ptr<crypto::Crypto> crypto_;
                 std::string appId_;
                 int ttl_;
             };

@@ -63,15 +63,15 @@ using virgil::sdk::cards::Card;
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto token = utils.getToken("identity");
 
     CardClient cardClient;
     ModelSigner modelSigner(crypto);
 
-    auto keyPair = crypto.generateKeyPair();
-    auto publicKeyData = crypto.exportPublicKey(keyPair.publicKey());
+    auto keyPair = crypto->generateKeyPair();
+    auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
 
     RawCardContent content("identity", publicKeyData, std::time(0));
     auto snapshot = content.snapshot();
@@ -97,15 +97,15 @@ TEST_CASE("test001_CreateCard", "[client]") {
 TEST_CASE("test002_GetCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto token = utils.getToken("identity");
 
     CardClient cardClient;
     ModelSigner modelSigner(crypto);
 
-    auto keyPair = crypto.generateKeyPair();
-    auto publicKeyData = crypto.exportPublicKey(keyPair.publicKey());
+    auto keyPair = crypto->generateKeyPair();
+    auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
 
     RawCardContent content("identity", publicKeyData, std::time(0));
     auto snapshot = content.snapshot();
@@ -134,15 +134,15 @@ TEST_CASE("test002_GetCard", "[client]") {
 TEST_CASE("test003_SearchCards", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto token = utils.getToken("identity");
 
     CardClient cardClient;
     ModelSigner modelSigner(crypto);
 
-    auto keyPair = crypto.generateKeyPair();
-    auto publicKeyData = crypto.exportPublicKey(keyPair.publicKey());
+    auto keyPair = crypto->generateKeyPair();
+    auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
 
     RawCardContent content("identity", publicKeyData, std::time(0));
     auto snapshot = content.snapshot();

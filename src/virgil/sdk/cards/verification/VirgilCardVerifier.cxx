@@ -47,9 +47,9 @@ const std::string VirgilCardVerifier::selfSignerIdentifier = "self";
 const std::string VirgilCardVerifier::virgilSignerIdentifier = "virgil";
 const std::string VirgilCardVerifier::virgilPublicKeyBase64 = "MCowBQYDK2VwAyEAljOYGANYiVq1WbvVvoYIKtvZi2ji9bAhxyu6iV/LF8M=";
 
-VirgilCardVerifier::VirgilCardVerifier(const Crypto &crypto, const std::vector<Whitelist> &whitelists)
+VirgilCardVerifier::VirgilCardVerifier(const std::shared_ptr<Crypto> &crypto, const std::vector<Whitelist> &whitelists)
 : crypto_(crypto), whitelists_(whitelists), verifySelfSignature(true), verifyVirgilSignature(true),
-  virgilPublicKey(crypto.importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64))) {}
+  virgilPublicKey(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64))) {}
 
 bool VirgilCardVerifier::verifyCard(const Card &card) const {
     return verifySelf(card) && verifyVirgil(card) && verifyWhitelists(card);
@@ -75,7 +75,7 @@ bool VirgilCardVerifier::verifyWhitelists(const virgil::sdk::cards::Card &card) 
         for (auto& credentials : whitelist.verifierCredentials()) {
             for (auto &signature : card.signatures()) {
                 if (signature.signer() == credentials.signer()) {
-                    auto publicKey = crypto_.importPublicKey(credentials.publicKey());
+                    auto publicKey = crypto_->importPublicKey(credentials.publicKey());
                     result = verify(card, credentials.signer(), publicKey);
                 }
             }
@@ -94,14 +94,14 @@ bool VirgilCardVerifier::verify(const virgil::sdk::cards::Card &card, const std:
             auto cardSnapshot = card.getRawCard().contentSnapshot();
             VirgilByteArrayUtils::append(cardSnapshot, signature.snapshot());
 
-            return crypto_.verify(cardSnapshot, signature.signature(), signerPublicKey);
+            return crypto_->verify(cardSnapshot, signature.signature(), signerPublicKey);
         }
     }
 
     return false;
 }
 
-const Crypto& VirgilCardVerifier::crypto() const { return crypto_; }
+const std::shared_ptr<Crypto>& VirgilCardVerifier::crypto() const { return crypto_; }
 
 const std::vector<Whitelist>& VirgilCardVerifier::whitelists() const { return whitelists_; }
 

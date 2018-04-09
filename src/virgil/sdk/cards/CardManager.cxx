@@ -59,7 +59,7 @@ using virgil::sdk::client::networking::errors::Error;
 
 using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
-CardManager::CardManager(const virgil::sdk::crypto::Crypto &crypto,
+CardManager::CardManager(const std::shared_ptr<Crypto> &crypto,
                          const std::shared_ptr<AccessTokenProviderInterface> &accessTokenProvider,
                          const std::shared_ptr<CardVerifierInterface> &cardVerifier)
 : crypto_(crypto), accessTokenProvider_(accessTokenProvider), cardVerifier_(cardVerifier),
@@ -70,7 +70,7 @@ CardManager::CardManager(const virgil::sdk::crypto::Crypto &crypto,
 RawSignedModel CardManager::generateRawCard(const PrivateKey &privateKey, const PublicKey &publicKey,
                                             const std::string& identity, const std::string &previousCardId,
                                             const std::unordered_map<std::string, std::string> &extraFields) const {
-    auto exportedPublicKey = crypto_.exportPublicKey(publicKey);
+    auto exportedPublicKey = crypto_->exportPublicKey(publicKey);
     auto cardContent = RawCardContent(identity, exportedPublicKey, time(0), previousCardId);
 
     auto rawCard = RawSignedModel(cardContent.snapshot());
@@ -253,11 +253,11 @@ T CardManager::tryQuery(const virgil::sdk::jwt::TokenContext &tokenContext, cons
     }
 }
 
-Card CardManager::parseCard(const RawSignedModel &model, const Crypto& crypto) {
+Card CardManager::parseCard(const RawSignedModel &model, const std::shared_ptr<Crypto>& crypto) {
     auto rawCardContent = RawCardContent::parse(model.contentSnapshot());
 
-    auto publicKey = crypto.importPublicKey(rawCardContent.publicKey());
-    auto fingerprint = crypto.generateSHA512(model.contentSnapshot());
+    auto publicKey = crypto->importPublicKey(rawCardContent.publicKey());
+    auto fingerprint = crypto->generateSHA512(model.contentSnapshot());
     fingerprint.resize(32);
     auto cardId = VirgilByteArrayUtils::bytesToHex(fingerprint);
 
@@ -329,7 +329,7 @@ bool CardManager::validateSelfSignatures(const RawSignedModel &rawCard1, const R
     return false;
 }
 
-const Crypto& CardManager::crypto() const { return crypto_; }
+const std::shared_ptr<virgil::sdk::crypto::Crypto>& CardManager::crypto() const { return crypto_; }
 
 const std::shared_ptr<AccessTokenProviderInterface> & CardManager::accessTokenProvider() const { return accessTokenProvider_; }
 

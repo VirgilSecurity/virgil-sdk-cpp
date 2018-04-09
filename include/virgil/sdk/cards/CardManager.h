@@ -52,7 +52,7 @@ namespace virgil {
         namespace cards {
             class CardManager {
             public:
-                CardManager(const crypto::Crypto& crypto,
+                CardManager(const std::shared_ptr<crypto::Crypto>& crypto,
                             const std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface>& accessTokenProvider,
                             const std::shared_ptr<verification::CardVerifierInterface>& cardVerifier);
 
@@ -61,7 +61,7 @@ namespace virgil {
                                                const std::unordered_map<std::string, std::string> &extraFields
                                                = std::unordered_map<std::string, std::string>()) const;
 
-                static Card parseCard(const RawSignedModel& model, const crypto::Crypto& crypto);
+                static Card parseCard(const RawSignedModel& model, const std::shared_ptr<crypto::Crypto>& crypto);
 
                 Card parseCard(const RawSignedModel& model) const;
 
@@ -86,7 +86,7 @@ namespace virgil {
                 std::string exportCardAsJson(const Card& card) const;
                 RawSignedModel exportCardAsRawCard(const Card& card) const;
 
-                const crypto::Crypto& crypto() const;
+                const std::shared_ptr<crypto::Crypto>& crypto() const;
                 const std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface>& accessTokenProvider() const;
                 const std::shared_ptr<verification::CardVerifierInterface>& cardVerifier() const;
 
@@ -104,7 +104,7 @@ namespace virgil {
 
             private:
                 ModelSigner modelSigner_;
-                crypto::Crypto crypto_;
+                std::shared_ptr<crypto::Crypto> crypto_;
                 std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface> accessTokenProvider_;
                 std::shared_ptr<verification::CardVerifierInterface> cardVerifier_;
                 std::shared_ptr<client::CardClientInterface> cardClient_;

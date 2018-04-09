@@ -145,7 +145,7 @@ TEST_CASE("test002_STC_2", "[compatibility]") {
 TEST_CASE("test003_STC_3", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
@@ -162,7 +162,7 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
 
     REQUIRE(card1.identifier() == testData.dict()["STC-3.card_id"]);
     REQUIRE(card1.identity() == "test");
-    auto publicKeyData = crypto.exportPublicKey(card1.publicKey());
+    auto publicKeyData = crypto->exportPublicKey(card1.publicKey());
     REQUIRE(VirgilBase64::encode(publicKeyData) == testData.dict()["STC-3.public_key_base64"]);
     REQUIRE(card1.version() == "5.0");
     REQUIRE(card1.createdAt() == 1515686245);
@@ -182,7 +182,7 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
 TEST_CASE("test004_STC_4", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
@@ -198,7 +198,7 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
 
     REQUIRE(card1.identifier() == testData.dict()["STC-4.card_id"]);
     REQUIRE(card1.identity() == "test");
-    auto publicKeyData = crypto.exportPublicKey(card1.publicKey());
+    auto publicKeyData = crypto->exportPublicKey(card1.publicKey());
     REQUIRE(VirgilBase64::encode(publicKeyData) == testData.dict()["STC-4.public_key_base64"]);
     REQUIRE(card1.version() == "5.0");
     REQUIRE(card1.createdAt() == 1515686245);
@@ -236,12 +236,12 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
 TEST_CASE("test005_STC_22", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto apiPublicKeyBase64 = testData.dict()["STC-22.api_public_key_base64"];
     auto apiPublicKeyId = testData.dict()["STC-22.api_key_id"];
     auto apiPublicKeyData = VirgilBase64::decode(apiPublicKeyBase64);
-    auto apiPubicKey = crypto.importPublicKey(apiPublicKeyData);
+    auto apiPubicKey = crypto->importPublicKey(apiPublicKeyData);
 
     auto jwtVerifier = JwtVerifier(apiPubicKey, apiPublicKeyId, crypto);
 
@@ -272,17 +272,17 @@ TEST_CASE("test005_STC_22", "[compatibility]") {
 TEST_CASE("test006_STC_23", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    Crypto crypto;
+    auto crypto = utils.crypto();
 
     auto apiPublicKeyBase64 = testData.dict()["STC-23.api_public_key_base64"];
     auto apiPublicKeyId = testData.dict()["STC-23.api_key_id"];
     auto apiPublicKeyData = VirgilBase64::decode(apiPublicKeyBase64);
-    auto apiPubicKey = crypto.importPublicKey(apiPublicKeyData);
+    auto apiPubicKey = crypto->importPublicKey(apiPublicKeyData);
 
     auto apiPrivateKeyBase64 = testData.dict()["STC-23.api_private_key_base64"];
     auto appId = testData.dict()["STC-23.app_id"];
     auto apiPrivateKeyData = VirgilBase64::decode(apiPrivateKeyBase64);
-    auto apiPrivateKey = crypto.importPrivateKey(apiPrivateKeyData);
+    auto apiPrivateKey = crypto->importPrivateKey(apiPrivateKeyData);
 
     auto jwtVerifier = JwtVerifier(apiPubicKey, apiPublicKeyId, crypto);
 

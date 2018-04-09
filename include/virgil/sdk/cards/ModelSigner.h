@@ -48,11 +48,11 @@ namespace virgil {
         namespace cards {
             class ModelSigner {
             public:
-                ModelSigner(const crypto::Crypto &crypto);
+                ModelSigner(const std::shared_ptr<crypto::Crypto> &crypto);
 
                 static const std::string selfSignerIdentifier;
 
-                const crypto::Crypto& crypto() const;
+                const std::shared_ptr<crypto::Crypto>& crypto() const;
 
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
@@ -79,7 +79,7 @@ namespace virgil {
                               const crypto::keys::PrivateKey &privateKey,
                               const std::unordered_map<std::string, std::string> &extraFields) const;
             private:
-                crypto::Crypto crypto_;
+                std::shared_ptr<crypto::Crypto> crypto_;
             };
         }
     }
