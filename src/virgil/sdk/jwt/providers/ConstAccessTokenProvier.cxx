@@ -43,7 +43,7 @@ ConstAccessTokenProvider::ConstAccessTokenProvider(const std::shared_ptr<AccessT
 : accessToken_(accessToken) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::getToken(
-        const virgil::sdk::jwt::TokenContext &tokenContext) const
+        const virgil::sdk::jwt::TokenContext &tokenContext)
 {
     std::promise<std::shared_ptr<AccessTokenInterface>> p;
     p.set_value(accessToken_);

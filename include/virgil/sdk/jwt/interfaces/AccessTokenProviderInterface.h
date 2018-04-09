@@ -48,7 +48,7 @@ namespace virgil {
             namespace interfaces {
                 class AccessTokenProviderInterface {
                 public:
-                    virtual std::future<std::shared_ptr<AccessTokenInterface>> getToken(const TokenContext& tokenContext) const = 0;
+                    virtual std::future<std::shared_ptr<AccessTokenInterface>> getToken(const TokenContext& tokenContext) = 0;
 
                     virtual ~AccessTokenProviderInterface() = default;
                 };

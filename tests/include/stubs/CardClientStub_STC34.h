@@ -34,49 +34,35 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_CARDCLIENTSTUB_STC34_H
+#define VIRGIL_SDK_CARDCLIENTSTUB_STC34_H
 
-#include <string>
-#include <memory>
-#include <ctime>
-#include <virgil/sdk/Common.h>
+#include <virgil/sdk/client/CardClientInterface.h>
+#include <TestData.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
+        namespace test {
+            namespace stubs {
+                class CardClientStub_STC34 : public client::CardClientInterface {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const std::time_t &createdAt,
-                                   const std::string &previousCardId = std::string(),
-                                   const std::string &version = "5.0");
+                    CardClientStub_STC34();
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+                    std::future<client::models::RawSignedModel> publishCard(const client::models::RawSignedModel& model,
+                                                                            const std::string& token) const;
 
-                    const std::string& identity() const;
+                    std::future<client::models::GetCardResponse> getCard(const std::string &cardId,
+                                                                         const std::string& token) const;
 
-                    const VirgilByteArray& publicKey() const;
+                    std::future<std::vector<client::models::RawSignedModel>> searchCards(const std::string &identity,
+                                                                                         const std::string& token) const;
 
-                    const std::string& version() const;
-
-                    const std::time_t& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
                 private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    std::time_t createdAt_;
-                    std::string previousCardId_;
+                    virgil::sdk::test::TestData testData_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_CARDCLIENTSTUB_STC34_H

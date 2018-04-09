@@ -71,12 +71,14 @@ RawSignedModel CardManager::generateRawCard(const PrivateKey &privateKey, const 
                                             const std::string& identity, const std::string &previousCardId,
                                             const std::unordered_map<std::string, std::string> &extraFields) const {
     auto exportedPublicKey = crypto_.exportPublicKey(publicKey);
-    auto cardContent = RawCardContent(identity, exportedPublicKey, std::time_t(0));
+    auto cardContent = RawCardContent(identity, exportedPublicKey, time(0), previousCardId);
 
     auto rawCard = RawSignedModel(cardContent.snapshot());
     modelSigner_.selfSign(rawCard, privateKey, extraFields);
 
-    return rawCard;
+    auto rawSignedModel = rawCard;
+
+    return rawSignedModel;
 }
 
 std::future<Card> CardManager::publishCard(const RawSignedModel& rawCard) const {
@@ -92,13 +94,15 @@ std::future<Card> CardManager::publishCard(const RawSignedModel& rawCard) const 
         }
 
         std::function<std::future<RawSignedModel>(const std::string& token)> publishFunc = [&](const std::string& token) {
-            return cardClient_->publishCard(rawCard, token);
+            return cardClient_->publishCard(rawSignedModel, token);
         };
         auto publishedRawCard = tryQuery<RawSignedModel>(tokenContext, tokenFuture.get()->stringRepresentation(), publishFunc);
 
-        if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot()){
+        if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot())
             throw make_error(VirgilSdkError::CardVerificationFailed, "Publishing returns invalid card");
-        }
+
+        if (!validateSelfSignatures(publishedRawCard, rawSignedModel))
+            throw make_error(VirgilSdkError::CardVerificationFailed, "Server changed self signature");
 
         auto card = parseCard(publishedRawCard);
 
@@ -129,13 +133,15 @@ std::future<Card> CardManager::publishCard(const virgil::sdk::crypto::keys::Priv
         }
 
         std::function<std::future<RawSignedModel>(const std::string& token)> publishFunc = [&](const std::string& token) {
-            return cardClient_->publishCard(rawCard, token);
+            return cardClient_->publishCard(rawSignedModel, token);
         };
         auto publishedRawCard = tryQuery<RawSignedModel>(tokenContext, token->stringRepresentation(), publishFunc);
 
-        if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot()){
+        if (publishedRawCard.contentSnapshot() != rawSignedModel.contentSnapshot())
             throw make_error(VirgilSdkError::CardVerificationFailed, "Publishing returns invalid card");
-        }
+
+        if (!validateSelfSignatures(publishedRawCard, rawSignedModel))
+            throw make_error(VirgilSdkError::CardVerificationFailed, "Server changed self signature");
 
         auto card = parseCard(publishedRawCard);
 
@@ -207,11 +213,16 @@ std::future<std::vector<Card>> CardManager::searchCards(const std::string &ident
             cards.push_back(parseCard(rawCard));
         }
 
+        for (auto& card : cards) {
+            if (unsorted.find(card.previousCardId()) != unsorted.end()) {
+                unsorted[card.previousCardId()]->isOutdated(true);
+                card.previousCard(unsorted[card.previousCardId()]);
+                unsorted.erase(card.previousCardId());
+            }
+        }
+
         for (auto card = cards.begin(); card != cards.end(); card++) {
-            if (unsorted.find(card->previousCardId()) != unsorted.end()) {
-                card->previousCard(unsorted[card->previousCardId()]);
-                unsorted[card->previousCardId()]->isOutdated(true);
-                unsorted.erase(card->previousCardId());
+            if (unsorted.find(card->identifier()) == unsorted.end()) {
                 cards.erase(card);
                 card--;
             }
@@ -262,7 +273,8 @@ Card CardManager::parseCard(const RawSignedModel &model, const Crypto& crypto) {
     }
 
     return Card(cardId, rawCardContent.identity(), publicKey, rawCardContent.version(),
-                rawCardContent.createdAt(), model.contentSnapshot(), false, cardSignatures);
+                rawCardContent.createdAt(), model.contentSnapshot(), false, cardSignatures,
+                rawCardContent.previousCardId());
 }
 
 Card CardManager::parseCard(const RawSignedModel &model) const {
@@ -301,6 +313,20 @@ std::string CardManager::exportCardAsJson(const virgil::sdk::cards::Card &card) 
 
 RawSignedModel CardManager::exportCardAsRawCard(const virgil::sdk::cards::Card &card) const {
     return card.getRawCard();
+}
+
+bool CardManager::validateSelfSignatures(const RawSignedModel &rawCard1, const RawSignedModel &rawCard2) const {
+    for (const auto& signature1 : rawCard1.signatures()) {
+        if (signature1.signer() == "self") {
+            for (auto& signature2 : rawCard2.signatures())
+                if (signature2.signer() == "self")
+                    if (signature1.snapshot() == signature2.snapshot())
+                        return true;
+            break;
+        }
+    }
+
+    return false;
 }
 
 const Crypto& CardManager::crypto() const { return crypto_; }

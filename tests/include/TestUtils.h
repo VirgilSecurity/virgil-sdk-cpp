@@ -58,7 +58,7 @@ namespace sdk {
         public:
             TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {}
 
-            jwt::Jwt getToken(const std::string& identity);
+            jwt::Jwt getToken(const std::string& identity, const int& ttl = 1000) const;
 
             bool isCardsEqual(const cards::Card& card1, const cards::Card& card2) const;
 
@@ -72,6 +72,8 @@ namespace sdk {
                                        const std::vector<cards::CardSignature>& signatures2) const;
 
             VirgilByteArray getRandomBytes(const int& size = 10) const;
+
+            std::string getRandomString(const int& size = 10) const;
 
             const std::shared_ptr<Crypto>& crypto() const;
 

@@ -48,7 +48,7 @@ namespace virgil {
                 public:
                     CallbackJwtProvider(std::function<std::future<std::string>(const TokenContext&)> getTokenCallback);
 
-                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext) const;
+                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
                     const std::function<std::future<std::string>(const TokenContext&)>& getTokenCallback() const;
 

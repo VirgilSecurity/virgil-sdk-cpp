@@ -113,6 +113,8 @@ namespace virgil {
 
                 template<typename T> T tryQuery(const jwt::TokenContext &tokenContext, const std::string& token,
                                                 std::function<std::future<T>(const std::string& token)> query) const;
+
+                bool validateSelfSignatures(const RawSignedModel& rawCard1, const RawSignedModel& rawCard2) const;
             };
         }
     }

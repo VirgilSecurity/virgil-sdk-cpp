@@ -46,14 +46,13 @@ GeneratorJwtProvider::GeneratorJwtProvider(const virgil::sdk::jwt::JwtGenerator 
 : jwtGenerator_(jwtGenerator), defaultIdentity_(defaultIdentity), additionalData_(additionalData) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> GeneratorJwtProvider::getToken(
-        const virgil::sdk::jwt::TokenContext &tokenContext) const
+        const virgil::sdk::jwt::TokenContext &tokenContext)
 {
     auto identity = tokenContext.identity().empty() ? defaultIdentity_ : tokenContext.identity();
     auto token = jwtGenerator_.generateToken(identity, additionalData_);
 
     std::promise<std::shared_ptr<AccessTokenInterface>> p;
-    auto tokenPtr = std::shared_ptr<AccessTokenInterface>(new Jwt(token.headerContent(), token.bodyContent(), token.signatureContent()));
-    p.set_value(tokenPtr);
+    p.set_value(std::make_shared<Jwt>(token));
 
     return p.get_future();
 }

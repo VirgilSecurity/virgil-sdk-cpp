@@ -34,49 +34,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#include <stubs/CardClientStub_STC34.h>
+#include <virgil/sdk/client/models/RawSignedModel.h>
 
-#include <string>
-#include <memory>
-#include <ctime>
-#include <virgil/sdk/Common.h>
+using virgil::sdk::test::stubs::CardClientStub_STC34;
+using virgil::sdk::client::models::RawSignedModel;
+using virgil::sdk::client::models::GetCardResponse;
 
-namespace virgil {
-    namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
-                public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const std::time_t &createdAt,
-                                   const std::string &previousCardId = std::string(),
-                                   const std::string &version = "5.0");
-
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
-
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const std::time_t& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
-                private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    std::time_t createdAt_;
-                    std::string previousCardId_;
-                };
-            }
-        }
-    }
+CardClientStub_STC34::CardClientStub_STC34() {
+    testData_ = virgil::sdk::test::TestData();
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+std::future<RawSignedModel> CardClientStub_STC34::publishCard(const RawSignedModel &model,
+                                                                      const std::string &token) const {
+    std::promise<RawSignedModel> p;
+    p.set_value(RawSignedModel::importFromBase64EncodedString(testData_.dict()["STC-34.as_string"]));
+
+    return p.get_future();
+}
+
+std::future<GetCardResponse> CardClientStub_STC34::getCard(const std::string &cardId,
+                                                                   const std::string &token) const {
+    std::promise<GetCardResponse> p;
+    auto rawCard = RawSignedModel::importFromBase64EncodedString(testData_.dict()["STC-34.as_string"]);
+    p.set_value(GetCardResponse(rawCard, false));
+
+    return p.get_future();
+}
+
+std::future<std::vector<RawSignedModel>> CardClientStub_STC34::searchCards(const std::string &identity,
+                                                                                   const std::string &token) const {
+    std::promise<std::vector<RawSignedModel>> p;
+    p.set_value({RawSignedModel::importFromBase64EncodedString(testData_.dict()["STC-34.as_string"])});
+
+    return p.get_future();
+}

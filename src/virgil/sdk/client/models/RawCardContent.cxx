@@ -46,9 +46,9 @@ using virgil::sdk::VirgilByteArrayUtils;
 
 RawCardContent::RawCardContent(const std::string &identity,
                                const VirgilByteArray &publicKey,
-                               const int &createdAt,
-                               const std::string &version,
-                               const std::string &previousCardId)
+                               const std::time_t &createdAt,
+                               const std::string &previousCardId,
+                               const std::string &version)
         : identity_(identity), publicKey_(publicKey), version_(version),
           createdAt_(createdAt), previousCardId_(previousCardId) {}
 
@@ -64,7 +64,7 @@ const VirgilByteArray& RawCardContent::publicKey() const { return publicKey_; }
 
 const std::string& RawCardContent::version() const { return version_; }
 
-const int& RawCardContent::createdAt() const { return createdAt_; }
+const std::time_t& RawCardContent::createdAt() const { return createdAt_; }
 
 const std::string& RawCardContent::previousCardId() const { return  previousCardId_; }
 

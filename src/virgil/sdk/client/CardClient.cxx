@@ -59,7 +59,7 @@ using virgil::sdk::client::networking::errors::VirgilError;
 using virgil::sdk::util::JsonUtils;
 using virgil::sdk::client::models::GetCardResponse;
 
-const std::string CardClient::xVirgilIsSuperseededKey = "x-virgil-is-superseeded";
+const std::string CardClient::xVirgilIsSuperseededKey = "X-Virgil-Is-Superseeded";
 
 CardClient::CardClient(const std::string &serviceUrl)
 : serviceUrl_(serviceUrl) {}

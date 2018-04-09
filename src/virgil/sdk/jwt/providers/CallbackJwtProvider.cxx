@@ -46,14 +46,13 @@ CallbackJwtProvider::CallbackJwtProvider(
         std::function<std::future<std::string>(const TokenContext&)> getTokenCallback)
 : getTokenCallback_(std::move(getTokenCallback)) {}
 
-std::future<std::shared_ptr<AccessTokenInterface>> CallbackJwtProvider::getToken(const TokenContext &tokenContext) const {
+std::future<std::shared_ptr<AccessTokenInterface>> CallbackJwtProvider::getToken(const TokenContext &tokenContext) {
     auto future = std::async([=]{
         std::promise<std::shared_ptr<AccessTokenInterface>> p;
         try {
             auto future = getTokenCallback_(tokenContext);
             auto jwt = Jwt::parse(future.get());
-            auto tokenPtr = std::shared_ptr<AccessTokenInterface>(new Jwt(jwt.headerContent(), jwt.bodyContent(), jwt.signatureContent()));
-            p.set_value(tokenPtr);
+            p.set_value(std::make_shared<Jwt>(jwt));
         } catch (...) {
             p.set_exception(std::current_exception());
         }

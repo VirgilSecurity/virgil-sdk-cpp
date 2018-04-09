@@ -51,7 +51,7 @@ namespace virgil {
                                          const std::unordered_map<std::string, std::string>& additionalData
                                          = std::unordered_map<std::string, std::string>());
 
-                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext) const;
+                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
                     const JwtGenerator& jwtGenerator() const;
 

@@ -73,7 +73,8 @@ namespace virgil {
                         for (auto& element : signaturesJson) {
                             std::string signer = element[JsonKey::Signer];
 
-                            VirgilByteArray snapshot = element.value(JsonKey::Snapshot, VirgilByteArray());
+                            auto snapshotStr = element.value(JsonKey::Snapshot, std::string());
+                            auto snapshot = VirgilBase64::decode(snapshotStr);
 
                             std::string signatureStr = element[JsonKey::Signature];
                             VirgilByteArray signatureBytes = VirgilBase64::decode(signatureStr);

@@ -188,7 +188,6 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
     verifier->verifySelfSignature = false;
     verifier->verifyVirgilSignature = false;
 
-    //FIXME nullptr?
     CardManager cardManager(crypto, nullptr, verifier);
 
     auto rawCardString = testData.dict()["STC-4.as_string"];

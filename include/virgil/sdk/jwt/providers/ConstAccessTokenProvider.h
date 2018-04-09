@@ -47,7 +47,7 @@ namespace virgil {
                 public:
                     ConstAccessTokenProvider(const std::shared_ptr<interfaces::AccessTokenInterface> &accessToken);
 
-                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext) const;
+                    std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
                     const std::shared_ptr<interfaces::AccessTokenInterface>& accessToken() const;
 

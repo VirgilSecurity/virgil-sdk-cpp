@@ -34,49 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
 
-#include <string>
-#include <memory>
-#include <ctime>
-#include <virgil/sdk/Common.h>
+#ifndef VIRGIL_SDK_VERIFIERTRUESTUB_H
+#define VIRGIL_SDK_VERIFIERTRUESTUB_H
+
+#include <virgil/sdk/cards/verification/CardVerifierInterface.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
-                public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const std::time_t &createdAt,
-                                   const std::string &previousCardId = std::string(),
-                                   const std::string &version = "5.0");
-
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
-
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const std::time_t& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
-                private:
-                    std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    std::time_t createdAt_;
-                    std::string previousCardId_;
+        namespace test {
+            namespace stubs {
+                class VerifierStubFalse : public cards::verification::CardVerifierInterface {
+                    bool verifyCard(const cards::Card &card) const { return false; }
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_VERIFIERTRUESTUB_H

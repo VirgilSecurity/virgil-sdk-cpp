@@ -54,11 +54,11 @@ using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::cards::CardSignature;
 using virgil::sdk::VirgilByteArray;
 
-Jwt TestUtils::getToken(const std::string &identity) {
+Jwt TestUtils::getToken(const std::string &identity, const int& ttl) const {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
     auto privateKey = crypto_->importPrivateKey(privateKeyData);
 
-    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), *crypto_, consts.AppId(), 1000);
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), *crypto_, consts.AppId(), ttl);
 
     return jwtGenerator.generateToken(identity);
 }
@@ -136,6 +136,21 @@ VirgilByteArray TestUtils::getRandomBytes(const int& size) const {
     std::generate(begin(data), end(data), std::ref(engine));
 
     return data;
+}
+
+std::string TestUtils::getRandomString(const int &size) const {
+    srand(time(0));
+    static const char alphanum[] =
+            "0123456789"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "abcdefghijklmnopqrstuvwxyz";
+
+    std::string s;
+    for (int i = 0; i < size; ++i) {
+        s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    return s;
 }
 
 const std::shared_ptr<Crypto>& TestUtils::crypto() const { return crypto_; }

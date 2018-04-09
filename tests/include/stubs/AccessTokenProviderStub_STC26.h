@@ -34,49 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
-#define VIRGIL_SDK_RAWCARDCONTENT_H
+#ifndef VIRGIL_SDK_ACCESSTOKENPROVIDERSTUB_STC26_H
+#define VIRGIL_SDK_ACCESSTOKENPROVIDERSTUB_STC26_H
 
-#include <string>
-#include <memory>
-#include <ctime>
-#include <virgil/sdk/Common.h>
+#include <functional>
+#include <virgil/sdk/jwt/interfaces/AccessTokenProviderInterface.h>
+#include <TestUtils.h>
 
 namespace virgil {
     namespace sdk {
-        namespace client {
-            namespace models {
-                class RawCardContent {
+        namespace test {
+            namespace stubs {
+                class AccessTokenProviderStub_STC26 : public jwt::interfaces::AccessTokenProviderInterface {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const std::time_t &createdAt,
-                                   const std::string &previousCardId = std::string(),
-                                   const std::string &version = "5.0");
+                    AccessTokenProviderStub_STC26(const std::string& identity, std::function<void(const bool& forceCallback)> forceCallback);
 
-                    static RawCardContent parse(const VirgilByteArray& snapshot);
+                    std::future<std::shared_ptr<jwt::interfaces::AccessTokenInterface>> getToken(const jwt::TokenContext& tokenContext);
 
-                    const std::string& identity() const;
-
-                    const VirgilByteArray& publicKey() const;
-
-                    const std::string& version() const;
-
-                    const std::time_t& createdAt() const;
-
-                    const std::string& previousCardId() const;
-
-                    VirgilByteArray snapshot() const;
                 private:
                     std::string identity_;
-                    VirgilByteArray publicKey_;
-                    std::string version_;
-                    std::time_t createdAt_;
-                    std::string previousCardId_;
+                    std::function<void(const bool& forceCallback)> forceCallback_;
+                    int counter_;
+                    TestUtils utils_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_RAWCARDCONTENT_H
+#endif //VIRGIL_SDK_ACCESSTOKENPROVIDERSTUB_STC26_H

@@ -74,7 +74,7 @@ namespace virgil {
                         std::shared_ptr<std::string> previousCardIdPtr = nullptr;
 
                         return RawCardContent(identity, publicKey, createdAt,
-                                              version, previousCardIdStr);
+                                              previousCardIdStr, version);
                     } catch (std::exception &exception) {
                         throw std::logic_error(std::string("virgil-sdk:\n JsonDeserializer<RawCardContent>::fromJson ") +
                                                exception.what());
