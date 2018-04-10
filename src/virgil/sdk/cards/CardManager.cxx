@@ -63,7 +63,7 @@ CardManager::CardManager(const std::shared_ptr<Crypto> &crypto,
                          const std::shared_ptr<AccessTokenProviderInterface> &accessTokenProvider,
                          const std::shared_ptr<CardVerifierInterface> &cardVerifier)
 : crypto_(crypto), accessTokenProvider_(accessTokenProvider), cardVerifier_(cardVerifier),
-  modelSigner_(ModelSigner(crypto_)), retryOnUnauthorized_(true) {
+  modelSigner_(ModelSigner(crypto)), retryOnUnauthorized_(true) {
     cardClient_ = std::make_shared<CardClient>();
 }
 

@@ -103,8 +103,8 @@ namespace virgil {
                 void retryOnUnauthorized(const bool& newRetryOnUnauthorized);
 
             private:
-                ModelSigner modelSigner_;
                 std::shared_ptr<crypto::Crypto> crypto_;
+                ModelSigner modelSigner_;
                 std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface> accessTokenProvider_;
                 std::shared_ptr<verification::CardVerifierInterface> cardVerifier_;
                 std::shared_ptr<client::CardClientInterface> cardClient_;
