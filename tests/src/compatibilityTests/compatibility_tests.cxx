@@ -145,7 +145,7 @@ TEST_CASE("test002_STC_2", "[compatibility]") {
 TEST_CASE("test003_STC_3", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
@@ -182,7 +182,7 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
 TEST_CASE("test004_STC_4", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
     verifier->verifySelfSignature = false;
@@ -236,7 +236,7 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
 TEST_CASE("test005_STC_22", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto apiPublicKeyBase64 = testData.dict()["STC-22.api_public_key_base64"];
     auto apiPublicKeyId = testData.dict()["STC-22.api_key_id"];
@@ -272,7 +272,7 @@ TEST_CASE("test005_STC_22", "[compatibility]") {
 TEST_CASE("test006_STC_23", "[compatibility]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto apiPublicKeyBase64 = testData.dict()["STC-23.api_public_key_base64"];
     auto apiPublicKeyId = testData.dict()["STC-23.api_key_id"];

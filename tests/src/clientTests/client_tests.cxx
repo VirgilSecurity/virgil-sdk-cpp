@@ -63,7 +63,7 @@ using virgil::sdk::cards::Card;
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto token = utils.getToken("identity");
 
@@ -97,7 +97,7 @@ TEST_CASE("test001_CreateCard", "[client]") {
 TEST_CASE("test002_GetCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto token = utils.getToken("identity");
 
@@ -134,7 +134,7 @@ TEST_CASE("test002_GetCard", "[client]") {
 TEST_CASE("test003_SearchCards", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto token = utils.getToken("identity");
 

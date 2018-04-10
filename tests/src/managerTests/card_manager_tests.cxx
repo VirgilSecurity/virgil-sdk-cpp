@@ -76,7 +76,7 @@ const auto testData = virgil::sdk::test::TestData();
 TEST_CASE("test001_STC_13", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -161,7 +161,7 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
 TEST_CASE("test002_STC_17", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -189,7 +189,7 @@ TEST_CASE("test002_STC_17", "[card_manager]") {
 TEST_CASE("test003_STC_18", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -223,7 +223,7 @@ TEST_CASE("test003_STC_18", "[card_manager]") {
 TEST_CASE("test004_STC_19", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -270,7 +270,7 @@ TEST_CASE("test004_STC_19", "[card_manager]") {
 TEST_CASE("test005_STC_20", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -330,7 +330,7 @@ TEST_CASE("test005_STC_20", "[card_manager]") {
 TEST_CASE("test006_STC_21", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -371,7 +371,7 @@ TEST_CASE("test006_STC_21", "[card_manager]") {
 TEST_CASE("test007_STC_34", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -403,7 +403,7 @@ TEST_CASE("test007_STC_34", "[card_manager]") {
 TEST_CASE("test008_STC_35", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -458,7 +458,7 @@ TEST_CASE("test008_STC_35", "[card_manager]") {
 TEST_CASE("test009_STC_36", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
+    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
@@ -488,8 +488,8 @@ TEST_CASE("test009_STC_36", "[card_manager]") {
 TEST_CASE("test0010_STC_26", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = utils.crypto();
-
+    auto crypto = std::make_shared<Crypto>();
+    
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
     auto privateKey = crypto->importPrivateKey(privateKeyData);
