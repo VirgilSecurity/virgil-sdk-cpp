@@ -63,6 +63,14 @@ Jwt TestUtils::getToken(const std::string &identity, const int& ttl) const {
     return jwtGenerator.generateToken(identity);
 }
 
+Jwt TestUtils::getTokenWithWrongPrivateKey(const std::string &identity, const int &ttl) const {
+    auto privateKey = crypto_->generateKeyPair().privateKey();
+
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto_, consts.AppId(), ttl);
+
+    return jwtGenerator.generateToken(identity);
+}
+
 bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) const {
     auto equals = card1.identifier() == card2.identifier()
                   && card1.identity() == card2.identity()

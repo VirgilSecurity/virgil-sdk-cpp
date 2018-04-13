@@ -60,6 +60,8 @@ namespace sdk {
 
             jwt::Jwt getToken(const std::string& identity, const int& ttl = 1000) const;
 
+            jwt::Jwt getTokenWithWrongPrivateKey(const std::string& identity, const int& ttl = 1000) const;
+
             bool isCardsEqual(const cards::Card& card1, const cards::Card& card2) const;
 
             bool isRawCardContentEqual(const client::models::RawCardContent& content1,

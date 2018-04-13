@@ -48,6 +48,7 @@
 #include <virgil/sdk/cards/ModelSigner.h>
 #include <virgil/sdk/cards/CardManager.h>
 #include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
 using virgil::sdk::client::CardClient;
 using virgil::sdk::crypto::Crypto;
@@ -59,6 +60,7 @@ using virgil::sdk::VirgilBase64;
 using virgil::sdk::cards::CardManager;
 using virgil::sdk::cards::verification::VirgilCardVerifier;
 using virgil::sdk::cards::Card;
+using virgil::sdk::client::networking::errors::Error;
 
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
@@ -174,4 +176,89 @@ TEST_CASE("test003_SearchCards", "[client]") {
         }
     }
     REQUIRE(found);
+}
+
+TEST_CASE("test004_STC25", "[client]") {
+    TestConst consts;
+    TestUtils utils(consts);
+    auto crypto = std::make_shared<Crypto>();
+
+    auto token = utils.getTokenWithWrongPrivateKey("identity");
+
+    CardClient cardClient;
+    ModelSigner modelSigner(crypto);
+
+    auto keyPair = crypto->generateKeyPair();
+    auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
+
+    RawCardContent content("identity", publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
+
+    RawSignedModel rawCard(snapshot);
+
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
+
+    auto card = CardManager::parseCard(rawCard, crypto);
+
+    bool errorWasThrown = false;
+    try {
+        auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+        auto publishedRawCard = future.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
+
+    errorWasThrown = false;
+    try {
+        auto searchFuture = cardClient.searchCards("identity", token.stringRepresentation());
+        auto rawCards = searchFuture.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
+
+    errorWasThrown = false;
+    try {
+        auto getFuture = cardClient.getCard(card.identifier(), token.stringRepresentation());
+        auto gotRawCard = getFuture.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
+}
+
+TEST_CASE("test005_STC27", "[client]") {
+    TestConst consts;
+    TestUtils utils(consts);
+    auto crypto = std::make_shared<Crypto>();
+
+    auto token = utils.getToken("identity");
+
+    CardClient cardClient;
+    ModelSigner modelSigner(crypto);
+
+    auto keyPair = crypto->generateKeyPair();
+    auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
+
+    RawCardContent content("another_identity", publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
+
+    RawSignedModel rawCard(snapshot);
+
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
+
+    bool errorWasThrown = false;
+    try {
+        auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+        auto responseRawCard = future.get();
+    } catch (...) {
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
 }

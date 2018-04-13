@@ -241,7 +241,7 @@ T CardManager::tryQuery(const virgil::sdk::jwt::TokenContext &tokenContext, cons
         auto futureResponse = query(token);
 
         return futureResponse.get();
-    } catch (Error error) {
+    } catch (Error& error) {
         if (error.httpErrorCode() == 401 && retryOnUnauthorized_) {
             auto newTokenContext = TokenContext(tokenContext.operation(), tokenContext.identity(), true);
             auto newTokenFuture = accessTokenProvider_->getToken(newTokenContext);
