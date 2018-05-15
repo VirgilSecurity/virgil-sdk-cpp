@@ -200,7 +200,7 @@ void Crypto::decrypt(std::istream &istream, std::ostream &ostream, const Private
 
 VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const PrivateKey &privateKey,
                                         const std::vector<PublicKey> &recipients) const {
-    auto signer = VirgilSigner();
+    auto signer = VirgilSigner(VirgilHashAlgorithm::SHA512);
 
     auto privateKeyData = exportPrivateKey(privateKey);
 
@@ -240,7 +240,7 @@ VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const Pri
 }
 
 VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const {
-    auto signer = VirgilSigner();
+    auto signer = VirgilSigner(VirgilHashAlgorithm::SHA512);
 
     auto privateKeyData = exportPrivateKey(privateKey);
 
@@ -248,7 +248,7 @@ VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const Pri
 }
 
 VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKey &privateKey) const {
-    auto signer = VirgilStreamSigner();
+    auto signer = VirgilStreamSigner(VirgilHashAlgorithm::SHA512);
 
     auto dataSource = VirgilStreamDataSource(istream);
     auto privateKeyData = exportPrivateKey(privateKey);

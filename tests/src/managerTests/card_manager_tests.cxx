@@ -113,7 +113,7 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.publishCard(keyPair1.privateKey(), keyPair1.publicKey());
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-        //FIXME make error handling easy
+        //FIXME make error handling easier?
         //if (e.condition().value() == static_cast<int>(VirgilSdkError::CardVerificationFailed))
             errorWasThrown = true;
     }
@@ -125,7 +125,6 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.publishCard(rawCard);
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-        //if (e.condition().value() == static_cast<int>(VirgilSdkError::CardVerificationFailed))
             errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
@@ -142,7 +141,6 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.getCard(existentCard.identifier());
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-        //if (e.condition().value() == static_cast<int>(VirgilSdkError::CardVerificationFailed))
             errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
@@ -152,7 +150,6 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.searchCards(existentIdentity);
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-        //if (e.condition().value() == static_cast<int>(VirgilSdkError::CardVerificationFailed))
             errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
