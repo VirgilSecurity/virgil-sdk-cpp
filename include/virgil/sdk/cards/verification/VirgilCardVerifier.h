@@ -52,31 +52,37 @@ namespace virgil {
                     VirgilCardVerifier(const std::shared_ptr<crypto::Crypto>& crypto,
                                        const std::vector<Whitelist>& whitelists = std::vector<Whitelist>());
 
-                    static const std::string selfSignerIdentifier;
-                    static const std::string virgilSignerIdentifier;
-                    static const std::string virgilPublicKeyBase64;
-
-                    bool verifySelfSignature;
-                    bool verifyVirgilSignature;
-
-                    crypto::keys::PublicKey virgilPublicKey;
+                    static const std::string selfSignerIdentifier_;
+                    static const std::string virgilSignerIdentifier_;
+                    static const std::string virgilPublicKeyBase64_;
 
                     const std::shared_ptr<crypto::Crypto>& crypto() const;
+
+                    const crypto::keys::PublicKey virgilPublicKey() const;
 
                     const std::vector<Whitelist>& whitelists() const;
                     void whitelists(const std::vector<Whitelist>& newWhitelists);
 
                     bool verifyCard(const Card &card) const override;
 
+                    const bool verifySelfSignature() const;
+                    void verifySelfSignature(const bool& newVerifySelfSignature);
+
+                    const bool verifyVirgilSignature() const;
+                    void verifyVirgilSignature(const bool& newVerifyVirgilSignature);
+
                 private:
+                    bool verifySelfSignature_;
+                    bool verifyVirgilSignature_;
+                    crypto::keys::PublicKey virgilPublicKey_;
+                    std::shared_ptr<crypto::Crypto> crypto_;
+                    std::vector<Whitelist> whitelists_;
+
                     bool verifySelf(const Card &card) const;
                     bool verifyVirgil(const Card &card) const;
                     bool verifyWhitelists(const Card &card) const;
                     bool verify(const Card &card, const std::string& signer,
                                 const crypto::keys::PublicKey& signerPublicKey) const;
-
-                    std::shared_ptr<crypto::Crypto> crypto_;
-                    std::vector<Whitelist> whitelists_;
                 };
             }
         }

@@ -378,8 +378,8 @@ TEST_CASE("test007_STC_34", "[card_manager]") {
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     auto keyPair = crypto->generateKeyPair();
 
@@ -410,8 +410,8 @@ TEST_CASE("test008_STC_35", "[card_manager]") {
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     auto cardManager = CardManager(crypto, provider, verifier);
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
@@ -465,8 +465,8 @@ TEST_CASE("test009_STC_36", "[card_manager]") {
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     auto cardManager = CardManager(crypto, provider, verifier);
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
@@ -506,8 +506,8 @@ TEST_CASE("test0010_STC_26", "[card_manager]") {
 
     auto provider = std::make_shared<AccessTokenProviderStub_STC26>(identity, forceCallbackCheck);
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     auto cardManager = CardManager(crypto, provider, verifier);
 

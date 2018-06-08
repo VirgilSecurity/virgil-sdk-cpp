@@ -148,8 +148,8 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
     auto crypto = std::make_shared<Crypto>();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     //FIXME nullptr?
     CardManager cardManager(crypto, nullptr, verifier);
@@ -185,8 +185,8 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
     auto crypto = std::make_shared<Crypto>();
 
     auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature = false;
-    verifier->verifyVirgilSignature = false;
+    verifier->verifySelfSignature(false);
+    verifier->verifyVirgilSignature(false);
 
     CardManager cardManager(crypto, nullptr, verifier);
 
