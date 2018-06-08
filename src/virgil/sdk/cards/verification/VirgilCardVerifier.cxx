@@ -49,7 +49,7 @@ const std::string VirgilCardVerifier::virgilPublicKeyBase64_ = "MCowBQYDK2VwAyEA
 
 VirgilCardVerifier::VirgilCardVerifier(std::shared_ptr<Crypto> crypto, std::vector<Whitelist> whitelists)
 : crypto_(std::move(crypto)), whitelists_(std::move(whitelists)), verifySelfSignature_(true), verifyVirgilSignature_(true),
-  virgilPublicKey_(std::move(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64_)))) {}
+  virgilPublicKey_(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64_))) {}
 
 bool VirgilCardVerifier::verifyCard(const Card &card) const {
     return verifySelf(card) && verifyVirgil(card) && verifyWhitelists(card);

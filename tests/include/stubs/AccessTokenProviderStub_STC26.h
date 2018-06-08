@@ -47,13 +47,13 @@ namespace virgil {
             namespace stubs {
                 class AccessTokenProviderStub_STC26 : public jwt::interfaces::AccessTokenProviderInterface {
                 public:
-                    AccessTokenProviderStub_STC26(const std::string& identity, std::function<void(const bool& forceCallback)> forceCallback);
+                    AccessTokenProviderStub_STC26(std::string identity, std::function<void(bool forceCallback)> forceCallback);
 
                     std::future<std::shared_ptr<jwt::interfaces::AccessTokenInterface>> getToken(const jwt::TokenContext& tokenContext);
 
                 private:
                     std::string identity_;
-                    std::function<void(const bool& forceCallback)> forceCallback_;
+                    std::function<void(bool forceCallback)> forceCallback_;
                     int counter_;
                     TestUtils utils_;
                 };

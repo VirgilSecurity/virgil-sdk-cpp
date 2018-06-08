@@ -100,7 +100,7 @@ namespace virgil {
                 void signCallback(const std::function<std::future<RawSignedModel>(RawSignedModel)>& newSignCallback);
 
                 bool retryOnUnauthorized() const;
-                void retryOnUnauthorized(const bool& newRetryOnUnauthorized);
+                void retryOnUnauthorized(bool newRetryOnUnauthorized);
 
             private:
                 std::shared_ptr<crypto::Crypto> crypto_;

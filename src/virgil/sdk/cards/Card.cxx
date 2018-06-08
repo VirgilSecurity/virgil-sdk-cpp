@@ -64,7 +64,7 @@ const std::time_t& Card::createdAt() const { return createdAt_; }
 
 const VirgilByteArray& Card::contentSnapshot() const { return contentSnapshot_; }
 
-const bool& Card::isOutdated() const { return isOutdated_; }
+bool Card::isOutdated() const { return isOutdated_; }
 
 const std::vector<CardSignature>& Card::signatures() const { return signatures_; }
 
@@ -76,7 +76,7 @@ void Card::previousCard(const std::shared_ptr<virgil::sdk::cards::Card> &newPrev
     previousCard_ = newPreviousCard;
 }
 
-void Card::isOutdated(const bool &newIsOutdated) {
+void Card::isOutdated(bool newIsOutdated) {
     isOutdated_ = newIsOutdated;
 }
 

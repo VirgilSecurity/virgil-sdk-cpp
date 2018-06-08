@@ -54,7 +54,7 @@ using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::cards::CardSignature;
 using virgil::sdk::VirgilByteArray;
 
-Jwt TestUtils::getToken(const std::string &identity, const int& ttl) const {
+Jwt TestUtils::getToken(const std::string &identity, int ttl) const {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
     auto privateKey = crypto_->importPrivateKey(privateKeyData);
 
@@ -63,7 +63,7 @@ Jwt TestUtils::getToken(const std::string &identity, const int& ttl) const {
     return jwtGenerator.generateToken(identity);
 }
 
-Jwt TestUtils::getTokenWithWrongPrivateKey(const std::string &identity, const int &ttl) const {
+Jwt TestUtils::getTokenWithWrongPrivateKey(const std::string &identity, int ttl) const {
     auto privateKey = crypto_->generateKeyPair().privateKey();
 
     auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto_, consts.AppId(), ttl);
@@ -138,7 +138,7 @@ bool TestUtils::isCardSignaturesEqual(const std::vector<CardSignature> &signatur
     return true;
 }
 
-VirgilByteArray TestUtils::getRandomBytes(const int& size) const {
+VirgilByteArray TestUtils::getRandomBytes(int size) const {
     std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char> engine;
     VirgilByteArray data(size);
     std::generate(begin(data), end(data), std::ref(engine));
@@ -146,7 +146,7 @@ VirgilByteArray TestUtils::getRandomBytes(const int& size) const {
     return data;
 }
 
-std::string TestUtils::getRandomString(const int &size) const {
+std::string TestUtils::getRandomString(int size) const {
     srand(time(0));
     static const char alphanum[] =
             "0123456789"

@@ -70,8 +70,8 @@ namespace virgil {
 
                 const VirgilByteArray& contentSnapshot() const;
 
-                const bool& isOutdated() const;
-                void isOutdated(const bool& newIsOutdated);
+                bool isOutdated() const;
+                void isOutdated(bool newIsOutdated);
 
                 const std::string& previousCardId() const;
                 void previousCardId(const std::string& newPreviousCardId);

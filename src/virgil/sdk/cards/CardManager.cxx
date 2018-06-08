@@ -355,6 +355,6 @@ void CardManager::signCallback(const std::function<std::future<RawSignedModel>(R
     signCallback_ = newSignCallback;
 }
 
-void CardManager::retryOnUnauthorized(const bool &newRetryOnUnauthorized) {
+void CardManager::retryOnUnauthorized(bool newRetryOnUnauthorized) {
     retryOnUnauthorized_ = newRetryOnUnauthorized;
 }

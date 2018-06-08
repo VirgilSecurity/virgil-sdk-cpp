@@ -495,7 +495,7 @@ TEST_CASE("test0010_STC_26", "[card_manager]") {
 
     int counter = 0;
 
-    std::function<void(const bool &forceCallback)> forceCallbackCheck = [&](const bool &forceCallback) {
+    std::function<void(bool forceCallback)> forceCallbackCheck = [&](bool forceCallback) {
         if (counter % 2 == 0)
             REQUIRE(!forceCallback);
         else

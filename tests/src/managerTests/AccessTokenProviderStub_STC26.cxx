@@ -77,9 +77,9 @@ using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 using virgil::sdk::jwt::TokenContext;
 using virgil::sdk::jwt::Jwt;
 
-AccessTokenProviderStub_STC26::AccessTokenProviderStub_STC26(const std::string &identity,
-                                                             std::function<void(const bool &forceCallback)> forceCallback)
-: identity_(identity), forceCallback_(std::move(forceCallback)), counter_(0), utils_(TestUtils(TestConst())) {}
+AccessTokenProviderStub_STC26::AccessTokenProviderStub_STC26(std::string identity,
+                                                             std::function<void(bool forceCallback)> forceCallback)
+: identity_(std::move(identity)), forceCallback_(std::move(forceCallback)), counter_(0), utils_(TestUtils(TestConst())) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> AccessTokenProviderStub_STC26::getToken(
         const TokenContext &tokenContext) {
