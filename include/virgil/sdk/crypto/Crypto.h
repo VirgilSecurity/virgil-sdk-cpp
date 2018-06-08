@@ -45,7 +45,7 @@ namespace sdk {
     namespace crypto {
         class Crypto {
         public:
-            Crypto(const bool &useSHA256Fingerprints = false);
+            Crypto(bool useSHA256Fingerprints = false);
 
             keys::KeyPair generateKeyPair() const;
 
@@ -99,7 +99,7 @@ namespace sdk {
              */
             VirgilByteArray computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const;
 
-            const bool useSHA256Fingerprints() const;
+            bool useSHA256Fingerprints() const;
         private:
             bool useSHA256Fingerprints_;
             VirgilByteArray computeHashForPublicKey(const VirgilByteArray &publicKey) const;

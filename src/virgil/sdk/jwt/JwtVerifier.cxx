@@ -41,15 +41,17 @@ using virgil::sdk::jwt::Jwt;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::crypto::keys::PublicKey;
 
-JwtVerifier::JwtVerifier(const PublicKey &apiPublicKey,
-                         const std::string &apiPublicKeyIdentifier,
-                         const std::shared_ptr<Crypto> &crypto)
-: apiPublicKey_(apiPublicKey), apiPublicKeyIdentifier_(apiPublicKeyIdentifier), crypto_(crypto) {}
+JwtVerifier::JwtVerifier(PublicKey apiPublicKey,
+                         std::string apiPublicKeyIdentifier,
+                         std::shared_ptr<Crypto> crypto)
+: apiPublicKey_(std::move(apiPublicKey)),
+  apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
+  crypto_(std::move(crypto)) {}
 
 bool JwtVerifier::verifyToken(const Jwt &token) const {
     try {
-        auto data = token.dataToSign();
-        auto signature = token.signatureContent();
+        const auto& data = token.dataToSign();
+        const auto& signature = token.signatureContent();
 
         return crypto_->verify(data, signature, apiPublicKey_);
     } catch (...) {
@@ -62,4 +64,3 @@ const PublicKey& JwtVerifier::apiPublicKey() const { return apiPublicKey_; }
 const std::string& JwtVerifier::apiPublicKeyIdentifier() const { return apiPublicKeyIdentifier_; }
 
 const std::shared_ptr<Crypto>& JwtVerifier::crypto() const { return crypto_; }
-

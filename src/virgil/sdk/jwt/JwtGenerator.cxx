@@ -43,9 +43,10 @@ using virgil::sdk::jwt::JwtBodyContent;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::crypto::keys::PrivateKey;
 
-JwtGenerator::JwtGenerator(const PrivateKey &apiKey, const std::string &apiPublicKeyIdentifier,
-                           const std::shared_ptr<Crypto> &crypto, const std::string &appId, const int &ttl)
-: apiKey_(apiKey), apiPublicKeyIdentifier_(apiPublicKeyIdentifier), crypto_(crypto), appId_(appId), ttl_(ttl) {}
+JwtGenerator::JwtGenerator(PrivateKey apiKey, std::string apiPublicKeyIdentifier,
+                           std::shared_ptr<Crypto> crypto, std::string appId, int ttl)
+: apiKey_(std::move(apiKey)), apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
+  crypto_(std::move(crypto)), appId_(std::move(appId)), ttl_(ttl) {}
 
 Jwt JwtGenerator::generateToken(const std::string &identity,
                                 const std::unordered_map<std::string, std::string> &additionalData) const {
@@ -65,4 +66,4 @@ const std::shared_ptr<Crypto>& JwtGenerator::crypto() const { return crypto_; }
 
 const std::string& JwtGenerator::appId() const { return appId_; }
 
-const int& JwtGenerator::ttl() const { return ttl_; }
+int JwtGenerator::ttl() const { return ttl_; }

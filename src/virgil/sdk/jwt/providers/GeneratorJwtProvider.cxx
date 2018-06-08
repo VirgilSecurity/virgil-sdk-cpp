@@ -40,10 +40,11 @@ using virgil::sdk::jwt::providers::GeneratorJwtProvider;
 using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 using virgil::sdk::jwt::JwtGenerator;
 
-GeneratorJwtProvider::GeneratorJwtProvider(const virgil::sdk::jwt::JwtGenerator &jwtGenerator,
-                                           const std::string &defaultIdentity,
-                                           const std::unordered_map<std::string, std::string> &additionalData)
-: jwtGenerator_(jwtGenerator), defaultIdentity_(defaultIdentity), additionalData_(additionalData) {}
+GeneratorJwtProvider::GeneratorJwtProvider(JwtGenerator jwtGenerator, std::string defaultIdentity,
+                                           std::unordered_map<std::string, std::string> additionalData)
+: jwtGenerator_(std::move(jwtGenerator)),
+  defaultIdentity_(std::move(defaultIdentity)),
+  additionalData_(std::move(additionalData)) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> GeneratorJwtProvider::getToken(
         const virgil::sdk::jwt::TokenContext &tokenContext)

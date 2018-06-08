@@ -34,7 +34,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/VirgilSdkError.h>
 #include <virgil/crypto/VirgilKeyPair.h>
@@ -69,7 +68,7 @@ using virgil::sdk::VirgilHashAlgorithm;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
-Crypto::Crypto(const bool &useSHA256Fingerprints)
+Crypto::Crypto(bool useSHA256Fingerprints)
         : useSHA256Fingerprints_(useSHA256Fingerprints) {}
 
 // Key management
@@ -130,9 +129,7 @@ VirgilByteArray Crypto::exportPublicKey(const PublicKey &publicKey) const {
     return VirgilKeyPair::publicKeyToDER(publicKey.key());
 }
 
-
 // Crypto operations
-
 VirgilByteArray Crypto::encrypt(const VirgilByteArray &data, const std::vector<PublicKey> &recipients) const {
     auto cipher = VirgilCipher();
 
@@ -276,6 +273,6 @@ VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey
     }
 }
 
-const bool Crypto::useSHA256Fingerprints() const {
+bool Crypto::useSHA256Fingerprints() const {
     return useSHA256Fingerprints_;
 }

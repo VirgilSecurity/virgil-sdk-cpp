@@ -44,12 +44,14 @@ using virgil::sdk::VirgilByteArray;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::util::Base64Url;
 
-Jwt::Jwt(const JwtHeaderContent &headerContent,
-         const JwtBodyContent &bodyContent,
-         const VirgilByteArray &signatureContent)
-: headerContent_(headerContent), bodyContent_(bodyContent), signatureContent_(signatureContent) {
-    dataToSign_ = Jwt::dataToSign(headerContent, bodyContent);
-    stringRepresentation_ = headerContent.base64Url() + "." + bodyContent.base64Url() + "." + signatureBase64Url();
+Jwt::Jwt(JwtHeaderContent headerContent,
+         JwtBodyContent bodyContent,
+         VirgilByteArray signatureContent)
+: headerContent_(std::move(headerContent)),
+  bodyContent_(std::move(bodyContent)),
+  signatureContent_(std::move(signatureContent)) {
+    dataToSign_ = Jwt::dataToSign(headerContent_, bodyContent_);
+    stringRepresentation_ = headerContent_.base64Url() + "." + bodyContent_.base64Url() + "." + signatureBase64Url();
 }
 
 Jwt Jwt::parse(const std::string &stringRepresentation) {

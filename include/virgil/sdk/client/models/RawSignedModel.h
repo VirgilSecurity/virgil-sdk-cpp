@@ -47,7 +47,7 @@ namespace virgil {
             namespace models {
                 class RawSignedModel {
                 public:
-                    RawSignedModel(const VirgilByteArray& contentSnapshot);
+                    RawSignedModel(VirgilByteArray contentSnapshot);
 
                     std::string exportAsBase64EncodedString() const;
 

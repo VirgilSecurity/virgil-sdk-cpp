@@ -48,7 +48,7 @@ namespace virgil {
         namespace cards {
             class ModelSigner {
             public:
-                ModelSigner(const std::shared_ptr<crypto::Crypto> &crypto);
+                ModelSigner(std::shared_ptr<crypto::Crypto> crypto);
 
                 static const std::string selfSignerIdentifier;
 

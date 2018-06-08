@@ -39,9 +39,9 @@
 using virgil::sdk::cards::verification::VerifierCredentials;
 using virgil::sdk::VirgilByteArray;
 
-VerifierCredentials::VerifierCredentials(const std::string &signer,
-                                         const virgil::sdk::VirgilByteArray &publicKey)
-: signer_(signer), publicKey_(publicKey) {}
+VerifierCredentials::VerifierCredentials(std::string signer,
+                                         VirgilByteArray publicKey)
+: signer_(std::move(signer)), publicKey_(std::move(publicKey)) {}
 
 const std::string& VerifierCredentials::signer() const { return signer_; }
 

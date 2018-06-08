@@ -47,8 +47,8 @@ using virgil::sdk::crypto::keys::PrivateKey;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::util::JsonUtils;
 
-ModelSigner::ModelSigner(const std::shared_ptr<Crypto> &crypto)
-        : crypto_(crypto) {}
+ModelSigner::ModelSigner(std::shared_ptr<Crypto> crypto)
+        : crypto_(std::move(crypto)) {}
 
 const std::string ModelSigner::selfSignerIdentifier = "self";
 

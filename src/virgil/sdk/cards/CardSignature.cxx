@@ -39,11 +39,12 @@
 using virgil::sdk::cards::CardSignature;
 using virgil::sdk::VirgilByteArray;
 
-CardSignature::CardSignature(const std::string &signer,
-                             const VirgilByteArray &signature,
-                             const VirgilByteArray &snapshot,
-                             const std::unordered_map<std::string, std::string> extraFields)
-        : signer_(signer), signature_(signature), snapshot_(snapshot), extraFields_(extraFields) {}
+CardSignature::CardSignature(std::string signer,
+                             VirgilByteArray signature,
+                             VirgilByteArray snapshot,
+                             std::unordered_map<std::string, std::string> extraFields)
+        : signer_(std::move(signer)), signature_(std::move(signature)),
+          snapshot_(std::move(snapshot)), extraFields_(std::move(extraFields)) {}
 
 const std::string& CardSignature::signer() const { return signer_; }
 

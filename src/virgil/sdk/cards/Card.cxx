@@ -43,14 +43,14 @@ using virgil::sdk::cards::CardSignature;
 using virgil::sdk::client::models::RawSignedModel;
 using virgil::sdk::client::models::RawSignature;
 
-Card::Card(const std::string &identifier, const std::string &identity,
-           const virgil::sdk::crypto::keys::PublicKey &publicKey, const std::string &version,
-           const std::time_t &createdAt, const virgil::sdk::VirgilByteArray &contentSnapshot, const bool &isOutdated,
-           const std::vector<CardSignature> &signatures, const std::string &previousCardId,
-           const std::shared_ptr<virgil::sdk::cards::Card> &previousCard)
-: identifier_(identifier), identity_(identity), publicKey_(publicKey), version_(version),
-  createdAt_(createdAt), contentSnapshot_(contentSnapshot), isOutdated_(isOutdated),
-  signatures_(signatures), previousCardId_(previousCardId), previousCard_(previousCard) {}
+Card::Card(std::string identifier, std::string identity, PublicKey publicKey,
+           std::string version, std::time_t createdAt, VirgilByteArray contentSnapshot,
+           bool isOutdated, std::vector<CardSignature> signatures, std::string previousCardId,
+           std::shared_ptr<Card> previousCard)
+: identifier_(std::move(identifier)), identity_(std::move(identity)), publicKey_(std::move(publicKey)),
+  version_(std::move(version)), createdAt_(createdAt), contentSnapshot_(std::move(contentSnapshot)),
+  isOutdated_(isOutdated), signatures_(std::move(signatures)), previousCardId_(std::move(previousCardId)),
+  previousCard_(std::move(previousCard)) {}
 
 const std::string& Card::identifier() const { return identifier_; }
 

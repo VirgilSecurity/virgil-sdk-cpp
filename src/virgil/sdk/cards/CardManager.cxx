@@ -59,11 +59,11 @@ using virgil::sdk::client::networking::errors::Error;
 
 using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
-CardManager::CardManager(const std::shared_ptr<Crypto> &crypto,
-                         const std::shared_ptr<AccessTokenProviderInterface> &accessTokenProvider,
-                         const std::shared_ptr<CardVerifierInterface> &cardVerifier)
-: crypto_(crypto), accessTokenProvider_(accessTokenProvider), cardVerifier_(cardVerifier),
-  modelSigner_(ModelSigner(crypto)), retryOnUnauthorized_(true) {
+CardManager::CardManager(std::shared_ptr<Crypto> crypto,
+                         std::shared_ptr<AccessTokenProviderInterface> accessTokenProvider,
+                         std::shared_ptr<CardVerifierInterface> cardVerifier)
+: crypto_(std::move(crypto)), accessTokenProvider_(std::move(accessTokenProvider)), cardVerifier_(std::move(cardVerifier)),
+  modelSigner_(ModelSigner(crypto_)), retryOnUnauthorized_(true) {
     cardClient_ = std::make_shared<CardClient>();
 }
 
@@ -341,7 +341,7 @@ const std::shared_ptr<CardClientInterface> & CardManager::cardClient() const { r
 
 const std::function<std::future<RawSignedModel>(RawSignedModel)>& CardManager::signCallback() const { return signCallback_; }
 
-const bool& CardManager::retryOnUnauthorized() const { return retryOnUnauthorized_; }
+bool CardManager::retryOnUnauthorized() const { return retryOnUnauthorized_; }
 
 void CardManager::modelSigner(const virgil::sdk::cards::ModelSigner &newModelSigner) {
     modelSigner_ = newModelSigner;

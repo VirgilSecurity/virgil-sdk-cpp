@@ -46,20 +46,20 @@ namespace virgil {
         namespace client {
             class CardClient : public CardClientInterface {
             public:
-                static const std::string xVirgilIsSuperseededKey;
+                CardClient(std::string serviceUrl = "https://api.virgilsecurity.com");
 
-                CardClient(const std::string& serviceUrl = "https://api.virgilsecurity.com");
+                static const std::string xVirgilIsSuperseededKey;
 
                 const std::string& serviceUrl() const;
 
                 std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
-                                                     const std::string& token) const override;
+                                                                const std::string& token) const override;
 
                 std::future<models::GetCardResponse> getCard(const std::string &cardId,
-                                                 const std::string& token) const override;
+                                                             const std::string& token) const override;
 
                 std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
-                                                           const std::string& token) const override ;
+                                                                             const std::string& token) const override;
             private:
                 networking::errors::Error parseError(const client::networking::Response &response) const;
 

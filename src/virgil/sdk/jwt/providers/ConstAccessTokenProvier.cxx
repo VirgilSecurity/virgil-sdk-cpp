@@ -39,8 +39,8 @@
 using virgil::sdk::jwt::providers::ConstAccessTokenProvider;
 using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
-ConstAccessTokenProvider::ConstAccessTokenProvider(const std::shared_ptr<AccessTokenInterface> &accessToken)
-: accessToken_(accessToken) {}
+ConstAccessTokenProvider::ConstAccessTokenProvider(std::shared_ptr<AccessTokenInterface> accessToken)
+: accessToken_(std::move(accessToken)) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::getToken(
         const virgil::sdk::jwt::TokenContext &tokenContext)
@@ -51,4 +51,4 @@ std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::get
     return p.get_future();
 }
 
-const std::shared_ptr<AccessTokenInterface> & ConstAccessTokenProvider::accessToken() const { return accessToken_; }
+const std::shared_ptr<AccessTokenInterface>& ConstAccessTokenProvider::accessToken() const { return accessToken_; }

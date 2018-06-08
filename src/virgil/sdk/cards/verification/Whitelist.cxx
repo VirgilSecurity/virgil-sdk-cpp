@@ -40,8 +40,8 @@
 using virgil::sdk::cards::verification::VerifierCredentials;
 using virgil::sdk::cards::verification::Whitelist;
 
-Whitelist::Whitelist(const std::vector<VerifierCredentials> &verifierCredentials)
-: verifierCredentials_(verifierCredentials) {
+Whitelist::Whitelist(std::vector<VerifierCredentials> verifierCredentials)
+: verifierCredentials_(std::move(verifierCredentials)) {
     std::vector<std::string> dic;
     for (auto& credentials : verifierCredentials) {
         if (std::find(dic.begin(), dic.end(), credentials.signer()) != dic.end()) {

@@ -45,10 +45,11 @@ using virgil::sdk::util::Base64Url;
 using virgil::sdk::serialization::JsonSerializer;
 using virgil::sdk::serialization::JsonDeserializer;
 
-JwtBodyContent::JwtBodyContent(const std::string &appId, const std::string &identity,
-                               const std::time_t &expiresAt, const std::time_t &issuedAt,
-                               const std::unordered_map<std::string, std::string> &additionalData)
-: appId_(appId), identity_(identity), expiresAt_(expiresAt), issuedAt_(issuedAt), additionalData_(additionalData) {}
+JwtBodyContent::JwtBodyContent(std::string appId, std::string identity,
+                               std::time_t expiresAt, std::time_t issuedAt,
+                               std::unordered_map<std::string, std::string> additionalData)
+: appId_(std::move(appId)), identity_(std::move(identity)), expiresAt_(expiresAt),
+  issuedAt_(issuedAt), additionalData_(std::move(additionalData)) {}
 
 JwtBodyContent JwtBodyContent::parse(const std::string &base64url) {
     return JsonDeserializer<JwtBodyContent>::fromJsonString(Base64Url::decode(base64url));

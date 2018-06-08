@@ -46,7 +46,7 @@ namespace virgil {
             namespace verification {
                 class VerifierCredentials {
                 public:
-                    VerifierCredentials(const std::string& signer, const VirgilByteArray& publicKey);
+                    VerifierCredentials(std::string signer, VirgilByteArray publicKey);
 
                     const std::string& signer() const;
 

@@ -44,13 +44,13 @@ using virgil::sdk::serialization::JsonSerializer;
 using virgil::sdk::serialization::JsonDeserializer;
 using virgil::sdk::VirgilByteArrayUtils;
 
-RawCardContent::RawCardContent(const std::string &identity,
-                               const VirgilByteArray &publicKey,
-                               const std::time_t &createdAt,
-                               const std::string &previousCardId,
-                               const std::string &version)
-        : identity_(identity), publicKey_(publicKey), version_(version),
-          createdAt_(createdAt), previousCardId_(previousCardId) {}
+RawCardContent::RawCardContent(std::string identity,
+                               VirgilByteArray publicKey,
+                               std::time_t createdAt,
+                               std::string previousCardId,
+                               std::string version)
+        : identity_(std::move(identity)), publicKey_(std::move(publicKey)), version_(std::move(version)),
+          createdAt_(createdAt), previousCardId_(std::move(previousCardId)) {}
 
 RawCardContent RawCardContent::parse(const VirgilByteArray &snapshot) {
     auto contentStr = VirgilByteArrayUtils::bytesToString(snapshot);

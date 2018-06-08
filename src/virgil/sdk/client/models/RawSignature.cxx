@@ -39,10 +39,10 @@
 using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::VirgilByteArray;
 
-RawSignature::RawSignature(const std::string &signer,
-                           const VirgilByteArray &signature,
-                           const VirgilByteArray &snapshot)
-: signer_(signer), snapshot_(snapshot), signature_(signature) {}
+RawSignature::RawSignature(std::string signer,
+                           VirgilByteArray signature,
+                           VirgilByteArray snapshot)
+: signer_(std::move(signer)), snapshot_(std::move(snapshot)), signature_(std::move(signature)) {}
 
 const std::string& RawSignature::signer() const { return signer_; }
 

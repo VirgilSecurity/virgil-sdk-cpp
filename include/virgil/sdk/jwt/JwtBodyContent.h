@@ -47,11 +47,11 @@ namespace virgil {
         namespace jwt {
             class JwtBodyContent {
             public:
-                JwtBodyContent(const std::string& appId,
-                               const std::string& identity,
-                               const std::time_t& expiresAt,
-                               const std::time_t& issuedAt,
-                               const std::unordered_map<std::string, std::string>& additionalData
+                JwtBodyContent(std::string appId,
+                               std::string identity,
+                               std::time_t expiresAt,
+                               std::time_t issuedAt,
+                               std::unordered_map<std::string, std::string> additionalData
                                = std::unordered_map<std::string, std::string>());
 
                 static JwtBodyContent parse(const std::string& base64url);

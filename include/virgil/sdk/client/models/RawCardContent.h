@@ -48,11 +48,11 @@ namespace virgil {
             namespace models {
                 class RawCardContent {
                 public:
-                    RawCardContent(const std::string &identity,
-                                   const VirgilByteArray &publicKey,
-                                   const std::time_t &createdAt,
-                                   const std::string &previousCardId = std::string(),
-                                   const std::string &version = "5.0");
+                    RawCardContent(std::string identity,
+                                   VirgilByteArray publicKey,
+                                   std::time_t createdAt,
+                                   std::string previousCardId = std::string(),
+                                   std::string version = "5.0");
 
                     static RawCardContent parse(const VirgilByteArray& snapshot);
 

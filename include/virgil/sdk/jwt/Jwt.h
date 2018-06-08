@@ -46,9 +46,9 @@ namespace virgil {
         namespace jwt {
             class Jwt : public interfaces::AccessTokenInterface {
             public:
-                Jwt(const JwtHeaderContent& headerContent,
-                    const JwtBodyContent& bodyContent,
-                    const VirgilByteArray& signatureContent);
+                Jwt(JwtHeaderContent headerContent,
+                    JwtBodyContent bodyContent,
+                    VirgilByteArray signatureContent);
 
                 static Jwt parse(const std::string& stringRepresentation);
 

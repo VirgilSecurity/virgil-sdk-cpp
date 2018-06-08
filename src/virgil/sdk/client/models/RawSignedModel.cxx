@@ -45,8 +45,8 @@ using virgil::sdk::VirgilByteArray;
 using virgil::sdk::serialization::JsonDeserializer;
 using virgil::sdk::serialization::JsonSerializer;
 
-RawSignedModel::RawSignedModel(const VirgilByteArray &contentSnapshot)
-: contentSnapshot_(contentSnapshot) {
+RawSignedModel::RawSignedModel(VirgilByteArray contentSnapshot)
+: contentSnapshot_(std::move(contentSnapshot)) {
     signatures_ = std::vector<RawSignature>();
 }
 

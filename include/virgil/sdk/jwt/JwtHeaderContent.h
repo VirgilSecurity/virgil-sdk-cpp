@@ -44,10 +44,10 @@ namespace virgil {
         namespace jwt {
             class JwtHeaderContent {
             public:
-                JwtHeaderContent(const std::string& keyIdentifier,
-                                 const std::string& algorithm = "VEDS512",
-                                 const std::string& type = "JWT",
-                                 const std::string& contentType = "virgil-jwt;v=1");
+                JwtHeaderContent(std::string keyIdentifier,
+                                 std::string algorithm = "VEDS512",
+                                 std::string type = "JWT",
+                                 std::string contentType = "virgil-jwt;v=1");
 
                 static JwtHeaderContent parse(const std::string& base64url);
 

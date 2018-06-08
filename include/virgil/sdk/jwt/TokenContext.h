@@ -45,15 +45,15 @@ namespace virgil {
         namespace jwt {
             class TokenContext {
             public:
-                TokenContext(const std::string& operation,
-                             const std::string& identity = std::string(),
-                             const bool& forceReload = false);
+                TokenContext(std::string operation,
+                             std::string identity = std::string(),
+                             bool forceReload = false);
 
                 const std::string& operation() const;
 
                 const std::string& identity() const;
 
-                const bool& forceReload() const;
+                bool forceReload() const;
 
             private:
                 std::string identity_;

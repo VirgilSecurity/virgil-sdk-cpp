@@ -47,11 +47,11 @@ namespace virgil {
         namespace jwt {
             class JwtGenerator {
             public:
-                JwtGenerator(const crypto::keys::PrivateKey& apiKey,
-                             const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto,
-                             const std::string& appId,
-                             const int& ttl);
+                JwtGenerator(crypto::keys::PrivateKey apiKey,
+                             std::string apiPublicKeyIdentifier,
+                             std::shared_ptr<crypto::Crypto> crypto,
+                             std::string appId,
+                             int ttl);
 
                 Jwt generateToken(const std::string& identity,
                                   const std::unordered_map<std::string, std::string>& additionalData
@@ -65,7 +65,7 @@ namespace virgil {
 
                 const std::string& appId() const;
 
-                const int& ttl() const;
+                int ttl() const;
 
             private:
                 crypto::keys::PrivateKey apiKey_;

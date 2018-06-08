@@ -52,9 +52,9 @@ namespace virgil {
         namespace cards {
             class CardManager {
             public:
-                CardManager(const std::shared_ptr<crypto::Crypto>& crypto,
-                            const std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface>& accessTokenProvider,
-                            const std::shared_ptr<verification::CardVerifierInterface>& cardVerifier);
+                CardManager(std::shared_ptr<crypto::Crypto> crypto,
+                            std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface> accessTokenProvider,
+                            std::shared_ptr<verification::CardVerifierInterface> cardVerifier);
 
                 RawSignedModel generateRawCard(const crypto::keys::PrivateKey& privateKey, const crypto::keys::PublicKey& publicKey,
                                                const std::string& identity, const std::string& previousCardId = std::string(),
@@ -99,7 +99,7 @@ namespace virgil {
                 const std::function<std::future<RawSignedModel>(RawSignedModel)>& signCallback() const;
                 void signCallback(const std::function<std::future<RawSignedModel>(RawSignedModel)>& newSignCallback);
 
-                const bool& retryOnUnauthorized() const;
+                bool retryOnUnauthorized() const;
                 void retryOnUnauthorized(const bool& newRetryOnUnauthorized);
 
             private:

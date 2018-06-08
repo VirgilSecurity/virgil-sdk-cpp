@@ -46,9 +46,9 @@ namespace virgil {
         namespace jwt {
             class JwtVerifier {
             public:
-                JwtVerifier(const crypto::keys::PublicKey& apiPublicKey,
-                             const std::string& apiPublicKeyIdentifier,
-                             const std::shared_ptr<crypto::Crypto>& crypto);
+                JwtVerifier(crypto::keys::PublicKey apiPublicKey,
+                            std::string apiPublicKeyIdentifier,
+                            std::shared_ptr<crypto::Crypto> crypto);
 
                 bool verifyToken(const Jwt& token) const;
 

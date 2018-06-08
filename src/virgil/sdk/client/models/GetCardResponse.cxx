@@ -39,10 +39,10 @@
 using virgil::sdk::client::models::GetCardResponse;
 using virgil::sdk::client::models::RawSignedModel;
 
-GetCardResponse::GetCardResponse(const RawSignedModel &rawCard,
-                                 const bool &isOutdated)
-: rawCard_(rawCard), isOutdated_(isOutdated) {}
+GetCardResponse::GetCardResponse(RawSignedModel rawCard,
+                                 bool isOutdated)
+: rawCard_(std::move(rawCard)), isOutdated_(isOutdated) {}
 
 const RawSignedModel& GetCardResponse::rawCard() const { return rawCard_; }
 
-const bool& GetCardResponse::isOutdated() const { return isOutdated_; }
+bool GetCardResponse::isOutdated() const { return isOutdated_; }

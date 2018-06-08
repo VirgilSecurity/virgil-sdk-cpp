@@ -46,9 +46,9 @@ namespace virgil {
             namespace models {
                 class RawSignature {
                 public:
-                    RawSignature(const std::string &signer,
-                                 const VirgilByteArray &signature,
-                                 const VirgilByteArray &snapshot = VirgilByteArray());
+                    RawSignature(std::string signer,
+                                 VirgilByteArray signature,
+                                 VirgilByteArray snapshot = VirgilByteArray());
 
                     const std::string& signer() const;
 

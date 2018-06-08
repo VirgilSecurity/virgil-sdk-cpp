@@ -46,10 +46,10 @@ namespace virgil {
         namespace cards {
             class CardSignature {
             public:
-                CardSignature(const std::string &signer,
-                              const VirgilByteArray &signature,
-                              const VirgilByteArray &snapshot,
-                              const std::unordered_map<std::string, std::string> extraFields);
+                CardSignature(std::string signer,
+                              VirgilByteArray signature,
+                              VirgilByteArray snapshot,
+                              std::unordered_map<std::string, std::string> extraFields);
 
                 const std::string& signer() const;
 

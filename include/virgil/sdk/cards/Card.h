@@ -47,16 +47,16 @@ namespace virgil {
         namespace cards {
             class Card {
             public:
-                Card(const std::string& identifier,
-                     const std::string& identity,
-                     const crypto::keys::PublicKey& publicKey,
-                     const std::string& version,
-                     const std::time_t& createdAt,
-                     const VirgilByteArray& contentSnapshot,
-                     const bool& isOutdated = false,
-                     const std::vector<cards::CardSignature>& signatures = std::vector<cards::CardSignature>(),
-                     const std::string& previousCardId = std::string(),
-                     const std::shared_ptr<Card>& previousCard = nullptr);
+                Card(std::string identifier,
+                     std::string identity,
+                     crypto::keys::PublicKey publicKey,
+                     std::string version,
+                     std::time_t createdAt,
+                     VirgilByteArray contentSnapshot,
+                     bool isOutdated = false,
+                     std::vector<cards::CardSignature> signatures = std::vector<cards::CardSignature>(),
+                     std::string previousCardId = std::string(),
+                     std::shared_ptr<Card> previousCard = nullptr);
 
                 const std::string& identifier() const;
 

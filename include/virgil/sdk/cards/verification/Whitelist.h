@@ -46,7 +46,7 @@ namespace virgil {
             namespace verification {
                 class Whitelist {
                 public:
-                    Whitelist(const std::vector<VerifierCredentials>& verifierCredentials);
+                    Whitelist(std::vector<VerifierCredentials> verifierCredentials);
 
                     const std::vector<VerifierCredentials>& verifierCredentials() const;
 

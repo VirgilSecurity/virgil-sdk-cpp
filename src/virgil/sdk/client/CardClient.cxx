@@ -61,8 +61,8 @@ using virgil::sdk::client::models::GetCardResponse;
 
 const std::string CardClient::xVirgilIsSuperseededKey = "X-Virgil-Is-Superseeded";
 
-CardClient::CardClient(const std::string &serviceUrl)
-: serviceUrl_(serviceUrl) {}
+CardClient::CardClient(std::string serviceUrl)
+: serviceUrl_(std::move(serviceUrl)) {}
 
 const std::string& CardClient::serviceUrl() const { return serviceUrl_; }
 

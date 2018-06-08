@@ -46,9 +46,9 @@ namespace virgil {
             namespace providers {
                 class GeneratorJwtProvider : public interfaces::AccessTokenProviderInterface {
                 public:
-                    GeneratorJwtProvider(const JwtGenerator& jwtGenerator,
-                                         const std::string& defaultIdentity,
-                                         const std::unordered_map<std::string, std::string>& additionalData
+                    GeneratorJwtProvider(JwtGenerator jwtGenerator,
+                                         std::string defaultIdentity,
+                                         std::unordered_map<std::string, std::string> additionalData
                                          = std::unordered_map<std::string, std::string>());
 
                     std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);

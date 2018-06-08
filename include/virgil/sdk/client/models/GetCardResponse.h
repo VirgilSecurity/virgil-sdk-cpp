@@ -45,12 +45,12 @@ namespace virgil {
             namespace models {
                 class GetCardResponse {
                 public:
-                    GetCardResponse(const RawSignedModel& rawCard,
-                                    const bool& isOutdated);
+                    GetCardResponse(RawSignedModel rawCard,
+                                    bool isOutdated);
 
                     const RawSignedModel& rawCard() const;
 
-                    const bool& isOutdated() const;
+                    bool isOutdated() const;
 
                 private:
                     RawSignedModel rawCard_;
