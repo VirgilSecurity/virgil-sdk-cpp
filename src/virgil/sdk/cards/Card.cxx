@@ -60,7 +60,7 @@ const PublicKey& Card::publicKey() const { return publicKey_; }
 
 const std::string& Card::version() const { return version_; }
 
-const std::time_t& Card::createdAt() const { return createdAt_; }
+std::time_t Card::createdAt() const { return createdAt_; }
 
 const VirgilByteArray& Card::contentSnapshot() const { return contentSnapshot_; }
 

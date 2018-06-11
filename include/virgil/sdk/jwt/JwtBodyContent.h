@@ -60,9 +60,9 @@ namespace virgil {
 
                 const std::string& identity() const;
 
-                const std::time_t& expiresAt() const;
+                std::time_t expiresAt() const;
 
-                const std::time_t& issuedAt() const;
+                std::time_t issuedAt() const;
 
                 const std::unordered_map<std::string, std::string>& additionalData() const;
 

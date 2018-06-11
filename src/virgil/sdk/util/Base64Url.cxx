@@ -49,7 +49,7 @@ const char Base64Url::base64_url_alphabet[] = {
 
 std::string Base64Url::encode(const std::string &in) {
     std::string out;
-    int val =0, valb=-6;
+    int val = 0, valb = -6;
     size_t len = in.length();
     unsigned int i = 0;
     for (i = 0; i < len; i++) {

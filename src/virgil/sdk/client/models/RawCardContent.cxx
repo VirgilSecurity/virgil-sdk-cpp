@@ -63,7 +63,7 @@ const VirgilByteArray& RawCardContent::publicKey() const { return publicKey_; }
 
 const std::string& RawCardContent::version() const { return version_; }
 
-const std::time_t& RawCardContent::createdAt() const { return createdAt_; }
+std::time_t RawCardContent::createdAt() const { return createdAt_; }
 
 const std::string& RawCardContent::previousCardId() const { return  previousCardId_; }
 

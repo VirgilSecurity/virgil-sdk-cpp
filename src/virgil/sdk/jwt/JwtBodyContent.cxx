@@ -63,8 +63,8 @@ const std::string& JwtBodyContent::appId() const { return appId_; }
 
 const std::string& JwtBodyContent::identity() const { return identity_; }
 
-const std::time_t& JwtBodyContent::expiresAt() const { return expiresAt_; }
+std::time_t JwtBodyContent::expiresAt() const { return expiresAt_; }
 
-const std::time_t& JwtBodyContent::issuedAt() const { return issuedAt_; }
+std::time_t JwtBodyContent::issuedAt() const { return issuedAt_; }
 
 const std::unordered_map<std::string, std::string>& JwtBodyContent::additionalData() const { return additionalData_; }

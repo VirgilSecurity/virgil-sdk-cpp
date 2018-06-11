@@ -66,7 +66,7 @@ namespace virgil {
 
                 const std::string& version() const;
 
-                const std::time_t& createdAt() const;
+                std::time_t createdAt() const;
 
                 const VirgilByteArray& contentSnapshot() const;
 
