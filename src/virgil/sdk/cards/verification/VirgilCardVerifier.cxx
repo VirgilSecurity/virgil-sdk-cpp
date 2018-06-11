@@ -47,8 +47,10 @@ const std::string VirgilCardVerifier::selfSignerIdentifier_ = "self";
 const std::string VirgilCardVerifier::virgilSignerIdentifier_ = "virgil";
 const std::string VirgilCardVerifier::virgilPublicKeyBase64_ = "MCowBQYDK2VwAyEAljOYGANYiVq1WbvVvoYIKtvZi2ji9bAhxyu6iV/LF8M=";
 
-VirgilCardVerifier::VirgilCardVerifier(std::shared_ptr<Crypto> crypto, std::vector<Whitelist> whitelists)
-: crypto_(std::move(crypto)), whitelists_(std::move(whitelists)), verifySelfSignature_(true), verifyVirgilSignature_(true),
+VirgilCardVerifier::VirgilCardVerifier(std::shared_ptr<Crypto> crypto, std::vector<Whitelist> whitelists,
+                                       bool verifySelfSignature, bool verifyVirgilSignature)
+: crypto_(std::move(crypto)), whitelists_(std::move(whitelists)),
+  verifySelfSignature_(verifySelfSignature), verifyVirgilSignature_(verifyVirgilSignature),
   virgilPublicKey_(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64_))) {}
 
 bool VirgilCardVerifier::verifyCard(const Card &card) const {
@@ -110,15 +112,3 @@ const std::vector<Whitelist>& VirgilCardVerifier::whitelists() const { return wh
 bool VirgilCardVerifier::verifySelfSignature() const { return verifySelfSignature_; }
 
 bool VirgilCardVerifier::verifyVirgilSignature() const { return verifyVirgilSignature_; }
-
-void VirgilCardVerifier::whitelists(const std::vector<virgil::sdk::cards::verification::Whitelist> &newWhitelists) {
-    whitelists_ = newWhitelists;
-}
-
-void VirgilCardVerifier::verifySelfSignature(bool newVerifySelfSignature) {
-    verifySelfSignature_ = newVerifySelfSignature;
-}
-
-void VirgilCardVerifier::verifyVirgilSignature(bool newVerifyVirgilSignature) {
-    verifyVirgilSignature_ = newVerifyVirgilSignature;
-}

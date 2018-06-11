@@ -61,11 +61,14 @@ using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
 CardManager::CardManager(std::shared_ptr<Crypto> crypto,
                          std::shared_ptr<AccessTokenProviderInterface> accessTokenProvider,
-                         std::shared_ptr<CardVerifierInterface> cardVerifier)
-: crypto_(std::move(crypto)), accessTokenProvider_(std::move(accessTokenProvider)), cardVerifier_(std::move(cardVerifier)),
-  modelSigner_(ModelSigner(crypto_)), retryOnUnauthorized_(true) {
-    cardClient_ = std::make_shared<CardClient>();
-}
+                         std::shared_ptr<CardVerifierInterface> cardVerifier,
+                         std::function<std::future<RawSignedModel>(RawSignedModel)> signCallback,
+                         std::shared_ptr<client::CardClientInterface> cardClient,
+                         bool retryOnUnauthorized)
+: crypto_(std::move(crypto)), accessTokenProvider_(std::move(accessTokenProvider)),
+  cardVerifier_(std::move(cardVerifier)), signCallback_(std::move(signCallback)),
+  cardClient_(std::move(cardClient)), retryOnUnauthorized_(retryOnUnauthorized),
+  modelSigner_(ModelSigner(crypto_)) {}
 
 RawSignedModel CardManager::generateRawCard(const PrivateKey &privateKey, const PublicKey &publicKey,
                                             const std::string& identity, const std::string &previousCardId,
@@ -342,19 +345,3 @@ const std::shared_ptr<CardClientInterface> & CardManager::cardClient() const { r
 const std::function<std::future<RawSignedModel>(RawSignedModel)>& CardManager::signCallback() const { return signCallback_; }
 
 bool CardManager::retryOnUnauthorized() const { return retryOnUnauthorized_; }
-
-void CardManager::modelSigner(const virgil::sdk::cards::ModelSigner &newModelSigner) {
-    modelSigner_ = newModelSigner;
-}
-
-void CardManager::cardClient(const std::shared_ptr<CardClientInterface> &newCardClient) {
-    cardClient_ = newCardClient;
-}
-
-void CardManager::signCallback(const std::function<std::future<RawSignedModel>(RawSignedModel)> &newSignCallback) {
-    signCallback_ = newSignCallback;
-}
-
-void CardManager::retryOnUnauthorized(bool newRetryOnUnauthorized) {
-    retryOnUnauthorized_ = newRetryOnUnauthorized;
-}

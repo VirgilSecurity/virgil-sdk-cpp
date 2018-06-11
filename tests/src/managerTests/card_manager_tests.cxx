@@ -336,8 +336,6 @@ TEST_CASE("test006_STC_21", "[card_manager]") {
     auto identity = "identity";
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-
     auto keyPair = crypto->generateKeyPair();
 
     std::function<std::future<RawSignedModel>(RawSignedModel)> signFunc = [&](RawSignedModel model) {
@@ -350,10 +348,10 @@ TEST_CASE("test006_STC_21", "[card_manager]") {
     };
 
     auto whitelist = Whitelist({VerifierCredentials("extra", crypto->exportPublicKey(keyPair.publicKey()))});
-    verifier->whitelists({whitelist});
+    std::vector<Whitelist> whitelists = {whitelist};
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, whitelists);
 
-    auto cardManager = CardManager(crypto, provider, verifier);
-    cardManager.signCallback(signFunc);
+    auto cardManager = CardManager(crypto, provider, verifier, signFunc);
 
     auto keyPair1 = crypto->generateKeyPair();
 
@@ -377,15 +375,12 @@ TEST_CASE("test007_STC_34", "[card_manager]") {
     auto identity = "identity";
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
     auto keyPair = crypto->generateKeyPair();
 
-    auto cardManager = CardManager(crypto, provider, verifier);
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
-    cardManager.cardClient(cardClientStub);
+    auto cardManager = CardManager(crypto, provider, verifier, nullptr, cardClientStub);
 
     bool errorWasThrown = false;
     try {
@@ -409,13 +404,10 @@ TEST_CASE("test008_STC_35", "[card_manager]") {
     auto identity = "some_identity";
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    auto cardManager = CardManager(crypto, provider, verifier);
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
-    cardManager.cardClient(cardClientStub);
+    auto cardManager = CardManager(crypto, provider, verifier, nullptr, cardClientStub);
 
     auto publicKeyData = VirgilBase64::decode(testData.dict()["STC-34.public_key_base64"]);
 
@@ -464,13 +456,10 @@ TEST_CASE("test009_STC_36", "[card_manager]") {
     auto identity = "some_identity";
     auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    auto cardManager = CardManager(crypto, provider, verifier);
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
-    cardManager.cardClient(cardClientStub);
+    auto cardManager = CardManager(crypto, provider, verifier, nullptr, cardClientStub);
 
     bool errorWasThrown = false;
     try {
@@ -505,9 +494,7 @@ TEST_CASE("test0010_STC_26", "[card_manager]") {
     };
 
     auto provider = std::make_shared<AccessTokenProviderStub_STC26>(identity, forceCallbackCheck);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
     auto cardManager = CardManager(crypto, provider, verifier);
 

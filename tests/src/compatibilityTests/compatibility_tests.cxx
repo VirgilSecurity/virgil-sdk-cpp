@@ -62,6 +62,7 @@ using virgil::sdk::util::JsonKey;
 using virgil::sdk::jwt::JwtVerifier;
 using virgil::sdk::jwt::Jwt;
 using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::cards::verification::Whitelist;
 
 const auto testData = virgil::sdk::test::TestData();
 
@@ -147,11 +148,8 @@ TEST_CASE("test003_STC_3", "[compatibility]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    //FIXME nullptr?
     CardManager cardManager(crypto, nullptr, verifier);
 
     auto rawCardString = testData.dict()["STC-3.as_string"];
@@ -184,9 +182,7 @@ TEST_CASE("test004_STC_4", "[compatibility]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
     CardManager cardManager(crypto, nullptr, verifier);
 

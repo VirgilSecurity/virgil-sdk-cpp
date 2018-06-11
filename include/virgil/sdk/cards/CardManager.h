@@ -39,10 +39,10 @@
 
 #include <functional>
 #include <virgil/sdk/jwt/interfaces/AccessTokenProviderInterface.h>
-#include <virgil/sdk/client/CardClientInterface.h>
 #include <virgil/sdk/cards/ModelSigner.h>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/cards/verification/CardVerifierInterface.h>
+#include <virgil/sdk/client/CardClient.h>
 
 using virgil::sdk::client::models::RawSignedModel;
 using virgil::sdk::client::models::GetCardResponse;
@@ -54,7 +54,10 @@ namespace virgil {
             public:
                 CardManager(std::shared_ptr<crypto::Crypto> crypto,
                             std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface> accessTokenProvider,
-                            std::shared_ptr<verification::CardVerifierInterface> cardVerifier);
+                            std::shared_ptr<verification::CardVerifierInterface> cardVerifier,
+                            std::function<std::future<RawSignedModel>(RawSignedModel)> signCallback = nullptr,
+                            std::shared_ptr<client::CardClientInterface> cardClient = std::make_shared<client::CardClient>(),
+                            bool retryOnUnauthorized = true);
 
                 RawSignedModel generateRawCard(const crypto::keys::PrivateKey& privateKey, const crypto::keys::PublicKey& publicKey,
                                                const std::string& identity, const std::string& previousCardId = std::string(),
@@ -87,20 +90,18 @@ namespace virgil {
                 RawSignedModel exportCardAsRawCard(const Card& card) const;
 
                 const std::shared_ptr<crypto::Crypto>& crypto() const;
+
                 const std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface>& accessTokenProvider() const;
+
                 const std::shared_ptr<verification::CardVerifierInterface>& cardVerifier() const;
 
                 const ModelSigner& modelSigner() const;
-                void modelSigner(const ModelSigner& newModelSigner);
 
                 const std::shared_ptr<client::CardClientInterface>& cardClient() const;
-                void cardClient(const std::shared_ptr<client::CardClientInterface>& newCardClient);
 
                 const std::function<std::future<RawSignedModel>(RawSignedModel)>& signCallback() const;
-                void signCallback(const std::function<std::future<RawSignedModel>(RawSignedModel)>& newSignCallback);
 
                 bool retryOnUnauthorized() const;
-                void retryOnUnauthorized(bool newRetryOnUnauthorized);
 
             private:
                 std::shared_ptr<crypto::Crypto> crypto_;

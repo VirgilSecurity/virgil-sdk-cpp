@@ -181,11 +181,9 @@ TEST_CASE("test003_STC_10", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-10.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -199,28 +197,28 @@ TEST_CASE("test003_STC_10", "[signer_verifier]") {
     auto publicKey2Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
     auto publicKey3Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
 
-    REQUIRE(verifier->verifyCard(card));
+    REQUIRE(verifier1->verifyCard(card));
 
-    verifier->verifySelfSignature(true);
-    REQUIRE(verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {}, true, false);
+    REQUIRE(verifier2.verifyCard(card));
 
-    verifier->verifyVirgilSignature(true);
-    REQUIRE(verifier->verifyCard(card));
+    auto verifier3 = VirgilCardVerifier(crypto, {}, true, true);
+    REQUIRE(verifier3.verifyCard(card));
 
     auto whitelist1 = Whitelist({VerifierCredentials("extra", publicKey1Data)});
-    verifier->whitelists({whitelist1});
-    REQUIRE(verifier->verifyCard(card));
+    auto verifier4 = VirgilCardVerifier(crypto, {whitelist1});
+    REQUIRE(verifier4.verifyCard(card));
 
     auto whitelist2 = Whitelist({VerifierCredentials("extra", publicKey1Data),
                                  VerifierCredentials("test1", publicKey2Data)});
-    verifier->whitelists({whitelist2});
-    REQUIRE(verifier->verifyCard(card));
+    auto verifier5 = VirgilCardVerifier(crypto, {whitelist2});
+    REQUIRE(verifier5.verifyCard(card));
 
     auto whitelist31 = Whitelist({VerifierCredentials("extra", publicKey1Data),
                                   VerifierCredentials("test1", publicKey2Data)});
     auto whitelist32 = Whitelist({VerifierCredentials("extra", publicKey3Data)});
-    verifier->whitelists({whitelist31, whitelist32});
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier6 = VirgilCardVerifier(crypto, {whitelist31, whitelist32});
+    REQUIRE(!verifier6.verifyCard(card));
 }
 
 TEST_CASE("test004_STC_11", "[signer_verifier]") {
@@ -228,19 +226,17 @@ TEST_CASE("test004_STC_11", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-11.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
 
-    REQUIRE(verifier->verifyCard(card));
+    REQUIRE(verifier1->verifyCard(card));
 
-    verifier->verifySelfSignature(true);
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {}, true, false);
+    REQUIRE(!verifier2.verifyCard(card));
 }
 
 TEST_CASE("test005_STC_12", "[signer_verifier]") {
@@ -248,19 +244,17 @@ TEST_CASE("test005_STC_12", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature (false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-12.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
 
-    REQUIRE(verifier->verifyCard(card));
+    REQUIRE(verifier1->verifyCard(card));
 
-    verifier->verifyVirgilSignature(true);
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {}, false, true);
+    REQUIRE(!verifier2.verifyCard(card));
 }
 
 TEST_CASE("test006_STC_14", "[signer_verifier]") {
@@ -268,17 +262,15 @@ TEST_CASE("test006_STC_14", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-14.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
 
-    verifier->verifyVirgilSignature(true);
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {}, false, true);
+    REQUIRE(!verifier2.verifyCard(card));
 }
 
 TEST_CASE("test007_STC_15", "[signer_verifier]") {
@@ -286,17 +278,15 @@ TEST_CASE("test007_STC_15", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-15.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
 
-    verifier->verifySelfSignature(true);
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {}, true, false);
+    REQUIRE(!verifier2.verifyCard(card));
 }
 
 TEST_CASE("test008_STC_16", "[signer_verifier]") {
@@ -304,11 +294,9 @@ TEST_CASE("test008_STC_16", "[signer_verifier]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
-    verifier->verifySelfSignature(false);
-    verifier->verifyVirgilSignature(false);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
 
-    CardManager cardManager(crypto, nullptr, verifier);
+    CardManager cardManager(crypto, nullptr, verifier1);
 
     auto cardStr = testData.dict()["STC-16.as_string"];
     auto card = cardManager.importCardFromBase64(cardStr);
@@ -318,10 +306,10 @@ TEST_CASE("test008_STC_16", "[signer_verifier]") {
     auto publicKey2Data = crypto->exportPublicKey(crypto->generateKeyPair().publicKey());
 
     auto whitelist1 = Whitelist({VerifierCredentials("extra", publicKey2Data)});
-    verifier->whitelists({whitelist1});
-    REQUIRE(!verifier->verifyCard(card));
+    auto verifier2 = VirgilCardVerifier(crypto, {whitelist1}, false, false);
+    REQUIRE(!verifier2.verifyCard(card));
 
     auto whitelist2 = Whitelist({VerifierCredentials("extra", publicKey1Data)});
-    verifier->whitelists({whitelist2});
-    REQUIRE(verifier->verifyCard(card));
+    auto verifier3 = VirgilCardVerifier(crypto, {whitelist2}, false, false);
+    REQUIRE(verifier3.verifyCard(card));
 }
