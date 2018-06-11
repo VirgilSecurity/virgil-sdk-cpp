@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/JwtVerifier.h>
@@ -41,12 +41,10 @@ using virgil::sdk::jwt::Jwt;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::crypto::keys::PublicKey;
 
-JwtVerifier::JwtVerifier(PublicKey apiPublicKey,
-                         std::string apiPublicKeyIdentifier,
-                         std::shared_ptr<Crypto> crypto)
-: apiPublicKey_(std::move(apiPublicKey)),
-  apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
-  crypto_(std::move(crypto)) {}
+JwtVerifier::JwtVerifier(PublicKey apiPublicKey, std::string apiPublicKeyIdentifier, std::shared_ptr<Crypto> crypto)
+        : apiPublicKey_(std::move(apiPublicKey)),
+          apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
+          crypto_(std::move(crypto)) {}
 
 bool JwtVerifier::verifyToken(const Jwt &token) const {
     try {

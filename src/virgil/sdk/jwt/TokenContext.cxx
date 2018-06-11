@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,16 +30,16 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/TokenContext.h>
 
 using virgil::sdk::jwt::TokenContext;
 
-TokenContext::TokenContext(std::string operation,
-                           std::string identity,
-                           bool forceReload)
-: operation_(std::move(operation)), identity_(std::move(identity)), forceReload_(forceReload) {}
+TokenContext::TokenContext(std::string operation, std::string identity, bool forceReload)
+        : operation_(std::move(operation)), identity_(std::move(identity)), forceReload_(forceReload) {}
 
 const std::string& TokenContext::operation() const { return operation_; }
 

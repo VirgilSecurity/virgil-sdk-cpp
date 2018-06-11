@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <map>
@@ -65,10 +65,10 @@ CardManager::CardManager(std::shared_ptr<Crypto> crypto,
                          std::function<std::future<RawSignedModel>(RawSignedModel)> signCallback,
                          std::shared_ptr<client::CardClientInterface> cardClient,
                          bool retryOnUnauthorized)
-: crypto_(std::move(crypto)), accessTokenProvider_(std::move(accessTokenProvider)),
-  cardVerifier_(std::move(cardVerifier)), signCallback_(std::move(signCallback)),
-  cardClient_(std::move(cardClient)), retryOnUnauthorized_(retryOnUnauthorized),
-  modelSigner_(ModelSigner(crypto_)) {}
+        : crypto_(std::move(crypto)), accessTokenProvider_(std::move(accessTokenProvider)),
+          cardVerifier_(std::move(cardVerifier)), signCallback_(std::move(signCallback)),
+          cardClient_(std::move(cardClient)), retryOnUnauthorized_(retryOnUnauthorized),
+          modelSigner_(ModelSigner(crypto_)) {}
 
 RawSignedModel CardManager::generateRawCard(const PrivateKey &privateKey, const PublicKey &publicKey,
                                             const std::string& identity, const std::string &previousCardId,

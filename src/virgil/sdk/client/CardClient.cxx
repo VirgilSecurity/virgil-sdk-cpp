@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <unordered_map>
@@ -62,7 +62,7 @@ using virgil::sdk::client::models::GetCardResponse;
 const std::string CardClient::xVirgilIsSuperseededKey = "X-Virgil-Is-Superseeded";
 
 CardClient::CardClient(std::string serviceUrl)
-: serviceUrl_(std::move(serviceUrl)) {}
+        : serviceUrl_(std::move(serviceUrl)) {}
 
 const std::string& CardClient::serviceUrl() const { return serviceUrl_; }
 

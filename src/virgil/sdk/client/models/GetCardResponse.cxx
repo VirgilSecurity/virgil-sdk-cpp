@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/client/models/GetCardResponse.h>
@@ -39,9 +39,8 @@
 using virgil::sdk::client::models::GetCardResponse;
 using virgil::sdk::client::models::RawSignedModel;
 
-GetCardResponse::GetCardResponse(RawSignedModel rawCard,
-                                 bool isOutdated)
-: rawCard_(std::move(rawCard)), isOutdated_(isOutdated) {}
+GetCardResponse::GetCardResponse(RawSignedModel rawCard, bool isOutdated)
+        : rawCard_(std::move(rawCard)), isOutdated_(isOutdated) {}
 
 const RawSignedModel& GetCardResponse::rawCard() const { return rawCard_; }
 

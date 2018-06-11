@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/JwtBodyContent.h>
@@ -48,8 +48,8 @@ using virgil::sdk::serialization::JsonDeserializer;
 JwtBodyContent::JwtBodyContent(std::string appId, std::string identity,
                                std::time_t expiresAt, std::time_t issuedAt,
                                std::unordered_map<std::string, std::string> additionalData)
-: appId_(std::move(appId)), identity_(std::move(identity)), expiresAt_(expiresAt),
-  issuedAt_(issuedAt), additionalData_(std::move(additionalData)) {}
+        : appId_(std::move(appId)), identity_(std::move(identity)), expiresAt_(expiresAt),
+          issuedAt_(issuedAt), additionalData_(std::move(additionalData)) {}
 
 JwtBodyContent JwtBodyContent::parse(const std::string &base64url) {
     return JsonDeserializer<JwtBodyContent>::fromJsonString(Base64Url::decode(base64url));

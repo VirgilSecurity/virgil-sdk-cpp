@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/providers/ConstAccessTokenProvider.h>
@@ -40,11 +40,9 @@ using virgil::sdk::jwt::providers::ConstAccessTokenProvider;
 using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 
 ConstAccessTokenProvider::ConstAccessTokenProvider(std::shared_ptr<AccessTokenInterface> accessToken)
-: accessToken_(std::move(accessToken)) {}
+        : accessToken_(std::move(accessToken)) {}
 
-std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::getToken(
-        const virgil::sdk::jwt::TokenContext &tokenContext)
-{
+std::future<std::shared_ptr<AccessTokenInterface>> ConstAccessTokenProvider::getToken(const virgil::sdk::jwt::TokenContext &tokenContext) {
     std::promise<std::shared_ptr<AccessTokenInterface>> p;
     p.set_value(accessToken_);
 

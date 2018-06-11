@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef VIRGIL_SDK_RAWCARDCONTENT_H
@@ -48,9 +48,7 @@ namespace virgil {
             namespace models {
                 class RawCardContent {
                 public:
-                    RawCardContent(std::string identity,
-                                   VirgilByteArray publicKey,
-                                   std::time_t createdAt,
+                    RawCardContent(std::string identity, VirgilByteArray publicKey, std::time_t createdAt,
                                    std::string previousCardId = std::string(),
                                    std::string version = "5.0");
 

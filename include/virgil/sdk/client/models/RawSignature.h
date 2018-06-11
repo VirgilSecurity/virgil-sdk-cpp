@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef VIRGIL_SDK_RAWSIGNATURE_H
@@ -46,8 +46,7 @@ namespace virgil {
             namespace models {
                 class RawSignature {
                 public:
-                    RawSignature(std::string signer,
-                                 VirgilByteArray signature,
+                    RawSignature(std::string signer, VirgilByteArray signature,
                                  VirgilByteArray snapshot = VirgilByteArray());
 
                     const std::string& signer() const;

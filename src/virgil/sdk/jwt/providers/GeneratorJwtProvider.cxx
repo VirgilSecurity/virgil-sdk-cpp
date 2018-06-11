@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/providers/GeneratorJwtProvider.h>
@@ -42,9 +42,8 @@ using virgil::sdk::jwt::JwtGenerator;
 
 GeneratorJwtProvider::GeneratorJwtProvider(JwtGenerator jwtGenerator, std::string defaultIdentity,
                                            std::unordered_map<std::string, std::string> additionalData)
-: jwtGenerator_(std::move(jwtGenerator)),
-  defaultIdentity_(std::move(defaultIdentity)),
-  additionalData_(std::move(additionalData)) {}
+        : jwtGenerator_(std::move(jwtGenerator)), defaultIdentity_(std::move(defaultIdentity)),
+          additionalData_(std::move(additionalData)) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> GeneratorJwtProvider::getToken(
         const virgil::sdk::jwt::TokenContext &tokenContext)

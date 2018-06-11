@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/cards/verification/VerifierCredentials.h>
@@ -39,9 +39,8 @@
 using virgil::sdk::cards::verification::VerifierCredentials;
 using virgil::sdk::VirgilByteArray;
 
-VerifierCredentials::VerifierCredentials(std::string signer,
-                                         VirgilByteArray publicKey)
-: signer_(std::move(signer)), publicKey_(std::move(publicKey)) {}
+VerifierCredentials::VerifierCredentials(std::string signer, VirgilByteArray publicKey)
+        : signer_(std::move(signer)), publicKey_(std::move(publicKey)) {}
 
 const std::string& VerifierCredentials::signer() const { return signer_; }
 

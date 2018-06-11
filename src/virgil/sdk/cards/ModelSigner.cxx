@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/cards/ModelSigner.h>
@@ -59,9 +59,7 @@ void ModelSigner::sign(RawSignedModel &model, const std::string &signer,
     this->sign(model, signer, privateKey, VirgilByteArray());
 }
 
-void ModelSigner::sign(RawSignedModel &model,
-                       const std::string &signer,
-                       const PrivateKey &privateKey,
+void ModelSigner::sign(RawSignedModel &model, const std::string &signer, const PrivateKey &privateKey,
                        const VirgilByteArray &additionalData) const {
     auto combinedSnapshot = model.contentSnapshot();
     VirgilByteArrayUtils::append(combinedSnapshot, additionalData);
@@ -72,19 +70,16 @@ void ModelSigner::sign(RawSignedModel &model,
     model.addSignature(rawSignature);
 }
 
-void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,
-                           const virgil::sdk::crypto::keys::PrivateKey &privateKey) const {
+void ModelSigner::selfSign(RawSignedModel &model, const PrivateKey &privateKey) const {
     this->sign(model, selfSignerIdentifier, privateKey, VirgilByteArray());
 }
 
-void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,
-                           const virgil::sdk::crypto::keys::PrivateKey &privateKey,
-                           const virgil::sdk::VirgilByteArray &additionalData) const {
+void ModelSigner::selfSign(RawSignedModel &model, const PrivateKey &privateKey,
+                           const VirgilByteArray &additionalData) const {
     this->sign(model, selfSignerIdentifier, privateKey, additionalData);
 }
 
-void ModelSigner::sign(virgil::sdk::client::models::RawSignedModel &model, const std::string &signer,
-                       const virgil::sdk::crypto::keys::PrivateKey &privateKey,
+void ModelSigner::sign(RawSignedModel &model, const std::string &signer, const PrivateKey &privateKey,
                        const std::unordered_map<std::string, std::string> &extraFields) const {
     auto additionalData = VirgilByteArray();
     if (!extraFields.empty()) {
@@ -95,8 +90,7 @@ void ModelSigner::sign(virgil::sdk::client::models::RawSignedModel &model, const
     this->sign(model, signer, privateKey, additionalData);
 }
 
-void ModelSigner::selfSign(virgil::sdk::client::models::RawSignedModel &model,
-                           const virgil::sdk::crypto::keys::PrivateKey &privateKey,
+void ModelSigner::selfSign(RawSignedModel &model, const PrivateKey &privateKey,
                            const std::unordered_map<std::string, std::string> &extraFields) const {
     auto additionalData = VirgilByteArray();
     if (!extraFields.empty()) {

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/Jwt.h>
@@ -44,12 +44,9 @@ using virgil::sdk::VirgilByteArray;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::util::Base64Url;
 
-Jwt::Jwt(JwtHeaderContent headerContent,
-         JwtBodyContent bodyContent,
-         VirgilByteArray signatureContent)
-: headerContent_(std::move(headerContent)),
-  bodyContent_(std::move(bodyContent)),
-  signatureContent_(std::move(signatureContent)) {
+Jwt::Jwt(JwtHeaderContent headerContent, JwtBodyContent bodyContent, VirgilByteArray signatureContent)
+        : headerContent_(std::move(headerContent)), bodyContent_(std::move(bodyContent)),
+          signatureContent_(std::move(signatureContent)) {
     dataToSign_ = Jwt::dataToSign(headerContent_, bodyContent_);
     stringRepresentation_ = headerContent_.base64Url() + "." + bodyContent_.base64Url() + "." + signatureBase64Url();
 }

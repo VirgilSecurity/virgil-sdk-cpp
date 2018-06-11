@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
@@ -49,9 +49,9 @@ const std::string VirgilCardVerifier::virgilPublicKeyBase64_ = "MCowBQYDK2VwAyEA
 
 VirgilCardVerifier::VirgilCardVerifier(std::shared_ptr<Crypto> crypto, std::vector<Whitelist> whitelists,
                                        bool verifySelfSignature, bool verifyVirgilSignature)
-: crypto_(std::move(crypto)), whitelists_(std::move(whitelists)),
-  verifySelfSignature_(verifySelfSignature), verifyVirgilSignature_(verifyVirgilSignature),
-  virgilPublicKey_(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64_))) {}
+        : crypto_(std::move(crypto)), whitelists_(std::move(whitelists)),
+          verifySelfSignature_(verifySelfSignature), verifyVirgilSignature_(verifyVirgilSignature),
+          virgilPublicKey_(crypto->importPublicKey(VirgilBase64::decode(virgilPublicKeyBase64_))) {}
 
 bool VirgilCardVerifier::verifyCard(const Card &card) const {
     return verifySelf(card) && verifyVirgil(card) && verifyWhitelists(card);

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/JwtGenerator.h>
@@ -45,8 +45,8 @@ using virgil::sdk::crypto::keys::PrivateKey;
 
 JwtGenerator::JwtGenerator(PrivateKey apiKey, std::string apiPublicKeyIdentifier,
                            std::shared_ptr<Crypto> crypto, std::string appId, int ttl)
-: apiKey_(std::move(apiKey)), apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
-  crypto_(std::move(crypto)), appId_(std::move(appId)), ttl_(ttl) {}
+        : apiKey_(std::move(apiKey)), apiPublicKeyIdentifier_(std::move(apiPublicKeyIdentifier)),
+          crypto_(std::move(crypto)), appId_(std::move(appId)), ttl_(ttl) {}
 
 Jwt JwtGenerator::generateToken(const std::string &identity,
                                 const std::unordered_map<std::string, std::string> &additionalData) const {

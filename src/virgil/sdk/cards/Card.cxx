@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/cards/Card.h>
@@ -47,10 +47,10 @@ Card::Card(std::string identifier, std::string identity, PublicKey publicKey,
            std::string version, std::time_t createdAt, VirgilByteArray contentSnapshot,
            bool isOutdated, std::vector<CardSignature> signatures, std::string previousCardId,
            std::shared_ptr<Card> previousCard)
-: identifier_(std::move(identifier)), identity_(std::move(identity)), publicKey_(std::move(publicKey)),
-  version_(std::move(version)), createdAt_(createdAt), contentSnapshot_(std::move(contentSnapshot)),
-  isOutdated_(isOutdated), signatures_(std::move(signatures)), previousCardId_(std::move(previousCardId)),
-  previousCard_(std::move(previousCard)) {}
+        : identifier_(std::move(identifier)), identity_(std::move(identity)), publicKey_(std::move(publicKey)),
+          version_(std::move(version)), createdAt_(createdAt), contentSnapshot_(std::move(contentSnapshot)),
+          isOutdated_(isOutdated), signatures_(std::move(signatures)), previousCardId_(std::move(previousCardId)),
+          previousCard_(std::move(previousCard)) {}
 
 const std::string& Card::identifier() const { return identifier_; }
 

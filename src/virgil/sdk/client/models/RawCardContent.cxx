@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/client/models/RawCardContent.h>
@@ -44,13 +44,12 @@ using virgil::sdk::serialization::JsonSerializer;
 using virgil::sdk::serialization::JsonDeserializer;
 using virgil::sdk::VirgilByteArrayUtils;
 
-RawCardContent::RawCardContent(std::string identity,
-                               VirgilByteArray publicKey,
-                               std::time_t createdAt,
-                               std::string previousCardId,
+RawCardContent::RawCardContent(std::string identity, VirgilByteArray publicKey,
+                               std::time_t createdAt, std::string previousCardId,
                                std::string version)
-        : identity_(std::move(identity)), publicKey_(std::move(publicKey)), version_(std::move(version)),
-          createdAt_(createdAt), previousCardId_(std::move(previousCardId)) {}
+        : identity_(std::move(identity)), publicKey_(std::move(publicKey)),
+          version_(std::move(version)), createdAt_(createdAt),
+          previousCardId_(std::move(previousCardId)) {}
 
 RawCardContent RawCardContent::parse(const VirgilByteArray &snapshot) {
     auto contentStr = VirgilByteArrayUtils::bytesToString(snapshot);

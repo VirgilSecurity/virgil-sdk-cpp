@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/cards/verification/Whitelist.h>
@@ -41,7 +41,7 @@ using virgil::sdk::cards::verification::VerifierCredentials;
 using virgil::sdk::cards::verification::Whitelist;
 
 Whitelist::Whitelist(std::vector<VerifierCredentials> verifierCredentials)
-: verifierCredentials_(std::move(verifierCredentials)) {
+        : verifierCredentials_(std::move(verifierCredentials)) {
     std::vector<std::string> dic;
     for (auto& credentials : verifierCredentials) {
         if (std::find(dic.begin(), dic.end(), credentials.signer()) != dic.end()) {

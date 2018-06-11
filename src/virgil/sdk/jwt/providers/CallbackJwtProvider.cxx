@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/providers/CallbackJwtProvider.h>
@@ -42,9 +42,8 @@ using virgil::sdk::jwt::interfaces::AccessTokenInterface;
 using virgil::sdk::jwt::TokenContext;
 using virgil::sdk::jwt::Jwt;
 
-CallbackJwtProvider::CallbackJwtProvider(
-        std::function<std::future<std::string>(const TokenContext&)> getTokenCallback)
-: getTokenCallback_(std::move(getTokenCallback)) {}
+CallbackJwtProvider::CallbackJwtProvider(std::function<std::future<std::string>(const TokenContext&)> getTokenCallback)
+        : getTokenCallback_(std::move(getTokenCallback)) {}
 
 std::future<std::shared_ptr<AccessTokenInterface>> CallbackJwtProvider::getToken(const TokenContext &tokenContext) {
     auto future = std::async([=]{

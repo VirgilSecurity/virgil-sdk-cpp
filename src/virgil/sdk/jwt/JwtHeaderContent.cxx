@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2018 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/jwt/JwtHeaderContent.h>
@@ -46,8 +46,8 @@ using virgil::sdk::serialization::JsonDeserializer;
 
 JwtHeaderContent::JwtHeaderContent(std::string keyIdentifier, std::string algorithm,
                                    std::string type, std::string contentType)
-: keyIdentifier_(std::move(keyIdentifier)), algorithm_(std::move(algorithm)),
-  type_(std::move(type)), contentType_(std::move(contentType)) {}
+        : keyIdentifier_(std::move(keyIdentifier)), algorithm_(std::move(algorithm)),
+          type_(std::move(type)), contentType_(std::move(contentType)) {}
 
 JwtHeaderContent JwtHeaderContent::parse(const std::string &base64url) {
     return JsonDeserializer<JwtHeaderContent>::fromJsonString(Base64Url::decode(base64url));
