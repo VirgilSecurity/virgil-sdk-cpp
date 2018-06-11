@@ -34,7 +34,6 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #include <TestUtils.h>
 #include <helpers.h>
 #include <virgil/sdk/jwt/JwtGenerator.h>

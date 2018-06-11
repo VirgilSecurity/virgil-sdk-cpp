@@ -34,7 +34,6 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #ifndef VIRGIL_SDK_CLIENTREQUEST_H
 #define VIRGIL_SDK_CLIENTREQUEST_H
 

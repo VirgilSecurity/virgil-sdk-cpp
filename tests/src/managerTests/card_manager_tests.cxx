@@ -263,7 +263,6 @@ TEST_CASE("test004_STC_19", "[card_manager]") {
     REQUIRE(utils.isCardSignaturesEqual(publishedCard2.signatures(), gotCard2.signatures()));
 }
 
-
 TEST_CASE("test005_STC_20", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);

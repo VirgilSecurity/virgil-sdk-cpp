@@ -34,7 +34,6 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/util/JsonUtils.h>
 

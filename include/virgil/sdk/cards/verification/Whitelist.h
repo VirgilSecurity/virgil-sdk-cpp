@@ -58,5 +58,4 @@ namespace virgil {
     }
 }
 
-
 #endif //VIRGIL_SDK_WHITELIST_H
