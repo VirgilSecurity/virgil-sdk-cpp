@@ -49,6 +49,7 @@ using HttpRequest = asoni::Handle;
 using virgil::sdk::client::networking::Connection;
 using virgil::sdk::client::networking::Request;
 using virgil::sdk::client::networking::Response;
+using virgil::sdk::util::CaseInsensitiveCompare;
 
 Response Connection::send(const Request& request) {
     // Make Request
@@ -80,7 +81,7 @@ Response Connection::send(const Request& request) {
     } catch (const std::logic_error&) {
         throw std::runtime_error(httpResponse.body);
     }
-
-    response.header(httpResponse.headers).body(httpResponse.body);
+    auto caseInsensitiveMap = std::map<std::string, std::string, CaseInsensitiveCompare>(httpResponse.headers.begin(), httpResponse.headers.end());
+    response.header(caseInsensitiveMap).body(httpResponse.body);
     return response;
 }

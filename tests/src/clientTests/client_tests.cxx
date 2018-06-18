@@ -138,7 +138,8 @@ TEST_CASE("test003_SearchCards", "[client]") {
     TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
-    auto token = utils.getToken("identity");
+    auto identity = utils.getRandomString();
+    auto token = utils.getToken(identity);
 
     CardClient cardClient;
     ModelSigner modelSigner(crypto);
@@ -146,7 +147,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     auto keyPair = crypto->generateKeyPair();
     auto publicKeyData = crypto->exportPublicKey(keyPair.publicKey());
 
-    RawCardContent content("identity", publicKeyData, std::time(0));
+    RawCardContent content(identity, publicKeyData, std::time(0));
     auto snapshot = content.snapshot();
 
     RawSignedModel rawCard(snapshot);

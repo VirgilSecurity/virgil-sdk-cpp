@@ -37,8 +37,8 @@
 #ifndef VIRGIL_SDK_HTTP_RESPONSE_H
 #define VIRGIL_SDK_HTTP_RESPONSE_H
 
-#include <string>
 #include <map>
+#include <virgil/sdk/util/CaseInsensitiveCompare.h>
 
 namespace virgil {
     namespace sdk {
@@ -67,7 +67,7 @@ namespace virgil {
                      * @name Types aliases
                      */
                     //@{
-                    using Header = std::map<std::string, std::string>;
+                    using Header = std::map<std::string, std::string, util::CaseInsensitiveCompare>;
                     using Parameters = std::map<std::string, std::string>;
                     //@}
                     /**
