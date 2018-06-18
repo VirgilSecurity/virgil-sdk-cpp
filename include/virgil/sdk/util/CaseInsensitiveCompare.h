@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_MAPINSENSITIVECOMPARE_H
 
 #include <string>
+#include <strings.h>
 
 namespace virgil {
     namespace sdk {
