@@ -40,6 +40,7 @@
 #include <memory>
 #include <string>
 #include <ctime>
+#include <algorithm>
 #include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/cards/Card.h>
