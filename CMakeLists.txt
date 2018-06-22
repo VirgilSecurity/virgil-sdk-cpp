@@ -65,6 +65,7 @@ set (INSTALL_CFG_DIR_NAME
 ## Installation options
 set (INSTALL_EXT_LIBS ON CACHE BOOL "Enable installation of SDK dependency libraries")
 set (INSTALL_EXT_HEADERS OFF CACHE BOOL "Enable installation of SDK dependency library headers")
+set (VIRGIL_CRYPTO_FEATURE_RNG_SEED_FILE OFF CACHE BOOL "Defines whether class VirgilRandom will use additional seed from a file.")
 mark_as_advanced (INSTALL_EXT_LIBS INSTALL_EXT_HEADERS)
 
 # Build shared library if defined
@@ -131,7 +132,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
 )
 
-virgil_find_package (virgil_crypto 2.4.5)
+virgil_find_package (virgil_crypto 2.5.0)
 virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
