@@ -34,6 +34,7 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
+#include <algorithm>
 #include <virgil/sdk/cards/verification/Whitelist.h>
 #include <virgil/sdk/VirgilSdkError.h>
 
