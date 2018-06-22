@@ -38,6 +38,7 @@
 #define VIRGIL_SDK_CARD_H
 
 #include <memory>
+#include <ctime>
 #include <virgil/sdk/crypto/keys/PublicKey.h>
 #include <virgil/sdk/cards/CardSignature.h>
 #include <virgil/sdk/client/models/RawSignedModel.h>

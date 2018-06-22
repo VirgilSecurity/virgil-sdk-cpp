@@ -69,7 +69,7 @@ TEST_CASE("test001_CreateCard", "[client]") {
 
     auto token = utils.getToken("identity");
 
-    CardClient cardClient;
+    CardClient cardClient(consts.ServiceURL());
     ModelSigner modelSigner(crypto);
 
     auto keyPair = crypto->generateKeyPair();
@@ -103,7 +103,7 @@ TEST_CASE("test002_GetCard", "[client]") {
 
     auto token = utils.getToken("identity");
 
-    CardClient cardClient;
+    CardClient cardClient(consts.ServiceURL());
     ModelSigner modelSigner(crypto);
 
     auto keyPair = crypto->generateKeyPair();
@@ -141,7 +141,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     auto identity = utils.getRandomString();
     auto token = utils.getToken(identity);
 
-    CardClient cardClient;
+    CardClient cardClient(consts.ServiceURL());
     ModelSigner modelSigner(crypto);
 
     auto keyPair = crypto->generateKeyPair();
@@ -186,7 +186,7 @@ TEST_CASE("test004_STC25", "[client]") {
 
     auto token = utils.getTokenWithWrongPrivateKey("identity");
 
-    CardClient cardClient;
+    CardClient cardClient(consts.ServiceURL());
     ModelSigner modelSigner(crypto);
 
     auto keyPair = crypto->generateKeyPair();
@@ -240,7 +240,7 @@ TEST_CASE("test005_STC27", "[client]") {
 
     auto token = utils.getToken("identity");
 
-    CardClient cardClient;
+    CardClient cardClient(consts.ServiceURL());
     ModelSigner modelSigner(crypto);
 
     auto keyPair = crypto->generateKeyPair();

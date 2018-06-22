@@ -34,6 +34,7 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
+#include <sstream>
 #include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/util/Base64Url.h>
 
