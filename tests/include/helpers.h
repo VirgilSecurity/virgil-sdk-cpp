@@ -40,6 +40,7 @@
 #include <random>
 #include <functional>
 #include <limits.h>
+#include <algorithm>
 
 #include <virgil/sdk/Common.h>
 
