@@ -52,12 +52,16 @@ namespace test {
         const std::string& AppId() const;
         const std::string& ServiceURL() const;
 
+        bool enableStg() const;
+
     private:
         std::string ApiPublicKeyId_;
         std::string ApiPrivateKey_;
         std::string ApiPublicKey_;
         std::string AppId_;
         std::string ServiceURL_;
+
+        bool enableStg_;
     };
 }
 }

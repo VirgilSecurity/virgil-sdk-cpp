@@ -41,7 +41,8 @@
 using virgil::sdk::test::TestConst;
 using json = nlohmann::json;
 
-TestConst::TestConst(const std::string &fileName, bool enableStg) {
+TestConst::TestConst(const std::string &fileName, bool enableStg)
+        : enableStg_(enableStg) {
     std::ifstream input(fileName);
 
     std::string str((std::istreambuf_iterator<char>(input)),
@@ -70,3 +71,5 @@ const std::string& TestConst::ApiPublicKey() const { return ApiPublicKey_; }
 const std::string& TestConst::AppId() const { return AppId_; }
 
 const std::string& TestConst::ServiceURL() const { return ServiceURL_; }
+
+bool TestConst::enableStg() const { return enableStg_; }

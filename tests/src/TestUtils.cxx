@@ -52,6 +52,11 @@ using virgil::sdk::client::models::RawCardContent;
 using virgil::sdk::client::models::RawSignature;
 using virgil::sdk::cards::CardSignature;
 using virgil::sdk::VirgilByteArray;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
+using virgil::sdk::cards::verification::Whitelist;
+
+TestUtils::TestUtils(TestConst consts)
+        : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {}
 
 Jwt TestUtils::getToken(const std::string &identity, int ttl) const {
     auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());

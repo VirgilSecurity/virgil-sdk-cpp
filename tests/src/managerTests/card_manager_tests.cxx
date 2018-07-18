@@ -69,6 +69,7 @@ using virgil::sdk::test::stubs::VerifierStubFalse;
 using virgil::sdk::test::stubs::CardClientStub_STC34;
 using virgil::sdk::test::stubs::AccessTokenProviderStub_STC26;
 using virgil::sdk::client::CardClientInterface;
+using virgil::sdk::client::CardClient;
 using virgil::sdk::client::models::RawCardContent;
 
 const auto testData = virgil::sdk::test::TestData();
@@ -76,18 +77,18 @@ const auto testData = virgil::sdk::test::TestData();
 TEST_CASE("test001_STC_13", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto identity = "identity";
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
+    auto identity = utils.getRandomString();
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
     auto verifier = std::make_shared<VerifierStubFalse>();
 
-    auto cardManager = CardManager(crypto, provider, verifier);
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
 
     auto rawCardStr = testData.dict()["STC-3.as_string"];
     bool errorWasThrown = false;
@@ -107,7 +108,7 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
     }
     REQUIRE(errorWasThrown);
 
-    auto keyPair1 = crypto->generateKeyPair();
+    auto keyPair1 = utils.crypto()->generateKeyPair();
     errorWasThrown = false;
     try {
         auto publishFuture = cardManager.publishCard(keyPair1.privateKey(), keyPair1.publicKey());
@@ -130,8 +131,8 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
     REQUIRE(errorWasThrown);
 
     auto existentIdentity = utils.getRandomString();
-    auto verifier1 = std::make_shared<VirgilCardVerifier>(crypto);
-    auto cardManager1 = CardManager(crypto, provider, verifier1);
+    auto verifier1 = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
+    auto cardManager1 = CardManager(utils.crypto(), provider, verifier1, nullptr, cardClient);
     auto existentRawCard = cardManager1.generateRawCard(keyPair1.privateKey(), keyPair1.publicKey(), existentIdentity);
     auto future = cardManager1.publishCard(existentRawCard);
     auto existentCard = future.get();
@@ -141,7 +142,7 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.getCard(existentCard.identifier());
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-            errorWasThrown = true;
+        errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
 
@@ -150,7 +151,7 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
         auto publishFuture = cardManager.searchCards(existentIdentity);
         auto publishedCard = publishFuture.get();
     } catch (VirgilSdkException& e) {
-            errorWasThrown = true;
+        errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
 }
@@ -158,18 +159,19 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
 TEST_CASE("test002_STC_17", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
+    auto identity = utils.getRandomString();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
-    auto provider = std::make_shared<GeneratorJwtProvider>(generator, "identity");
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
+    auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
 
-    auto cardManager = CardManager(crypto, provider, verifier);
-    auto keyPair = crypto->generateKeyPair();
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
+    auto keyPair = utils.crypto()->generateKeyPair();
 
     auto publishFuture = cardManager.publishCard(keyPair.privateKey(), keyPair.publicKey());
     auto publishedCard = publishFuture.get();
@@ -186,18 +188,19 @@ TEST_CASE("test002_STC_17", "[card_manager]") {
 TEST_CASE("test003_STC_18", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
+    auto identity = utils.getRandomString();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
-    auto provider = std::make_shared<GeneratorJwtProvider>(generator, "identity");
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
+    auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
 
-    auto cardManager = CardManager(crypto, provider, verifier);
-    auto keyPair = crypto->generateKeyPair();
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
+    auto keyPair = utils.crypto()->generateKeyPair();
 
     std::unordered_map<std::string, std::string> dic = {
             {"key1", "data1"},
@@ -205,7 +208,7 @@ TEST_CASE("test003_STC_18", "[card_manager]") {
     };
 
     auto publishFuture = cardManager.publishCard(keyPair.privateKey(), keyPair.publicKey(),
-                                                 "identity", std::string(), dic);
+                                                 identity, std::string(), dic);
     auto publishedCard = publishFuture.get();
     REQUIRE(!publishedCard.isOutdated());
 
@@ -220,32 +223,33 @@ TEST_CASE("test003_STC_18", "[card_manager]") {
 TEST_CASE("test004_STC_19", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
+    auto identity = utils.getRandomString();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
-    auto provider = std::make_shared<GeneratorJwtProvider>(generator, "identity");
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
+    auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
 
-    auto cardManager = CardManager(crypto, provider, verifier);
-    auto keyPair1 = crypto->generateKeyPair();
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
+    auto keyPair1 = utils.crypto()->generateKeyPair();
 
     std::unordered_map<std::string, std::string> dic = {
             {"key1", "data1"},
             {"key2", "data2"},
     };
     auto publishFuture1 = cardManager.publishCard(keyPair1.privateKey(), keyPair1.publicKey(),
-                                                 "identity", std::string(), dic);
+                                                 identity, std::string(), dic);
     auto publishedCard1 = publishFuture1.get();
     REQUIRE(!publishedCard1.isOutdated());
 
-    auto keyPair2 = crypto->generateKeyPair();
+    auto keyPair2 = utils.crypto()->generateKeyPair();
 
     auto publishFuture2 = cardManager.publishCard(keyPair2.privateKey(), keyPair2.publicKey(),
-                                                  "identity", publishedCard1.identifier());
+                                                  identity, publishedCard1.identifier());
     auto publishedCard2 = publishFuture2.get();
     REQUIRE(!publishedCard2.isOutdated());
 
@@ -266,19 +270,19 @@ TEST_CASE("test004_STC_19", "[card_manager]") {
 TEST_CASE("test005_STC_20", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
     auto identity = utils.getRandomString();
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
 
-    auto cardManager = CardManager(crypto, provider, verifier);
-    auto keyPair1 = crypto->generateKeyPair();
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
+    auto keyPair1 = utils.crypto()->generateKeyPair();
 
     std::unordered_map<std::string, std::string> dic = {
             {"key1", "data1"},
@@ -289,14 +293,14 @@ TEST_CASE("test005_STC_20", "[card_manager]") {
     auto publishedCard1 = publishFuture1.get();
     REQUIRE(!publishedCard1.isOutdated());
 
-    auto keyPair2 = crypto->generateKeyPair();
+    auto keyPair2 = utils.crypto()->generateKeyPair();
 
     auto publishFuture2 = cardManager.publishCard(keyPair2.privateKey(), keyPair2.publicKey(),
                                                   identity, publishedCard1.identifier());
     auto publishedCard2 = publishFuture2.get();
     REQUIRE(!publishedCard2.isOutdated());
 
-    auto keyPair3 = crypto->generateKeyPair();
+    auto keyPair3 = utils.crypto()->generateKeyPair();
 
     auto publishFuture3 = cardManager.publishCard(keyPair3.privateKey(), keyPair3.publicKey(), identity);
     auto publishedCard3 = publishFuture3.get();
@@ -326,33 +330,33 @@ TEST_CASE("test005_STC_20", "[card_manager]") {
 TEST_CASE("test006_STC_21", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto identity = "identity";
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
+    auto identity = utils.getRandomString();
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto keyPair = crypto->generateKeyPair();
+    auto keyPair = utils.crypto()->generateKeyPair();
 
     std::function<std::future<RawSignedModel>(RawSignedModel)> signFunc = [&](RawSignedModel model) {
         std::promise<RawSignedModel> p;
-        ModelSigner signer(crypto);
+        ModelSigner signer(utils.crypto());
         signer.sign(model, "extra", keyPair.privateKey());
         p.set_value(model);
 
         return p.get_future();
     };
 
-    auto whitelist = Whitelist({VerifierCredentials("extra", crypto->exportPublicKey(keyPair.publicKey()))});
+    auto whitelist = Whitelist({VerifierCredentials("extra", utils.crypto()->exportPublicKey(keyPair.publicKey()))});
     std::vector<Whitelist> whitelists = {whitelist};
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, whitelists);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), whitelists, true, !consts.enableStg());
 
-    auto cardManager = CardManager(crypto, provider, verifier, signFunc);
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, signFunc, cardClient);
 
-    auto keyPair1 = crypto->generateKeyPair();
+    auto keyPair1 = utils.crypto()->generateKeyPair();
 
     auto rawCard = cardManager.generateRawCard(keyPair1.privateKey(), keyPair1.publicKey(), identity);
 
@@ -365,21 +369,20 @@ TEST_CASE("test006_STC_21", "[card_manager]") {
 TEST_CASE("test007_STC_34", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto identity = "identity";
-    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto, consts.AppId(), 1000);
+    auto identity = utils.getRandomString();
+    auto generator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), utils.crypto(), consts.AppId(), 1000);
     auto provider = std::make_shared<GeneratorJwtProvider>(generator, identity);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), false, false);
 
-    auto keyPair = crypto->generateKeyPair();
+    auto keyPair = utils.crypto()->generateKeyPair();
 
     auto cardClientStub = std::make_shared<CardClientStub_STC34>();
-    auto cardManager = CardManager(crypto, provider, verifier, nullptr, cardClientStub);
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClientStub);
 
     bool errorWasThrown = false;
     try {
@@ -445,7 +448,6 @@ TEST_CASE("test008_STC_35", "[card_manager]") {
 
 TEST_CASE("test009_STC_36", "[card_manager]") {
     TestConst consts;
-    TestUtils utils(consts);
     auto crypto = std::make_shared<Crypto>();
 
     auto privateKeyStr = consts.ApiPrivateKey();
@@ -473,13 +475,13 @@ TEST_CASE("test009_STC_36", "[card_manager]") {
 TEST_CASE("test0010_STC_26", "[card_manager]") {
     TestConst consts;
     TestUtils utils(consts);
-    auto crypto = std::make_shared<Crypto>();
+    auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
     
     auto privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-    auto privateKey = crypto->importPrivateKey(privateKeyData);
+    auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
-    auto identity = "some_identity";
+    auto identity = utils.getRandomString();
 
     int counter = 0;
 
@@ -493,11 +495,11 @@ TEST_CASE("test0010_STC_26", "[card_manager]") {
     };
 
     auto provider = std::make_shared<AccessTokenProviderStub_STC26>(identity, forceCallbackCheck);
-    auto verifier = std::make_shared<VirgilCardVerifier>(crypto, std::vector<Whitelist>(), false, false);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), false, false);
 
-    auto cardManager = CardManager(crypto, provider, verifier);
+    auto cardManager = CardManager(utils.crypto(), provider, verifier, nullptr, cardClient);
 
-    auto keyPair = crypto->generateKeyPair();
+    auto keyPair = utils.crypto()->generateKeyPair();
 
     auto publishFuture = cardManager.publishCard(keyPair.privateKey(), keyPair.publicKey(), identity);
     auto publishedCard = publishFuture.get();

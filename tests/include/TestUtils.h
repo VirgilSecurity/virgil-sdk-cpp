@@ -38,24 +38,24 @@
 #define VIRGIL_SDK_TESTUTILS_H
 
 #include <memory>
-#include <string>
 #include <ctime>
 #include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/cards/Card.h>
-
-#include <TestConst.h>
 #include <virgil/sdk/client/models/RawCardContent.h>
+#include <TestConst.h>
+#include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
 
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
 
 namespace virgil {
 namespace sdk {
     namespace test {
         class TestUtils {
         public:
-            TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {}
+            TestUtils(TestConst consts);
 
             jwt::Jwt getToken(const std::string& identity, int ttl = 1000) const;
 
@@ -79,7 +79,8 @@ namespace sdk {
             const std::shared_ptr<Crypto>& crypto() const;
 
         private:
-            const std::shared_ptr<Crypto> crypto_;
+            std::shared_ptr<Crypto> crypto_;
+
             TestConst consts;
         };
     }
