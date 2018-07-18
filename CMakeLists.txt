@@ -76,34 +76,10 @@ mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 ## Environment
 set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
-if (ENABLE_STAGING_ENV)
-    set (VIRGIL_IDENTITY_SERVICE_URI "https://identity-stg.virgilsecurity.com"
-            CACHE STRING "Base URI to the Virgil Identity service")
 
-    set (VIRGIL_KEYS_SERVICE_URI "https://keys-stg.virgilsecurity.com"
-            CACHE STRING  "Base URI to Virgil Keys service")
-
-    set (VIRGIL_PRIVATE_KEYS_SERVICE_URI "https://keys-private-stg.virgilsecurity.com"
-        CACHE STRING "Base URI to Virgil Private Keys service")
-endif ()
 mark_as_advanced (
     ENABLE_STAGING_ENV
-    VIRGIL_IDENTITY_SERVICE_URI
-    VIRGIL_KEYS_SERVICE_URI
-    VIRGIL_PRIVATE_KEYS_SERVICE_URI
 )
-
-if (VIRGIL_IDENTITY_SERVICE_URI)
-    add_definitions (-DVIRGIL_IDENTITY_SERVICE_URI="${VIRGIL_IDENTITY_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_KEYS_SERVICE_URI="${VIRGIL_KEYS_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
-endif ()
 
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
