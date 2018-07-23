@@ -46,17 +46,43 @@
 namespace virgil {
     namespace sdk {
         namespace client {
+            /*!
+             * @brief Interface representing operations with Virgil Cards service
+             */
             class CardClientInterface {
             public:
+                /*!
+                 * @brief Creates Virgil Card instance on the Virgil Cards Service.
+                 * Also makes the Card accessible for search/get queries from other users.
+                 * RawSignedModel should contain appropriate signatures
+                 * @param model signed RawSignedModel to publish
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with RawSignedModel of published Card
+                 */
                 virtual std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
                                                                         const std::string& token) const = 0;
 
+                /*!
+                 * @brief Returns GetCardResponse with RawSignedModel of card from the Virgil Cards Service with given ID, if exists
+                 * @param cardId std::string with unique Virgil Card identifier
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with GetCardResponse if Card found
+                 */
                 virtual std::future<models::GetCardResponse> getCard(const std::string &cardId,
                                                                      const std::string& token) const = 0;
 
+                /*!
+                 * @brief Performs search of Virgil Cards using given identity on the Virgil Cards Service
+                 * @param identity identity of cards to search
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with std::vector with RawSignedModels of matched Virgil Cards
+                 */
                 virtual std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
                                                                                      const std::string& token) const = 0;
 
+                /*!
+                 * @brief Virtual destructor
+                 */
                 virtual ~CardClientInterface() = default;
             };
         }

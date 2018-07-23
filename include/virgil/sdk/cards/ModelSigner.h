@@ -46,38 +46,90 @@
 namespace virgil {
     namespace sdk {
         namespace cards {
+            /*!
+             * @brief Class responsible for signing RawSignerModel
+             */
             class ModelSigner {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param crypto std::shared_ptr to Crypto instance
+                 */
                 ModelSigner(std::shared_ptr<crypto::Crypto> crypto);
 
+                /*!
+                 * @brief signer identifier for self signatures
+                 */
                 static const std::string selfSignerIdentifier;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to Crypto instance
+                 */
                 const std::shared_ptr<crypto::Crypto>& crypto() const;
 
+                /*!
+                 * @brief Adds signature to given RawSignedModel with provided signer and PrivateKey
+                 * @param model RawSignedModel to sign
+                 * @param signer identifier of signer
+                 * @param privateKey PrivateKey to sign with
+                 */
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
                           const crypto::keys::PrivateKey &privateKey) const;
 
+                /*!
+                 * @brief Adds signature to given RawSignedModel with provided signer, PrivateKey and additional data
+                 * @param model RawSignedModel to sign
+                 * @param signer identifier of signer
+                 * @param privateKey PrivateKey to sign with
+                 * @param additionalData additional data to sign with model
+                 */
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
                           const crypto::keys::PrivateKey &privateKey,
                           const VirgilByteArray &additionalData) const;
 
+                /*!
+                 * @brief Adds signature to given RawSignedModel with provided signer, PrivateKey and additional data
+                 * @param model RawSignedModel to sign
+                 * @param signer identifier of signer
+                 * @param privateKey PrivateKey to sign with
+                 * @param extraFields std::unordered_map with additional data to sign with model
+                 */
                 void sign(client::models::RawSignedModel &model,
                           const std::string &signer,
                           const crypto::keys::PrivateKey &privateKey,
                           const std::unordered_map<std::string, std::string> &extraFields) const;
 
+                /*!
+                 * @brief Adds owner's signature to given RawSignedModel using provided PrivateKey
+                 * @param model RawSignedModel to sign
+                 * @param privateKey PrivateKey to sign with
+                 */
                 void selfSign(client::models::RawSignedModel &model,
                               const crypto::keys::PrivateKey &privateKey) const;
 
+                /*!
+                 * @brief Adds owner's signature to given RawSignedModel using provided PrivateKey and additional data
+                 * @param model RawSignedModel to sign
+                 * @param privateKey PrivateKey to sign with
+                 * @param additionalData additional data to sign with model
+                 */
                 void selfSign(client::models::RawSignedModel &model,
                               const crypto::keys::PrivateKey &privateKey,
                               const VirgilByteArray &additionalData) const;
 
+                /*!
+                 * @brief Adds owner's signature to given RawSignedModel using provided PrivateKey and additional data
+                 * @param model RawSignedModel to sign
+                 * @param privateKey PrivateKey to sign with
+                 * @param extraFields std::unordered_map with additional data to sign with model
+                 */
                 void selfSign(client::models::RawSignedModel &model,
                               const crypto::keys::PrivateKey &privateKey,
                               const std::unordered_map<std::string, std::string> &extraFields) const;
+
             private:
                 std::shared_ptr<crypto::Crypto> crypto_;
             };

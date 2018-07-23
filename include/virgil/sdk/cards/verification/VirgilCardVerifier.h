@@ -47,28 +47,80 @@ namespace virgil {
     namespace sdk {
         namespace cards {
             namespace verification {
+                /*!
+                 * @brief Virgil implementation of CardVerifierInterface
+                 * @note By default verifies Card's self signature and Virgil Cards Service signature
+                 */
                 class VirgilCardVerifier : public CardVerifierInterface {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param crypto std::shared_ptr to Crypto instance
+                     * @param whitelists std::vector with collections of verifiers
+                     * @param verifySelfSignature VirgilCardVerifier will verify self signature if true
+                     * @param verifyVirgilSignature VirgilCardVerifier will verify Virgil Cards Service signature if true
+                     * @note VirgilCardVerifier verifies Card if it contains signature from AT LEAST
+                     * one verifier from EACH Whitelist
+                     */
                     VirgilCardVerifier(std::shared_ptr<crypto::Crypto> crypto,
                                        std::vector<Whitelist> whitelists = std::vector<Whitelist>(),
                                        bool verifySelfSignature = true,
                                        bool verifyVirgilSignature = true);
 
+                    /*!
+                     * @brief Signer identifier for self signatures
+                     */
                     static const std::string selfSignerIdentifier_;
+
+                    /*!
+                     * @brief Signer identifier for Virgil Cards Service signature
+                     */
                     static const std::string virgilSignerIdentifier_;
+
+                    /*!
+                     * @brief Base64 encoded string with Virgil Service's Public Key for verifying Virgil Cards Service signature
+                     */
                     static const std::string virgilPublicKeyBase64_;
 
+                    /*!
+                     * @brief Getter
+                     * @return std::shared_ptr to Crypto instance
+                     */
                     const std::shared_ptr<crypto::Crypto>& crypto() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return Public Key of Virgil Cards Service
+                     */
                     const crypto::keys::PublicKey virgilPublicKey() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return std::vector with collections of verifiers
+                     */
                     const std::vector<Whitelist>& whitelists() const;
 
-                    bool verifyCard(const Card &card) const override;
-
+                    /*!
+                     * @brief Getter
+                     * @return true if VirgilCardVerifier will verify self signature, false otherwise
+                     */
                     bool verifySelfSignature() const;
 
+                    /*!
+                     * Getter
+                     * @return true if VirgilCardVerifier will verify Virgil Cards Service signature, false otherwise
+                     */
                     bool verifyVirgilSignature() const;
+
+                    /*!
+                     * @brief Verifies Card instance using set rules
+                     * @param card Card to verify
+                     * @return true if Card verified, false otherwise
+                     * @note VirgilCardVerifier verifies Card if it contains signature from AT LEAST
+                     * one verifier from EACH Whitelist
+                     */
+                    bool verifyCard(const Card &card) const override;
+
                 private:
                     bool verifySelfSignature_;
                     bool verifyVirgilSignature_;

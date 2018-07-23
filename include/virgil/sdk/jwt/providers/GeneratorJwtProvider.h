@@ -44,19 +44,48 @@ namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace providers {
+                /*!
+                 * @brief Implementation of AccessTokenProviderInterface which provides generated JWTs
+                 */
                 class GeneratorJwtProvider : public interfaces::AccessTokenProviderInterface {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param jwtGenerator JwtGenerator instance for generating new tokens
+                     * @param defaultIdentity identity that will be used for generating token
+                     * if tokenContext do not have it (e.g. for read operations)
+                     * @param additionalData std::unordered_map with additional data, that will be present in token
+                     * @warning Do not create cards with defaultIdentity
+                     */
                     GeneratorJwtProvider(JwtGenerator jwtGenerator,
                                          std::string defaultIdentity,
                                          std::unordered_map<std::string, std::string> additionalData
                                          = std::unordered_map<std::string, std::string>());
 
+                    /*!
+                     * @brief Provides new generated JWT
+                     * @param tokenContext TokenContext provides context explaining why token is needed
+                     * @return std::future with std::shared_ptr to AccessTokenInterface implementation
+                     */
                     std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
+                    /*!
+                     * @brief Getter
+                     * @return JwtGenerator instance Provider uses for generating new tokens
+                     */
                     const JwtGenerator& jwtGenerator() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return identity that will be used for generating token
+                     * if tokenContext do not have it (e.g. for read operations)
+                     */
                     const std::string& defaultIdentity() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return std::unordered_map with additional data, that added to generated tokens
+                     */
                     const std::unordered_map<std::string, std::string>& additionalData() const;
 
                 private:

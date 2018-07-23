@@ -46,10 +46,21 @@ namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace interfaces {
+                /*!
+                 * @brief Interface responsible for providing AccessToken
+                 */
                 class AccessTokenProviderInterface {
                 public:
+                    /*!
+                     * @brief Provides access token
+                     * @param tokenContext TokenContext provides context explaining why token is needed
+                     * @return std::future with std::shared_ptr to AccessTokenInterface implementation
+                     */
                     virtual std::future<std::shared_ptr<AccessTokenInterface>> getToken(const TokenContext& tokenContext) = 0;
 
+                    /*!
+                     * @brief Virtual destructor
+                     */
                     virtual ~AccessTokenProviderInterface() = default;
                 };
             }

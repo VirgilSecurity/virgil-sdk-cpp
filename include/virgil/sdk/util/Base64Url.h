@@ -42,18 +42,32 @@
 namespace virgil {
     namespace sdk {
         namespace util {
+            /*!
+             * @brief Class for base64Url encoding and decoding
+             */
             class Base64Url {
             public:
-                static const char base64_url_alphabet[];
-
+                /*!
+                 * @brief Encodes passed std::string in base64Url format
+                 * @param in std::string to be encoded
+                 * @return base64Url encoded std::string
+                 */
                 static std::string encode(const std::string &in);
 
+                /*!
+                 * @brief Decodes passed base64Url encoded std::string
+                 * @param in base64Url encoded std::string
+                 * @return decoded std::string
+                 */
                 static std::string decode(const std::string &in);
 
                 /*!
                  * @brief Forbid creation.
                  */
                 Base64Url() = delete;
+
+            private:
+                static const char base64_url_alphabet[];
             };
         }
     }

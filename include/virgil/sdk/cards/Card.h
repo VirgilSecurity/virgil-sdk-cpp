@@ -46,8 +46,24 @@
 namespace virgil {
     namespace sdk {
         namespace cards {
+            /*!
+             * @brief Class representing Virgil Card
+             */
             class Card {
             public:
+                /*!
+                 * @brief Contructor
+                 * @param identifier identifier of Virgil Card. Must be unique
+                 * @param identity identity of Virgil Card
+                 * @param publicKey Public Key of Virgil Card
+                 * @param version version of Virgil Card
+                 * @param createdAt std::time with creation date of Virgil Card
+                 * @param contentSnapshot VirgilByteArray with snapshot of corresponding RawCardContent
+                 * @param isOutdated true if Virgil Card is outdated, false otherwise
+                 * @param signatures std::vector with CardSignatures of Virgil Card
+                 * @param previousCardId identifier of outdated previous Virgil Card with same identity
+                 * @param previousCard std::shared_ptr to previous Virgil Card instance
+                 */
                 Card(std::string identifier,
                      std::string identity,
                      crypto::keys::PublicKey publicKey,
@@ -59,29 +75,88 @@ namespace virgil {
                      std::string previousCardId = std::string(),
                      std::shared_ptr<Card> previousCard = nullptr);
 
+                /*!
+                 * @brief Getter
+                 * @return identifier of Virgil Card
+                 */
                 const std::string& identifier() const;
 
+                /*!
+                 * @brief Getter
+                 * @return identity of Virgil Card
+                 */
                 const std::string& identity() const;
 
+                /*!
+                 * @brief Getter
+                 * @return Public Key of Virgil Card
+                 */
                 const crypto::keys::PublicKey& publicKey() const;
 
+                /*!
+                 * @brief Getter
+                 * @return version of Virgil Card
+                 */
                 const std::string& version() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::time with creation date of Virgil Card
+                 */
                 std::time_t createdAt() const;
 
+                /*!
+                 * @brief Getter
+                 * @return VirgilByteArray with snapshot of corresponding RawCardContent
+                 */
                 const VirgilByteArray& contentSnapshot() const;
 
+                /*!
+                 * @brief Getter
+                 * @return true if Virgil Card is outdated, false otherwise
+                 */
                 bool isOutdated() const;
-                void isOutdated(bool newIsOutdated);
 
+                /*!
+                 * @brief Getter
+                 * @return identifier of outdated previous Virgil Card with same identity
+                 */
                 const std::string& previousCardId() const;
-                void previousCardId(const std::string& newPreviousCardId);
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to previous Virgil Card instance
+                 */
                 const std::shared_ptr<Card>& previousCard() const;
-                void previousCard(const std::shared_ptr<Card>& newPreviousCard);
 
+                /*!
+                 * @brief Getter
+                 * @return std::vector with CardSignatures of Virgil Card
+                 */
                 const std::vector<cards::CardSignature>& signatures() const;
 
+                /*!
+                 * @brief Setter
+                 * @param newIsOutdated bool isOutdated to be set
+                 */
+                void isOutdated(bool newIsOutdated);
+
+                /*!
+                 * @brief Setter
+                 * @param newPreviousCardId std::string previousCardId to be set
+                 */
+                void previousCardId(const std::string& newPreviousCardId);
+
+                /*!
+                 * @brief Setter
+                 * @param newPreviousCard previousCard to be set
+                 */
+                void previousCard(const std::shared_ptr<Card>& newPreviousCard);
+
+                /*!
+                 * @brief Builds RawSignedModel representing Card
+                 * @return RawSignedModel representing Card
+                 */
                 client::models::RawSignedModel getRawCard() const;
 
             private:

@@ -50,8 +50,21 @@ using virgil::sdk::client::models::GetCardResponse;
 namespace virgil {
     namespace sdk {
         namespace cards {
+            /*!
+             * @brief Class responsible for operations with Virgil Cards
+             */
             class CardManager {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param crypto Crypto instance
+                 * @param accessTokenProvider AccessTokenProviderInterface implementation used for getting Access Token
+                 * when performing queries
+                 * @param cardVerifier CardVerifierInterface implementation used for verifying Cards
+                 * @param signCallback std::function called to perform additional signatures for card before publishing
+                 * @param cardClient CardClientInterface implementation used for performing queries
+                 * @param retryOnUnauthorized will automatically perform second query with forceReload = true AccessToken if true
+                 */
                 CardManager(std::shared_ptr<crypto::Crypto> crypto,
                             std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface> accessTokenProvider,
                             std::shared_ptr<verification::CardVerifierInterface> cardVerifier,
@@ -59,17 +72,54 @@ namespace virgil {
                             std::shared_ptr<client::CardClientInterface> cardClient = std::make_shared<client::CardClient>(),
                             bool retryOnUnauthorized = true);
 
+                /*!
+                 * @brief Generates self signed RawSignedModel
+                 * @param privateKey PrivateKey to self sign with
+                 * @param publicKey PublicKey instance
+                 * @param identity identity of Card
+                 * @param previousCardId identifier of Virgil Card with same identity this Card will replace
+                 * @param extraFields std::unordered_map with extra data to sign with model
+                 * @return self signed RawSignedModel
+                 */
                 RawSignedModel generateRawCard(const crypto::keys::PrivateKey& privateKey, const crypto::keys::PublicKey& publicKey,
                                                const std::string& identity, const std::string& previousCardId = std::string(),
                                                const std::unordered_map<std::string, std::string> &extraFields
                                                = std::unordered_map<std::string, std::string>()) const;
 
+                /*!
+                 * @brief Imports Card from RawSignedModel
+                 * @param model RawSignedModel instance to import
+                 * @param crypto Crypto instance
+                 * @return imported Card
+                 */
                 static Card parseCard(const RawSignedModel& model, const std::shared_ptr<crypto::Crypto>& crypto);
 
+                /*!
+                 * @brief Imports and verifies Card from RawSignedModel using self Crypto instance
+                 * @param model RawSignedModel to import
+                 * @return imported Card
+                 */
                 Card parseCard(const RawSignedModel& model) const;
 
+                /*!
+                 * @brief Asynchronously creates Virgil Card instance on the Virgil Cards Service and associates it with unique identifier
+                 * Also makes the Card accessible for search/get queries from other users
+                 * RawSignedModel should be at least selfSigned
+                 * @param rawCard self signed RawSignedModel
+                 * @return std::future with published and verified Card
+                 */
                 std::future<Card> publishCard(const RawSignedModel& rawCard) const;
 
+                /*!
+                 * @brief Generates self signed RawSignedModel, asynchronously creates Virgil Card
+                 * instance on the Virgil Cards Service and associates it with unique identifier
+                 * @param privateKey PrivateKey to self sign RawSignedModel with
+                 * @param publicKey PublicKey instance for generating RawSignedModel
+                 * @param identity identity for generating RawSignedModel. Will be taken from token if omitted
+                 * @param previousCardId identifier of Virgil Card to replace
+                 * @param extraFields std::unordered_map with extra data to sign RawSignedModel with
+                 * @return std::future with published and verified Card
+                 */
                 std::future<Card> publishCard(const crypto::keys::PrivateKey& privateKey,
                                               const crypto::keys::PublicKey& publicKey,
                                               const std::string& identity = std::string(),
@@ -77,30 +127,102 @@ namespace virgil {
                                               const std::unordered_map<std::string, std::string>& extraFields
                                               = std::unordered_map<std::string, std::string>()) const;
 
+                /*!
+                 * @brief Asynchronously returns Card with given identifier
+                 * @param cardId identifier of card to return
+                 * @return std::future with found and verified Card
+                 */
                 std::future<Card> getCard(const std::string& cardId) const;
 
+                /*!
+                 * @brief Asynchronously performs search of Virgil Cards using identity on the Virgil Cards Service
+                 * @param identity identity of Card to search
+                 * @return std::future with std::vector of found and verified Cards
+                 */
                 std::future<std::vector<Card>> searchCards(const std::string& identity) const;
 
+                /*!
+                 * @brief Imports and verifies Card from base64 encoded std::string
+                 * @param base64 base64 encoded std::string with Card
+                 * @return imported and verified Card
+                 */
                 Card importCardFromBase64(const std::string& base64) const;
+
+                /*!
+                 * @brief Imports and verifies Card from json std::string
+                 * @param json std::string with json structure of Card
+                 * @return imported and verified Card
+                 */
                 Card importCardFromJson(const std::string json) const;
+
+                /*!
+                 * @brief Imports and verifies Card from RawSignedModel
+                 * @param rawCard RawSignedModel to import
+                 * @return imported and verified Card
+                 */
                 Card importCardFromRawCard(const RawSignedModel& rawCard) const;
 
+                /*!
+                 * @brief Exports Card as base64 encoded std::string
+                 * @param card Card instance to export
+                 * @return base64 encoded std::string with Card
+                 */
                 std::string exportCardAsBase64(const Card& card) const;
+
+                /*!
+                 * @brief Exports Card as json std::string
+                 * @param card Card instance to import
+                 * @return json std::string with Card
+                 */
                 std::string exportCardAsJson(const Card& card) const;
+
+                /*!
+                 * @brief Exports Card as RawSignedModel
+                 * @param card Card instance to export
+                 * @return RawSignedModel representing Card
+                 */
                 RawSignedModel exportCardAsRawCard(const Card& card) const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to Crypto instance
+                 */
                 const std::shared_ptr<crypto::Crypto>& crypto() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to AccessTokenProviderInterface implementation
+                 */
                 const std::shared_ptr<jwt::interfaces::AccessTokenProviderInterface>& accessTokenProvider() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to CardVerifierInterface implementation
+                 */
                 const std::shared_ptr<verification::CardVerifierInterface>& cardVerifier() const;
 
+                /*!
+                 * @brief Getter
+                 * @return ModelSigner instance
+                 */
                 const ModelSigner& modelSigner() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to CardClientInterface implementation
+                 */
                 const std::shared_ptr<client::CardClientInterface>& cardClient() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::function called to perform additional signatures for card before publishing
+                 */
                 const std::function<std::future<RawSignedModel>(RawSignedModel)>& signCallback() const;
 
+                /*!
+                 * @brief Getter
+                 * @return true if CardManager will automatically perform second query with forceReload = true AccessToken, false otherwise
+                 */
                 bool retryOnUnauthorized() const;
 
             private:

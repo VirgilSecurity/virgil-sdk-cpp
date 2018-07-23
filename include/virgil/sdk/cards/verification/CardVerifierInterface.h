@@ -43,10 +43,21 @@ namespace virgil {
     namespace sdk {
         namespace cards {
             namespace verification {
+                /*!
+                 * @brief Interface representing Card verification process
+                 */
                 class CardVerifierInterface {
                 public:
+                    /*!
+                     * @brief Verifies Card instance
+                     * @param card Card to verify
+                     * @return true if Card verified, false otherwise
+                     */
                     virtual bool verifyCard(const Card &card) const = 0;
 
+                    /*!
+                     * @brief Virtual destructor
+                     */
                     virtual ~CardVerifierInterface() = default;
                 };
             }

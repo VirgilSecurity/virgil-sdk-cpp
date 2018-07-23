@@ -42,23 +42,60 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class representing JWT Header content
+             */
             class JwtHeaderContent {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param keyIdentifier identifier of public key which should be used to verify signature.
+                 * Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 * @param algorithm used signature algorithm
+                 * @param type token type
+                 * @param contentType content type for this JWT
+                 */
                 JwtHeaderContent(std::string keyIdentifier,
                                  std::string algorithm = "VEDS512",
                                  std::string type = "JWT",
                                  std::string contentType = "virgil-jwt;v=1");
 
+                /*!
+                 * @brief Initializes JwtHeaderContent from base64Url encoded string
+                 * @param base64url base64Url encoded string with JwtHeaderContent
+                 * @return JwtHeaderContent instance
+                 */
                 static JwtHeaderContent parse(const std::string& base64url);
 
+                /*!
+                 * @brief Getter
+                 * @return used signature algorithm
+                 */
                 const std::string& algorithm() const;
 
+                /*!
+                 * @brief Getter
+                 * @return token type
+                 */
                 const std::string& type() const;
 
+                /*!
+                 * @brief Getter
+                 * @return content type for this JWT
+                 */
                 const std::string& contentType() const;
 
+                /*!
+                 * @brief Getter
+                 * @return identifier of public key which should be used to verify signature
+                 * @note Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 */
                 const std::string& keyIdentifier() const;
 
+                /*!
+                 * @brief Exports JwtHeaderContent as base64Url encoded string
+                 * @return base64Url encoded string with JwtHeaderContent
+                 */
                 std::string base64Url() const;
 
             private:

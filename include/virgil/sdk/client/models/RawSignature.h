@@ -44,20 +44,45 @@ namespace virgil {
     namespace sdk {
         namespace client {
             namespace models {
+                /*!
+                 * @brief Represents signature for RawSignedModel
+                 */
                 class RawSignature {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param signer identifier of signer
+                     * @param signature signature data
+                     * @param snapshot additional data
+                     * @note signer must be unique. Reserved values:
+                     *   - Self verifier: "self"
+                     *   - Virgil Service verifier: "virgil"
+                     */
                     RawSignature(std::string signer, VirgilByteArray signature,
                                  VirgilByteArray snapshot = VirgilByteArray());
 
+                    /*!
+                     * @brief Getter
+                     * @return identifier of signer
+                     */
                     const std::string& signer() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return signature data
+                     */
+                    const VirgilByteArray& signature() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return additional data
+                     */
                     const VirgilByteArray& snapshot() const;
 
-                    const VirgilByteArray& signature() const;
                 private:
                     std::string signer_;
-                    VirgilByteArray snapshot_;
                     VirgilByteArray signature_;
+                    VirgilByteArray snapshot_;
                 };
             }
         }

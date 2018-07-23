@@ -44,10 +44,23 @@ namespace virgil {
     namespace sdk {
         namespace cards {
             namespace verification {
+                /*!
+                 * @brief Class representing collection of verifiers
+                 * @note Card should contain signature from AT LEAST one verifier from collection of verifiers
+                 */
                 class Whitelist {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param verifierCredentials std::vector with VerifierCredentials
+                     */
                     Whitelist(std::vector<VerifierCredentials> verifierCredentials);
 
+                    /*!
+                     * @brief Getter
+                     * @return std::vector with VerifierCredentials
+                     * @note Card must be signed by AT LEAST one of them
+                     */
                     const std::vector<VerifierCredentials>& verifierCredentials() const;
 
                 private:

@@ -46,25 +46,66 @@ namespace virgil {
     namespace sdk {
         namespace client {
             namespace models {
+                /*!
+                 * @brief Represents content of Virgil Card
+                 */
                 class RawCardContent {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param identity identity of Card
+                     * @param publicKey PublicKey data of Card
+                     * @param createdAt std::time with date of Card creation
+                     * @param previousCardId identifier of previous Card with same identity
+                     * @param version version of Card
+                     */
                     RawCardContent(std::string identity, VirgilByteArray publicKey, std::time_t createdAt,
                                    std::string previousCardId = std::string(),
                                    std::string version = "5.0");
 
+                    /*!
+                     * @brief Initializes RawCardContent from binary content snapshot
+                     * @param snapshot binary snapshot of RawCardContent
+                     * @return initialized RawCardContent
+                     */
                     static RawCardContent parse(const VirgilByteArray& snapshot);
 
+                    /*!
+                     * @brief Takes binary snapshot of RawCardContent
+                     * @return binary snapshot of RawCardContent
+                     */
+                    VirgilByteArray snapshot() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return identity of Card
+                     */
                     const std::string& identity() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return PublicKey data of Card
+                     */
                     const VirgilByteArray& publicKey() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return version of Card
+                     */
                     const std::string& version() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return std::time with date of Card creation
+                     */
                     std::time_t createdAt() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return identifier of previous Card with same identity
+                     */
                     const std::string& previousCardId() const;
 
-                    VirgilByteArray snapshot() const;
                 private:
                     std::string identity_;
                     VirgilByteArray publicKey_;

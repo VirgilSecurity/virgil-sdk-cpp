@@ -44,28 +44,77 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class implementing AccessTokenInterface in terms of Virgil JWT
+             */
             class Jwt : public interfaces::AccessTokenInterface {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param headerContent JwtHeaderContent representing header of Jwt
+                 * @param bodyContent JwtBodyContent representing body of Jwt
+                 * @param signatureContent signature data of Jwt
+                 */
                 Jwt(JwtHeaderContent headerContent,
                     JwtBodyContent bodyContent,
                     VirgilByteArray signatureContent);
 
+                /*!
+                 * @brief Initializes Jwt from its string representation
+                 * @param stringRepresentation must be equal to
+                 * base64UrlEncode(JWT Header) + "." + base64UrlEncode(JWT Body) + "." + base64UrlEncode(Jwt Signature)
+                 * @return Jwt instance
+                 */
                 static Jwt parse(const std::string& stringRepresentation);
 
+                /*!
+                 * @brief Getter
+                 * @return JwtHeaderContent representing header of Jwt
+                 */
                 const JwtHeaderContent& headerContent() const;
 
+                /*!
+                 * @brief Getter
+                 * @return JwtBodyContent representing body of Jwt
+                 */
                 const JwtBodyContent& bodyContent() const;
 
+                /*!
+                 * @brief Getter
+                 * @return signature data of Jwt
+                 */
                 const VirgilByteArray& signatureContent() const;
 
+                /*!
+                 * @brief Provides string representation of token
+                 * @return string representation of token
+                 */
                 const std::string& stringRepresentation() const;
 
+                /*!
+                 * @brief Extracts identity
+                 * @return std::string with identity
+                 */
                 const std::string& identity() const;
 
+                /*!
+                 * @brief Returns JWT data that should be signed
+                 * @return JWT data that should be signed
+                 */
                 const VirgilByteArray& dataToSign() const;
 
+                /*!
+                 * @brief Returns whether or not token is expired
+                 * @return true if token is expired, false otherwise
+                 */
                 bool isExpired() const;
 
+                /*!
+                 * @brief Returns JWT data that should be signed
+                 * @param headerContent JwtHeaderContent representing header of Jwt
+                 * @param bodyContent JwtBodyContent representing body of Jwt
+                 * @return JWT data that should be signed
+                 */
                 static VirgilByteArray dataToSign(const JwtHeaderContent& headerContent,
                                                   const JwtBodyContent& bodyContent);
 

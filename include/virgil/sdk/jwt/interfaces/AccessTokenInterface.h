@@ -43,12 +43,26 @@ namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace interfaces {
+                /*!
+                 * @brief Interface representing Access Token
+                 */
                 class AccessTokenInterface {
                 public:
+                    /*!
+                     * @brief Provides string representation of token
+                     * @return std::string with token
+                     */
                     virtual const std::string& stringRepresentation() const = 0;
 
+                    /*!
+                     * @brief Extracts identity
+                     * @return std::string with identity
+                     */
                     virtual const std::string& identity() const = 0;
 
+                    /*!
+                     * @brief Virtual destructor
+                     */
                     virtual ~AccessTokenInterface() = default;
                 };
             }

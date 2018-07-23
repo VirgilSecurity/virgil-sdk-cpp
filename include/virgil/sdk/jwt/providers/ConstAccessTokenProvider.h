@@ -43,12 +43,28 @@ namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace providers {
+                /*!
+                 * @brief Implementation of AccessTokenProviderInterface which provides constant AccessTokenInterface implementation
+                 */
                 class ConstAccessTokenProvider : public interfaces::AccessTokenProviderInterface {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param accessToken std::shared_ptr to implementation of AccessTokenInterface
+                     */
                     ConstAccessTokenProvider(std::shared_ptr<interfaces::AccessTokenInterface> accessToken);
 
+                    /*!
+                     * @brief Provides cached access token
+                     * @param do not have any influence on result in this implementation
+                     * @return std::future with cached std::shared_ptr to implementation of AccessTokenInterface
+                     */
                     std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
+                    /*!
+                     * @brief Getter
+                     * @return cached std::shared_ptr to implementation of AccessTokenInterface
+                     */
                     const std::shared_ptr<interfaces::AccessTokenInterface>& accessToken() const;
 
                 private:

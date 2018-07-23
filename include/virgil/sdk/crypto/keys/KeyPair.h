@@ -55,7 +55,6 @@ namespace crypto {
     namespace keys {
         /*!
          * @brief Wrapper for related Public Key and Private Key.
-         * @see CryptoInterface
          */
         class KeyPair {
         public:

@@ -44,18 +44,44 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class responsible for verification of JWTs
+             */
             class JwtVerifier {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param apiPublicKey Public Key which should be used to verify signatures
+                 * @param apiPublicKeyIdentifier identifier of public key which should be used to verify signatures
+                 * @param crypto std::shared_ptr to Crypto instance
+                 */
                 JwtVerifier(crypto::keys::PublicKey apiPublicKey,
                             std::string apiPublicKeyIdentifier,
                             std::shared_ptr<crypto::Crypto> crypto);
 
+                /*!
+                 * @brief Verifies Jwt signature
+                 * @param token Jwt to be verified
+                 * @return true if token is verified, false otherwise
+                 */
                 bool verifyToken(const Jwt& token) const;
 
+                /*!
+                 * @brief Getter
+                 * @return Public Key which Verifier uses to verify signatures
+                 */
                 const crypto::keys::PublicKey& apiPublicKey() const;
 
+                /*!
+                 * @brief Getter
+                 * @return identifier of public key which Verifier uses to verify signatures
+                 */
                 const std::string& apiPublicKeyIdentifier() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to Crypto instance
+                 */
                 const std::shared_ptr<crypto::Crypto>& crypto() const;
 
             private:

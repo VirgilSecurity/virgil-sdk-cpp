@@ -44,19 +44,48 @@
 namespace virgil {
     namespace sdk {
         namespace cards {
+            /*!
+             * @brief Class representing Virgil Card Signature
+             */
             class CardSignature {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param signer identifier of signer
+                 * @param signature signature data
+                 * @param snapshot additional data
+                 * @param extraFields std::unordered_map with additional data
+                 * @note signer must be unique. Reserved values:
+                 *   - Self verifier: "self"
+                 *   - Virgil Service verifier: "virgil"
+                 */
                 CardSignature(std::string signer,
                               VirgilByteArray signature,
                               VirgilByteArray snapshot,
                               std::unordered_map<std::string, std::string> extraFields);
 
+                /*!
+                 * @brief Getter
+                 * @return identifier of signer
+                 */
                 const std::string& signer() const;
 
+                /*!
+                 * @brief Getter
+                 * @return signature data
+                 */
                 const VirgilByteArray& signature() const;
 
+                /*!
+                 * @brief Getter
+                 * @return additional data
+                 */
                 const VirgilByteArray& snapshot() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::unordered_map with additional data
+                 */
                 const std::unordered_map<std::string, std::string>& extraFields() const;
 
             private:

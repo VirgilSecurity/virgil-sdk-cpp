@@ -45,22 +45,59 @@ namespace virgil {
     namespace sdk {
         namespace client {
             namespace models {
+                /*!
+                 * @brief Represents model in binary form which can have signatures and corresponds to Virgil Cards Service model
+                 */
                 class RawSignedModel {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param contentSnapshot data with snapshot of RawCardContent
+                     */
                     RawSignedModel(VirgilByteArray contentSnapshot);
 
+                    /*!
+                     * @brief Exports RawSignedModel as base64 encoded std::string
+                     * @return base64 encoded std::string with RawSignedModel
+                     */
                     std::string exportAsBase64EncodedString() const;
 
+                    /*!
+                     * @brief Exports RawSignedModel as json std::string
+                     * @return json std::string with RawSignedModel
+                     */
                     std::string exportAsJson() const;
 
+                    /*!
+                     * @brief Initializes RawSignedModel from base64 encoded std::string
+                     * @param data base64 encoded std::string with RawSignedModel
+                     * @return RawSignedModel instance
+                     */
                     static RawSignedModel importFromBase64EncodedString(const std::string &data);
 
+                    /*!
+                     * @brief Initializes RawSignedModel from json std::string
+                     * @param data json std::string with RawSignedModel
+                     * @return RawSignedModel instance
+                     */
                     static RawSignedModel importFromJson(const std::string &data);
 
+                    /*!
+                     * @brief Getter
+                     * @return data with snapshot of RawCardContent
+                     */
                     const VirgilByteArray& contentSnapshot() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return std::vector with RawSignatures of Card
+                     */
                     const std::vector<RawSignature> signatures() const;
 
+                    /*!
+                     * @brief Adds new signature
+                     * @param newSignature RawSignature to add
+                     */
                     void addSignature(const RawSignature &newSignature);
 
                 private:

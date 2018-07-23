@@ -43,12 +43,28 @@ namespace virgil {
     namespace sdk {
         namespace client {
             namespace models {
+                /*!
+                 * @brief Represents response from CardClient's getCard function with RawSignedModel and whether or not card is outdated
+                 */
                 class GetCardResponse {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param rawCard RawSignedModel representing Virgil Card
+                     * @param isOutdated whether card is outdated or not
+                     */
                     GetCardResponse(RawSignedModel rawCard, bool isOutdated);
 
+                    /*!
+                     * @brief Getter
+                     * @return RawSignedModel representing Virgil Card
+                     */
                     const RawSignedModel& rawCard() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return true if Virgil Card is outdated, false otherwise
+                     */
                     bool isOutdated() const;
 
                 private:

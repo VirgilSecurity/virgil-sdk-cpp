@@ -54,7 +54,6 @@ namespace crypto {
     namespace keys {
         /*!
          * @brief Container for Private Key which is used for crypto operations.
-         * @see CryptoInterface
          */
         class PrivateKey {
         private:

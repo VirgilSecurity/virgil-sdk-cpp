@@ -45,26 +45,68 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class responsible for JWT generation
+             */
             class JwtGenerator {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param apiKey Api Private Key for signing generated tokens.
+                 * Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 * @param apiPublicKeyIdentifier Public Key identifier of Api Key.
+                 * Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 * @param crypto std::shared_ptr to Crypto instance
+                 * @param appId Application Id.
+                 * Can be taken  <a href="https://dashboard.virgilsecurity.com">here</a>
+                 * @param ttl Lifetime of generated tokens
+                 */
                 JwtGenerator(crypto::keys::PrivateKey apiKey,
                              std::string apiPublicKeyIdentifier,
                              std::shared_ptr<crypto::Crypto> crypto,
                              std::string appId,
                              int ttl);
 
+                /*!
+                 * @brief Generates new JWT
+                 * @param identity std::string with identity to generate with
+                 * @param additionalData std::unordered_map with additional data
+                 * @return generated and signed Jwt
+                 */
                 Jwt generateToken(const std::string& identity,
                                   const std::unordered_map<std::string, std::string>& additionalData
                                   = std::unordered_map<std::string, std::string>()) const;
 
+                /*!
+                 * @brief Getter
+                 * @return Api Private Key Generator uses for signing generated tokens
+                 * @note Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 */
                 const crypto::keys::PrivateKey& apiKey() const;
 
+                /*!
+                 * @brief Getter
+                 * @return Public Key identifier of Api Key
+                 * @note Can be taken <a href="https://dashboard.virgilsecurity.com/api-keys">here</a>
+                 */
                 const std::string& apiPublicKeyIdentifier() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::shared_ptr to Crypto instance
+                 */
                 const std::shared_ptr<crypto::Crypto>& crypto() const;
 
+                /*!
+                 * @brief Application Id
+                 * @return Can be taken  <a href="https://dashboard.virgilsecurity.com">here</a>
+                 */
                 const std::string& appId() const;
 
+                /*!
+                 * @brief Getter
+                 * @return Lifetime of generated tokens
+                 */
                 int ttl() const;
 
             private:

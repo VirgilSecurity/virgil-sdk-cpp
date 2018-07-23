@@ -44,12 +44,28 @@ namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace providers {
+                /*!
+                 * @brief Implementation of AccessTokenProviderInterface which provides AccessToken using callback
+                 */
                 class CallbackJwtProvider : public interfaces::AccessTokenProviderInterface {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param getTokenCallback std::function, which takes a TokenContext returns std::future with Jwt std::string
+                     */
                     CallbackJwtProvider(std::function<std::future<std::string>(const TokenContext&)> getTokenCallback);
 
+                    /*!
+                     * @brief Provides access token using callback
+                     * @param tokenContext TokenContext provides context explaining why token is needed
+                     * @return
+                     */
                     std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
 
+                    /*!
+                     * @brief Getter
+                     * @return callback Provider uses to obtain token
+                     */
                     const std::function<std::future<std::string>(const TokenContext&)>& getTokenCallback() const;
 
                 private:

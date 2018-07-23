@@ -44,13 +44,33 @@ namespace virgil {
     namespace sdk {
         namespace cards {
             namespace verification {
+                /*!
+                 * Class representing verifier credentials
+                 */
                 class VerifierCredentials {
                 public:
+                    /*!
+                     * @brief Constructor
+                     * @param signer identifier of signer
+                     * @param publicKey exported Public Key to verify with
+                     * @note signer must be unique. Reserved values:
+                     *   - Self verifier: "self"
+                     *   - Virgil Service verifier: "virgil"
+                     */
                     VerifierCredentials(std::string signer, VirgilByteArray publicKey);
 
+                    /*!
+                     * @brief Getter
+                     * @return identifier of signer
+                     */
                     const std::string& signer() const;
 
+                    /*!
+                     * @brief Getter
+                     * @return exported Public Key to verify with
+                     */
                     const VirgilByteArray& publicKey() const;
+
                 private:
                     std::string signer_;
                     VirgilByteArray publicKey_;

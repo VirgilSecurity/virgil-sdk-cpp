@@ -43,16 +43,45 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class used to provide additional info for AccessTokenProviderInterface implementations and explain why token is needed
+             */
             class TokenContext {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param operation std::string with operation for which token is needed.
+                 * CardManager uses following operations:
+                 *    - "get"
+                 *    - "search"
+                 *    - "publish"
+                 * @param identity std::string with identity to use in token
+                 * @param forceReload if true AccessTokenProviderInterface implementation should reset cached token, if such exist
+                 */
                 TokenContext(std::string operation,
                              std::string identity = std::string(),
                              bool forceReload = false);
 
+                /*!
+                 * @brief Getter
+                 * @return std::string with operation for which token is needed
+                 * @note CardManager uses following operations:
+                 *   - "get"
+                 *   - "search"
+                 *   - "publish"
+                 */
                 const std::string& operation() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::string with identity to use in token
+                 */
                 const std::string& identity() const;
 
+                /*!
+                 * @brief Getter
+                 * @return if true AccessTokenProviderInterface implementation should reset cached token, if such exist
+                 */
                 bool forceReload() const;
 
             private:

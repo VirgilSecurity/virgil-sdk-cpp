@@ -45,8 +45,19 @@
 namespace virgil {
     namespace sdk {
         namespace jwt {
+            /*!
+             * @brief Class representing JWT Body content
+             */
             class JwtBodyContent {
             public:
+                /*!
+                 * @brief Constructor
+                 * @param appId std::string with issuer containing application id. Can be taken <a href="https://dashboard.virgilsecurity.com">here</a>
+                 * @param identity std::string with identity (must be equal to RawSignedModel identity when publishing card)
+                 * @param expiresAt std::time with expiration date of token
+                 * @param issuedAt std::time with issued date of token
+                 * @param additionalData std::unordered_map with additional data
+                 */
                 JwtBodyContent(std::string appId,
                                std::string identity,
                                std::time_t expiresAt,
@@ -54,18 +65,49 @@ namespace virgil {
                                std::unordered_map<std::string, std::string> additionalData
                                = std::unordered_map<std::string, std::string>());
 
+                /*!
+                 * @brief Initializes JwtBodyContent from a base64Url encoded std::string
+                 * @param base64url base64Url encoded std::string with JwtBodyContent
+                 * @return JwtBodyContent instance
+                 */
                 static JwtBodyContent parse(const std::string& base64url);
 
+                /*!
+                 * @brief Getter
+                 * @return std::string with issuer containing application id
+                 * @note Can be taken <a href="https://dashboard.virgilsecurity.com">here</a>
+                 */
                 const std::string& appId() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::string with identity
+                 * @note must be equal to RawSignedModel identity when publishing card
+                 */
                 const std::string& identity() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::time with expiration date of token
+                 */
                 std::time_t expiresAt() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::time with issued date of token
+                 */
                 std::time_t issuedAt() const;
 
+                /*!
+                 * @brief Getter
+                 * @return std::unordered_map with additional data
+                 */
                 const std::unordered_map<std::string, std::string>& additionalData() const;
 
+                /*!
+                 * @brief Exports JwtBodyContent as base64Url encoded string
+                 * @return base64Url encoded string with JwtBodyContent
+                 */
                 std::string base64Url() const;
 
             private:
