@@ -47,8 +47,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 # Configurable variables
 ## Features
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
-set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 
 ## Crosscompiling
 set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
