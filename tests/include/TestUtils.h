@@ -38,7 +38,7 @@
 #define VIRGIL_SDK_TESTUTILS_H
 
 #include <memory>
-#include <ctime>
+#include <algorithm>
 #include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/crypto/Crypto.h>
 #include <virgil/sdk/cards/Card.h>

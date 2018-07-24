@@ -52,6 +52,7 @@ namespace virgil {
                         /*!
                          * @brief Constructor
                          * @param virgilErrorCode int with error code
+                         * @param errorMsg std::string with error message
                          */
                         VirgilError(int virgilErrorCode, std::string errorMsg = "Unknown error");
 

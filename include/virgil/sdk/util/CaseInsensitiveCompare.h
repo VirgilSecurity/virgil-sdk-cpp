@@ -47,6 +47,9 @@ namespace virgil {
              * @brief Struct for case-insensitive comparison
              */
             struct CaseInsensitiveCompare {
+                /*!
+                 * @brief operator for case-insensitive comparison
+                 */
                 bool operator()(const std::string &lhs, const std::string &rhs) const {
                     return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
                 }

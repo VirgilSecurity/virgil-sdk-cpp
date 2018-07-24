@@ -48,7 +48,13 @@ namespace virgil {
                  */
                 class ClientRequest : public Request {
                 public:
+                    /*!
+                     * @brief std::string with header key for authorization
+                     */
                     static const std::string accessTokenHeader;
+                    /*!
+                     * @brief std::string with prefix to Access Token in authentication header
+                     */
                     static const std::string accessTokenPrefix;
 
                     /*!

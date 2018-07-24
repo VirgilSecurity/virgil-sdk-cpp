@@ -56,7 +56,7 @@ namespace virgil {
 
                     /*!
                      * @brief Provides cached access token
-                     * @param do not have any influence on result in this implementation
+                     * @param tokenContext do not have any influence on result in this implementation
                      * @return std::future with cached std::shared_ptr to implementation of AccessTokenInterface
                      */
                     std::future<std::shared_ptr<interfaces::AccessTokenInterface>> getToken(const TokenContext& tokenContext);
