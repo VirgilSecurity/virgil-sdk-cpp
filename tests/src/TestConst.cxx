@@ -41,8 +41,8 @@
 using virgil::sdk::test::TestConst;
 using json = nlohmann::json;
 
-TestConst::TestConst(const std::string &fileName, bool enableStg)
-        : enableStg_(enableStg) {
+TestConst::TestConst(const std::string &fileName)
+        : enableStg_(ENABLE_STAGING_ENV) {
     std::ifstream input(fileName);
 
     std::string str((std::istreambuf_iterator<char>(input)),
@@ -51,7 +51,7 @@ TestConst::TestConst(const std::string &fileName, bool enableStg)
     if (!str.empty()) {
         auto j = json::parse(str);
 
-        json dict = enableStg ? j["staging"] : j["prod"];
+        json dict = enableStg_ ? j["staging"] : j["prod"];
 
         ApiPublicKeyId_ = dict["ApiPublicKeyId"];
         ApiPrivateKey_ = dict["ApiPrivateKey"];

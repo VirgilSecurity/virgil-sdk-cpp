@@ -75,11 +75,16 @@ set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 ## Environment
-set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
+set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment for tests")
 
 mark_as_advanced (
     ENABLE_STAGING_ENV
 )
+if (ENABLE_STAGING_ENV)
+    add_definitions(-DENABLE_STAGING_ENV=true)
+else()
+    add_definitions(-DENABLE_STAGING_ENV=false)
+endif()
 
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})

@@ -44,7 +44,7 @@ namespace sdk {
 namespace test {
     class TestConst {
     public:
-        TestConst(const std::string &fileName = "consts.json", bool enableStg = false);
+        TestConst(const std::string &fileName = "consts.json");
 
         const std::string& ApiPublicKeyId() const;
         const std::string& ApiPrivateKey() const;
