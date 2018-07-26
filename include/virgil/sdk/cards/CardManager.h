@@ -74,6 +74,23 @@ namespace virgil {
 
                 /*!
                  * @brief Generates self signed RawSignedModel
+                 * @param crypto Crypto instance for exporting PublicKey
+                 * @param modelSigner ModelSigner instance for self signing model
+                 * @param privateKey PrivateKey to self sign with
+                 * @param publicKey PublicKey instance
+                 * @param identity identity of Card
+                 * @param previousCardId identifier of Virgil Card with same identity this Card will replace
+                 * @param extraFields std::unordered_map with extra data to sign with model
+                 * @return self signed RawSignedModel
+                 */
+                static RawSignedModel generateRawCard(const std::shared_ptr<crypto::Crypto>& crypto, const ModelSigner& modelSigner,
+                                                      const crypto::keys::PrivateKey& privateKey, const crypto::keys::PublicKey& publicKey,
+                                                      const std::string& identity, const std::string& previousCardId = std::string(),
+                                                      const std::unordered_map<std::string, std::string> &extraFields
+                                                      = std::unordered_map<std::string, std::string>());
+
+                /*!
+                 * @brief Generates self signed RawSignedModel
                  * @param privateKey PrivateKey to self sign with
                  * @param publicKey PublicKey instance
                  * @param identity identity of Card

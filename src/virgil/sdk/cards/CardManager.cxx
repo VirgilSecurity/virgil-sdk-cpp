@@ -73,11 +73,18 @@ CardManager::CardManager(std::shared_ptr<Crypto> crypto,
 RawSignedModel CardManager::generateRawCard(const PrivateKey &privateKey, const PublicKey &publicKey,
                                             const std::string& identity, const std::string &previousCardId,
                                             const std::unordered_map<std::string, std::string> &extraFields) const {
-    auto exportedPublicKey = crypto_->exportPublicKey(publicKey);
+    return CardManager::generateRawCard(crypto_, modelSigner_, privateKey, publicKey, identity, previousCardId, extraFields);
+}
+
+RawSignedModel CardManager::generateRawCard(const std::shared_ptr<Crypto> &crypto, const ModelSigner &modelSigner,
+                                            const PrivateKey &privateKey, const PublicKey &publicKey,
+                                            const std::string &identity, const std::string &previousCardId,
+                                            const std::unordered_map<std::string, std::string> &extraFields) {
+    auto exportedPublicKey = crypto->exportPublicKey(publicKey);
     auto cardContent = RawCardContent(identity, exportedPublicKey, time(0), previousCardId);
 
     auto rawCard = RawSignedModel(cardContent.snapshot());
-    modelSigner_.selfSign(rawCard, privateKey, extraFields);
+    modelSigner.selfSign(rawCard, privateKey, extraFields);
 
     auto rawSignedModel = rawCard;
 
