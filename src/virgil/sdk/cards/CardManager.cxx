@@ -94,7 +94,7 @@ RawSignedModel CardManager::generateRawCard(const std::shared_ptr<Crypto> &crypt
 std::future<Card> CardManager::publishCard(const RawSignedModel& rawCard) const {
     auto future = std::async([=]{
         auto cardContent = RawCardContent::parse(rawCard.contentSnapshot());
-        auto tokenContext = TokenContext("publish", cardContent.identity());
+        auto tokenContext = TokenContext("publish", "cards", cardContent.identity());
 
         auto tokenFuture = accessTokenProvider_->getToken(tokenContext);
 
@@ -132,7 +132,7 @@ std::future<Card> CardManager::publishCard(const virgil::sdk::crypto::keys::Priv
                                            const std::string &identity, const std::string &previousCardId,
                                            const std::unordered_map<std::string, std::string> &extraFields) const {
     auto future = std::async([=]{
-        auto tokenContext = TokenContext("publish", identity);
+        auto tokenContext = TokenContext("publish", "cards", identity);
         auto token = accessTokenProvider_->getToken(tokenContext).get();
 
         auto rawCard = generateRawCard(privateKey, publicKey, token->identity(), previousCardId, extraFields);
@@ -168,7 +168,7 @@ std::future<Card> CardManager::publishCard(const virgil::sdk::crypto::keys::Priv
 
 std::future<Card> CardManager::getCard(const std::string &cardId) const {
     auto future = std::async([=]{
-        auto tokenContext = TokenContext("get");
+        auto tokenContext = TokenContext("get", "cards");
         auto tokenFuture = accessTokenProvider_->getToken(tokenContext);
 
         std::function<std::future<GetCardResponse>(const std::string& token)> getFunc = [&](const std::string& token) {
@@ -198,7 +198,7 @@ std::future<Card> CardManager::getCard(const std::string &cardId) const {
 
 std::future<std::vector<Card>> CardManager::searchCards(const std::string &identity) const {
     auto future = std::async([=]{
-        auto tokenContext = TokenContext("search");
+        auto tokenContext = TokenContext("search", "cards");
         auto tokenFuture = accessTokenProvider_->getToken(tokenContext);
 
         std::function<std::future<std::vector<RawSignedModel>>(const std::string& token)> searchFunc = [&](const std::string& token) {
@@ -253,7 +253,7 @@ T CardManager::tryQuery(const virgil::sdk::jwt::TokenContext &tokenContext, cons
         return futureResponse.get();
     } catch (Error& error) {
         if (error.httpErrorCode() == 401 && retryOnUnauthorized_) {
-            auto newTokenContext = TokenContext(tokenContext.operation(), tokenContext.identity(), true);
+            auto newTokenContext = TokenContext(tokenContext.operation(), "cards", tokenContext.identity(), true);
             auto newTokenFuture = accessTokenProvider_->getToken(newTokenContext);
             auto newFutureResponse = query(newTokenFuture.get()->stringRepresentation());
 

@@ -38,8 +38,9 @@
 
 using virgil::sdk::jwt::TokenContext;
 
-TokenContext::TokenContext(std::string operation, std::string identity, bool forceReload)
-        : operation_(std::move(operation)), identity_(std::move(identity)), forceReload_(forceReload) {}
+TokenContext::TokenContext(std::string operation, std::string service, std::string identity, bool forceReload)
+        : operation_(std::move(operation)), service_(std::move(service)),
+          identity_(std::move(identity)), forceReload_(forceReload) {}
 
 const std::string& TokenContext::operation() const { return operation_; }
 

@@ -55,12 +55,25 @@ namespace virgil {
                  *    - "get"
                  *    - "search"
                  *    - "publish"
+                 * @param service std::string with requested service
                  * @param identity std::string with identity to use in token
                  * @param forceReload if true AccessTokenProviderInterface implementation should reset cached token, if such exist
                  */
-                TokenContext(std::string operation,
+                TokenContext(std::string operation, std::string service,
                              std::string identity = std::string(),
                              bool forceReload = false);
+
+                /*!
+                 * @brief Getter
+                 * @return std::string with identity to use in token
+                 */
+                const std::string& identity() const;
+
+                /*!
+                 * @brief Getter
+                 * @return requested service
+                 */
+                const std::string& service() const;
 
                 /*!
                  * @brief Getter
@@ -74,18 +87,13 @@ namespace virgil {
 
                 /*!
                  * @brief Getter
-                 * @return std::string with identity to use in token
-                 */
-                const std::string& identity() const;
-
-                /*!
-                 * @brief Getter
                  * @return if true AccessTokenProviderInterface implementation should reset cached token, if such exist
                  */
                 bool forceReload() const;
 
             private:
                 std::string identity_;
+                std::string service_;
                 std::string operation_;
                 bool forceReload_;
             };

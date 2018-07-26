@@ -75,7 +75,7 @@ TEST_CASE("test001_STC_24", "[card_manager]") {
     };
     auto callbackProvider = CallbackJwtProvider(callback);
 
-    auto tokenContext = TokenContext("test", "some_identity");
+    auto tokenContext = TokenContext("test", "cards", "some_identity");
     auto futureToken1 = callbackProvider.getToken(tokenContext);
     auto token1 = futureToken1.get();
 
@@ -112,7 +112,7 @@ TEST_CASE("test001_STC_37", "[card_manager]") {
     auto token = generator.generateToken("some_identity");
     auto constProvider = ConstAccessTokenProvider(std::make_shared<Jwt>(token));
 
-    auto tokenContext = TokenContext("test");
+    auto tokenContext = TokenContext("test", "cards");
     auto futureToken1 = constProvider.getToken(tokenContext);
     auto token1 = futureToken1.get();
 
@@ -191,7 +191,7 @@ TEST_CASE("test001_STC_38", "[card_manager]") {
     };
     auto cachingJwtProvider = CachingJwtProvider(callback);
 
-    auto tokenContext = TokenContext("test", "some_identity");
+    auto tokenContext = TokenContext("test", "cards", "some_identity");
     auto futureToken1 = cachingJwtProvider.getToken(tokenContext);
     auto token1 = futureToken1.get();
 
