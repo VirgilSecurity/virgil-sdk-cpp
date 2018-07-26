@@ -34,29 +34,30 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-#ifndef VIRGIL_SDK_CALLBACKJWTPROVIDER_H
-#define VIRGIL_SDK_CALLBACKJWTPROVIDER_H
+#ifndef VIRGIL_SDK_CACHINGJWTPROVIDER_H
+#define VIRGIL_SDK_CACHINGJWTPROVIDER_H
 
 #include <functional>
 #include <virgil/sdk/jwt/interfaces/AccessTokenProviderInterface.h>
+#include <virgil/sdk/jwt/Jwt.h>
 
 namespace virgil {
     namespace sdk {
         namespace jwt {
             namespace providers {
                 /*!
-                 * @brief Implementation of AccessTokenProviderInterface which provides AccessToken using callback
+                 * @brief Implementation of AccessTokenProvider which provides AccessToken using cache+renew callback
                  */
-                class CallbackJwtProvider : public interfaces::AccessTokenProviderInterface {
+                class CachingJwtProvider : public interfaces::AccessTokenProviderInterface {
                 public:
                     /*!
                      * @brief Constructor
-                     * @param getTokenCallback std::function, which takes a TokenContext returns std::future with Jwt std::string
+                     * @param renewJwtCallback std::function, which takes a TokenContext returns std::future with Jwt std::string
                      */
-                    CallbackJwtProvider(std::function<std::future<std::string>(const TokenContext&)> getTokenCallback);
+                    CachingJwtProvider(std::function<std::future<std::string>(const TokenContext&)> renewJwtCallback);
 
                     /*!
-                     * @brief Provides access token using callback
+                     * @brief Provides access token using callback or cached token
                      * @param tokenContext TokenContext provides context explaining why token is needed
                      * @return std::future with std::shared_ptr to Jwt
                      */
@@ -66,14 +67,21 @@ namespace virgil {
                      * @brief Getter
                      * @return callback provider uses to obtain token
                      */
-                    const std::function<std::future<std::string>(const TokenContext&)>& getTokenCallback() const;
+                    const std::function<std::future<std::string>(const TokenContext&)>& renewJwtCallback() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return cached Jwt
+                     */
+                    const std::shared_ptr<Jwt>& jwt() const;
 
                 private:
-                    std::function<std::future<std::string>(const TokenContext&)> getTokenCallback_;
+                    std::shared_ptr<Jwt> jwt_;
+                    std::function<std::future<std::string>(const TokenContext&)> renewJwtCallback_;
                 };
             }
         }
     }
 }
 
-#endif //VIRGIL_SDK_CALLBACKJWTPROVIDER_H
+#endif //VIRGIL_SDK_CACHINGJWTPROVIDER_H

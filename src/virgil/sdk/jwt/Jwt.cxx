@@ -75,8 +75,8 @@ const std::string& Jwt::identity() const {
     return bodyContent_.identity();
 }
 
-bool Jwt::isExpired() const {
-    return std::time(0) >= bodyContent_.expiresAt();
+bool Jwt::isExpired(std::time_t date) const {
+    return date >= bodyContent_.expiresAt();
 }
 
 const std::string Jwt::signatureBase64Url() const {

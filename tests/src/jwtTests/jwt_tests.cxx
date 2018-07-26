@@ -44,6 +44,7 @@
 
 #include <virgil/sdk/jwt/providers/GeneratorJwtProvider.h>
 #include <virgil/sdk/jwt/providers/CallbackJwtProvider.h>
+#include <virgil/sdk/jwt/providers/CachingJwtProvider.h>
 #include <virgil/sdk/jwt/providers/ConstAccessTokenProvider.h>
 #include <virgil/sdk/util/JsonUtils.h>
 
@@ -51,6 +52,7 @@ using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilBase64;
 using virgil::sdk::jwt::JwtGenerator;
 using virgil::sdk::jwt::providers::CallbackJwtProvider;
+using virgil::sdk::jwt::providers::CachingJwtProvider;
 using virgil::sdk::jwt::providers::ConstAccessTokenProvider;
 using virgil::sdk::jwt::TokenContext;
 using virgil::sdk::jwt::Jwt;
@@ -172,4 +174,35 @@ TEST_CASE("test001_STC_29", "[card_manager]") {
     REQUIRE(signatureStr == testData.dict()["STC-29.jwt_signature_base64"]);
 
     REQUIRE(jwt.stringRepresentation() == tokenStr);
+}
+
+TEST_CASE("test001_STC_38", "[card_manager]") {
+    auto crypto = std::make_shared<Crypto>();
+
+    std::function<std::future<std::string>(const TokenContext&)> callback = [&](const TokenContext& tokenContext) {
+        std::promise<std::string> p;
+
+        auto keyPair = crypto->generateKeyPair();
+        auto generator = JwtGenerator(keyPair.privateKey(), "id", crypto, "appId", 10);
+        auto jwt = generator.generateToken(tokenContext.identity());
+        p.set_value(jwt.stringRepresentation());
+
+        return p.get_future();
+    };
+    auto cachingJwtProvider = CachingJwtProvider(callback);
+
+    auto tokenContext = TokenContext("test", "some_identity");
+    auto futureToken1 = cachingJwtProvider.getToken(tokenContext);
+    auto token1 = futureToken1.get();
+
+    auto futureToken2 = cachingJwtProvider.getToken(tokenContext);
+    auto token2 = futureToken2.get();
+
+    REQUIRE(token1 == token2);
+
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+
+    auto futureToken3 = cachingJwtProvider.getToken(tokenContext);
+    auto token3 = futureToken3.get();
+    REQUIRE(token2 != token3);
 }

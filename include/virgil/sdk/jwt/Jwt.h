@@ -105,9 +105,10 @@ namespace virgil {
 
                 /*!
                  * @brief Returns whether or not token is expired
+                 * @param date std::time with current date
                  * @return true if token is expired, false otherwise
                  */
-                bool isExpired() const;
+                bool isExpired(std::time_t date = std::time(0)) const;
 
                 /*!
                  * @brief Returns JWT data that should be signed
