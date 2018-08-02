@@ -55,6 +55,7 @@ Response Connection::send(const Request& request) {
     // Make Request
     HttpRequest httpRequest;
     httpRequest.header(request.header()).content(request.contentType(), request.body());
+    httpRequest.timeout(7L);
 
     switch (request.method()) {
         case Request::Method::GET:
