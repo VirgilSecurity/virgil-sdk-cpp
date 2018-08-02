@@ -46,7 +46,7 @@ TestConst::TestConst(const std::string &fileName)
     std::ifstream input(fileName);
 
     std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
+                     std::istreambuf_iterator<char>());
 
     if (!str.empty()) {
         auto j = json::parse(str);
