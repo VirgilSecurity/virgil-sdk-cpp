@@ -41,7 +41,7 @@ project (virgil_sdk VERSION 3.2.3 LANGUAGES CXX)
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 # Configurable variables
 ## Features

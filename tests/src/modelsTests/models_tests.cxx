@@ -103,5 +103,4 @@ TEST_CASE("test003_CardImportExport", "[models]") {
     REQUIRE(validator->verifiers().size() == 2);
 
     REQUIRE(utils.checkCardEquality(card, importedCard));
-    REQUIRE(validator->validateCardResponse(importedCard.cardResponse()));
 }

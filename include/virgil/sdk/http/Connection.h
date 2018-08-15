@@ -53,7 +53,7 @@ namespace sdk {
              * @brief Send synchronous request.
              * @param request - request to be send.
              * @throw std::logic_error - if given parameters are inconsistent.
-             * @throw std::runtime_error - if error was occured when send request.
+             * @throw std::runtime_error - if error was occurred when send request.
              */
             virtual virgil::sdk::http::Response send(const virgil::sdk::http::Request& request);
         };
