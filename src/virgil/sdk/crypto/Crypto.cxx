@@ -68,6 +68,8 @@ using virgil::sdk::VirgilHashAlgorithm;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
 
+const auto CustomParamKeySignerId = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNER-ID");
+
 Crypto::Crypto(bool useSHA256Fingerprints)
         : useSHA256Fingerprints_(useSHA256Fingerprints) {}
 
@@ -207,6 +209,9 @@ VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const Priva
 
     cipher.customParams().setData(CustomParamKeySignature, signature);
 
+    auto signerId = privateKey.identifier();
+    cipher.customParams().setData(CustomParamKeySignerId, signerId);
+
     for (auto& recipient : recipients) {
         auto publicKeyData = exportPublicKey(recipient);
 
@@ -227,6 +232,35 @@ VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const Pri
 
     auto signer = VirgilSigner();
     auto publicKeyData = exportPublicKey(signerPublicKey);
+    auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
+
+    if (!isVerified) {
+        throw make_error(VirgilSdkError::VerificationFailed, "Invalid signature.");
+    }
+
+    return decryptedData;
+}
+
+VirgilByteArray Crypto::decryptThenVerify(const virgil::sdk::VirgilByteArray &data,
+                                          const virgil::sdk::crypto::keys::PrivateKey &privateKey,
+                                          const std::vector<PublicKey> &signersPublicKeys) const {
+    auto cipher = VirgilCipher();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+    auto decryptedData = cipher.decryptWithKey(data, privateKey.identifier(), privateKeyData);
+
+    auto signature = cipher.customParams().getData(CustomParamKeySignature);
+    auto signerId = cipher.customParams().getData(CustomParamKeySignerId);
+
+    auto publicKeyData = VirgilByteArray();
+
+    for (auto& signerPublicKey : signersPublicKeys) {
+        if (signerPublicKey.identifier() == signerId) {
+            publicKeyData = exportPublicKey(signerPublicKey);
+        }
+    }
+
+    auto signer = VirgilSigner();
     auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
 
     if (!isVerified) {

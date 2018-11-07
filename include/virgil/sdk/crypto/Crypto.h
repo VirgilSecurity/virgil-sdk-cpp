@@ -179,6 +179,16 @@ namespace sdk {
                                               const keys::PublicKey &signerPublicKey) const;
 
             /*!
+             * @brief Decrypts (with private key) Then Verifies data using any of signers' PublicKeys
+             * @param data data to be signed, then verified
+             * @param privateKey receiver's private key
+             * @param signerPublicKey signer public key
+             * @return decrypted, then verified data
+             */
+            VirgilByteArray decryptThenVerify(const VirgilByteArray &data, const keys::PrivateKey &privateKey,
+                                              const std::vector<keys::PublicKey> &signersPublicKeys) const;
+
+            /*!
              * @brief Generates digital signature of data using private key
              * @param data data to sign
              * @param privateKey Private Key to be used to generate signature

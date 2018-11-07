@@ -44,6 +44,7 @@
 #include <virgil/sdk/crypto/Crypto.h>
 
 using virgil::sdk::crypto::Crypto;
+using virgil::sdk::crypto::keys::PublicKey;
 using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::test::Utils;
 
@@ -239,6 +240,23 @@ TEST_CASE("testESD001_SignAndEncryptRandomData_CorrectKeys_ShouldDecryptValidate
     auto signedAndEncryptedData = crypto.signThenEncrypt(data, senderKeyPair.privateKey(), { receiverKeyPair.publicKey() });
 
     auto decryptedAndVerifiedData = crypto.decryptThenVerify(signedAndEncryptedData, receiverKeyPair.privateKey(), senderKeyPair.publicKey());
+
+    REQUIRE(data == decryptedAndVerifiedData);
+}
+
+TEST_CASE("testESD002_SignAndEncryptRandomData_OneCorrectKey_ShouldDecryptValidate", "[crypto]") {
+    Crypto crypto;
+    auto senderKeyPair = crypto.generateKeyPair();
+    auto wrongKeyPair = crypto.generateKeyPair();
+    auto receiverKeyPair = crypto.generateKeyPair();
+
+    auto data = Utils::generateRandomData(100);
+
+    auto signedAndEncryptedData = crypto.signThenEncrypt(data, senderKeyPair.privateKey(), { receiverKeyPair.publicKey() });
+
+    std::vector<PublicKey> publicKeysToVerifyWith = { senderKeyPair.publicKey(), wrongKeyPair.publicKey() };
+
+    auto decryptedAndVerifiedData = crypto.decryptThenVerify(signedAndEncryptedData, receiverKeyPair.privateKey(), publicKeysToVerifyWith);
 
     REQUIRE(data == decryptedAndVerifiedData);
 }
