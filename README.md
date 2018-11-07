@@ -1,5 +1,3 @@
-![VirgilSDK](https://cloud.githubusercontent.com/assets/6513916/19643783/bfbf78be-99f4-11e6-8d5a-a43394f2b9b2.png)
-
 [![Build Status](https://travis-ci.org/VirgilSecurity/virgil-sdk-cpp.svg?branch=master)](https://travis-ci.org/VirgilSecurity/virgil-sdk-cpp)
 [![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/virgil-sdk-cpp)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/7135/badge.svg)](https://scan.coverity.com/projects/virgilsecurity-virgil-sdk-cpp)
@@ -42,6 +40,11 @@ Before start practicing with the usage examples be sure that the SDK is configur
 Use the following lines of code to create and publish a user's Card with Public Key inside on Virgil Cards Service:
 
 ```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::crypto::Crypto;
+using virgil::sdk::cards::CardManager;
+
 // use Virgil Crypto
 auto crypto = std::make_shared<Crypto>();
 
@@ -60,6 +63,12 @@ Virgil SDK lets you use a user's Private key and his or her Cards to sign, then 
 In the following example, we load a Private Key from a customized Key Storage and get recipient's Card from the Virgil Cards Services. Recipient's Card contains a Public Key on which we will encrypt the data and verify a signature.
 
 ```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::cards::CardManager;
+using virgil::sdk::crypto::keys::PublicKey;
+using virgil::sdk::VirgilByteArrayUtils;
+
 // prepare a message
 auto messageToEncrypt = "Hello, Bob!";
 auto dataToEncrypt = VirgilByteArrayUtils::stringToBytes(messageToEncrypt);
@@ -81,6 +90,11 @@ auto encryptedData = crypto->signThenEncrypt(dataToEncrypt, alicePrivateKey, bob
 Once the Users receive the signed and encrypted message, they can decrypt it with their own Private Key and verify signature with a Sender's Card:
 
 ```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::cards::CardManager;
+using virgil::sdk::crypto::keys::PublicKey;
+
 // using cardManager search for Alice's cards on Cards Service
 auto future = cardManager.searchCards("Alice");
 auto aliceCards = future.get();
