@@ -37,5 +37,5 @@
 
 set -ev
 
-- openssl aes-256-cbc -K $encrypted_067cfd0bede1_key -iv $encrypted_067cfd0bede1_iv \
+openssl aes-256-cbc -K $encrypted_067cfd0bede1_key -iv $encrypted_067cfd0bede1_iv \
     -in "${TRAVIS_BUILD_DIR}/tests/src/resources/consts.json.enc" -out "${TRAVIS_BUILD_DIR}/tests/src/resources/consts.json" -d
