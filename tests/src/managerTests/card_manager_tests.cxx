@@ -120,7 +120,8 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
     }
     REQUIRE(errorWasThrown);
 
-    auto rawCard = cardManager.generateRawCard(keyPair1.privateKey(), keyPair1.publicKey(), identity);
+    auto keyPair2 = utils.crypto()->generateKeyPair();
+    auto rawCard = cardManager.generateRawCard(keyPair2.privateKey(), keyPair2.publicKey(), identity);
     errorWasThrown = false;
     try {
         auto publishFuture = cardManager.publishCard(rawCard);
