@@ -29,7 +29,7 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 Virgil SDK can be integrated using CMake in the following way
 
 ```cmake
-add_subdirectory (<PATH_TO_DEPENDENCIES>/virgil-sdk-cpp virgil-sdk-cpp)
+add_subdirectory (<PATH_TO_DEPENDENCIES>/sdk-cpp sdk-cpp)
 
 target_link_libraries (${PROJECT_NAME} virgil_sdk)
 ```
@@ -124,7 +124,7 @@ You can find us on [Twitter](https://twitter.com/VirgilSecurity) or send us emai
 
 Also, get extra help from our support team on [Slack](https://virgilsecurity.slack.com/join/shared_invite/enQtMjg4MDE4ODM3ODA4LTc2OWQwOTQ3YjNhNTQ0ZjJiZDc2NjkzYjYxNTI0YzhmNTY2ZDliMGJjYWQ5YmZiOGU5ZWEzNmJiMWZhYWVmYTM).
 
-[_virgil_crypto]: https://github.com/VirgilSecurity/virgil-sdk-crypto-net
+[_virgil_crypto]: https://github.com/VirgilSecurity/virgil-crypto
 [_cards_service]: https://developer.virgilsecurity.com/docs/api-reference/card-service/v5
 [_use_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/use-card-for-crypto-operation
 [_get_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/get-card
