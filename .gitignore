@@ -32,3 +32,6 @@ profile
 
 # JIRA plugin
 atlassian-ide-plugin.xml
+
+# Test Consts
+consts.json
