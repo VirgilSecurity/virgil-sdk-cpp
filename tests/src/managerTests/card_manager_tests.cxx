@@ -131,10 +131,11 @@ TEST_CASE("test001_STC_13", "[card_manager]") {
     }
     REQUIRE(errorWasThrown);
 
+    auto keyPair3 = utils.crypto()->generateKeyPair();
     auto existentIdentity = utils.getRandomString();
     auto verifier1 = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), true, !consts.enableStg());
     auto cardManager1 = CardManager(utils.crypto(), provider, verifier1, nullptr, cardClient);
-    auto existentRawCard = cardManager1.generateRawCard(keyPair1.privateKey(), keyPair1.publicKey(), existentIdentity);
+    auto existentRawCard = cardManager1.generateRawCard(keyPair3.privateKey(), keyPair3.publicKey(), existentIdentity);
     auto future = cardManager1.publishCard(existentRawCard);
     auto existentCard = future.get();
 
