@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,33 +30,46 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #include <TestConst.h>
+#include <fstream>
+#include <nlohman/json.hpp>
 
 using virgil::sdk::test::TestConst;
+using json = nlohmann::json;
 
-std::string TestConst::applicationToken() const {
-    return "AT.931f8eb623be4e4709cbc241bfc89dde3a518527faccf2e1da7f9bd1a71fe78b";
+TestConst::TestConst(const std::string &fileName)
+        : enableStg_(ENABLE_STAGING_ENV) {
+    std::ifstream input(fileName);
+
+    std::string str((std::istreambuf_iterator<char>(input)),
+                     std::istreambuf_iterator<char>());
+
+    if (!str.empty()) {
+        auto j = json::parse(str);
+
+        json dict = enableStg_ ? j["staging"] : j["prod"];
+
+        ApiPublicKeyId_ = dict["ApiPublicKeyId"];
+        ApiPrivateKey_ = dict["ApiPrivateKey"];
+        ApiPublicKey_ = dict["ApiPublicKey"];
+        AppId_ = dict["AppId"];
+        ServiceURL_ = dict["ServiceURL"];
+    }
+    input.close();
 }
 
-std::string TestConst::applicationPublicKeyBase64() const {
-    return "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0NCk1Db3dCUVlESzJWd0F5RUExblJKZHpWeDVDcE10VGJjbTNLZVk1b3Q2OU5OV3lNTjV1cDNRbDE1N1ZJPQ0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tDQo=";
-}
+const std::string& TestConst::ApiPublicKeyId() const { return ApiPublicKeyId_; }
 
-std::string TestConst::applicationPrivateKeyBase64() const {
-    return "LS0tLS1CRUdJTiBFTkNSWVBURUQgUFJJVkFURSBLRVktLS0tLQ0KTUlHaE1GMEdDU3FHU0liM0RRRUZEVEJRTUM4R0NTcUdTSWIzRFFFRkREQWlCQkRROWFBSHdRbjFXckxlMDN5Sw0KR2R0aEFnSVJpakFLQmdncWhraUc5dzBDQ2pBZEJnbGdoa2dCWlFNRUFTb0VFTXhwQTNzVVVaMXlWR1V2VWVTTA0KUmE4RVFKcHVZOXV1eCs2d0NVSno0Ti9qVnZ2WmRPMTdmcnAwMytYZWhxN1ZhbUNwK0Y1RFE1cS82M2tGV0drMw0KcXA4Wk5GQlZ4VEpKY1grRkFLVGIvc0VGTnhFPQ0KLS0tLS1FTkQgRU5DUllQVEVEIFBSSVZBVEUgS0VZLS0tLS0NCg==";
-}
+const std::string& TestConst::ApiPrivateKey() const { return ApiPrivateKey_; }
 
-std::string TestConst::applicationPrivateKeyPassword() const {
-    return "test";
-}
+const std::string& TestConst::ApiPublicKey() const { return ApiPublicKey_; }
 
-std::string TestConst::applicationIdentityType() const {
-    return "test";
-}
+const std::string& TestConst::AppId() const { return AppId_; }
 
-std::string TestConst::applicationId() const {
-    return "c53035253366736218ea3ebc924275073aafc2e78d09fe4f910e6b33a7297dd7";
-}
+const std::string& TestConst::ServiceURL() const { return ServiceURL_; }
+
+bool TestConst::enableStg() const { return enableStg_; }

@@ -36,17 +36,17 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil_sdk VERSION 3.2.3 LANGUAGES CXX)
+project (virgil_sdk VERSION 5.0.0 LANGUAGES CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 # Configurable variables
 ## Features
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
-set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 
 ## Crosscompiling
 set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
@@ -73,35 +73,16 @@ set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 ## Environment
-set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
-if (ENABLE_STAGING_ENV)
-    set (VIRGIL_IDENTITY_SERVICE_URI "https://identity-stg.virgilsecurity.com"
-            CACHE STRING "Base URI to the Virgil Identity service")
+set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment for tests")
 
-    set (VIRGIL_KEYS_SERVICE_URI "https://keys-stg.virgilsecurity.com"
-            CACHE STRING  "Base URI to Virgil Keys service")
-
-    set (VIRGIL_PRIVATE_KEYS_SERVICE_URI "https://keys-private-stg.virgilsecurity.com"
-        CACHE STRING "Base URI to Virgil Private Keys service")
-endif ()
 mark_as_advanced (
     ENABLE_STAGING_ENV
-    VIRGIL_IDENTITY_SERVICE_URI
-    VIRGIL_KEYS_SERVICE_URI
-    VIRGIL_PRIVATE_KEYS_SERVICE_URI
 )
-
-if (VIRGIL_IDENTITY_SERVICE_URI)
-    add_definitions (-DVIRGIL_IDENTITY_SERVICE_URI="${VIRGIL_IDENTITY_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_KEYS_SERVICE_URI="${VIRGIL_KEYS_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
-endif ()
+if (ENABLE_STAGING_ENV)
+    add_definitions(-DENABLE_STAGING_ENV=true)
+else()
+    add_definitions(-DENABLE_STAGING_ENV=false)
+endif()
 
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
@@ -129,7 +110,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
 )
 
-virgil_find_package (virgil_crypto 2.0.2)
+virgil_find_package (virgil_crypto 2.4.5)
 virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate

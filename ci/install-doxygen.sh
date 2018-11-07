@@ -39,7 +39,7 @@ set -ev
 
 if [ ! -d "$HOME/doxygen/bin" ]; then
     curl -L -O http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.10.linux.bin.tar.gz
-    tar -xzf doxygen-1.8.10.linux.bin.tar.gz
+    tar -xf doxygen-1.8.10.linux.bin.tar.gz
     cp -fa doxygen-1.8.10/. $HOME/doxygen/
 else
     echo "Using Doxygen cached directory."

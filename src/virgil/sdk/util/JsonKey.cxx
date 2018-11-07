@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,25 +30,34 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/util/JsonKey.h>
 
 using virgil::sdk::util::JsonKey;
 
-const std::string JsonKey::Id = "id";
-const std::string JsonKey::CreatedAt = "created_at";
-const std::string JsonKey::CardVersion = "card_version";
-const std::string JsonKey::Identity = "identity";
-const std::string JsonKey::Data = "data";
-const std::string JsonKey::Info = "info";
+const std::string JsonKey::Signer = "signer";
+const std::string JsonKey::Snapshot = "snapshot";
+const std::string JsonKey::Signature = "signature";
+const std::string JsonKey::Signatures = "signatures";
 const std::string JsonKey::PublicKey = "public_key";
 const std::string JsonKey::ContentSnapshot = "content_snapshot";
-const std::string JsonKey::Meta = "meta";
-const std::string JsonKey::CardScope = "scope";
-const std::string JsonKey::IdentityType = "identity_type";
-const std::string JsonKey::Signs = "signs";
-const std::string JsonKey::CardId = "card_id";
-const std::string JsonKey::RevocationReason = "revocation_reason";
-const std::string JsonKey::Identities = "identities";
+const std::string JsonKey::PreviousCardId = "previous_card_id";
+const std::string JsonKey::CreatedAt = "created_at";
+const std::string JsonKey::Identity = "identity";
+const std::string JsonKey::Version = "version";
 const std::string JsonKey::Code = "code";
+const std::string JsonKey::Message = "message";
+
+const std::string JsonKey::Algorithm = "alg";
+const std::string JsonKey::Type = "typ";
+const std::string JsonKey::ContentType = "cty";
+const std::string JsonKey::KeyIdentifier = "kid";
+
+const std::string JsonKey::AppId = "iss";
+const std::string JsonKey::IdentityJWT = "sub";
+const std::string JsonKey::IssuedAt = "iat";
+const std::string JsonKey::ExpiresAt = "exp";
+const std::string JsonKey::AdditionalData = "ada";

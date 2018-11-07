@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,8 +30,9 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
-
 
 #include <virgil/sdk/Common.h>
 #include <virgil/sdk/util/JsonUtils.h>
@@ -81,4 +80,13 @@ json JsonUtils::unorderedBinaryMapToJson(const std::unordered_map<std::string, V
     }
 
     return j;
+}
+
+std::unordered_map<std::string, std::string> JsonUtils::bytesToUnorderedMap(
+        const virgil::sdk::VirgilByteArray &bytes) {
+    auto str = VirgilByteArrayUtils::bytesToString(bytes);
+
+    json j = json::parse(str);
+
+    return JsonUtils::jsonToUnorderedMap(j);
 }

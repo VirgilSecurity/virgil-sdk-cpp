@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <catch.hpp>
@@ -42,160 +42,223 @@
 #include <TestConst.h>
 #include <TestUtils.h>
 
-#include <virgil/sdk/Common.h>
-#include <virgil/sdk/client/Client.h>
-#include <virgil/sdk/client/CardValidator.h>
+#include <virgil/sdk/client/CardClient.h>
 
-#include <virgil/sdk/util/Memory.h>
+#include <virgil/sdk/client/models/RawCardContent.h>
+#include <virgil/sdk/cards/ModelSigner.h>
+#include <virgil/sdk/cards/CardManager.h>
+#include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
+#include <virgil/sdk/VirgilSdkError.h>
 
-using virgil::sdk::client::Client;
-using virgil::sdk::client::ServiceConfig;
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::SearchCardsCriteria;
-using virgil::sdk::client::models::CardScope;
+using virgil::sdk::client::CardClient;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestUtils;
-using virgil::sdk::client::CardValidator;
+using virgil::sdk::client::models::RawCardContent;
+using virgil::sdk::client::models::RawSignedModel;
+using virgil::sdk::cards::ModelSigner;
 using virgil::sdk::VirgilBase64;
-using virgil::sdk::client::interfaces::CardValidatorInterface;
+using virgil::sdk::cards::CardManager;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
+using virgil::sdk::cards::Card;
+using virgil::sdk::client::networking::errors::Error;
 
 TEST_CASE("test001_CreateCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
+    auto identity = utils.getRandomString();
 
-    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    auto validator = std::make_unique<CardValidator>(utils.crypto());
-    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
-    REQUIRE(validator->verifiers().size() == 2);
-    serviceConfig.cardValidator(std::move(validator));
+    auto token = utils.getToken(identity);
 
-    Client client(std::move(serviceConfig));
+    CardClient cardClient(consts.ServiceURL());
+    ModelSigner modelSigner(utils.crypto());
 
-    auto createCardRequest = utils.instantiateCreateCardRequest();
+    auto keyPair = utils.crypto()->generateKeyPair();
+    auto publicKeyData = utils.crypto()->exportPublicKey(keyPair.publicKey());
 
-    auto future = client.createCard(createCardRequest);
+    RawCardContent content(identity, publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
 
-    auto card = future.get();
+    RawSignedModel rawCard(snapshot);
 
-    REQUIRE(utils.checkCardEquality(card, createCardRequest));
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
+
+    auto card = CardManager::parseCard(rawCard, utils.crypto());
+
+    auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+
+    auto responseRawCard = future.get();
+    auto publishedCard = CardManager::parseCard(responseRawCard, utils.crypto());
+
+    REQUIRE(utils.isCardsEqual(card, publishedCard));
+
+    auto verifier = VirgilCardVerifier(utils.crypto(), {}, true, !consts.enableStg());
+    REQUIRE(verifier.verifyCard(publishedCard));
 }
 
-TEST_CASE("test002_CreateCardWithDataAndInfo", "[client]") {
+TEST_CASE("test002_GetCard", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
 
-    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    auto validator = std::make_unique<CardValidator>(utils.crypto());
-    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
-    REQUIRE(validator->verifiers().size() == 2);
-    serviceConfig.cardValidator(std::move(validator));
+    auto identity = utils.getRandomString();
+    auto token = utils.getToken(identity);
 
-    Client client(std::move(serviceConfig));
+    CardClient cardClient(consts.ServiceURL());
+    ModelSigner modelSigner(utils.crypto());
 
-    std::unordered_map<std::string, std::string> data;
-    data["some_random_key1"] = "some_random_data1";
-    data["some_random_key2"] = "some_random_data2";
+    auto keyPair = utils.crypto()->generateKeyPair();
+    auto publicKeyData = utils.crypto()->exportPublicKey(keyPair.publicKey());
 
-    auto createCardRequest = utils.instantiateCreateCardRequest(data, "mac", "very_good_mac");
+    RawCardContent content(identity, publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
 
-    auto future = client.createCard(createCardRequest);
+    RawSignedModel rawCard(snapshot);
 
-    auto card = future.get();
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
 
-    REQUIRE(utils.checkCardEquality(card, createCardRequest));
+    auto card = CardManager::parseCard(rawCard, utils.crypto());
+
+    auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+    auto publishedRawCard = future.get();
+    auto publishedCard = CardManager::parseCard(publishedRawCard, utils.crypto());
+
+    auto getFuture = cardClient.getCard(publishedCard.identifier(), token.stringRepresentation());
+    auto getCardResponse = getFuture.get();
+    auto gotCard = CardManager::parseCard(getCardResponse.rawCard(), utils.crypto());
+
+    REQUIRE(utils.isCardsEqual(gotCard, publishedCard));
+
+    auto verifier = VirgilCardVerifier(utils.crypto(), {}, true, !consts.enableStg());
+    REQUIRE(verifier.verifyCard(gotCard));
 }
 
 TEST_CASE("test003_SearchCards", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
 
-    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    auto validator = std::make_unique<CardValidator>(utils.crypto());
-    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
-    REQUIRE(validator->verifiers().size() == 2);
-    serviceConfig.cardValidator(std::move(validator));
+    auto identity = utils.getRandomString();
+    auto token = utils.getToken(identity);
 
-    Client client(std::move(serviceConfig));
+    CardClient cardClient(consts.ServiceURL());
+    ModelSigner modelSigner(utils.crypto());
 
-    auto createCardRequest = utils.instantiateCreateCardRequest();
+    auto keyPair = utils.crypto()->generateKeyPair();
+    auto publicKeyData = utils.crypto()->exportPublicKey(keyPair.publicKey());
 
-    auto future = client.createCard(createCardRequest);
+    RawCardContent content(identity, publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
 
-    auto card = future.get();
+    RawSignedModel rawCard(snapshot);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
 
-    auto future2 = client.searchCards(
-            SearchCardsCriteria::createCriteria({ card.identity() }, CardScope::application, card.identityType()));
+    auto card = CardManager::parseCard(rawCard, utils.crypto());
 
-    auto foundCards = future2.get();
+    auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+    auto publishedRawCard = future.get();
+    auto publishedCard = CardManager::parseCard(publishedRawCard, utils.crypto());
 
-    REQUIRE(foundCards.size() == 1);
-    REQUIRE(utils.checkCardEquality(card, foundCards[0]));
+    auto searchFuture = cardClient.searchCards(publishedCard.identity(), token.stringRepresentation());
+    auto rawCards = searchFuture.get();
+    REQUIRE(!rawCards.empty());
+
+    auto verifier = VirgilCardVerifier(utils.crypto(), {}, true, !consts.enableStg());
+
+    bool found = false;
+    for (auto& element : rawCards) {
+        auto foundCard = CardManager::parseCard(element, utils.crypto());
+        if (utils.isCardsEqual(foundCard, publishedCard)) {
+            found = true;
+            REQUIRE(verifier.verifyCard(foundCard));
+
+            break;
+        }
+    }
+    REQUIRE(found);
 }
 
-TEST_CASE("test004_GetCard", "[client]") {
+TEST_CASE("test004_STC25", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
+    auto identity = utils.getRandomString();
 
-    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    auto validator = std::make_unique<CardValidator>(utils.crypto());
-    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
-    REQUIRE(validator->verifiers().size() == 2);
-    serviceConfig.cardValidator(std::move(validator));
+    auto token = utils.getTokenWithWrongPrivateKey(identity);
 
-    Client client(std::move(serviceConfig));
+    CardClient cardClient(consts.ServiceURL());
+    ModelSigner modelSigner(utils.crypto());
 
-    auto createCardRequest = utils.instantiateCreateCardRequest();
+    auto keyPair = utils.crypto()->generateKeyPair();
+    auto publicKeyData = utils.crypto()->exportPublicKey(keyPair.publicKey());
 
-    auto future = client.createCard(createCardRequest);
+    RawCardContent content(identity, publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
 
-    auto card = future.get();
+    RawSignedModel rawCard(snapshot);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
 
-    auto future2 = client.getCard(card.identifier());
-
-    auto foundCard = future2.get();
-
-    REQUIRE(utils.checkCardEquality(card, foundCard));
-}
-
-TEST_CASE("test005_RevokeCard", "[client]") {
-    TestConst consts;
-    TestUtils utils(consts);
-
-    auto serviceConfig = ServiceConfig::createConfig(consts.applicationToken());
-    auto validator = std::make_unique<CardValidator>(utils.crypto());
-    validator->addVerifier(consts.applicationId(), VirgilBase64::decode(consts.applicationPublicKeyBase64()));
-    REQUIRE(validator->verifiers().size() == 2);
-    serviceConfig.cardValidator(std::move(validator));
-
-    Client client(std::move(serviceConfig));
-
-    auto createCardRequest = utils.instantiateCreateCardRequest();
-
-    auto future = client.createCard(createCardRequest);
-
-    auto card = future.get();
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-
-    auto revokeRequest = utils.instantiateRevokeCardRequest(card);
-
-    auto future2 = client.revokeCard(revokeRequest);
-
-    future2.get();
-
-    auto future3 = client.getCard(card.identifier());
+    auto card = CardManager::parseCard(rawCard, utils.crypto());
 
     bool errorWasThrown = false;
     try {
-        future3.get();
-    }
-    catch (...) {
+        auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+        auto publishedRawCard = future.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
         errorWasThrown = true;
     }
+    REQUIRE(errorWasThrown);
 
+    errorWasThrown = false;
+    try {
+        auto searchFuture = cardClient.searchCards(identity, token.stringRepresentation());
+        auto rawCards = searchFuture.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
+
+    errorWasThrown = false;
+    try {
+        auto getFuture = cardClient.getCard(card.identifier(), token.stringRepresentation());
+        auto gotRawCard = getFuture.get();
+    } catch (Error& error) {
+        REQUIRE(error.httpErrorCode() == 401);
+        errorWasThrown = true;
+    }
+    REQUIRE(errorWasThrown);
+}
+
+TEST_CASE("test005_STC27", "[client]") {
+    TestConst consts;
+    TestUtils utils(consts);
+
+    auto token = utils.getToken("identity");
+
+    CardClient cardClient(consts.ServiceURL());
+    ModelSigner modelSigner(utils.crypto());
+
+    auto keyPair = utils.crypto()->generateKeyPair();
+    auto publicKeyData = utils.crypto()->exportPublicKey(keyPair.publicKey());
+
+    RawCardContent content("another_identity", publicKeyData, std::time(0));
+    auto snapshot = content.snapshot();
+
+    RawSignedModel rawCard(snapshot);
+
+    modelSigner.selfSign(rawCard, keyPair.privateKey());
+    REQUIRE(rawCard.signatures().size() == 1);
+
+    bool errorWasThrown = false;
+    try {
+        auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
+        auto responseRawCard = future.get();
+    } catch (...) {
+        errorWasThrown = true;
+    }
     REQUIRE(errorWasThrown);
 }

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,11 +30,11 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/crypto/Fingerprint.h>
 #include <virgil/sdk/VirgilSdkError.h>
 #include <virgil/crypto/VirgilKeyPair.h>
 #include <virgil/crypto/foundation/VirgilHash.h>
@@ -55,7 +53,6 @@ using virgil::sdk::VirgilByteArrayUtils;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::VirgilByteArray;
 using virgil::sdk::VirgilByteArrayUtils;
-using virgil::sdk::crypto::Fingerprint;
 using virgil::crypto::VirgilKeyPair;
 using virgil::crypto::VirgilSigner;
 using virgil::crypto::VirgilCipher;
@@ -70,6 +67,11 @@ using virgil::sdk::crypto::keys::KeyPair;
 using virgil::sdk::VirgilHashAlgorithm;
 
 const auto CustomParamKeySignature = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNATURE");
+
+const auto CustomParamKeySignerId = VirgilByteArrayUtils::stringToBytes("VIRGIL-DATA-SIGNER-ID");
+
+Crypto::Crypto(bool useSHA256Fingerprints)
+        : useSHA256Fingerprints_(useSHA256Fingerprints) {}
 
 // Key management
 KeyPair Crypto::generateKeyPair() const {
@@ -129,9 +131,7 @@ VirgilByteArray Crypto::exportPublicKey(const PublicKey &publicKey) const {
     return VirgilKeyPair::publicKeyToDER(publicKey.key());
 }
 
-
 // Crypto operations
-
 VirgilByteArray Crypto::encrypt(const VirgilByteArray &data, const std::vector<PublicKey> &recipients) const {
     auto cipher = VirgilCipher();
 
@@ -199,7 +199,7 @@ void Crypto::decrypt(std::istream &istream, std::ostream &ostream, const Private
 
 VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const PrivateKey &privateKey,
                                         const std::vector<PublicKey> &recipients) const {
-    auto signer = VirgilSigner();
+    auto signer = VirgilSigner(VirgilHashAlgorithm::SHA512);
 
     auto privateKeyData = exportPrivateKey(privateKey);
 
@@ -208,6 +208,9 @@ VirgilByteArray Crypto::signThenEncrypt(const VirgilByteArray &data, const Priva
     auto cipher = VirgilCipher();
 
     cipher.customParams().setData(CustomParamKeySignature, signature);
+
+    auto signerId = privateKey.identifier();
+    cipher.customParams().setData(CustomParamKeySignerId, signerId);
 
     for (auto& recipient : recipients) {
         auto publicKeyData = exportPublicKey(recipient);
@@ -238,8 +241,37 @@ VirgilByteArray Crypto::decryptThenVerify(const VirgilByteArray &data, const Pri
     return decryptedData;
 }
 
-VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const {
+VirgilByteArray Crypto::decryptThenVerify(const virgil::sdk::VirgilByteArray &data,
+                                          const virgil::sdk::crypto::keys::PrivateKey &privateKey,
+                                          const std::vector<PublicKey> &signersPublicKeys) const {
+    auto cipher = VirgilCipher();
+
+    auto privateKeyData = exportPrivateKey(privateKey);
+    auto decryptedData = cipher.decryptWithKey(data, privateKey.identifier(), privateKeyData);
+
+    auto signature = cipher.customParams().getData(CustomParamKeySignature);
+    auto signerId = cipher.customParams().getData(CustomParamKeySignerId);
+
+    auto publicKeyData = VirgilByteArray();
+
+    for (auto& signerPublicKey : signersPublicKeys) {
+        if (signerPublicKey.identifier() == signerId) {
+            publicKeyData = exportPublicKey(signerPublicKey);
+        }
+    }
+
     auto signer = VirgilSigner();
+    auto isVerified = signer.verify(decryptedData, signature, publicKeyData);
+
+    if (!isVerified) {
+        throw make_error(VirgilSdkError::VerificationFailed, "Invalid signature.");
+    }
+
+    return decryptedData;
+}
+
+VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const PrivateKey &privateKey) const {
+    auto signer = VirgilSigner(VirgilHashAlgorithm::SHA512);
 
     auto privateKeyData = exportPrivateKey(privateKey);
 
@@ -247,7 +279,7 @@ VirgilByteArray Crypto::generateSignature(const VirgilByteArray &data, const Pri
 }
 
 VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKey &privateKey) const {
-    auto signer = VirgilStreamSigner();
+    auto signer = VirgilStreamSigner(VirgilHashAlgorithm::SHA512);
 
     auto dataSource = VirgilStreamDataSource(istream);
     auto privateKeyData = exportPrivateKey(privateKey);
@@ -256,8 +288,8 @@ VirgilByteArray Crypto::generateSignature(std::istream &istream, const PrivateKe
 }
 
 //Utils
-Fingerprint Crypto::calculateFingerprint(const VirgilByteArray &data) const {
-    return Fingerprint(computeHash(data, VirgilHashAlgorithm::SHA256));
+VirgilByteArray Crypto::generateSHA512(const VirgilByteArray &data) const {
+    return computeHash(data, VirgilHashAlgorithm::SHA512);
 }
 
 VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgorithm algorithm) const {
@@ -266,5 +298,15 @@ VirgilByteArray Crypto::computeHash(const VirgilByteArray &data, VirgilHashAlgor
 }
 
 VirgilByteArray Crypto::computeHashForPublicKey(const VirgilByteArray &publicKey) const {
-    return computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA256);
+    if (useSHA256Fingerprints_)
+        return computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA256);
+    else {
+        VirgilByteArray hash = computeHash(VirgilKeyPair::publicKeyToDER(publicKey), VirgilHashAlgorithm::SHA512);
+        hash.resize(8);
+        return hash;
+    }
+}
+
+bool Crypto::useSHA256Fingerprints() const {
+    return useSHA256Fingerprints_;
 }

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,220 +30,271 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-
 #include <catch.hpp>
-#include <nlohman/json.hpp>
 
-#include <fstream>
+#include <thread>
+#include <memory>
 
-#include <virgil/sdk/Common.h>
-#include <virgil/sdk/crypto/Crypto.h>
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
+#include <TestConst.h>
+#include <TestUtils.h>
+#include <TestData.h>
 
-using virgil::sdk::VirgilBase64;
+#include <virgil/sdk/cards/CardManager.h>
+#include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
+#include <virgil/sdk/util/JsonUtils.h>
+#include <virgil/sdk/util/JsonKey.h>
+#include <virgil/sdk/jwt/JwtVerifier.h>
+#include <virgil/sdk/jwt/JwtGenerator.h>
+
 using virgil::sdk::crypto::Crypto;
-using virgil::sdk::VirgilByteArrayUtils;
-using virgil::sdk::crypto::keys::PrivateKey;
-using virgil::sdk::client::models::requests::CreateCardRequest;
+using virgil::sdk::test::TestUtils;
+using virgil::sdk::client::models::RawSignedModel;
+using virgil::sdk::VirgilBase64;
+using virgil::sdk::cards::CardManager;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
+using virgil::sdk::client::models::RawCardContent;
+using nlohmann::json;
+using virgil::sdk::util::JsonKey;
+using virgil::sdk::jwt::JwtVerifier;
+using virgil::sdk::jwt::Jwt;
+using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::cards::verification::Whitelist;
 
-using json = nlohmann::json;
+const auto testData = virgil::sdk::test::TestData();
 
-TEST_CASE("test001_CheckNumberOfTestsInJSON", "[compatibility]") {
-    std::ifstream input("sdk_compatibility_data.json");
+TEST_CASE("test001_STC_1", "[compatibility]") {
+    TestConst consts;
+    TestUtils utils(consts);
 
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
+    auto rawCardString = testData.dict()["STC-1.as_string"];
+    auto rawCard1 = RawSignedModel::importFromBase64EncodedString(rawCardString);
 
-    auto j = json::parse(str);
+    auto rawCardJson = testData.dict()["STC-1.as_json"];
+    auto rawCard2 = RawSignedModel::importFromJson(rawCardJson);
 
-    REQUIRE(j.size() == 6);
+    auto rawCardContent1 = RawCardContent::parse(rawCard1.contentSnapshot());
+    auto rawCardContent2 = RawCardContent::parse(rawCard2.contentSnapshot());
+
+    REQUIRE(rawCardContent1.identity() == "test");
+    REQUIRE(VirgilBase64::encode(rawCardContent1.publicKey()) == "MCowBQYDK2VwAyEA6d9bQQFuEnU8vSmx9fDo0Wxec42JdNg4VR4FOr4/BUk=");
+    REQUIRE(rawCardContent1.version() == "5.0");
+    REQUIRE(rawCardContent1.createdAt() == 1515686245);
+    REQUIRE(rawCardContent1.previousCardId().empty());
+    REQUIRE(rawCard1.signatures().empty());
+
+    REQUIRE(utils.isRawCardContentEqual(rawCardContent1, rawCardContent2));
+    REQUIRE(rawCard2.signatures().empty());
+
+    auto newRawCard = RawSignedModel(rawCardContent1.snapshot());
+    REQUIRE(newRawCard.contentSnapshot() == rawCard1.contentSnapshot());
+
+    auto exportedRawCard1AsJson = newRawCard.exportAsJson();
+    auto exportedRawCard1AsString = newRawCard.exportAsBase64EncodedString();
+    REQUIRE(exportedRawCard1AsJson == rawCardJson);
+    REQUIRE(exportedRawCard1AsString == rawCardString);
+
+    auto importedRawCardContent1 = RawCardContent::parse(rawCardContent1.snapshot());
+    REQUIRE(importedRawCardContent1.previousCardId().empty());
 }
 
-TEST_CASE("test002_DecryptFromSingleRecipient_ShouldDecrypt", "[compatibility]") {
-    auto crypto = Crypto();
+TEST_CASE("test002_STC_2", "[compatibility]") {
+    TestConst consts;
+    TestUtils utils(consts);
 
-    std::ifstream input("sdk_compatibility_data.json");
+    auto rawCardString = testData.dict()["STC-2.as_string"];
+    auto rawCard1 = RawSignedModel::importFromBase64EncodedString(rawCardString);
 
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
+    auto rawCardJson = testData.dict()["STC-2.as_json"];
+    auto rawCard2 = RawSignedModel::importFromJson(rawCardJson);
 
-    auto j = json::parse(str);
+    auto rawCardContent1 = RawCardContent::parse(rawCard1.contentSnapshot());
+    auto rawCardContent2 = RawCardContent::parse(rawCard2.contentSnapshot());
 
-    json dict = j["encrypt_single_recipient"];
+    REQUIRE(rawCardContent1.identity() == "test");
+    REQUIRE(VirgilBase64::encode(rawCardContent1.publicKey()) == "MCowBQYDK2VwAyEA6d9bQQFuEnU8vSmx9fDo0Wxec42JdNg4VR4FOr4/BUk=");
+    REQUIRE(rawCardContent1.version() == "5.0");
+    REQUIRE(rawCardContent1.createdAt() == 1515686245);
+    REQUIRE(rawCardContent1.previousCardId() == "a666318071274adb738af3f67b8c7ec29d954de2cabfd71a942e6ea38e59fff9");
+    REQUIRE(rawCard1.signatures().size() == 3);
 
-    std::string privateKeyStr = dict["private_key"];
-    auto privateKey = crypto.importPrivateKey(VirgilBase64::decode(privateKeyStr));
-
-    std::string originalDataStr = dict["original_data"];
-
-    std::string cipherDataStr = dict["cipher_data"];
-    auto cipherData = VirgilBase64::decode(cipherDataStr);
-
-    auto decryptedData = crypto.decrypt(cipherData, privateKey);
-    auto decryptedDataStr = VirgilBase64::encode(decryptedData);
-
-    REQUIRE(decryptedDataStr == originalDataStr);
-}
-
-TEST_CASE("test003_DecryptFromMultipleRecipients_ShouldDecypt", "[compatibility]") {
-    auto crypto = Crypto();
-
-    std::ifstream input("sdk_compatibility_data.json");
-
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
-
-    auto j = json::parse(str);
-
-    json dict = j["encrypt_multiple_recipients"];
-
-    std::vector<PrivateKey> privateKeys;
-
-    std::vector<json> privateKeysJson = dict["private_keys"];
-
-    for (const std::string &privateKeyStr : privateKeysJson) {
-        auto privateKeyData = VirgilBase64::decode(privateKeyStr);
-
-        auto privateKey = crypto.importPrivateKey(privateKeyData);
-
-        privateKeys.push_back(std::move(privateKey));
+    for (auto& signature : rawCard1.signatures()) {
+        if (signature.signer() == "self") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == "MFEwDQYJYIZIAWUDBAIDBQAEQNXguibY1cDCfnuJhTK+jX/Qv6v5i5TzqQs3e1fWlbisdUWYh+s10gsLkhf83wOqrm8ZXUCpjgkJn83TDaKYZQ8=");
+            REQUIRE(signature.snapshot().empty());
+        } else if (signature.signer() == "virgil") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == "MFEwDQYJYIZIAWUDBAIDBQAEQNXguibY1cDCfnuJhTK+jX/Qv6v5i5TzqQs3e1fWlbisdUWYh+s10gsLkhf83wOqrm8ZXUCpjgkJn83TDaKYZQ8=");
+            REQUIRE(signature.snapshot().empty());
+        } else if (signature.signer() == "extra") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == "MFEwDQYJYIZIAWUDBAIDBQAEQCA3O35Rk+doRPHkHhJJKJyFxz2APDZOSBZi6QhmI7BP3yTb65gRYwu0HtNNYdMRsEqVj9IEKhtDelf4SKpbJwo=");
+            REQUIRE(signature.snapshot().empty());
+        } else {
+            FAIL();
+        }
     }
 
-    REQUIRE(privateKeys.size() > 0);
+    REQUIRE(utils.isRawCardContentEqual(rawCardContent1, rawCardContent2));
+    REQUIRE(utils.isRawSignaturesEqual(rawCard1.signatures(), rawCard2.signatures()));
 
-    std::string originalDataStr = dict["original_data"];
+    REQUIRE(rawCard1.exportAsBase64EncodedString() == rawCardString);
+    REQUIRE(rawCard1.exportAsJson() == rawCardJson);
+}
 
-    std::string cipherDataStr = dict["cipher_data"];
-    auto cipherData = VirgilBase64::decode(cipherDataStr);
+TEST_CASE("test003_STC_3", "[compatibility]") {
+    TestConst consts;
+    TestUtils utils(consts);
 
-    for (auto& privateKey : privateKeys) {
-        auto decryptedData = crypto.decrypt(cipherData, privateKey);
-        auto decryptedDataStr = VirgilBase64::encode(decryptedData);
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), false, false);
 
-        REQUIRE(decryptedDataStr == originalDataStr);
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
+
+    auto rawCardString = testData.dict()["STC-3.as_string"];
+    auto card1 = cardManager.importCardFromBase64(rawCardString);
+
+    auto rawCardJson = testData.dict()["STC-3.as_json"];
+    auto card2 = cardManager.importCardFromJson(rawCardJson);
+
+    REQUIRE(card1.identifier() == testData.dict()["STC-3.card_id"]);
+    REQUIRE(card1.identity() == "test");
+    auto publicKeyData = utils.crypto()->exportPublicKey(card1.publicKey());
+    REQUIRE(VirgilBase64::encode(publicKeyData) == testData.dict()["STC-3.public_key_base64"]);
+    REQUIRE(card1.version() == "5.0");
+    REQUIRE(card1.createdAt() == 1515686245);
+    REQUIRE(card1.previousCardId().empty());
+    REQUIRE(card1.previousCard() == nullptr);
+    REQUIRE(card1.signatures().empty());
+
+    REQUIRE(utils.isCardsEqual(card1, card2));
+    REQUIRE(utils.isCardSignaturesEqual(card1.signatures(), card2.signatures()));
+
+    auto exportedCardBase64 = cardManager.exportCardAsBase64(card1);
+    auto exportedCardJson = cardManager.exportCardAsJson(card1);
+    REQUIRE(rawCardString == exportedCardBase64);
+    REQUIRE(rawCardJson == exportedCardJson);
+}
+
+TEST_CASE("test004_STC_4", "[compatibility]") {
+    TestConst consts;
+    TestUtils utils(consts);
+
+    auto verifier = std::make_shared<VirgilCardVerifier>(utils.crypto(), std::vector<Whitelist>(), false, false);
+
+    CardManager cardManager(utils.crypto(), nullptr, verifier);
+
+    auto rawCardString = testData.dict()["STC-4.as_string"];
+    auto card1 = cardManager.importCardFromBase64(rawCardString);
+
+    auto rawCardJson = testData.dict()["STC-4.as_json"];
+    auto card2 = cardManager.importCardFromJson(rawCardJson);
+
+    REQUIRE(card1.identifier() == testData.dict()["STC-4.card_id"]);
+    REQUIRE(card1.identity() == "test");
+    auto publicKeyData = utils.crypto()->exportPublicKey(card1.publicKey());
+    REQUIRE(VirgilBase64::encode(publicKeyData) == testData.dict()["STC-4.public_key_base64"]);
+    REQUIRE(card1.version() == "5.0");
+    REQUIRE(card1.createdAt() == 1515686245);
+    REQUIRE(card1.previousCardId().empty());
+    REQUIRE(card1.previousCard() == nullptr);
+    REQUIRE(card1.signatures().size() == 3);
+
+    for (auto& signature : card1.signatures()) {
+        if (signature.signer() == "self") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == testData.dict()["STC-4.signature_self_base64"]);
+            REQUIRE(signature.snapshot().empty());
+            REQUIRE(signature.extraFields().empty());
+        } else if (signature.signer() == "virgil") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == testData.dict()["STC-4.signature_virgil_base64"]);
+            REQUIRE(signature.snapshot().empty());
+            REQUIRE(signature.extraFields().empty());
+        } else if (signature.signer() == "extra") {
+            REQUIRE(VirgilBase64 ::encode(signature.signature()) == testData.dict()["STC-4.signature_extra_base64"]);
+            REQUIRE(signature.snapshot().empty());
+            REQUIRE(signature.extraFields().empty());
+        } else {
+            FAIL();
+        }
     }
+
+    REQUIRE(utils.isCardsEqual(card1, card2));
+    REQUIRE(utils.isCardSignaturesEqual(card1.signatures(), card2.signatures()));
+
+    auto exportedCardBase64 = cardManager.exportCardAsBase64(card1);
+    auto exportedCardJson = cardManager.exportCardAsJson(card1);
+    REQUIRE(rawCardString == exportedCardBase64);
+    REQUIRE(rawCardJson == exportedCardJson);
 }
 
-TEST_CASE("test004_DecryptThenVerifySingleRecipient_ShouldDecryptAndVerify", "[compatibility]") {
-    auto crypto = Crypto();
+TEST_CASE("test005_STC_22", "[compatibility]") {
+    auto crypto = std::make_shared<Crypto>();
 
-    std::ifstream input("sdk_compatibility_data.json");
+    auto apiPublicKeyBase64 = testData.dict()["STC-22.api_public_key_base64"];
+    auto apiPublicKeyId = testData.dict()["STC-22.api_key_id"];
+    auto apiPublicKeyData = VirgilBase64::decode(apiPublicKeyBase64);
+    auto apiPubicKey = crypto->importPublicKey(apiPublicKeyData);
 
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
+    auto jwtVerifier = JwtVerifier(apiPubicKey, apiPublicKeyId, crypto);
 
-    auto j = json::parse(str);
+    auto jwtStringRepresentation = testData.dict()["STC-22.jwt"];
+    auto jwt = Jwt::parse(jwtStringRepresentation);
 
-    json dict = j["sign_then_encrypt_single_recipient"];
+    auto keyIdentifier = testData.dict()["STC-22.api_key_id"];
+    REQUIRE(jwt.headerContent().algorithm() == "VEDS512");
+    REQUIRE(jwt.headerContent().contentType() == "virgil-jwt;v=1");
+    REQUIRE(jwt.headerContent().type() == "JWT");
+    REQUIRE(jwt.headerContent().keyIdentifier() == keyIdentifier);
 
-    std::string privateKeyStr = dict["private_key"];
-    auto privateKey = crypto.importPrivateKey(VirgilBase64::decode(privateKeyStr));
-    auto publicKey = crypto.extractPublicKeyFromPrivateKey(privateKey);
+    REQUIRE(jwt.bodyContent().identity() == "some_identity");
+    REQUIRE(jwt.bodyContent().appId() == "13497c3c795e3a6c32643b0a76957b70d2332080762469cdbec89d6390e6dbd7");
+    REQUIRE(jwt.bodyContent().issuedAt() == 1518513309);
+    REQUIRE(jwt.bodyContent().expiresAt() == 1518513909);
+    REQUIRE(jwt.isExpired());
 
-    std::string originalDataStr = dict["original_data"];
+    REQUIRE(jwt.stringRepresentation() == jwtStringRepresentation);
 
-    std::string cipherDataStr = dict["cipher_data"];
-    auto cipherData = VirgilBase64::decode(cipherDataStr);
-
-    auto decryptedData = crypto.decryptThenVerify(cipherData, privateKey, publicKey);
-    auto decryptedDataStr = VirgilBase64::encode(decryptedData);
-
-    REQUIRE(decryptedDataStr == originalDataStr);
+    std::unordered_map<std::string, std::string> dic = {
+            {"username", "some_username"}
+    };
+    REQUIRE(jwt.bodyContent().additionalData() == dic);
+    REQUIRE(jwtVerifier.verifyToken(jwt));
 }
 
-TEST_CASE("test005_DecryptThenVerifyMultipleRecipients_ShouldDecryptAndVerify", "[compatibility]") {
-    auto crypto = Crypto();
+TEST_CASE("test006_STC_23", "[compatibility]") {
+    auto crypto = std::make_shared<Crypto>();
 
-    std::ifstream input("sdk_compatibility_data.json");
+    auto apiPublicKeyBase64 = testData.dict()["STC-23.api_public_key_base64"];
+    auto apiPublicKeyId = testData.dict()["STC-23.api_key_id"];
+    auto apiPublicKeyData = VirgilBase64::decode(apiPublicKeyBase64);
+    auto apiPubicKey = crypto->importPublicKey(apiPublicKeyData);
 
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
+    auto apiPrivateKeyBase64 = testData.dict()["STC-23.api_private_key_base64"];
+    auto appId = testData.dict()["STC-23.app_id"];
+    auto apiPrivateKeyData = VirgilBase64::decode(apiPrivateKeyBase64);
+    auto apiPrivateKey = crypto->importPrivateKey(apiPrivateKeyData);
 
-    auto j = json::parse(str);
+    auto jwtVerifier = JwtVerifier(apiPubicKey, apiPublicKeyId, crypto);
 
-    json dict = j["sign_then_encrypt_multiple_recipients"];
+    auto generator = JwtGenerator(apiPrivateKey, apiPublicKeyId, crypto, appId, 1000);
 
-    std::vector<PrivateKey> privateKeys;
+    auto identity = "some_identity";
+    std::unordered_map<std::string, std::string> dic = {
+            {"username", "some_username"}
+    };
 
-    std::vector<json> privateKeysJson = dict["private_keys"];
+    auto jwt = generator.generateToken(identity, dic);
 
-    for (const std::string &privateKeyStr : privateKeysJson) {
-        auto privateKeyData = VirgilBase64::decode(privateKeyStr);
+    auto keyIdentifier = testData.dict()["STC-23.api_key_id"];
+    REQUIRE(jwt.headerContent().algorithm() == "VEDS512");
+    REQUIRE(jwt.headerContent().contentType() == "virgil-jwt;v=1");
+    REQUIRE(jwt.headerContent().type() == "JWT");
+    REQUIRE(jwt.headerContent().keyIdentifier() == keyIdentifier);
 
-        auto privateKey = crypto.importPrivateKey(privateKeyData);
+    REQUIRE(jwt.bodyContent().identity() == "some_identity");
+    REQUIRE(jwt.bodyContent().appId() == "13497c3c795e3a6c32643b0a76957b70d2332080762469cdbec89d6390e6dbd7");
+    REQUIRE(!jwt.isExpired());
+    REQUIRE(jwt.bodyContent().additionalData() == dic);
 
-        privateKeys.push_back(std::move(privateKey));
-    }
-
-    REQUIRE(privateKeys.size() > 0);
-
-    std::string originalDataStr = dict["original_data"];
-
-    std::string cipherDataStr = dict["cipher_data"];
-    auto cipherData = VirgilBase64::decode(cipherDataStr);
-
-    auto signerPublicKey = crypto.extractPublicKeyFromPrivateKey(privateKeys[0]);
-
-    for (auto& privateKey : privateKeys) {
-        auto decryptedData = crypto.decryptThenVerify(cipherData, privateKey, signerPublicKey);
-        auto decryptedDataStr = VirgilBase64::encode(decryptedData);
-
-        REQUIRE(decryptedDataStr == originalDataStr);
-    }
-}
-
-TEST_CASE("test006_GenerateSignature_ShouldBeEqual", "[compatibility]") {
-    auto crypto = Crypto();
-
-    std::ifstream input("sdk_compatibility_data.json");
-
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
-
-    auto j = json::parse(str);
-
-    json dict = j["generate_signature"];
-
-    std::string privateKeyStr = dict["private_key"];
-    auto privateKey = crypto.importPrivateKey(VirgilBase64::decode(privateKeyStr));
-
-    std::string originalDataStr = dict["original_data"];
-    auto originalData = VirgilBase64::decode(originalDataStr);
-
-    auto signature = crypto.generateSignature(originalData, privateKey);
-    auto signatureStr = VirgilBase64::encode(signature);
-
-    std::string originalSignatureStr = dict["signature"];
-
-    REQUIRE(signatureStr == originalSignatureStr);
-}
-
-TEST_CASE("test007_ExportSignableData_ShouldBeEqual", "[compatibility]") {
-    auto crypto = Crypto();
-
-    std::ifstream input("sdk_compatibility_data.json");
-
-    std::string str((std::istreambuf_iterator<char>(input)),
-                    std::istreambuf_iterator<char>());
-
-    auto j = json::parse(str);
-
-    json dict = j["export_signable_request"];
-
-    std::string exportedRequest = dict["exported_request"];
-
-    auto request = CreateCardRequest::importFromString(exportedRequest);
-
-    auto fingerprint = crypto.calculateFingerprint(request.snapshot());
-
-    auto creatorPublicKey = crypto.importPublicKey(request.snapshotModel().publicKeyData());
-
-    auto fingerprintHex = fingerprint.hexValue();
-
-    auto signature = request.signatures().at(fingerprintHex);
-
-    auto verified = crypto.verify(fingerprint.value(), signature, creatorPublicKey);
-    REQUIRE(verified);
+    REQUIRE(jwtVerifier.verifyToken(jwt));
 }

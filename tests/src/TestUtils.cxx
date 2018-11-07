@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,109 +30,139 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
-
 
 #include <TestUtils.h>
 #include <helpers.h>
-#include <virgil/sdk/client/models/ClientCommon.h>
-#include <virgil/sdk/client/RequestSigner.h>
-#include <virgil/sdk/client/models/responses/CardResponse.h>
-#include <virgil/sdk/client/models/serialization/JsonDeserializer.h>
+#include <virgil/sdk/jwt/JwtGenerator.h>
+#include <virgil/sdk/jwt/providers/GeneratorJwtProvider.h>
+#include <random>
 
 using virgil::sdk::VirgilByteArrayUtils;
-using virgil::sdk::client::models::CardRevocationReason;
 using virgil::sdk::test::Utils;
 using virgil::sdk::test::TestUtils;
-using virgil::sdk::VirgilBase64;
-using virgil::sdk::client::RequestSigner;
-using virgil::sdk::client::models::responses::CardResponse;
-using virgil::sdk::client::models::serialization::JsonDeserializer;
+using virgil::sdk::jwt::Jwt;
+using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::jwt::providers::GeneratorJwtProvider;
+using virgil::sdk::jwt::TokenContext;
+using virgil::sdk::cards::Card;
+using virgil::sdk::client::models::RawCardContent;
+using virgil::sdk::client::models::RawSignature;
+using virgil::sdk::cards::CardSignature;
+using virgil::sdk::VirgilByteArray;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
+using virgil::sdk::cards::verification::Whitelist;
 
-CreateCardRequest TestUtils::instantiateCreateCardRequest(
-        const std::unordered_map<std::string, std::string> &data,
-        const std::string &device,
-        const std::string &deviceName) const {
-    auto keyPair = crypto_->generateKeyPair();
-    auto exportedPublicKey = crypto_->exportPublicKey(keyPair.publicKey());
+TestUtils::TestUtils(TestConst consts)
+        : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {}
 
-    auto identity = Utils::generateRandomStr(40);
-    auto identityType = consts.applicationIdentityType();
+Jwt TestUtils::getToken(const std::string &identity, int ttl) const {
+    auto privateKeyData = VirgilBase64::decode(consts.ApiPrivateKey());
+    auto privateKey = crypto_->importPrivateKey(privateKeyData);
 
-    auto request = CreateCardRequest::createRequest(identity, identityType, exportedPublicKey, data, device, deviceName);
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto_, consts.AppId(), ttl);
 
-    auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
-    auto appPrivateKey = crypto_->importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
-
-    auto signer = RequestSigner(crypto_);
-
-    signer.selfSign(request, keyPair.privateKey());
-    signer.authoritySign(request, consts.applicationId(), appPrivateKey);
-
-    return request;
+    return jwtGenerator.generateToken(identity);
 }
 
-RevokeCardRequest TestUtils::instantiateRevokeCardRequest(const Card &card) const {
-    auto request = RevokeCardRequest::createRequest(card.identifier(), CardRevocationReason::unspecified);
+Jwt TestUtils::getTokenWithWrongPrivateKey(const std::string &identity, int ttl) const {
+    auto privateKey = crypto_->generateKeyPair().privateKey();
 
-    auto signer = RequestSigner(crypto_);
+    auto jwtGenerator = JwtGenerator(privateKey, consts.ApiPublicKeyId(), crypto_, consts.AppId(), ttl);
 
-    auto privateAppKeyData = VirgilBase64::decode(consts.applicationPrivateKeyBase64());
-    auto appPrivateKey = crypto_->importPrivateKey(privateAppKeyData, consts.applicationPrivateKeyPassword());
-
-    signer.authoritySign(request, consts.applicationId(), appPrivateKey);
-
-    return request;
+    return jwtGenerator.generateToken(identity);
 }
 
-Card TestUtils::instantiateCard() const {
-    auto cardResponse = JsonDeserializer<CardResponse>::fromJsonString("{\"id\":\"5bbe7efe9786e0b6d8409a5ec0fc45d7b9956548e0cc2baba58e05b8934f3d1f\",\"content_snapshot\":\"eyJpZGVudGl0eSI6IkMzN2dFRnY0RG14d25WOXRVcEJEZ2FxT3RwQ1Q0bDRSZDF0ZTJPTFEiLCJpZGVudGl0eV90eXBlIjoidGVzdCIsInB1YmxpY19rZXkiOiJNQ293QlFZREsyVndBeUVBK3c0bGNNcnBKbkN3dEExeDlHMEJTM0hzWFF5QlAxVlRTOTlUV1gzSnpOTT0iLCJzY29wZSI6ImFwcGxpY2F0aW9uIn0=\",\"meta\":{\"created_at\":\"2017-01-18T11:51:17+0000\",\"card_version\":\"4.0\",\"signs\":{\"5bbe7efe9786e0b6d8409a5ec0fc45d7b9956548e0cc2baba58e05b8934f3d1f\":\"MFEwDQYJYIZIAWUDBAICBQAEQOtH1Xxm9MAN3UJGrOjt8g6LoA5ovB2kX1IMOFgjYl7+QQy3c+Qz1qThekwS8SETTXqVEwJSvS9X+o9BDReJ4AM=\",\"c53035253366736218ea3ebc924275073aafc2e78d09fe4f910e6b33a7297dd7\":\"MFEwDQYJYIZIAWUDBAICBQAEQIATNZh6jjHvXyq314uXwzKTh9h\\/mqK3S+EeKE+pFuSoaw1BLytaN9CVyJFPkfdaRpdU2uYPMGjQlBrXfmCaDws=\",\"3e29d43373348cfb373b7eae189214dc01d7237765e572db685839b64adca853\":\"MFEwDQYJYIZIAWUDBAICBQAEQIW7qBS\\/8tHo8pKfNMb4GO1ARsWqkuh157F8JENBQSrnPhZC5oe9z8\\/2hD+OGUFoaubaDEl\\/PJcO4RzACdw46Qg=\"}}}");
-    return Card::buildCard(cardResponse);
-}
-
-bool TestUtils::checkCardEquality(const Card &card, const CreateCardRequest &request) {
-    auto equals = card.identityType() == request.snapshotModel().identityType()
-        && card.identity() == request.snapshotModel().identity()
-        && card.data() == request.snapshotModel().data()
-        && card.info() == request.snapshotModel().info()
-        && card.publicKeyData() == request.snapshotModel().publicKeyData()
-        && card.scope() == request.snapshotModel().scope();
-
-    return equals;
-}
-
-bool TestUtils::checkCardEquality(const Card &card1, const Card &card2) {
-    auto equals = card1.identityType() == card2.identityType()
+bool TestUtils::isCardsEqual(const Card &card1, const Card &card2) const {
+    auto equals = card1.identifier() == card2.identifier()
                   && card1.identity() == card2.identity()
-                  && card1.identifier() == card2.identifier()
+                  && card1.version() == card2.version()
                   && card1.createdAt() == card2.createdAt()
-                  && card1.cardVersion() == card2.cardVersion()
-                  && card1.data() == card2.data()
-                  && card1.info() == card2.info()
-                  && card1.publicKeyData() == card2.publicKeyData()
-                  && card1.scope() == card2.scope();
+                  && card1.previousCardId() == card2.previousCardId()
+                  && card1.isOutdated() == card2.isOutdated()
+                  && card1.contentSnapshot() == card2.contentSnapshot()
+                  && ((card1.previousCard() == nullptr && card2.previousCard() == nullptr) || (isCardsEqual(*card1.previousCard(), *card2.previousCard())));
 
     return equals;
 }
 
-bool TestUtils::checkCreateCardRequestEquality(const CreateCardRequest &request1, const CreateCardRequest &request2) {
-    auto equals = request1.snapshot() == request2.snapshot()
-                  && request1.signatures() == request2.signatures()
-                  && request1.snapshotModel().data() == request2.snapshotModel().data()
-                  && request1.snapshotModel().identity() == request2.snapshotModel().identity()
-                  && request1.snapshotModel().identityType() == request2.snapshotModel().identityType()
-                  && request1.snapshotModel().info() == request2.snapshotModel().info()
-                  && request1.snapshotModel().publicKeyData() == request2.snapshotModel().publicKeyData()
-                  && request1.snapshotModel().scope() == request2.snapshotModel().scope();
+bool TestUtils::isRawCardContentEqual(const RawCardContent &content1, const RawCardContent &content2) const {
+    auto equals = content1.identity() == content2.identity()
+                  && content1.publicKey() == content2.publicKey()
+                  && content1.version() == content2.version()
+                  && content1.createdAt() == content2.createdAt()
+                  && content1.previousCardId() == content2.previousCardId();
 
     return equals;
 }
 
-bool TestUtils::checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2) {
-    auto equals = request1.snapshot() == request2.snapshot()
-                  && request1.signatures() == request2.signatures()
-                  && request1.snapshotModel().cardId() == request2.snapshotModel().cardId()
-                  && request1.snapshotModel().revocationReason() == request2.snapshotModel().revocationReason();
+bool TestUtils::isRawSignaturesEqual(const std::vector<RawSignature> &signatures1,
+                                                   const std::vector<RawSignature> &signatures2) const {
+    if (signatures1.size() != signatures2.size())
+        return false;
 
-    return equals;
+    for (auto& signature1 : signatures1) {
+        bool found = false;
+        for (auto &signature2 : signatures2) {
+            if (signature1.signer() == signature2.signer()) {
+                found = true;
+                if (signature1.signature() != signature2.signature() || signature1.snapshot() != signature2.snapshot())
+                    return false;
+            }
+        }
+        if (!found)
+            return false;
+    }
+
+    return true;
 }
+
+bool TestUtils::isCardSignaturesEqual(const std::vector<CardSignature> &signatures1,
+                                      const std::vector<CardSignature> &signatures2) const {
+    if (signatures1.size() != signatures2.size())
+        return false;
+
+    for (auto& signature1 : signatures1) {
+        bool found = false;
+        for (auto &signature2 : signatures2) {
+            if (signature1.signer() == signature2.signer()) {
+                found = true;
+                if (signature1.signature() != signature2.signature()
+                    || signature1.snapshot() != signature2.snapshot()
+                    || signature1.extraFields() != signature2.extraFields())
+                    return false;
+            }
+        }
+        if (!found)
+            return false;
+    }
+
+    return true;
+}
+
+VirgilByteArray TestUtils::getRandomBytes(int size) const {
+    std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char> engine;
+    VirgilByteArray data(size);
+    std::generate(begin(data), end(data), std::ref(engine));
+
+    return data;
+}
+
+std::string TestUtils::getRandomString(int size) const {
+    srand(time(0));
+    static const char alphanum[] =
+            "0123456789"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "abcdefghijklmnopqrstuvwxyz";
+
+    std::string s;
+    for (int i = 0; i < size; ++i) {
+        s += alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+
+    return s;
+}
+
+const std::shared_ptr<Crypto>& TestUtils::crypto() const { return crypto_; }

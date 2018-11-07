@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,8 +30,9 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
-
 
 #ifndef VIRGIL_SDK_TESTCONST_H
 #define VIRGIL_SDK_TESTCONST_H
@@ -45,12 +44,24 @@ namespace sdk {
 namespace test {
     class TestConst {
     public:
-        std::string applicationToken() const;
-        std::string applicationPublicKeyBase64() const;
-        std::string applicationPrivateKeyBase64() const;
-        std::string applicationPrivateKeyPassword() const;
-        std::string applicationIdentityType() const;
-        std::string applicationId() const;
+        TestConst(const std::string &fileName = "consts.json");
+
+        const std::string& ApiPublicKeyId() const;
+        const std::string& ApiPrivateKey() const;
+        const std::string& ApiPublicKey() const;
+        const std::string& AppId() const;
+        const std::string& ServiceURL() const;
+
+        bool enableStg() const;
+
+    private:
+        std::string ApiPublicKeyId_;
+        std::string ApiPrivateKey_;
+        std::string ApiPublicKey_;
+        std::string AppId_;
+        std::string ServiceURL_;
+
+        bool enableStg_;
     };
 }
 }

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,55 +30,57 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
-
 
 #ifndef VIRGIL_SDK_TESTUTILS_H
 #define VIRGIL_SDK_TESTUTILS_H
 
-#include <virgil/sdk/client/models/requests/CreateCardRequest.h>
-#include <virgil/sdk/client/models/requests/RevokeCardRequest.h>
-#include <virgil/sdk/client/models/Card.h>
-#include <virgil/sdk/crypto/CryptoInterface.h>
+#include <memory>
+#include <algorithm>
+#include <virgil/sdk/jwt/Jwt.h>
 #include <virgil/sdk/crypto/Crypto.h>
-
+#include <virgil/sdk/cards/Card.h>
+#include <virgil/sdk/client/models/RawCardContent.h>
 #include <TestConst.h>
+#include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
 
-using virgil::sdk::client::models::requests::CreateCardRequest;
-using virgil::sdk::client::models::requests::RevokeCardRequest;
-using virgil::sdk::client::models::Card;
-using virgil::sdk::crypto::CryptoInterface;
 using virgil::sdk::crypto::Crypto;
 using virgil::sdk::test::TestConst;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
 
 namespace virgil {
 namespace sdk {
     namespace test {
         class TestUtils {
         public:
-            TestUtils(TestConst consts) : consts(std::move(consts)), crypto_(std::make_shared<Crypto>()) {
-            }
+            TestUtils(TestConst consts);
 
-            CreateCardRequest instantiateCreateCardRequest(
-                    const std::unordered_map<std::string, std::string> &data
-                          = std::unordered_map<std::string, std::string>(),
-                    const std::string &device = "",
-                    const std::string &deviceName = "") const;
+            jwt::Jwt getToken(const std::string& identity, int ttl = 1000) const;
 
-            RevokeCardRequest instantiateRevokeCardRequest(const Card &card) const;
+            jwt::Jwt getTokenWithWrongPrivateKey(const std::string& identity, int ttl = 1000) const;
 
-            Card instantiateCard() const;
+            bool isCardsEqual(const cards::Card& card1, const cards::Card& card2) const;
 
-            static bool checkCardEquality(const Card &card, const CreateCardRequest &request);
-            static bool checkCardEquality(const Card &card1, const Card &card2);
+            bool isRawCardContentEqual(const client::models::RawCardContent& content1,
+                                       const client::models::RawCardContent& content2) const;
 
-            static bool checkCreateCardRequestEquality(const CreateCardRequest &request1, const CreateCardRequest &request2);
-            static bool checkRevokeCardRequestEquality(const RevokeCardRequest &request1, const RevokeCardRequest &request2);
+            bool isRawSignaturesEqual(const std::vector<client::models::RawSignature>& signatures1,
+                                      const std::vector<client::models::RawSignature>& signatures2) const;
 
-            const std::shared_ptr<CryptoInterface>& crypto() const { return crypto_; }
+            bool isCardSignaturesEqual(const std::vector<cards::CardSignature>& signatures1,
+                                       const std::vector<cards::CardSignature>& signatures2) const;
+
+            VirgilByteArray getRandomBytes(int size = 50) const;
+
+            std::string getRandomString(int size = 50) const;
+
+            const std::shared_ptr<Crypto>& crypto() const;
 
         private:
-            const std::shared_ptr<CryptoInterface> crypto_;
+            std::shared_ptr<Crypto> crypto_;
+
             TestConst consts;
         };
     }

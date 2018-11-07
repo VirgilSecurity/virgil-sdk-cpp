@@ -1,0 +1,121 @@
+/**
+ * Copyright (C) 2015-2018 Virgil Security Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     (1) Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *     (2) Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *
+ *     (3) Neither the name of the copyright holder nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ */
+
+#ifndef VIRGIL_SDK_RAWCARDCONTENT_H
+#define VIRGIL_SDK_RAWCARDCONTENT_H
+
+#include <string>
+#include <memory>
+#include <ctime>
+#include <virgil/sdk/Common.h>
+
+namespace virgil {
+    namespace sdk {
+        namespace client {
+            namespace models {
+                /*!
+                 * @brief Represents content of Virgil Card
+                 */
+                class RawCardContent {
+                public:
+                    /*!
+                     * @brief Constructor
+                     * @param identity identity of Card
+                     * @param publicKey PublicKey data of Card
+                     * @param createdAt std::time with date of Card creation
+                     * @param previousCardId identifier of previous Card with same identity
+                     * @param version version of Card
+                     */
+                    RawCardContent(std::string identity, VirgilByteArray publicKey, std::time_t createdAt,
+                                   std::string previousCardId = std::string(),
+                                   std::string version = "5.0");
+
+                    /*!
+                     * @brief Initializes RawCardContent from binary content snapshot
+                     * @param snapshot binary snapshot of RawCardContent
+                     * @return initialized RawCardContent
+                     */
+                    static RawCardContent parse(const VirgilByteArray& snapshot);
+
+                    /*!
+                     * @brief Takes binary snapshot of RawCardContent
+                     * @return binary snapshot of RawCardContent
+                     */
+                    VirgilByteArray snapshot() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return identity of Card
+                     */
+                    const std::string& identity() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return PublicKey data of Card
+                     */
+                    const VirgilByteArray& publicKey() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return version of Card
+                     */
+                    const std::string& version() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return std::time with date of Card creation
+                     */
+                    std::time_t createdAt() const;
+
+                    /*!
+                     * @brief Getter
+                     * @return identifier of previous Card with same identity
+                     */
+                    const std::string& previousCardId() const;
+
+                private:
+                    std::string identity_;
+                    VirgilByteArray publicKey_;
+                    std::string version_;
+                    std::time_t createdAt_;
+                    std::string previousCardId_;
+                };
+            }
+        }
+    }
+}
+
+#endif //VIRGIL_SDK_RAWCARDCONTENT_H

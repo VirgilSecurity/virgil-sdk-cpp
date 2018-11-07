@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2016 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef VIRGIL_SDK_VIRGILSDKERROR_H
@@ -51,8 +51,10 @@ namespace virgil {
         enum class VirgilSdkError  {
             Reserved = 0, ///< Should not be used.
             VerificationFailed, ///< Verification of signature failed.
-            CardValidationFailed, ///< Validation of Virgil Card failed.
+            CardVerificationFailed, ///< Verification of Virgil Card failed.
             ServiceQueryFailed, ///< REST Query to Virgil Service failed.
+            AddSignatureFailed, ///< Adding duplicate signature failed.
+            AddVerifierCredentialsFailed, ///< Adding duplicate verifier credentials failed.
             Undefined = std::numeric_limits<int>::max()
         };
 

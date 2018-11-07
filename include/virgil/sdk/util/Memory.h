@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef VIRGIL_SDK_UTIL_MEMORY_H
@@ -44,10 +44,13 @@
 #if !defined(_MSC_VER) || _MSC_VER < 1800
 
 namespace std {
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&& ... args) {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
+    /*!
+     * @brief Custom implementation of std::make_unique() function
+     */
+    template<typename T, typename... Args>
+    std::unique_ptr<T> make_unique(Args&& ... args) {
+        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
 }
 
 #endif // !defined(_MSC_VER) || _MSC_VER < 1800
