@@ -19,14 +19,20 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 - manage users' Public Keys
 - use Virgil [Crypto library][_virgil_crypto]
 
-## Requirements
+## Installation
+### Requirements
 
 - C++11 compatible compiler
 - CMake 3.10+
 
-## Installation
+### CMake
+Virgil SDK can be integrated using CMake in the following way
 
-TODO
+```cmake
+add_subdirectory (<PATH_TO_DEPENDENCIES>/virgil-sdk-cpp virgil-sdk-cpp)
+
+target_link_libraries (${PROJECT_NAME} virgil_sdk)
+```
 
 ## Usage Examples
 
