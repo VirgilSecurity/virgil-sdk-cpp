@@ -51,6 +51,9 @@ set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 ## Crosscompiling
 set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
 
+## Virgil Crypto option
+set (VIRGIL_CRYPTO_FEATURE_RNG_SEED_FILE OFF CACHE BOOL "Defines whether class VirgilRandom will use additional seed from a file.")
+
 ## Installation directories
 set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
 set (INSTALL_LIB_DIR_NAME lib CACHE STRING "Installation directory name for libraries")
