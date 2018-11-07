@@ -17,9 +17,7 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 ## SDK Features
 - communicate with [Virgil Cards Service][_cards_service]
 - manage users' Public Keys
-- store private keys in secure local storage
 - use Virgil [Crypto library][_virgil_crypto]
-- use your own Crypto
 
 ## Requirements
 
