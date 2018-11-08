@@ -153,7 +153,6 @@ for (auto& card : aliceCards)
 auto decryptedData = crypto->decryptThenVerify(encryptedData, bobPrivateKey, aliceRelevantCardsPublicKeys);
 ```
 
-
 ## License
 
 This library is released under the [3-clause BSD License](LICENSE.md).
