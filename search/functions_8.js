@@ -1,0 +1,15 @@
+var searchData=
+[
+  ['identifier',['identifier',['../classvirgil_1_1sdk_1_1cards_1_1_card.html#a782e1ca1145b5178f6c880c3eaa7482e',1,'virgil::sdk::cards::Card']]],
+  ['identity',['identity',['../classvirgil_1_1sdk_1_1cards_1_1_card.html#a6f56decdcf6dc0ec8cfd2dffa6e4234c',1,'virgil::sdk::cards::Card::identity()'],['../classvirgil_1_1sdk_1_1client_1_1models_1_1_raw_card_content.html#a910ddf09df9e260a35ffdc651f266385',1,'virgil::sdk::client::models::RawCardContent::identity()'],['../classvirgil_1_1sdk_1_1jwt_1_1interfaces_1_1_access_token_interface.html#a7d0f7da331fc9b574469bddb89e837a8',1,'virgil::sdk::jwt::interfaces::AccessTokenInterface::identity()'],['../classvirgil_1_1sdk_1_1jwt_1_1_jwt.html#a21002d85b404305da14db62f5ea36e4e',1,'virgil::sdk::jwt::Jwt::identity()'],['../classvirgil_1_1sdk_1_1jwt_1_1_jwt_body_content.html#a0578dc5bfc2e4f945dbf3aaca612876b',1,'virgil::sdk::jwt::JwtBodyContent::identity()'],['../classvirgil_1_1sdk_1_1jwt_1_1_token_context.html#a7091a25106a931c12abd3c1f7cd65011',1,'virgil::sdk::jwt::TokenContext::identity()']]],
+  ['importcardfrombase64',['importCardFromBase64',['../classvirgil_1_1sdk_1_1cards_1_1_card_manager.html#a25ccb5d69ebb409158d5bf56c5e104fc',1,'virgil::sdk::cards::CardManager']]],
+  ['importcardfromjson',['importCardFromJson',['../classvirgil_1_1sdk_1_1cards_1_1_card_manager.html#a5017d377d834727b9845ff27c6703d3f',1,'virgil::sdk::cards::CardManager']]],
+  ['importcardfromrawcard',['importCardFromRawCard',['../classvirgil_1_1sdk_1_1cards_1_1_card_manager.html#a84ea1da9b43ed736e55f87d8ddb1306e',1,'virgil::sdk::cards::CardManager']]],
+  ['importfrombase64encodedstring',['importFromBase64EncodedString',['../classvirgil_1_1sdk_1_1client_1_1models_1_1_raw_signed_model.html#ab7ebbebf7fafea3065b61d6c03e95b8f',1,'virgil::sdk::client::models::RawSignedModel']]],
+  ['importfromjson',['importFromJson',['../classvirgil_1_1sdk_1_1client_1_1models_1_1_raw_signed_model.html#a582c66033d36af3b1465f7945f81b6e3',1,'virgil::sdk::client::models::RawSignedModel']]],
+  ['importprivatekey',['importPrivateKey',['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a61a38000cef7bf27d1059d3c146c9176',1,'virgil::sdk::crypto::Crypto']]],
+  ['importpublickey',['importPublicKey',['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a418a9cb23437295e7297517ec43d2376',1,'virgil::sdk::crypto::Crypto']]],
+  ['isexpired',['isExpired',['../classvirgil_1_1sdk_1_1jwt_1_1_jwt.html#a169872ccdbe2b5c9924d81905838237d',1,'virgil::sdk::jwt::Jwt']]],
+  ['isoutdated',['isOutdated',['../classvirgil_1_1sdk_1_1cards_1_1_card.html#ade29f0ac118bfcdce94d348d0d84d241',1,'virgil::sdk::cards::Card::isOutdated() const '],['../classvirgil_1_1sdk_1_1cards_1_1_card.html#ae710ac5924a28f1ab2946cd5acbb9736',1,'virgil::sdk::cards::Card::isOutdated(bool newIsOutdated)'],['../classvirgil_1_1sdk_1_1client_1_1models_1_1_get_card_response.html#ad133b34f5023ed2fcfd6b1f6ea1f1cf4',1,'virgil::sdk::client::models::GetCardResponse::isOutdated()']]],
+  ['issuedat',['issuedAt',['../classvirgil_1_1sdk_1_1jwt_1_1_jwt_body_content.html#a8646634665df6c8e82235efd0e43d2ff',1,'virgil::sdk::jwt::JwtBodyContent']]]
+];

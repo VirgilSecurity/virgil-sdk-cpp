@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['datatosign',['dataToSign',['../classvirgil_1_1sdk_1_1jwt_1_1_jwt.html#a3cb5dc5be6ac6314130de9c60bacb8ad',1,'virgil::sdk::jwt::Jwt::dataToSign() const '],['../classvirgil_1_1sdk_1_1jwt_1_1_jwt.html#a852b1c1427294aece3a18fa8e94b65b0',1,'virgil::sdk::jwt::Jwt::dataToSign(const JwtHeaderContent &amp;headerContent, const JwtBodyContent &amp;bodyContent)']]],
+  ['decode',['decode',['../classvirgil_1_1sdk_1_1util_1_1_base64_url.html#a895953c141675b74148e78d56c458800',1,'virgil::sdk::util::Base64Url']]],
+  ['decrypt',['decrypt',['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a5a1f6e2d50ab5073e402b84908964f74',1,'virgil::sdk::crypto::Crypto::decrypt(const VirgilByteArray &amp;data, const keys::PrivateKey &amp;privateKey) const '],['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a06ff7b055f8207028f6a1d36f4679601',1,'virgil::sdk::crypto::Crypto::decrypt(std::istream &amp;istream, std::ostream &amp;ostream, const keys::PrivateKey &amp;privateKey) const ']]],
+  ['decryptthenverify',['decryptThenVerify',['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a30bae2efca7b9f851a241d4f7bcfa39a',1,'virgil::sdk::crypto::Crypto::decryptThenVerify(const VirgilByteArray &amp;data, const keys::PrivateKey &amp;privateKey, const keys::PublicKey &amp;signerPublicKey) const '],['../classvirgil_1_1sdk_1_1crypto_1_1_crypto.html#a7a8c954d145c25dd3f44d18549d37f09',1,'virgil::sdk::crypto::Crypto::decryptThenVerify(const VirgilByteArray &amp;data, const keys::PrivateKey &amp;privateKey, const std::vector&lt; keys::PublicKey &gt; &amp;signersPublicKeys) const ']]],
+  ['defaultidentity',['defaultIdentity',['../classvirgil_1_1sdk_1_1jwt_1_1providers_1_1_generator_jwt_provider.html#a09d7b2d5bd62501474af59d1acae55c5',1,'virgil::sdk::jwt::providers::GeneratorJwtProvider']]],
+  ['del',['del',['../classvirgil_1_1sdk_1_1client_1_1networking_1_1_request.html#a55857f0ed8cab97275a628dd92d3dc3f',1,'virgil::sdk::client::networking::Request']]]
+];
