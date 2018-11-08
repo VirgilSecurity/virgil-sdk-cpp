@@ -57,4 +57,5 @@ deploy:
   skip-cleanup: true
   local_dir: "docs/html"
   on:
+    branch: develop
     condition: $PUBLISH_DOCS = "YES"
