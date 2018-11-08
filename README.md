@@ -153,24 +153,6 @@ for (auto& card : aliceCards)
 auto decryptedData = crypto->decryptThenVerify(encryptedData, bobPrivateKey, aliceRelevantCardsPublicKeys);
 ```
 
-## Docs
-Virgil Security has a powerful set of APIs, and the documentation below can get you started today.
-
-In order to use the Virgil SDK with your application, you will need to first configure your application. By default, the SDK will attempt to look for Virgil-specific settings in your application but you can change it during SDK configuration.
-
-* [Configure the SDK][_configure_sdk] documentation
-  * [Setup authentication][_setup_authentication] to make API calls to Virgil Services
-  * [Setup Card Manager][_card_manager] to manage user's Public Keys
-  * [Setup Card Verifier][_card_verifier] to verify signatures inside of user's Card
-  * [Setup Key storage][_key_storage] to store Private Keys
-  * [Setup your own Crypto library][_own_crypto] inside of the SDK
-* [More usage examples][_more_examples]
-  * [Create & publish a Card][_create_card] that has a Public Key on Virgil Cards Service
-  * [Search user's Card by user's identity][_search_card]
-  * [Get user's Card by its ID][_get_card]
-  * [Use Card for crypto operations][_use_card]
-* [Reference API][_reference_api]
-
 
 ## License
 
