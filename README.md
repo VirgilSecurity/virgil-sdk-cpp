@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.com/VirgilSecurity/sdk-cpp.svg?branch=master)](https://travis-ci.org/VirgilSecurity/sdk-cpp)
+[![Build Status](https://travis-ci.com/VirgilSecurity/sdk-cpp.svg?branch=master)](https://travis-ci.com/VirgilSecurity/sdk-cpp)
 [![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/sdk-cpp)
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 
 
-[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
+[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Usage Examples](#usage-examples) | [Support](#support)
 
 ## Introduction
 
