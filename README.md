@@ -23,12 +23,58 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 - CMake 3.10+
 
 ### CMake
-Virgil SDK can be integrated using CMake in the following way
+Virgil SDK can be integrated using CMake in the different ways
+
+#### Add downloaded sources as subdirectory
 
 ```cmake
 add_subdirectory (<PATH_TO_DEPENDENCIES>/sdk-cpp sdk-cpp)
 
 target_link_libraries (${PROJECT_NAME} virgil_sdk)
+```
+
+#### Use custom CMake util
+You can find file called *virgil_depends_local.cmake* at *sdk-cpp/cmake/utils*.
+This is in-house dependency loader based on pure CMake features.
+
+Usage:
+  - Create cmake configuration file for target dependency
+```cmake
+  cmake_minimum_required (VERSION @CMAKE_VERSION@ FATAL_ERROR)
+
+  project ("@VIRGIL_DEPENDS_PACKAGE_NAME@-depends")
+
+  include (ExternalProject)
+
+  # Configure additional CMake parameters
+  file (WRITE "@VIRGIL_DEPENDS_ARGS_FILE@"
+    "set (ENABLE_TESTING OFF CACHE INTERNAL \"\")\n"
+    "set (INSTALL_EXT_LIBS ON CACHE INTERNAL \"\")\n"
+    "set (INSTALL_EXT_HEADERS ON CACHE INTERNAL \"\")\n"
+    "set (UCLIBC @UCLIBC@ CACHE INTERNAL \"\")\n"
+  )
+  
+  ExternalProject_Add (${PROJECT_NAME}
+    DOWNLOAD_DIR "@VIRGIL_DEPENDS_PACKAGE_DOWNLOAD_DIR@"
+    URL "https://github.com/VirgilSecurity/sdk-cpp/archive/v5.0.0.tar.gz"
+    URL_HASH SHA1=<PUT_PACKAGE_HASH_HERE>
+    PREFIX "@VIRGIL_DEPENDS_PACKAGE_BUILD_DIR@"
+    CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
+  )
+
+  add_custom_target ("${PROJECT_NAME}-build" ALL COMMENT "Build package ${PROJECT_NAME}")
+  add_dependencies ("${PROJECT_NAME}-build" ${PROJECT_NAME})
+```
+  - In the project just put
+```cmake
+  include (virgil_depends)
+  
+  virgil_depends (
+    PACKAGE_NAME "virgil_sdk"
+    CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dir_to_config_file_from_step_1"
+  )
+
+  virgil_find_package (virgil_sdk)
 ```
 
 ## Usage Examples
