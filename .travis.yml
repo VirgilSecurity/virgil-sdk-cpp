@@ -56,6 +56,7 @@ deploy:
   github-token: $GITHUB_TOKEN
   skip-cleanup: true
   local_dir: "docs/html"
+  keep-history: true
   on:
-    branch: develop
+    tags: true
     condition: $PUBLISH_DOCS = "YES"
