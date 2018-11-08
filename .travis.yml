@@ -50,3 +50,10 @@ before_script:
   - bash ./ci/configure.sh
 script:
   - bash ./ci/run.sh
+
+deploy:
+  provider: pages
+  github-token: $GITHUB_TOKEN
+  skip-cleanup: true
+  local_dir: "docs/html"
+
