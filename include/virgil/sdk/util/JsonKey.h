@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,6 +30,8 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef VIRGIL_SDK_UTIL_JSON_KEY_H
@@ -49,135 +49,38 @@ namespace sdk {
          */
         class JsonKey {
         public:
-            /**
-             * @property id
-             * @brief Json Key that points object's identifier
-             */
-            static const std::string id;
-            /**
-             * @property publicKey
-             * @brief Json Key that points Public Key object
-             */
-            static const std::string publicKey;
-            /**
-             * @property privateKey
-             * @brief Json Key that points Private Key object
-             */
-            static const std::string privateKey;
-            /**
-             * @property createdAt
-             * @brief Json Key that points timestamp string value
-             */
-            static const std::string createdAt;
-            /**
-             * @property cards
-             * @brief Json Key that points collection of Virgil Cards objects
-             */
-            static const std::string cards;
-            /**
-             * @property cardId
-             * @brief Json Key that points Virgil Card's identifier
-             */
-            static const std::string cardId;
-            /**
-             * @property authorizedBy
-             * @brief Json Key that points boolean property which tells whether entity is confirmed, or not
-             */
-            static const std::string authorizedBy;
-            /**
-             * @property hash
-             * @brief Json Key that points Virgil Card's hash
-             */
-            static const std::string hash;
-            /**
-             * @property identity
-             * @brief Json Key that points Virgil Identity object
-             */
-            static const std::string identity;
-            /**
-             * @property identities
-             * @brief Json Key that points collection of Virgil Identity objects
-             */
-            static const std::string identities;
-            /**
-             * @property type
-             * @brief Json Key that points enumeration which represents Virgil Identity type
-             */
-            static const std::string type;
-            /**
-             * @property value
-             * @brief Json Key that points string which represents Virgil Identity value
-             */
-            static const std::string value;
-            /**
-             * @property publicKeyId
-             * @brief Json Key that points
-             */
-            static const std::string publicKeyId;
-            /**
-             * @property data
-             * @brief Json Key that points Virgil Card's custom data object
-             */
-            static const std::string data;
-            /**
-             * @property includeUnauthorized
-             * @brief Json Key that points boolean value which tell to include unconfirmed Virgil Cards, or not
-             */
-            static const std::string includeUnauthorized;
-            /**
-             * @property error
-             * @brief Json Key that points Error object
-             */
-            static const std::string error;
-            /**
-             * @property errorCode
-             * @brief Json Key that points points Error code
-             */
-            static const std::string errorCode;
-            /**
-             * @property extraFields
-             * @brief Json Key that points parameter will be passed back in an email in a
-             * hidden form with extra hidden fields
-             */
-            static const std::string extraFields;
-            /**
-             * @property confirmationCode
-             * @brief Json Key that points identity confirmation code string
-             */
-            static const std::string confirmationCode;
-            /**
-             * @property actionId
-             * @brief Json Key that points action identifier string
-             */
-            static const std::string actionId;
-            /**
-             * @property token
-             * @brief Json Key that points token
-             */
-            static const std::string token;
-            /**
-             * @property timeToLive
-             * @brief Json Key that points validation token time to live in seconds
-             */
-            static const std::string timeToLive;
-            /**
-             * @property countToLive
-             * @brief Json Key that points validation token count to live in usage count
-             */
-            static const std::string countToLive;
-            /**
-             * @property validationToken
-             * @brief Json Key that points validation token string
-             */
-            static const std::string validationToken;
-            /**
-             * @property responsePassword
-             * @brief Json Key that points password which is used to encrypt a response from the Private Keys Service
-             */
-            static const std::string responsePassword;
+            //! @cond Doxygen_Suppress
+            static const std::string Signer;
+            static const std::string Snapshot;
+            static const std::string Signature;
+            static const std::string Signatures;
+            static const std::string PublicKey;
+            static const std::string ContentSnapshot;
+            static const std::string PreviousCardId;
+            static const std::string CreatedAt;
+            static const std::string Identity;
+            static const std::string Version;
+            static const std::string Code;
+            static const std::string Message;
 
-        private:
-            JsonKey();
+            static const std::string Algorithm;
+            static const std::string Type;
+            static const std::string ContentType;
+            static const std::string KeyIdentifier;
+
+            static const std::string AppId;
+            static const std::string IdentityJWT;
+            static const std::string IssuedAt;
+            static const std::string ExpiresAt;
+            static const std::string AdditionalData;
+
+            //! @endcond
+
+            /*!
+             * @brief Forbid creation.
+             *
+             */
+            JsonKey() = delete;
         };
     }
 }

@@ -36,20 +36,23 @@
 
 cmake_minimum_required (VERSION 3.2 FATAL_ERROR)
 
-project (virgil_sdk VERSION 3.2.3 LANGUAGES CXX)
+project (virgil_sdk VERSION 5.0.0 LANGUAGES CXX)
 
 # Enable C++11
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 # Configurable variables
 ## Features
 set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
-set (ENABLE_EXAMPLES OFF CACHE BOOL "Enable build of Examples")
-set (INSTALL_EXAMPLES OFF CACHE BOOL "Enable Examples installation")
 
 ## Crosscompiling
 set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
+
+## Virgil Crypto option
+set (VIRGIL_CRYPTO_FEATURE_RNG_SEED_FILE OFF CACHE BOOL "Defines whether class VirgilRandom will use additional seed from a file.")
 
 ## Installation directories
 set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
@@ -73,35 +76,16 @@ set (DOXYGEN_EXCLUDE_PRIVATE ON CACHE BOOL "Exclude SDK private API from Doxygen
 mark_as_advanced (DOXYGEN_EXCLUDE_PRIVATE)
 
 ## Environment
-set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment")
-if (ENABLE_STAGING_ENV)
-    set (VIRGIL_IDENTITY_SERVICE_URI "https://identity-stg.virgilsecurity.com"
-            CACHE STRING "Base URI to the Virgil Identity service")
+set (ENABLE_STAGING_ENV OFF CACHE BOOL "Use staging environment for tests")
 
-    set (VIRGIL_KEYS_SERVICE_URI "https://keys-stg.virgilsecurity.com"
-            CACHE STRING  "Base URI to Virgil Keys service")
-
-    set (VIRGIL_PRIVATE_KEYS_SERVICE_URI "https://keys-private-stg.virgilsecurity.com"
-        CACHE STRING "Base URI to Virgil Private Keys service")
-endif ()
 mark_as_advanced (
     ENABLE_STAGING_ENV
-    VIRGIL_IDENTITY_SERVICE_URI
-    VIRGIL_KEYS_SERVICE_URI
-    VIRGIL_PRIVATE_KEYS_SERVICE_URI
 )
-
-if (VIRGIL_IDENTITY_SERVICE_URI)
-    add_definitions (-DVIRGIL_IDENTITY_SERVICE_URI="${VIRGIL_IDENTITY_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_KEYS_SERVICE_URI="${VIRGIL_KEYS_SERVICE_URI}")
-endif ()
-
-if (VIRGIL_PRIVATE_KEYS_SERVICE_URI)
-    add_definitions (-DVIRGIL_PRIVATE_KEYS_SERVICE_URI="${VIRGIL_PRIVATE_KEYS_SERVICE_URI}")
-endif ()
+if (ENABLE_STAGING_ENV)
+    add_definitions(-DENABLE_STAGING_ENV=true)
+else()
+    add_definitions(-DENABLE_STAGING_ENV=false)
+endif()
 
 # Set library version
 message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
@@ -129,7 +113,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
 )
 
-virgil_find_package (virgil_crypto 1.8.1)
+virgil_find_package (virgil_crypto 2.6.1)
 virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
@@ -139,16 +123,19 @@ include_directories (${CURL_INCLUDE_DIRS})
 include_directories (${NLOHMAN_JSON_INCLUDE_DIRS})
 
 # Grab source directory tree
-file (GLOB_RECURSE SRC_LIST "src/*.cxx")
-foreach (SRC_FILE ${SRC_LIST})
+file (GLOB_RECURSE SRC_CONF "src/*.cxx.in")
+foreach (SRC_FILE ${SRC_CONF})
     string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src/" "" SRC_REL_PATH ${SRC_FILE})
+    string (REPLACE ".in" "" SRC_REL_PATH ${SRC_REL_PATH})
     configure_file (
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/${SRC_REL_PATH}.in"
         "${CMAKE_CURRENT_BINARY_DIR}/src/${SRC_REL_PATH}"
         @ONLY
     )
 endforeach ()
-file (GLOB_RECURSE SRC_LIST "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
+file (GLOB_RECURSE SRC_LIST_BIN "${CMAKE_CURRENT_BINARY_DIR}/src/*.cxx")
+file (GLOB_RECURSE SRC_LIST_SRC "src/*.cxx")
+set (SRC_LIST ${SRC_LIST_BIN} ${SRC_LIST_SRC})
 
 # Configure library build
 add_library (${PROJECT_NAME} ${SRC_LIST})
@@ -210,6 +197,7 @@ install (DIRECTORY "include/" DESTINATION "include"
      PATTERN "ClientConnection.h" EXCLUDE
      PATTERN "Headers.h" EXCLUDE
      PATTERN "JsonKey.h" EXCLUDE
+     PATTERN "Memory.h" EXCLUDE
 )
 
 if (INSTALL_EXT_HEADERS)
@@ -237,15 +225,6 @@ else (ENABLE_TESTING)
     message (STATUS "Unit tests status: DISABLED")
 endif (ENABLE_TESTING)
 
-# Add examples
-if (ENABLE_EXAMPLES)
-    add_subdirectory (examples)
-    add_subdirectory (examples/IPMessaging)
-    message (STATUS "Examples status: ENABLED")
-else (ENABLE_EXAMPLES)
-    message (STATUS "Examples status: DISABLED")
-endif (ENABLE_EXAMPLES)
-
 # Add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 
@@ -258,13 +237,6 @@ endif (DOT_PROGRAM)
 
 if (DOXYGEN_FOUND)
     if (DOXYGEN_EXCLUDE_PRIVATE)
-        set (DOXYGEN_EXCLUDE
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/endpoints/*"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/http/Headers.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/util/JsonKey.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/include/virgil/sdk/client/ClientConnection.h"
-        )
-        string (REPLACE ";" " " DOXYGEN_EXCLUDE "${DOXYGEN_EXCLUDE}")
         set (DOXYGEN_EXTRACT_PRIVATE "NO")
     else ()
         set (DOXYGEN_EXTRACT_PRIVATE "YES")

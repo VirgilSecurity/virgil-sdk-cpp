@@ -1,39 +1,62 @@
-language: cpp
-compiler:
-  - gcc
-  - clang
-os:
-  - linux
-env:
-  global:
-    - BUILD_DIR_NAME=build
-    - DOC_BRANCH=master
-    # COVERITY_SCAN_TOKEN
-    - secure: "uldI2ICD0g48xlZbZWmIyLQ1t8HGnFNWoClUhzLB957L9o1LJJbulf7HQs6kKaJMHT9TTbT2mWNoT95ttnn5sVjuE/4qmpgLcVE54q78wj9RBpeXehz+jmNVbY7U5kryI0/6I1aO64GswlGx/O0aP/9zdo5L7sQxuyOjMxbXm51wHuoQtGVpzswqW3q2Wg4a8fUh977+VEAz6IWvbAm3KYbsEGR/0eq6jUTMNcWWpj76uk04GiyzNKaly/BBXlck2Ljb0WRDy1yXNTQnrv1jOcr4YEqtbFDmhqJvGvKo6dQHTZeJD7eTSgkkD+nCri23fXKjDgcdXm2G9SU+MmSxC8zFnmWWO5aAurtn7aIjjf2L6iPs8DhxZ0dNmMsXR5tEpcaWY/uqrTV6OQE+Of3HWmriVjAgAwnIqw78v1gABrCohykOiimv+6krvXpLBOw1FQS9XMGT8Tgxn96DtyElrXfepqUhLpjDsxaV5pB9pA2hOcBRHeCkMhZP1+zOttgDKPmirH9d0tMlbYHEhBqnunw88RkBUthgSCk57H1jyXiAD1ZvuXF/32OthX97qZVbD6lLGXf4Fx9olrqdRZoiXNp2uPDaOAaNKwNBM/wxN4cHZCHSttKGgdHwFP/CHKxb/tANeUi6eVitn9YEusDArpY6ZpLvK7Ub765X8mOC2nk="
+sudo: false
+language: generic
+
+cache:
+  apt: true
+
+matrix:
+  include:
+    - compiler: gcc
+      os: linux
+      env: CXX=g++-5 CC=gcc-5 BUILD_DIR_NAME=build PUBLISH_DOCS="NO"
+      addons:
+        apt:
+          packages:
+            - g++-5
+          sources:
+            - ubuntu-toolchain-r-test
+      
+    - compiler: clang
+      os: linux
+      env: CXX=clang++-3.7 CC=clang-3.7 BUILD_DIR_NAME=build PUBLISH_DOCS="YES"
+      addons:
+        apt:
+          packages:
+            - clang-3.7
+          sources:
+              - ubuntu-toolchain-r-test
+              - llvm-toolchain-precise-3.7
+
+  exclude:
+    - compiler: gcc
+
 cache:
   directories:
     - $HOME/cmake
     - $HOME/doxygen
+
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
-      - gcc-4.8
-      - g++-4.8
       - libcurl4-openssl-dev
       - python-yaml
       - graphviz
-install:
-- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+
 before_install:
   - bash ./ci/install-cmake.sh
-  - bash ./ci/install-credentials.sh
   - bash ./ci/install-doxygen.sh
+  - bash ./ci/decrypt-consts.sh
 before_script:
   - bash ./ci/configure.sh
 script:
   - bash ./ci/run.sh
-after_success:
-  - bash ./ci/publish-docs.sh
-sudo: false
+
+deploy:
+  provider: pages
+  github-token: $GITHUB_TOKEN
+  skip-cleanup: true
+  local_dir: "docs/html"
+  keep-history: true
+  on:
+    tags: true
+    condition: $PUBLISH_DOCS = "YES"

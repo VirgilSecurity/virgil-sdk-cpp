@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,33 +30,34 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #include <virgil/sdk/util/JsonKey.h>
 
 using virgil::sdk::util::JsonKey;
 
-const std::string JsonKey::id = "id";
-const std::string JsonKey::publicKey = "public_key";
-const std::string JsonKey::privateKey = "private_key";
-const std::string JsonKey::createdAt = "created_at";
-const std::string JsonKey::cards = "virgil_cards";
-const std::string JsonKey::cardId = "virgil_card_id";
-const std::string JsonKey::authorizedBy = "authorized_by";
-const std::string JsonKey::hash = "hash";
-const std::string JsonKey::identity = "identity";
-const std::string JsonKey::identities = "identities";
-const std::string JsonKey::type = "type";
-const std::string JsonKey::value = "value";
-const std::string JsonKey::publicKeyId = "public_key_id";
-const std::string JsonKey::data = "data";
-const std::string JsonKey::includeUnauthorized = "include_unauthorized";
-const std::string JsonKey::errorCode = "code";
-const std::string JsonKey::extraFields = "extra_fields";
-const std::string JsonKey::confirmationCode = "confirmation_code";
-const std::string JsonKey::actionId = "action_id";
-const std::string JsonKey::token = "token";
-const std::string JsonKey::timeToLive = "time_to_live";
-const std::string JsonKey::countToLive = "count_to_live";
-const std::string JsonKey::validationToken = "validation_token";
-const std::string JsonKey::responsePassword = "response_password";
+const std::string JsonKey::Signer = "signer";
+const std::string JsonKey::Snapshot = "snapshot";
+const std::string JsonKey::Signature = "signature";
+const std::string JsonKey::Signatures = "signatures";
+const std::string JsonKey::PublicKey = "public_key";
+const std::string JsonKey::ContentSnapshot = "content_snapshot";
+const std::string JsonKey::PreviousCardId = "previous_card_id";
+const std::string JsonKey::CreatedAt = "created_at";
+const std::string JsonKey::Identity = "identity";
+const std::string JsonKey::Version = "version";
+const std::string JsonKey::Code = "code";
+const std::string JsonKey::Message = "message";
+
+const std::string JsonKey::Algorithm = "alg";
+const std::string JsonKey::Type = "typ";
+const std::string JsonKey::ContentType = "cty";
+const std::string JsonKey::KeyIdentifier = "kid";
+
+const std::string JsonKey::AppId = "iss";
+const std::string JsonKey::IdentityJWT = "sub";
+const std::string JsonKey::IssuedAt = "iat";
+const std::string JsonKey::ExpiresAt = "exp";
+const std::string JsonKey::AdditionalData = "ada";

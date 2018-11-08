@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,40 +30,52 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
 #ifndef HELPERS_H
 #define HELPERS_H
 
-#include <string>
-#include <vector>
+#include <random>
+#include <functional>
+#include <limits.h>
+#include <algorithm>
 
-#include <virgil/sdk/models/PublicKeyModel.h>
-#include <virgil/sdk/models/PrivateKeyModel.h>
-#include <virgil/sdk/dto/ValidatedIdentity.h>
-#include <virgil/sdk/models/CardModel.h>
-#include <virgil/sdk/util/JsonKey.h>
-
-#include <nlohman/json.hpp>
+#include <virgil/sdk/Common.h>
 
 namespace virgil {
+namespace sdk {
 namespace test {
+    using random_bytes_engine = std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char>;
 
-    nlohmann::json getJsonValidatedIdentity();
-    virgil::sdk::dto::ValidatedIdentity getValidatedIdentity();
+    class Utils {
+    public:
+        static virgil::sdk::VirgilByteArray generateRandomData(int size) {
+            std::random_device rd;
+            random_bytes_engine rbe(rd());
+            std::vector<unsigned char> data(size);
+            std::generate(begin(data), end(data), std::ref(rbe));
+            return data;
+        }
 
-    nlohmann::json getJsonPublicKey();
-    virgil::sdk::models::PublicKeyModel getPublicKey();
+        static std::string generateRandomStr(int size) {
+            static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    nlohmann::json getJsonCard();
-    virgil::sdk::models::CardModel getCard();
+            std::random_device rd;
+            std::default_random_engine generator(rd());
+            std::uniform_int_distribution<int> distribution(0, sizeof(alphanum) - 1);
+            auto randomCharNum = std::bind(distribution, generator);
 
-    nlohmann::json getJsonResponseCards();
-    nlohmann::json getJsonCards();
-    std::vector<virgil::sdk::models::CardModel> getCards();
+            std::string st;
+            for (int i = 0; i < size; ++i) {
+                st += alphanum[randomCharNum()];
+            }
 
-    nlohmann::json getJsonPrivateKey();
-    virgil::sdk::models::PrivateKeyModel getPrivateKey();
+            return st;
+        }
+    };
+}
 }
 }
 

@@ -1,7 +1,5 @@
 /**
- * Copyright (C) 2015 Virgil Security Inc.
- *
- * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
+ * Copyright (C) 2015-2018 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -32,160 +30,78 @@
  * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-#ifndef VIRGIL_SDK_CARDS_CLIENT_H
-#define VIRGIL_SDK_CARDS_CLIENT_H
+#ifndef VIRGIL_SDK_CARDCLIENT_H
+#define VIRGIL_SDK_CARDCLIENT_H
 
-#include <map>
-
-#include <virgil/crypto/VirgilByteArray.h>
-
-#include <virgil/sdk/Credentials.h>
-#include <virgil/sdk/models/CardModel.h>
-#include <virgil/sdk/dto/ValidatedIdentity.h>
-#include <virgil/sdk/dto/IdentityType.h>
-#include <virgil/sdk/client/Client.h>
+#include <virgil/sdk/client/networking/Response.h>
+#include <virgil/sdk/client/networking/errors/Error.h>
+#include <virgil/sdk/client/CardClientInterface.h>
 
 namespace virgil {
-namespace sdk {
-    namespace client {
-        /**
-         * @brief Provide access to the Virgil Keys Service endpoints,
-         *        that perform managing of the Virgil Card entity
-         */
-        class CardClient : public Client {
-        public:
-            using Client::Client;
-            /**
-             * @brief Create client with ability to load self Virgil Card by request
-             * @see Client::Client()
+    namespace sdk {
+        namespace client {
+            /*!
+             * @brief Virgil implementation of CardClientInterface
              */
-            CardClient(const std::string& accessToken, const std::string& baseServiceUri);
-            /**
-             * @brief Create validated Virgil Card entity
-             *
-             * @param validatedIdentity - identity that was validated by user thru Virgil Identity Service
-             * @param publicKey - Public Key that was generated locally
-             * @param credentials - Private Key + Private Key password
-             * @param customData - the custom data
-             * @return Created Virgil Card
-             */
-            virgil::sdk::models::CardModel
-            create(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity,
-                   const virgil::crypto::VirgilByteArray& publicKey, const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
-            /**
-             * @brief Create validated Virgil Card entity attached to known public key
-             *
-             * @param validatedIdentity - identity that was validated by user thru Virgil Identity Service
-             * @param publicKeyId - Public Key identifier
-             * @param credentials - Private Key + Private Key password
-             * @param customData - the custom data
-             * @return Created Virgil Card
-             */
-            virgil::sdk::models::CardModel
-            create(const virgil::sdk::dto::ValidatedIdentity& validatedIdentity, const std::string& publicKeyId,
-                   const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
-            /**
-             * @brief Creates not validated Virgil Card entity
-             *
-             * @param identity - identity to be searched
-             * @param publicKey - Public Key that was generated locally
-             * @param credentials - Private Key + Private Key password
-             * @param customData - the custom data
-             * @return Created Virgil Card
-             */
-            virgil::sdk::models::CardModel
-            create(const virgil::sdk::dto::Identity& identity, const virgil::crypto::VirgilByteArray& publicKey,
-                   const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
-            /**
-             * @brief Creates not validated Virgil Card entity attached to known public key
-             *
-             * @param identity - identity to be searched
-             * @param publicKeyId - Public Key that was generated locally
-             * @param credentials - Private Key + Private Key password
-             * @param customData - the custom data
-             * @return Created Virgil Card
-             */
-            virgil::sdk::models::CardModel
-            create(const virgil::sdk::dto::Identity& identity, const std::string& publicKeyId,
-                   const virgil::sdk::Credentials& credentials,
-                   const std::map<std::string, std::string>& customData = std::map<std::string, std::string>());
+            class CardClient : public CardClientInterface {
+            public:
+                /*!
+                 * @brief Constructor
+                 * @param serviceUrl std::string with URL of service client will use
+                 */
+                CardClient(std::string serviceUrl = "https://api.virgilsecurity.com");
 
-            /**
-             * @brief Performs the search of a private application's Virgil Cards
-             *
-             * @param identityValue - identity to be searched
-             * @param identityType - identity type to be searched
-             * @param includeUnauthorized - specifies whether an unconfirmed Virgil Cards should be returned
-             * @return Found Virgil Cards
-             */
-            std::vector<virgil::sdk::models::CardModel> search(const std::string& identityValue,
-                                                               const std::string& identityType,
-                                                               const bool includeUnauthorized = false);
-            /**
-             * @brief Performs the global search fot the applications' Virgil Cards
-             *
-             * @param identityValue - identity to be searched
-             * @param identityType - the type of identifier, Application or Email
-             * @param skipVerification - skip verification of the service response;
-             * @return Found Virgil Cards associated with application or email identity
-             */
-            std::vector<virgil::sdk::models::CardModel> searchGlobal(const std::string& identityValue,
-                                                                     const virgil::sdk::dto::IdentityType& identityType,
-                                                                     bool skipVerification = false) const;
-            /**
-             * @brief Revoke validated the Virgil Card and all associated data
-             *
-             * @param cardId - Virgil Card Identifier
-             * @param validatedIdentity - entity that is validated via Virgil Identity Service,
-             *                            and associted with given cardId
-             * @param credentials - Private Key that associted with given cardId
-             */
-            void revoke(const std::string& cardId, const virgil::sdk::dto::ValidatedIdentity& validatedIdentity,
-                        const virgil::sdk::Credentials& credentials);
-            /**
-             * @brief Revoke not validated the Virgil Card and all associated data
-             *
-             * @param cardId - Virgil Card Identifier
-             * @param identity - identity to be searched
-             * @param credentials - Private Key that associted with given cardId
-             */
-            void revoke(const std::string& cardId, const virgil::sdk::dto::Identity& identity,
-                        const virgil::sdk::Credentials& credentials);
-            /**
-             * @brief Return card associated with given identifier
-             *
-             * @param cardId - Virgil Card identifier
-             */
-            virgil::sdk::models::CardModel get(const std::string& cardId);
-            /**
-             * @brief Return Virgil Cards associated with given Public Key identifier
-             *
-             * @param publicKeyId - Public Key identifier
-             * @param cardId - one of the Virgil Card identifier associated with given Public Key identifier
-             * @param credentials - Private Key that associted with given cardId
-             * @return Virgil Cards associated with given publicKeyId
-             */
-            std::vector<virgil::sdk::models::CardModel> get(const std::string& publicKeyId, const std::string& cardId,
-                                                            const Credentials& credentials);
+                /*!
+                 * @brief HTTP header key for getCard response that marks outdated cards
+                 */
+                static const std::string xVirgilIsSuperseededKey;
 
-        private:
-            /**
-             * @brief Support function for Card create(...)
-             *
-             * @param credentials - Private Key + Private Key password
-             * @param jsonPayload - json body
-             * @return Created Virgil Card
-             */
-            virgil::sdk::models::CardModel create(const virgil::sdk::Credentials& credentials,
-                                                  const std::string& payload);
-        };
+                /*!
+                 * @brief Getter
+                 * @return std::string with URL of service client use
+                 */
+                const std::string& serviceUrl() const;
+
+                /*!
+                 * @brief Creates Virgil Card instance on the Virgil Cards Service.
+                 * Also makes the Card accessible for search/get queries from other users.
+                 * RawSignedModel should contain appropriate signatures
+                 * @param model signed RawSignedModel to publish
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with RawSignedModel of published Card
+                 */
+                std::future<models::RawSignedModel> publishCard(const models::RawSignedModel& model,
+                                                                const std::string& token) const override;
+
+                /*!
+                 * @brief Returns GetCardResponse with RawSignedModel of card from the Virgil Cards Service with given ID, if exists
+                 * @param cardId std::string with unique Virgil Card identifier
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with GetCardResponse if Card found
+                 */
+                std::future<models::GetCardResponse> getCard(const std::string &cardId,
+                                                             const std::string& token) const override;
+
+                /*!
+                 * @brief Performs search of Virgil Cards using given identity on the Virgil Cards Service
+                 * @param identity identity of cards to search
+                 * @param token std::string with AccessTokenInterface implementation
+                 * @return std::future with std::vector with RawSignedModels of matched Virgil Cards
+                 */
+                std::future<std::vector<models::RawSignedModel>> searchCards(const std::string &identity,
+                                                                             const std::string& token) const override;
+
+            private:
+                networking::errors::Error parseError(const client::networking::Response &response) const;
+
+                std::string serviceUrl_;
+            };
+        }
     }
 }
-}
 
-#endif /* VIRGIL_SDK_CARDS_CLIENT_H */
+#endif //VIRGIL_SDK_CARDCLIENT_H

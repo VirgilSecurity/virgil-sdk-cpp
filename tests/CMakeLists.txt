@@ -43,9 +43,22 @@ include_directories ("include")
 
 file(GLOB_RECURSE UUT_SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx")
 
+# list of files for which we add a copy rule
+file(GLOB_RECURSE RES_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/*")
+
 # Configure test target
 add_executable(${TEST_RUNNER} ${UUT_SRC_LIST})
 target_link_libraries (${TEST_RUNNER} virgil_sdk)
+
+foreach(ITEM IN LISTS RES_LIST)
+    string (REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/" "" ITEM_REL_PATH ${ITEM})
+
+    add_custom_command(
+        TARGET ${TEST_RUNNER} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/${ITEM_REL_PATH}" "${CMAKE_CURRENT_BINARY_DIR}/${ITEM_REL_PATH}"
+        DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/${ITEM_REL_PATH}"
+    )
+endforeach()
 
 # Run tests
 add_test (
