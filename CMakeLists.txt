@@ -51,6 +51,9 @@ set (ENABLE_TESTING OFF CACHE BOOL "Enable unit tests")
 ## Crosscompiling
 set (UCLIBC OFF CACHE BOOL "Enable pathches if SDK is build with uClibc++")
 
+## Virgil Crypto option
+set (VIRGIL_CRYPTO_FEATURE_RNG_SEED_FILE OFF CACHE BOOL "Defines whether class VirgilRandom will use additional seed from a file.")
+
 ## Installation directories
 set (INSTALL_INC_DIR_NAME include CACHE STRING "Installation directory name for includes")
 set (INSTALL_LIB_DIR_NAME lib CACHE STRING "Installation directory name for libraries")
@@ -110,7 +113,7 @@ virgil_depends (
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/restless"
 )
 
-virgil_find_package (virgil_crypto 2.4.5)
+virgil_find_package (virgil_crypto 2.6.1)
 virgil_find_package (nlohman_json 1.1.0 EXACT)
 virgil_find_package (restless 0.3.0 EXACT)
 virgil_find_package (MbedTLS) # Installed as virgil_crypto dependency, so found version will be appropriate
