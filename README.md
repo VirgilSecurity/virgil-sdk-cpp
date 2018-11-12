@@ -25,7 +25,7 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 - CMake 3.10+
 
 ### CMake
-Virgil SDK can be integrated using CMake in two different ways
+Virgil SDK can be integrated using CMake in different ways
 
 #### Add downloaded sources as subdirectory
 
