@@ -1,9 +1,11 @@
+# Virgil Security C++ SDK
+
 [![Build Status](https://travis-ci.com/VirgilSecurity/sdk-cpp.svg?branch=master)](https://travis-ci.com/VirgilSecurity/sdk-cpp)
 [![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/sdk-cpp)
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 
 
-[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Usage Examples](#usage-examples) | [Support](#support)
+[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
 
 ## Introduction
 
@@ -23,7 +25,7 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 - CMake 3.10+
 
 ### CMake
-Virgil SDK can be integrated using CMake in the different ways
+Virgil SDK can be integrated using CMake in different ways
 
 #### Add downloaded sources as subdirectory
 
@@ -79,7 +81,7 @@ virgil_find_package (virgil_sdk)
 
 ## Usage Examples
 
-Before start practicing with the usage examples be sure that the SDK is configured. Check out our [SDK configuration guides][_configure_sdk] for more information.
+Before starting practicing with the usage examples, make sure that the SDK is configured. Check out our [SDK configuration guides][_configure_sdk] for more information.
 
 #### Generate and publish user's Cards with Public Keys inside on Cards Service
 Use the following lines of code to create and publish a user's Card with Public Key inside on Virgil Cards Service:
@@ -103,9 +105,9 @@ auto card = future.get();
 
 #### Sign then encrypt data
 
-Virgil SDK lets you use a user's Private key and his or her Cards to sign, then encrypt any kind of data.
+Virgil SDK allows you to use a user's Private key and his or her Cards to sign, then encrypt any kind of data.
 
-In the following example, we load a Private Key from a customized Key Storage and get recipient's Card from the Virgil Cards Services. Recipient's Card contains a Public Key on which we will encrypt the data and verify a signature.
+In the following example, we load a Private Key from a customized Key Storage and get recipient's Card from the Virgil Cards Services. Recipient's Card contains a Public Key which we will encrypt the data and verify a signature with.
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -132,7 +134,7 @@ auto encryptedData = crypto->signThenEncrypt(dataToEncrypt, alicePrivateKey, bob
 ```
 
 #### Decrypt then verify data
-Once the Users receive the signed and encrypted message, they can decrypt it with their own Private Key and verify signature with a Sender's Card:
+Once the Users have received the signed and encrypted message, they can decrypt it with their own Private Key and verify the signature with Sender's Card:
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -153,6 +155,26 @@ for (auto& card : aliceCards)
 auto decryptedData = crypto->decryptThenVerify(encryptedData, bobPrivateKey, aliceRelevantCardsPublicKeys);
 ```
 
+## Docs
+Virgil Security has a powerful set of APIs, and the documentation below can get you started today.
+
+In order to use the Virgil SDK with your application, you will need to configure your application first. By default, 
+the SDK will attempt to look for Virgil-specific settings in your application but you can change it during SDK 
+configuration.
+
+* [Configure the SDK][_configure_sdk] documentation
+  * [Setup authentication][_setup_authentication] to make API calls to Virgil Services
+  * [Setup Card Manager][_card_manager] to manage user's Public Keys
+  * [Setup Card Verifier][_card_verifier] to verify signatures inside of user's Card
+  * [Setup Key storage][_key_storage] to store Private Keys
+  * [Setup your own Crypto library][_own_crypto] inside of the SDK
+* [More usage examples][_more_examples]
+  * [Create & publish a Card][_create_card] that has a Public Key on Virgil Cards Service
+  * [Search user's Card by user's identity][_search_card]
+  * [Get user's Card by its ID][_get_card]
+  * [Use Card for crypto operations][_use_card]
+* [API Reference][_reference_api]
+
 ## License
 
 This library is released under the [3-clause BSD License](LICENSE.md).
@@ -166,15 +188,15 @@ Also, get extra help from our support team on [Slack](https://virgilsecurity.sla
 
 [_virgil_crypto]: https://github.com/VirgilSecurity/virgil-crypto
 [_cards_service]: https://developer.virgilsecurity.com/docs/api-reference/card-service/v5
-[_use_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/use-card-for-crypto-operation
-[_get_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/get-card
-[_search_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/search-card
-[_create_card]: https://developer.virgilsecurity.com/docs/cs/how-to/public-key-management/v5/create-card
-[_own_crypto]: https://developer.virgilsecurity.com/docs/cs/how-to/setup/v5/setup-own-crypto-library
-[_key_storage]: https://developer.virgilsecurity.com/docs/cs/how-to/setup/v5/setup-key-storage
-[_card_verifier]: https://developer.virgilsecurity.com/docs/cs/how-to/setup/v5/setup-card-verifier
-[_card_manager]: https://developer.virgilsecurity.com/docs/cs/how-to/setup/v5/setup-card-manager
-[_setup_authentication]: https://developer.virgilsecurity.com/docs/cs/how-to/setup/v5/setup-authentication
+[_use_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/use-card-for-crypto-operation
+[_get_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/get-card
+[_search_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/search-card
+[_create_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/create-card
+[_own_crypto]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-own-crypto-library
+[_key_storage]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-key-storage
+[_card_verifier]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-card-verifier
+[_card_manager]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-card-manager
+[_setup_authentication]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-authentication
 [_reference_api]: https://developer.virgilsecurity.com/docs/api-reference
 [_configure_sdk]: https://developer.virgilsecurity.com/docs/how-to#sdk-configuration
 [_more_examples]: https://developer.virgilsecurity.com/docs/how-to#public-key-management
