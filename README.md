@@ -25,7 +25,7 @@ The Virgil SDK allows developers to get up and running with Virgil API quickly a
 - CMake 3.10+
 
 ### CMake
-Virgil SDK can be integrated using CMake in different ways
+Virgil SDK can be integrated using CMake in different ways:
 
 #### Add downloaded sources as subdirectory
 
@@ -37,7 +37,7 @@ target_link_libraries (${PROJECT_NAME} virgil_sdk)
 
 #### Use custom CMake util
 You can find file called *virgil_depends_local.cmake* at *sdk-cpp/cmake/utils*.
-This is in-house dependency loader based on pure CMake features.
+This is an in-house dependency loader based on pure CMake features.
 
 Usage:
   - Create cmake configuration file for target dependency
@@ -67,7 +67,7 @@ ExternalProject_Add (${PROJECT_NAME}
 add_custom_target ("${PROJECT_NAME}-build" ALL COMMENT "Build package ${PROJECT_NAME}")
 add_dependencies ("${PROJECT_NAME}-build" ${PROJECT_NAME})
 ```
-  - In the project just put
+  - In the project, add the following code
 ```cmake
 include (virgil_depends)
 
@@ -81,10 +81,10 @@ virgil_find_package (virgil_sdk)
 
 ## Usage Examples
 
-Before starting practicing with the usage examples, make sure that the SDK is configured. Check out our [SDK configuration guides][_configure_sdk] for more information.
+Before you start practicing with the usage examples, make sure that the SDK is configured. Check out our [SDK configuration guides][_configure_sdk] for more details.
 
-#### Generate and publish user's Cards with Public Keys inside on Cards Service
-Use the following lines of code to create and publish a user's Card with Public Key inside on Virgil Cards Service:
+#### Generate and publish a User's Card with their Public Key on the Virgil Cards Service
+Use the following lines of code to create and publish a user's Card (similar to a business card, this Card contains their Public Key) on the Virgil Cards Service:
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -105,9 +105,9 @@ auto card = future.get();
 
 #### Sign then encrypt data
 
-Virgil SDK allows you to use a user's Private key and his or her Cards to sign, then encrypt any kind of data.
+Virgil SDK allows you to use a user's Private Key and his or her Cards to sign, then encrypt any kind of data.
 
-In the following example, we load a Private Key from a customized Key Storage and get recipient's Card from the Virgil Cards Services. Recipient's Card contains a Public Key which we will encrypt the data and verify a signature with.
+In the following example, we load a Private Key from a customized Key Storage and get the recipient's Card from the Virgil Cards Services. The Recipient's Card contains a Public Key with which we will encrypt the data and verify a signature.
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -134,7 +134,7 @@ auto encryptedData = crypto->signThenEncrypt(dataToEncrypt, alicePrivateKey, bob
 ```
 
 #### Decrypt then verify data
-Once the Users have received the signed and encrypted message, they can decrypt it with their own Private Key and verify the signature with Sender's Card:
+Once the Users have received the signed and encrypted message, they can decrypt it with their own Private Key and verify the signature with the Sender's Card:
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -159,8 +159,7 @@ auto decryptedData = crypto->decryptThenVerify(encryptedData, bobPrivateKey, ali
 Virgil Security has a powerful set of APIs, and the documentation below can get you started today.
 
 In order to use the Virgil SDK with your application, you will need to configure your application first. By default, 
-the SDK will attempt to look for Virgil-specific settings in your application but you can change it during SDK 
-configuration.
+the SDK will attempt to look for Virgil-specific settings in your application but you can customize those during the SDK configuration. 
 
 * [Configure the SDK][_configure_sdk] documentation
   * [Setup authentication][_setup_authentication] to make API calls to Virgil Services
@@ -180,7 +179,7 @@ configuration.
 This library is released under the [3-clause BSD License](LICENSE.md).
 
 ## Support
-Our developer support team is here to help you. Find out more information on our [Help Center](https://help.virgilsecurity.com/).
+Our developer support team is here to help you. Find more information on our [Help Center](https://help.virgilsecurity.com/).
 
 You can find us on [Twitter](https://twitter.com/VirgilSecurity) or send us email support@VirgilSecurity.com.
 
