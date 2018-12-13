@@ -1,7 +1,7 @@
 # Virgil Security C++ SDK
 
-[![Build Status](https://travis-ci.com/VirgilSecurity/sdk-cpp.svg?branch=master)](https://travis-ci.com/VirgilSecurity/sdk-cpp)
-[![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/sdk-cpp)
+[![Build Status](https://travis-ci.com/VirgilSecurity/virgil-sdk-cpp.svg?branch=master)](https://travis-ci.com/VirgilSecurity/virgil-sdk-cpp)
+[![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/virgil-sdk-cpp)
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 
 
@@ -30,13 +30,13 @@ Virgil SDK can be integrated using CMake in different ways:
 #### Add downloaded sources as subdirectory
 
 ```cmake
-add_subdirectory (<PATH_TO_DEPENDENCIES>/sdk-cpp sdk-cpp)
+add_subdirectory (<PATH_TO_DEPENDENCIES>/virgil-sdk-cpp virgil-sdk-cpp)
 
 target_link_libraries (${PROJECT_NAME} virgil_sdk)
 ```
 
 #### Use custom CMake util
-You can find file called *virgil_depends_local.cmake* at *sdk-cpp/cmake/utils*.
+You can find file called *virgil_depends_local.cmake* at *virgil-sdk-cpp/cmake/utils*.
 This is an in-house dependency loader based on pure CMake features.
 
 Usage:
@@ -58,7 +58,7 @@ file (WRITE "@VIRGIL_DEPENDS_ARGS_FILE@"
 
 ExternalProject_Add (${PROJECT_NAME}
   DOWNLOAD_DIR "@VIRGIL_DEPENDS_PACKAGE_DOWNLOAD_DIR@"
-  URL "https://github.com/VirgilSecurity/sdk-cpp/archive/v5.0.0.tar.gz"
+  URL "https://github.com/VirgilSecurity/virgil-sdk-cpp/archive/v5.0.0.tar.gz"
   URL_HASH SHA1=<PUT_PACKAGE_HASH_HERE>
   PREFIX "@VIRGIL_DEPENDS_PACKAGE_BUILD_DIR@"
   CMAKE_ARGS "@VIRGIL_DEPENDS_CMAKE_ARGS@"
