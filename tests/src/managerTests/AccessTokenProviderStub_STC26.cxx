@@ -34,6 +34,7 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
+#include <chrono>
 #include <stubs/AccessTokenProviderStub_STC26.h>
 
 using virgil::sdk::test::stubs::AccessTokenProviderStub_STC26;
@@ -49,12 +50,16 @@ AccessTokenProviderStub_STC26::AccessTokenProviderStub_STC26(std::string identit
 std::future<std::shared_ptr<AccessTokenInterface>> AccessTokenProviderStub_STC26::getToken(
         const TokenContext &tokenContext) {
     std::promise<std::shared_ptr<AccessTokenInterface>> p;
-    auto interval = (counter_ % 2) == 0 ? -1 : 1000;
+    auto interval = (counter_ % 2) == 0 ? 5 : 1000;
     forceCallback_(tokenContext.forceReload());
-    counter_++;
 
     auto token = utils_.getToken(identity_, interval);
     p.set_value(std::make_shared<Jwt>(token));
+
+    if (counter_ % 2 == 0)
+        std::this_thread::sleep_for(std::chrono::seconds(10));
+
+    counter_++;
 
     return p.get_future();
 }

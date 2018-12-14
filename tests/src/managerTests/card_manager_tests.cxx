@@ -36,7 +36,6 @@
 
 #include <catch.hpp>
 
-#include <thread>
 #include <memory>
 
 #include <TestConst.h>
@@ -479,7 +478,7 @@ TEST_CASE("test0010_STC_26", "[card_manager]") {
     TestUtils utils(consts);
     auto cardClient = std::make_shared<CardClient>(consts.ServiceURL());
     
-    auto privateKeyStr = consts.ApiPrivateKey();
+    const auto &privateKeyStr = consts.ApiPrivateKey();
     auto privateKeyData = VirgilBase64::decode(privateKeyStr);
     auto privateKey = utils.crypto()->importPrivateKey(privateKeyData);
 
