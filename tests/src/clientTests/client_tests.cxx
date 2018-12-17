@@ -179,7 +179,7 @@ TEST_CASE("test003_SearchCards", "[client]") {
     REQUIRE(found);
 }
 
-TEST_CASE("test004_STC25", "[client]") {
+TEST_CASE("test004_STC_25", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
     auto identity = utils.getRandomString();
@@ -207,7 +207,7 @@ TEST_CASE("test004_STC25", "[client]") {
         auto future = cardClient.publishCard(rawCard, token.stringRepresentation());
         auto publishedRawCard = future.get();
     } catch (Error& error) {
-        REQUIRE(error.httpErrorCode() == 401);
+        REQUIRE(error.httpErrorCode() == 400);
         errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
@@ -217,7 +217,7 @@ TEST_CASE("test004_STC25", "[client]") {
         auto searchFuture = cardClient.searchCards(identity, token.stringRepresentation());
         auto rawCards = searchFuture.get();
     } catch (Error& error) {
-        REQUIRE(error.httpErrorCode() == 401);
+        REQUIRE(error.httpErrorCode() == 400);
         errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
@@ -227,13 +227,13 @@ TEST_CASE("test004_STC25", "[client]") {
         auto getFuture = cardClient.getCard(card.identifier(), token.stringRepresentation());
         auto gotRawCard = getFuture.get();
     } catch (Error& error) {
-        REQUIRE(error.httpErrorCode() == 401);
+        REQUIRE(error.httpErrorCode() == 400);
         errorWasThrown = true;
     }
     REQUIRE(errorWasThrown);
 }
 
-TEST_CASE("test005_STC27", "[client]") {
+TEST_CASE("test005_STC_27", "[client]") {
     TestConst consts;
     TestUtils utils(consts);
 

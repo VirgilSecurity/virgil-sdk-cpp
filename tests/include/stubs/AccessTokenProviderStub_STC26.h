@@ -37,6 +37,7 @@
 #ifndef VIRGIL_SDK_ACCESSTOKENPROVIDERSTUB_STC26_H
 #define VIRGIL_SDK_ACCESSTOKENPROVIDERSTUB_STC26_H
 
+#include <thread>
 #include <functional>
 #include <virgil/sdk/jwt/interfaces/AccessTokenProviderInterface.h>
 #include <TestUtils.h>

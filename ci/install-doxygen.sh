@@ -38,9 +38,14 @@
 set -ev
 
 if [ ! -d "$HOME/doxygen/bin" ]; then
-    curl -L -O http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.10.linux.bin.tar.gz
-    tar -xf doxygen-1.8.10.linux.bin.tar.gz
-    cp -fa doxygen-1.8.10/. $HOME/doxygen/
+    curl -L -O https://github.com/doxygen/doxygen/archive/ca2e7ae50604cfdf9c0661b5be4264d1df9176f3.tar.gz
+    tar -xf ca2e7ae50604cfdf9c0661b5be4264d1df9176f3.tar.gz
+    mkdir doxygen-ca2e7ae50604cfdf9c0661b5be4264d1df9176f3/build
+    pushd doxygen-ca2e7ae50604cfdf9c0661b5be4264d1df9176f3/build
+        cmake -G "Unix Makefiles" ..
+        make
+    popd
+    cp -fa doxygen-ca2e7ae50604cfdf9c0661b5be4264d1df9176f3/build/. $HOME/doxygen/
 else
     echo "Using Doxygen cached directory."
 fi
