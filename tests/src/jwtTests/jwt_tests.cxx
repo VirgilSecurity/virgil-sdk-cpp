@@ -172,8 +172,6 @@ TEST_CASE("test001_STC_29", "[card_manager]") {
     REQUIRE(jwt.bodyContent().additionalData() == map);
     auto signatureStr = VirgilBase64::encode(jwt.signatureContent());
     REQUIRE(signatureStr == testData.dict()["STC-29.jwt_signature_base64"]);
-
-    REQUIRE(jwt.stringRepresentation() == tokenStr);
 }
 
 TEST_CASE("test001_STC_38", "[card_manager]") {
