@@ -48,7 +48,7 @@ std::future<std::shared_ptr<AccessTokenInterface>> CachingJwtProvider::getToken(
     auto future = std::async([=]{
         std::promise<std::shared_ptr<AccessTokenInterface>> p;
 
-        if (jwt_ == nullptr || jwt_->isExpired(std::time(0) + 5)) {
+        if (jwt_ == nullptr || jwt_->isExpired(std::time(0) + 5) || tokenContext.forceReload()) {
             try {
                 auto future = renewJwtCallback_(tokenContext);
                 auto jwt = Jwt::parse(future.get());
