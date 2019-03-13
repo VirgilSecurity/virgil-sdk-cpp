@@ -204,3 +204,29 @@ TEST_CASE("test001_STC_38", "[card_manager]") {
     auto token3 = futureToken3.get();
     REQUIRE(token2 != token3);
 }
+
+TEST_CASE("test001_STC_43", "[card_manager]") {
+    auto crypto = std::make_shared<Crypto>();
+
+    std::function<std::future<std::string>(const TokenContext&)> callback = [&](const TokenContext& tokenContext) {
+        std::promise<std::string> p;
+
+        auto keyPair = crypto->generateKeyPair();
+        auto generator = JwtGenerator(keyPair.privateKey(), "id", crypto, "appId", 10);
+        auto jwt = generator.generateToken(tokenContext.identity());
+        p.set_value(jwt.stringRepresentation());
+
+        return p.get_future();
+    };
+    auto cachingJwtProvider = CachingJwtProvider(callback);
+
+    auto tokenContext1 = TokenContext("test", "cards", "some_identity");
+    auto futureToken1 = cachingJwtProvider.getToken(tokenContext1);
+    auto token1 = futureToken1.get();
+
+    auto tokenContext2 = TokenContext("test", "cards", "some_identity", true);
+    auto futureToken2 = cachingJwtProvider.getToken(tokenContext2);
+    auto token2 = futureToken2.get();
+
+    REQUIRE(token1 != token2);
+}
