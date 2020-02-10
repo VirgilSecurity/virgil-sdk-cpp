@@ -1,25 +1,38 @@
-# Virgil Security C++ SDK
+# Virgil Core SDK C++
 
 [![Build Status](https://travis-ci.com/VirgilSecurity/virgil-sdk-cpp.svg?branch=master)](https://travis-ci.com/VirgilSecurity/virgil-sdk-cpp)
 [![Documentation Doxygen](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://VirgilSecurity.github.io/virgil-sdk-cpp)
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 
 
-[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
+[Introduction](#introduction) | [SDK Features](#sdk-features) | [Crypto Library Purposes](#crypto-library-purposes) | [Installation](#installation) | [Configure SDK](#configure-sdk) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
 
 ## Introduction
 
-<a href="https://developer.virgilsecurity.com/docs"><img width="230px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/virgil-logo-red.png" align="left" hspace="10" vspace="6"></a>[Virgil Security](https://virgilsecurity.com) provides a set of APIs for adding security to any application. In a few simple steps you can encrypt communication, securely store data, provide passwordless login, and ensure data integrity.
+<a href="https://developer.virgilsecurity.com/docs"><img width="230px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/virgil-logo-red.png" align="left" hspace="10" vspace="6"></a> [Virgil Security](https://virgilsecurity.com) provides a set of APIs for adding security to any application. In a few simple steps you can encrypt communication, securely store data, provide passwordless login, and ensure data integrity.
 
-The Virgil SDK allows developers to get up and running with Virgil API quickly and add full end-to-end security to their existing digital solutions to become HIPAA and GDPR compliant and more.
+The Virgil Core SDK allows developers to get up and running with Virgil API quickly and add full end-to-end security to their existing digital solutions to become HIPAA and GDPR compliant and more.
 
 ## SDK Features
-- communicate with [Virgil Cards Service][_cards_service]
-- manage users' Public Keys
-- use Virgil [Crypto library][_virgil_crypto]
+- Communicate with [Virgil Cards Service](https://developer.virgilsecurity.com/docs/platform/api-reference/cards-service/)
+- Manage users' public keys
+- Encrypt, sign, decrypt and verify data
+- Store private keys in secure local storage
+- Use Virgil [Crypto Library](https://github.com/VirgilSecurity/virgil-crypto-javascript)
+- Use your own crypto library
+
+## Crypto Library Purposes
+* Asymmetric Key Generation
+* Encryption/Decryption of data and streams
+* Generation/Verification of digital signatures
+* PFS (Perfect Forward Secrecy)
+* **Post quantum algorithms support**. [Round5](https://round5.org/) (ecnryption) and [Falcon](https://falcon-sign.info/) (signature) 
 
 ## Installation
-### Requirements
+
+The Virgil Core SDK С++ is provided as a package named virgil_sdk.
+
+#### Requirements
 
 - C++11 compatible compiler
 - CMake 3.10+
@@ -79,12 +92,148 @@ virgil_depends (
 virgil_find_package (virgil_sdk)
 ```
 
+## Configure SDK
+
+This section contains guides on how to set up Virgil Core SDK modules for authenticating users, managing Virgil Cards and storing private keys.
+
+### Set up authentication
+
+Set up user authentication with tokens that are based on the [JSON Web Token standard](https://jwt.io/) with some Virgil modifications.
+
+In order to make calls to Virgil Services (for example, to publish user's Card on Virgil Cards Service), you need to have a JSON Web Token ("JWT") that contains the user's `identity`, which is a string that uniquely identifies each user in your application.
+
+Credentials that you'll need:
+
+|Parameter|Description|
+|--- |--- |
+|App ID|ID of your Application at [Virgil Dashboard](https://dashboard.virgilsecurity.com)|
+|App Key ID|A unique string value that identifies your account at the Virgil developer portal|
+|App Key|A Private Key that is used to sign API calls to Virgil Services. For security, you will only be shown the App Key when the key is created. Don't forget to save it in a secure location for the next step|
+
+#### Set up JWT provider on Client side
+
+Use these lines of code to specify which JWT generation source you prefer to use in your project:
+
+```cpp
+#include <virgil/sdk/jwt/providers/CachingJwtProvider.h>
+
+using virgil::sdk::jwt::TokenContext;
+using virgil::sdk::jwt::providers::CachingJwtProvider;
+
+// Get generated token from server-side
+auto authenticatedQueryToServerSide = [&](const TokenContext& context) {
+    std::promise<std::string> p;
+    p.set_value("<TOKEN_FETCHED_FROM_SERVER>");
+
+    return p.get_future();
+};
+
+// Setup AccessTokenProvider
+auto provider = std::make_shared<CachingJwtProvider>(authenticatedQueryToServerSide);
+```
+
+#### Generate JWT on Server side
+
+Next, you'll need to set up the `JwtGenerator` and generate a JWT using the Virgil SDK.
+
+Here is an example of how to generate a JWT:
+
+```cpp
+#include <virgil/sdk/jwt/JwtGenerator.h>
+#include <virgil/sdk/crypto/Crypto.h>
+
+using virgil::sdk::jwt::JwtGenerator;
+using virgil::sdk::VirgilBase64;
+using virgil::sdk::crypto::Crypto;    
+
+// App Key (you got this Key at Virgil Dashboard)
+auto appKeyBase64 = "MIGhMF0GCSqGSIb3DQEFDTBQMC8GCSqGSIb3DQEFDDAiBBC7Sg/DbNzhJ/uakTvafUMoAgIUtzAKBggqhkiG9w0CCjAdBglghkgBZQMEASoEEDunQ1yhWZoKaLaDFgjpxRwEQAFdbC8e6103lJrUhY9ahyUA8+4rTJKZCmdTlCDPvoWH/5N5kxbOvTtbxtxevI421z3gRbjAtoWkfWraSLD6gj0=";
+auto privateKeyData = VirgilBase64::decode(appKeyBase64);
+
+// Crypto library imports a private key into a necessary format
+auto crypto = std::shared_ptr<Crypto>();
+auto appKey = crypto->importPrivateKey(privateKeyData);
+
+// use your App Credentials you got at Virgil Dashboard:
+auto appId = "be00e10e4e1f4bf58f9b4dc85d79c77a"; // App ID
+auto appKeyId = "70b447e321f3a0fd"; // App Key ID
+int ttl = 60 * 60 * 24; // 1 hour (JWT's lifetime)
+
+// setup JWT generator with necessary parameters:
+auto jwtGenerator = JwtGenerator(appKey, appKeyId, crypto, appId, ttl);
+
+// generate JWT for a user
+// remember that you must provide each user with his unique JWT
+// each JWT contains unique user's identity (in this case - Alice)
+// identity can be any value: name, email, some id etc.
+auto identity = "Alice";
+auto aliceJwt = jwtGenerator.generateToken(identity);
+
+// as result you get users JWT, it looks like this: "eyJraWQiOiI3MGI0NDdlMzIxZjNhMGZkIiwidHlwIjoiSldUIiwiYWxnIjoiVkVEUzUxMiIsImN0eSI6InZpcmdpbC1qd3Q7dj0xIn0.eyJleHAiOjE1MTg2OTg5MTcsImlzcyI6InZpcmdpbC1iZTAwZTEwZTRlMWY0YmY1OGY5YjRkYzg1ZDc5Yzc3YSIsInN1YiI6ImlkZW50aXR5LUFsaWNlIiwiaWF0IjoxNTE4NjEyNTE3fQ.MFEwDQYJYIZIAWUDBAIDBQAEQP4Yo3yjmt8WWJ5mqs3Yrqc_VzG6nBtrW2KIjP-kxiIJL_7Wv0pqty7PDbDoGhkX8CJa6UOdyn3rBWRvMK7p7Ak"
+// you can provide users with JWT at registration or authorization steps
+// Send a JWT to client-side
+auto jwtString = aliceJwt.stringRepresentation();
+```
+
+For this subsection we've created a sample backend that demonstrates how you can set up your backend to generate the JWTs. To set up and run the sample backend locally, head over to your GitHub repo of choice:
+
+[Node.js](https://github.com/VirgilSecurity/sample-backend-nodejs) | [Golang](https://github.com/VirgilSecurity/sample-backend-go) | [PHP](https://github.com/VirgilSecurity/sample-backend-php) | [Java](https://github.com/VirgilSecurity/sample-backend-java) | [Python](https://github.com/VirgilSecurity/virgil-sdk-python/tree/master#sample-backend-for-jwt-generation)
+ and follow the instructions in README.
+ 
+### Set up Card Verifier
+
+Virgil Card Verifier helps you automatically verify signatures of a user's Card, for example when you get a Card from Virgil Cards Service.
+
+By default, `VirgilCardVerifier` verifies only two signatures - those of a Card owner and Virgil Cards Service.
+
+Set up `VirgilCardVerifier` with the following lines of code:
+
+```cpp
+#include <virgil/sdk/cards/verification/VirgilCardVerifier.h>
+
+using virgil::sdk::VirgilBase64;
+using virgil::sdk::cards::verification::VirgilCardVerifier;
+using virgil::sdk::cards::verification::VerifierCredentials;
+using virgil::sdk::cards::verification::Whitelist;
+using virgil::sdk::crypto::Crypto;
+
+auto crypto = std::shared_ptr<Crypto>();
+
+auto publicKeyData = VirgilBase64::decode(publicKeyStr);
+auto yourBackendVerifierCredentials = VerifierCredentials("YOUR_BACKEND", publicKeyData);
+
+auto yourBackendWhitelist = Whitelist({ yourBackendVerifierCredentials });
+
+auto cardVerifier = VirgilCardVerifier(crypto, { yourBackendWhitelist });
+```
+
+### Set up Card Manager
+
+This subsection shows how to set up a Card Manager module to help you manage users' public keys.
+
+With Card Manager you can:
+- specify an access Token (JWT) Provider.
+- specify a Card Verifier used to verify signatures of your users, your App Server, Virgil Services (optional).
+
+Use the following lines of code to set up the Card Manager:
+
+```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::cards::CardManager;
+
+// initialize cardManager and specify accessTokenProvider, cardVerifier
+auto cardManager = CardManager(crypto, accessTokenProvider, cardVerifier);
+```
+
+
 ## Usage Examples
 
-Before you start practicing with the usage examples, make sure that the SDK is configured. Check out our [SDK configuration guides][_configure_sdk] for more details.
+Before you start practicing with the usage examples, make sure that the SDK is configured. See the [Configure SDK](#configure-sdk) section for more information.
 
-#### Generate and publish a User's Card with their Public Key on the Virgil Cards Service
-Use the following lines of code to create and publish a user's Card (similar to a business card, this Card contains their Public Key) on the Virgil Cards Service:
+### Generate and publish Virgil Cards at Cards Service
+
+Use the following lines of code to create a user's Card with a public key inside and publish it at Virgil Cards Service:
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -103,11 +252,11 @@ auto future = cardManager.publishCard(keyPair.privateKey(), keyPair.publicKey())
 auto card = future.get();
 ```
 
-#### Sign then encrypt data
+### Sign then encrypt data
 
-Virgil SDK allows you to use a user's Private Key and his or her Cards to sign, then encrypt any kind of data.
+Virgil Core SDK allows you to use a user's private key and their Virgil Cards to sign and encrypt any kind of data.
 
-In the following example, we load a Private Key from a customized Key Storage and get the recipient's Card from the Virgil Cards Services. The Recipient's Card contains a Public Key with which we will encrypt the data and verify a signature.
+In the following example, we load a private key from a customized key storage and get recipient's Card from the Virgil Cards Service. Recipient's Card contains a public key which we will use to encrypt the data and verify a signature.
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -133,8 +282,9 @@ for (auto& card : bobCards)
 auto encryptedData = crypto->signThenEncrypt(dataToEncrypt, alicePrivateKey, bobRelevantCardsPublicKeys);
 ```
 
-#### Decrypt then verify data
-Once the Users have received the signed and encrypted message, they can decrypt it with their own Private Key and verify the signature with the Sender's Card:
+### Decrypt data and verify signature
+
+Once the user receives the signed and encrypted message, they can decrypt it with their own private key and verify the signature with the sender's Card:
 
 ```cpp
 #include <virgil/sdk/cards/CardManager.h>
@@ -155,47 +305,46 @@ for (auto& card : aliceCards)
 auto decryptedData = crypto->decryptThenVerify(encryptedData, bobPrivateKey, aliceRelevantCardsPublicKeys);
 ```
 
+### Get Card by its ID
+
+Use the following lines of code to get a user's card from Virgil Cloud by its ID:
+
+```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::cards::CardManager;
+
+// using cardManager get a user's card from the Cards Service
+auto getFuture = cardManager.getCard("f4bf9f7fcbedaba0392f108c59d8f4a38b3838efb64877380171b54475c2ade8");
+auto card = getFuture.get()
+```
+
+### Get Card by user's identity
+
+For a single user, use the following lines of code to get a user's Card by a user's `identity`:
+
+```cpp
+#include <virgil/sdk/cards/CardManager.h>
+
+using virgil::sdk::cards::CardManager;
+
+// using cardManager search for user's cards on Cards Service
+auto searchFuture = cardManager.searchCards("Bob");
+auto cards = searchFuture.get();
+```
+
 ## Docs
-Virgil Security has a powerful set of APIs, and the documentation below can get you started today.
 
-In order to use the Virgil SDK with your application, you will need to configure your application first. By default, 
-the SDK will attempt to look for Virgil-specific settings in your application but you can customize those during the SDK configuration. 
-
-* [Configure the SDK][_configure_sdk] documentation
-  * [Setup authentication][_setup_authentication] to make API calls to Virgil Services
-  * [Setup Card Manager][_card_manager] to manage user's Public Keys
-  * [Setup Card Verifier][_card_verifier] to verify signatures inside of user's Card
-  * [Setup Key storage][_key_storage] to store Private Keys
-  * [Setup your own Crypto library][_own_crypto] inside of the SDK
-* [More usage examples][_more_examples]
-  * [Create & publish a Card][_create_card] that has a Public Key on Virgil Cards Service
-  * [Search user's Card by user's identity][_search_card]
-  * [Get user's Card by its ID][_get_card]
-  * [Use Card for crypto operations][_use_card]
-* [API Reference][_reference_api]
+Virgil Security has a powerful set of APIs, and the [Developer Documentation](https://developer.virgilsecurity.com/) can get you started today.
 
 ## License
 
-This library is released under the [3-clause BSD License](LICENSE.md).
+This library is released under the [3-clause BSD License](LICENSE).
 
 ## Support
-Our developer support team is here to help you. Find more information on our [Help Center](https://help.virgilsecurity.com/).
+
+Our developer support team is here to help you. Find out more information on our [Help Center](https://help.virgilsecurity.com/).
 
 You can find us on [Twitter](https://twitter.com/VirgilSecurity) or send us email support@VirgilSecurity.com.
 
 Also, get extra help from our support team on [Slack](https://virgilsecurity.com/join-community).
-
-[_virgil_crypto]: https://github.com/VirgilSecurity/virgil-crypto
-[_cards_service]: https://developer.virgilsecurity.com/docs/api-reference/card-service/v5
-[_use_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/use-card-for-crypto-operation
-[_get_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/get-card
-[_search_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/search-card
-[_create_card]: https://developer.virgilsecurity.com/docs/cpp/how-to/public-key-management/v5/create-card
-[_own_crypto]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-own-crypto-library
-[_key_storage]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-key-storage
-[_card_verifier]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-card-verifier
-[_card_manager]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-card-manager
-[_setup_authentication]: https://developer.virgilsecurity.com/docs/cpp/how-to/setup/v5/setup-authentication
-[_reference_api]: https://developer.virgilsecurity.com/docs/api-reference
-[_configure_sdk]: https://developer.virgilsecurity.com/docs/how-to#sdk-configuration
-[_more_examples]: https://developer.virgilsecurity.com/docs/how-to#public-key-management
