@@ -98,6 +98,9 @@ find_package (CURL REQUIRED)
 # Add in-house external dependencies
 include (virgil_depends)
 
+# Define known toolchain arguments to be passed downstream.
+include (TransitiveToolchainArgs)
+
 virgil_depends (
     PACKAGE_NAME "virgil_crypto"
     CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/virgil_crypto"

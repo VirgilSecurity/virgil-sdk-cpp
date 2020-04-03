@@ -75,9 +75,10 @@
 #          virgil_find_package (zzzzz x.y)
 #
 
-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 include (CMakeParseArguments)
+include (TransitiveArgs)
 
 function (virgil_depends_log_error)
     message ("")
@@ -113,11 +114,11 @@ endfunction (virgil_depends_log_debug)
 function (virgil_depends_write_cache_var file var)
     if (DEFINED ${var})
         virgil_depends_log_debug (
-            "Forwarding: ${var} = ${${var}}"
+                "Forwarding: ${var} = ${${var}}"
         )
         file (APPEND "${file}"
-            "set (${var} \"${${var}}\" CACHE INTERNAL \"\")\n"
-        )
+                "set (${var} \"${${var}}\" CACHE INTERNAL \"\")\n"
+                )
     endif ()
 endfunction ()
 
@@ -128,7 +129,7 @@ function (virgil_depends_create_cache_file cache_path)
     # Pass compiler flags if not toolchain case
     if (NOT CMAKE_CROSSCOMPILING)
         string (TOUPPER "${CMAKE_BUILD_TYPE}" configuration)
-        foreach (lang C CXX)
+        foreach (lang ASM C CXX)
             virgil_depends_write_cache_var ("${cache_path}" "CMAKE_${lang}_COMPILER")
             virgil_depends_write_cache_var ("${cache_path}" "CMAKE_${lang}_FLAGS")
             virgil_depends_write_cache_var ("${cache_path}" "CMAKE_${lang}_FLAGS_${configuration}")
@@ -144,6 +145,7 @@ function (virgil_depends_create_cache_file cache_path)
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_MACOSX_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_INSTALL_NAME_DIR")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_INSTALL_RPATH")
+    virgil_depends_write_cache_var ("${cache_path}" "CMAKE_BUILD_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_SKIP_BUILD_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_BUILD_WITH_INSTALL_RPATH")
     virgil_depends_write_cache_var ("${cache_path}" "CMAKE_INSTALL_RPATH_USE_LINK_PATH")
@@ -213,8 +215,8 @@ function (virgil_depends)
                 "${VIRGIL_DEPENDS_CONFIG_DIR}/${VIRGIL_DEPENDS_PACKAGE_NAME_LOWER}.cmake")
     else ()
         virgil_depends_log_error(
-            "${VIRGIL_DEPENDS_PACKAGE_NAME}.cmake file nor ${VIRGIL_DEPENDS_PACKAGE_NAME_LOWER}.cmake"
-            "    are exist in ${VIRGIL_DEPENDS_CONFIG_DIR}"
+                "${VIRGIL_DEPENDS_PACKAGE_NAME}.cmake file nor ${VIRGIL_DEPENDS_PACKAGE_NAME_LOWER}.cmake"
+                "    are exist in ${VIRGIL_DEPENDS_CONFIG_DIR}"
         )
     endif ()
 
@@ -229,97 +231,98 @@ function (virgil_depends)
     set (_file)
 
     set (VIRGIL_DEPENDS_CMAKE_ARGS
-        "-G${CMAKE_GENERATOR}"
-        "-C${VIRGIL_DEPENDS_CACHE_FILE}"
-        "-C${VIRGIL_DEPENDS_ARGS_FILE}"
-        "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
-        "-DCMAKE_INSTALL_PREFIX=${VIRGIL_DEPENDS_PREFIX}"
-        "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
-        "${VIRGIL_DEPENDS_CMAKE_ARGS}"
-    )
+            "-G${CMAKE_GENERATOR}"
+            "-C${VIRGIL_DEPENDS_CACHE_FILE}"
+            "-C${VIRGIL_DEPENDS_ARGS_FILE}"
+            "-C${TRANSITIVE_ARGS_FILE}"
+            "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+            "-DCMAKE_INSTALL_PREFIX=${VIRGIL_DEPENDS_PREFIX}"
+            "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}"
+            "${VIRGIL_DEPENDS_CMAKE_ARGS}"
+            )
 
     configure_file (
-        "${VIRGIL_DEPENDS_PACKAGE_CONFIG_FILE}"
-        "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}/CMakeLists.txt"
-        @ONLY
+            "${VIRGIL_DEPENDS_PACKAGE_CONFIG_FILE}"
+            "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}/CMakeLists.txt"
+            @ONLY
     )
 
     set (cmd
-        "${CMAKE_COMMAND}"
-        "-H${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
-        "-B${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
-        "${VIRGIL_DEPENDS_CMAKE_ARGS}"
-    )
+            "${CMAKE_COMMAND}"
+            "-H${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
+            "-B${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
+            "${VIRGIL_DEPENDS_CMAKE_ARGS}"
+            )
 
     # Configure target package
     execute_process (
-        COMMAND ${cmd}
-        WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
-        RESULT_VARIABLE _generate_result
-        "OUTPUT_QUIET"
+            COMMAND ${cmd}
+            WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
+            RESULT_VARIABLE _generate_result
+            "OUTPUT_QUIET"
     )
 
     if (_generate_result EQUAL 0)
         virgil_depends_log_info (
-              "Configure step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR})"
+                "Configure step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR})"
         )
     else ()
         virgil_depends_log_error (
-              "Configure step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR})"
+                "Configure step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR})"
         )
     endif ()
 
     # Build target package
     set (cmd
-        "${CMAKE_COMMAND}"
-        --build
-        "${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
-    )
+            "${CMAKE_COMMAND}"
+            --build
+            "${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
+            )
 
     execute_process (
-        COMMAND ${cmd}
-        WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
-        RESULT_VARIABLE _build_result
+            COMMAND ${cmd}
+            WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
+            RESULT_VARIABLE _build_result
     )
 
     if (_build_result EQUAL 0)
         virgil_depends_log_info (
-              "Build step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
+                "Build step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
         )
     else ()
         virgil_depends_log_error(
-              "Build step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
+                "Build step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
         )
     endif ()
 
     # Install target package
     set (cmd
-        "${CMAKE_COMMAND}"
-        --build
-        "${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
-        --target install
-    )
+            "${CMAKE_COMMAND}"
+            --build
+            "${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR}"
+            --target install
+            )
 
     execute_process (
-        COMMAND ${cmd}
-        WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
-        RESULT_VARIABLE _install_result
+            COMMAND ${cmd}
+            WORKING_DIRECTORY "${VIRGIL_DEPENDS_PACKAGE_SOURCE_DIR}"
+            RESULT_VARIABLE _install_result
     )
 
     if (_install_result EQUAL 0)
         virgil_depends_log_info (
-              "Install step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
+                "Install step successful (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
         )
     else ()
         # Just ignore, because not all packages have target 'install'
         virgil_depends_log_debug (
-              "Install step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
+                "Install step failed (dir: ${VIRGIL_DEPENDS_PACKAGE_BUILD_DIR})"
         )
     endif ()
 endfunction (virgil_depends)
 
 function (virgil_find_package)
     find_package (${ARGN}
-        REQUIRED CONFIG HINTS "${VIRGIL_DEPENDS_PREFIX}" NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
-    )
+            REQUIRED CONFIG HINTS "${VIRGIL_DEPENDS_PREFIX}" NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+            )
 endfunction (virgil_find_package)
