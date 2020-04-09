@@ -58,6 +58,10 @@ ExternalProject_Add (${PROJECT_NAME}
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/patch"
             "${CMAKE_CURRENT_BINARY_DIR}/src/${PROJECT_NAME}/src"
+
+    COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_CURRENT_SOURCE_DIR}/patch-curl-usage/CMakeLists.txt"
+            "${CMAKE_CURRENT_BINARY_DIR}/src/${PROJECT_NAME}/ext/CMakeLists.txt"
 )
 
 add_custom_target ("${PROJECT_NAME}-build" ALL COMMENT "Build package ${PROJECT_NAME}")

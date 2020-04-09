@@ -93,13 +93,26 @@ message (STATUS "Virgil SDK version: " ${${PROJECT_NAME}_VERSION})
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils" ${CMAKE_MODULE_PATH})
 
 # Add system external dependencies
-find_package (CURL REQUIRED)
+if ("${CURL_ROOT_DIR}" STREQUAL "")
+    find_package (CURL REQUIRED)
+else()
+    find_library(LIB_CURL
+            NAMES curl
+            HINTS ${CURL_ROOT_DIR}/lib
+            NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
+            )
+
+    set (CURL_LIBRARIES "${LIB_CURL}")
+    set (CURL_INCLUDE_DIRS ${CURL_ROOT_DIR}/include ${CURL_ROOT_DIR}/include/curl)
+endif()
 
 # Add in-house external dependencies
 include (virgil_depends)
 
 # Define known toolchain arguments to be passed downstream.
 include (TransitiveToolchainArgs)
+
+transitive_args_add(CURL_ROOT_DIR)
 
 virgil_depends (
     PACKAGE_NAME "virgil_crypto"
