@@ -51,6 +51,8 @@ using virgil::sdk::client::networking::Request;
 using virgil::sdk::client::networking::Response;
 using virgil::sdk::util::CaseInsensitiveCompare;
 
+std::string Connection::customCA_ = "";
+
 Response Connection::send(const Request& request) {
     // Make Request
     HttpRequest httpRequest;

@@ -64,10 +64,10 @@ namespace virgil {
                      * @throw std::logic_error - if given parameters are inconsistent.
                      * @throw std::runtime_error - if error was occurred when send request.
                      */
-                    virtual void setCA(const std::string& ca);
+                    static void setCA(const std::string& ca);
 
                 private:
-                    std::string customCA_;
+                    static std::string customCA_;
                 };
             }
         }
