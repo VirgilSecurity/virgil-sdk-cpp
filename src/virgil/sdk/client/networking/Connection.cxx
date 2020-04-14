@@ -56,6 +56,7 @@ Response Connection::send(const Request& request) {
     HttpRequest httpRequest;
     httpRequest.header(request.header()).content(request.contentType(), request.body());
     httpRequest.timeout(7L);
+    httpRequest.setCA(customCA_);
 
     switch (request.method()) {
         case Request::Method::GET:
@@ -85,4 +86,8 @@ Response Connection::send(const Request& request) {
     auto caseInsensitiveMap = std::map<std::string, std::string, CaseInsensitiveCompare>(httpResponse.headers.begin(), httpResponse.headers.end());
     response.header(caseInsensitiveMap).body(httpResponse.body);
     return response;
+}
+
+void Connection::setCA(const std::string& ca) {
+    customCA_ = ca;
 }
