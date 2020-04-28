@@ -21,7 +21,6 @@ In case you need additional security functionality for multi-device support, gro
 - Encrypt, sign, decrypt and verify data
 - Store private keys in secure local storage
 - Use [Virgil Crypto Library](https://github.com/VirgilSecurity/virgil-crypto)
-- Use your own crypto library
 
 ## Installation
 
@@ -220,7 +219,6 @@ using virgil::sdk::cards::CardManager;
 // initialize cardManager and specify accessTokenProvider, cardVerifier
 auto cardManager = CardManager(crypto, accessTokenProvider, cardVerifier);
 ```
-
 
 ## Usage Examples
 
