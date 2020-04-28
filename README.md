@@ -5,7 +5,7 @@
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://raw.githubusercontent.com/VirgilSecurity/virgil-sdk-cpp/release/LICENSE)
 
 
-[Introduction](#introduction) | [SDK Features](#sdk-features) | [Crypto Library Purposes](#crypto-library-purposes) | [Installation](#installation) | [Configure SDK](#configure-sdk) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
+[Introduction](#introduction) | [SDK Features](#sdk-features) | [Installation](#installation) | [Configure SDK](#configure-sdk) | [Usage Examples](#usage-examples) | [Docs](#docs) | [Support](#support)
 
 ## Introduction
 
@@ -44,7 +44,7 @@ target_link_libraries (${PROJECT_NAME} virgil_sdk)
 ```
 
 #### Use custom CMake util
-You can find file called *virgil_depends_local.cmake* at *virgil-sdk-cpp/cmake/utils*.
+You can find еру file called *virgil_depends_local.cmake* at *virgil-sdk-cpp/cmake/utils*.
 This is an in-house dependency loader based on pure CMake features.
 
 Usage:
